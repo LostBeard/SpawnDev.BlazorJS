@@ -1,0 +1,98 @@
+﻿using Microsoft.JSInterop;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+namespace SpawnDev.BlazorJS.JSObjects
+{
+    // https://web.dev/cache-api-quick-guide/
+    [JsonConverter(typeof(JSObjectConverter<CacheStorage>))]
+    public class CacheStorage : JSObject
+    {
+        public CacheStorage(IJSInProcessObjectReference _ref) : base(_ref) { }
+
+        public bool IsOpen { get { return _ref != null; } }
+        public string Name { get; private set; } = "";
+
+        public static async Task<CacheStorage> OpenCache(string name)
+        {
+            var ret = await JS.CallAsync<CacheStorage>("caches.open", name);
+            return ret;
+        }
+
+        public static async Task<List<string>> CacheNames()
+        {
+            var ret = await JS.CallAsync<List<string>>("caches.keys");
+            return ret;
+        }
+
+        public async Task<List<string>> CacheKeys()
+        {
+            var ret = new List<string>();
+            var tmp = await _ref.CallAsync<Request[]>("keys");
+            //var cnt = tmp.GetProperty<int>("length");
+            foreach(var r in tmp)
+            {
+                var url = r.Url;
+                ret.Add(url);
+                r.Dispose();
+            }
+            return ret;
+        }
+
+        public Task<Response> Match(string path)
+        {
+            var t = new TaskCompletionSource<Response>();
+            Match(path, (r) => t.TrySetResult(r));
+            return t.Task;
+        }
+
+        // use callbacks and promise syntax to avoid inability to catch DotNet exception when Match returns an undefined value to the promise then callback
+        // retest - not tested since Blazor DotNet 3
+        public void Match(string path, Action<Response> callback)
+        {
+            var callbackGroup = new CallbackGroup();
+            var promise = _ref.Call<JSObject>("match", path);
+            promise._ref.CallVoid("then", Callback.Create((Response response) => {
+                try
+                {
+                    callback(response);
+                }
+                catch (Exception)
+                {
+                    callback(null);
+                }
+                promise.Dispose();
+                callbackGroup.Dispose();
+            }, callbackGroup));
+            promise._ref.CallVoid("catch", Callback.Create(() => {
+                callback(null);
+                promise.Dispose();
+                callbackGroup.Dispose();
+            }, callbackGroup));
+        }
+
+        public async Task<bool> Has(string path)
+        {
+            return await _ref.InvokeAsync<bool>("has", path);
+        }
+
+        public void Put(string path, Response response)
+        {
+            _ref.InvokeVoid("put", path, response);
+        }
+
+        public void Delete(string path)
+        {
+            _ref.InvokeVoid("delete", path);
+        }
+
+        public async Task AddAll(IEnumerable<string> urls)
+        {
+
+        }
+    }
+}
