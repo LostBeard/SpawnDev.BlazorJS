@@ -2,6 +2,7 @@
 using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS
 {
@@ -22,7 +23,7 @@ namespace SpawnDev.BlazorJS
             if (_js == null) throw new Exception("JS must be initialized before use via SpawnDev.BlazorJS.JS.InitAsync(IJSInProcessRuntime) usually in Program.cs");
         }
         public static void DisposeCallback(string callbackerID) => _JSInteropCallVoid("DisposeCallbacker", callbackerID);
-        
+
         public static AsyncIterator? GetAsyncIterator(IJSInProcessObjectReference targetObject) => Get<AsyncIterator?>(targetObject, "Symbol.asyncIterator");
 
         public static Task<bool> LoadScript(string src, string ifThisGlobalVarIsUndefined = null)
@@ -79,45 +80,16 @@ namespace SpawnDev.BlazorJS
         // document.body
         public static IJSInProcessObjectReference GetDocumentBody() => Get<IJSInProcessObjectReference>("document.body");
         public static T GetDocumentBody<T>() where T : JSObject => Get<T>("document.body");
-        public static void DocumentHeadAppendChild(IJSInProcessObjectReference element)
-        {
-            using var head = GetDocumentHead<Node>();
-            head.AppendChild(element);
-        }
-        public static void DocumentBodyAppendChild(IJSInProcessObjectReference element)
-        {
-            using var body = GetDocumentBody<Node>();
-            body.AppendChild(element);
-        }
-        public static IJSInProcessObjectReference DocumentCreateElement(string elementType)
-        {
-            using var document = GetDocument<Document>();
-            document.CreateElement(elementType);
-            return document.CreateElement(elementType);
-        }
-        public static T DocumentCreateElement<T>(string elementType) where T : JSObject
-        {
-            using var document = GetDocument<Document>();
-            return document.CreateElement<T>(elementType);
-        }
+        public static void DocumentHeadAppendChild(IJSInProcessObjectReference element) => CallVoid("document.head.appendChild", element);
+        public static void DocumentBodyAppendChild(IJSInProcessObjectReference element) => CallVoid("document.body.appendChild", element);
+        // document.CreateElement
+        public static IJSInProcessObjectReference DocumentCreateElement(string elementType) => Call<IJSInProcessObjectReference>("document.createElement", elementType);
+        public static T DocumentCreateElement<T>(string elementType) where T : JSObject => Call<T>("document.createElement", elementType);
 
         public static bool JSEquals(object obj1, object obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
 
-        public static void DisposeIt(object obj)
-        {
-            if (obj is IDisposable disposable) disposable.Dispose();
-        }
-        // below is removed becuase ReturnMe is the same thing
-        //public static T DeserializeTo<T>(JSObject obj)
-        //{
-        //    return _js.Invoke<T>("JSInterop._returnMe", obj._ref);
-        //}
-        public static T CopyReference<T>(JSObject obj) where T : JSObject
-        {
-            var tmp = ReturnMe<IJSInProcessObjectReference>(obj.JSRef);
-            return (T)Activator.CreateInstance(typeof(T), tmp);
-        }
-        public static IJSInProcessObjectReference CopyReference(IJSInProcessObjectReference obj) => ReturnMe<IJSInProcessObjectReference>(obj);
+        //public static T CopyReference<T>(JSObject obj) where T : JSObject => ReturnMe<T>(obj);
+        //public static IJSInProcessObjectReference CopyReference(IJSInProcessObjectReference obj) => ReturnMe<IJSInProcessObjectReference>(obj);
         public static T MoveReference<T>(JSObject orig, bool sourceDisposeExceptRef = true) where T : JSObject
         {
             var ret = (T)Activator.CreateInstance(typeof(T), orig.JSRef);

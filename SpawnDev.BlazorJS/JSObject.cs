@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS
     public class JSObject : IDisposable
     {
         public static readonly IJSInProcessObjectReference NullRef = null;
-        public IJSInProcessObjectReference JSRef { get; private set; }
+        public IJSInProcessObjectReference? JSRef { get; private set; }
         public bool IsWrapperDisposed { get; private set; } = false;
         public JSObject(ElementReference elementRef) => FromReference(JS.ReturnMe<IJSInProcessObjectReference>(elementRef));
 
@@ -39,27 +39,36 @@ namespace SpawnDev.BlazorJS
         public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }));
         public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }));
         public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }));
-        public virtual void FromReference(IJSInProcessObjectReference _ref)
+        protected virtual void FromReference(IJSInProcessObjectReference _ref)
         {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
-            if (this.JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
-            this.JSRef = _ref;
+            if (JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
+            JSRef = _ref;
         }
         protected void ReplaceReference(IJSInProcessObjectReference _ref)
         {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
-            this.JSRef?.Dispose();
-            this.JSRef = null;
+            JSRef?.Dispose();
+            JSRef = null;
             FromReference(_ref);
         }
         // sourceDisposeExceptRef - should usually be true becuase otherwise they share a _ref object and either beign disposed will dispose that object makign it useless to the one that did not dispose it
         // by setting sourceDisposeExceptRef = true (default) the new IJSObject will have exclusive use of the _ref object
-        public T ConvertToIJSObject<T>(bool sourceDisposeExceptRef = true) where T : JSObject
+        public T JSRefMove<T>() where T : JSObject
         {
-            var ret = (T)Activator.CreateInstance(typeof(T), JSRef);
-            if (sourceDisposeExceptRef) DisposeExceptRef();
-            return ret;
+            var _ref = JSRef;
+            DisposeExceptRef();
+            return (T)Activator.CreateInstance(typeof(T), _ref);
         }
+        public IJSInProcessObjectReference? JSRefMove()
+        {
+            var _ref = JSRef;
+            DisposeExceptRef();
+            return _ref;
+        }
+        public T JSRefCopy<T>() where T : JSObject => JS.ReturnMe<T>(this);
+        public IJSInProcessObjectReference JSRefCopy() => JS.ReturnMe<IJSInProcessObjectReference>(this);
+
         public void DisposeExceptRef()
         {
             JSRef = null;
@@ -94,35 +103,35 @@ namespace SpawnDev.BlazorJS
 #endif
             Dispose(false);
         }
-        public T CopyPropertiesTo<T>(bool camelCase = true)
-        {
-            var Ttype = typeof(T);
-            T ret = (T)Activator.CreateInstance(Ttype);
-            foreach (var p in Ttype.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                var propName = camelCase ? Char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1) : p.Name;
-                //Console.WriteLine("propName: " + propName);
-                try
-                {
-                    if (p.CanWrite && p.GetSetMethod(/*nonPublic*/ true).IsPublic)
-                    {
-                        if (!JS.IsUndefined(this, propName))
-                        {
-                            var value = JSRef.Get(p.PropertyType, propName);
-                            p.SetValue(ret, value);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("ERROR: CopyPropertiesTo - " + ex.Message);
-                    Console.WriteLine(">> propName: " + propName);
-                    Console.WriteLine(">> proptype: " + JS.TypeOf(this, propName));
-                    //Console.WriteLine("ERROR: CopyPropertiesTo - " + ex.StackTrace);
-                }
-            }
-            return ret;
-        }
+        //public T CopyPropertiesTo<T>(bool camelCase = true)
+        //{
+        //    var Ttype = typeof(T);
+        //    T ret = (T)Activator.CreateInstance(Ttype);
+        //    foreach (var p in Ttype.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        //    {
+        //        var propName = camelCase ? Char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1) : p.Name;
+        //        //Console.WriteLine("propName: " + propName);
+        //        try
+        //        {
+        //            if (p.CanWrite && p.GetSetMethod(/*nonPublic*/ true).IsPublic)
+        //            {
+        //                if (!JS.IsUndefined(this, propName))
+        //                {
+        //                    var value = JSRef.Get(p.PropertyType, propName);
+        //                    p.SetValue(ret, value);
+        //                }
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine("ERROR: CopyPropertiesTo - " + ex.Message);
+        //            Console.WriteLine(">> propName: " + propName);
+        //            Console.WriteLine(">> proptype: " + JS.TypeOf(this, propName));
+        //            //Console.WriteLine("ERROR: CopyPropertiesTo - " + ex.StackTrace);
+        //        }
+        //    }
+        //    return ret;
+        //}
         public static T FromElementReference<T>(ElementReference elementRef) where T : JSObject => (T)Activator.CreateInstance(typeof(T), JS.ReturnMe<IJSInProcessObjectReference>(elementRef));
     }
 }

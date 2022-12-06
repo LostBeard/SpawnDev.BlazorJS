@@ -33,20 +33,20 @@ namespace SpawnDev.BlazorJS.JSObjects
                                 case "directory":
                                     if (includeDirectories)
                                     {
-                                        fid = f.ConvertToIJSObject<FileSystemDirectoryHandle>();
+                                        fid = f.JSRefMove<FileSystemDirectoryHandle>();
                                     }
                                     break;
                                 case "file":
                                     if (includeFiles)
                                     {
-                                        fid = f.ConvertToIJSObject<FileSystemFileHandle>();
+                                        fid = f.JSRefMove<FileSystemFileHandle>();
                                     }
                                     break;
                             }
                             if (fid != null) ret.Add(fid);
                         }
                     }
-                } 
+                }
                 catch
                 {
 #if DEBUG
@@ -60,7 +60,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public async Task<FileSystemHandle> GetEntryExt(string path)
         {
-            FileSystemDirectoryHandle tmp = JS.CopyReference<FileSystemDirectoryHandle>(this);
+            FileSystemDirectoryHandle tmp = JSRefCopy<FileSystemDirectoryHandle>();
             path = path.Trim('/');
             if (string.IsNullOrEmpty(path) || path == ".") return tmp;
             FileSystemHandle ret = null;
@@ -73,11 +73,11 @@ namespace SpawnDev.BlazorJS.JSObjects
                 if (i == pparts.Length - 1)
                 {
                     ret = f;
-                } 
+                }
                 else if (f.Kind == "directory")
                 {
-                    tmp = f.ConvertToIJSObject<FileSystemDirectoryHandle>();
-                } 
+                    tmp = f.JSRefMove<FileSystemDirectoryHandle>();
+                }
                 else
                 {
                     break;
@@ -95,7 +95,7 @@ namespace SpawnDev.BlazorJS.JSObjects
                 ret.Dispose();
                 return null;
             }
-            return ret == null ? null : ret.ConvertToIJSObject<FileSystemFileHandle>();
+            return ret == null ? null : ret.JSRefMove<FileSystemFileHandle>();
         }
 
         public async Task<FileSystemDirectoryHandle> GetDirExt(string path)
@@ -107,7 +107,7 @@ namespace SpawnDev.BlazorJS.JSObjects
                 ret.Dispose();
                 return null;
             }
-            return ret == null ? null : ret.ConvertToIJSObject<FileSystemDirectoryHandle>();
+            return ret == null ? null : ret.JSRefMove<FileSystemDirectoryHandle>();
         }
 
         public async Task<FileSystemHandle> GetEntry(string name, StringComparison stringComp = StringComparison.OrdinalIgnoreCase)
@@ -200,7 +200,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             using (var valuesIterator = JSRef.Call<JSObject>("values"))
             {
                 var tmp = await IterateDirectoryAsync(valuesIterator, false, true);
-                foreach(var t in tmp) files.Add((FileSystemDirectoryHandle)t);
+                foreach (var t in tmp) files.Add((FileSystemDirectoryHandle)t);
             }
             return files;
         }

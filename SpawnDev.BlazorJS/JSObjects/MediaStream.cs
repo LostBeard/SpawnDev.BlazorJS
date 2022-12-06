@@ -17,7 +17,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public MediaStream(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public override void FromReference(IJSInProcessObjectReference _ref)
+        protected override void FromReference(IJSInProcessObjectReference _ref)
         {
             base.FromReference(_ref);
             AddEventListener("ended", Callback.Create(_OnEnded, callbacks));

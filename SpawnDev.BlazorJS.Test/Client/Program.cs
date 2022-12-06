@@ -36,6 +36,9 @@ namespace SpawnDev.BlazorJS.Test
 
             var cache = await Cache.OpenCache("TestCacheYay");
 
+            var tt = new JSObject((IJSInProcessObjectReference)null);
+
+
             JS.Set("testSetFn", Callback.Create(() => { Console.WriteLine("Who calls me?"); }));
 
             var fn = new FunctionHandle("return new Promise(resolve => setTimeout(resolve, 5000, 5));");
