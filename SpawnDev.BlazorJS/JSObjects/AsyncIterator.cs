@@ -8,6 +8,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class AsyncIterator : JSObject
     {
         public AsyncIterator(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public ValueTask<AsyncIteratorNext> Next() => _ref.GetAsync<AsyncIteratorNext>("next");
+        public ValueTask<AsyncIteratorNext> Next() => JSRef.GetAsync<AsyncIteratorNext>("next");
     }
 }

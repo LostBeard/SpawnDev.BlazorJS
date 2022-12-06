@@ -7,8 +7,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<ServiceWorker>))]
     public class ServiceWorker : EventTarget
     {
-        public string State => _ref.Get<string>("state");
-        public string ScriptURL => _ref.Get<string>("scriptURL");
+        public string State => JSRef.Get<string>("state");
+        public string ScriptURL => JSRef.Get<string>("scriptURL");
         public delegate void MessageDelegate(MessageEvent msg);
         public event MessageDelegate OnStateChange;
         public static bool IsSupported => !JS.IsUndefined("navigator.serviceWorker");

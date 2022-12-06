@@ -8,13 +8,13 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<HTMLImageElement>))]
     public class HTMLImageElement : HTMLElement
     {
-        public int Width => _ref.Get<int>("width");
-        public int Height => _ref.Get<int>("height");
-        public int NaturalWidth => _ref.Get<int>("naturalWidth");
-        public int NaturalHeight => _ref.Get<int>("naturalHeight");
-        public bool Complete => _ref.Get<bool>("complete");
+        public int Width => JSRef.Get<int>("width");
+        public int Height => JSRef.Get<int>("height");
+        public int NaturalWidth => JSRef.Get<int>("naturalWidth");
+        public int NaturalHeight => JSRef.Get<int>("naturalHeight");
+        public bool Complete => JSRef.Get<bool>("complete");
 
-        public string Src { get => _ref.Get<string>("src"); set => _ref.Set("src", value); }
+        public string Src { get => JSRef.Get<string>("src"); set => JSRef.Set("src", value); }
 
         public HTMLImageElement(IJSInProcessObjectReference _ref) : base(_ref) { }
 

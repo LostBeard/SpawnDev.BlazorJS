@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public Cache(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public bool IsOpen { get { return _ref != null; } }
+        public bool IsOpen { get { return JSRef != null; } }
         public string Name { get; private set; } = "";
 
         public static async Task<Cache> OpenCache(string name)
@@ -33,7 +33,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public async Task<List<string>> CacheKeys()
         {
             var ret = new List<string>();
-            var tmp = await _ref.CallAsync<Request[]>("keys");
+            var tmp = await JSRef.CallAsync<Request[]>("keys");
             //var cnt = tmp.GetProperty<int>("length");
             foreach (var r in tmp)
             {
@@ -56,8 +56,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void Match(string url, Action<Response> callback)
         {
             var callbackGroup = new CallbackGroup();
-            var promise = _ref.Call<JSObject>("match", url);
-            promise._ref.CallVoid("then", Callback.Create((Response response) => {
+            var promise = JSRef.Call<JSObject>("match", url);
+            promise.JSRef.CallVoid("then", Callback.Create((Response response) => {
                 try
                 {
                     callback(response);
@@ -69,7 +69,7 @@ namespace SpawnDev.BlazorJS.JSObjects
                 promise.Dispose();
                 callbackGroup.Dispose();
             }, callbackGroup));
-            promise._ref.CallVoid("catch", Callback.Create(() => {
+            promise.JSRef.CallVoid("catch", Callback.Create(() => {
                 callback(null);
                 promise.Dispose();
                 callbackGroup.Dispose();
@@ -78,17 +78,17 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public async Task<bool> Has(string url)
         {
-            return await _ref.InvokeAsync<bool>("has", url);
+            return await JSRef.InvokeAsync<bool>("has", url);
         }
 
         public void Put(string url, Response response)
         {
-            _ref.InvokeVoid("put", url, response);
+            JSRef.InvokeVoid("put", url, response);
         }
 
         public void Delete(string url)
         {
-            _ref.InvokeVoid("delete", url);
+            JSRef.InvokeVoid("delete", url);
         }
 
         public async Task AddAll(IEnumerable<string> urls)

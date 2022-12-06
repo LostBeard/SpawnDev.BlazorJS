@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<Response>))]
     public class Response : JSObject
     {
-        public bool Ok => _ref.Get<bool>("ok");
+        public bool Ok => JSRef.Get<bool>("ok");
 
         public Response(IJSInProcessObjectReference _ref) : base(_ref) { }
 
@@ -20,42 +20,42 @@ namespace SpawnDev.BlazorJS.JSObjects
             FromReference(JS.CreateNew("Response", data));
             if (!string.IsNullOrEmpty(contentType))
             {
-                using var headers = _ref.Get<JSObject>("headers");
-                headers._ref.CallVoid("set", "Content-Type", contentType);
-                headers._ref.CallVoid("set", "Content-Length", Encoding.UTF8.GetByteCount(data));
+                using var headers = JSRef.Get<JSObject>("headers");
+                headers.JSRef.CallVoid("set", "Content-Type", contentType);
+                headers.JSRef.CallVoid("set", "Content-Length", Encoding.UTF8.GetByteCount(data));
             }
         }
 
         public Response(Uint8Array uint8array, string contentType = "application/octet-stream") : base(NullRef)
         {
             FromReference(JS.CreateNew("Response", uint8array));
-            using var headers = _ref.Get<JSObject>("headers");
-            headers._ref.CallVoid("set", "Content-Type", contentType);
-            headers._ref.CallVoid("set", "Content-Length", uint8array.ByteLength);
+            using var headers = JSRef.Get<JSObject>("headers");
+            headers.JSRef.CallVoid("set", "Content-Type", contentType);
+            headers.JSRef.CallVoid("set", "Content-Length", uint8array.ByteLength);
         }
 
         public Response(byte[] data, string contentType = "application/octet-stream") : base(NullRef)
         {
             using var uint8array = new Uint8Array(data);
             FromReference(JS.CreateNew("Response", uint8array));
-            using var headers = _ref.Get<JSObject>("headers");
-            headers._ref.CallVoid("set", "Content-Type", contentType);
-            headers._ref.CallVoid("set", "Content-Length", data.Length);
+            using var headers = JSRef.Get<JSObject>("headers");
+            headers.JSRef.CallVoid("set", "Content-Type", contentType);
+            headers.JSRef.CallVoid("set", "Content-Length", data.Length);
         }
 
-        public ValueTask<Blob> Blob() => _ref.CallAsync<Blob>("blob");
-        public ValueTask<string> Text() => _ref.CallAsync<string>("text");
-        public ValueTask<ArrayBuffer> ArrayBuffer() => _ref.CallAsync<ArrayBuffer>("arrayBuffer");
+        public ValueTask<Blob> Blob() => JSRef.CallAsync<Blob>("blob");
+        public ValueTask<string> Text() => JSRef.CallAsync<string>("text");
+        public ValueTask<ArrayBuffer> ArrayBuffer() => JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
 
         public void HeaderSet(string key, string value)
         {
-            using var headers = _ref.Get<JSObject>("headers");
-            headers._ref.CallVoid("set", key, value);
+            using var headers = JSRef.Get<JSObject>("headers");
+            headers.JSRef.CallVoid("set", key, value);
         }
 
         public async Task<byte[]> ReadBytes()
         {
-            using var tmp = await _ref.CallAsync<ArrayBuffer>("arrayBuffer");
+            using var tmp = await JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
             return tmp.ReadBytes();
         }
     }

@@ -13,9 +13,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public CallbackGroup callbackGroup { get; private set; } = new CallbackGroup();
         public IDBRequest(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public string ReadyState => _ref.Get<string>("readyState");
+        public string ReadyState => JSRef.Get<string>("readyState");
 
-        public T GetResult<T>() => _ref.Get<T>("result");   // Function used for this proerpty to allow T return type
+        public T GetResult<T>() => JSRef.Get<T>("result");   // Function used for this proerpty to allow T return type
 
         public void OnError(Action<JSObject> handler)
         {
@@ -28,9 +28,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void OnSuccess<T>(Action<T> resultHandler)
         {
             On("onsuccess", (JSObject arg0) => {
-                using (var target = arg0._ref.Get<JSObject>("target"))
+                using (var target = arg0.JSRef.Get<JSObject>("target"))
                 {
-                    var result = target._ref.Get<T>("result");
+                    var result = target.JSRef.Get<T>("result");
                     resultHandler.Invoke(result);
                 }
                 arg0.Dispose();
@@ -38,7 +38,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
         public void On(string eventName, Action<JSObject> handler, bool disposeAfterCalled = false)
         {
-            _ref.Set(eventName, Callback.Create((JSObject arg0) =>
+            JSRef.Set(eventName, Callback.Create((JSObject arg0) =>
             {
                 handler?.Invoke(arg0);
                 arg0.Dispose();

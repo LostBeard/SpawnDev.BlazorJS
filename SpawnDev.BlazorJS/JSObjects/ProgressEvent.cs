@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class ProgressEvent : JSObject
     {
         public ProgressEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public long? Loaded => _ref.Get<long?>("loaded");
-        public long? Total => _ref.Get<long?>("total");
+        public long? Loaded => JSRef.Get<long?>("loaded");
+        public long? Total => JSRef.Get<long?>("total");
     }
 }

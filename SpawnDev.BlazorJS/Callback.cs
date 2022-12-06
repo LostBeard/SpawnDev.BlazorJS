@@ -19,12 +19,16 @@ namespace SpawnDev.BlazorJS
         public string[] paramTypes { get; private set; } = new string[0];
         public string returnType { get; private set; } = "";
         protected bool once { get; private set; } = false;
+        [JsonIgnore]
+        public Type CallbackType { get; private set; }
         public Callback()
         {
+            CallbackType = this.GetType();
             netObjRef = DotNetObjectReference.Create(this);
             // get callback parameter types
             // we need to make sure any callback parameters that are assignable to type JSObject are transferred as IJSInProcessObjectReference type
-            var methodInfo = this.GetType().GetMethod("Invoke");
+            // also that IJSInProcessObjectReference is passed properly
+            var methodInfo = CallbackType.GetMethod("Invoke");
             if (methodInfo != null)
             {
                 var paramInfos = methodInfo.GetParameters();
@@ -32,8 +36,18 @@ namespace SpawnDev.BlazorJS
                 for (var i = 0; i < paramTypes.Length; i++)
                 {
                     var paramType = paramInfos[i].ParameterType;
-                    var isIJSObject = typeof(JSObject).IsAssignableFrom(paramType);
-                    paramTypes[i] = isIJSObject ? "IJSObject" : paramType.Name;
+                    if (typeof(JSObject).IsAssignableFrom(paramType))
+                    {
+                        paramTypes[i] = "IJSObject";
+                    }
+                    else if (typeof(IJSInProcessObjectReference).IsAssignableFrom(paramType))
+                    {
+                        paramTypes[i] = "IJSObject";
+                    }
+                    else
+                    {
+                        paramTypes[i] = paramType.Name;
+                    }
                 }
                 returnType = methodInfo.ReturnType.Name;
             }
@@ -48,13 +62,8 @@ namespace SpawnDev.BlazorJS
                 IsCallbackerID2++;
             }
             callbackerID = $"callback_{IsCallbackerID++}_{IsCallbackerID2}";
-#if DEBUG && false
-            Console.WriteLine($"Created callbackerID: {callbackerID} {string.Join(", ", paramTypes)}");
-            if (callbackerID == "callback_52_0")
-            {
-                throw new Exception("TASK is not a valid return type!");
-
-            }
+#if DEBUG
+            Console.WriteLine($"Created callbackerID: {callbackerID} {CallbackType.Name} {string.Join(", ", paramTypes)}");
 #endif
         }
         public virtual void Dispose()

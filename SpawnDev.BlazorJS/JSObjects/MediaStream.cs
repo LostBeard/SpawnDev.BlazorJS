@@ -7,9 +7,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<MediaStream>))]
     public class MediaStream : EventTarget
     {
-        public bool Active => _ref.Get<bool>("active");
-        public bool Ended => _ref.Get<bool>("ended");
-        public string Id => _ref.Get<string>("id");
+        public bool Active => JSRef.Get<bool>("active");
+        public bool Ended => JSRef.Get<bool>("ended");
+        public string Id => JSRef.Get<string>("id");
 
         CallbackGroup callbacks = new CallbackGroup();
 
@@ -58,18 +58,18 @@ namespace SpawnDev.BlazorJS.JSObjects
             callbacks?.Dispose();
         }
 
-        public void RemoveTrack(MediaStreamTrack track) => _ref.CallVoid("removeTrack", track);
-        public void AddTrack(MediaStreamTrack track) => _ref.CallVoid("addTrack", track);
-        public MediaStream Clone() => _ref.Call<MediaStream>("clone");
-        public MediaStreamTrack GetTrackById(string id) => _ref.Call<MediaStreamTrack>("getTrackById", id);
+        public void RemoveTrack(MediaStreamTrack track) => JSRef.CallVoid("removeTrack", track);
+        public void AddTrack(MediaStreamTrack track) => JSRef.CallVoid("addTrack", track);
+        public MediaStream Clone() => JSRef.Call<MediaStream>("clone");
+        public MediaStreamTrack GetTrackById(string id) => JSRef.Call<MediaStreamTrack>("getTrackById", id);
         public int GetTracksLength()
         {
-            using var tmp = _ref.Get<JSObject>("getTracks");
-            return tmp._ref.Get<int>("length");
+            using var tmp = JSRef.Get<JSObject>("getTracks");
+            return tmp.JSRef.Get<int>("length");
         }
-        public MediaStreamTrack[] GetTracks() => _ref.Call<MediaStreamTrack[]>("getTracks");
-        public MediaStreamTrack[] GetVideoTracks() => _ref.Call<MediaStreamTrack[]>("getVideoTracks");
-        public MediaStreamTrack[] GetAudioTracks() => _ref.Call<MediaStreamTrack[]>("getAudioTracks");
+        public MediaStreamTrack[] GetTracks() => JSRef.Call<MediaStreamTrack[]>("getTracks");
+        public MediaStreamTrack[] GetVideoTracks() => JSRef.Call<MediaStreamTrack[]>("getVideoTracks");
+        public MediaStreamTrack[] GetAudioTracks() => JSRef.Call<MediaStreamTrack[]>("getAudioTracks");
         public MediaStreamTrack GetFirstVideoTrack()
         {
             var tracks = GetVideoTracks();

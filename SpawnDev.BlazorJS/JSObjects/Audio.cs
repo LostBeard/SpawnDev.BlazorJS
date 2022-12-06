@@ -13,6 +13,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public Audio(IJSInProcessObjectReference _ref) : base(_ref) { }
         public Audio(string url) : base("Audio", url) { }
-        public void Play() => _ref.CallVoid("play");
+        public void Play() => JSRef.CallVoid("play");
     }
 }

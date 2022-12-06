@@ -12,7 +12,13 @@ namespace SpawnDev.BlazorJS
         public static void _JSInteropCallVoid(string fn, params object?[] args)
         {
             AssertInit();
-            _js.InvokeVoid($"JSInterop.{fn}", args);
+            try
+            {
+                _js.InvokeVoid($"JSInterop.{fn}", args);
+            } catch (Exception ex)
+            {
+                var art = true;
+            }
         }
         public static T _JSInteropCall<T>(string fn, params object?[] args)
         {

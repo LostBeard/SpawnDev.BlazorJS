@@ -17,10 +17,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<ResizeObserverEntry>))]
     public class ResizeObserverEntry : JSObject
     {
-        public List<ResizeObserverSize> BorderBoxSize => _ref.Get<List<ResizeObserverSize>>("borderBoxSize");
-        public List<ResizeObserverSize> ContentBoxSize => _ref.Get<List<ResizeObserverSize>>("contentBoxSize");
-        public List<ResizeObserverSize> DevicePixelContentBoxSize => _ref.Get<List<ResizeObserverSize>>("devicePixelContentBoxSize");
-        public DOMRect ContentRect => _ref.Get<DOMRect>("contentRect");
+        public List<ResizeObserverSize> BorderBoxSize => JSRef.Get<List<ResizeObserverSize>>("borderBoxSize");
+        public List<ResizeObserverSize> ContentBoxSize => JSRef.Get<List<ResizeObserverSize>>("contentBoxSize");
+        public List<ResizeObserverSize> DevicePixelContentBoxSize => JSRef.Get<List<ResizeObserverSize>>("devicePixelContentBoxSize");
+        public DOMRect ContentRect => JSRef.Get<DOMRect>("contentRect");
         public ResizeObserverEntry(IJSInProcessObjectReference _ref) : base(_ref) { }
     }
 }

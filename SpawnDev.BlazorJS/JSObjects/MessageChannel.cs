@@ -10,7 +10,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public MessageChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
         public MessageChannel(ExpandoObject options) : base("MessageChannel", options) { }
         public MessageChannel() : base("MessageChannel") { }
-        public MessagePort Port1 => _ref.Get<MessagePort>("port1");
-        public MessagePort Port2 => _ref.Get<MessagePort>("port2");
+        public MessagePort Port1 => JSRef.Get<MessagePort>("port1");
+        public MessagePort Port2 => JSRef.Get<MessagePort>("port2");
     }
 }

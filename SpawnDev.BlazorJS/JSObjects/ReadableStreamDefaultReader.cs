@@ -9,9 +9,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class ReadableStreamDefaultReader : JSObject
     {
         public ReadableStreamDefaultReader(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public bool Closed => _ref.Get<bool>("closed");
-        public async Task Cancel() => await _ref.CallVoidAsync("cancel");
-        public async Task<ReadableStreamReaderReadResponse> Read() => await _ref.CallAsync<ReadableStreamReaderReadResponse>("read");
-        public void ReleaseLock() => _ref.CallVoid("releaseLock");
+        public bool Closed => JSRef.Get<bool>("closed");
+        public async Task Cancel() => await JSRef.CallVoidAsync("cancel");
+        public async Task<ReadableStreamReaderReadResponse> Read() => await JSRef.CallAsync<ReadableStreamReaderReadResponse>("read");
+        public void ReleaseLock() => JSRef.CallVoid("releaseLock");
     }
 }

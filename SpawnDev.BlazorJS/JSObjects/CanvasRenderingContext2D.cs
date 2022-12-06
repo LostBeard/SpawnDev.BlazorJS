@@ -10,15 +10,15 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public bool ImageSmoothingEnabled
         {
-            get => _ref.Get<bool>("imageSmoothingEnabled");
-            set => _ref.Set("imageSmoothingEnabled", value);
+            get => JSRef.Get<bool>("imageSmoothingEnabled");
+            set => JSRef.Set("imageSmoothingEnabled", value);
         }
         public CanvasRenderingContext2D(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public HTMLCanvasElement Canvas => _ref.Get<HTMLCanvasElement>("canvas");
+        public HTMLCanvasElement Canvas => JSRef.Get<HTMLCanvasElement>("canvas");
         //public ImageData GetImageData() => _ref.Call<ImageData>("getImageData");
-        public ImageData GetImageData(int x, int y, int width, int height) => _ref.Call<ImageData>("getImageData", x, y, width, height);
-        public void PutImageData(ImageData imageData, int dx, int dy) => _ref.CallVoid("putImageData", imageData, dx, dy);
-        public void PutImageData(ImageData imageData, int dx, int dy, int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight) => _ref.CallVoid("putImageData", imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
+        public ImageData GetImageData(int x, int y, int width, int height) => JSRef.Call<ImageData>("getImageData", x, y, width, height);
+        public void PutImageData(ImageData imageData, int dx, int dy) => JSRef.CallVoid("putImageData", imageData, dx, dy);
+        public void PutImageData(ImageData imageData, int dx, int dy, int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight) => JSRef.CallVoid("putImageData", imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
 
         public byte[]? GetImageBytes()
         {
@@ -50,25 +50,25 @@ namespace SpawnDev.BlazorJS.JSObjects
             PutImageData(imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
         }
 
-        public void DrawImage(HTMLVideoElement imageData, int dx = 0, int dy = 0) => _ref.CallVoid("drawImage", imageData, dx, dy);
-        public void DrawImage(HTMLVideoElement imageData, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
-        public void DrawImage(HTMLVideoElement imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        public void DrawImage(HTMLVideoElement imageData, int dx = 0, int dy = 0) => JSRef.CallVoid("drawImage", imageData, dx, dy);
+        public void DrawImage(HTMLVideoElement imageData, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
+        public void DrawImage(HTMLVideoElement imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
-        public void DrawImage(HTMLImageElement imageData, int dx = 0, int dy = 0) => _ref.CallVoid("drawImage", imageData, dx, dy);
-        public void DrawImage(HTMLImageElement imageData, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
-        public void DrawImage(HTMLImageElement imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        public void DrawImage(HTMLImageElement imageData, int dx = 0, int dy = 0) => JSRef.CallVoid("drawImage", imageData, dx, dy);
+        public void DrawImage(HTMLImageElement imageData, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
+        public void DrawImage(HTMLImageElement imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
-        public void DrawImage(HTMLCanvasElement imageData, int dx = 0, int dy = 0) => _ref.CallVoid("drawImage", imageData, dx, dy);
-        public void DrawImage(HTMLCanvasElement imageData, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
-        public void DrawImage(HTMLCanvasElement imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        public void DrawImage(HTMLCanvasElement imageData, int dx = 0, int dy = 0) => JSRef.CallVoid("drawImage", imageData, dx, dy);
+        public void DrawImage(HTMLCanvasElement imageData, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
+        public void DrawImage(HTMLCanvasElement imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
-        public void DrawImage(OffscreenCanvas imageData, int dx = 0, int dy = 0) => _ref.CallVoid("drawImage", imageData, dx, dy);
-        public void DrawImage(OffscreenCanvas imageData, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
-        public void DrawImage(OffscreenCanvas imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        public void DrawImage(OffscreenCanvas imageData, int dx = 0, int dy = 0) => JSRef.CallVoid("drawImage", imageData, dx, dy);
+        public void DrawImage(OffscreenCanvas imageData, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
+        public void DrawImage(OffscreenCanvas imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
-        public void DrawImage(SVGImageElement imageData, int dx = 0, int dy = 0) => _ref.CallVoid("drawImage", imageData, dx, dy);
-        public void DrawImage(SVGImageElement imageData, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
-        public void DrawImage(SVGImageElement imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => _ref.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        public void DrawImage(SVGImageElement imageData, int dx = 0, int dy = 0) => JSRef.CallVoid("drawImage", imageData, dx, dy);
+        public void DrawImage(SVGImageElement imageData, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
+        public void DrawImage(SVGImageElement imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
     }
 }

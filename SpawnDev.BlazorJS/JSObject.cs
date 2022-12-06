@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS
     public class JSObject : IDisposable
     {
         public static readonly IJSInProcessObjectReference NullRef = null;
-        public IJSInProcessObjectReference _ref { get; private set; }
+        public IJSInProcessObjectReference JSRef { get; private set; }
         public bool IsWrapperDisposed { get; private set; } = false;
         public JSObject(ElementReference elementRef) => FromReference(JS.ReturnMe<IJSInProcessObjectReference>(elementRef));
 
@@ -42,27 +42,27 @@ namespace SpawnDev.BlazorJS
         public virtual void FromReference(IJSInProcessObjectReference _ref)
         {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
-            if (this._ref != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
-            this._ref = _ref;
+            if (this.JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
+            this.JSRef = _ref;
         }
         protected void ReplaceReference(IJSInProcessObjectReference _ref)
         {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
-            this._ref?.Dispose();
-            this._ref = null;
+            this.JSRef?.Dispose();
+            this.JSRef = null;
             FromReference(_ref);
         }
         // sourceDisposeExceptRef - should usually be true becuase otherwise they share a _ref object and either beign disposed will dispose that object makign it useless to the one that did not dispose it
         // by setting sourceDisposeExceptRef = true (default) the new IJSObject will have exclusive use of the _ref object
         public T ConvertToIJSObject<T>(bool sourceDisposeExceptRef = true) where T : JSObject
         {
-            var ret = (T)Activator.CreateInstance(typeof(T), _ref);
+            var ret = (T)Activator.CreateInstance(typeof(T), JSRef);
             if (sourceDisposeExceptRef) DisposeExceptRef();
             return ret;
         }
         public void DisposeExceptRef()
         {
-            _ref = null;
+            JSRef = null;
             Dispose();
         }
         protected virtual void Dispose(bool disposing)
@@ -73,8 +73,8 @@ namespace SpawnDev.BlazorJS
             {
                 // managed assets
             }
-            _ref?.Dispose();
-            _ref = null;
+            JSRef?.Dispose();
+            JSRef = null;
         }
         public virtual void Dispose()
         {
@@ -86,7 +86,7 @@ namespace SpawnDev.BlazorJS
         {
 #if DEBUG
             var thisType = this.GetType();
-            var refDispsoed = _ref == null;
+            var refDispsoed = JSRef == null;
             if (!refDispsoed)
             {
                 Console.WriteLine($"DEBUG WARNING: JSObject was not Disposed properly: {thisType.Name} - {thisType.FullName}");
@@ -108,7 +108,7 @@ namespace SpawnDev.BlazorJS
                     {
                         if (!JS.IsUndefined(this, propName))
                         {
-                            var value = _ref.Get(p.PropertyType, propName);
+                            var value = JSRef.Get(p.PropertyType, propName);
                             p.SetValue(ret, value);
                         }
                     }
@@ -123,5 +123,6 @@ namespace SpawnDev.BlazorJS
             }
             return ret;
         }
+        public static T FromElementReference<T>(ElementReference elementRef) where T : JSObject => (T)Activator.CreateInstance(typeof(T), JS.ReturnMe<IJSInProcessObjectReference>(elementRef));
     }
 }

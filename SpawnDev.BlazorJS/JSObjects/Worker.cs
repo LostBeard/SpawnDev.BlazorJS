@@ -24,9 +24,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
         public void PostMessaage(object message, IEnumerable<ArrayBuffer> transfer = null)
         {
-            if (transfer == null) _ref.CallVoid("postMessage", message);
-            else _ref.CallVoid("postMessage", message, transfer);
+            if (transfer == null) JSRef.CallVoid("postMessage", message);
+            else JSRef.CallVoid("postMessage", message, transfer);
         }
-        public void Terminate() => _ref.CallVoid("terminate");
+        public void Terminate() => JSRef.CallVoid("terminate");
     }
 }

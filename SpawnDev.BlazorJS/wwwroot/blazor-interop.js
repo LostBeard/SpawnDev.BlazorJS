@@ -231,8 +231,7 @@ var initFunc = function () {
         }
     }
 
-    function deserializeFromDotNet(value)
-    {
+    function deserializeFromDotNet(value) {
         if (typeof value === 'object' && value !== null && typeof value.__wrappedFunction === 'function') {
             value = value.__wrappedFunction;
         }
@@ -328,14 +327,16 @@ var initFunc = function () {
                     var ret = null;
                     if (!callbacks[callbackerID] || fn !== callbacks[callbackerID]) return;
                     var args = ["Invoke"];
-                    // for (var i = 0; i < arguments.length || i < value.paramTypes.length; i++) {
+                    // When the Callback is created the argument types are enumerated so they call be passed back to .Net correctly when the callback is called
+                    // IJSObject - specifies that the argument should be manually passed as a JSObjectReference and it will be wrapped before firing the owner on the other side
+                    // function - specifies the a function that should be wrapped in a fn wrapper
                     for (var i = 0; i < value.paramTypes.length; i++) {
                         var v = i < arguments.length ? arguments[i] : null;
                         var paramType = i < value.paramTypes.length ? value.paramTypes[i] : null;
-                        if (typeof v === 'function') {
+                        if (typeof v === 'Function') {
                             v = wrapFunction(v);
                         }
-                        if (paramType === 'JSObject') {
+                        if (paramType === 'IJSObject') {
                             if (typeof v !== 'undefined' && v !== null) {
                                 try {
                                     v = DotNet.createJSObjectReference(v);

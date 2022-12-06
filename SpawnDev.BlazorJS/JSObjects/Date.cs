@@ -14,9 +14,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public Date() : base("Date") { }
         public Date(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public long GetTime() => _ref.Call<long>("getTime");
-        public int GetTimezoneOffset() => _ref.Call<int>("getTimezoneOffset");
-        public string ToISOString() => _ref.Call<string>("toISOString");
+        public long GetTime() => JSRef.Call<long>("getTime");
+        public int GetTimezoneOffset() => JSRef.Call<int>("getTimezoneOffset");
+        public string ToISOString() => JSRef.Call<string>("toISOString");
         public DateTimeOffset GetDateTimeOffset() => DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromMinutes(-GetTimezoneOffset()));
 
     }

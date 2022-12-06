@@ -49,27 +49,27 @@ namespace SpawnDev.BlazorJS.JSObjects
             }
             var request = JS.Call<IDBRequest>("indexedDB.open", Name, Version);
             request.On("onupgradeneeded", (JSObject arg0) => {
-                using (var target = arg0._ref.Get<JSObject>("target"))
+                using (var target = arg0.JSRef.Get<JSObject>("target"))
                 {
-                    FromReference(target._ref.Get<IJSInProcessObjectReference>("result"));
+                    FromReference(target.JSRef.Get<IJSInProcessObjectReference>("result"));
                     OnUpgradeNeeded?.Invoke();
                 }
                 arg0.Dispose();
             });
             request.OnSuccess((JSObject arg0) => {
-                using (var target = arg0._ref.Get<JSObject>("target"))
+                using (var target = arg0.JSRef.Get<JSObject>("target"))
                 {
                     IsOpen = true;
-                    ReplaceReference(target._ref.Get<IJSInProcessObjectReference>("result"));
+                    ReplaceReference(target.JSRef.Get<IJSInProcessObjectReference>("result"));
                     t.TrySetResult(IsOpen);
                     request.Dispose();
                 }
                 arg0.Dispose();
             });
             request.OnError((JSObject arg0) => {
-                using (var target = arg0._ref.Get<JSObject>("target"))
+                using (var target = arg0.JSRef.Get<JSObject>("target"))
                 {
-                    _lastErrorCode = _ref.Get<double>("errorCode");
+                    _lastErrorCode = JSRef.Get<double>("errorCode");
                     t.TrySetResult(IsOpen);
                     request.Dispose();
                 }
@@ -112,20 +112,20 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public IDBTransaction Transaction(string[] storeNames, string mode, ExpandoObject options)
         {
-            IDBTransaction transaction = _ref.Call<IDBTransaction>("transaction", storeNames, mode, options);
+            IDBTransaction transaction = JSRef.Call<IDBTransaction>("transaction", storeNames, mode, options);
             return transaction;
         }
 
         // TODO - below needs to be verified working
         public string[] ObjectStoreNames()
         {
-            using(var domStringList = _ref.Get<JSObject>("objectStoreNames"))
+            using(var domStringList = JSRef.Get<JSObject>("objectStoreNames"))
             {
                 var ret = new List<string>();
-                var length = domStringList._ref.Get<int>("length");
+                var length = domStringList.JSRef.Get<int>("length");
                 for (var i = 0; i < length; i++)
                 {
-                    var tmp = domStringList._ref.Call<string>("item", i);
+                    var tmp = domStringList.JSRef.Call<string>("item", i);
                     ret.Add(tmp);
                 }
                 return ret.ToArray();
@@ -145,27 +145,27 @@ namespace SpawnDev.BlazorJS.JSObjects
             options.autoIncrement = autoIncrement;
             IDBObjectStore objectStore;
             if (options == null)
-                objectStore = _ref.Call<IDBObjectStore>("createObjectStore", storeName);
+                objectStore = JSRef.Call<IDBObjectStore>("createObjectStore", storeName);
             else
-                objectStore = _ref.Call<IDBObjectStore>("createObjectStore", storeName, (object)options);
+                objectStore = JSRef.Call<IDBObjectStore>("createObjectStore", storeName, (object)options);
             return objectStore;
         }
 
         public void DeleteObjectStore(string storeName)
         {
-            _ref.CallVoid("deleteObjectStore", storeName);
+            JSRef.CallVoid("deleteObjectStore", storeName);
         }
 
         // static
         public static CallbackGroup AttachErrorSuccessHandler(JSObject request, Action<JSObject> onError, Action<JSObject> onSuccess)
         {
             var callbackGroup = new CallbackGroup();
-            request._ref.Set("onerror", Callback.Create((JSObject arg0) => {
+            request.JSRef.Set("onerror", Callback.Create((JSObject arg0) => {
                 callbackGroup.Dispose();
                 onError.Invoke(arg0);
                 arg0.Dispose();
             }, callbackGroup));
-            request._ref.Set("onsuccess", Callback.Create((JSObject arg0) => {
+            request.JSRef.Set("onsuccess", Callback.Create((JSObject arg0) => {
                 callbackGroup.Dispose();
                 onSuccess.Invoke(arg0);
                 arg0.Dispose();

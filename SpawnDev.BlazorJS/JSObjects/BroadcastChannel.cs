@@ -8,11 +8,11 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public BroadcastChannel(IJSInProcessObjectReference _ref) :base(_ref){ }
         CallbackGroup callbacks = new CallbackGroup();
-        public string Name => _ref.Get<string>("name");
+        public string Name => JSRef.Get<string>("name");
         BroadcastChannel(string channelName) : base("BroadcastChannel", channelName) { }
-        public void PostMessage<T>(T msg) => _ref.CallVoid("postMessage", msg);
+        public void PostMessage<T>(T msg) => JSRef.CallVoid("postMessage", msg);
         public void OnMessage(Callback callback) => callbacks.Add(callback);
-        public void Close() => _ref.CallVoid("close");
+        public void Close() => JSRef.CallVoid("close");
         public override void Dispose()
         {
             if (IsWrapperDisposed) return;

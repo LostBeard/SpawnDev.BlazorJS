@@ -13,8 +13,8 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         CallbackGroup callbacks = new CallbackGroup();
 
-        public void OnReadable(Action callback) { _ref.CallVoid("on", "readable", Callback.Create(callback, callbacks)); }
-        public void OnEnd(Action callback) { _ref.CallVoid("on", "end", Callback.Create(callback, callbacks)); }
+        public void OnReadable(Action callback) { JSRef.CallVoid("on", "readable", Callback.Create(callback, callbacks)); }
+        public void OnEnd(Action callback) { JSRef.CallVoid("on", "end", Callback.Create(callback, callbacks)); }
 
         public ReadableStream(ExpandoObject options) : base("ReadableStream", options) { }
 
@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             Uint8Array? ret = null;
             try
             {
-                ret = _ref.Call<Uint8Array>("read");
+                ret = JSRef.Call<Uint8Array>("read");
             }
             catch { }
             return ret;
@@ -31,12 +31,12 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public ReadableStreamDefaultReader GetReader()
         {
-            return _ref.Call<ReadableStreamDefaultReader>("getReader");
+            return JSRef.Call<ReadableStreamDefaultReader>("getReader");
         }
 
         public void Destroy()
         {
-            _ref.CallVoid("destroy");
+            JSRef.CallVoid("destroy");
         }
 
         public override void Dispose()

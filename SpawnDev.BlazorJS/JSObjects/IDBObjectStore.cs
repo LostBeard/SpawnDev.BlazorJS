@@ -14,27 +14,27 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public IDBRequest Add(object value, string key)
         {
-            return _ref.Call<IDBRequest>("add", value, key);
+            return JSRef.Call<IDBRequest>("add", value, key);
         }
 
         public Task AddAsync(object value, string key)
         {
-            return IDBRequest.ToAsync(_ref.Call<IDBRequest>("add", value, key));
+            return IDBRequest.ToAsync(JSRef.Call<IDBRequest>("add", value, key));
         }
 
         public IDBRequest Put(object value, string key)
         {
-            return _ref.Call<IDBRequest>("put", value, key);
+            return JSRef.Call<IDBRequest>("put", value, key);
         }
 
         public Task PutAsync(object value, string key)
         {
-            return IDBRequest.ToAsync(_ref.Call<IDBRequest>("put", value, key));
+            return IDBRequest.ToAsync(JSRef.Call<IDBRequest>("put", value, key));
         }
 
         public IDBRequest GetAll()
         {
-            return _ref.Call<IDBRequest>("getAll");
+            return JSRef.Call<IDBRequest>("getAll");
         }
 
         public Task<List<T>> GetAllAsync<T>()
@@ -44,10 +44,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             var t = new TaskCompletionSource<List<T>>();
             request.OnError((arg0) => { t.SetException(new Exception("IDBRequest failed. Exception info TODO")); });
             request.OnSuccess<JSObject>((result) => {
-                var length = result._ref.Get<int>("length");
+                var length = result.JSRef.Get<int>("length");
                 for (var i = 0; i < length; i++)
                 {
-                    ret.Add(result._ref.Get<T>(i));
+                    ret.Add(result.JSRef.Get<T>(i));
                 }
                 result.Dispose();
                 t.TrySetResult(ret);
@@ -57,42 +57,42 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public IDBRequest Get(string key)
         {
-            return _ref.Call<IDBRequest>("get", key);
+            return JSRef.Call<IDBRequest>("get", key);
         }
 
         public Task<T> GetAsync<T>(string key)
         {
-            return IDBRequest.ToAsync<T>(_ref.Call<IDBRequest>("get", key));
+            return IDBRequest.ToAsync<T>(JSRef.Call<IDBRequest>("get", key));
         }
 
         public IDBRequest Delete(string key)
         {
-            return _ref.Call<IDBRequest>("delete", key);
+            return JSRef.Call<IDBRequest>("delete", key);
         }
 
         public Task DeleteAsync(string key)
         {
-            return IDBRequest.ToAsync(_ref.Call<IDBRequest>("delete", key));
+            return IDBRequest.ToAsync(JSRef.Call<IDBRequest>("delete", key));
         }
 
         public IDBRequest Clear()
         {
-            return _ref.Call<IDBRequest>("clear");
+            return JSRef.Call<IDBRequest>("clear");
         }
 
         public Task ClearAsync()
         {
-            return IDBRequest.ToAsync(_ref.Call<IDBRequest>("clear"));
+            return IDBRequest.ToAsync(JSRef.Call<IDBRequest>("clear"));
         }
 
         public IDBRequest GetAllKeys()
         {
-            return _ref.Call<IDBRequest>("getAllKeys");
+            return JSRef.Call<IDBRequest>("getAllKeys");
         }
 
         public Task<string[]> GetAllKeysAsync()
         {
-            return IDBRequest.ToAsync<string[]>(_ref.Call<IDBRequest>("getAllKeys"));
+            return IDBRequest.ToAsync<string[]>(JSRef.Call<IDBRequest>("getAllKeys"));
         }
     }
 }

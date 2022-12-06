@@ -7,6 +7,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Element : Node
     {
         public Element(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public DOMRect GetBoundingClientRect() => _ref.Call<DOMRect>("getBoundingClientRect");
+        public DOMRect GetBoundingClientRect() => JSRef.Call<DOMRect>("getBoundingClientRect");
     }
 }

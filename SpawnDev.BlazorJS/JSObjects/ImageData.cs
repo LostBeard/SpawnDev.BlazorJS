@@ -6,10 +6,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<ImageData>))]
     public class ImageData : JSObject
     {
-        public string ColorSpace => _ref.Get<string>("colorSpace");
-        public ulong Height => _ref.Get<ulong>("height");
-        public ulong Width => _ref.Get<ulong>("width");
-        public Uint8ClampedArray Data => _ref.Get<Uint8ClampedArray>("data");
+        public string ColorSpace => JSRef.Get<string>("colorSpace");
+        public ulong Height => JSRef.Get<ulong>("height");
+        public ulong Width => JSRef.Get<ulong>("width");
+        public Uint8ClampedArray Data => JSRef.Get<Uint8ClampedArray>("data");
         public ImageData(IJSInProcessObjectReference _ref) : base(_ref) { }
         public ImageData(int width, int height) : base("ImageData", width, height) { }
         public ImageData(Uint8ClampedArray array, int width, int height) : base("ImageData", array, width, height) { }

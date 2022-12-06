@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class ArrayBuffer : JSObject
     {
         public ArrayBuffer(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public int ByteLength => _ref.Get<int>("byteLength");
+        public int ByteLength => JSRef.Get<int>("byteLength");
         public ArrayBuffer(long length) : base("ArrayBuffer", length) { }
         public byte[] ReadBytes()
         {

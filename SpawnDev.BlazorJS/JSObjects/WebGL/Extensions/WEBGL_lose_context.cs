@@ -9,8 +9,8 @@ namespace SpawnDev.BlazorJS.WebGL.Extensions
 
         public WEBGL_lose_context(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public void LoseContext() => _ref.CallVoid("loseContext");
-        public void RestoreContext() => _ref.CallVoid("restoreContext");
+        public void LoseContext() => JSRef.CallVoid("loseContext");
+        public void RestoreContext() => JSRef.CallVoid("restoreContext");
 
     }
 }

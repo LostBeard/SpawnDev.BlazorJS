@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class File : Blob
     {
         public File(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public string Name => _ref.Get<string>("name");
-        public long LastModified => _ref.Get<long>("lastModified");
+        public string Name => JSRef.Get<string>("name");
+        public long LastModified => JSRef.Get<long>("lastModified");
     }
 }

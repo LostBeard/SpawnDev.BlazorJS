@@ -20,12 +20,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Blob(IJSInProcessObjectReference _ref) : base(_ref) { }
         public Blob(ArrayBuffer[] buffers, BlobOptions options) : base("Blob", buffers, options) { }
         public Blob(IEnumerable<string> buffers, BlobOptions options) : base("Blob", buffers, options) { }
-        public long Size => _ref.Get<long>("size");
-        public string Type => _ref.Get<string>("type");
-        public async Task<string> Text() => await _ref.CallAsync<string>("text");
-        public async Task<ArrayBuffer> ArrayBuffer() => await _ref.CallAsync<ArrayBuffer>("arrayBuffer");
-        public Blob Slice(long startPos, long endPos, string contentType) => _ref.Call<Blob>("slice", startPos, endPos, contentType);
-        public ReadableStream Stream() => _ref.Call<ReadableStream>("stream");
+        public long Size => JSRef.Get<long>("size");
+        public string Type => JSRef.Get<string>("type");
+        public async Task<string> Text() => await JSRef.CallAsync<string>("text");
+        public async Task<ArrayBuffer> ArrayBuffer() => await JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
+        public Blob Slice(long startPos, long endPos, string contentType) => JSRef.Call<Blob>("slice", startPos, endPos, contentType);
+        public ReadableStream Stream() => JSRef.Call<ReadableStream>("stream");
         static string atob(string str)
         {
             var bytes = Encoding.UTF8.GetBytes(str);

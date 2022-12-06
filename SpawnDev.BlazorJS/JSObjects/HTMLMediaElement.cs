@@ -12,12 +12,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         // MediaStream, MediaSource, Blob, or File
         public JSObject SrcObject 
         {
-            get => _ref.Get<JSObject>("srcObject");
-            set => _ref.Set("srcObject", value);
+            get => JSRef.Get<JSObject>("srcObject");
+            set => JSRef.Set("srcObject", value);
         }
 
 
-        public async Task Play() => await _ref.CallVoidAsync("play");
-        public void Pause() => _ref.CallVoid("pause");
+        public async Task Play() => await JSRef.CallVoidAsync("play");
+        public void Pause() => JSRef.CallVoid("pause");
     }
 }

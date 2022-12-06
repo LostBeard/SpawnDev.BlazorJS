@@ -18,11 +18,11 @@ namespace SpawnDev.BlazorJS.JSObjects
             {
                 _OnMessage?.Dispose();
                 _OnMessage = value;
-                _ref.Set("onmessage", _OnMessage);
+                JSRef.Set("onmessage", _OnMessage);
             }
         }
-        public void PostMessage(string message, object[] transferList = null) => _ref.CallVoid("postMessage", message, transferList);
-        public void PostMessage<T>(T message, object[] transferList = null) => _ref.CallVoid("postMessage", message, transferList);
+        public void PostMessage(string message, object[] transferList = null) => JSRef.CallVoid("postMessage", message, transferList);
+        public void PostMessage<T>(T message, object[] transferList = null) => JSRef.CallVoid("postMessage", message, transferList);
         public override void Dispose()
         {
             if (IsWrapperDisposed) return;

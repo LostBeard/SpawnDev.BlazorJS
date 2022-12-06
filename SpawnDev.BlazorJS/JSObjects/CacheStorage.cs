@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public CacheStorage(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public bool IsOpen { get { return _ref != null; } }
+        public bool IsOpen { get { return JSRef != null; } }
         public string Name { get; private set; } = "";
 
         public static async Task<CacheStorage> OpenCache(string name)
@@ -32,7 +32,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public async Task<List<string>> CacheKeys()
         {
             var ret = new List<string>();
-            var tmp = await _ref.CallAsync<Request[]>("keys");
+            var tmp = await JSRef.CallAsync<Request[]>("keys");
             //var cnt = tmp.GetProperty<int>("length");
             foreach(var r in tmp)
             {
@@ -55,8 +55,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void Match(string path, Action<Response> callback)
         {
             var callbackGroup = new CallbackGroup();
-            var promise = _ref.Call<JSObject>("match", path);
-            promise._ref.CallVoid("then", Callback.Create((Response response) => {
+            var promise = JSRef.Call<JSObject>("match", path);
+            promise.JSRef.CallVoid("then", Callback.Create((Response response) => {
                 try
                 {
                     callback(response);
@@ -68,7 +68,7 @@ namespace SpawnDev.BlazorJS.JSObjects
                 promise.Dispose();
                 callbackGroup.Dispose();
             }, callbackGroup));
-            promise._ref.CallVoid("catch", Callback.Create(() => {
+            promise.JSRef.CallVoid("catch", Callback.Create(() => {
                 callback(null);
                 promise.Dispose();
                 callbackGroup.Dispose();
@@ -77,17 +77,17 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public async Task<bool> Has(string path)
         {
-            return await _ref.InvokeAsync<bool>("has", path);
+            return await JSRef.InvokeAsync<bool>("has", path);
         }
 
         public void Put(string path, Response response)
         {
-            _ref.InvokeVoid("put", path, response);
+            JSRef.InvokeVoid("put", path, response);
         }
 
         public void Delete(string path)
         {
-            _ref.InvokeVoid("delete", path);
+            JSRef.InvokeVoid("delete", path);
         }
 
         public async Task AddAll(IEnumerable<string> urls)

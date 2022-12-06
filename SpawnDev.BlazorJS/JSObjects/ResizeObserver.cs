@@ -16,9 +16,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public ResizeObserver(IJSInProcessObjectReference _ref) : base(_ref) { }
         public ResizeObserver(ActionCallback<List<ResizeObserverEntry>> callback) : base("ResizeObserver", callback) { }
         public ResizeObserver(Callback callback) : base("ResizeObserver", callback) { }
-        public void Observe(IJSInProcessObjectReference el) => _ref.CallVoid("observe", el);
-        public void Unobserve(IJSInProcessObjectReference el) => _ref.CallVoid("unobserve", el);
-        public void Observe(ElementReference el) => _ref.CallVoid("observe", el);
-        public void Unobserve(ElementReference el) => _ref.CallVoid("unobserve", el);
+        public void Observe(IJSInProcessObjectReference el) => JSRef.CallVoid("observe", el);
+        public void Unobserve(IJSInProcessObjectReference el) => JSRef.CallVoid("unobserve", el);
+        public void Observe(ElementReference el) => JSRef.CallVoid("observe", el);
+        public void Unobserve(ElementReference el) => JSRef.CallVoid("unobserve", el);
     }
 }

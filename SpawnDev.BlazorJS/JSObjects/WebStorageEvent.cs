@@ -7,9 +7,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class WebStorageEvent : JSObject
     {
         public WebStorageEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public string Key => _ref.Get<string>("key");
-        public string OldValue => _ref.Get<string>("oldValue");
-        public string NewValue => _ref.Get<string>("newValue");
-        public string Url => _ref.Get<string>("url");
+        public string Key => JSRef.Get<string>("key");
+        public string OldValue => JSRef.Get<string>("oldValue");
+        public string NewValue => JSRef.Get<string>("newValue");
+        public string Url => JSRef.Get<string>("url");
     }
 }

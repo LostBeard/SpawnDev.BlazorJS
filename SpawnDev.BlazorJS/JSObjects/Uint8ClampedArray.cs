@@ -8,8 +8,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Uint8ClampedArray : JSObject
     {
         public Uint8ClampedArray(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public ArrayBuffer Buffer => _ref.Get<ArrayBuffer>("buffer");
-        public int ByteLength => _ref.Get<int>("byteLength");
+        public ArrayBuffer Buffer => JSRef.Get<ArrayBuffer>("buffer");
+        public int ByteLength => JSRef.Get<int>("byteLength");
         //public byte this[int index]
         //{
         //    get => _ref.Get<byte>(index);

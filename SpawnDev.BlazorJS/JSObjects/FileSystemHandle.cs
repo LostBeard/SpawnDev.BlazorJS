@@ -14,19 +14,19 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class FileSystemHandle : JSObject
     {
         public FileSystemHandle(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public string Name => _ref.Get<string>("name");
-        public string Kind => _ref.Get<string>("kind");
-        public bool IsSameEntry(JSObject fsHandle) => _ref.Call<bool>("isSameEntry", fsHandle);
+        public string Name => JSRef.Get<string>("name");
+        public string Kind => JSRef.Get<string>("kind");
+        public bool IsSameEntry(JSObject fsHandle) => JSRef.Call<bool>("isSameEntry", fsHandle);
 
         public static async Task<List<T>> IterateAsync<T>(JSObject iteratee)
         {
             var ret = new List<T>();
             while (true)
             {
-                using (var next = await iteratee._ref.CallAsync<JSObject>("next"))
+                using (var next = await iteratee.JSRef.CallAsync<JSObject>("next"))
                 {
-                    if (next._ref.Get<bool>("done")) break;
-                    ret.Add(next._ref.Get<T>("value"));
+                    if (next.JSRef.Get<bool>("done")) break;
+                    ret.Add(next.JSRef.Get<T>("value"));
                 }
             }
             return ret;
@@ -70,22 +70,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             dynamic options = new ExpandoObject();
             options.mode = writePermission ? "readwrite" : "read";
-            return await _ref.CallAsync<string>("queryPermission", (object)options);
+            return await JSRef.CallAsync<string>("queryPermission", (object)options);
         }
 
         public async Task<string> RequestPermission(bool writePermission = false)
         {
             dynamic options = new ExpandoObject();
             options.mode = writePermission ? "readwrite" : "read";
-            return await _ref.CallAsync<string>("requestPermission", (object)options);
+            return await JSRef.CallAsync<string>("requestPermission", (object)options);
         }
 
         public async Task<bool> VerifyPermission(bool readWrite = true, bool askIfNeeded = true)
         {
             dynamic options = new ExpandoObject();
             options.mode = readWrite ? "readwrite" : "read";
-            if ((await _ref.CallAsync<string>("queryPermission", (object)options)) == "granted") return true;
-            if (askIfNeeded && (await _ref.CallAsync<string>("requestPermission", (object)options)) == "granted") return true;
+            if ((await JSRef.CallAsync<string>("queryPermission", (object)options)) == "granted") return true;
+            if (askIfNeeded && (await JSRef.CallAsync<string>("requestPermission", (object)options)) == "granted") return true;
             return false;
         }
     }

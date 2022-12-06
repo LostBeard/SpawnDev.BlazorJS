@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public async Task<File> GetFile()
         {
-            return await _ref.CallAsync<File>("getFile");
+            return await JSRef.CallAsync<File>("getFile");
         }
     }
 }

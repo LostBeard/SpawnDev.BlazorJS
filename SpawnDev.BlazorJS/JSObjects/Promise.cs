@@ -9,8 +9,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Promise : JSObject
     {
         public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public void Then(Callback callback) { _ref.CallVoid("then", callback); }
-        public void Catch(Callback callback) { _ref.CallVoid("catch", callback); }
+        public void Then(Callback callback) { JSRef.CallVoid("then", callback); }
+        public void Catch(Callback callback) { JSRef.CallVoid("catch", callback); }
         public Task<T> ThenAsync<T>()
         {
             var callbacks = new CallbackGroup();

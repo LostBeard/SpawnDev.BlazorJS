@@ -12,14 +12,14 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<ServiceWorkerContainer>))]
     public class ServiceWorkerContainer : EventTarget
     {
-        public ServiceWorker Controller => _ref.Get<ServiceWorker>("controller");
-        public ValueTask<ServiceWorkerRegistration> Ready => _ref.GetAsync<ServiceWorkerRegistration>("ready");
+        public ServiceWorker Controller => JSRef.Get<ServiceWorker>("controller");
+        public ValueTask<ServiceWorkerRegistration> Ready => JSRef.GetAsync<ServiceWorkerRegistration>("ready");
         public ServiceWorkerContainer(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         public async Task<ServiceWorkerRegistration> Register(string scriptURL, RegisterOptions options = null)
         {
-            if (options != null) return await _ref.CallAsync<ServiceWorkerRegistration>("register", scriptURL, options);
-            return await _ref.CallAsync<ServiceWorkerRegistration>("register", scriptURL);
+            if (options != null) return await JSRef.CallAsync<ServiceWorkerRegistration>("register", scriptURL, options);
+            return await JSRef.CallAsync<ServiceWorkerRegistration>("register", scriptURL);
         }
 
         public class RegisterOptions

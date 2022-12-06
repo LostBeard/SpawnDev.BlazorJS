@@ -21,9 +21,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public EventTarget(string className) : base(className) { }
         public EventTarget(string className, object arg0) : base(className, arg0) { }
         public EventTarget(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public bool DispatchEvent(string type) => _ref.Call<bool>("dispatchEvent", type);
-        public void AddEventListener(string type, Callback listener, bool useCapture = false) => _ref.CallVoid("addEventListener", type, listener, useCapture);
-        public void AddEventListener(string type, Callback listener, AddEventListenerOptions options) => _ref.CallVoid("addEventListener", type, listener, options);
-        public void RemoveEventListener(string type, Callback listener, bool useCapture = false) => _ref.CallVoid("removeEventListener", type, listener, useCapture);
+        public bool DispatchEvent(string type) => JSRef.Call<bool>("dispatchEvent", type);
+        public void AddEventListener(string type, Callback listener, bool useCapture = false) => JSRef.CallVoid("addEventListener", type, listener, useCapture);
+        public void AddEventListener(string type, Callback listener, AddEventListenerOptions options) => JSRef.CallVoid("addEventListener", type, listener, options);
+        public void RemoveEventListener(string type, Callback listener, bool useCapture = false) => JSRef.CallVoid("removeEventListener", type, listener, useCapture);
     }
 }

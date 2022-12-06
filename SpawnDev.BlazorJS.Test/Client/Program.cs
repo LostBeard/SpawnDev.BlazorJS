@@ -46,7 +46,7 @@ namespace SpawnDev.BlazorJS.Test
             JS.Set("window2", window);
             JS.Set("window2", window);
             var inneeWidth = JS.Get<int>("innerWidth");
-            var inneeWigth = window._ref.Get<int>("innerWidth");
+            var inneeWigth = window.JSRef.Get<int>("innerWidth");
             var windsw = JS.Get<Window>("window2");
 
             await host.RunAsync();

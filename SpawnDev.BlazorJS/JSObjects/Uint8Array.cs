@@ -21,13 +21,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Uint8Array(ArrayBuffer arrayBuffer) : base("Uint8Array", arrayBuffer) { }
         public Uint8Array(int length) : base("Uint8Array", length) { }
         public Uint8Array(byte[] sourceBytes) : base(JS.ReturnMe<IJSInProcessObjectReference>(sourceBytes)) { }
-        public ArrayBuffer Buffer => IsWrapperDisposed || _ref == null ? null : _ref.Get<ArrayBuffer>("buffer");
-        public long ByteLength => _ref.Get<long>("byteLength");
-        public long ByteOffset => _ref.Get<long>("byteOffset");
-        public bool IsPartialView => _ref.Get<long>("buffer.byteLength") != _ref.Get<long>("byteLength");
+        public ArrayBuffer Buffer => IsWrapperDisposed || JSRef == null ? null : JSRef.Get<ArrayBuffer>("buffer");
+        public long ByteLength => JSRef.Get<long>("byteLength");
+        public long ByteOffset => JSRef.Get<long>("byteOffset");
+        public bool IsPartialView => JSRef.Get<long>("buffer.byteLength") != JSRef.Get<long>("byteLength");
         public byte[] ReadBytes()
         {
-            return JS.ReturnMe<byte[]>(_ref);
+            return JS.ReturnMe<byte[]>(JSRef);
         }
     }
 }

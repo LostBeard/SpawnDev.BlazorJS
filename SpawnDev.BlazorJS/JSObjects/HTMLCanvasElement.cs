@@ -40,13 +40,13 @@ namespace SpawnDev.BlazorJS.JSObjects
     }
 
     [JsonConverter(typeof(JSObjectConverter<HTMLCanvasElement>))]
-    public class HTMLCanvasElement : JSObject
+    public class HTMLCanvasElement : HTMLElement
     {
         //dynamic brush1x1 = null;
         //Uint8Array brush1x1Data = null;
 
-        public int Width { get { var tmp = _ref.Get<int?>("width"); return tmp.HasValue ? tmp.Value : 0; } set { _ref.Set("width", value); } }
-        public int Height { get { var tmp = _ref.Get<int?>("height"); return tmp.HasValue ? tmp.Value : 0; } set { _ref.Set("height", value); } }
+        public int Width { get { var tmp = JSRef.Get<int?>("width"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("width", value); } }
+        public int Height { get { var tmp = JSRef.Get<int?>("height"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("height", value); } }
 
         //private CanvasRenderingContext2D? _Context2D = null;
 
@@ -64,31 +64,31 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public HTMLCanvasElement(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public HTMLCanvasElement(ElementReference canvasElementReference) : base(canvasElementReference) { }
+        public HTMLCanvasElement(ElementReference canvasElementReference) : base(JS.ReturnMe<IJSInProcessObjectReference>(canvasElementReference)) { }
 
         public HTMLCanvasElement(int width, int height) : base(NullRef)
         {
-            FromReference(JS.DocumentCreateElement<IJSInProcessObjectReference>("canvas"));
+            FromReference(JS.DocumentCreateElement("canvas"));
             Width = width;
             Height = height;
         }
 
         public CanvasRenderingContext2D Get2DContext(ContextAttributes2D contextAttributes = null)
         {
-            if (contextAttributes == null) return _ref.Call<CanvasRenderingContext2D>("getContext", "2d");
-            return _ref.Call<CanvasRenderingContext2D>("getContext", "2d", contextAttributes);
+            if (contextAttributes == null) return JSRef.Call<CanvasRenderingContext2D>("getContext", "2d");
+            return JSRef.Call<CanvasRenderingContext2D>("getContext", "2d", contextAttributes);
         }
 
         public WebGLRenderingContext GetWebGLContext(WebGLContextAttributes contextAttributes = null)
         {
-            if (contextAttributes == null) return _ref.Call<WebGLRenderingContext>("getContext", "webgl");
-            return _ref.Call<WebGLRenderingContext>("getContext", "webgl", contextAttributes);
+            if (contextAttributes == null) return JSRef.Call<WebGLRenderingContext>("getContext", "webgl");
+            return JSRef.Call<WebGLRenderingContext>("getContext", "webgl", contextAttributes);
         }
 
         public WebGL2RenderingContext GetWebGL2Context(WebGLContextAttributes contextAttributes = null)
         {
-            if (contextAttributes == null) return _ref.Call<WebGL2RenderingContext>("getContext", "webgl2");
-            return _ref.Call<WebGL2RenderingContext>("getContext", "webgl2", contextAttributes);
+            if (contextAttributes == null) return JSRef.Call<WebGL2RenderingContext>("getContext", "webgl2");
+            return JSRef.Call<WebGL2RenderingContext>("getContext", "webgl2", contextAttributes);
         }
 
         //public byte[] GetImageData(int x, int y, int width, int height)
@@ -152,7 +152,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    return GetImageData(x, y, 1, 1);
         //}
 
-        public string GetDataUrl() => _ref.Call<string>("toDataURL", "image/png");
+        public string GetDataUrl() => JSRef.Call<string>("toDataURL", "image/png");
 
 
         // NOTE - may not work on some browsers if not added to DOM first (even if temporary)
@@ -250,11 +250,11 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public DOMRect GetBoundingClientRect()
         {
-            return _ref.Call<DOMRect>("getBoundingClientRect");
+            return JSRef.Call<DOMRect>("getBoundingClientRect");
         }
 
-        public int OffsetWidth => _ref.Get<int>("offsetWidth");
-        public int OffsetHeight => _ref.Get<int>("offsetHeight");
+        public int OffsetWidth => JSRef.Get<int>("offsetWidth");
+        public int OffsetHeight => JSRef.Get<int>("offsetHeight");
 
         //public void DrawPixelOld(int x, int y, byte r, byte g, byte b, byte a)
         //{

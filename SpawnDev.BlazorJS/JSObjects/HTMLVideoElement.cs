@@ -9,8 +9,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public HTMLVideoElement() : base(JS.DocumentCreateElement("video")) { }
         public HTMLVideoElement(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public int VideoWidth => _ref.Get<int>("videoWidth");
-        public int VideoHeight => _ref.Get<int>("videoHeight");
+        public int VideoWidth => JSRef.Get<int>("videoWidth");
+        public int VideoHeight => JSRef.Get<int>("videoHeight");
         public bool SupportsRequestVideoFrameCallback => !JS.IsUndefined(this, "requestVideoFrameCallback");
     }
 }

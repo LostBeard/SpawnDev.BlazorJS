@@ -67,45 +67,40 @@ namespace SpawnDev.BlazorJS
             foreach (var src in sources) tasks.Add(LoadScript(src));
             await Task.WhenAll(tasks);
         }
-        public static IJSInProcessObjectReference GetDocument()
-        {
-            using var window = GetWindow();
-            return window._ref.Get<IJSInProcessObjectReference>("document");
-        }
-        public static IJSInProcessObjectReference GetDocumentHead()
-        {
-            using var document = GetDocument();
-            return document.Get<IJSInProcessObjectReference>("head");
-        }
-        public static IJSInProcessObjectReference GetDocumentBody()
-        {
-            using var document = GetDocument();
-            return document.Get<IJSInProcessObjectReference>("body");
-        }
+        // window
+        public static IJSInProcessObjectReference GetWindow() => Get<IJSInProcessObjectReference>("window");
+        public static T GetWindow<T>() where T : JSObject => Get<T>("window");
+        // document
+        public static IJSInProcessObjectReference GetDocument() => Get<IJSInProcessObjectReference>("document");
+        public static T GetDocument<T>() where T : JSObject => Get<T>("document");
+        // document.head
+        public static IJSInProcessObjectReference GetDocumentHead() => Get<IJSInProcessObjectReference>("document.head");
+        public static T GetDocumentHead<T>() where T : JSObject => Get<T>("document.head");
+        // document.body
+        public static IJSInProcessObjectReference GetDocumentBody() => Get<IJSInProcessObjectReference>("document.body");
+        public static T GetDocumentBody<T>() where T : JSObject => Get<T>("document.body");
         public static void DocumentHeadAppendChild(IJSInProcessObjectReference element)
         {
-            using var head = GetDocumentHead();
-            head.CallVoid("appendChild", element);
+            using var head = GetDocumentHead<Node>();
+            head.AppendChild(element);
         }
         public static void DocumentBodyAppendChild(IJSInProcessObjectReference element)
         {
-            using var body = GetDocumentBody();
-            body.CallVoid("appendChild", element);
+            using var body = GetDocumentBody<Node>();
+            body.AppendChild(element);
         }
         public static IJSInProcessObjectReference DocumentCreateElement(string elementType)
         {
-            using var document = GetDocument();
-            return document.Call<IJSInProcessObjectReference>("createElement", elementType);
+            using var document = GetDocument<Document>();
+            document.CreateElement(elementType);
+            return document.CreateElement(elementType);
         }
-        public static T DocumentCreateElement<T>(string elementType)
+        public static T DocumentCreateElement<T>(string elementType) where T : JSObject
         {
-            using var document = GetDocument();
-            return document.Call<T>("createElement", elementType);
+            using var document = GetDocument<Document>();
+            return document.CreateElement<T>(elementType);
         }
-        //public static bool JSEquals(JSObject obj1, JSObject obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
-        //public static bool JSEquals(IJSInProcessObjectReference obj1, IJSInProcessObjectReference obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
-        //public static bool JSEquals(IJSInProcessObjectReference obj1, JSObject obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
-        //public static bool JSEquals(JSObject obj1, IJSInProcessObjectReference obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
+
         public static bool JSEquals(object obj1, object obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
 
         public static void DisposeIt(object obj)
@@ -119,13 +114,13 @@ namespace SpawnDev.BlazorJS
         //}
         public static T CopyReference<T>(JSObject obj) where T : JSObject
         {
-            var tmp = ReturnMe<IJSInProcessObjectReference>(obj._ref);
+            var tmp = ReturnMe<IJSInProcessObjectReference>(obj.JSRef);
             return (T)Activator.CreateInstance(typeof(T), tmp);
         }
         public static IJSInProcessObjectReference CopyReference(IJSInProcessObjectReference obj) => ReturnMe<IJSInProcessObjectReference>(obj);
         public static T MoveReference<T>(JSObject orig, bool sourceDisposeExceptRef = true) where T : JSObject
         {
-            var ret = (T)Activator.CreateInstance(typeof(T), orig._ref);
+            var ret = (T)Activator.CreateInstance(typeof(T), orig.JSRef);
             if (sourceDisposeExceptRef) orig.DisposeExceptRef();
             return ret;
         }
@@ -141,9 +136,9 @@ namespace SpawnDev.BlazorJS
         public static IJSInProcessObjectReference CreateNew(string className, object arg0, object arg1, object arg2, object arg3, object arg4) => CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4 });
         public static IJSInProcessObjectReference CreateNew(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 });
         public static bool IsUndefined(JSObject obj, string identifier = "") => _JSInteropCall<string>("_typeof", obj, identifier) == "undefined";
-        public static bool IsUndefined(string identifier = "") => _JSInteropCall<string>("_typeof", null, identifier) == "undefined";
+        public static bool IsUndefined(string identifier) => _JSInteropCall<string>("_typeof", null, identifier) == "undefined";
         public static string TypeOf(JSObject obj, string identifier = "") => _JSInteropCall<string>("_typeof", obj, identifier);
-        public static string TypeOf(string identifier = "") => _JSInteropCall<string>("_typeof", null, identifier);
-        public static Window GetWindow() => Get<Window>("window");
+        public static string TypeOf(string identifier) => _JSInteropCall<string>("_typeof", null, identifier);
+        public static void Log(params object[] args) => CallApplyVoid("console.log", args);
     }
 }

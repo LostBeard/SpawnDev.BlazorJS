@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public Navigator() : base(JS.Get<IJSInProcessObjectReference>("navigator")) { }
         public Navigator(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public MediaDevices MediaDevices => _ref.Get<MediaDevices>("mediaDevices");
-        public ServiceWorkerContainer ServiceWorker => _ref.Get<ServiceWorkerContainer>("serviceWorker");
+        public MediaDevices MediaDevices => JSRef.Get<MediaDevices>("mediaDevices");
+        public ServiceWorkerContainer ServiceWorker => JSRef.Get<ServiceWorkerContainer>("serviceWorker");
     }
 }

@@ -13,13 +13,39 @@ namespace SpawnDev.BlazorJS
         }
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
-            return (T)Activator.CreateInstance(typeof(T), _ref);
+            try
+            {
+                var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+                return (T)Activator.CreateInstance(typeof(T), _ref);
+            }
+            catch (Exception ex)
+            {
+                var nmt = true;
+            }
+            var destType = typeToConvert.Name;
+            try
+            {
+                using var jsonDocument = JsonDocument.ParseValue(ref reader);
+                var jsonText = jsonDocument.RootElement.GetRawText();
+                var ok = true;
+            }
+            catch (Exception ex)
+            {
+                var art = true;
+            }
+            return default;
         }
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
-            var ext = value as JSObject;
-            JsonSerializer.Serialize(writer, ext._ref, options);
+            try
+            {
+                var ext = value as JSObject;
+                JsonSerializer.Serialize(writer, ext.JSRef, options);
+            }
+            catch (Exception ex)
+            {
+                var art = true;
+            }
         }
     }
     public class JSObjectConverter : JsonConverter<JSObject>
@@ -35,7 +61,7 @@ namespace SpawnDev.BlazorJS
         }
         public override void Write(Utf8JsonWriter writer, JSObject value, JsonSerializerOptions options)
         {
-            JsonSerializer.Serialize(writer, value._ref, options);
+            JsonSerializer.Serialize(writer, value.JSRef, options);
         }
     }
 }

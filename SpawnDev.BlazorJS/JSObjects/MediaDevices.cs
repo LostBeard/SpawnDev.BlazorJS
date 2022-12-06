@@ -117,7 +117,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             MediaStream stream = null;
             try
             {
-                stream = await _ref.CallAsync<MediaStream>("getUserMedia", (object)constraints);
+                stream = await JSRef.CallAsync<MediaStream>("getUserMedia", (object)constraints);
             }
             catch (Exception ex)
             {
@@ -133,7 +133,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             MediaStream stream = null;
             try
             {
-                stream = await _ref.CallAsync<MediaStream>("getDisplayMedia", (object)constraints);
+                stream = await JSRef.CallAsync<MediaStream>("getDisplayMedia", (object)constraints);
             }
             catch (Exception ex)
             {
@@ -167,8 +167,14 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public async Task<DeviceInfo[]> EnumerateDevices()
         {
-            return await _ref.CallAsync<DeviceInfo[]>("enumerateDevices");
+            return await JSRef.CallAsync<DeviceInfo[]>("enumerateDevices");
         }
+
+        public ValueTask<MediaStream> GetUserMedia(ExpandoObject constraints)
+        {
+            return JSRef.CallAsync<MediaStream>("getUserMedia", constraints);
+        }
+
 
         //public async Task<IJSObject> EnumerateDevicesObject()
         //{

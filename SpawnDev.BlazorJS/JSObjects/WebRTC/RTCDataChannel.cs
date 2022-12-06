@@ -12,18 +12,18 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
     public class RTCDataChannel : EventTarget
     {
         public RTCDataChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public ushort Id => _ref.Get<ushort>("id");
-        public string Label => _ref.Get<string>("label");
-        public bool Ordered => _ref.Get<bool>("ordered");
-        public ushort? MaxPacketLifeTime => _ref.Get<ushort?>("maxPacketLifeTime");
-        public ushort? MaxRetransmits => _ref.Get<ushort?>("maxRetransmits");
-        public string Protocol => _ref.Get<string>("protocol");
-        public bool Negotiated => _ref.Get<bool>("negotiated");
-        public string ReadyState => _ref.Get<string>("readyState");
-        public void Close() => _ref.CallVoid("close");
-        public void Open() => _ref.CallVoid("open");
-        public void Send(string data) => _ref.CallVoid("send", data);
-        public void Send(Blob data) => _ref.CallVoid("send", data);
-        public void Send(ArrayBuffer data) => _ref.CallVoid("send", data);
+        public ushort Id => JSRef.Get<ushort>("id");
+        public string Label => JSRef.Get<string>("label");
+        public bool Ordered => JSRef.Get<bool>("ordered");
+        public ushort? MaxPacketLifeTime => JSRef.Get<ushort?>("maxPacketLifeTime");
+        public ushort? MaxRetransmits => JSRef.Get<ushort?>("maxRetransmits");
+        public string Protocol => JSRef.Get<string>("protocol");
+        public bool Negotiated => JSRef.Get<bool>("negotiated");
+        public string ReadyState => JSRef.Get<string>("readyState");
+        public void Close() => JSRef.CallVoid("close");
+        public void Open() => JSRef.CallVoid("open");
+        public void Send(string data) => JSRef.CallVoid("send", data);
+        public void Send(Blob data) => JSRef.CallVoid("send", data);
+        public void Send(ArrayBuffer data) => JSRef.CallVoid("send", data);
     }
 }
