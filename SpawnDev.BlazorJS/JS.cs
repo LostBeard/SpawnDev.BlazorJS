@@ -102,11 +102,11 @@ namespace SpawnDev.BlazorJS
             using var document = GetDocument();
             return document.Call<T>("createElement", elementType);
         }
-        public static bool JSEquals(JSObject obj1, JSObject obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
-        public static bool JSEquals(IJSInProcessObjectReference obj1, IJSInProcessObjectReference obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
-
-        public static bool JSEquals(IJSInProcessObjectReference obj1, JSObject obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
-        public static bool JSEquals(JSObject obj1, IJSInProcessObjectReference obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
+        //public static bool JSEquals(JSObject obj1, JSObject obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
+        //public static bool JSEquals(IJSInProcessObjectReference obj1, IJSInProcessObjectReference obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
+        //public static bool JSEquals(IJSInProcessObjectReference obj1, JSObject obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
+        //public static bool JSEquals(JSObject obj1, IJSInProcessObjectReference obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
+        public static bool JSEquals(object obj1, object obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
 
         public static void DisposeIt(object obj)
         {
@@ -122,6 +122,7 @@ namespace SpawnDev.BlazorJS
             var tmp = ReturnMe<IJSInProcessObjectReference>(obj._ref);
             return (T)Activator.CreateInstance(typeof(T), tmp);
         }
+        public static IJSInProcessObjectReference CopyReference(IJSInProcessObjectReference obj) => ReturnMe<IJSInProcessObjectReference>(obj);
         public static T MoveReference<T>(JSObject orig, bool sourceDisposeExceptRef = true) where T : JSObject
         {
             var ret = (T)Activator.CreateInstance(typeof(T), orig._ref);

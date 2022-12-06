@@ -30,7 +30,8 @@ namespace SpawnDev.BlazorJS.Test
             var testArrayRewd = JS.Get<IJSInProcessObjectReference[]>("mywindows");
             var t = testArrayRead[0].InnerWidth;
             var q = testArrayRewd[0].Get<int>("innerWidth");
-            var eq = JS.JSEquals(testArrayRead[0], testArrayRewd[0]);
+            var eq = JS.JSEquals(3, 2);
+            var eq1 = JS.JSEquals(2, 2);
             var innkidth = www.InnerWidth;
 
             var cache = await Cache.OpenCache("TestCacheYay");
