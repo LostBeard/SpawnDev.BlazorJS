@@ -1,58 +1,76 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Test;
+using SpawnDev.BlazorJS.WebWorkers;
 
-namespace SpawnDev.BlazorJS.Test
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+var globalThisType = JS.GetConstructorName("globalThis");
+Console.WriteLine("Program.cs ctor " + builder.HostEnvironment.BaseAddress + $" GlobalThisType: {JS.GlobalThisTypeName} {globalThisType}");
+if (JS.IsWindow)
 {
-    public class Program
-    {
-        public static async Task Main(string[] args)
-        {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("#app");
-            builder.RootComponents.Add<HeadOutlet>("head::after");
-
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
-            builder.Services.AddSingleton(serviceProvider => (IJSInProcessRuntime)serviceProvider.GetRequiredService<IJSRuntime>());
-
-            var host = builder.Build();
-            await JS.InitAsync(host.Services.GetRequiredService<IJSInProcessRuntime>());
-
-
-            var www = JS.Get<Window>("window");
-            var testArray = new[] { www, www, www };
-
-            JS.Set("mywindows", testArray);
-            var testArrayRead = JS.Get<Window[]>("mywindows");
-            var testArrayRewd = JS.Get<IJSInProcessObjectReference[]>("mywindows");
-            var t = testArrayRead[0].InnerWidth;
-            var q = testArrayRewd[0].Get<int>("innerWidth");
-            var eq = JS.JSEquals(3, 2);
-            var eq1 = JS.JSEquals(2, 2);
-            var innkidth = www.InnerWidth;
-
-            var cache = await Cache.OpenCache("TestCacheYay");
-
-            var tt = new JSObject((IJSInProcessObjectReference)null);
-
-
-            JS.Set("testSetFn", Callback.Create(() => { Console.WriteLine("Who calls me?"); }));
-
-            var fn = new FunctionHandle("return new Promise(resolve => setTimeout(resolve, 5000, 5));");
-            var five = await fn.CallFnAsync<int>();
-            //var f5 = await five.ThenAsync<int>();
-            var innerWidth = JS.Get<int>("window.innerWidth");
-            var window = JS.Get<Window>("window");
-            JS.Set("window2", window);
-            JS.Set("window2", window);
-            var inneeWidth = JS.Get<int>("innerWidth");
-            var inneeWigth = window.JSRef.Get<int>("innerWidth");
-            var windsw = JS.Get<Window>("window2");
-
-            await host.RunAsync();
-        }
-    }
+    // we can skip adding dom objects (optional)
+    builder.RootComponents.Add<App>("#app");
+    builder.RootComponents.Add<HeadOutlet>("head::after");
 }
+// add services
+builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+// SpawnDev.BlazorJS.WebWorkers
+builder.Services.AddSingleton<WebWorkerService>();
+// ...
+// build 
+WebAssemblyHost host = builder.Build();
+// init any services that need it (ideally services are initialized as needed on the pages that use them instead of here.)
+var workerService = host.Services.GetRequiredService<WebWorkerService>();
+await workerService.InitAsync();
+WebWorker? _webWorker = null;
+//SharedWebWorker? _sharedWebWorker = null;
+// optionally start spinning up a worker now
+Task<WebWorker> _preStarted = workerService.CreateWorker(false);
+// optionally start spinning up a shared worker now
+// shared workers are named. ask for a worker by name in any thread
+// the nice thing about shared workers is that they only need to spin up once no matter how many tabs are loaded
+_ = workerService.CreateSharedWorker("test");
+if (JS.IsWindow)
+{
+    // main thread
+    JS.Set("_newWorker", Callback.Create(new Action<bool>(async (verbose) =>
+    {
+        using var webWorker = await workerService.CreateWorker(verbose);
+        var ret = await webWorker.InvokeAsync<WebWorkerService, int>(nameof(WebWorkerService.TestFuncAsync), 100, 500);
+        Console.WriteLine($"ret: {ret}");
+    })));
+    JS.Set("_getWorker", Callback.Create(new Action<bool>(async (verbose) =>
+    {
+        if (_webWorker == null) _webWorker = await workerService.CreateWorker(verbose);
+        var ret = await _webWorker.InvokeAsync<WebWorkerService, int>(nameof(WebWorkerService.TestFuncAsync), 100, 500);
+        Console.WriteLine($"ret: {ret}");
+    })));
+    JS.Set("_getSharedWorker", Callback.Create(new Action<bool?>(async (verbose) =>
+    {
+        using var _sharedWebWorker = await workerService.CreateSharedWorker("test", verbose.HasValue && verbose.Value);
+        var ret = await _sharedWebWorker.InvokeAsync<WebWorkerService, int>(nameof(WebWorkerService.TestFuncAsync), 100, 500);
+        Console.WriteLine($"ret: {ret}");
+        var nmt = true;
+    })));
+    JS.Set("_getSharedWorkerPre", Callback.Create(new Action<bool?>(async (verbose) =>
+    {
+        using var _sharedWebWorker = await workerService.CreateSharedWorker("test", verbose.HasValue && verbose.Value);
+        var ret = await _sharedWebWorker.InvokeAsync<WebWorkerService, int>(nameof(WebWorkerService.TestFuncAsync), 100, 500);
+        Console.WriteLine($"ret: {ret}");
+        var nmt = true;
+    })));
+    JS.Set("_getPrespun", Callback.Create(new Action<bool?>(async (verbose) =>
+    {
+        var worker = await _preStarted;
+        var ret = await worker.InvokeAsync<WebWorkerService, int>(nameof(WebWorkerService.TestFuncAsync), 100, 500);
+        Console.WriteLine($"ret: {ret}");
+        var nmt = true;
+    })));
+}
+else
+{
+    // worker thread
+    JS.Log("This is a background worker.");
+}
+await host.RunAsync();

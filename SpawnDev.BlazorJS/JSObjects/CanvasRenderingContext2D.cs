@@ -16,6 +16,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         public CanvasRenderingContext2D(IJSInProcessObjectReference _ref) : base(_ref) { }
         public HTMLCanvasElement Canvas => JSRef.Get<HTMLCanvasElement>("canvas");
         //public ImageData GetImageData() => _ref.Call<ImageData>("getImageData");
+        public ImageData? GetImageData()
+        {
+            using var canvas = Canvas;
+            return GetImageData(0, 0, canvas.Width, canvas.Height);
+        }
         public ImageData GetImageData(int x, int y, int width, int height) => JSRef.Call<ImageData>("getImageData", x, y, width, height);
         public void PutImageData(ImageData imageData, int dx, int dy) => JSRef.CallVoid("putImageData", imageData, dx, dy);
         public void PutImageData(ImageData imageData, int dx, int dy, int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight) => JSRef.CallVoid("putImageData", imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);

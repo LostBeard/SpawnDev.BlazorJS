@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
 
     [JsonConverter(typeof(JSObjectConverter<Window>))]
-    public class Window : JSObject
+    public class Window : EventTarget
     {
         public Window() : base(JS.Get<IJSInProcessObjectReference>("window")) { }
         public Window(IJSInProcessObjectReference _ref) : base(_ref) { }

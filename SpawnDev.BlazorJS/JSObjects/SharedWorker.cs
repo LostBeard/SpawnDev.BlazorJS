@@ -14,39 +14,34 @@ namespace SpawnDev.BlazorJS.JSObjects
     //    public string Data { get; set; }
     //}
 
-    //[JsonConverter(typeof(IJSObjectConverter<SharedWorker>))]
-    //public class SharedWorker : IJSObject
-    //{
-    //    public static bool Supported => IJSObject.TypeOf("window.SharedWorker") != "undefined";
-    //    CallbackGroup callbacks = new CallbackGroup();
-    //    dynamic port = null;
+    [JsonConverter(typeof(JSObjectConverter<SharedWorker>))]
+    public class SharedWorker : EventTarget
+    {
+        CallbackGroup _callbacks = new CallbackGroup();
+        public delegate void MessageDelegate(MessageEvent msg);
+        public event MessageDelegate OnMessage;
 
-    //    public SharedWorker(IJSInProcessObjectReference _ref) : base(_ref) { }
+        public MessagePort Port => JSRef.Get<MessagePort>("port");
 
-    //    public SharedWorker(string workerUrl)
-    //    {
-    //        FromReference(CreateNew("SharedWorker", workerUrl));
-    //        port = _this.port<IJSObject>();
-    //        port.addEventListener("message", Callback.Create<SharedWorkerMessageEvent>(onMessage, callbacks), false);
-    //        port.start();
-    //    }
+        public SharedWorker(IJSInProcessObjectReference _ref) : base(_ref) { }
+        public SharedWorker(string url) : base(NullRef)
+        {
+            FromReference(JS.CreateNew("SharedWorker", url));
+        }
+        public SharedWorker(string url, string name) : base(NullRef)
+        {
+            FromReference(JS.CreateNew("SharedWorker", url, name));
+        }
+        protected override void FromReference(IJSInProcessObjectReference _ref)
+        {
+            base.FromReference(_ref);
+            
+        }
 
-    //    public void PostMessage(string msg)
-    //    {
-    //        port.postMessage(msg);
-    //    }
-
-    //    void onMessage(SharedWorkerMessageEvent e)
-    //    {
-    //        Console.WriteLine("SharedWorkerMessageEvent: " + e.Data);
-    //    }
-
-    //    public override void Dispose()
-    //    {
-    //        if (IsWrapperDisposed) return;
-    //        port?.Dispose();
-    //        callbacks.Dispose();
-    //        base.Dispose();
-    //    }
-    //}
+        public override void Dispose()
+        {
+            _callbacks.Dispose();
+            base.Dispose();
+        }
+    }
 }

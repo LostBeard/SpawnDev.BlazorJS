@@ -62,7 +62,7 @@ namespace SpawnDev.BlazorJS
                 IsCallbackerID2++;
             }
             callbackerID = $"callback_{IsCallbackerID++}_{IsCallbackerID2}";
-#if DEBUG
+#if DEBUG && false
             Console.WriteLine($"Created callbackerID: {callbackerID} {CallbackType.Name} {string.Join(", ", paramTypes)}");
 #endif
         }

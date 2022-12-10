@@ -4,20 +4,49 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     [JsonConverter(typeof(JSObjectConverter<BroadcastChannel>))]
-    public class BroadcastChannel : JSObject
+    public class BroadcastChannel : EventTarget
     {
-        public BroadcastChannel(IJSInProcessObjectReference _ref) :base(_ref){ }
-        CallbackGroup callbacks = new CallbackGroup();
+        public BroadcastChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string Name => JSRef.Get<string>("name");
-        BroadcastChannel(string channelName) : base("BroadcastChannel", channelName) { }
-        public void PostMessage<T>(T msg) => JSRef.CallVoid("postMessage", msg);
-        public void OnMessage(Callback callback) => callbacks.Add(callback);
+        public BroadcastChannel(string channelName) : base(JS.CreateNew("BroadcastChannel", channelName)) { }
+        CallbackGroup _callbacks = new CallbackGroup();
+        public delegate void ErrorDelete();
+        public event ErrorDelete OnError;
+        public delegate void MessageDelegate(MessageEvent msg);
+        public event MessageDelegate OnMessage;
+        protected override void FromReference(IJSInProcessObjectReference _ref)
+        {
+            base.FromReference(_ref);
+            AddEventListener("message", Callback.Create<MessageEvent>((e) => {
+                OnMessagePre(e);
+                e.Dispose();
+            }, _callbacks));
+            AddEventListener("messageerror", Callback.Create<MessageEvent>((e) => {
+                OnErrorPre();
+                e.Dispose();
+            }, _callbacks));
+        }
+
+        protected virtual void OnMessagePre(MessageEvent e)
+        {
+            OnMessage?.Invoke(e);
+        }
+
+        protected virtual void OnErrorPre()
+        {
+            OnError?.Invoke();
+        }
+
         public void Close() => JSRef.CallVoid("close");
+        public void PostMessaage(object message)
+        {
+            JSRef.CallVoid("postMessage", message);
+        }
+
         public override void Dispose()
         {
-            if (IsWrapperDisposed) return;
+            _callbacks.Dispose();
             base.Dispose();
-            callbacks.Dispose();
         }
     }
 }

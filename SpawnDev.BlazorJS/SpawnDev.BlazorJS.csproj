@@ -13,9 +13,9 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;</PackageTags>
 		<PackageReleaseNotes>Initial commit</PackageReleaseNotes>
-		<Version>1.1.0.0</Version>
-		<FileVersion>1.1.0.0</FileVersion>
-		<AssemblyVersion>1.1.0.0</AssemblyVersion>
+		<Version>1.2.0.0</Version>
+		<FileVersion>1.2.0.0</FileVersion>
+		<AssemblyVersion>1.2.0.0</AssemblyVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

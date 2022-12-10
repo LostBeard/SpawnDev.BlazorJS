@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<Promise>))]
     public class Promise : JSObject
     {
+        public Promise() : base(JS.CreateNew("Promise")) { }
         public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
         public void Then(Callback callback) { JSRef.CallVoid("then", callback); }
         public void Catch(Callback callback) { JSRef.CallVoid("catch", callback); }

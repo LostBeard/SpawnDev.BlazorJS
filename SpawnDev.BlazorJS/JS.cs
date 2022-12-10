@@ -1,22 +1,55 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
+using Microsoft.JSInterop.WebAssembly;
 using SpawnDev.BlazorJS.JSObjects;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+using System;
+using System.Drawing;
 
 namespace SpawnDev.BlazorJS
 {
     // Facilitates the JSInterop javascript code
     public static partial class JS
     {
+        public static Window? WindowThis { get; private set; } = null;
+        public static DedicatedWorkerGlobalScope? DedicateWorkerThis { get; private set; } = null;
+        public static SharedWorkerGlobalScope? SharedWorkerThis { get; private set; } = null;
+        public static string GlobalThisTypeName { get; }
+        public static JSObject GlobalThis { get; }
         public static IJSInProcessRuntime? Runtime => _js;
         private static IJSInProcessRuntime? _js { get; set; } = null;
-        public static async Task InitAsync(this IJSInProcessRuntime js)
+        public static bool IsWindow => GlobalThis is Window;
+        public static bool IsDedicatedWorkerGlobalScope => GlobalThis is DedicatedWorkerGlobalScope;
+        public static bool IsSharedWorkerGlobalScope => GlobalThis is SharedWorkerGlobalScope;
+        static JS()
         {
-            if (_js != null) return;
-            _js = js;
-            using var _module = await js.InvokeAsync<IJSInProcessObjectReference>("import", "./_content/SpawnDev.BlazorJS/blazor-interop.js");
-            _module.InvokeVoid("init");
+            // the javascript module for JS is loaded before Program.cs is started so it available here to continue initializing
+            // _content/SpawnDev.BlazorJS/SpawnDev.BlazorJS.lib.module.js
+            var jsRuntimeType = typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime");
+            var instanceField = jsRuntimeType.GetFields(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).Where(o => o.Name == "Instance").FirstOrDefault();
+            object? jsRuntimeObj = instanceField.GetValue(null);
+            _js = (IJSInProcessRuntime)jsRuntimeObj;    // (WebAssemblyJSRuntime)
+            GlobalThis = Get<JSObject>("JSInterop.globalObject");
+            GlobalThisTypeName = GlobalThis.JSRef.Get<string>("constructor.name");
+            switch (GlobalThisTypeName)
+            {
+                case nameof(Window):
+                    WindowThis = GlobalThis.JSRefMove<Window>();
+                    GlobalThis = WindowThis;
+                    break;
+                case nameof(DedicatedWorkerGlobalScope):
+                    DedicateWorkerThis = GlobalThis.JSRefMove<DedicatedWorkerGlobalScope>();
+                    GlobalThis = DedicateWorkerThis;
+                    break;
+                case nameof(SharedWorkerGlobalScope):
+                    SharedWorkerThis = GlobalThis.JSRefMove<SharedWorkerGlobalScope>();
+                    GlobalThis = SharedWorkerThis;
+                    break;
+            }
+#if DEBUG
+            Log("JS.GlobalThisTypeName", GlobalThisTypeName);
+#endif
         }
         private static void AssertInit()
         {

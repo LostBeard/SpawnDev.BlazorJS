@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.Test", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS", "SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj", "{085BD3B9-2F11-4BD0-9072-217D2A3C9150}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.WebWorkers", "SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj", "{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

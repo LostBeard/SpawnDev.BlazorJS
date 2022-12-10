@@ -10,9 +10,11 @@ namespace SpawnDev.BlazorJS
     public static partial class JS
     {
 
-        public static List<string> GetPropertyNames(this IJSInProcessObjectReference _ref, bool hasOwnProperty = false) => _JSInteropCall<List<string>>("JSInterop._getPropertyNames", _ref, null, hasOwnProperty);
-        public static string PropertyType(this IJSInProcessObjectReference _ref, string identifier = "") => _JSInteropCall<string>("JSInterop._typeof", _ref, identifier);
-        public static string PropertyInstanceOf(this IJSInProcessObjectReference _ref, string identifier = "") => _JSInteropCall<string>("JSInterop._instanceof", _ref, identifier);
+        public static string GetConstructorName(string identifier) => _JSInteropCall<string>("_instanceof", null, identifier);
+
+        public static List<string> GetPropertyNames(this IJSInProcessObjectReference _ref, bool hasOwnProperty = false) => _JSInteropCall<List<string>>("_getPropertyNames", _ref, null, hasOwnProperty);
+        public static string PropertyType(this IJSInProcessObjectReference _ref, string identifier = "") => _JSInteropCall<string>("_typeof", _ref, identifier);
+        public static string PropertyInstanceOf(this IJSInProcessObjectReference _ref, string identifier = "") => _JSInteropCall<string>("_instanceof", _ref, identifier);
 
         #region IJSInProcessObjectReference Base Accessors
         public static void Set(this IJSInProcessObjectReference targetObject, string identifier, object? value) => _JSInteropCallVoid("_set", targetObject, identifier, value);

@@ -3,33 +3,51 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    // https://developer.mozilla.org/en-US/docs/Web/API/MessagePort
     [JsonConverter(typeof(JSObjectConverter<MessagePort>))]
-    public class MessagePort : JSObject
+    public class MessagePort : EventTarget
     {
+        CallbackGroup _callbacks = new CallbackGroup();
+        public delegate void ErrorDelete();
+        public event ErrorDelete OnError;
+        public delegate void MessageDelegate(MessageEvent msg);
+        public event MessageDelegate OnMessage;
         public MessagePort(IJSInProcessObjectReference _ref) : base(_ref) { }
-        private Callback _OnMessage = null;
-        public Callback OnMessage
+        protected override void FromReference(IJSInProcessObjectReference _ref)
         {
-            get
-            {
-                return _OnMessage;
-            }
-            set
-            {
-                _OnMessage?.Dispose();
-                _OnMessage = value;
-                JSRef.Set("onmessage", _OnMessage);
-            }
+            base.FromReference(_ref);
+            AddEventListener("message", Callback.Create<MessageEvent>((e) => {
+                OnMessagePre(e);
+                e.Dispose();
+            }, _callbacks));
+            AddEventListener("error", Callback.Create<MessageEvent>((e) => {
+                OnErrorPre();
+                e.Dispose();
+            }, _callbacks));
         }
+
+        protected virtual void OnMessagePre(MessageEvent e)
+        {
+            OnMessage?.Invoke(e);
+        }
+
+        protected virtual void OnErrorPre()
+        {
+            OnError?.Invoke();
+        }
+
+        public void Start() => JSRef.CallVoid("start");
         public void PostMessage(string message, object[] transferList = null) => JSRef.CallVoid("postMessage", message, transferList);
-        public void PostMessage<T>(T message, object[] transferList = null) => JSRef.CallVoid("postMessage", message, transferList);
+        public void PostMessaage(object message, IEnumerable<object>? transfer = null)
+        {
+            if (transfer == null) JSRef.CallVoid("postMessage", message);
+            else JSRef.CallVoid("postMessage", message, transfer);
+        }
+
         public override void Dispose()
         {
-            if (IsWrapperDisposed) return;
+            _callbacks.Dispose();
             base.Dispose();
-            _OnMessage?.Dispose();
-            _OnMessage = null;
-            //callbacks.Dispose();
         }
     }
 }
