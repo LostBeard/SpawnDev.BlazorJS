@@ -39,11 +39,40 @@ Use the extended functions of IJSInProcessObjectReference to work with Javascrip
 (Nuget coming soon...)  
 Run CPU intensive tasks on a dedicated worker or on a shared worker with WebWorkers!
 
-As simple as...  
-Register the WebWorkerService
+Example setup and usage
+
 ```cs
 // Program.cs
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using SpawnDev.BlazorJS;
+using SpawnDev.BlazorJS.Test;
+using SpawnDev.BlazorJS.Test.Services;
+using SpawnDev.BlazorJS.WebWorkers;
+
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+if (JS.IsWindow)
+{
+    // we can skip adding dom objects in non UI threads
+    builder.RootComponents.Add<App>("#app");
+    builder.RootComponents.Add<HeadOutlet>("head::after");
+}
+// add services
+builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+// SpawnDev.BlazorJS.WebWorkers
 builder.Services.AddSingleton<WebWorkerService>();
+// app specific services...
+builder.Services.AddSingleton<MathsService>();
+// build 
+WebAssemblyHost host = builder.Build();
+// init WebWorkerService
+var workerService = host.Services.GetRequiredService<WebWorkerService>();
+await workerService.InitAsync();
+await host.RunAsync();
+```
+
+Use the WebWorkers
+```cs
 
 // Create a WebWorker
 var webWorker = await workerService.CreateWorker();
@@ -77,14 +106,12 @@ var sharedWebWorker = await workerService.CreateSharedWorker("workername");
 // Call a registered service on the worker thread with your arguments
 int ret = await sharedWebWorker.InvokeAsync<MyService, int>("MyLongRunningMethod", 100, 500);
 Console.WriteLine($"ret: {ret}");
-
-
 ```
 
-
-Inspired by Tewr's BlazorWorker implementation. I even copied one of his test pages for the demo.  
+Inspired by Tewr's BlazorWorker implementation. Thank you! I wrote my implementation from scratch as I needed workers in .Net 7.  
 https://github.com/Tewr/BlazorWorker
 
+I shamelessly copied one of Tewr's test pages for WebWorkers demo.  
 Demo  
 https://blazorjs.spawndev.com/
 
