@@ -9,26 +9,17 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             _worker = worker;
         }
-        public bool IsDisposed { get; private set; } = false;
-        public void Dispose(bool disposing)
+
+        public override void Dispose(bool disposing)
         {
             if (IsDisposed) return;
-            IsDisposed = true;
-            if (disposing)
+            try
             {
-
+                _worker?.Terminate();
             }
-            _worker.Terminate();
-            _worker.Dispose();
-        }
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        ~WebWorker()
-        {
-            Dispose(false);
-            GC.SuppressFinalize(this);
+            catch { }
+            _worker?.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

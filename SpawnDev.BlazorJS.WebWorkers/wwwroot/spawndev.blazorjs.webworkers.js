@@ -44,8 +44,6 @@ const locationQueryParams = new Proxy(new URLSearchParams(location.search), {
 
 var verbose = locationQueryParams.verbose === 'true';
 
-console.log('locationQueryParams', locationQueryParams);
-
 // _content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js
 consoleLog('spawndev.blazorjs.webworkers: started');
 consoleLog('location.href', location.href);

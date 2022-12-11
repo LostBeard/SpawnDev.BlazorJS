@@ -84,6 +84,18 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         public ServiceCallDispatcher? DedicatedWorkerParent { get; private set; } = null;
 
+        public void SendEventToParents(string eventName, object? data = null)
+        {
+            if (DedicatedWorkerParent != null)
+            {
+                DedicatedWorkerParent.SendEvent(eventName, data);
+            }
+            foreach(var p in SharedWorkerIncomingConnections)
+            {
+                p.SendEvent(eventName, data);
+            }
+        }
+
         public async Task InitAsync()
         {
             if (BeenInit) return;
@@ -228,7 +240,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return a + b;
         }
 
-        public async Task<WebWorker?> CreateWorker(bool verboseMode = false)
+        public async Task<WebWorker?> CreateWorker(bool verboseMode = false, bool awaitWhenReady = true)
         {
             if (!WebWorkerSupported) return null;
             var queryArgs = new NameValueCollection();
@@ -236,11 +248,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var worker = new Worker($"_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js?{ToQueryString(queryArgs)}");
             var webWorker = new WebWorker(worker, _serviceProvider);
             Workers.Add(webWorker);
-            await webWorker.WhenReady;
+            if (awaitWhenReady) await webWorker.WhenReady;
             return webWorker;
         }
 
-        public async Task<SharedWebWorker?> CreateSharedWorker(string sharedWorkerName = "", bool verboseMode = false)
+        public async Task<SharedWebWorker?> CreateSharedWorker(string sharedWorkerName = "", bool verboseMode = false, bool awaitWhenReady = true)
         {
             if (!SharedWebWorkerSupported) return null;
             var queryArgs = new NameValueCollection();
@@ -248,7 +260,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var worker = new SharedWorker($"_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js", sharedWorkerName);
             JS.Set("_sharedWorker1", worker);
             var webWorker = new SharedWebWorker(sharedWorkerName, worker, _serviceProvider);
-            await webWorker.WhenReady;
+            if (awaitWhenReady) await webWorker.WhenReady;
             return webWorker;
         }
     }

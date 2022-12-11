@@ -9,15 +9,28 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
-    internal class WebWorkerCallMessageBase
+    public interface IWebWorkerCallMessageBase
     {
-        public string ServiceTypeFullName { get; set; } = "";
-        public string MethodName { get; set; } = "";
+        string TargetName { get; set; }
+        string RequestId { get; set; }
+        string TargetType { get; set; }
+    }
+
+    public class WebWorkerMessageBase : IWebWorkerCallMessageBase
+    {
+        public string TargetType { get; set; } = "";
+        public string TargetName { get; set; } = "";
         public string RequestId { get; set; } = "";
     }
 
-    internal class WebWorkerCallMessageOutgoing : WebWorkerCallMessageBase
+    internal class WebWorkerMessageOut : WebWorkerMessageBase
     {
-        public object?[]? Args { get; set; } = null;
+        public object? Data { get; set; } = null;
+    }
+    public class WebWorkerMessageIn : WebWorkerMessageBase
+    {
+        [JsonIgnore]
+        public MessageEvent? _msg { get; set; }
+        public T? GetData<T>() => _msg == null ? default : _msg.JSRef.Get<T>("data.data");
     }
 }

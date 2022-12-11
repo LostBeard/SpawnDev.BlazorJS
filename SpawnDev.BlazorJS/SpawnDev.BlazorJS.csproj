@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -13,9 +13,9 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;</PackageTags>
 		<PackageReleaseNotes>Initial commit</PackageReleaseNotes>
-		<Version>1.2.0.0</Version>
-		<FileVersion>1.2.0.0</FileVersion>
-		<AssemblyVersion>1.2.0.0</AssemblyVersion>
+		<Version>1.2.1.1</Version>
+		<FileVersion>1.2.1.1</FileVersion>
+		<AssemblyVersion>1.2.1.1</AssemblyVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

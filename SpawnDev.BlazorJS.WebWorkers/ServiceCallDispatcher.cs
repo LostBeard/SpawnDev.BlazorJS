@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System;
@@ -9,98 +10,23 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static SpawnDev.BlazorJS.WebWorkers.ServiceCallDispatcher;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
-    //public class MethodCallParams : BaseMessage
-    //{
-    //    public interface IExpressionSerializer
-    //    {
-    //        string Serialize(Expression expr);
-
-    //        Expression Deserialize(string exprString);
-    //    }
-    //    public class WebWorkerOptions
-    //    {
-    //        private ISerializer messageSerializer;
-    //        private IExpressionSerializer expressionSerializer;
-
-    //        public ISerializer MessageSerializer
-    //        {
-    //            get => messageSerializer ?? (messageSerializer = new DefaultMessageSerializer());
-    //            set => messageSerializer = value;
-    //        }
-
-    //        public IExpressionSerializer ExpressionSerializer
-    //        {
-    //            get => expressionSerializer ?? (expressionSerializer = new SerializeLinqExpressionSerializer());
-    //            set => expressionSerializer = value;
-    //        }
-    //    }
-    //    public MethodCallParams()
-    //    {
-    //        MessageType = nameof(MethodCallParams);
-    //    }
-    //    private readonly WebWorkerOptions options;
-
-    //    public bool AwaitResult { get; set; }
-    //    public long InstanceId { get; set; }
-    //    public string SerializedExpression { get; set; }
-    //    public long WorkerId { get; set; }
-    //    public long CallId { get; set; }
-    //}
-    //private class InvokeOptions
-    //{
-    //    public static readonly InvokeOptions Default = new InvokeOptions();
-
-    //    public bool AwaitResult { get; set; }
-    //}
-
-    //private async Task<TResult> InvokeAsyncInternal<TResult>(Expression action, InvokeOptions invokeOptions)
-    //{
-    //    // If Blazor ever gets multithreaded this would need to be locked for race conditions
-    //    // However, when/if that happens, most of this project is obsolete anyway
-    //    var (id, taskCompletionSource) = this.messageRegister.CreateAndAdd();
-
-    //    var expression = this.options.ExpressionSerializer.Serialize(action);
-    //    var methodCallParams = new MethodCallParams
-    //    {
-    //        AwaitResult = invokeOptions.AwaitResult,
-    //        WorkerId = this.worker.Identifier,
-    //        InstanceId = instanceId,
-    //        SerializedExpression = expression,
-    //        CallId = id
-    //    };
-
-    //    var methodCall = this.options.MessageSerializer.Serialize(methodCallParams);
-
-    //    await this.worker.PostMessageAsync(methodCall);
-
-    //    var returnMessage = await taskCompletionSource.Task;
-    //    if (returnMessage.IsException)
-    //    {
-    //        throw new AggregateException($"Worker exception: {returnMessage.Exception.Message}", returnMessage.Exception);
-    //    }
-    //    if (string.IsNullOrEmpty(returnMessage.ResultPayload))
-    //    {
-    //        return default;
-    //    }
-
-    //    return this.options.MessageSerializer.Deserialize<TResult>(returnMessage.ResultPayload);
-    //}
     internal class WebWorkerCallMessageTask
     {
         public Type? ReturnValueType { get; set; }
         public string RequestId => webWorkerCallMessageOutgoing.RequestId;
         public Action<JSObject?>? OnComplete { get; set; }
         public CancellationToken? CancellationToken { get; set; }
-        public WebWorkerCallMessageOutgoing webWorkerCallMessageOutgoing { get; set; }
+        public WebWorkerMessageOut webWorkerCallMessageOutgoing { get; set; }
         public WebWorkerCallMessageTask(Action<JSObject?>? onComplete)
         {
             OnComplete = onComplete;
         }
     }
-    public class ServiceCallDispatcher
+    public class ServiceCallDispatcher : IDisposable
     {
         public static List<Type> _transferableTypes { get; } = new List<Type> {
             typeof(ArrayBuffer),
@@ -139,19 +65,49 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public Task WhenReady => _oninit.Task;
         public void SendReadyFlag()
         {
-            _port.PostMessaage(new WebWorkerCallMessageBase { MethodName = "__init" });
+            _port.PostMessaage(new WebWorkerMessageBase { TargetName = "__init" });
         }
+
+        public delegate void OnMessageDelegate(ServiceCallDispatcher sender, WebWorkerMessageIn msg);
+        public event OnMessageDelegate OnMessage;
+
+        static Dictionary<string, Type?> typeCache = new Dictionary<string, Type>();
+
+        /// <summary>
+        /// For whatever reason Type.GetType was failing when trying to find a Type in the same assembly as this class... no idea why. Below code worked when it failed
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        public static Type? GetType(string typeName)
+        {
+            Type? t = null;
+            lock (typeCache)
+            {
+                if (!typeCache.TryGetValue(typeName, out t))
+                {
+                    foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+                    {
+                        t = a.GetType(typeName);
+                        if (t != null) break;
+                    }
+                    typeCache[typeName] = t;
+                }
+            }
+            return t;
+        }
+
         protected async void _worker_OnMessage(MessageEvent e)
         {
             JSObject? args = null;
             try
             {
-                var msgBase = e.GetData<WebWorkerCallMessageBase>();
-                if (msgBase.MethodName == "__")
+                var msgBase = e.GetData<WebWorkerMessageIn>();
+                msgBase._msg = e;
+                if (msgBase.TargetName == "__")
                 {
                     Console.WriteLine("ping --__--");
                 }
-                else if (msgBase.MethodName == "__init")
+                else if (msgBase.TargetName == "__init")
                 {
                     if (!RecevdInit)
                     {
@@ -159,31 +115,49 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         _oninit.TrySetResult(0);
                     }
                 }
-                else if (msgBase.MethodName == "__callback" && !string.IsNullOrEmpty(msgBase.RequestId))
+                else if (msgBase.TargetName == "__callback" && !string.IsNullOrEmpty(msgBase.RequestId))
                 {
                     if (_waiting.TryGetValue(msgBase.RequestId, out var req))
                     {
                         _waiting.Remove(msgBase.RequestId);
                         try
                         {
-                            args = e.JSRef.Get<JSObject?>("data.args");
+                            args = msgBase.GetData<JSObject>();
+                            //args = e.JSRef.Get<JSObject?>("data.args");
                         }
                         catch { }
                         req.OnComplete(args);
                     }
                 }
-                else if (!string.IsNullOrEmpty(msgBase.ServiceTypeFullName) && !string.IsNullOrEmpty(msgBase.MethodName))
+                else if (msgBase.TargetType == "event" && !string.IsNullOrEmpty(msgBase.TargetName))
+                {
+                    OnMessage?.Invoke(this, msgBase);
+                }
+                else if (!string.IsNullOrEmpty(msgBase.TargetType) && !string.IsNullOrEmpty(msgBase.TargetName))
                 {
                     //Console.WriteLine($"msgBase.MethodName: {msgBase.ServiceTypeFullName}::{msgBase.MethodName}");
                     try
                     {
-                        args = e.JSRef.Get<JSObject?>("data.args");
+                        args = msgBase.GetData<JSObject>();
+                        //args = e.JSRef.Get<JSObject?>("data.args");
                     }
                     catch { }
                     var argsLength = args != null ? args.JSRef.Get<int>("length") : 0;
-                    var serviceType = Type.GetType(msgBase.ServiceTypeFullName);
-                    var service = _serviceProvider.GetService(serviceType);
-                    var methodInfo = GetBestInstanceMethod(serviceType, msgBase.MethodName, argsLength);
+                    var serviceType = GetType(msgBase.TargetType);
+                    if (serviceType == null)
+                    {
+                        throw new Exception($"ERROR: {nameof(ServiceCallDispatcher)} OnMessage - Service type not found {msgBase.TargetType}");// TODO - catch all errors and send to caller on other thread
+                    }
+                    object? service = null;
+                    try
+                    {
+                        service = _serviceProvider.GetService(serviceType);
+                    }
+                    catch
+                    {
+                        throw new Exception($"ERROR: {nameof(ServiceCallDispatcher)} OnMessage - Service not registered {serviceType.FullName}");
+                    }
+                    var methodInfo = GetBestInstanceMethod(serviceType, msgBase.TargetName, argsLength);
                     var methodsParamTypes = methodInfo.GetParameters().Select(p => p.ParameterType).ToArray();
                     var returnType = methodInfo.ReturnType;
                     var returnTypeIsVoid = typeof(void) == returnType;
@@ -229,8 +203,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     if (!string.IsNullOrEmpty(msgBase.RequestId))
                     {
                         // send notification of completeion is there is a requestid
-                        var callbackMsg = new WebWorkerCallMessageOutgoing { MethodName = "__callback", RequestId = msgBase.RequestId };
-                        if (hasReturnValue) callbackMsg.Args = new object[] { retValue };
+                        var callbackMsg = new WebWorkerMessageOut { TargetName = "__callback", RequestId = msgBase.RequestId };
+                        if (hasReturnValue) callbackMsg.Data = new object[] { retValue };
                         // TODO - use attributes on the methodinfo to determine what, if any, should be transferred  (vs copied)
                         _port.PostMessaage(callbackMsg);
                     }
@@ -240,12 +214,19 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 JS.Log("ERROR: ", e);
                 Console.WriteLine($"ERROR: {ex.Message}");
+                Console.WriteLine($"ERROR stacktrace: {ex.StackTrace}");
             }
             finally
             {
                 args?.Dispose();
             }
         }
+
+        public void SendEvent(string eventName, object? data = null)
+        {
+            _port.PostMessaage(new WebWorkerMessageOut { TargetType = "event", TargetName = eventName, Data = data });
+        }
+
         //
         public Task<object?> InvokeAsync(Type serviceType, string methodName, params object?[]? args) => CallAsync(serviceType, methodName, args ?? new object[0]);
         public Task<object?> CallAsync(Type serviceType, string methodName, object?[]? args = null)
@@ -264,12 +245,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var returnTypeOfTheTaskName = returnTypeOfTheTask.Name;
             var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-            var workerMsg = new WebWorkerCallMessageOutgoing
+            var workerMsg = new WebWorkerMessageOut
             {
                 RequestId = Guid.NewGuid().ToString(),
-                MethodName = methodName,
-                ServiceTypeFullName = serviceType.FullName,
-                Args = args,
+                TargetName = methodName,
+                TargetType = serviceType.FullName,
+                Data = args,
             };
             //var reqTypeName = typeof(TResult).Name;
             var fnRetTypeName = finalReturnType.Name;
@@ -304,12 +285,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var returnTypeOfTheTaskName = returnTypeOfTheTask.Name;
             var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-            var workerMsg = new WebWorkerCallMessageOutgoing
+            var workerMsg = new WebWorkerMessageOut
             {
                 RequestId = Guid.NewGuid().ToString(),
-                MethodName = methodName,
-                ServiceTypeFullName = typeof(TService).FullName,
-                Args = args,
+                TargetName = methodName,
+                TargetType = typeof(TService).FullName,
+                Data = args,
             };
             var reqTypeName = typeof(TResult).Name;
             var fnRetTypeName = finalReturnType.Name;
@@ -350,12 +331,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var returnTypeOfTheTaskName = returnTypeOfTheTask.Name;
             var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-            var workerMsg = new WebWorkerCallMessageOutgoing
+            var workerMsg = new WebWorkerMessageOut
             {
                 RequestId = Guid.NewGuid().ToString(),
-                MethodName = methodName,
-                ServiceTypeFullName = typeof(TService).FullName,
-                Args = args,
+                TargetName = methodName,
+                TargetType = typeof(TService).FullName,
+                Data = args,
             };
             var reqTypeName = typeof(void).Name;
             var fnRetTypeName = finalReturnType.Name;
@@ -393,6 +374,26 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 best = instanceMethods[0];
             }
             return best;
+        }
+
+        public bool IsDisposed { get; private set; } = false;
+        public virtual void Dispose(bool disposing)
+        {
+            if (IsDisposed) return;
+            IsDisposed = true;
+            if (disposing)
+            {
+
+            }
+        }
+        public virtual void Dispose()
+        {
+            Dispose(true);
+        }
+        ~ServiceCallDispatcher()
+        {
+            Dispose(false);
+            GC.SuppressFinalize(this);
         }
     }
 }
