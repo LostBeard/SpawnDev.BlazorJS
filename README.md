@@ -45,14 +45,14 @@ Register the WebWorkerService
 // Program.cs
 builder.Services.AddSingleton<WebWorkerService>();
 
-// Create the worker
-var webWorker = await workerService.CreateWorker(verbose);
+// Create a WebWorker
+var webWorker = await workerService.CreateWorker();
 
 // Call a registered service on the worker thread with your arguments
-int ret = await _webWorker.InvokeAsync<MyService, int>("MyLongRunningMethod", 100, 500);
+int ret = await webWorker.InvokeAsync<MyService, int>("MyLongRunningMethod", 100, 500);
 Console.WriteLine($"ret: {ret}");
 
-// You can also listen for event messages
+// Optionally listen for event messages
 worker.OnMessage += (sender, msg) =>
 {
     if (msg.TargetName == "progress")
@@ -62,6 +62,23 @@ worker.OnMessage += (sender, msg) =>
         StateHasChanged();
     }
 };
+
+// From SharedWebWorker or WebWorker threads send an event to conencted parents/owners
+workerService.SendEventToParents("progress", new PiProgress { Progress = piProgress });
+
+// Or on send an event to a connected worker
+webWorker.SendEvent("progress", new PiProgress { Progress = piProgress });
+
+// Create a SharedWebWorker
+// Calling the CreateSharedWorker in another window will get the worker with the same name
+var sharedWebWorker = await workerService.CreateSharedWorker("workername");
+
+// Just like WebWorker but shared
+// Call a registered service on the worker thread with your arguments
+int ret = await sharedWebWorker.InvokeAsync<MyService, int>("MyLongRunningMethod", 100, 500);
+Console.WriteLine($"ret: {ret}");
+
+
 ```
 
 
