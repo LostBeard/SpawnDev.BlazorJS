@@ -2,6 +2,9 @@
 
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS)  
+
+Supports .Net 7
+
 An easy Javascript interop library desgined specifcally for client side Blazor.
 
 Use Javascript libraries in Blazor without writing any Javascript code.
@@ -41,13 +44,11 @@ JS.Set("testCallback", Callback.Create<string>((strArg) => {
 testCallback('Hello callback!');
 ```
 
-Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for WebGL, and WebRTC are already usable in SpawnDev.BlazorJS.JSObjects.
-
 # SpawnDev.BlazorJS.WebWorkers
 (Nuget coming soon...)  
 Run CPU intensive tasks on a dedicated worker or on a shared worker with WebWorkers!
 
-Example setup and usage
+Example WebWorkerService setup and usage
 
 ```cs
 // Program.cs
@@ -79,7 +80,7 @@ await workerService.InitAsync();
 await host.RunAsync();
 ```
 
-Use the WebWorkers
+Using the WebWorkers
 ```cs
 
 // Create a WebWorker
@@ -119,13 +120,16 @@ Console.WriteLine($"ret: {ret}");
 Inspired by Tewr's BlazorWorker implementation. Thank you! I wrote my implementation from scratch as I needed workers in .Net 7.  
 https://github.com/Tewr/BlazorWorker
 
-I shamelessly copied one of Tewr's test pages for WebWorkers demo.  
-Demo  
+I shamelessly copied one of Tewr's test pages for the WebWorkers demo.  
+BlazorJS and WebWorkers Demo  
 https://blazorjs.spawndev.com/
 
+# JSObject
+
+Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (locaStorage and sessionStorage), WebGL, WebRTC, and many more are already usable in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use ocne created.
 
 # Custom JSObjects  
-Implement your own JSObject classes for Javascript objects not already available in the BlazorJS library.
+Implement your own JSObject classes for Javascript objects not already available in the BlazorJS.JSObjects library.
 
 Instead of this (simple but not as reusable)
 ```cs
