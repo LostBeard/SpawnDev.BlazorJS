@@ -37,8 +37,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
 
         public void Start() => JSRef.CallVoid("start");
-        public void PostMessage(string message, object[] transferList = null) => JSRef.CallVoid("postMessage", message, transferList);
-        public void PostMessaage(object message, IEnumerable<object>? transfer = null)
+        //public void PostMessage(string message, object[]? transferList = null) => JSRef.CallVoid("postMessage", message, transferList);
+        public void PostMessage(object message, object[]? transfer = null)
         {
             if (transfer == null) JSRef.CallVoid("postMessage", message);
             else JSRef.CallVoid("postMessage", message, transfer);
