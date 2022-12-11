@@ -6,34 +6,42 @@ An easy Javascript interop library desgined specifcally for client side Blazor.
 
 Use Javascript libraries in Blazor without writing any Javascript code.
 
+Get and Set global properties
 ```cs
-// Get and Set global properties
 var innerHeight = JS.Get<int>("window.innerHeight");
 JS.Set("document.title", "Hello World!");
+```
 
-
-// Get and Set object properties (Extends IJSInProcessObjectReference)
+Get and Set object properties (BlazorJS extends IJSInProcessObjectReference)
+```cs
+JS.Set("window.myGlobalVar", 5);
 var window = JS.Get<IJSInProcessObjectReference>("window");
-var innerHeight = window.Get<int>("innerHeight");
-// Call methods
+var innerHeight = window.Get<int>("myGlobalVar");
+```
+
+Call methods
+```cs
 var item = JS.Call<string?>("localStorage.getItem", "itemName");
+```
 
-
-// Create a new Javascript object
+Create a new Javascript object
+```cs
 var worker = JS.CreateNew("Worker", myWorkerScript);
+```
 
-
-// Pass callbacks to Javascript
+Pass callbacks to Javascript
+```cs
 JS.Set("testCallback", Callback.Create<string>((strArg) => {
     Console.WriteLine($"Javascript sent: {strArg}");
     // this prints "Hello callback!"
 }));
-
+```
+```js
 // in Javascript
 testCallback('Hello callback!');
 ```
 
-Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 80 of the most common Javascript objects, including ones for WebGL, ab WebRTC already usable in SpawnDev.BlazorJS.JSObjects.
+Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for WebGL, and WebRTC are already usable in SpawnDev.BlazorJS.JSObjects.
 
 # SpawnDev.BlazorJS.WebWorkers
 (Nuget coming soon...)  
@@ -114,4 +122,32 @@ https://github.com/Tewr/BlazorWorker
 I shamelessly copied one of Tewr's test pages for WebWorkers demo.  
 Demo  
 https://blazorjs.spawndev.com/
+
+
+# Custom JSObjects  
+Implement your own JSObject classes for Javascript objects not already available in the BlazorJS library.
+
+Instead of this (simple but not as reusable)
+```cs
+var audio = JS.CreateNew("Audio", "https://some_audio_online");
+audio.CallVoid("play");
+```
+
+Do this...  
+Create a custom JSObject class
+```cs
+[JsonConverter(typeof(JSObjectConverter<Audio>))]
+public class Audio : JSObject
+{
+    public Audio(IJSInProcessObjectReference _ref) : base(_ref) { }
+    public Audio(string url) : base(JS.CreateNew("Audio", url)) { }
+    public void Play() => JSRef.CallVoid("play");
+}
+```
+
+Then use your new object
+```cs
+var audio = new Audio("https://some_audio_online");
+audio.Play();
+```
 
