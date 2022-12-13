@@ -91,7 +91,8 @@ audio.Play();
 ```
 
 # SpawnDev.BlazorJS.WebWorkers
-(Nuget coming soon...)  
+[![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.WebWorkers.svg?label=SpawnDev.BlazorJS.WebWorkers)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers) 
+
 Run CPU intensive tasks on a dedicated worker or on a shared worker with WebWorkers!
 
 Example WebWorkerService setup and usage
