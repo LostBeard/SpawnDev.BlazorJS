@@ -19,6 +19,14 @@ An easy Javascript interop library desgined specifcally for client side Blazor.
 
 NOTE: The below code shows quick examples. Some objects implement IDisposable, such as all JSObject, IJSInProcessObjectReference, and Callback, and need to be disposed when no longer used.
 
+Firefox note:
+Firefox does not support dynamic modules in workers, originally make BlazorJS.WebWorkers fail due to this limitation.
+I wrote a code that changes the scripts before they are loaded to workaround this limitation until Firefox finishes worker module intergration.
+
+https://bugzilla.mozilla.org/show_bug.cgi?id=1540913#c6
+https://bugzilla.mozilla.org/show_bug.cgi?id=1247687
+
+
 # JS
 
 ```cs

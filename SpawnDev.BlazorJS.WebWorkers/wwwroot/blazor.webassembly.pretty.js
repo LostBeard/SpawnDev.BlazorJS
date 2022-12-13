@@ -2421,6 +2421,7 @@
         try {
             await n.start(f)
         } catch (e) {
+            console.log(e);
             throw new Error(`Failed to start platform. Reason: ${e}`)
         }
         n.callEntryPoint(f.bootConfig.entryAssembly), d.invokeAfterStartedCallbacks(Ke)

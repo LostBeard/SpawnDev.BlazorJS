@@ -373,10 +373,10 @@ var initFunc = function () {
 };
 initFunc();
 
-export function beforeStart(options, extensions) {
-    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! blazorJS beforeStart");
-}
+//export function beforeStart(options, extensions) {
+//    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! blazorJS beforeStart");
+//}
 
-export function afterStarted(blazor) {
-    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! blazorJS afterStarted");
-}
+//export function afterStarted(blazor) {
+//    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! blazorJS afterStarted");
+//}

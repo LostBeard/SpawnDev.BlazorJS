@@ -81,6 +81,7 @@ namespace SpawnDev.BlazorJS
             if (disposing)
             {
                 // managed assets
+
             }
             JSRef?.Dispose();
             JSRef = null;

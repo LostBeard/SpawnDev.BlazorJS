@@ -23,4 +23,54 @@ WebAssemblyHost host = builder.Build();
 // init WebWorkerService
 var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
 await webWorkerService.InitAsync();
-await host.RunAsync(); 
+#region TestingSection
+WebWorker? _testWorker = null;
+if (JS.IsWindow)
+{
+    // window thread
+    JS.Set("_getTest", Callback.Create(new Action<bool?>(async (verbose) =>
+    {
+        if (_testWorker == null) _testWorker = await webWorkerService.GetWebWorker(verbose.HasValue && verbose.Value);
+    })));
+    JS.Set("_disposeTest", Callback.Create(new Action<bool?>(async (verbose) =>
+    {
+        _testWorker?.Dispose();
+        _testWorker = null;
+    })));
+    JS.Set("_getWorker", Callback.Create(new Action<bool?>(async (verbose) =>
+    {
+        using var webWorker = await webWorkerService.GetWebWorker(verbose.HasValue && verbose.Value);
+        var ret = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), 100, new Action<int>((i) =>
+        {
+            Console.WriteLine($"Progress: {i}");
+        }));
+        Console.WriteLine($"ret: {ret}");
+    })));
+    JS.Set("_getSharedWorker", Callback.Create(new Action<bool?>(async (verbose) =>
+    {
+        using var webWorker = await webWorkerService.GetSharedWebWorker(verboseMode: verbose.HasValue && verbose.Value);
+        var ret = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), 100, new Action<int>((i) =>
+        {
+            Console.WriteLine($"Progress: {i}");
+        }));
+        Console.WriteLine($"ret: {ret}");
+    })));
+}
+else if (JS.IsDedicatedWorkerGlobalScope)
+{
+    //Console.WriteLine($"IsDedicatedWorkerGlobalScope: -----------------");
+    //// dedicated worker thread
+    //var webWorker = webWorkerService.DedicatedWorkerParent;
+    //var ret = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), 100, new Action<int>((i) =>
+    //{
+    //    Console.WriteLine($"Progress: {i}");
+    //}));
+    //Console.WriteLine($"ret: {ret}");
+}
+else if (JS.IsWorker)
+{
+    // worker thread
+
+}
+#endregion
+await host.RunAsync();

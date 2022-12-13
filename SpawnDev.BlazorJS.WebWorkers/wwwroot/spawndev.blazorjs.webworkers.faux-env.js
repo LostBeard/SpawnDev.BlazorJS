@@ -1,9 +1,12 @@
 'use strict';
 
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+// Todd Tanner
+// 2022
+// built as part of SpawnDev.BlazorJS.WebWorkers
+// This script creates a minimal Window scope environment to allow Blazor to boot up
 
 var undefinedGets = {};
-
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
 function createProxiedObject(obj) {
     var ret = new Proxy(obj, {
         get(target, key) {
@@ -43,7 +46,11 @@ function createProxiedObject(obj) {
         },
         has(target, key) {
             consoleLog('has', target.constructor.name, key);
-            return key in target || target[key];
+            var ret = key in target || target[key];
+            if (key === 'Blazor') {
+                consoleLog('has"key") ==', ret);
+            }
+            return ret;
         },
         defineProperty(target, key, descriptor) {
             consoleLog('defineProperty', target, key, descriptor);
@@ -100,17 +107,6 @@ class EventTargetFake {
         consoleLog(this.constructor.name, 'dispatchEvent', event);
     }
 }
-
-//class Window extends EventTargetFake {
-//    constructor() {
-//        super();
-//        this._localStorage = new WebStorage();
-//        this._sessionStorage = new WebStorage();
-//    }
-//    get isSecureContext() { return true; }
-//    get localStorage() { return this._localStorage; }
-//    get sessionStorage() { return this._sessionStorage; }
-//}
 
 class Node extends EventTargetFake {
     constructor() {
@@ -217,23 +213,23 @@ class HTMLDocument extends Node {
         this._body = null;
         this.nodeType = Node.DOCUMENT_NODE;
         this.activeElement = null;
+        this._beenInit = false;
+        this._importScriptsOnInit = true;
+        this._readyState = '';
+    }
+    get readyState() {
+        return this._readyState;
+    }
+    setReadyState(state) {
+        if (this._readyState == state) return false;
+        this._readyState = state;
+        consoleLog('document readystatechanged', state);
+        // if events are enabled ...
+        // this.dispatchEvent('readystatechanged', state);
     }
     get documentElement() {
         return this._nodes.length == 0 ? null : this._nodes[0]
     }
-    //appendChild(node) {
-    //    node.parentNode = this;
-    //    this._nodes.push(node);
-    //    var nodeType = node.constructor.name;
-    //    var thisType = this.constructor.name;
-    //    consoleLog(`appendChild: ${nodeType} to ${thisType}`);
-    //    if (node instanceof HTMLHeadElement) {
-    //        this._head = node;
-    //    } else if (node instanceof HTMLBodyElement) {
-    //        this._body = node;
-    //    }
-    //    return node;
-    //}
     get head() {
         return this._head;
     }
@@ -276,6 +272,7 @@ class HTMLDocument extends Node {
     querySelector(selector) {
         consoleLog(this.constructor.name, 'querySelector', selector);
         var nodes = this.descendants();
+        // id search
         var idPatt = new RegExp('^#([a-z][a-z0-9_-]*)$');
         var m = idPatt.exec(selector);
         if (m) {
@@ -287,12 +284,31 @@ class HTMLDocument extends Node {
             return null;
         }
         if (selector === 'head') return this.head;
-        if (selector === 'body') return this.body;
+        else if (selector === 'body') return this.body;
         return null;
     }
     querySelectorAll(selector) {
+        var ret = [];
         consoleLog(this.constructor.name, 'querySelectorAll', selector);
-        return [];
+        var nodes = this.descendants();
+        if (selector === '*') {
+            return descendants;
+        }
+        // id search
+        var idPatt = new RegExp('^#([a-z][a-z0-9_-]*)$');
+        var m = idPatt.exec(selector);
+        if (m) {
+            var id = m[1];
+            for (var i = 0; i < nodes.length; i++) {
+                var n = nodes[i];
+                if (n.getAttribute('id') === id) {
+                    ret.push(n);
+                }
+            }
+        }
+        if (selector === 'head') ret.push(this.head);
+        else if (selector === 'body') ret.push(this.body);
+        return ret;
     }
     addGlobalListener() {
         consoleLog(this.constructor.name, 'addGlobalListener');
@@ -300,7 +316,6 @@ class HTMLDocument extends Node {
     }
     get currentScript() {
         consoleLog(this.constructor.name, 'currentScript');
-        // To start blazor it needs to think the currentScript is it's own script tag
         return this._currentScript;
     }
     set currentScript(value) {
@@ -315,10 +330,15 @@ class HTMLDocument extends Node {
         return ret;
     }
     initDocument() {
+        if (this._beenInit) {
+            console.error('document has already been initialized');
+            return;
+        }
+        this._beenInit = true;
+        this.setReadyState('loading');
         if (this.childNodes.length > 0) {
             var rootNode = this.childNodes[0];
             if (rootNode instanceof HTMLHtmlElement && rootNode.hasChildNodes()) {
-                var head = null;
                 rootNode.childNodes.forEach((n) => {
                     if (n instanceof HTMLHeadElement) {
                         this._head = n;
@@ -329,7 +349,42 @@ class HTMLDocument extends Node {
             }
         }
         this.activeElement = this.body;
-        consoleLog('!!! document ready !!!');
+        consoleLog("document.dispatchEvent('DOMContentLoaded')");
+        this.setReadyState('interactive');
+        if (this._importScriptsOnInit) {
+            consoleLog("importing scripts from all script elements in document");
+            var nodes = this.descendants();
+            for (var node of nodes) {
+                if (node instanceof HTMLScriptElement) {
+                    var innerHTML = node.innerHTML;
+                    if (innerHTML) {
+                        this.currentScript = node;
+                        console.log('usign script innerHTML instead of src');
+                        try {
+                            let fn = new Function(innerHTML);
+                            fn.apply(globalThisObj, []);
+                        } catch (ex) {
+                            console.error('ERROR loading document script', href, ex);
+                        }
+                        this.currentScript = null;
+                        continue;
+                    }
+                    var src = node.getAttribute('src');
+                    if (src) {
+                        var href = new URL(src, this.baseURI);
+                        this.currentScript = node;
+                        try {
+                            importScripts(href);
+                        } catch (ex) {
+                            console.error('ERROR loading document script', href, ex);
+                        }
+                        this.currentScript = null;
+                    }
+                }
+            }
+        }
+        consoleLog("window.dispatchEvent('load')");
+        this.setReadyState('complete');
     }
 }
 
@@ -342,7 +397,7 @@ class CSSStyleDeclaration {
         this._styles[key] = value;
     }
     getProperty(key) {
-        consoleLog(this.constructor.name, 'getProperty', key);
+        //consoleLog(this.constructor.name, 'getProperty', key);
         return this._styles[key];
     }
 }
@@ -373,7 +428,7 @@ class Element extends Node {
     getElementsByTagName(tagName) {
         //consoleLog(this.constructor.name, 'getElementsByTagName', tagName);
         var ret = [];
-        tagName = tagName.toUpperCase();    // When called on an HTML element in an HTML document, getElementsByTagName lower-cases the argument before searching for it.
+        tagName = tagName.toUpperCase();
         var nodes = this.descendants();
         for (const node of nodes) {
             if (!(node instanceof HTMLElement)) continue;
@@ -387,7 +442,7 @@ class Element extends Node {
     getElementsByTagNameNS(namespaceURI, localName) {
         consoleLog(this.constructor.name, 'getElementsByTagNameNS', namespaceURI, localName);
         var ret = [];
-        localName = localName.toUpperCase();    // When called on an HTML element in an HTML document, getElementsByTagName lower-cases the argument before searching for it.
+        localName = localName.toUpperCase();
         var nodes = this.descendants();
         for (const node of nodes) {
             if (!(node instanceof HTMLElement)) continue;
@@ -570,7 +625,7 @@ class History {
     }
     var history = createProxiedObject(new History());
     var document = createProxiedObject(new HTMLDocument());
-    // assign to global object
+    // assign a proxied globaThis to window
     globalThisObj.window = createProxiedObject(new Proxy(self, {
         get(target, key) {
             var ret = target[key];
@@ -590,31 +645,19 @@ class History {
     // document.baseURI
     var href = globalThisObj.location.href;
     var webWorkerContentDir = href.substring(0, href.lastIndexOf('/') + 1);
-    if (webWorkerContentDir.indexOf('_content/') > 0) {
-        webWorkerContentDir = new URL(webWorkerContentDir + '../../').toString();
-    }
     document.baseURI = webWorkerContentDir;
-    consoleLog('document.baseURI', document.baseURI);
-    // setup standard document
-    var htmlEl = document.appendChild(document.createElement('html'));
-    var headEl = htmlEl.appendChild(document.createElement('head'));
-    var bodyEl = htmlEl.appendChild(document.createElement('body'));
-    // add page specific stuff
-    // <div id="app">
-    var appDiv = bodyEl.appendChild(document.createElement('div'));
-    appDiv.setAttribute('id', 'app');
-    // <div id="blazor-error-ui">
-    var errorDiv = bodyEl.appendChild(document.createElement('div'));
-    errorDiv.setAttribute('id', 'blazor-error-ui');
-    // <script src="_framework/blazor.webassembly.js" autostart="false"></script>
-    var blazorWASMScriptEl = bodyEl.appendChild(document.createElement('script'));
-    blazorWASMScriptEl.setAttribute('autostart', "false");
-    blazorWASMScriptEl.setAttribute('src', '_framework/blazor.webassembly.js');
-    // the inital document is now added to the DOM and ready to be initialized
-    // essentially at the state when the html page has been loaded but no elements have been parsed (no scripts loaded yet)
-    document.initDocument();
-    // blazor checks the currentScript for an attribute names "autostart"
-    // TODO - handle below cleaner. init doc shuld iterate and load scripts
-    document.currentScript = blazorWASMScriptEl;
 })();
 
+// *********** Fake Window scope environment is built ***********
+// - add needed elements like html, head, body, script
+// - adjust the document baseURI (if needed)
+// - finally: call document.initDocument() to initialize the document
+//
+// Example:
+//var htmlEl = document.appendChild(document.createElement('html'));
+//var headEl = htmlEl.appendChild(document.createElement('head'));
+//var bodyEl = htmlEl.appendChild(document.createElement('body'));
+//var blazorWASMScriptEl = bodyEl.appendChild(document.createElement('script'));
+//blazorWASMScriptEl.setAttribute('src', '_framework/blazor.webassembly.js');
+//...
+//document.initDocument();

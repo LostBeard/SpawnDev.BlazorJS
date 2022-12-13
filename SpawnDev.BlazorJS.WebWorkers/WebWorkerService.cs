@@ -250,7 +250,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var queryArgs = new NameValueCollection();
             queryArgs.Add("verbose", verboseMode ? "true" : "false");
             var worker = new SharedWorker($"_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js", sharedWorkerName);
-            JS.Set("_sharedWorker1", worker);
             var webWorker = new SharedWebWorker(sharedWorkerName, worker, _serviceProvider);
             if (awaitWhenReady) await webWorker.WhenReady;
             return webWorker;
