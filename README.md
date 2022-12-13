@@ -23,8 +23,6 @@ Firefox note:
 Firefox does not support dynamic modules in workers, originally make BlazorJS.WebWorkers fail due to this limitation.
 I wrote a code that changes the scripts before they are loaded to workaround this limitation until Firefox finishes worker module intergration.
 
-Performance in Chrome appears to be much better than Firefox accoring to my testing. I am unsure to why at this time.
-
 https://bugzilla.mozilla.org/show_bug.cgi?id=1540913#c6
 https://bugzilla.mozilla.org/show_bug.cgi?id=1247687
 
