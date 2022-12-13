@@ -20,6 +20,7 @@ An easy Javascript interop library desgined specifcally for client side Blazor.
 NOTE: The below code shows quick examples. Some objects implement IDisposable, such as all JSObject, IJSInProcessObjectReference, and Callback, and need to be disposed when no longer used.
 
 # JS
+
 ```cs
 // Get Set
 var innerHeight = JS.Get<int>("window.innerHeight");
@@ -147,7 +148,7 @@ var sharedWebWorker = await workerService.GetSharedWebWorker("workername");
 
 // Just like WebWorker but shared
 // Call a registered service on the worker thread with your arguments
-var result = await webWorker.InvokeAsync<MathsService, string>("CalculatePiWithActionProgress", piDecimalPlaces, new Action<int>((i) =>
+var result = await sharedWebWorker.InvokeAsync<MathsService, string>("CalculatePiWithActionProgress", piDecimalPlaces, new Action<int>((i) =>
 {
     piProgress = i;
     StateHasChanged();
