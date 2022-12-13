@@ -13,9 +13,9 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;</PackageTags>
 		<PackageReleaseNotes></PackageReleaseNotes>
-		<Version>1.2.3.0</Version>
-		<FileVersion>1.2.3.0</FileVersion>
-		<AssemblyVersion>1.2.3.0</AssemblyVersion>
+		<Version>1.2.4.1</Version>
+		<FileVersion>1.2.4.1</FileVersion>
+		<AssemblyVersion>1.2.4.1</AssemblyVersion>
 		<Authors>LostBeard</Authors>
 	</PropertyGroup>
 

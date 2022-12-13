@@ -44,7 +44,7 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
 }
 
 var disableHotReload = true;
-var verboseWebWorkers = location.search.indexOf('verbose=true');
+var verboseWebWorkers = location.search.indexOf('verbose=true') > -1;
 // at the moment verbose must be false because an unknown issue is causing Blazor to fail without any errors if it is enabled
 var consoleLog = function () {
     if (!verboseWebWorkers) return;
@@ -103,7 +103,7 @@ var initWebWorkerBlazor = async () => {
         blazorWASMScriptEl.setAttribute('src', '_framework/blazor.webassembly.js');
         //blazorWASMScriptEl.setAttribute('src', '_content/SpawnDev.BlazorJS.WebWorkers/blazor.webassembly.pretty.js');
         // init document
-        if (dynamicImportSupported && false) {
+        if (dynamicImportSupported) {
             document.initDocument();
         }
         else
