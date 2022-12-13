@@ -26,11 +26,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         public SharedWorker(IJSInProcessObjectReference _ref) : base(_ref) { }
         public SharedWorker(string url) : base(NullRef)
         {
-            FromReference(JS.CreateNew("SharedWorker", url));
+            FromReference(JS.New("SharedWorker", url));
         }
         public SharedWorker(string url, string name) : base(NullRef)
         {
-            FromReference(JS.CreateNew("SharedWorker", url, name));
+            FromReference(JS.New("SharedWorker", url, name));
         }
         protected override void FromReference(IJSInProcessObjectReference _ref)
         {

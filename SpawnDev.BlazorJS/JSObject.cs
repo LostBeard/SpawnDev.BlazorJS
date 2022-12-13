@@ -28,17 +28,17 @@ namespace SpawnDev.BlazorJS
         // all objects inheriting JSObject should at minimum support this constructor to enable deserialization
         public JSObject(IJSInProcessObjectReference _ref) => FromReference(_ref);
         // used to create a new instance of a javascript class
-        public JSObject(string className) => FromReference(JS.CreateNewArgs(className));
-        public JSObject(string className, object arg0) => FromReference(JS.CreateNewArgs(className, new object[] { arg0 }));
-        public JSObject(string className, object arg0, object arg1) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1 }));
-        public JSObject(string className, object arg0, object arg1, object arg2) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2 }));
-        public JSObject(string className, object arg0, object arg1, object arg2, object arg3) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3 }));
-        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4 }));
-        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 }));
-        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 }));
-        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }));
-        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }));
-        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => FromReference(JS.CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }));
+        public JSObject(string className) => FromReference(JS.NewApply(className));
+        public JSObject(string className, object arg0) => FromReference(JS.NewApply(className, new object[] { arg0 }));
+        public JSObject(string className, object arg0, object arg1) => FromReference(JS.NewApply(className, new object[] { arg0, arg1 }));
+        public JSObject(string className, object arg0, object arg1, object arg2) => FromReference(JS.NewApply(className, new object[] { arg0, arg1, arg2 }));
+        public JSObject(string className, object arg0, object arg1, object arg2, object arg3) => FromReference(JS.NewApply(className, new object[] { arg0, arg1, arg2, arg3 }));
+        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4) => FromReference(JS.NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4 }));
+        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => FromReference(JS.NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 }));
+        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) => FromReference(JS.NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 }));
+        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => FromReference(JS.NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }));
+        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => FromReference(JS.NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }));
+        public JSObject(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => FromReference(JS.NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }));
         protected virtual void FromReference(IJSInProcessObjectReference _ref)
         {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
@@ -102,6 +102,12 @@ namespace SpawnDev.BlazorJS
             }
 #endif
             Dispose(false);
+        }
+
+        protected void DisposeAndNull(ref IDisposable? disposable)
+        {
+            disposable?.Dispose();
+            disposable = null;
         }
         //public T CopyPropertiesTo<T>(bool camelCase = true)
         //{

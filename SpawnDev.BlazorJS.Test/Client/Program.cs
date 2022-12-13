@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SpawnDev.BlazorJS;
+using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
@@ -20,6 +21,6 @@ builder.Services.AddSingleton<MathsService>();
 // build 
 WebAssemblyHost host = builder.Build();
 // init WebWorkerService
-var workerService = host.Services.GetRequiredService<WebWorkerService>();
-await workerService.InitAsync();
-await host.RunAsync();
+var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
+await webWorkerService.InitAsync();
+await host.RunAsync(); 

@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public HTMLImageElement(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public HTMLImageElement() : base(JS.CreateNew("Image")) { }
+        public HTMLImageElement() : base(JS.New("Image")) { }
 
         public static Task<HTMLImageElement> CreateFromImageAsync(string src)
         {

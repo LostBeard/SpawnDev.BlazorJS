@@ -9,7 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Function(IJSInProcessObjectReference _ref) : base(_ref) { }
         // syntax
         // new Function ([arg1, arg2, ...argN], functionBody)
-        public Function(params string[] args) : base(JS.CreateNewArgs("Function", args)) { }
+        public Function(params string[] args) : base(JS.NewApply("Function", args)) { }
 
         public T Apply<T>(object? thisObj, object[] args) => JSRef.Call<T>("applyFn", thisObj, args);
         public ValueTask<T> ApplyAsync<T>(object? thisObj, object[] args) => JSRef.CallAsync<T>("applyFn", thisObj, args);

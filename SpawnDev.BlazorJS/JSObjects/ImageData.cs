@@ -16,13 +16,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         public ImageData(Uint8Array uint8, int width, int height) : base(NullRef)
         {
             using var uint8Clamped = new Uint8ClampedArray(uint8);
-            FromReference(JS.CreateNew("ImageData", uint8Clamped, width, height));
+            FromReference(JS.New("ImageData", uint8Clamped, width, height));
         }
         public ImageData(byte[] rgbaBytes, int width, int height) : base(NullRef)
         {
             using var uint8 = new Uint8Array(rgbaBytes);
             using var uint8Clamped = new Uint8ClampedArray(uint8);
-            FromReference(JS.CreateNew("ImageData", uint8Clamped, width, height));
+            FromReference(JS.New("ImageData", uint8Clamped, width, height));
         }
     }
 }

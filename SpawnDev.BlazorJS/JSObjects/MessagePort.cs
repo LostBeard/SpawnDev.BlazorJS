@@ -3,51 +3,104 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    public interface IMessagePort
+    {
+        event Action OnMessageError;
+        event Action<MessageEvent> OnMessage;
+
+        void Dispose();
+        void PostMessage(object message);
+        void PostMessage(object message, object[] transfer);
+    }
+
     // https://developer.mozilla.org/en-US/docs/Web/API/MessagePort
     [JsonConverter(typeof(JSObjectConverter<MessagePort>))]
-    public class MessagePort : EventTarget
+    public class MessagePort : EventTarget, IMessagePort
     {
         CallbackGroup _callbacks = new CallbackGroup();
-        public delegate void ErrorDelete();
-        public event ErrorDelete OnError;
-        public delegate void MessageDelegate(MessageEvent msg);
-        public event MessageDelegate OnMessage;
-        public MessagePort(IJSInProcessObjectReference _ref) : base(_ref) { }
-        protected override void FromReference(IJSInProcessObjectReference _ref)
+
+        public MessagePort(IJSInProcessObjectReference _ref) : base(_ref)
         {
-            base.FromReference(_ref);
-            AddEventListener("message", Callback.Create<MessageEvent>((e) => {
-                OnMessagePre(e);
-                e.Dispose();
-            }, _callbacks));
-            AddEventListener("error", Callback.Create<MessageEvent>((e) => {
-                OnErrorPre();
-                e.Dispose();
-            }, _callbacks));
+            InitEventsHandlers();
         }
 
-        protected virtual void OnMessagePre(MessageEvent e)
+        private void InitEventsHandlers()
         {
-            OnMessage?.Invoke(e);
+            _OnMessageCallback = Callback.Create<MessageEvent>((e) => _OnMessage?.Invoke(e), _callbacks);
+            _OnMessageErrorCallback = Callback.Create(() => _OnMessageError?.Invoke(), _callbacks);
         }
 
-        protected virtual void OnErrorPre()
+        private Callback _OnMessageCallback;
+        private event Action<MessageEvent> _OnMessage;
+        public event Action<MessageEvent> OnMessage
         {
-            OnError?.Invoke();
+            add
+            {
+                _OnMessage += value;
+                if (_OnMessage.GetInvocationList().Length == 1)
+                    AddEventListener("message", _OnMessageCallback);
+            }
+            remove
+            {
+                if (_OnMessage.GetInvocationList().Length == 1)
+                    RemoveEventListener("message", _OnMessageCallback);
+                _OnMessage -= value;
+            }
+        }
+
+        private Callback _OnMessageErrorCallback;
+        private event Action _OnMessageError;
+        public event Action OnMessageError
+        {
+            add
+            {
+                _OnMessageError += value;
+                if (_OnMessageError.GetInvocationList().Length == 1)
+                    AddEventListener("messageerror", _OnMessageErrorCallback);
+            }
+            remove
+            {
+                if (_OnMessageError.GetInvocationList().Length == 1)
+                    RemoveEventListener("messageerror", _OnMessageErrorCallback);
+                _OnMessageError -= value;
+            }
         }
 
         public void Start() => JSRef.CallVoid("start");
-        //public void PostMessage(string message, object[]? transferList = null) => JSRef.CallVoid("postMessage", message, transferList);
-        public void PostMessage(object message, object[]? transfer = null)
-        {
-            if (transfer == null) JSRef.CallVoid("postMessage", message);
-            else JSRef.CallVoid("postMessage", message, transfer);
-        }
+        public void Close() => JSRef.CallVoid("close");
+        public void PostMessage(object message) => JSRef.CallVoid("postMessage", message);
+        public void PostMessage(object message, object[] transfer) => JSRef.CallVoid("postMessage", message, transfer);
 
         public override void Dispose()
         {
             _callbacks.Dispose();
             base.Dispose();
+        }
+    }
+
+
+    public class Test1
+    {
+        public Test1()
+        {
+
+        }
+        private Callback _OnMessageCallback;
+        private event Action<MessageEvent> _OnMessage;
+        public event Action<MessageEvent> OnMessage
+        {
+            add
+            {
+                if (_OnMessage == null)
+                    Console.WriteLine("add here");
+                _OnMessage += value;
+            }
+            remove
+            {
+                _OnMessage -= value;
+                if (_OnMessage == null)
+                    Console.WriteLine("remove here");
+            }
         }
     }
 }

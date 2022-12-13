@@ -12,10 +12,11 @@
 		<RepositoryUrl>https://github.com/LostBeard/SpawnDev.BlazorJS.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;</PackageTags>
-		<PackageReleaseNotes>Initial commit</PackageReleaseNotes>
-		<Version>1.2.1.1</Version>
-		<FileVersion>1.2.1.1</FileVersion>
-		<AssemblyVersion>1.2.1.1</AssemblyVersion>
+		<PackageReleaseNotes></PackageReleaseNotes>
+		<Version>1.2.3.0</Version>
+		<FileVersion>1.2.3.0</FileVersion>
+		<AssemblyVersion>1.2.3.0</AssemblyVersion>
+		<Authors>LostBeard</Authors>
 	</PropertyGroup>
 
 	<ItemGroup>

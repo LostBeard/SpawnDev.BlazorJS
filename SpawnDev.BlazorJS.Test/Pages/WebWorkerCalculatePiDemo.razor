@@ -2,16 +2,16 @@
 
 <PageTitle>WebWorker</PageTitle>
 
-@inject WebWorkerService workerFactory
+@inject WebWorkerService webWorkerService
 @inject MathsService mathsService
 
 <div class="row">
     <div class="col-5 col-xs-12">
         <h1>SpawnDev.BlazorJS.WebWorkers.WebWorker</h1>
         <br /><br />
-        Pi estimation demo. Specify number of iterations.<br />
-        <input type="text" @bind="piIterations" placeholder="estimation iterations" /><br />
-        <progress max=@piIterations value="@piProgress" /><br /><br />
+        Calculate Pi to N decimal places<br />
+        <input type="text" @bind="piDecimalPlaces" placeholder="decimal places" /><br />
+        <progress max=@piDecimalPlaces value="@piProgress" /><br /><br />
         <button disabled=@RunDisabled @onclick=OnClick class="btn btn-primary">Run test</button><br /><br />
         <button disabled="@canDisposeWorker" @onclick="OnDisposeWorker" class="btn btn-secondary">Dispose Worker</button><br />
         <br />
@@ -24,11 +24,11 @@
     </div>
 </div>
 @code {
-    int piIterations = 5_000_000;
+    int piDecimalPlaces = 3000;
     int piProgress = 0;
     string output = "";
-    WebWorker? worker;
-    string? canDisposeWorker => worker != null ? null : "disabled";
+    WebWorker? webWorker;
+    string? canDisposeWorker => webWorker != null ? null : "disabled";
     string? RunDisabled => Running ? "disabled" : null;
     bool Running = false;
 
@@ -41,32 +41,27 @@
         try
         {
             var sw = new System.Diagnostics.Stopwatch();
-            if (worker == null)
+            if (webWorker == null)
             {
                 output = $"{rn}{LogDate()} Creating WebWorker...";
                 StateHasChanged();
                 sw.Start();
-                worker = await workerFactory.CreateWorker();
-                worker.OnMessage += (sender, msg) =>
-                {
-                    if (msg.TargetName == "progress")
-                    {
-                        var msgData = msg.GetData<PiProgress>();
-                        piProgress = msgData.Progress;
-                        StateHasChanged();
-                    }
-                };
+                webWorker = await webWorkerService.GetWebWorker();
                 sw.Stop();
                 output += $"{rn}{LogDate()} Background service created in {sw.ElapsedMilliseconds}ms";
                 StateHasChanged();
             }
-            // We cannot pass piIterations directly, as it would create a reference to the current class
-            // which is difficult to serialize over process borders
-            // local variables are fine though
-            var localParamValue = piIterations;
-            output += $"{rn}{LogDate()} Calling EstimatePI({piIterations})...";
-            var result = await worker.InvokeAsync<MathsService, double>(nameof(MathsService.EstimatePI), localParamValue);
-            output += $"{rn}{LogDate()} EstimatePI({piIterations}) = {result}";
+            output += $"{rn}{LogDate()} Calling EstimatePI({piDecimalPlaces})...";
+            sw.Restart();
+            // Actions can be passed for progress callbacks but they only live as long as the call itself does and can have at most 1 parameter
+            var result = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), piDecimalPlaces, new Action<int>((i) =>
+            {
+                piProgress = i;
+                StateHasChanged();
+            }));
+            output += $"{rn}{LogDate()} EstimatePI({piDecimalPlaces}) = {result}";
+            sw.Stop();
+            output += $"{rn}{LogDate()} Computerd Pi to {piDecimalPlaces} places in {sw.ElapsedMilliseconds}ms";
             StateHasChanged();
         }
         catch (Exception e)
@@ -81,15 +76,16 @@
 
     async Task OnWithoutThreadClicked()
     {
-        var result = await mathsService.EstimatePI(piIterations);
-        output += $"{rn}{LogDate()} EstimatePI({piIterations}) = {result}";
+        var result = await mathsService.EstimatePI(piDecimalPlaces);
+        output += $"{rn}{LogDate()} EstimatePI({piDecimalPlaces}) = {result}";
         StateHasChanged();
     }
 
     public void OnDisposeWorker()
     {
-        worker?.Dispose();
-        worker = null;
+        webWorker?.Dispose();
+        webWorker = null;
+        Running = false;
     }
 
     private string LogDate()

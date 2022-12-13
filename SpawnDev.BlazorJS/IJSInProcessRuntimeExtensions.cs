@@ -100,6 +100,7 @@ namespace SpawnDev.BlazorJS
 
         public static async ValueTask<object?> InvokeAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, params object[] args)
         {
+            // TODO - get repalce dynamic usage with other (like is WebWorkers ServiceCallDispatcher)
             dynamic task = GetJSRuntimeInvokeAsync(returnType).Invoke(_js, new object[] { identifier, args });
             if (task == null) return null;
             await task;

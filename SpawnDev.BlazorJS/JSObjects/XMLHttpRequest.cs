@@ -13,7 +13,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<XMLHttpRequest>))]
     public class XMLHttpRequest : XMLHttpRequestEventTarget
     {
-        public XMLHttpRequest() : base(JS.CreateNew("XMLHttpRequest")) { }
+        public XMLHttpRequest() : base(JS.New("XMLHttpRequest")) { }
         public XMLHttpRequest(IJSInProcessObjectReference _ref) : base(_ref) { }
         public XMLHttpRequestUpload Upload => JSRef.Get<XMLHttpRequestUpload>("upload");
         public int Status => JSRef.Get<int>("status");

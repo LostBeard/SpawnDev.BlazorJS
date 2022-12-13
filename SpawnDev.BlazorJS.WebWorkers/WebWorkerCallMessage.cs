@@ -32,5 +32,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
         [JsonIgnore]
         public MessageEvent? _msg { get; set; }
         public T? GetData<T>() => _msg == null ? default : _msg.JSRef.Get<T>("data.data");
+        public object? GetData(Type type) => _msg == null ? default : _msg.JSRef.Get(type, "data.data");
     }
 }

@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Uint8ClampedArray(byte[] bytes) : base(NullRef)
         {
             using var arrayBuffer = new Uint8Array(bytes);
-            FromReference(JS.CreateNew("Uint8ClampedArray", arrayBuffer));
+            FromReference(JS.New("Uint8ClampedArray", arrayBuffer));
         }
         public Uint8ClampedArray(Uint8Array uint8Array) : base("Uint8ClampedArray", uint8Array) { }
         public Uint8ClampedArray(int length) : base("Uint8ClampedArray", length) { }

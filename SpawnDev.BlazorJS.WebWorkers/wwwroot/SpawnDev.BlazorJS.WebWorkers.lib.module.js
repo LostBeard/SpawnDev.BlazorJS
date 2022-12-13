@@ -4,9 +4,9 @@
 // probably removing this file soon if not needed
 
 export function beforeStart(options, extensions) {
-    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! webworkers beforeStart");
+    //console.log("webworkers beforeStart");
 }
 
 export function afterStarted(blazor) {
-    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! webworkers afterStarted");
+    //console.log("webworkers afterStarted");
 }

@@ -1,4 +1,6 @@
 ﻿using SpawnDev.BlazorJS.WebWorkers;
+using System;
+using System.Diagnostics;
 
 namespace SpawnDev.BlazorJS.Test.Services
 {
@@ -6,7 +8,10 @@ namespace SpawnDev.BlazorJS.Test.Services
     {
         public int Progress { get; set; }
     }
-
+    public class CalculatePiProgress
+    {
+        public int Progress { get; set; }
+    }
 
     /// <summary>
     /// This service runs insinde the worker.
@@ -18,6 +23,91 @@ namespace SpawnDev.BlazorJS.Test.Services
         public MathsService(WebWorkerService webWorkerService)
         {
             _webWorkerService = webWorkerService;
+        }
+
+        // nicholas on StackOverflow
+        // https://stackoverflow.com/questions/11677369/how-to-calculate-pi-to-n-number-of-places-in-c-sharp-using-loops
+        public string CalculatePi(int digits, ServiceCallDispatcher? caller = null)
+        {
+            var sw = new Stopwatch();
+            sw.Restart();
+            digits++;
+            uint[] x = new uint[digits * 10 / 3 + 2];
+            uint[] r = new uint[digits * 10 / 3 + 2];
+            uint[] pi = new uint[digits];
+            for (int j = 0; j < x.Length; j++) x[j] = 20;
+            for (int i = 0; i < digits; i++)
+            {
+                uint carry = 0;
+                for (int j = 0; j < x.Length; j++)
+                {
+                    uint num = (uint)(x.Length - j - 1);
+                    uint dem = num * 2 + 1;
+                    x[j] += carry;
+                    uint q = x[j] / dem;
+                    r[j] = x[j] % dem;
+                    carry = q * num;
+                }
+                pi[i] = (x[x.Length - 1] / 10);
+                r[x.Length - 1] = x[x.Length - 1] % 10;
+                for (int j = 0; j < x.Length; j++) x[j] = r[j] * 10;
+                if (sw.Elapsed.TotalMilliseconds > 200)
+                {
+                    caller.SendEvent(nameof(CalculatePiProgress), new CalculatePiProgress() { Progress = i });
+                    sw.Restart();
+                }
+            }
+            var result = "";
+            uint c = 0;
+            for (int i = pi.Length - 1; i >= 0; i--)
+            {
+                pi[i] += c;
+                c = pi[i] / 10;
+                result = (pi[i] % 10).ToString() + result;
+                // Put delays in progress for performance reasons
+            }
+            return result;
+        }
+
+        public string CalculatePiWithActionProgress(int digits, Action<int>? progress = null)
+        {
+            var sw = new Stopwatch();
+            sw.Restart();
+            digits++;
+            uint[] x = new uint[digits * 10 / 3 + 2];
+            uint[] r = new uint[digits * 10 / 3 + 2];
+            uint[] pi = new uint[digits];
+            for (int j = 0; j < x.Length; j++) x[j] = 20;
+            for (int i = 0; i < digits; i++)
+            {
+                uint carry = 0;
+                for (int j = 0; j < x.Length; j++)
+                {
+                    uint num = (uint)(x.Length - j - 1);
+                    uint dem = num * 2 + 1;
+                    x[j] += carry;
+                    uint q = x[j] / dem;
+                    r[j] = x[j] % dem;
+                    carry = q * num;
+                }
+                pi[i] = (x[x.Length - 1] / 10);
+                r[x.Length - 1] = x[x.Length - 1] % 10;
+                for (int j = 0; j < x.Length; j++) x[j] = r[j] * 10;
+                if (sw.Elapsed.TotalMilliseconds > 200)
+                {
+                    progress?.Invoke(i);
+                    sw.Restart();
+                }
+            }
+            var result = "";
+            uint c = 0;
+            for (int i = pi.Length - 1; i >= 0; i--)
+            {
+                pi[i] += c;
+                c = pi[i] / 10;
+                result = (pi[i] % 10).ToString() + result;
+            }
+            return result;
         }
 
         private IEnumerable<int> AlternatingSequence(int start = 0)
@@ -44,7 +134,8 @@ namespace SpawnDev.BlazorJS.Test.Services
             var lastReport = 0;
             await Task.Delay(100);
             return (4 * AlternatingSequence().Take(sumLength)
-                .Select((x, i) => {
+                .Select((x, i) =>
+                {
                     // Keep reporting events down a bit, serialization is expensive!
                     var progressDelta = (Math.Abs(i - lastReport) / (double)sumLength) * 100;
                     if (progressDelta > 3 || i >= sumLength - 1)
@@ -52,7 +143,8 @@ namespace SpawnDev.BlazorJS.Test.Services
                         lastReport = i;
                         _webWorkerService.SendEventToParents("progress", new PiProgress() { Progress = i });
                     }
-                    return x; })
+                    return x;
+                })
                 .Sum(x => 1.0 / x));
         }
 
@@ -62,7 +154,8 @@ namespace SpawnDev.BlazorJS.Test.Services
             var lastReport = 0;
             return AlternatingSequence(sumStart)
                 .Take(sumLength)
-                .Select((x, i) => {
+                .Select((x, i) =>
+                {
 
                     // Keep reporting events down a bit, serialization is expensive!
                     var progressDelta = (Math.Abs(i - lastReport) / (double)sumLength) * 100;
@@ -74,7 +167,6 @@ namespace SpawnDev.BlazorJS.Test.Services
                     return x;
                 })
                 .Sum(x => 1.0 / x);
-
         }
     }
 }

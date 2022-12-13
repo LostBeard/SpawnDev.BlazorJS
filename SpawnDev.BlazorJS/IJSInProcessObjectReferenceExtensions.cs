@@ -17,6 +17,7 @@ namespace SpawnDev.BlazorJS
         public static object? Invoke(this IJSInProcessObjectReference _ref, Type returnType, string identifier, params object[] args) => GetJSInProcessObjectInvoke(returnType).Invoke(_ref, new object[] { identifier, args });
         public static async Task<object?> InvokeAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, params object[] args)
         {
+            // TODO - get repalce dynamic usage with other (like is WebWorkers ServiceCallDispatcher)
             dynamic task = GetJSInProcessObjectInvokeAsync(returnType).Invoke(_ref, new object[] { identifier, args });
             await task;
             return (object)task.GetAwaiter().GetResult();

@@ -62,6 +62,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    } 
         //}
 
+        public HTMLCanvasElement() : base(JS.DocumentCreateElement("canvas")) { }
         public HTMLCanvasElement(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         public HTMLCanvasElement(ElementReference canvasElementReference) : base(JS.ReturnMe<IJSInProcessObjectReference>(canvasElementReference)) { }
@@ -152,13 +153,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    return GetImageData(x, y, 1, 1);
         //}
 
-        public string GetDataUrl() => JSRef.Call<string>("toDataURL", "image/png");
+        public string ToDataURL(string type = "image/png") => JSRef.Call<string>(type);
+        public string ToDataURL(string type, float encoderOptions) => JSRef.Call<string>(type, encoderOptions);
 
 
         // NOTE - may not work on some browsers if not added to DOM first (even if temporary)
         public void DownloadAsImage(string fileName, bool appendToBody = false)
         {
-            var dataUrl = GetDataUrl();
+            var dataUrl = ToDataURL();
             using(var link = JS.DocumentCreateElement("a"))
             {
                 link.CallVoid("setAttribute", "download", fileName);

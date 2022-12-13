@@ -13,6 +13,7 @@ namespace SpawnDev.BlazorJS
         public static void Set(string identifier, object? value) => _JSInteropCallVoid("_setGlobal", identifier, value);
          #region Global Get Sync
         public static T Get<T>(string identifier) => _JSInteropCall<T>("_getGlobal", identifier);
+        //public static IJSInProcessObjectReference GetJSRef(string identifier) => _JSInteropCall<IJSInProcessObjectReference>("_getGlobal", identifier);
         public static object? Get(Type returnType, string identifier) => _JSInteropCall(returnType, "_getGlobal", identifier);
         #endregion
         #region Global Get Async

@@ -17,7 +17,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public Response(string data, string contentType = "text/plain;charset=UTF-8") : base(NullRef)
         {
-            FromReference(JS.CreateNew("Response", data));
+            FromReference(JS.New("Response", data));
             if (!string.IsNullOrEmpty(contentType))
             {
                 using var headers = JSRef.Get<JSObject>("headers");
@@ -28,7 +28,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public Response(Uint8Array uint8array, string contentType = "application/octet-stream") : base(NullRef)
         {
-            FromReference(JS.CreateNew("Response", uint8array));
+            FromReference(JS.New("Response", uint8array));
             using var headers = JSRef.Get<JSObject>("headers");
             headers.JSRef.CallVoid("set", "Content-Type", contentType);
             headers.JSRef.CallVoid("set", "Content-Length", uint8array.ByteLength);
@@ -37,7 +37,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Response(byte[] data, string contentType = "application/octet-stream") : base(NullRef)
         {
             using var uint8array = new Uint8Array(data);
-            FromReference(JS.CreateNew("Response", uint8array));
+            FromReference(JS.New("Response", uint8array));
             using var headers = JSRef.Get<JSObject>("headers");
             headers.JSRef.CallVoid("set", "Content-Type", contentType);
             headers.JSRef.CallVoid("set", "Content-Length", data.Length);

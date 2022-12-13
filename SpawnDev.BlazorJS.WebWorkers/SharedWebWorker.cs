@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public SharedWebWorker(string name, SharedWorker sharedWorker, IServiceProvider serviceProvider) : base(serviceProvider, sharedWorker.Port)
         {
             _shareWorker = sharedWorker;
-            _port.Start();
+            if (_port is MessagePort port) port.Start();
         }
 
         public override void Dispose(bool disposing)

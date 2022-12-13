@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public BroadcastChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string Name => JSRef.Get<string>("name");
-        public BroadcastChannel(string channelName) : base(JS.CreateNew("BroadcastChannel", channelName)) { }
+        public BroadcastChannel(string channelName) : base(JS.New("BroadcastChannel", channelName)) { }
         CallbackGroup _callbacks = new CallbackGroup();
         public delegate void ErrorDelete();
         public event ErrorDelete OnError;

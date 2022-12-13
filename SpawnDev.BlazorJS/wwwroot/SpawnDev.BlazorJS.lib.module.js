@@ -1,8 +1,7 @@
+'use strict';
 // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/?view=aspnetcore-7.0#inject-a-script-after-blazor-starts
 
 //console.log('SpawnDev.BlazorJS.lib.module.js: loaded');
-
-'use strict';
 
 // get the globalThis instance
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis

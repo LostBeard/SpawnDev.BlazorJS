@@ -34,11 +34,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             _navigator = navigator;
             _serviceProvider = serviceProvider;
             AppBaseUri = _navigator.BaseUri;
-#if DEBUG && false
-            Console.WriteLine($"WebWorkerService.AppBaseUri: {AppBaseUri}");
-            Console.WriteLine($"WebWorkerService.IsSupported: {IsSupported}");
-            Console.WriteLine($"WebWorkerService.GlobalThisType: {GlobalThisType.ToString()}");
-#endif
         }
 
         // TODO -didpose
@@ -46,9 +41,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         // TODO -didpose
         BroadcastChannel _eventChannel = new BroadcastChannel(nameof(WebWorkerService));
-
-        //MessagePort? _parentPort = null;
-        //ServiceCallDispatcher? Parent = null;
 
         string InstanceId = Guid.NewGuid().ToString();
         class WebWorkerServiceEventMsgBase
@@ -240,7 +232,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return a + b;
         }
 
-        public async Task<WebWorker?> CreateWorker(bool verboseMode = false, bool awaitWhenReady = true)
+        public async Task<WebWorker?> GetWebWorker(bool verboseMode = false, bool awaitWhenReady = true)
         {
             if (!WebWorkerSupported) return null;
             var queryArgs = new NameValueCollection();
@@ -252,7 +244,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return webWorker;
         }
 
-        public async Task<SharedWebWorker?> CreateSharedWorker(string sharedWorkerName = "", bool verboseMode = false, bool awaitWhenReady = true)
+        public async Task<SharedWebWorker?> GetSharedWebWorker(string sharedWorkerName = "", bool verboseMode = false, bool awaitWhenReady = true)
         {
             if (!SharedWebWorkerSupported) return null;
             var queryArgs = new NameValueCollection();

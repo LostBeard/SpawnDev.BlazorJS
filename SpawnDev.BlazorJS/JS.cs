@@ -20,8 +20,10 @@ namespace SpawnDev.BlazorJS
         public static IJSInProcessRuntime? Runtime => _js;
         private static IJSInProcessRuntime? _js { get; set; } = null;
         public static bool IsWindow => GlobalThis is Window;
+        public static bool IsWorker => IsDedicatedWorkerGlobalScope || IsSharedWorkerGlobalScope || IsServiceWorkerGlobalScope;
         public static bool IsDedicatedWorkerGlobalScope => GlobalThis is DedicatedWorkerGlobalScope;
         public static bool IsSharedWorkerGlobalScope => GlobalThis is SharedWorkerGlobalScope;
+        public static bool IsServiceWorkerGlobalScope => GlobalThis is ServiceWorkerGlobalScope;
         static JS()
         {
             // the javascript module for JS is loaded before Program.cs is started so it available here to continue initializing
@@ -31,7 +33,7 @@ namespace SpawnDev.BlazorJS
             object? jsRuntimeObj = instanceField.GetValue(null);
             _js = (IJSInProcessRuntime)jsRuntimeObj;    // (WebAssemblyJSRuntime)
             GlobalThis = Get<JSObject>("JSInterop.globalObject");
-            GlobalThisTypeName = GlobalThis.JSRef.Get<string>("constructor.name");
+            GlobalThisTypeName = GlobalThis.JSRef.GetConstructorName();
             switch (GlobalThisTypeName)
             {
                 case nameof(Window):
@@ -131,19 +133,25 @@ namespace SpawnDev.BlazorJS
         }
         public static T ReturnMe<T>(object obj) => _JSInteropCall<T>("_returnMe", obj);
         public static JSObject FromElementReference(ElementReference elementRef) => ReturnMe<JSObject>(elementRef);
+        public static IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);
         public static T FromElementReference<T>(ElementReference elementRef) where T : JSObject => (T)Activator.CreateInstance(typeof(T), ReturnMe<IJSInProcessObjectReference>(elementRef));
-        public static IJSInProcessObjectReference CreateNewArgs(string className, object[]? args = null) => _JSInteropCall<IJSInProcessObjectReference>("_returnNew", className, args);
-        public static IJSInProcessObjectReference CreateNew(string className) => CreateNewArgs(className);
-        public static IJSInProcessObjectReference CreateNew(string className, object arg0) => CreateNewArgs(className, new object[] { arg0 });
-        public static IJSInProcessObjectReference CreateNew(string className, object arg0, object arg1) => CreateNewArgs(className, new object[] { arg0, arg1 });
-        public static IJSInProcessObjectReference CreateNew(string className, object arg0, object arg1, object arg2) => CreateNewArgs(className, new object[] { arg0, arg1, arg2 });
-        public static IJSInProcessObjectReference CreateNew(string className, object arg0, object arg1, object arg2, object arg3) => CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3 });
-        public static IJSInProcessObjectReference CreateNew(string className, object arg0, object arg1, object arg2, object arg3, object arg4) => CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4 });
-        public static IJSInProcessObjectReference CreateNew(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => CreateNewArgs(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        public static IJSInProcessObjectReference NewApply(string className, object[]? args = null) => _JSInteropCall<IJSInProcessObjectReference>("_returnNew", className, args);
+        public static IJSInProcessObjectReference New(string className) => NewApply(className);
+        public static IJSInProcessObjectReference New(string className, object arg0) => NewApply(className, new object[] { arg0 });
+        public static IJSInProcessObjectReference New(string className, object arg0, object arg1) => NewApply(className, new object[] { arg0, arg1 });
+        public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2) => NewApply(className, new object[] { arg0, arg1, arg2 });
+        public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3) => NewApply(className, new object[] { arg0, arg1, arg2, arg3 });
+        public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4 });
+        public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
         public static bool IsUndefined(JSObject obj, string identifier = "") => _JSInteropCall<string>("_typeof", obj, identifier) == "undefined";
         public static bool IsUndefined(string identifier) => _JSInteropCall<string>("_typeof", null, identifier) == "undefined";
         public static string TypeOf(JSObject obj, string identifier = "") => _JSInteropCall<string>("_typeof", obj, identifier);
         public static string TypeOf(string identifier) => _JSInteropCall<string>("_typeof", null, identifier);
         public static void Log(params object[] args) => CallApplyVoid("console.log", args);
+        public static string GetConstructorName(string identifier) => JS.Get<string>($"{identifier}.constructor.name");
     }
 }
