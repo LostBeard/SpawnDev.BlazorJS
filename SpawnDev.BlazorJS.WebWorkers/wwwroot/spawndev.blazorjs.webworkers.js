@@ -108,7 +108,7 @@ var initWebWorkerBlazor = async () => {
         }
         else
         {
-            console.log('Loading modified blazor.webassembly.js to workaround lack of dynamic import support in some browsers');
+            consoleLog('Loading workaround to counter lack of dynamic import support in some browsers (Firefox, others?)');
             var integrity = '';
             var blazorWasmJsUri = new URL('_content/SpawnDev.BlazorJS.WebWorkers/blazor.webassembly.pretty.js', document.baseURI);
             //var blazorWasmJsUri = new URL('_framework/blazor.webassembly.js', document.baseURI);
@@ -122,6 +122,7 @@ var initWebWorkerBlazor = async () => {
             //json.debugBuild = false;
             //json.linkerEnabled = false;
             function fixModuleScript(jsStr) {
+                // handle things that are automatically handled by import
                 // import.meta.url
                 jsStr = jsStr.replace(new RegExp('\\bimport\\.meta\\.url\\b', 'g'), `document.baseURI`);
                 // import.meta
@@ -129,6 +130,7 @@ var initWebWorkerBlazor = async () => {
                 // import
                 jsStr = jsStr.replace(new RegExp('\\bimport\\(', 'g'), 'importOverride(');
                 // export
+                // https://www.geeksforgeeks.org/what-is-export-default-in-javascript/
                 // handle exports from
                 // lib modules
                 // Ex(_content/SpawnDev.BlazorJS/SpawnDev.BlazorJS.lib.module.js)
@@ -158,7 +160,7 @@ var initWebWorkerBlazor = async () => {
                 return modulize;
             }
             globalThisObj.importOverride = async function (src) {
-                console.log('importOverride', src);
+                consoleLog('importOverride', src);
                 var response = await fetch(src, {
                     cache: 'no-cache',
                     //integrity: integrity,
