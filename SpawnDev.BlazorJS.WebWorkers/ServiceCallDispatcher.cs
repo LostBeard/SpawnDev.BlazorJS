@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public Action<JSObject?>? OnComplete { get; set; }
         public CancellationToken? CancellationToken { get; set; }
         public WebWorkerMessageOut webWorkerCallMessageOutgoing { get; set; }
-        
+
         public WebWorkerCallMessageTask(Action<JSObject?>? onComplete)
         {
             OnComplete = onComplete;
@@ -46,6 +46,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public static bool IsTransferable<T>() => _transferableTypes.Contains(typeof(T));
         public static bool IsTransferable<T>(T obj) => _transferableTypes.Contains(typeof(T));
         public IMessagePort _port { get; set; }
+
+        public bool WaitingForResponse => _waiting.Count > 0;
+
         Dictionary<string, WebWorkerCallMessageTask> _waiting = new Dictionary<string, WebWorkerCallMessageTask>();
         protected IServiceProvider _serviceProvider;
 
@@ -132,13 +135,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
                             {
                                 // Does not handle multiple args at the moment due to the added complexity with refelction
                                 args = msgBase.GetData<JSObject>();
-                               // JS.Log("msgBasemsgBasemsgBase", msgBase);
+                                // JS.Log("msgBasemsgBasemsgBase", msgBase);
                                 var argsLength = args != null ? args.JSRef.Get<int>("length") : 0;
                                 if (actionArgs.Length != argsLength)
                                 {
                                     Console.WriteLine("Action paramter count does not match incoking");
                                 }
-                                for(var n = 0; n < actionArgs.Length; n++)
+                                for (var n = 0; n < actionArgs.Length; n++)
                                 {
                                     actionArgs[n] = args.JSRef.Get(actionHandle.ParameterTypes[n], n);
                                 }
@@ -201,9 +204,24 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     var returnTypeOfTheTaskName = returnTypeOfTheTask.Name;
                     var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
                     var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-                    var methodParams = methodInfo.GetParameters();
+                    var finalReturnTypeIsTransferable = _transferableTypes.Contains(finalReturnType);
                     var callArgs0 = PostDeserializeArgs(msgBase.RequestId, methodInfo, argsLength, args.JSRef.Get);
+                    // call the requested method
                     var retv = methodInfo.Invoke(service, callArgs0);
+                    var autoDisposeArgs = true;
+                    if (autoDisposeArgs)
+                    {
+                        foreach(var ca in callArgs0)
+                        {
+                            if (ca is IDisposable disposable)
+                            {
+                                disposable.Dispose();
+                            }
+                        }
+                    }
+
+                    // TODO ... should the called args dipose of the incoming parameters?
+                    // dispose any parameters that implement IDisposable and were created for the call
                     object? retValue = null;
                     var hasReturnValue = (isValueTask && !returnTypeOfTheTaskIsVoid) || (isTask && !returnTypeOfTheTaskIsVoid) || (!returnTypeIsVoid && !isTask && !isValueTask);
                     if (retv is Task t)
@@ -230,9 +248,17 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     {
                         // send notification of completeion is there is a requestid
                         var callbackMsg = new WebWorkerMessageOut { TargetType = "__callback", RequestId = msgBase.RequestId };
-                        if (hasReturnValue) callbackMsg.Data = new object[] { retValue };
-                        // TODO - use attributes on the methodinfo to determine what, if any, should be transferred  (vs copied)
-                        _port.PostMessage(callbackMsg);
+                        var transfer = hasReturnValue && finalReturnTypeIsTransferable ? new object?[] { retValue } : new object?[0];
+                        if (hasReturnValue)
+                        {
+                            callbackMsg.Data = new object?[] { retValue };
+                        }
+                        _port.PostMessage(callbackMsg, transfer);
+                        // dispose the return value if it is IJSInProcessObjectReference or JSObject
+                        if (retValue is IDisposable disposable)
+                        {
+                            disposable.Dispose();
+                        }
                     }
                 }
             }
@@ -245,6 +271,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             finally
             {
                 args?.Dispose();
+                e?.Dispose();
             }
         }
 
@@ -271,12 +298,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
             var requestId = Guid.NewGuid().ToString();
+            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
             var workerMsg = new WebWorkerMessageOut
             {
                 RequestId = requestId,
                 TargetName = methodName,
                 TargetType = serviceType.FullName,
-                Data = PreSerializeArgs(requestId, methodInfo, args),
+                Data = msgData,
             };
             //var reqTypeName = typeof(TResult).Name;
             var fnRetTypeName = finalReturnType.Name;
@@ -294,7 +322,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             workerTask.ReturnValueType = finalReturnType;
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
             _waiting.Add(workerTask.RequestId, workerTask);
-            _port.PostMessage(workerMsg);
+            _port.PostMessage(workerMsg, transferable);
             return t.Task;
         }
         public Task<TResult> InvokeAsync<TService, TResult>(string methodName, params object?[]? args) => CallAsync<TService, TResult>(methodName, args ?? new object[0]);
@@ -315,12 +343,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
             var requestId = Guid.NewGuid().ToString();
+            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
             var workerMsg = new WebWorkerMessageOut
             {
                 RequestId = requestId,
                 TargetName = methodName,
                 TargetType = typeof(TService).FullName,
-                Data = PreSerializeArgs(requestId, methodInfo, args),
+                Data = msgData,
             };
             var reqTypeName = typeof(TResult).Name;
             var fnRetTypeName = finalReturnType.Name;
@@ -344,7 +373,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             workerTask.ReturnValueType = finalReturnType;
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
             _waiting.Add(workerTask.RequestId, workerTask);
-            _port.PostMessage(workerMsg);
+            _port.PostMessage(workerMsg, transferable);
             return t.Task;
         }
         class ActionHandles
@@ -360,14 +389,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return null;
         }
 
-        //object? CreateActionDelegate()
-        //{
-        //    Action action = (Action)Delegate.CreateDelegate(typeof(Action));
-        //    return action;
-        //}
-
         Dictionary<string, CallbackAction> _actionHandles = new Dictionary<string, CallbackAction>();
-        //Dictionary<string, object> _action1Handles = new Dictionary<string, object>();
 
         class CallbackAction
         {
@@ -378,8 +400,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
             public Type[] ParameterTypes { get; set; }
         }
 
-        object?[]? PreSerializeArgs(string requestId, MethodInfo methodInfo, object?[]? args)
+        object?[]? PreSerializeArgs(string requestId, MethodInfo methodInfo, object?[]? args, out object[] transferable)
         {
+            var trasnferableList = new List<object>();
             var methodsParamTypes = methodInfo.GetParameters();
             object?[]? ret = null;
             if (args != null)
@@ -390,6 +413,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 {
                     var methodParam = methodsParamTypes[i];
                     var methodParamType = methodParam.ParameterType;
+                    var methodParamTypeIsTransferable = IsTransferable(methodParamType);
+                    // TODO - add an attribute that allwos disabling of auto transferable
                     var methodParamTypeName = methodParam.ParameterType.Name;
                     var genericTypes = methodParamType.GenericTypeArguments;
                     var genericTypeNames = methodParamType.GenericTypeArguments.Select(o => o.Name).ToArray();
@@ -414,7 +439,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     }
                     else if (argI < args.Length)
                     {
-                        ret[i] = args[argI];
+                        var argVal = args[argI];
+                        if (methodParamTypeIsTransferable && argVal != null)
+                        {
+                            trasnferableList.Add(argVal);
+                        }
+                        ret[i] = argVal;
                         argI++;
                     }
                     else
@@ -423,6 +453,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     }
                 }
             }
+            transferable = trasnferableList.ToArray();
             return ret;
         }
 
@@ -510,12 +541,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
             var requestId = Guid.NewGuid().ToString();
+            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
             var workerMsg = new WebWorkerMessageOut
             {
                 RequestId = requestId,
                 TargetName = methodName,
                 TargetType = typeof(TService).FullName,
-                Data = PreSerializeArgs(requestId, methodInfo, args),
+                Data = msgData,
             };
             var reqTypeName = typeof(void).Name;
             var fnRetTypeName = finalReturnType.Name;
@@ -537,7 +569,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             workerTask.ReturnValueType = finalReturnType;
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
             _waiting.Add(workerTask.RequestId, workerTask);
-            _port.PostMessage(workerMsg);
+            _port.PostMessage(workerMsg, transferable);
             return t.Task;
         }
 

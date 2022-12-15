@@ -1,10 +1,20 @@
 ﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop.Implementation;
+using SpawnDev.BlazorJS.JSObjects;
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+    public class SerialzationClass //: JSObject
+    {
+        //public Window window { get; set; }
+        public SerialzationClass(JSRuntime jsRuntime, long id) //: base(jsRuntime, id)
+        {
+            var gg = "";
+        }
+    }
     public class JSObjectConverter<T> : JsonConverter<T>
     {
         public override bool CanConvert(Type type)
@@ -13,6 +23,11 @@ namespace SpawnDev.BlazorJS
         }
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
+
+            //var id = JSObjectReferenceJsonWorker.ReadJSObjectReferenceIdentifier(ref reader);
+            //return new JSObjectReference(_jsRuntime, id);
+
+
             try
             {
                 var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
@@ -27,6 +42,10 @@ namespace SpawnDev.BlazorJS
             {
                 using var jsonDocument = JsonDocument.ParseValue(ref reader);
                 var jsonText = jsonDocument.RootElement.GetRawText();
+                if (jsonText == "{}")
+                {
+                    return default;
+                }
                 var ok = true;
             }
             catch (Exception ex)

@@ -333,7 +333,7 @@ var initFunc = function () {
                     for (var i = 0; i < value.paramTypes.length; i++) {
                         var v = i < arguments.length ? arguments[i] : null;
                         var paramType = i < value.paramTypes.length ? value.paramTypes[i] : null;
-                        if (typeof v === 'Function') {
+                        if (typeof v === 'function') {
                             v = wrapFunction(v);
                         }
                         if (paramType === 'IJSObject') {

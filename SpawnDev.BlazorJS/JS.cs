@@ -2,34 +2,107 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
+using Microsoft.JSInterop.Implementation;
 using Microsoft.JSInterop.WebAssembly;
 using SpawnDev.BlazorJS.JSObjects;
 using System;
 using System.Drawing;
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+    public class TestObjectImpl : TestObject
+    {
+        public TestObjectImpl(IJSInProcessObjectReference jsRef, int id) : base(jsRef, id)
+        { }
+    }
+    public class TestObject
+    {
+        public IJSInProcessObjectReference JSRef { get; }
+        public long Id { get; }
+
+        public TestObject(IJSInProcessObjectReference jsRef, int id)
+        {
+            JSRef = jsRef;
+            Id = id;
+        }
+    }
+    class TestObjectConverter : JsonConverter<TestObject>
+    {
+        internal static readonly JsonEncodedText JSObjectIdKey = JsonEncodedText.Encode("__jsObjectId");
+        private readonly WebAssemblyJSRuntime _jsRuntime;
+
+        public TestObjectConverter(WebAssemblyJSRuntime jsRuntime)
+        {
+            _jsRuntime = jsRuntime;
+        }
+
+        public override bool CanConvert(Type typeToConvert)
+        {
+            return typeof(TestObject).IsAssignableFrom(typeToConvert);
+        }
+
+        static Type? JSInProcessObjectReferenceType = null;
+
+        static IJSInProcessObjectReference? CreateJSRef(JSInProcessRuntime jsRuntime, long id)
+        {
+            // uses reflection to create instance of JSInProcessObjectReference
+            // creates instance of JSInProcessObjectReference
+            IJSInProcessObjectReference? ret = null;
+            if (JSInProcessObjectReferenceType == null)
+            {
+                JSInProcessObjectReferenceType = Type.GetType("Microsoft.JSInterop.Implementation.JSInProcessObjectReference");
+            }
+            ret = (IJSInProcessObjectReference)Activator.CreateInstance(JSInProcessObjectReferenceType, jsRuntime, id);
+            return ret;
+        }
+
+        public override TestObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var id = JSObjectReferenceJsonWorker.ReadJSObjectReferenceIdentifier(ref reader);
+            var jsRef = CreateJSRef(_jsRuntime, id);
+            var ret = (TestObject)Activator.CreateInstance(typeToConvert, jsRef, id);
+            return ret;
+        }
+
+        public override void Write(Utf8JsonWriter writer, TestObject value, JsonSerializerOptions options)
+        {
+            // js will see it as a IJSInProcessObjectReference and restore it to its object
+            writer.WriteStartObject();
+            writer.WriteNumber(JSObjectIdKey, value.Id);
+            writer.WriteEndObject();
+        }
+    }
     // Facilitates the JSInterop javascript code
     public static partial class JS
     {
         public static Window? WindowThis { get; private set; } = null;
         public static DedicatedWorkerGlobalScope? DedicateWorkerThis { get; private set; } = null;
         public static SharedWorkerGlobalScope? SharedWorkerThis { get; private set; } = null;
-        public static string GlobalThisTypeName { get; }
-        public static JSObject GlobalThis { get; }
-        public static IJSInProcessRuntime? Runtime => _js;
+        public static string GlobalThisTypeName { get; private set; }
+        public static JSObject GlobalThis { get; private set; }
         private static IJSInProcessRuntime? _js { get; set; } = null;
         public static bool IsWindow => GlobalThis is Window;
         public static bool IsWorker => IsDedicatedWorkerGlobalScope || IsSharedWorkerGlobalScope || IsServiceWorkerGlobalScope;
         public static bool IsDedicatedWorkerGlobalScope => GlobalThis is DedicatedWorkerGlobalScope;
         public static bool IsSharedWorkerGlobalScope => GlobalThis is SharedWorkerGlobalScope;
         public static bool IsServiceWorkerGlobalScope => GlobalThis is ServiceWorkerGlobalScope;
+
         static JS()
+        {
+
+        }
+
+        public static void Init()
         {
             // the javascript module for JS is loaded before Program.cs is started so it available here to continue initializing
             // _content/SpawnDev.BlazorJS/SpawnDev.BlazorJS.lib.module.js
             var jsRuntimeType = typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime");
-            var instanceField = jsRuntimeType.GetFields(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).Where(o => o.Name == "Instance").FirstOrDefault();
+            var instanceField = jsRuntimeType.GetField("Instance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
             object? jsRuntimeObj = instanceField.GetValue(null);
             _js = (IJSInProcessRuntime)jsRuntimeObj;    // (WebAssemblyJSRuntime)
             GlobalThis = Get<JSObject>("JSInterop.globalObject");
@@ -49,10 +122,28 @@ namespace SpawnDev.BlazorJS
                     GlobalThis = SharedWorkerThis;
                     break;
             }
+
+#if false
+            // JsonSerializerOptions JsonSerializerOptions
+            var jsonSerializerOptionsProperty = typeof(JSRuntime).GetProperty("JsonSerializerOptions", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            _runtimeSerializerOptions = (JsonSerializerOptions)jsonSerializerOptionsProperty.GetValue(jsRuntimeObj);
+
+            // get ArrayBuilder<T> type
+            var arrayBuilderType = typeof(JSRuntime).Assembly.GetType("Microsoft.JSInterop.Infrastructure.ArrayBuilder`1");
+            var arrayBuilerTypedByteArray = arrayBuilderType.MakeGenericType(new Type[] { typeof(byte[]) });
+            arrayBuilderClearMethod = arrayBuilerTypedByteArray.GetMethod("Clear", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            var byteArraysToBeRevivedProperty = typeof(JSRuntime).GetField("ByteArraysToBeRevived", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            arrayBuilderInstance = byteArraysToBeRevivedProperty.GetValue(jsRuntimeObj);
+
+            // WebAssembly.JSInterop.InternalCalls
+            var internalCallsType = GetType("WebAssembly.JSInterop.InternalCalls");
+            internalCallsInvoekJSMethod = internalCallsType.GetMethod("InvokeJS", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+#endif
 #if DEBUG
             Log("JS.GlobalThisTypeName", GlobalThisTypeName);
 #endif
         }
+
         private static void AssertInit()
         {
             if (_js == null) throw new Exception("JS must be initialized before use via SpawnDev.BlazorJS.JS.InitAsync(IJSInProcessRuntime) usually in Program.cs");
@@ -153,5 +244,29 @@ namespace SpawnDev.BlazorJS
         public static string TypeOf(string identifier) => _JSInteropCall<string>("_typeof", null, identifier);
         public static void Log(params object[] args) => CallApplyVoid("console.log", args);
         public static string GetConstructorName(string identifier) => JS.Get<string>($"{identifier}.constructor.name");
+
+        static Dictionary<string, Type?> typeCache { get; } = new Dictionary<string, Type?>();
+        /// <summary>
+        /// For whatever reason Type.GetType was failing when trying to find a Type in the same assembly as this class... no idea why. Below code worked when it failed
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        public static Type? GetType(string typeName)
+        {
+            Type? t = null;
+            lock (typeCache)
+            {
+                if (!typeCache.TryGetValue(typeName, out t))
+                {
+                    foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+                    {
+                        t = a.GetType(typeName);
+                        if (t != null) break;
+                    }
+                    typeCache[typeName] = t;
+                }
+            }
+            return t;
+        }
     }
 }

@@ -4,9 +4,15 @@ namespace SpawnDev.BlazorJS.WebWorkers
 {
     public class WebWorker : ServiceCallDispatcher, IDisposable
     {
+        public static bool Supported;
+        static WebWorker()
+        {
+            Supported = !JS.IsUndefined("Worker");
+        }
         Worker _worker;
         public WebWorker(Worker worker, IServiceProvider serviceProvider) : base(serviceProvider, worker)
         {
+            var g = Supported;
             _worker = worker;
         }
 

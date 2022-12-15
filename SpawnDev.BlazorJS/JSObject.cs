@@ -99,7 +99,7 @@ namespace SpawnDev.BlazorJS
             var refDispsoed = JSRef == null;
             if (!refDispsoed)
             {
-                Console.WriteLine($"DEBUG WARNING: JSObject was not Disposed properly: {thisType.Name} - {thisType.FullName}");
+                Console.WriteLine($"DEBUG WARNING: JSObject was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
             }
 #endif
             Dispose(false);

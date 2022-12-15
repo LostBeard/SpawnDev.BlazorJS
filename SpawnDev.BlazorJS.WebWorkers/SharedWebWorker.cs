@@ -4,6 +4,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
 {
     public class SharedWebWorker : ServiceCallDispatcher, IDisposable
     {
+        public static bool Supported;
+        static SharedWebWorker()
+        {
+            Supported = !JS.IsUndefined("SharedWorker");
+        }
         SharedWorker _shareWorker;
         public SharedWebWorker(string name, SharedWorker sharedWorker, IServiceProvider serviceProvider) : base(serviceProvider, sharedWorker.Port)
         {

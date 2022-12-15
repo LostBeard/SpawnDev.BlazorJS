@@ -22,6 +22,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public string AppBaseUri { get; }
         public bool BeenInit { get; private set; }
         DateTime StartTime = DateTime.Now;
+        public int MaxWorkerCount { get; private set; } = 0;
         static WebWorkerService()
         {
             WebWorkerSupported = !JS.IsUndefined("Worker");
@@ -34,6 +35,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
             _navigator = navigator;
             _serviceProvider = serviceProvider;
             AppBaseUri = _navigator.BaseUri;
+            var hardwareConcurrency = JS.Get<int?>("navigator.hardwareConcurrency");
+            MaxWorkerCount = hardwareConcurrency == null || hardwareConcurrency.Value == 0 ? 0 : hardwareConcurrency.Value - 1;
+
         }
 
         // TODO -didpose

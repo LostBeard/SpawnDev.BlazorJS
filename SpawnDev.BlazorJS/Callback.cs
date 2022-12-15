@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+    // TODO - Add support for nested JSObject parameters in callbacks
     public abstract class Callback : IDisposable
     {
         //static IJSInProcessRuntime _js { get { return JSObject._js; } }
