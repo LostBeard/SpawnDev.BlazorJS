@@ -94,11 +94,6 @@ namespace SpawnDev.BlazorJS
 
         static JS()
         {
-
-        }
-
-        public static void Init()
-        {
             // the javascript module for JS is loaded before Program.cs is started so it available here to continue initializing
             // _content/SpawnDev.BlazorJS/SpawnDev.BlazorJS.lib.module.js
             var jsRuntimeType = typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime");
