@@ -68,6 +68,8 @@ testCallback('Hello callback!');
 
 # JSObject
 
+JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow stranly typed access to the underlying object.
+
 Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (locaStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
 
 # Custom JSObjects  
@@ -181,6 +183,44 @@ workerService.SendEventToParents("progress", new PiProgress { Progress = piProgr
 webWorker.SendEvent("progress", new PiProgress { Progress = piProgress });
 ```
 
+## Worker Transferable JSObjects
+
+When working with workers in Javascript you can optionally tell Javascript (via the MessagePort.postMessage method) to transfer some of the objects instead of copying them.
+
+WebWorkerService, when calling services on a worker, will transfer any transfaerable types by default. To disable the transfering of a return value, paramter, or proprty use the WorkerTransferAttribute.
+
+Example
+```cs
+        public class ProcessFrameResult
+        {
+            [WorkerTransfer(false)]
+            public ArrayBuffer? ArrayBuffer { get; set; }
+            public byte[]? HomorgraphyBytes { get; set; }
+        }
+
+        [return: WorkerTransfer(false)]
+        public async Task<ProcessFrameResult?> ProcessFrame([WorkerTransfer(false)] ArrayBuffer? frameBuffer, int width, int height, int _canny0, int _canny1, double _needlePatternSize)
+        {
+            // ...
+            return null;
+        }
+```
+
+In the above example; the WorkerTransferAttribute on the return type set to false will prevent all properties of the return type from being transferred.
+
+### Transferable JSObject types 
+ArrayBuffer  
+MessagePort  
+ReadableStream  
+WritableStream  
+TransformStream  
+AudioData  
+ImageBitmap  
+VideoFrame  
+OffscreenCanvas  
+RTCDataChannel  
+
+## Support
 Inspired by Tewr's BlazorWorker implementation. Thank you! I wrote my implementation from scratch as I needed workers in .Net 7.  
 https://github.com/Tewr/BlazorWorker
 
