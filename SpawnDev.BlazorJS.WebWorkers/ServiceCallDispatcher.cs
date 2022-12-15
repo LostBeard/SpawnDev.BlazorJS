@@ -204,7 +204,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     var returnTypeOfTheTaskName = returnTypeOfTheTask.Name;
                     var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
                     var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-                    var finalReturnTypeIsTransferable = _transferableTypes.Contains(finalReturnType);
+                    var finalReturnTypeAllowTransfer = true;
+                    var transferAttrMethod = (WorkerTransferAttribute?)returnType.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
+                    if (transferAttrMethod != null)
+                    {
+                        // this property has been marked as non-stransferable
+                        finalReturnTypeAllowTransfer = transferAttrMethod.Transfer;
+                    }
                     var callArgs0 = PostDeserializeArgs(msgBase.RequestId, methodInfo, argsLength, args.JSRef.Get);
                     // call the requested method
                     var retv = methodInfo.Invoke(service, callArgs0);
@@ -219,7 +225,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
                             }
                         }
                     }
-
                     // TODO ... should the called args dipose of the incoming parameters?
                     // dispose any parameters that implement IDisposable and were created for the call
                     object? retValue = null;
@@ -248,9 +253,15 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     {
                         // send notification of completeion is there is a requestid
                         var callbackMsg = new WebWorkerMessageOut { TargetType = "__callback", RequestId = msgBase.RequestId };
-                        var transfer = hasReturnValue && finalReturnTypeIsTransferable ? new object?[] { retValue } : new object?[0];
+                        object[] transfer = new object?[0];
                         if (hasReturnValue)
                         {
+                            if (finalReturnTypeAllowTransfer)
+                            {
+                                var conversionInfo = JS.GetTypeConversionInfo(finalReturnType);
+                                transfer = conversionInfo.GetTransferablePropertyValues(retValue);
+                            }
+                            //if (transfer.Length > 0) Console.WriteLine($"transfering: {transfer.Length} {transfer[0].GetType().Name}");
                             callbackMsg.Data = new object?[] { retValue };
                         }
                         _port.PostMessage(callbackMsg, transfer);
@@ -414,7 +425,16 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     var methodParam = methodsParamTypes[i];
                     var methodParamType = methodParam.ParameterType;
                     var methodParamTypeIsTransferable = IsTransferable(methodParamType);
-                    // TODO - add an attribute that allwos disabling of auto transferable
+                    var allowTransferable = methodParamType.IsClass;
+                    if (allowTransferable)
+                    {
+                        var transferAttr = (WorkerTransferAttribute?)methodParam.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
+                        if (transferAttr != null && !transferAttr.Transfer)
+                        {
+                            // this property has been marked as non-stransferable
+                            allowTransferable = false;
+                        }
+                    }
                     var methodParamTypeName = methodParam.ParameterType.Name;
                     var genericTypes = methodParamType.GenericTypeArguments;
                     var genericTypeNames = methodParamType.GenericTypeArguments.Select(o => o.Name).ToArray();
@@ -440,9 +460,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     else if (argI < args.Length)
                     {
                         var argVal = args[argI];
-                        if (methodParamTypeIsTransferable && argVal != null)
+                        if (allowTransferable)
                         {
-                            trasnferableList.Add(argVal);
+                            var covnersionInfo = JS.GetTypeConversionInfo(methodParamType);
+                            var propTransferable = covnersionInfo.GetTransferablePropertyValues(argVal);
+                            trasnferableList.AddRange(propTransferable);
                         }
                         ret[i] = argVal;
                         argI++;

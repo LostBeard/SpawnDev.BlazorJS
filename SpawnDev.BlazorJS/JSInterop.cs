@@ -13,29 +13,10 @@ namespace SpawnDev.BlazorJS
 {
     public static partial class JS
     {
-
-        public class TestClassInner
-        {
-            public Window[]? Windows { get; set; }
-            public Window? Window { get; set; }
-            public byte[] Data { get; set; } = new byte[] { 2, 4, 6, 8 };
-        }
-        public class TestClass
-        {
-            public TestClassInner Wow { get; set; } = new TestClassInner();
-        }
-
         public static void _JSInteropCallVoid(string fn, params object?[] args)
         {
             AssertInit();
-            try
-            {
-                _js.InvokeVoid($"JSInterop.{fn}", args);
-            }
-            catch (Exception ex)
-            {
-                var art = true;
-            }
+            _js.InvokeVoid($"JSInterop.{fn}", args);
         }
 
         public class TypeConversionInfo
@@ -46,7 +27,17 @@ namespace SpawnDev.BlazorJS
             public bool useIterationReader { get; private set; }
             public bool useDefaultReader { get; private set; }
             public Type? ElementType { get; set; } = null;
-            public PropertyInfo[] returnTypeProperties { get; private set; } = new PropertyInfo[0];
+            public PropertyInfo[] ClassProperties { get; set; } = new PropertyInfo[0];
+            public Dictionary<string, PropertyInfo> returnTypeProperties { get; private set; } = new Dictionary<string, PropertyInfo>();
+            public List<string> TransferableProperties = new List<string>();
+            public bool IsTransferable { get; private set; }
+
+            static string GetPropertyJSName(PropertyInfo prop)
+            {
+                // todo - json name attribute
+                var propName = prop.Name.Substring(0, 1).ToLowerInvariant() + prop.Name.Substring(1);
+                return propName;
+            }
             public TypeConversionInfo(Type returnType)
             {
                 if (returnType == null) throw new Exception("Invalid Return Type");
@@ -67,29 +58,69 @@ namespace SpawnDev.BlazorJS
                 }
                 else if (typeof(JSObject).IsAssignableFrom(returnType))
                 {
+                    IsTransferable = JSObject.TransferableTypes.Contains(returnType);
                     useJSObjectReader = true;
                     return;
                 }
                 else if (returnType.IsClass && !typeof(Delegate).IsAssignableFrom(returnType))
                 {
-
                     // class
                     // check if the class types requires per property import
-                    returnTypeProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where((o) => {
-                        // Some properties should be ignored when considering conversion type
-                        return !Attribute.IsDefined(o, typeof(JsonIgnoreAttribute));
-                    }).ToArray();
-                    foreach (var prop in returnTypeProperties)
+                    ClassProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                    foreach (var prop in ClassProperties)
                     {
+                        if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
+                        var propJSName = GetPropertyJSName(prop);
+                        returnTypeProperties[propJSName] = prop;
                         var propertyTypeConversionInfo = GetTypeConversionInfo(prop.PropertyType);
                         if (!propertyTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(prop.PropertyType))
                         {
                             usePropertyReader = true;
-                            return;
+                        }
+                        if (JSObject.TransferableTypes.Contains(prop.PropertyType))
+                        {
+                            // can be transferred
+                            if (!TransferableProperties.Contains(propJSName))
+                            {
+                                TransferableProperties.Add(propJSName);
+                            }
+                        }
+                    }
+                    if (usePropertyReader) return;
+                }
+                useDefaultReader = true;
+            }
+            public object[] GetTransferablePropertyValues(object? obj)
+            {
+                var ret = new List<object>();
+                if (obj != null)
+                {
+                    if (IsTransferable)
+                    {
+                        ret.Add(obj);
+                    }
+                    else
+                    {
+                        foreach(var kvp in returnTypeProperties)
+                        {
+                            var prop = kvp.Value;
+                            if (!prop.PropertyType.IsClass) continue;
+                            var transferAttr = (WorkerTransferAttribute?)prop.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
+                            if (transferAttr != null && !transferAttr.Transfer)
+                            {
+                                // this property has been marked as non-stransferable
+                                continue;
+                            }
+                            if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
+                            var propVal = prop.GetValue(obj);
+                            if (propVal == null) continue;
+                            var conversionInfo = GetTypeConversionInfo(prop.PropertyType);
+                            var tmpp = conversionInfo.GetTransferablePropertyValues(propVal);
+                            ret.AddRange(tmpp);
                         }
                     }
                 }
-                useDefaultReader = true;
+                return ret.ToArray();
             }
             public object? FinishImport(IJSInProcessObjectReference? _ref)
             {
@@ -98,11 +129,10 @@ namespace SpawnDev.BlazorJS
                 if (usePropertyReader)
                 {
                     var tmpRet = Activator.CreateInstance(ReturnType);
-                    foreach (var prop in returnTypeProperties)
+                    foreach (var kvp in returnTypeProperties)
                     {
-                        // some properties need to be skipped
-
-                        var propName = prop.Name.Substring(0, 1).ToLowerInvariant() + prop.Name.Substring(1);
+                        var propName = kvp.Key;
+                        var prop = kvp.Value;
                         var value = _ref.Get(prop.PropertyType, propName);
                         prop.SetValue(tmpRet, value);
                     }

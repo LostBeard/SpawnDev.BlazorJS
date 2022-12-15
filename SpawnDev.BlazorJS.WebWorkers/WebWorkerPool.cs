@@ -9,9 +9,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
 {
     public class WebWorkerPool : IDisposable
     {
-        WebWorkerService? _webWorkerService = null;
+        WebWorkerService _webWorkerService = null;
         List<WebWorker> _workers = new List<WebWorker>();
-        public int MaxWorkerCount => MaxWorkerCount;
+        public int MaxWorkerCount => _webWorkerService.MaxWorkerCount;
 
         public WebWorkerPool(WebWorkerService webWorkerService)
         {

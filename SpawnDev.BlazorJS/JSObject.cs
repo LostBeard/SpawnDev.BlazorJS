@@ -2,6 +2,7 @@
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.Implementation;
 using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.JSObjects.WebRTC;
 //using Microsoft.JSInterop.WebAssembly;
 //using SpawnDev.JSInterop.JSObjects;
 using System;
@@ -92,16 +93,18 @@ namespace SpawnDev.BlazorJS
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        public static bool UndisposedHandleVerboseMode { get; set; } = false;
         ~JSObject()
         {
-#if DEBUG
-            var thisType = this.GetType();
-            var refDispsoed = JSRef == null;
-            if (!refDispsoed)
+            if (UndisposedHandleVerboseMode)
             {
-                Console.WriteLine($"DEBUG WARNING: JSObject was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
+                var thisType = this.GetType();
+                var refDispsoed = JSRef == null;
+                if (!refDispsoed)
+                {
+                    Console.WriteLine($"DEBUG WARNING: JSObject was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
+                }
             }
-#endif
             Dispose(false);
         }
 
@@ -110,6 +113,18 @@ namespace SpawnDev.BlazorJS
             disposable?.Dispose();
             disposable = null;
         }
+        public static List<Type> TransferableTypes { get; } = new List<Type> {
+            typeof(ArrayBuffer),
+            typeof(MessagePort),
+            typeof(ReadableStream),
+            typeof(WritableStream),
+            typeof(TransformStream),
+            typeof(AudioData),
+            typeof(ImageBitmap),
+            typeof(VideoFrame),
+            typeof(OffscreenCanvas),
+            typeof(RTCDataChannel),
+        };
         //public T CopyPropertiesTo<T>(bool camelCase = true)
         //{
         //    var Ttype = typeof(T);

@@ -36,8 +36,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             _serviceProvider = serviceProvider;
             AppBaseUri = _navigator.BaseUri;
             var hardwareConcurrency = JS.Get<int?>("navigator.hardwareConcurrency");
-            MaxWorkerCount = hardwareConcurrency == null || hardwareConcurrency.Value == 0 ? 0 : hardwareConcurrency.Value - 1;
-
+            MaxWorkerCount = hardwareConcurrency == null || hardwareConcurrency.Value == 0 ? 0 : hardwareConcurrency.Value;
         }
 
         // TODO -didpose
