@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Description>Blazor WebAssembly Javascript Interop</Description>
+		<Description>Extended Blazor WebAssembly Javascript Interop</Description>
 		<PackageProjectUrl>https://github.com/LostBeard/SpawnDev.BlazorJS</PackageProjectUrl>
 		<Title>SpawnDev.BlazorJS</Title>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
