@@ -13,7 +13,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;</PackageTags>
 		<PackageReleaseNotes></PackageReleaseNotes>
-		<Version>1.2.6</Version>
+		<Version>1.2.7</Version>
 		<FileVersion></FileVersion>
 		<AssemblyVersion></AssemblyVersion>
 		<Authors>LostBeard</Authors>

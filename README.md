@@ -68,7 +68,7 @@ testCallback('Hello callback!');
 
 # JSObject
 
-JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow stranly typed access to the underlying object.
+JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow strongly typed access to the underlying object.
 
 Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (locaStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
 
