@@ -4,14 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-    public class SerialzationClass //: JSObject
-    {
-        //public Window window { get; set; }
-        public SerialzationClass(JSRuntime jsRuntime, long id) //: base(jsRuntime, id)
-        {
-            var gg = "";
-        }
-    }
     public class JSObjectConverter<T> : JsonConverter<T>
     {
         public override bool CanConvert(Type type)
