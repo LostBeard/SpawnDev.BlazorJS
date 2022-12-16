@@ -3,7 +3,7 @@
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS)  
 
-Supports .Net 7
+Supports .Net 6 and .Net 7
 
 An easy Javascript interop library desgined specifcally for client side Blazor.
 
@@ -13,7 +13,6 @@ An easy Javascript interop library desgined specifcally for client side Blazor.
 - Create new Javascript objects with JS.New
 - Get and set object properties via IJSInProcessObjectReference extended methods
 - Create Callbacks that can be sent to Javascript event listeners or assigned to javascript variables
-
 - Easily call Services in separate threads with WebWorkers and SharedWebWorkers
 
 NOTE: The below code shows quick examples. Some objects implement IDisposable, such as all JSObject, IJSInProcessObjectReference, and Callback, and need to be disposed when no longer used.
