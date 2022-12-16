@@ -39,6 +39,11 @@ namespace SpawnDev.BlazorJS.JSObjects
             Version = version;
         }
 
+        //public IDBDatabase OpenDB(string dbName, ulong version = 1)
+        //{
+
+        //}
+
         public Task<bool> Open()
         {
             var t = new TaskCompletionSource<bool>();
@@ -48,26 +53,27 @@ namespace SpawnDev.BlazorJS.JSObjects
                 return t.Task;
             }
             var request = JS.Call<IDBRequest>("indexedDB.open", Name, Version);
-            request.On("onupgradeneeded", (JSObject arg0) => {
-                using (var target = arg0.JSRef.Get<JSObject>("target"))
+            request.On("onupgradeneeded", (IJSInProcessObjectReference arg0) => {
+                using (var target = arg0.Get<IJSInProcessObjectReference>("target"))
                 {
-                    FromReference(target.JSRef.Get<IJSInProcessObjectReference>("result"));
+                    FromReference(target.Get<IJSInProcessObjectReference>("result"));
                     OnUpgradeNeeded?.Invoke();
                 }
                 arg0.Dispose();
             });
-            request.OnSuccess((JSObject arg0) => {
-                using (var target = arg0.JSRef.Get<JSObject>("target"))
+            request.OnSuccess((IJSInProcessObjectReference arg0) => {
+                using (var target = arg0.Get<IJSInProcessObjectReference>("target"))
                 {
                     IsOpen = true;
-                    ReplaceReference(target.JSRef.Get<IJSInProcessObjectReference>("result"));
+                    // may be the only legititmate use for ReplaceReference
+                    ReplaceReference(target.Get<IJSInProcessObjectReference>("result"));
                     t.TrySetResult(IsOpen);
                     request.Dispose();
                 }
                 arg0.Dispose();
             });
-            request.OnError((JSObject arg0) => {
-                using (var target = arg0.JSRef.Get<JSObject>("target"))
+            request.OnError((IJSInProcessObjectReference arg0) => {
+                using (var target = arg0.Get<IJSInProcessObjectReference>("target"))
                 {
                     _lastErrorCode = JSRef.Get<double>("errorCode");
                     t.TrySetResult(IsOpen);
@@ -119,13 +125,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         // TODO - below needs to be verified working
         public string[] ObjectStoreNames()
         {
-            using(var domStringList = JSRef.Get<JSObject>("objectStoreNames"))
+            using(var domStringList = JSRef.Get<IJSInProcessObjectReference>("objectStoreNames"))
             {
                 var ret = new List<string>();
-                var length = domStringList.JSRef.Get<int>("length");
+                var length = domStringList.Get<int>("length");
                 for (var i = 0; i < length; i++)
                 {
-                    var tmp = domStringList.JSRef.Call<string>("item", i);
+                    var tmp = domStringList.Call<string>("item", i);
                     ret.Add(tmp);
                 }
                 return ret.ToArray();
@@ -157,15 +163,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
 
         // static
-        public static CallbackGroup AttachErrorSuccessHandler(JSObject request, Action<JSObject> onError, Action<JSObject> onSuccess)
+        public static CallbackGroup AttachErrorSuccessHandler(IJSInProcessObjectReference request, Action<IJSInProcessObjectReference> onError, Action<IJSInProcessObjectReference> onSuccess)
         {
             var callbackGroup = new CallbackGroup();
-            request.JSRef.Set("onerror", Callback.Create((JSObject arg0) => {
+            request.Set("onerror", Callback.Create((IJSInProcessObjectReference arg0) => {
                 callbackGroup.Dispose();
                 onError.Invoke(arg0);
                 arg0.Dispose();
             }, callbackGroup));
-            request.JSRef.Set("onsuccess", Callback.Create((JSObject arg0) => {
+            request.Set("onsuccess", Callback.Create((IJSInProcessObjectReference arg0) => {
                 callbackGroup.Dispose();
                 onSuccess.Invoke(arg0);
                 arg0.Dispose();

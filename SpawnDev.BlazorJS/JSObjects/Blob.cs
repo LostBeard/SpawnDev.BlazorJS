@@ -10,7 +10,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class BlobOptions
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Type { get; set; } = null;
+        public string? Type { get; set; } = null;
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Blob
@@ -18,8 +18,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Blob : JSObject
     {
         public Blob(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public Blob(ArrayBuffer[] buffers, BlobOptions options) : base("Blob", buffers, options) { }
-        public Blob(IEnumerable<string> buffers, BlobOptions options) : base("Blob", buffers, options) { }
+        public Blob(ArrayBuffer[] buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
+        public Blob(IEnumerable<string> buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
         public long Size => JSRef.Get<long>("size");
         public string Type => JSRef.Get<string>("type");
         public async Task<string> Text() => await JSRef.CallAsync<string>("text");

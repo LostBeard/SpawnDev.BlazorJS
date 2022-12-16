@@ -1,11 +1,5 @@
-﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JSObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using SpawnDev.BlazorJS.JSObjects;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {

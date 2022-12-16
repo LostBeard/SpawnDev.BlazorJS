@@ -17,28 +17,28 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public T GetResult<T>() => JSRef.Get<T>("result");   // Function used for this proerpty to allow T return type
 
-        public void OnError(Action<JSObject> handler)
+        public void OnError(Action<IJSInProcessObjectReference> handler)
         {
             On("onerror", handler, true);
         }
-        public void OnSuccess(Action<JSObject> handler)
+        public void OnSuccess(Action<IJSInProcessObjectReference> handler)
         {
             On("onsuccess", handler, true);
         }
         public void OnSuccess<T>(Action<T> resultHandler)
         {
-            On("onsuccess", (JSObject arg0) => {
-                using (var target = arg0.JSRef.Get<JSObject>("target"))
+            On("onsuccess", (IJSInProcessObjectReference arg0) => {
+                using (var target = arg0.Get<IJSInProcessObjectReference>("target"))
                 {
-                    var result = target.JSRef.Get<T>("result");
+                    var result = target.Get<T>("result");
                     resultHandler.Invoke(result);
                 }
                 arg0.Dispose();
             }, true);
         }
-        public void On(string eventName, Action<JSObject> handler, bool disposeAfterCalled = false)
+        public void On(string eventName, Action<IJSInProcessObjectReference> handler, bool disposeAfterCalled = false)
         {
-            JSRef.Set(eventName, Callback.Create((JSObject arg0) =>
+            JSRef.Set(eventName, Callback.Create((IJSInProcessObjectReference arg0) =>
             {
                 handler?.Invoke(arg0);
                 arg0.Dispose();

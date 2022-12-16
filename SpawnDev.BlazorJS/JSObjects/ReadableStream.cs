@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void OnReadable(Action callback) { JSRef.CallVoid("on", "readable", Callback.Create(callback, callbacks)); }
         public void OnEnd(Action callback) { JSRef.CallVoid("on", "end", Callback.Create(callback, callbacks)); }
 
-        public ReadableStream(ExpandoObject options) : base("ReadableStream", options) { }
+        public ReadableStream(ExpandoObject options) : base(JS.New(nameof(ReadableStream), options)) { }
 
         public Uint8Array? Read()
         {

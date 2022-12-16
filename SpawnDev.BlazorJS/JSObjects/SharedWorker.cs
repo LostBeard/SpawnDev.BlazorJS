@@ -17,31 +17,12 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<SharedWorker>))]
     public class SharedWorker : EventTarget
     {
-        CallbackGroup _callbacks = new CallbackGroup();
-        public delegate void MessageDelegate(MessageEvent msg);
-        public event MessageDelegate OnMessage;
-
         public MessagePort Port => JSRef.Get<MessagePort>("port");
 
         public SharedWorker(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public SharedWorker(string url) : base(NullRef)
-        {
-            FromReference(JS.New("SharedWorker", url));
-        }
-        public SharedWorker(string url, string name) : base(NullRef)
-        {
-            FromReference(JS.New("SharedWorker", url, name));
-        }
-        protected override void FromReference(IJSInProcessObjectReference _ref)
-        {
-            base.FromReference(_ref);
-            
-        }
-
-        public override void Dispose()
-        {
-            _callbacks.Dispose();
-            base.Dispose();
-        }
+        public SharedWorker(string url) : base(JS.New(nameof(SharedWorker), url))
+        { }
+        public SharedWorker(string url, string name) : base(JS.New(nameof(SharedWorker), url, name))
+        { }
     }
 }

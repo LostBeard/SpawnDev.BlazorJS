@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Web.Virtualization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpawnDev.BlazorJS.WebWorkers
+﻿namespace SpawnDev.BlazorJS.WebWorkers
 {
     public class WebWorkerPool : IDisposable
     {

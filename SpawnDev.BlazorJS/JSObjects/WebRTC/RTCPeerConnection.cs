@@ -9,8 +9,8 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
     {
         
         public RTCPeerConnection(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public RTCPeerConnection() : base("RTCPeerConnection") { }
-        public RTCPeerConnection(RTCConfiguration configuration) : base("RTCPeerConnection", configuration) { }
+        public RTCPeerConnection() : base(JS.New(nameof(RTCPeerConnection))) { }
+        public RTCPeerConnection(RTCConfiguration configuration) : base(JS.New(nameof(RTCPeerConnection), configuration)) { }
         public bool CanTrickleIceCandidates => JSRef.Get<bool>("canTrickleIceCandidates");
         public string ConnectionState => JSRef.Get<string>("connectionState");
         public string SignalingState => JSRef.Get<string>("signalingState");

@@ -16,17 +16,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         public FileSystemHandle(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string Name => JSRef.Get<string>("name");
         public string Kind => JSRef.Get<string>("kind");
-        public bool IsSameEntry(JSObject fsHandle) => JSRef.Call<bool>("isSameEntry", fsHandle);
+        public bool IsSameEntry(FileSystemHandle fsHandle) => JSRef.Call<bool>("isSameEntry", fsHandle);
 
-        public static async Task<List<T>> IterateAsync<T>(JSObject iteratee)
+        public static async Task<List<T>> IterateAsync<T>(IJSInProcessObjectReference iteratee)
         {
             var ret = new List<T>();
             while (true)
             {
-                using (var next = await iteratee.JSRef.CallAsync<JSObject>("next"))
+                using (var next = await iteratee.CallAsync<IJSInProcessObjectReference>("next"))
                 {
-                    if (next.JSRef.Get<bool>("done")) break;
-                    ret.Add(next.JSRef.Get<T>("value"));
+                    if (next.Get<bool>("done")) break;
+                    ret.Add(next.Get<T>("value"));
                 }
             }
             return ret;

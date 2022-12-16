@@ -18,8 +18,8 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         // UDPATE: Fixed in DotNet 6 RC 1
         static readonly bool UseCustomInterop = false;
-        public Uint8Array(ArrayBuffer arrayBuffer) : base("Uint8Array", arrayBuffer) { }
-        public Uint8Array(int length) : base("Uint8Array", length) { }
+        public Uint8Array(ArrayBuffer arrayBuffer) : base(JS.New(nameof(Uint8Array), arrayBuffer)) { }
+        public Uint8Array(int length) : base(JS.New(nameof(Uint8Array), length)) { }
         public Uint8Array(byte[] sourceBytes) : base(JS.ReturnMe<IJSInProcessObjectReference>(sourceBytes)) { }
         public ArrayBuffer Buffer => IsWrapperDisposed || JSRef == null ? null : JSRef.Get<ArrayBuffer>("buffer");
         public long ByteLength => JSRef.Get<long>("byteLength");

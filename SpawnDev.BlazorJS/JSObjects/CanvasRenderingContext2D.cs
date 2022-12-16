@@ -45,13 +45,13 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public void PutImageBytes(byte[] srcBytes, int srcWidth, int srcHeight, int dx = 0, int dy = 0)
         {
-            using var imageData = new ImageData(srcBytes, srcWidth, srcHeight);
+            using var imageData = ImageData.FromBytes(srcBytes, srcWidth, srcHeight);
             PutImageData(imageData, dx, dy);
         }
 
         public void PutImageBytes(byte[] imageBytes, int srcWidth, int srcHeight, int dx, int dy, int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight)
         {
-            using var imageData = new ImageData(imageBytes, srcWidth, srcHeight);
+            using var imageData = ImageData.FromBytes(imageBytes, srcWidth, srcHeight);
             PutImageData(imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
         }
 

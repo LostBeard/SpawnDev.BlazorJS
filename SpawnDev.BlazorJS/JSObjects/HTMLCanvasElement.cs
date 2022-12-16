@@ -64,14 +64,20 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public HTMLCanvasElement() : base(JS.DocumentCreateElement("canvas")) { }
         public HTMLCanvasElement(IJSInProcessObjectReference _ref) : base(_ref) { }
-
         public HTMLCanvasElement(ElementReference canvasElementReference) : base(JS.ReturnMe<IJSInProcessObjectReference>(canvasElementReference)) { }
 
-        public HTMLCanvasElement(int width, int height) : base(NullRef)
+        public static HTMLCanvasElement Create()
         {
-            FromReference(JS.DocumentCreateElement("canvas"));
-            Width = width;
-            Height = height;
+            var jsRef = JS.DocumentCreateElement("canvas");
+            var ret = new HTMLCanvasElement();
+            return ret;
+        }
+        public static HTMLCanvasElement Create(int width, int height)
+        {
+            var ret = Create();
+            ret.Width = width;
+            ret.Height = height;
+            return ret;
         }
 
         public CanvasRenderingContext2D Get2DContext(ContextAttributes2D contextAttributes = null)

@@ -1,17 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JSObjects;
+﻿using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static SpawnDev.BlazorJS.WebWorkers.ServiceCallDispatcher;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {

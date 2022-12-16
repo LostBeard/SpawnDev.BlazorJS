@@ -64,8 +64,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public MediaStreamTrack GetTrackById(string id) => JSRef.Call<MediaStreamTrack>("getTrackById", id);
         public int GetTracksLength()
         {
-            using var tmp = JSRef.Get<JSObject>("getTracks");
-            return tmp.JSRef.Get<int>("length");
+            using var tmp = JSRef.Get<IJSInProcessObjectReference>("getTracks");
+            return tmp.Get<int>("length");
         }
         public MediaStreamTrack[] GetTracks() => JSRef.Call<MediaStreamTrack[]>("getTracks");
         public MediaStreamTrack[] GetVideoTracks() => JSRef.Call<MediaStreamTrack[]>("getVideoTracks");

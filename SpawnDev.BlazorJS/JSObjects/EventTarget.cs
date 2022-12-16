@@ -18,8 +18,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<EventTarget>))]
     public class EventTarget : JSObject
     {
-        public EventTarget(string className) : base(className) { }
-        public EventTarget(string className, object arg0) : base(className, arg0) { }
+        //public EventTarget(string className) : base(className) { }
+        //public EventTarget(string className, object arg0) : base(className, arg0) { }
         public EventTarget(IJSInProcessObjectReference _ref) : base(_ref) { }
         public bool DispatchEvent(string type) => JSRef.Call<bool>("dispatchEvent", type);
         public void AddEventListener(string type, Callback listener, bool useCapture = false) => JSRef.CallVoid("addEventListener", type, listener, useCapture);

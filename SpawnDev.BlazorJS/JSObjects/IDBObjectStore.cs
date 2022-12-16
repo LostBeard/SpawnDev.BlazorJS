@@ -43,11 +43,11 @@ namespace SpawnDev.BlazorJS.JSObjects
             var request = GetAll();
             var t = new TaskCompletionSource<List<T>>();
             request.OnError((arg0) => { t.SetException(new Exception("IDBRequest failed. Exception info TODO")); });
-            request.OnSuccess<JSObject>((result) => {
-                var length = result.JSRef.Get<int>("length");
+            request.OnSuccess<IJSInProcessObjectReference>((result) => {
+                var length = result.Get<int>("length");
                 for (var i = 0; i < length; i++)
                 {
-                    ret.Add(result.JSRef.Get<T>(i));
+                    ret.Add(result.Get<T>(i));
                 }
                 result.Dispose();
                 t.TrySetResult(ret);

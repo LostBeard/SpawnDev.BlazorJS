@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public ArrayBuffer(IJSInProcessObjectReference _ref) : base(_ref) { }
         public int ByteLength => JSRef.Get<int>("byteLength");
-        public ArrayBuffer(long length) : base("ArrayBuffer", length) { }
+        public ArrayBuffer(long length) : base(JS.New(nameof(ArrayBuffer), length)) { }
         public byte[] ReadBytes()
         {
             using var uint8array = new Uint8Array(this);

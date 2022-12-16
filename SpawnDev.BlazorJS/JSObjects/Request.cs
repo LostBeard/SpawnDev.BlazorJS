@@ -12,6 +12,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string Url => JSRef.Get<string>("url");
         public string Method => JSRef.Get<string>("method");
         public string Credentials => JSRef.Get<string>("credentials");
-        public Request(string url, ExpandoObject options = null) : base("Request", url, options) { }
+        public Request(string url, ExpandoObject? options = null) : base(JS.New(nameof(Request), url, options)) { }
     }
 }

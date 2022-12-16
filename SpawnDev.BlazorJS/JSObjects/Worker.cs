@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             InitEventsHandlers();
         }
-        public Worker(string url) : base(JS.New("Worker", url))
+        public Worker(string url) : base(JS.New(nameof(Worker), url))
         {
             InitEventsHandlers();
         }

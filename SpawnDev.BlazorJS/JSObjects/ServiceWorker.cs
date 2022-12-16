@@ -15,12 +15,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         public static bool IsSupported => !JS.IsUndefined("navigator.serviceWorker");
         public ServiceWorker(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public ServiceWorker(string serviceWorkerSrc) : base(NullRef)
-        {
-            using var serviceWorkerContainer = JS.Get<ServiceWorkerContainer>("navigator.serviceWorker");
-            // TODO
-            throw new System.Exception("TODO ServiceWorker() constructor unfinshed");
-        }
+        //public ServiceWorker(string serviceWorkerSrc) : base(NullRef)
+        //{
+        //    using var serviceWorkerContainer = JS.Get<ServiceWorkerContainer>("navigator.serviceWorker");
+        //    // TODO
+        //    throw new System.Exception("TODO ServiceWorker() constructor unfinshed");
+        //}
 
         //public ServiceWorker(string url) : base(NullRef)
         //{

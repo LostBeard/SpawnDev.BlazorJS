@@ -1,82 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
-using Microsoft.JSInterop.Implementation;
-using Microsoft.JSInterop.WebAssembly;
 using SpawnDev.BlazorJS.JSObjects;
-using System;
-using System.Drawing;
-using System.Globalization;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-    public class TestObjectImpl : TestObject
-    {
-        public TestObjectImpl(IJSInProcessObjectReference jsRef, int id) : base(jsRef, id)
-        { }
-    }
-    public class TestObject
-    {
-        public IJSInProcessObjectReference JSRef { get; }
-        public long Id { get; }
-
-        public TestObject(IJSInProcessObjectReference jsRef, int id)
-        {
-            JSRef = jsRef;
-            Id = id;
-        }
-    }
-    class TestObjectConverter : JsonConverter<TestObject>
-    {
-        internal static readonly JsonEncodedText JSObjectIdKey = JsonEncodedText.Encode("__jsObjectId");
-        private readonly WebAssemblyJSRuntime _jsRuntime;
-
-        public TestObjectConverter(WebAssemblyJSRuntime jsRuntime)
-        {
-            _jsRuntime = jsRuntime;
-        }
-
-        public override bool CanConvert(Type typeToConvert)
-        {
-            return typeof(TestObject).IsAssignableFrom(typeToConvert);
-        }
-
-        static Type? JSInProcessObjectReferenceType = null;
-
-        static IJSInProcessObjectReference? CreateJSRef(JSInProcessRuntime jsRuntime, long id)
-        {
-            // uses reflection to create instance of JSInProcessObjectReference
-            // creates instance of JSInProcessObjectReference
-            IJSInProcessObjectReference? ret = null;
-            if (JSInProcessObjectReferenceType == null)
-            {
-                JSInProcessObjectReferenceType = Type.GetType("Microsoft.JSInterop.Implementation.JSInProcessObjectReference");
-            }
-            ret = (IJSInProcessObjectReference)Activator.CreateInstance(JSInProcessObjectReferenceType, jsRuntime, id);
-            return ret;
-        }
-
-        public override TestObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            var id = JSObjectReferenceJsonWorker.ReadJSObjectReferenceIdentifier(ref reader);
-            var jsRef = CreateJSRef(_jsRuntime, id);
-            var ret = (TestObject)Activator.CreateInstance(typeToConvert, jsRef, id);
-            return ret;
-        }
-
-        public override void Write(Utf8JsonWriter writer, TestObject value, JsonSerializerOptions options)
-        {
-            // js will see it as a IJSInProcessObjectReference and restore it to its object
-            writer.WriteStartObject();
-            writer.WriteNumber(JSObjectIdKey, value.Id);
-            writer.WriteEndObject();
-        }
-    }
     // Facilitates the JSInterop javascript code
     public static partial class JS
     {
@@ -100,21 +29,23 @@ namespace SpawnDev.BlazorJS
             var instanceField = jsRuntimeType.GetField("Instance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
             object? jsRuntimeObj = instanceField.GetValue(null);
             _js = (IJSInProcessRuntime)jsRuntimeObj;    // (WebAssemblyJSRuntime)
-            GlobalThis = Get<JSObject>("JSInterop.globalObject");
-            GlobalThisTypeName = GlobalThis.JSRef.GetConstructorName();
+            GlobalThisTypeName = GetConstructorName("globalThis");
             switch (GlobalThisTypeName)
             {
                 case nameof(Window):
-                    WindowThis = GlobalThis.JSRefMove<Window>();
+                    WindowThis = JS.Get<Window>("globalThis");
                     GlobalThis = WindowThis;
                     break;
                 case nameof(DedicatedWorkerGlobalScope):
-                    DedicateWorkerThis = GlobalThis.JSRefMove<DedicatedWorkerGlobalScope>();
+                    DedicateWorkerThis = JS.Get<DedicatedWorkerGlobalScope>("globalThis");
                     GlobalThis = DedicateWorkerThis;
                     break;
                 case nameof(SharedWorkerGlobalScope):
-                    SharedWorkerThis = GlobalThis.JSRefMove<SharedWorkerGlobalScope>();
+                    SharedWorkerThis = JS.Get<SharedWorkerGlobalScope>("globalThis");
                     GlobalThis = SharedWorkerThis;
+                    break;
+                default:
+                    GlobalThis = JS.Get<JSObject>("globalThis");
                     break;
             }
 
@@ -211,12 +142,12 @@ namespace SpawnDev.BlazorJS
 
         //public static T CopyReference<T>(JSObject obj) where T : JSObject => ReturnMe<T>(obj);
         //public static IJSInProcessObjectReference CopyReference(IJSInProcessObjectReference obj) => ReturnMe<IJSInProcessObjectReference>(obj);
-        public static T MoveReference<T>(JSObject orig, bool sourceDisposeExceptRef = true) where T : JSObject
-        {
-            var ret = (T)Activator.CreateInstance(typeof(T), orig.JSRef);
-            if (sourceDisposeExceptRef) orig.DisposeExceptRef();
-            return ret;
-        }
+        //public static T MoveReference<T>(JSObject orig, bool sourceDisposeExceptRef = true) where T : JSObject
+        //{
+        //    var ret = (T)Activator.CreateInstance(typeof(T), orig.JSRef);
+        //    if (sourceDisposeExceptRef) orig.DisposeExceptRef();
+        //    return ret;
+        //}
         public static T ReturnMe<T>(object obj) => _JSInteropCall<T>("_returnMe", obj);
         public static JSObject FromElementReference(ElementReference elementRef) => ReturnMe<JSObject>(elementRef);
         public static IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);

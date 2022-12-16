@@ -1,7 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using Microsoft.JSInterop.Implementation;
-using SpawnDev.BlazorJS.JSObjects;
-using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -23,11 +20,6 @@ namespace SpawnDev.BlazorJS
         }
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-
-            //var id = JSObjectReferenceJsonWorker.ReadJSObjectReferenceIdentifier(ref reader);
-            //return new JSObjectReference(_jsRuntime, id);
-
-
             try
             {
                 var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
@@ -67,20 +59,20 @@ namespace SpawnDev.BlazorJS
             }
         }
     }
-    public class JSObjectConverter : JsonConverter<JSObject>
-    {
-        public override bool CanConvert(Type type)
-        {
-            return typeof(JSObject).IsAssignableFrom(type);
-        }
-        public override JSObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
-            return (JSObject)Activator.CreateInstance(typeToConvert, _ref);
-        }
-        public override void Write(Utf8JsonWriter writer, JSObject value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, value.JSRef, options);
-        }
-    }
+    //public class JSObjectConverter : JsonConverter<JSObject>
+    //{
+    //    public override bool CanConvert(Type type)
+    //    {
+    //        return typeof(JSObject).IsAssignableFrom(type);
+    //    }
+    //    public override JSObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    //    {
+    //        var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+    //        return (JSObject)Activator.CreateInstance(typeToConvert, _ref);
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, JSObject value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.JSRef, options);
+    //    }
+    //}
 }

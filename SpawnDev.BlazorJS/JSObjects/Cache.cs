@@ -56,8 +56,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void Match(string url, Action<Response> callback)
         {
             var callbackGroup = new CallbackGroup();
-            var promise = JSRef.Call<JSObject>("match", url);
-            promise.JSRef.CallVoid("then", Callback.Create((Response response) => {
+            var promise = JSRef.Call<IJSInProcessObjectReference>("match", url);
+            promise.CallVoid("then", Callback.Create((Response response) => {
                 try
                 {
                     callback(response);
@@ -69,7 +69,7 @@ namespace SpawnDev.BlazorJS.JSObjects
                 promise.Dispose();
                 callbackGroup.Dispose();
             }, callbackGroup));
-            promise.JSRef.CallVoid("catch", Callback.Create(() => {
+            promise.CallVoid("catch", Callback.Create(() => {
                 callback(null);
                 promise.Dispose();
                 callbackGroup.Dispose();

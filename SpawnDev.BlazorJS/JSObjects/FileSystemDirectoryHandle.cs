@@ -15,31 +15,31 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public async Task<File> GetFile() => await JSRef.CallAsync<File>("getFile");
 
-        public static async Task<List<FileSystemHandle>> IterateDirectoryAsync(JSObject iteratee, bool includeFiles, bool includeDirectories)
+        public static async Task<List<FileSystemHandle>> IterateDirectoryAsync(IJSInProcessObjectReference iteratee, bool includeFiles, bool includeDirectories)
         {
             var ret = new List<FileSystemHandle>();
             while (true)
             {
                 try
                 {
-                    using (var next = await iteratee.JSRef.CallAsync<JSObject>("next"))
+                    using (var next = await iteratee.CallAsync<IJSInProcessObjectReference>("next"))
                     {
-                        if (next.JSRef.Get<bool>("done")) break;
-                        using (FileSystemHandle f = next.JSRef.Get<FileSystemHandle>("value"))
+                        if (next.Get<bool>("done")) break;
+                        using (var f = next.Get<FileSystemHandle>("value"))
                         {
-                            FileSystemHandle fid = null;
+                            FileSystemHandle? fid = null;
                             switch (f.Kind)
                             {
                                 case "directory":
                                     if (includeDirectories)
                                     {
-                                        fid = f.JSRefMove<FileSystemDirectoryHandle>();
+                                        fid = next.Get<FileSystemDirectoryHandle>("value");
                                     }
                                     break;
                                 case "file":
                                     if (includeFiles)
                                     {
-                                        fid = f.JSRefMove<FileSystemFileHandle>();
+                                        fid = next.Get<FileSystemFileHandle>("value");
                                     }
                                     break;
                             }
@@ -176,7 +176,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public async Task<List<FileSystemHandle>> Entries()
         {
             List<FileSystemHandle> files = null;
-            using (var valuesIterator = JSRef.Get<JSObject>("values"))
+            using (var valuesIterator = JSRef.Get<IJSInProcessObjectReference>("values"))
             {
                 files = await IterateDirectoryAsync(valuesIterator, true, true);
             }
@@ -186,7 +186,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public async Task<List<FileSystemFileHandle>> GetFileEntries()
         {
             List<FileSystemFileHandle> files = new List<FileSystemFileHandle>();
-            using (var valuesIterator = JSRef.Call<JSObject>("values"))
+            using (var valuesIterator = JSRef.Call<IJSInProcessObjectReference>("values"))
             {
                 var tmp = await IterateDirectoryAsync(valuesIterator, true, false);
                 foreach (var t in tmp) files.Add((FileSystemFileHandle)t);
@@ -197,7 +197,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public async Task<List<FileSystemDirectoryHandle>> GetDirectoryEntries()
         {
             List<FileSystemDirectoryHandle> files = new List<FileSystemDirectoryHandle>();
-            using (var valuesIterator = JSRef.Call<JSObject>("values"))
+            using (var valuesIterator = JSRef.Call<IJSInProcessObjectReference>("values"))
             {
                 var tmp = await IterateDirectoryAsync(valuesIterator, false, true);
                 foreach (var t in tmp) files.Add((FileSystemDirectoryHandle)t);

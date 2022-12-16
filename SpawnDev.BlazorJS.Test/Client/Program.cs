@@ -5,6 +5,18 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
+using System.Collections.Specialized;
+
+var bb = new SpawnDev.BlazorJS.JSObjects.ResponseOptions();
+
+var headers = new Dictionary<string,string>();
+headers.Add("a", "v");
+bb.Headers = headers;
+
+JS.Set("bb", bb);
+
+var gg = new Response("hello");
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 if (JS.IsWindow)

@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using SpawnDev.BlazorJS.JSObjects;
 using System.Collections.Specialized;
-using System.Diagnostics.Tracing;
 using System.Web;
 
 namespace SpawnDev.BlazorJS.WebWorkers

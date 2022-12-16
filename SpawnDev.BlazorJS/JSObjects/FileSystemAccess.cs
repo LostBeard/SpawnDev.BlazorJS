@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.JSInterop;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Threading.Tasks;
@@ -16,12 +17,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         // https://web.dev/file-system-access/
         // 
 
-        Window window;
+        IJSInProcessObjectReference window;
         public static bool Supported => JS.TypeOf("window.showOpenFilePicker") != "undefined";
 
         public FileSystemAccess()
         {
-            window = JS.GetWindow<Window>();
+            window = JS.Get<IJSInProcessObjectReference>("window");
             //Supported = IJSObject.TypeOf("window.showOpenFilePicker") == "undefined";
             Console.WriteLine("!!! The class FileSystemAccess is being used but has not beem tested completely. Please report bugs"); ;
         }
@@ -35,8 +36,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             pickerOptions.multiple = multiple;
             if (filters != null) pickerOptions.accept = filters;
             List<FileSystemFileHandle> ret;
-            using JSObject fileSystemDirectoryHandle = await window.JSRef.CallAsync<JSObject>("showOpenFilePicker", (object)pickerOptions);
-            using JSObject valuesIterator = fileSystemDirectoryHandle.JSRef.Get<JSObject>("values");
+            using var fileSystemDirectoryHandle = await window.CallAsync<IJSInProcessObjectReference>("showOpenFilePicker", (object)pickerOptions);
+            using var valuesIterator = fileSystemDirectoryHandle.Get<IJSInProcessObjectReference>("values");
             ret = await IterateAsync<FileSystemFileHandle>(valuesIterator);
             return ret;
         }
@@ -44,9 +45,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public async Task<JSObject> ShowSaveFilePicker(ExpandoObject pickerOptions = null)
         {
             if (pickerOptions == null)
-                return await window.JSRef.CallAsync<JSObject>("showSaveFilePicker");
+                return await window.CallAsync<JSObject>("showSaveFilePicker");
             else
-                return await window.JSRef.CallAsync<JSObject>("showSaveFilePicker", pickerOptions);
+                return await window.CallAsync<JSObject>("showSaveFilePicker", pickerOptions);
         }
 
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/showDirectoryPicker
@@ -54,7 +55,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             try
             {
-                return await window.JSRef.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker");
+                return await window.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker");
             }
             catch { }
             return null;
@@ -69,15 +70,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    return false;
         //}
 
-        static async Task<List<T>> IterateAsync<T>(JSObject iteratee)
+        static async Task<List<T>> IterateAsync<T>(IJSInProcessObjectReference iteratee)
         {
             var ret = new List<T>();
             while (true)
             {
-                using (var next = await iteratee.JSRef.CallAsync<JSObject>("next"))
+                using (var next = await iteratee.CallAsync<IJSInProcessObjectReference>("next"))
                 {
-                    if (next.JSRef.Get<bool>("done")) break;
-                    ret.Add(next.JSRef.Get<T>("value"));
+                    if (next.Get<bool>("done")) break;
+                    ret.Add(next.Get<T>("value"));
                 }
             }
             return ret;

@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<Date>))]
     internal class Date : JSObject
     {
-        public Date() : base("Date") { }
+        public Date() : base(JS.New(nameof(Date))) { }
         public Date(IJSInProcessObjectReference _ref) : base(_ref) { }
         public long GetTime() => JSRef.Call<long>("getTime");
         public int GetTimezoneOffset() => JSRef.Call<int>("getTimezoneOffset");
