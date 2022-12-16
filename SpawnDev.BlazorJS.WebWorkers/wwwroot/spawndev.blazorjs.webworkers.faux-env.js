@@ -177,6 +177,7 @@ class Node extends EventTargetFake {
         var nodeType = node.constructor.name;
         var thisType = this.constructor.name;
         consoleLog(`appendChild: ${nodeType} to ${thisType}`);
+        document._nodeAppended(node);
         return node;
     }
     hasChildNodes() {
@@ -216,6 +217,37 @@ class HTMLDocument extends Node {
         this._beenInit = false;
         this._importScriptsOnInit = true;
         this._readyState = '';
+    }
+    _nodeAppended(node) {
+        // if the dom hasn't been init yet do nothing here. the node will be init whe nthe doucment is
+        if (this._beenInit) {
+            if (node instanceof HTMLScriptElement) {
+                this.initScriptElement(node);
+            }
+        }
+    }
+    initScriptElement(node) {
+        this.currentScript = node;
+        // behaves differently thatn a standard script loader...
+        // uses the text attribute if available instead of the src (to allow using modified script in text)
+        if (node.text) {
+            consoleLog('Loading script text');
+            try {
+                let fn = new Function(node.text);
+                fn.apply(globalThisObj, []);
+            } catch (ex) {
+                console.error('ERROR loading document script', href, ex);
+            }
+        } else if (node.src) {
+            consoleLog('Loading script src');
+            var href = new URL(node.src, this.baseURI);
+            try {
+                importScripts(href);
+            } catch (ex) {
+                console.error('ERROR loading document script', href, ex);
+            }
+        } 
+        this.currentScript = null;
     }
     get readyState() {
         return this._readyState;
@@ -356,30 +388,7 @@ class HTMLDocument extends Node {
             var nodes = this.descendants();
             for (var node of nodes) {
                 if (node instanceof HTMLScriptElement) {
-                    var innerHTML = node.innerHTML;
-                    if (innerHTML) {
-                        this.currentScript = node;
-                        console.log('usign script innerHTML instead of src');
-                        try {
-                            let fn = new Function(innerHTML);
-                            fn.apply(globalThisObj, []);
-                        } catch (ex) {
-                            console.error('ERROR loading document script', href, ex);
-                        }
-                        this.currentScript = null;
-                        continue;
-                    }
-                    var src = node.getAttribute('src');
-                    if (src) {
-                        var href = new URL(src, this.baseURI);
-                        this.currentScript = node;
-                        try {
-                            importScripts(href);
-                        } catch (ex) {
-                            console.error('ERROR loading document script', href, ex);
-                        }
-                        this.currentScript = null;
-                    }
+                    this.initScriptElement(node);
                 }
             }
         }
@@ -533,11 +542,17 @@ class HTMLScriptElement extends HTMLElement {
     constructor() {
         super();
         this._src = '';
+        this._text = '';
     }
     get src() { return this._src; }
     set src(value) {
         consoleLog(this.constructor.name, 'src');
         this._src = value;
+    }
+    get text() { return this._text; }
+    set text(value) {
+        consoleLog(this.constructor.name, 'text');
+        this._text = value;
     }
 }
 class HTMLButtonElement extends HTMLElement {

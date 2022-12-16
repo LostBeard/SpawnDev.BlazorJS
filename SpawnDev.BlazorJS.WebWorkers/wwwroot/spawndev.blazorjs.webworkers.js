@@ -174,7 +174,7 @@ var initWebWorkerBlazor = async () => {
             }
             jsStr = fixModuleScript(jsStr);
             //console.log("jsStr", jsStr);
-            blazorWASMScriptEl.innerHTML = jsStr;
+            blazorWASMScriptEl.text = jsStr;
             document.initDocument();
         }
     }
