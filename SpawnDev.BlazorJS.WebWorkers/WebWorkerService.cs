@@ -131,8 +131,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
             BroadcastEvent("ping", ThisInstance());
             await Task.Delay(pingWaitTime);
             var now = DateTime.Now;
-            var active = KnownRunning.Values.Where(o => now - o.LastSeen < TimeSpan.FromMicroseconds(pingWaitTime)).ToList();
-            var inactive = KnownRunning.Values.Where(o => now - o.LastSeen > TimeSpan.FromMicroseconds(pingWaitTime)).ToList();
+            var active = KnownRunning.Values.Where(o => now - o.LastSeen < TimeSpan.FromMilliseconds(pingWaitTime)).ToList();
+            var inactive = KnownRunning.Values.Where(o => now - o.LastSeen > TimeSpan.FromMilliseconds(pingWaitTime)).ToList();
             KnownRunning = active.ToDictionary(o => o.SrcId, o => o);
             return active;
         }
