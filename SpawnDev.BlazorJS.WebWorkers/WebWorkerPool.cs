@@ -46,18 +46,29 @@
             return false;
         }
 
-        public bool WorkersRunning => WorkerCount > 0;
-        public int WorkerCount { get; private set; }
+        public bool AreWorkersRunning => WorkersRunning > 0;
+        public int WorkersRunning { get; private set; }
+        int _WorkerCountRequest;
+        public int WorkerCountRequest
+        {
+            get => _WorkerCountRequest;
+            set
+            {
+                if (_WorkerCountRequest == value) return;
+                _WorkerCountRequest = value;
+                _ = SetWorkerCount(_WorkerCountRequest);
+            }
+        }
 
         SemaphoreSlim _SetWorkerCountLock = new SemaphoreSlim(1);
         public async Task<bool> SetWorkerCount(int count)
         {
+            _WorkerCountRequest = count;
             if (!WebWorker.Supported) return false;
             if (_webWorkerService == null) return false;
-            var hasLock = await _SetWorkerCountLock.WaitAsync(0);
-            if (!hasLock) return false;
             try
             {
+                await _SetWorkerCountLock.WaitAsync();
                 while (_workers.Count < count)
                 {
                     var webWorker = await _webWorkerService.GetWebWorker();
@@ -67,8 +78,8 @@
                         _workers.Add(webWorker);
                     }
                 }
-                WorkerCount = count;
-                while (_workers.Count > WorkerCount)
+                WorkersRunning = count;
+                while (_workers.Count > WorkersRunning)
                 {
                     var w = await GetFreeWorkerAsync();
                     if (w != null)
@@ -98,7 +109,7 @@
             IsDisposed = true;
             if (disposing)
             {
-                WorkerCount = 0;
+                WorkersRunning = 0;
                 _SetWorkerCountLock.Dispose();
                 foreach (var w in _workers)
                 {

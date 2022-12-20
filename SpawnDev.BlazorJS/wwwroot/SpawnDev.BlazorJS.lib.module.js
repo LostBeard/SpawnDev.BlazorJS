@@ -153,16 +153,8 @@ var initFunc = function () {
     JSInterop._getMember = function (obj, name, args, returnType, returnTypeFinal) {
         var { target, parent, targetType } = JSInterop.pathObjectInfo(obj, name);
         if (targetType === "function") {
-            // functions are called with args as the arguments and the return value is what is returned; 
-            // unless returnTypeFinal === 'FunctionHandle' ... then the function is wrapped (to prevent dotnet from refusing it) and the wrapper is returned
             var fnBound = target.bind(parent);
             return wrapFunction(fnBound);
-            //var ret = fnBound.apply(null, args);
-            //if (returnType === 'void') {
-            //    return undefined;
-            //} else {
-            //    return ret;
-            //}
         } else if (targetType === "undefined") {
             return null;
         } else {
@@ -170,7 +162,7 @@ var initFunc = function () {
         }
     };
 
-    JSInterop._getProperty = function (obj, name, args, returnType, returnTypeFinal) {
+    JSInterop._getDynamic = function (obj, name, args, returnType, returnTypeFinal) {
         var { target, parent, targetType } = JSInterop.pathObjectInfo(obj, name);
         if (targetType === "function") {
             // functions are called with args as the arguments and the return value is what is returned; 
@@ -193,6 +185,11 @@ var initFunc = function () {
     };
 
     JSInterop._returnNew = function (className, args) {
+        var { target, parent, targetType } = JSInterop.pathObjectInfo(null, className);
+        return !args ? new target() : new target(...args);
+    };
+
+    JSInterop._returnNew2 = function (className, args) {
         var argsStr = '';
         if (args && args.length) {
             var argsCall = [];
@@ -201,6 +198,7 @@ var initFunc = function () {
         }
         var js = `return new ${className}(${argsStr})`;
         var fnWrapper = new Function(js);
+        fnWrapper.bind(globalObject);
         var newInstance = fnWrapper(args);
         if (className === 'Function') {
             newInstance = wrapFunction(newInstance);

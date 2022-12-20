@@ -8,21 +8,21 @@ namespace SpawnDev.BlazorJS.JSObjects
     [JsonConverter(typeof(JSObjectConverter<Promise>))]
     public class Promise : JSObject
     {
-        public Promise() : base(JS.New("Promise")) { }
+        public Promise(Action<Function, Function> handler) : base(JS.New("Promise", Callback.Create(handler))) {  }
         public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public void Then(Callback callback) { JSRef.CallVoid("then", callback); }
-        public void Catch(Callback callback) { JSRef.CallVoid("catch", callback); }
+        public Promise Then(Callback callback) { JSRef.CallVoid("then", callback); return this; }
+        public Promise Catch(Callback callback) { JSRef.CallVoid("catch", callback); return this; }
         public Task<T> ThenAsync<T>()
         {
             var callbacks = new CallbackGroup();
             var t = new TaskCompletionSource<T>();
-            Then(Callback.Create<T>((e) => { 
-                callbacks.Dispose(); 
-                t.SetResult(e); 
+            Then(Callback.Create<T>((e) => {
+                callbacks.Dispose();
+                t.SetResult(e);
             }, callbacks));
-            Catch(Callback.Create(() => { 
-                callbacks.Dispose(); 
-                t.TrySetException(new Exception("Failed")); 
+            Catch(Callback.Create(() => {
+                callbacks.Dispose();
+                t.TrySetException(new Exception("Failed"));
             }, callbacks));
             return t.Task;
         }
@@ -30,13 +30,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             var callbacks = new CallbackGroup();
             var t = new TaskCompletionSource();
-            Then(Callback.Create(() => { 
-                callbacks.Dispose(); 
-                t.SetResult(); 
+            Then(Callback.Create(() => {
+                callbacks.Dispose();
+                t.SetResult();
             }, callbacks));
-            Catch(Callback.Create(() => { 
-                callbacks.Dispose(); 
-                t.TrySetException(new Exception("Failed")); 
+            Catch(Callback.Create(() => {
+                callbacks.Dispose();
+                t.TrySetException(new Exception("Failed"));
             }, callbacks));
             return t.Task;
         }

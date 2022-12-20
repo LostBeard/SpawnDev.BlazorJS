@@ -11,9 +11,9 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/LostBeard/SpawnDev.BlazorJS.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Blazor;</PackageTags>
+		<PackageTags>Blazor;BlazorWebAssembly;DotNet</PackageTags>
 		<PackageReleaseNotes></PackageReleaseNotes>
-		<Version>1.3.0</Version>
+		<Version>1.4.0</Version>
 		<FileVersion></FileVersion>
 		<AssemblyVersion></AssemblyVersion>
 		<Authors>LostBeard</Authors>

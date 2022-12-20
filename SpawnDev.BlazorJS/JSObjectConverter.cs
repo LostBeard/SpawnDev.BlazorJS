@@ -43,7 +43,7 @@ namespace SpawnDev.BlazorJS
             try
             {
                 var ext = value as JSObject;
-                JsonSerializer.Serialize(writer, ext.JSRef, options);
+                JsonSerializer.Serialize(writer, ext?.JSRef, options);
             }
             catch (Exception ex)
             {

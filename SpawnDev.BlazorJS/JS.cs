@@ -78,7 +78,7 @@ namespace SpawnDev.BlazorJS
 
         public static AsyncIterator? GetAsyncIterator(IJSInProcessObjectReference targetObject) => Get<AsyncIterator?>(targetObject, "Symbol.asyncIterator");
 
-        public static Task<bool> LoadScript(string src, string ifThisGlobalVarIsUndefined = null)
+        public static Task<bool> LoadScript(string src, string? ifThisGlobalVarIsUndefined = null)
         {
             var t = new TaskCompletionSource<bool>();
             if (!string.IsNullOrEmpty(ifThisGlobalVarIsUndefined) && !IsUndefined(ifThisGlobalVarIsUndefined))
@@ -152,7 +152,7 @@ namespace SpawnDev.BlazorJS
         public static JSObject FromElementReference(ElementReference elementRef) => ReturnMe<JSObject>(elementRef);
         public static IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);
         public static T FromElementReference<T>(ElementReference elementRef) where T : JSObject => (T)Activator.CreateInstance(typeof(T), ReturnMe<IJSInProcessObjectReference>(elementRef));
-        public static IJSInProcessObjectReference NewApply(string className, object[]? args = null) => _JSInteropCall<IJSInProcessObjectReference>("_returnNew", className, args);
+        public static IJSInProcessObjectReference NewApply(string className, object?[]? args = null) => _JSInteropCall<IJSInProcessObjectReference>("_returnNew", className, args);
         public static IJSInProcessObjectReference New(string className) => NewApply(className);
         public static IJSInProcessObjectReference New(string className, object arg0) => NewApply(className, new object[] { arg0 });
         public static IJSInProcessObjectReference New(string className, object arg0, object arg1) => NewApply(className, new object[] { arg0, arg1 });

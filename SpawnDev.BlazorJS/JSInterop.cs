@@ -12,9 +12,12 @@ namespace SpawnDev.BlazorJS
             _js.InvokeVoid($"JSInterop.{fn}", args);
         }
 
+
+
         public class TypeConversionInfo
         {
             public Type ReturnType { get; private set; }
+            public bool useIJSWrapperReader { get; private set; }
             public bool usePropertyReader { get; private set; }
             public bool useJSObjectReader { get; private set; }
             public bool useIterationReader { get; private set; }
@@ -24,6 +27,19 @@ namespace SpawnDev.BlazorJS
             public Dictionary<string, PropertyInfo> returnTypeProperties { get; private set; } = new Dictionary<string, PropertyInfo>();
             public List<string> TransferableProperties = new List<string>();
             public bool IsTransferable { get; private set; }
+
+            bool HasIJSInProcessObjectReferenceConstructor()
+            {
+                var constructors = ReturnType.GetConstructors();
+                foreach (var c in constructors)
+                {
+                    if (c.IsPrivate) continue;
+                    var args = c.GetParameters();
+                    if (args.Length != 1) continue;
+                    if (args[0].ParameterType == typeof(IJSInProcessObjectReference)) return true;
+                }
+                return false;
+            }
 
             static string GetPropertyJSName(PropertyInfo prop)
             {
@@ -53,6 +69,12 @@ namespace SpawnDev.BlazorJS
                 {
                     IsTransferable = JSObject.TransferableTypes.Contains(returnType);
                     useJSObjectReader = true;
+                    return;
+                }
+                else if (HasIJSInProcessObjectReferenceConstructor())
+                {
+                    IsTransferable = false; // no way to tell from this conversion. this is a generic wrapper for IJSInProcessObjectRefrence
+                    useIJSWrapperReader = true;
                     return;
                 }
                 else if (returnType.IsClass && !typeof(Delegate).IsAssignableFrom(returnType))
@@ -94,7 +116,7 @@ namespace SpawnDev.BlazorJS
                     }
                     else
                     {
-                        foreach(var kvp in returnTypeProperties)
+                        foreach (var kvp in returnTypeProperties)
                         {
                             var prop = kvp.Value;
                             if (!prop.PropertyType.IsClass) continue;
@@ -126,7 +148,17 @@ namespace SpawnDev.BlazorJS
                     {
                         var propName = kvp.Key;
                         var prop = kvp.Value;
-                        var value = _ref.Get(prop.PropertyType, propName);
+                        object? value = null;
+                        try
+                        {
+                            value = _ref.Get(prop.PropertyType, propName);
+                        }
+                        catch
+                        {
+                            // Could not read property. Skipping
+                            continue;
+                        }
+                        if (value == null) continue;
                         prop.SetValue(tmpRet, value);
                     }
                     ret = tmpRet;
@@ -138,13 +170,28 @@ namespace SpawnDev.BlazorJS
                     var tmpRet = Array.CreateInstance(ElementType, length);
                     for (var i = 0; i < length; i++)
                     {
-                        var value = _ref.Get(ElementType, i);
+                        object? value = null;
+                        try
+                        {
+                            value = _ref.Get(ElementType, i);
+                        }
+                        catch
+                        {
+                            // Could not read property. Skipping
+                            continue;
+                        }
+                        if (value == null) continue;
                         tmpRet.SetValue(value, i);
                     }
                     ret = (object)tmpRet;
                     _ref.Dispose();
                 }
                 else if (useJSObjectReader)
+                {
+                    if (_ref != null)
+                        ret = Activator.CreateInstance(ReturnType, _ref);
+                }
+                else if (useIJSWrapperReader)
                 {
                     if (_ref != null)
                         ret = Activator.CreateInstance(ReturnType, _ref);
@@ -176,7 +223,7 @@ namespace SpawnDev.BlazorJS
             }
             else
             {
-                ret = _js.Invoke<T>($"JSInterop.{fn}", args);
+                ret = _js.Invoke<T?>($"JSInterop.{fn}", args);
             }
             return ret;
         }
@@ -233,6 +280,59 @@ namespace SpawnDev.BlazorJS
                 ret = await _js.InvokeAsync(returnType, $"JSInterop.{fn}", args);
             }
             return ret;
+        }
+
+        internal static object? GetDynamic(Type? resultType, IJSInProcessObjectReference _ref, object identifier, object[] args)
+        {
+            object? result = null;
+            if (resultType == null)
+            {
+                JS._JSInteropCallVoid("_getDynamic", _ref, identifier, args, "void", "void");
+            }
+            else
+            {
+                var finalReturnTypeName = resultType.Name;
+                var isArray = resultType.IsArray;
+                var isIJSObjectArray = false;
+                Type? elementType = null;
+                if (isArray)
+                {
+                    elementType = resultType.GetElementType();
+                    isIJSObjectArray = resultType != null && typeof(JSObject).IsAssignableFrom(elementType);
+                }
+                var isIJSObject = resultType != null && typeof(JSObject).IsAssignableFrom(resultType);
+                Type tmpType = isIJSObjectArray || isIJSObject ? typeof(IJSInProcessObjectReference) : resultType;
+                var typeName = tmpType == null ? "void" : tmpType.Name;
+                if (typeName == "Task") throw new Exception("TASK is not a valid return type!");
+                result = JS._JSInteropCall(tmpType, "_getDynamic", new object[] { _ref, identifier, args, typeName, finalReturnTypeName });
+            }
+            return result;
+        }
+        internal static async Task<object?> GetDynamicAsync(Type? resultType, IJSInProcessObjectReference _ref, object identifier, object[] args)
+        {
+            object? result = null;
+            if (resultType == null)
+            {
+                await JS._JSInteropCallVoidAsync("_getDynamic", _ref, identifier, args, "void", "void");
+            }
+            else
+            {
+                var finalReturnTypeName = resultType.Name;
+                var isArray = resultType.IsArray;
+                var isIJSObjectArray = false;
+                Type? elementType = null;
+                if (isArray)
+                {
+                    elementType = resultType.GetElementType();
+                    isIJSObjectArray = resultType != null && typeof(JSObject).IsAssignableFrom(elementType);
+                }
+                var isIJSObject = resultType != null && typeof(JSObject).IsAssignableFrom(resultType);
+                Type tmpType = isIJSObjectArray || isIJSObject ? typeof(IJSInProcessObjectReference) : resultType;
+                var typeName = tmpType == null ? "void" : tmpType.Name;
+                if (typeName == "Task") throw new Exception("TASK is not a valid return type!");
+                result = await JS._JSInteropCallAsync(tmpType, "_getDynamic", new object[] { _ref, identifier, args, typeName, finalReturnTypeName });
+            }
+            return result;
         }
     }
 }

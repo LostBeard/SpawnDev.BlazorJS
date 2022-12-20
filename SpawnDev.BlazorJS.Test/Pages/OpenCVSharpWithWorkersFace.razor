@@ -1,0 +1,58 @@
+﻿@page "/opencv"
+
+<RadzenCard>
+    <div style="">
+        <button onclick="@(() => _ = RefreshCameraList())">Refresh Camera List</button>
+    </div>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Camera</RadzenText>
+    <RadzenDropDown @bind-Value=@_selectedDevice AllowClear="true" TValue="DeviceInfo" Class="w-100" Data=@_devices Change=@(args => OnDeviceChange(args as DeviceInfo))>
+        <Template>
+            Video: @((context as DeviceInfo)?.Label)
+        </Template>
+    </RadzenDropDown>
+</RadzenCard>
+
+<div style="">
+    <div>
+        Faces: @_facesFnd
+    </div>
+    <div>
+        FPS: @_fps
+    </div>
+    <div>
+        Workers: @_openCVService.WorkersRunning
+    </div>
+    <div>
+        <RadzenCard>
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Canny0 @_canny0</RadzenText>
+            <RadzenSlider @bind-Value=@_canny0 TValue="int" Min="0" Max="255" />
+        </RadzenCard>
+        <RadzenCard>
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Canny1 @_canny1</RadzenText>
+            <RadzenSlider @bind-Value=@_canny1 TValue="int" Min="0" Max="255" />
+        </RadzenCard>
+    </div>
+    <div style="padding: 4px;">
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enable Processing</RadzenText>
+        <RadzenSwitch @bind-Value=@_enableProcessing Disabled="@_processingDisabled" />
+    </div>
+    <div>
+        <RadzenRadioButtonList TValue="int" Orientation="Orientation.Vertical" Change=@((args) => OnWebWorkerCountChange(args))>
+            <Items>
+                <RadzenRadioButtonListItem Text="None" Value="0" />
+                @for (var i = 1; i <= _openCVService.MaxWorkerCount; i++)
+                {
+                    var txt = $"{i} WebWorker";
+                    <RadzenRadioButtonListItem Text=@txt Value=@i />
+                }
+            </Items>
+        </RadzenRadioButtonList>
+    </div>
+    <div style="padding: 4px;">
+        <canvas style="zoom: 50%;" @ref="_cameraCanvasProcessedElRef"></canvas>
+    </div>
+</div>
+
+@code {
+
+}

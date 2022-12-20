@@ -11,12 +11,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         // new Function ([arg1, arg2, ...argN], functionBody)
         public Function(params string[] args) : base(JS.NewApply("Function", args)) { }
 
-        public T Apply<T>(object? thisObj, object[] args) => JSRef.Call<T>("applyFn", thisObj, args);
-        public ValueTask<T> ApplyAsync<T>(object? thisObj, object[] args) => JSRef.CallAsync<T>("applyFn", thisObj, args);
-        public void ApplyVoid<T>(object? thisObj, object[] args) => JSRef.CallVoid("applyFn", thisObj, args);
+        public T Apply<T>(object? thisObj = null, object?[]? args = null) => JSRef.Call<T>("applyFn", thisObj, args);
+        public ValueTask<T> ApplyAsync<T>(object? thisObj = null, object?[]? args = null) => JSRef.CallAsync<T>("applyFn", thisObj, args);
+        public void ApplyVoid(object? thisObj = null, object?[]? args = null) => JSRef.CallVoid("applyFn", thisObj, args);
 
-        public T Call<T>(object? thisObj, params object[] args) => JSRef.Call<T>("applyFn", thisObj, args);
-        public ValueTask<T> CallAsync<T>(object? thisObj, params object[] args) => JSRef.CallAsync<T>("applyFn", thisObj, args);
-        public void CallVoid<T>(object? thisObj, params object[] args) => JSRef.CallVoid("applyFn", thisObj, args);
+        public T Call<T>(object? thisObj = null, params object?[] args) => JSRef.Call<T>("applyFn", thisObj, args);
+        public ValueTask<T> CallAsync<T>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<T>("applyFn", thisObj, args);
+        public void CallVoid<T>(object? thisObj = null, params object?[] args) => JSRef.CallVoid("applyFn", thisObj, args);
     }
 }

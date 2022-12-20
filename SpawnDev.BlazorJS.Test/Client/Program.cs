@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Radzen;
 using SpawnDev.BlazorJS;
+using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
@@ -16,7 +18,17 @@ if (JS.IsWindow)
 builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 // SpawnDev.BlazorJS.WebWorkers
 builder.Services.AddSingleton<WebWorkerService>();
+builder.Services.AddSingleton<OpenCVService>();
+builder.Services.AddSingleton<OpenCVJSService>();
+builder.Services.AddSingleton<FaceAPIService>();
+builder.Services.AddSingleton<MediaDevices>();
 builder.Services.AddSingleton<MathsService>();
+builder.Services.AddSingleton<MediaDevicesService>();
+// Radzen
+builder.Services.AddSingleton<DialogService>();
+builder.Services.AddSingleton<NotificationService>();
+builder.Services.AddSingleton<TooltipService>();
+builder.Services.AddSingleton<ContextMenuService>();
 // build 
 WebAssemblyHost host = builder.Build();
 // init WebWorkerService

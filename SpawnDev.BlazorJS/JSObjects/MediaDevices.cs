@@ -8,20 +8,12 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     public class DeviceInfo
     {
-        public string DeviceId { get; set; }
-        public string Kind { get; set; }
-        public string Label { get; set; }
-        public string GroupId { get; set; }
-        public string Facing { get; set; }
+        public string DeviceId { get; set; } = "";
+        public string Kind { get; set; } = "";
+        public string Label { get; set; } = "";
+        public string GroupId { get; set; } = "";
+        public string Facing { get; set; } = "";
     }
-
-    //public class InputDeviceInfo : DeviceInfo
-    //{
-    //    public void GetCapabilities()
-    //    {
-
-    //    }
-    //}
 
     [JsonConverter(typeof(JSObjectConverter<MediaDevices>))]
     public class MediaDevices : EventTarget
@@ -174,11 +166,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             return JSRef.CallAsync<MediaStream>("getUserMedia", constraints);
         }
-
-
-        //public async Task<IJSObject> EnumerateDevicesObject()
-        //{
-        //    return await GetPropertyAsync<IJSObject>("enumerateDevices");
-        //}
     }
 }

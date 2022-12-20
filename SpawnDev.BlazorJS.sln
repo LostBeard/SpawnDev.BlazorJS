@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS", "SpawnD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.WebWorkers", "SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj", "{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.OpenCVSharp4", "SpawnDev.BlazorJS.OpenCVSharp4\SpawnDev.BlazorJS.OpenCVSharp4.csproj", "{A91D1E89-19A8-4D0B-A049-B9E4F065A96F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpawnDev.BlazorJS.OpenCVJS", "SpawnDev.BlazorJS.OpenCVJS\SpawnDev.BlazorJS.OpenCVJS.csproj", "{03EF79FE-C590-487C-83A7-8798D47D4E65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A91D1E89-19A8-4D0B-A049-B9E4F065A96F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A91D1E89-19A8-4D0B-A049-B9E4F065A96F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A91D1E89-19A8-4D0B-A049-B9E4F065A96F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A91D1E89-19A8-4D0B-A049-B9E4F065A96F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03EF79FE-C590-487C-83A7-8798D47D4E65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03EF79FE-C590-487C-83A7-8798D47D4E65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03EF79FE-C590-487C-83A7-8798D47D4E65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03EF79FE-C590-487C-83A7-8798D47D4E65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

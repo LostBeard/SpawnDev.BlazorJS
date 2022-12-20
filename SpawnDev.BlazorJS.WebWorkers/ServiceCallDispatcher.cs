@@ -1,4 +1,5 @@
-﻿using SpawnDev.BlazorJS.JSObjects;
+﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -9,11 +10,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
     {
         public Type? ReturnValueType { get; set; }
         public string RequestId => webWorkerCallMessageOutgoing.RequestId;
-        public Action<JSObject?>? OnComplete { get; set; }
+        public Action<IJSInProcessObjectReference>? OnComplete { get; set; }
         public CancellationToken? CancellationToken { get; set; }
         public WebWorkerMessageOut webWorkerCallMessageOutgoing { get; set; }
 
-        public WebWorkerCallMessageTask(Action<JSObject?>? onComplete)
+        public WebWorkerCallMessageTask(Action<IJSInProcessObjectReference>? onComplete)
         {
             OnComplete = onComplete;
         }
@@ -96,7 +97,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         protected async void _worker_OnMessage(MessageEvent e)
         {
-            JSObject? args = null;
+            IJSInProcessObjectReference? args = null;
             try
             {
                 var msgBase = e.GetData<WebWorkerMessageIn>();
@@ -124,16 +125,16 @@ namespace SpawnDev.BlazorJS.WebWorkers
                             if (actionArgs.Length > 0)
                             {
                                 // Does not handle multiple args at the moment due to the added complexity with refelction
-                                args = msgBase.GetData<JSObject>();
+                                args = msgBase.GetData<IJSInProcessObjectReference>();
                                 // JS.Log("msgBasemsgBasemsgBase", msgBase);
-                                var argsLength = args != null ? args.JSRef.Get<int>("length") : 0;
+                                var argsLength = args != null ? args.Get<int>("length") : 0;
                                 if (actionArgs.Length != argsLength)
                                 {
                                     Console.WriteLine("Action paramter count does not match incoking");
                                 }
                                 for (var n = 0; n < actionArgs.Length; n++)
                                 {
-                                    actionArgs[n] = args.JSRef.Get(actionHandle.ParameterTypes[n], n);
+                                    actionArgs[n] = args.Get(actionHandle.ParameterTypes[n], n);
                                 }
                             }
                             actionHandle.Target.DynamicInvoke(actionArgs);
@@ -147,11 +148,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         _waiting.Remove(msgBase.RequestId);
                         try
                         {
-                            args = msgBase.GetData<JSObject>();
-                            //args = e.JSRef.Get<JSObject?>("data.args");
+                            args = msgBase.GetData<IJSInProcessObjectReference>();
+                            //args = e.Get<JSObject?>("data.args");
                         }
                         catch { }
-                        req.OnComplete(args);
+                        if (args != null) req.OnComplete?.Invoke(args);
                     }
                 }
                 else if (msgBase.TargetType == "event" && !string.IsNullOrEmpty(msgBase.TargetName))
@@ -163,11 +164,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     //Console.WriteLine($"msgBase.MethodName: {msgBase.ServiceTypeFullName}::{msgBase.MethodName}");
                     try
                     {
-                        args = msgBase.GetData<JSObject>();
-                        //args = e.JSRef.Get<JSObject?>("data.args");
+                        args = msgBase.GetData<IJSInProcessObjectReference>();
+                        //args = e.Get<JSObject?>("data.args");
                     }
                     catch { }
-                    var argsLength = args != null ? args.JSRef.Get<int>("length") : 0;
+                    var argsLength = args != null ? args.Get<int>("length") : 0;
                     var serviceType = GetType(msgBase.TargetType);
                     if (serviceType == null)
                     {
@@ -201,43 +202,65 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         // this property has been marked as non-stransferable
                         finalReturnTypeAllowTransfer = transferAttrMethod.Transfer;
                     }
-                    var callArgs0 = PostDeserializeArgs(msgBase.RequestId, methodInfo, argsLength, args.JSRef.Get);
+                    var callArgs0 = PostDeserializeArgs(msgBase.RequestId, methodInfo, argsLength, args.Get);
                     // call the requested method
-                    var retv = methodInfo.Invoke(service, callArgs0);
+                    // TODO ... should the called args dipose of the incoming parameters?
+                    // dispose any parameters that implement IDisposable and were created for the call
+                    var hasReturnValue = (isValueTask && !returnTypeOfTheTaskIsVoid) || (isTask && !returnTypeOfTheTaskIsVoid) || (!returnTypeIsVoid && !isTask && !isValueTask);
+                    object? retValue = null;
+                    string? err = null;
+                    try
+                    {
+                        var retv = methodInfo.Invoke(service, callArgs0);
+                        if (retv is Task t)
+                        {
+                            await t;
+                            if (t.Exception != null)
+                            {
+                                err = t.Exception.Message;
+                            }
+                            else if (returnTypeOfTheTask != typeof(void))
+                            {
+                                retValue = returnType.GetProperty("Result").GetValue(retv, null);
+                            }
+                        }
+                        else if (retv is ValueTask vt)
+                        {
+                            await vt;
+                            if (vt.IsFaulted)
+                            {
+                                err = "Call failed";
+                            }
+                            else if (returnTypeOfTheTask != typeof(void))
+                            {
+                                retValue = returnType.GetProperty("Result").GetValue(retv, null);
+                            }
+                        }
+                        else if (!returnTypeIsVoid)
+                        {
+                            retValue = retv;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        err = ex.Message;
+                    }
+
+                    if (retValue == null)
+                    {
+                        Console.WriteLine("retValue == null");
+                    }
+
                     var autoDisposeArgs = true;
                     if (autoDisposeArgs)
                     {
-                        foreach(var ca in callArgs0)
+                        foreach (var ca in callArgs0)
                         {
                             if (ca is IDisposable disposable)
                             {
                                 disposable.Dispose();
                             }
                         }
-                    }
-                    // TODO ... should the called args dipose of the incoming parameters?
-                    // dispose any parameters that implement IDisposable and were created for the call
-                    object? retValue = null;
-                    var hasReturnValue = (isValueTask && !returnTypeOfTheTaskIsVoid) || (isTask && !returnTypeOfTheTaskIsVoid) || (!returnTypeIsVoid && !isTask && !isValueTask);
-                    if (retv is Task t)
-                    {
-                        await t;
-                        if (returnTypeOfTheTask != typeof(void))
-                        {
-                            retValue = returnType.GetProperty("Result").GetValue(retv, null);
-                        }
-                    }
-                    else if (retv is ValueTask vt)
-                    {
-                        await vt;
-                        if (returnTypeOfTheTask != typeof(void))
-                        {
-                            retValue = returnType.GetProperty("Result").GetValue(retv, null);
-                        }
-                    }
-                    else if (!returnTypeIsVoid)
-                    {
-                        retValue = retv;
                     }
                     if (!string.IsNullOrEmpty(msgBase.RequestId))
                     {
@@ -252,7 +275,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                                 transfer = conversionInfo.GetTransferablePropertyValues(retValue);
                             }
                             //if (transfer.Length > 0) Console.WriteLine($"transfering: {transfer.Length} {transfer[0].GetType().Name}");
-                            callbackMsg.Data = new object?[] { retValue };
+                            callbackMsg.Data = new object?[] { err, retValue };
                         }
                         _port.PostMessage(callbackMsg, transfer);
                         // dispose the return value if it is IJSInProcessObjectReference or JSObject
@@ -315,10 +338,19 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 // remove any callbacks
                 var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
                 foreach (var key in keysToRemove) _actionHandles.Remove(key);
-                //
-                var argsLength = args != null ? args.JSRef.Get<int>("length") : 0;
-                object? arg0 = argsLength == 1 ? (object?)args.JSRef.Get(finalReturnType, 0) : null;
-                t.TrySetResult(arg0);
+                // get result or exception and fire results handlers
+                var argsLength = args != null ? args.Get<int>("length") : 0;
+                object? retVal = null;
+                string? err = null;
+                if (argsLength > 0)
+                {
+                    err = args.Get<string?>(0);
+                    if (string.IsNullOrEmpty(err)) retVal = (object?)args.Get(finalReturnType, 1);
+                }
+                if (!string.IsNullOrEmpty(err)) 
+                    t.TrySetException(new Exception(err));
+                else 
+                    t.TrySetResult(retVal);
             });
             workerTask.ReturnValueType = finalReturnType;
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
@@ -367,9 +399,19 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
                 foreach (var key in keysToRemove) _actionHandles.Remove(key);
                 //
-                var argsLength = args != null ? args.JSRef.Get<int>("length") : 0;
-                var arg0 = argsLength == 1 ? args.JSRef.Get<TResult>(0) : default(TResult);
-                t.TrySetResult(arg0);
+                var argsLength = args != null ? args.Get<int>("length") : 0;
+                TResult? retVal = default;
+                string? err = null;
+                var finalReturnTypeName = finalReturnType.Name;
+                if (argsLength > 0)
+                {
+                    err = args.Get<string?>(0);
+                    if (string.IsNullOrEmpty(err)) retVal = args.Get<TResult>(1);
+                }
+                if (!string.IsNullOrEmpty(err))
+                    t.TrySetException(new Exception(err));
+                else
+                    t.TrySetResult(retVal);
             });
             workerTask.ReturnValueType = finalReturnType;
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
@@ -576,7 +618,16 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
                 foreach (var key in keysToRemove) _actionHandles.Remove(key);
                 //
-                t.TrySetResult(0);
+                var argsLength = args != null ? args.Get<int>("length") : 0;
+                string? err = null;
+                if (argsLength > 0)
+                {
+                    err = args.Get<string?>(0);
+                }
+                if (!string.IsNullOrEmpty(err))
+                    t.TrySetException(new Exception(err));
+                else
+                    t.TrySetResult(0);
             });
             workerTask.ReturnValueType = finalReturnType;
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
