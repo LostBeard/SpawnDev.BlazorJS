@@ -1,4 +1,7 @@
 ﻿using Microsoft.JSInterop;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -21,8 +24,11 @@ namespace SpawnDev.BlazorJS
             public bool usePropertyReader { get; private set; }
             public bool useJSObjectReader { get; private set; }
             public bool useIterationReader { get; private set; }
+            public bool useDictionaryReader { get; private set; }
             public bool useDefaultReader { get; private set; }
             public Type? ElementType { get; set; } = null;
+            public Type? DictionaryKeyType { get; set; } = null;
+            public Type? DictionaryValueType { get; set; } = null;
             public PropertyInfo[] ClassProperties { get; set; } = new PropertyInfo[0];
             public Dictionary<string, PropertyInfo> returnTypeProperties { get; private set; } = new Dictionary<string, PropertyInfo>();
             public List<string> TransferableProperties = new List<string>();
@@ -65,6 +71,20 @@ namespace SpawnDev.BlazorJS
                     useIterationReader = !elementTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(ElementType);
                     if (useIterationReader) return;
                 }
+                else if (typeof(System.Collections.IDictionary).IsAssignableFrom(returnType))
+                {
+                    Type[] arguments = returnType.GetGenericArguments();
+                    if (arguments.Length == 2)
+                    {
+                        DictionaryKeyType = arguments[0];
+                        DictionaryValueType = arguments[1];
+                        var keyTypeConversionInfo = GetTypeConversionInfo(DictionaryKeyType);
+                        useDictionaryReader = !keyTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(DictionaryKeyType);
+                        var valueTypeConversionInfo = GetTypeConversionInfo(DictionaryValueType);
+                        useDictionaryReader = !valueTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(DictionaryValueType);
+                        if (useDictionaryReader) return;
+                    }
+                }
                 else if (typeof(JSObject).IsAssignableFrom(returnType))
                 {
                     IsTransferable = JSObject.TransferableTypes.Contains(returnType);
@@ -105,6 +125,8 @@ namespace SpawnDev.BlazorJS
                 }
                 useDefaultReader = true;
             }
+
+            // TODO - handle arrays
             public object[] GetTransferablePropertyValues(object? obj)
             {
                 var ret = new List<object>();
@@ -114,7 +136,7 @@ namespace SpawnDev.BlazorJS
                     {
                         ret.Add(obj);
                     }
-                    else
+                    else if (usePropertyReader)
                     {
                         foreach (var kvp in returnTypeProperties)
                         {
@@ -127,11 +149,46 @@ namespace SpawnDev.BlazorJS
                                 continue;
                             }
                             if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
-                            var propVal = prop.GetValue(obj);
+                            object? propVal = null;
+                            try
+                            {
+                                propVal = prop.GetValue(obj);
+                            }
+                            catch { }
                             if (propVal == null) continue;
                             var conversionInfo = GetTypeConversionInfo(prop.PropertyType);
                             var tmpp = conversionInfo.GetTransferablePropertyValues(propVal);
                             ret.AddRange(tmpp);
+                        }
+                    }
+                    else if (useIterationReader)
+                    {
+                        // TODO
+                        var nmt = true;
+                    }
+                    else if (useDictionaryReader)
+                    {
+                        if (DictionaryKeyType != null && DictionaryValueType != null)
+                        {
+                            var keyTypeConversionInfo = GetTypeConversionInfo(DictionaryKeyType);
+                            var valueTypeConversionInfo = GetTypeConversionInfo(DictionaryValueType);
+                            if (obj is System.Collections.IDictionary dict)
+                            {
+                                foreach (var key in dict.Keys)
+                                {
+                                    var value = dict[key];
+                                    if (key != null)
+                                    {
+                                        var tmpp = keyTypeConversionInfo.GetTransferablePropertyValues(key);
+                                        ret.AddRange(tmpp);
+                                    }
+                                    if (value != null)
+                                    {
+                                        var tmpp = valueTypeConversionInfo.GetTransferablePropertyValues(value);
+                                        ret.AddRange(tmpp);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -140,7 +197,7 @@ namespace SpawnDev.BlazorJS
             public object? FinishImport(IJSInProcessObjectReference? _ref)
             {
                 object? ret = null;
-                if (_ref == null) return null;
+                if (_ref == null || ReturnType == null) return null;
                 if (usePropertyReader)
                 {
                     var tmpRet = Activator.CreateInstance(ReturnType);
@@ -148,7 +205,7 @@ namespace SpawnDev.BlazorJS
                     {
                         var propName = kvp.Key;
                         var prop = kvp.Value;
-                        object? value = null;
+                        object? value;
                         try
                         {
                             value = _ref.Get(prop.PropertyType, propName);
@@ -163,39 +220,94 @@ namespace SpawnDev.BlazorJS
                     }
                     ret = tmpRet;
                     _ref.Dispose();
+                    _ref = null;
                 }
                 else if (useIterationReader)
                 {
-                    var length = _ref.Get<int>("length");
-                    var tmpRet = Array.CreateInstance(ElementType, length);
-                    for (var i = 0; i < length; i++)
+                    if (ElementType != null)
                     {
-                        object? value = null;
-                        try
+                        var length = _ref.Get<int>("length");
+                        var tmpRet = Array.CreateInstance(ElementType, length);
+                        for (var i = 0; i < length; i++)
                         {
-                            value = _ref.Get(ElementType, i);
+                            object? value;
+                            try
+                            {
+                                value = _ref.Get(ElementType, i);
+                            }
+                            catch
+                            {
+                                // Could not read property. Skipping
+                                continue;
+                            }
+                            if (value == null) continue;
+                            tmpRet.SetValue(value, i);
                         }
-                        catch
-                        {
-                            // Could not read property. Skipping
-                            continue;
-                        }
-                        if (value == null) continue;
-                        tmpRet.SetValue(value, i);
+                        ret = (object)tmpRet;
+                        _ref.Dispose();
+                        _ref = null;
                     }
-                    ret = (object)tmpRet;
-                    _ref.Dispose();
+                }
+                else if (useDictionaryReader)
+                {
+                    if (DictionaryKeyType != null && DictionaryValueType != null)
+                    {
+                        var tmpRet = Activator.CreateInstance(ReturnType) as System.Collections.IDictionary;
+                        if (tmpRet != null)
+                        {
+                            using var keysArray = JS.Call<IJSInProcessObjectReference>("Object.keys", _ref);
+                            if (keysArray != null)
+                            {
+                                var length = keysArray.Get<int>("length");
+                                if (length > 0)
+                                {
+                                    using var valuesArray = JS.Call<IJSInProcessObjectReference>("Object.values", _ref);
+                                    if (valuesArray != null)
+                                    {
+                                        for (var i = 0; i < length; i++)
+                                        {
+                                            object? key = null;
+                                            object? value = null;
+                                            try
+                                            {
+                                                key = keysArray.Get(DictionaryKeyType, i);
+                                            }
+                                            catch
+                                            {
+                                                // Could not read property. Skipping
+                                                continue;
+                                            }
+                                            try
+                                            {
+                                                value = valuesArray.Get(DictionaryValueType, i);
+                                            }
+                                            catch { }
+                                            tmpRet.Add(key, value);
+                                        }
+                                        ret = tmpRet;
+                                        _ref.Dispose();
+                                        _ref = null;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 else if (useJSObjectReader)
                 {
-                    if (_ref != null)
-                        ret = Activator.CreateInstance(ReturnType, _ref);
+                    ret = Activator.CreateInstance(ReturnType, _ref);
+                    _ref = null;    // ret now owns ret, prevent _ref's disposal.
                 }
                 else if (useIJSWrapperReader)
                 {
-                    if (_ref != null)
-                        ret = Activator.CreateInstance(ReturnType, _ref);
+                    ret = Activator.CreateInstance(ReturnType, _ref);
+                    _ref = null;    // ret now owns ret, prevent _ref's disposal.
                 }
+                // _ref must be contained in a JSObject that now owns the _ref and will dispose it later
+                // OR
+                // _ref must disposed before getting here
+                // failure to dispose _ref (just like any IJSInProcessObjectReference) will cause a memory leak
+                _ref?.Dispose();
                 return ret;
             }
         }
