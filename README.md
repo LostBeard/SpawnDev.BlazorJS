@@ -186,7 +186,7 @@ webWorker.SendEvent("progress", new PiProgress { Progress = piProgress });
 
 When working with workers in Javascript you can optionally tell Javascript (via the MessagePort.postMessage method) to transfer some of the objects instead of copying them.
 
-WebWorkerService, when calling services on a worker, will transfer any transfaerable types by default. To disable the transfering of a return value, paramter, or proprty use the WorkerTransferAttribute.
+WebWorkerService, when calling services on a worker, will transfer any transfaerable types by default. To disable the transfering of a return value, paramter, or property use the WorkerTransferAttribute.
 
 Example
 ```cs
@@ -194,14 +194,15 @@ Example
         {
             [WorkerTransfer(false)]
             public ArrayBuffer? ArrayBuffer { get; set; }
-            public byte[]? HomorgraphyBytes { get; set; }
+            public byte[]? HomographyBytes { get; set; }
         }
 
         [return: WorkerTransfer(false)]
         public async Task<ProcessFrameResult?> ProcessFrame([WorkerTransfer(false)] ArrayBuffer? frameBuffer, int width, int height, int _canny0, int _canny1, double _needlePatternSize)
         {
+            var ret = new ProcessFrameResult();
             // ...
-            return null;
+            return ret;
         }
 ```
 

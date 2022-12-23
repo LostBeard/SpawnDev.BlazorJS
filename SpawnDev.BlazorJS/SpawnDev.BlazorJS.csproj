@@ -13,7 +13,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;BlazorWebAssembly;DotNet</PackageTags>
 		<PackageReleaseNotes></PackageReleaseNotes>
-		<Version>1.4.0</Version>
+		<Version>1.5.0</Version>
 		<FileVersion></FileVersion>
 		<AssemblyVersion></AssemblyVersion>
 		<Authors>LostBeard</Authors>
