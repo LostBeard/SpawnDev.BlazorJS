@@ -419,10 +419,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             _port.PostMessage(workerMsg, transferable);
             return t.Task;
         }
-        class ActionHandles
-        {
 
-        }
         public static object GetDefault(Type type)
         {
             if (type.IsValueType)

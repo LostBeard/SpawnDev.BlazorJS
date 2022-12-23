@@ -10,7 +10,9 @@ namespace SpawnDev.BlazorJS
     public class JSObject : IDisposable
     {
         public static IJSInProcessObjectReference? NullRef { get; } = null;
+        [JsonIgnore]
         public IJSInProcessObjectReference? JSRef { get; private set; }
+        [JsonIgnore]
         public bool IsWrapperDisposed { get; private set; } = false;
         public JSObject(IJSInProcessObjectReference _ref) => FromReference(_ref);
 
@@ -94,7 +96,7 @@ namespace SpawnDev.BlazorJS
             disposable?.Dispose();
             disposable = null;
         }
-
+        [JsonIgnore]
         public string JSDebugName { get; set; } = "";
         public static IReadOnlyCollection<Type> TransferableTypes { get; } = new List<Type> {
             typeof(ArrayBuffer),

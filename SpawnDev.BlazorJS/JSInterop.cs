@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS
             public Type? DictionaryValueType { get; set; } = null;
             public PropertyInfo[] ClassProperties { get; set; } = new PropertyInfo[0];
             public Dictionary<string, PropertyInfo> returnTypeProperties { get; private set; } = new Dictionary<string, PropertyInfo>();
-            public List<string> TransferableProperties = new List<string>();
+            //public List<string> TransferableProperties = new List<string>();
             public bool IsTransferable { get; private set; }
 
             bool HasIJSInProcessObjectReferenceConstructor()
@@ -67,9 +67,12 @@ namespace SpawnDev.BlazorJS
                     // array
                     // check if the element type requires per element import
                     ElementType = returnType.GetElementType();
-                    var elementTypeConversionInfo = GetTypeConversionInfo(ElementType);
-                    useIterationReader = !elementTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(ElementType);
-                    if (useIterationReader) return;
+                    if (ElementType != null)
+                    {
+                        var elementTypeConversionInfo = GetTypeConversionInfo(ElementType);
+                        useIterationReader = !elementTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(ElementType);
+                        if (useIterationReader) return;
+                    }
                 }
                 else if (typeof(System.Collections.IDictionary).IsAssignableFrom(returnType))
                 {
@@ -85,48 +88,52 @@ namespace SpawnDev.BlazorJS
                         if (useDictionaryReader) return;
                     }
                 }
-                else if (typeof(JSObject).IsAssignableFrom(returnType))
-                {
-                    IsTransferable = JSObject.TransferableTypes.Contains(returnType);
-                    useJSObjectReader = true;
-                    return;
-                }
-                else if (HasIJSInProcessObjectReferenceConstructor())
-                {
-                    IsTransferable = false; // no way to tell from this conversion. this is a generic wrapper for IJSInProcessObjectRefrence
-                    useIJSWrapperReader = true;
-                    return;
-                }
                 else if (returnType.IsClass && !typeof(Delegate).IsAssignableFrom(returnType))
                 {
-                    // class
-                    // check if the class types requires per property import
-                    ClassProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                    foreach (var prop in ClassProperties)
+                    if (typeof(JSObject).IsAssignableFrom(returnType))
                     {
-                        if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
-                        var propJSName = GetPropertyJSName(prop);
-                        returnTypeProperties[propJSName] = prop;
-                        var propertyTypeConversionInfo = GetTypeConversionInfo(prop.PropertyType);
-                        if (!propertyTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(prop.PropertyType))
+                        IsTransferable = JSObject.TransferableTypes.Contains(returnType);
+                        useJSObjectReader = true;
+                        if (!IsTransferable)
                         {
-                            usePropertyReader = true;
-                        }
-                        if (JSObject.TransferableTypes.Contains(prop.PropertyType))
-                        {
-                            // can be transferred
-                            if (!TransferableProperties.Contains(propJSName))
+                            ClassProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                            foreach (var prop in ClassProperties)
                             {
-                                TransferableProperties.Add(propJSName);
+                                if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
+                                var propJSName = GetPropertyJSName(prop);
+                                returnTypeProperties[propJSName] = prop;
                             }
                         }
+                        return;
                     }
-                    if (usePropertyReader) return;
+                    else if (HasIJSInProcessObjectReferenceConstructor())
+                    {
+                        IsTransferable = false; // no way to tell from this conversion. this is a generic wrapper for IJSInProcessObjectRefrence
+                        useIJSWrapperReader = true;
+                        return;
+                    }
+                    else
+                    {
+                        // class
+                        // check if the class types requires per property import
+                        ClassProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                        foreach (var prop in ClassProperties)
+                        {
+                            if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
+                            var propJSName = GetPropertyJSName(prop);
+                            returnTypeProperties[propJSName] = prop;
+                            var propertyTypeConversionInfo = GetTypeConversionInfo(prop.PropertyType);
+                            if (!propertyTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(prop.PropertyType))
+                            {
+                                usePropertyReader = true;
+                            }
+                        }
+                        if (usePropertyReader) return;
+                    }
                 }
                 useDefaultReader = true;
             }
 
-            // TODO - handle arrays
             public object[] GetTransferablePropertyValues(object? obj)
             {
                 var ret = new List<object>();
@@ -141,14 +148,18 @@ namespace SpawnDev.BlazorJS
                         foreach (var kvp in returnTypeProperties)
                         {
                             var prop = kvp.Value;
+                            if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
+                            {
+                                continue;
+                            }
                             if (!prop.PropertyType.IsClass) continue;
+                            if (typeof(IJSInProcessObjectReference) == prop.PropertyType) continue;
                             var transferAttr = (WorkerTransferAttribute?)prop.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
                             if (transferAttr != null && !transferAttr.Transfer)
                             {
                                 // this property has been marked as non-stransferable
                                 continue;
                             }
-                            if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
                             object? propVal = null;
                             try
                             {
@@ -161,10 +172,47 @@ namespace SpawnDev.BlazorJS
                             ret.AddRange(tmpp);
                         }
                     }
-                    else if (useIterationReader)
+                    else if (useJSObjectReader)
                     {
-                        // TODO
-                        var nmt = true;
+                        foreach (var kvp in returnTypeProperties)
+                        {
+                            var prop = kvp.Value;
+                            if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
+                            {
+                                continue;
+                            }
+                            if (!prop.PropertyType.IsClass) continue;
+                            if (typeof(IJSInProcessObjectReference) == prop.PropertyType) continue;
+                            var transferAttr = (WorkerTransferAttribute?)prop.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
+                            if (transferAttr != null && !transferAttr.Transfer)
+                            {
+                                // this property has been marked as non-stransferable
+                                continue;
+                            }
+                            object? propVal = null;
+                            try
+                            {
+                                propVal = prop.GetValue(obj);
+                            }
+                            catch (Exception ex)
+                            {
+                                var nmt = ex.Message;
+                            }
+                            if (propVal == null) continue;
+                            var conversionInfo = GetTypeConversionInfo(prop.PropertyType);
+                            var tmpp = conversionInfo.GetTransferablePropertyValues(propVal);
+                            ret.AddRange(tmpp);
+                        }
+                    }
+                    else if (useIterationReader && ElementType != null && obj is IEnumerable enumarable)
+                    {
+                        var conversionInfo = GetTypeConversionInfo(ElementType);
+                        foreach (var ival in enumarable)
+                        {
+                            if (ival == null) continue;
+                            var tmpp = conversionInfo.GetTransferablePropertyValues(ival);
+                            ret.AddRange(tmpp);
+                        }
                     }
                     else if (useDictionaryReader)
                     {

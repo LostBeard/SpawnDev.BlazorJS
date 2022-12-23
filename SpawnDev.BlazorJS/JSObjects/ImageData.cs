@@ -7,8 +7,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class ImageData : JSObject
     {
         public string ColorSpace => JSRef.Get<string>("colorSpace");
-        public ulong Height => JSRef.Get<ulong>("height");
-        public ulong Width => JSRef.Get<ulong>("width");
+        public int Height => JSRef.Get<int>("height");
+        public int Width => JSRef.Get<int>("width");
         public Uint8ClampedArray Data => JSRef.Get<Uint8ClampedArray>("data");
         public ImageData(IJSInProcessObjectReference _ref) : base(_ref) { }
         public ImageData(int width, int height) : base(JS.New(nameof(ImageData), width, height)) { }
