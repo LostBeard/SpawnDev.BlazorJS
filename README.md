@@ -190,11 +190,14 @@ WebWorkerService, when calling services on a worker, will transfer any transfaer
 
 Example
 ```cs
-        public class ProcessFrameResult
+        public class ProcessFrameResult : IDisposable
         {
             [WorkerTransfer(false)]
             public ArrayBuffer? ArrayBuffer { get; set; }
             public byte[]? HomographyBytes { get; set; }
+            public void Dispose(){
+                ArrayBuffer?.Dispose();
+            }
         }
 
         [return: WorkerTransfer(false)]
