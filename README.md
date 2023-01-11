@@ -5,11 +5,11 @@
 
 Supports .Net 6 and .Net 7
 
-An easy Javascript interop library desgined specifcally for client side Blazor.
+An easy Javascript interop library designed specifically for client side Blazor.
 
 - Use Javascript libraries in Blazor without writing any Javascript code.
 - Alternative access to IJSRuntime JS is globally available without injection and is usable on the first line of Program.cs
-- Get and set global proeprties via JS.Set and JS.Get
+- Get and set global properties via JS.Set and JS.Get
 - Create new Javascript objects with JS.New
 - Get and set object properties via IJSInProcessObjectReference extended methods
 - Create Callbacks that can be sent to Javascript event listeners or assigned to javascript variables
@@ -19,7 +19,7 @@ NOTE: The below code shows quick examples. Some objects implement IDisposable, s
 
 Firefox WebWorkers note:  
 Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
-I wrote code that changes the scripts on the fly before they are loaded to workaround this limitation until Firefox finishes worker module intergration.
+I wrote code that changes the scripts on the fly before they are loaded to workaround this limitation until Firefox finishes worker module integration.
   
 https://bugzilla.mozilla.org/show_bug.cgi?id=1540913#c6  
 https://bugzilla.mozilla.org/show_bug.cgi?id=1247687  
@@ -69,7 +69,7 @@ testCallback('Hello callback!');
 
 JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow strongly typed access to the underlying object.
 
-Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (locaStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
+Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (localStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
 
 # Custom JSObjects  
 Implement your own JSObject classes for Javascript objects not already available in the BlazorJS.JSObjects library.
@@ -175,7 +175,7 @@ worker.OnMessage += (sender, msg) =>
     }
 };
 
-// From SharedWebWorker or WebWorker threads send an event to conencted parents
+// From SharedWebWorker or WebWorker threads send an event to connected parents
 workerService.SendEventToParents("progress", new PiProgress { Progress = piProgress });
 
 // Or on send an event to a connected worker
@@ -186,7 +186,7 @@ webWorker.SendEvent("progress", new PiProgress { Progress = piProgress });
 
 When working with workers in Javascript you can optionally tell Javascript (via the MessagePort.postMessage method) to transfer some of the objects instead of copying them.
 
-WebWorkerService, when calling services on a worker, will transfer any transfaerable types by default. To disable the transfering of a return value, paramter, or property use the WorkerTransferAttribute.
+WebWorkerService, when calling services on a worker, will transfer any transferable types by default. To disable the transferring of a return value, parameter, or property use the WorkerTransferAttribute.
 
 Example
 ```cs
