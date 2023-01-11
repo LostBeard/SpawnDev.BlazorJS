@@ -31,6 +31,9 @@ namespace SpawnDev.BlazorJS.JSObjects
             return GetImageBytes(0, 0, canvas.Width, canvas.Height);
         }
 
+
+        public void ClearRect(int x, int y, int width, int height) => JSRef.CallVoid("clearRect", x, y, width, height);
+
         public byte[]? GetImageBytes(int x, int y, int width, int height)
         {
             byte[]? ret = null;

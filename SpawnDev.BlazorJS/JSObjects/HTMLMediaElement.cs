@@ -10,10 +10,19 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public HTMLMediaElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         // MediaStream, MediaSource, Blob, or File
-        public JSObject SrcObject 
+        public JSObject? SrcObject 
         {
             get => JSRef.Get<JSObject>("srcObject");
             set => JSRef.Set("srcObject", value);
+        }
+        public string? Src
+        {
+            get => JSRef.Get<string>("src");
+            set => JSRef.Set("src", value);
+        }
+        public string? CurrentSrc
+        {
+            get => JSRef.Get<string>("currentSrc");
         }
         public T? GetSrcObject<T>() => JSRef.Get<T>("srcObject");
 

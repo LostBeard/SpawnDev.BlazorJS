@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Text.Json.Serialization;
 
@@ -26,6 +27,12 @@ namespace SpawnDev.BlazorJS.JSObjects
                 ret = JSRef.Call<Uint8Array>("read");
             }
             catch { }
+            return ret;
+        }
+
+        public AsyncIterator GetAsyncIterator()
+        {
+            var ret = JSRef.Get<AsyncIterator>("Symbol.asyncIterator");
             return ret;
         }
 

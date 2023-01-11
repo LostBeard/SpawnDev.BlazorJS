@@ -15,8 +15,6 @@ namespace SpawnDev.BlazorJS
             _js.InvokeVoid($"JSInterop.{fn}", args);
         }
 
-
-
         public class TypeConversionInfo
         {
             public Type ReturnType { get; private set; }
@@ -36,7 +34,15 @@ namespace SpawnDev.BlazorJS
 
             bool HasIJSInProcessObjectReferenceConstructor()
             {
-                var constructors = ReturnType.GetConstructors();
+                ConstructorInfo[] constructors;
+                try
+                {
+                    constructors = ReturnType.GetConstructors();
+                }
+                catch
+                {
+                    return false;
+                }
                 foreach (var c in constructors)
                 {
                     if (c.IsPrivate) continue;
@@ -49,7 +55,7 @@ namespace SpawnDev.BlazorJS
 
             static string GetPropertyJSName(PropertyInfo prop)
             {
-                // todo - json name attribute
+                // TODO - json name attribute
                 var propName = prop.Name.Substring(0, 1).ToLowerInvariant() + prop.Name.Substring(1);
                 return propName;
             }
