@@ -1,16 +1,19 @@
 
-
 ## NuGet
 
 | Package | Description | Link |
 |---------|-------------|------|
-|**SpawnDev.BlazorJS**| Enhanced Blazor WebAssembly Javascript interop | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS) |
-|**SpawnDev.BlazorJS.WebWorkers**| Blazor WebAssembly WebWorkers and SharedWebWorkers | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS) |
+|**[SpawnDev.BlazorJS](#spawndevblazorjs)**| Enhanced Blazor WebAssembly Javascript interop | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS) |
+|**[SpawnDev.BlazorJS.WebWorkers](#spawndevblazorjswebworkers)**| Blazor WebAssembly WebWorkers and SharedWebWorkers | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS) |
  
 
-Supports Blazor WebAssembly .Net 6 and .Net 7 
+# SpawnDev.BlazorJS
+[![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
-An easy Javascript interop library designed specifically for client side Blazor.
+An easy Javascript interop library designed specifically for client side Blazor.  
+
+Supports Blazor WebAssembly .Net 6 and .Net 7.
+
 
 - Use Javascript libraries in Blazor without writing any Javascript code.
 - Alternative access to IJSRuntime JS is globally available without injection and is usable on the first line of Program.cs
@@ -18,20 +21,6 @@ An easy Javascript interop library designed specifically for client side Blazor.
 - Create new Javascript objects with JS.New
 - Get and set object properties via IJSInProcessObjectReference extended methods
 - Create Callbacks that can be sent to Javascript event listeners or assigned to javascript variables
-- Easily call Services in separate threads with WebWorkers and SharedWebWorkers
-
-NOTE: The below code shows quick examples. Some objects implement IDisposable, such as all JSObject, IJSInProcessObjectReference, and Callback, and need to be disposed when no longer used.
-
-Firefox WebWorkers note:  
-Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
-I wrote code that changes the scripts on the fly before they are loaded to workaround this limitation until Firefox finishes worker module integration.
-  
-https://bugzilla.mozilla.org/show_bug.cgi?id=1540913#c6  
-https://bugzilla.mozilla.org/show_bug.cgi?id=1247687  
-
-
-# SpawnDev.BlazorJS
-[![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
 # JS
 
@@ -90,8 +79,8 @@ var audio = JS.New("Audio", "https://some_audio_online");
 audio.CallVoid("play");
 ```
 
-Do this...  
-Create a custom JSObject class
+You can do this...  
+Create a custom JSObject wrapper
 ```cs
 [JsonConverter(typeof(JSObjectConverter<Audio>))]
 public class Audio : JSObject
@@ -111,7 +100,14 @@ audio.Play();
 # SpawnDev.BlazorJS.WebWorkers
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.WebWorkers.svg?label=SpawnDev.BlazorJS.WebWorkers)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers) 
 
-Run CPU intensive tasks on a dedicated worker or on a shared worker with WebWorkers!
+- Easily call Blazor Services in separate threads with WebWorkers and SharedWebWorkers
+
+Firefox WebWorkers note:  
+Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
+I wrote code that changes the scripts on the fly before they are loaded to workaround this limitation until Firefox finishes worker module integration. It is possible some other browsers may have this issue. Issues can be reported here on GitHub.
+  
+https://bugzilla.mozilla.org/show_bug.cgi?id=1540913#c6  
+https://bugzilla.mozilla.org/show_bug.cgi?id=1247687  
 
 Example WebWorkerService setup and usage
 
@@ -232,6 +228,9 @@ ImageBitmap
 VideoFrame  
 OffscreenCanvas  
 RTCDataChannel  
+
+
+NOTE: The above code shows quick examples. Some objects implement IDisposable, such as all JSObject, IJSInProcessObjectReference, and Callback, and need to be disposed when no longer used. Disposable objects returned from a Blazor service in a WebWorker or SharedWorker are automatically disposed after the data has been sent to the calling thread.
 
 ## Support
 Inspired by Tewr's BlazorWorker implementation. Thank you! I wrote my implementation from scratch as I needed workers in .Net 7.  
