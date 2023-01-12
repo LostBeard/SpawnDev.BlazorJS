@@ -1,9 +1,14 @@
 
 
-# SpawnDev.BlazorJS
-[![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS)  
+## NuGet
 
-Supports .Net 6 and .Net 7
+| Package | Description | Link |
+|---------|-------------|------|
+|**SpawnDev.BlazorJS**| Enhanced Blazor WebAssembly Javascript interop | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS) |
+|**SpawnDev.BlazorJS.WebWorkers**| Blazor WebAssembly WebWorkers and SharedWebWorkers | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS) |
+ 
+
+Supports Blazor WebAssembly .Net 6 and .Net 7 
 
 An easy Javascript interop library designed specifically for client side Blazor.
 
@@ -24,6 +29,10 @@ I wrote code that changes the scripts on the fly before they are loaded to worka
 https://bugzilla.mozilla.org/show_bug.cgi?id=1540913#c6  
 https://bugzilla.mozilla.org/show_bug.cgi?id=1247687  
 
+
+# SpawnDev.BlazorJS
+[![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
+
 # JS
 
 ```cs
@@ -37,6 +46,7 @@ JS.CallVoid("addEventListener", "resize", Callback.Create(() => Console.WriteLin
 ```
 
 # IJSInProcessObjectReference extended
+
 ```cs
 // Get Set
 var window = JS.Get<IJSInProcessObjectReference>("window");
