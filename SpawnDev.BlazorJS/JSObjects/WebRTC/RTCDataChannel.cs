@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
+    // https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel
+    // https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample
     [JsonConverter(typeof(JSObjectConverter<RTCDataChannel>))]
     public class RTCDataChannel : EventTarget
     {
@@ -21,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public bool Negotiated => JSRef.Get<bool>("negotiated");
         public string ReadyState => JSRef.Get<string>("readyState");
         public void Close() => JSRef.CallVoid("close");
-        public void Open() => JSRef.CallVoid("open");
+        //public void Open() => JSRef.CallVoid("open");
         public void Send(string data) => JSRef.CallVoid("send", data);
         public void Send(Blob data) => JSRef.CallVoid("send", data);
         public void Send(ArrayBuffer data) => JSRef.CallVoid("send", data);

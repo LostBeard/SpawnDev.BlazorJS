@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
+    // https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer
     public class RTCIceServer
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

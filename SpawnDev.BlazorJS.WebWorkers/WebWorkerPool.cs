@@ -62,6 +62,19 @@
             }
         }
 
+
+        async Task<bool> TryStartWorker()
+        {
+            var webWorker = await _webWorkerService.GetWebWorker();
+            if (webWorker == null) return false;
+            lock (_workers)
+            {
+                _workers.Add(webWorker);
+                WorkersRunning++;
+            }
+            return true;
+        }
+
         SemaphoreSlim _SetWorkerCountLock = new SemaphoreSlim(1);
         public async Task<bool> SetWorkerCount(int count)
         {
@@ -71,15 +84,16 @@
             try
             {
                 await _SetWorkerCountLock.WaitAsync();
-                while (_workers.Count < count)
+                var countToAdd = count - _workers.Count;
+                if (countToAdd > 0)
                 {
-                    var webWorker = await _webWorkerService.GetWebWorker();
-                    if (webWorker == null) return false;
-                    if (webWorker != null)
+                    var tasks = new List<Task<bool>>();
+                    for (var i = 0; i < countToAdd; i++)
                     {
-                        _workers.Add(webWorker);
-                        WorkersRunning++;
+                        var task = TryStartWorker();
+                        tasks.Add(task);
                     }
+                    await Task.WhenAll(tasks);
                 }
                 WorkersRunning = count;
                 while (_workers.Count > WorkersRunning)
@@ -98,6 +112,41 @@
             }
             return true;
         }
+        //public async Task<bool> SetWorkerCount(int count)
+        //{
+        //    _WorkerCountRequest = count;
+        //    if (!WebWorker.Supported) return false;
+        //    if (_webWorkerService == null) return false;
+        //    try
+        //    {
+        //        await _SetWorkerCountLock.WaitAsync();
+        //        while (_workers.Count < count)
+        //        {
+        //            var webWorker = await _webWorkerService.GetWebWorker();
+        //            if (webWorker == null) return false;
+        //            if (webWorker != null)
+        //            {
+        //                _workers.Add(webWorker);
+        //                WorkersRunning++;
+        //            }
+        //        }
+        //        WorkersRunning = count;
+        //        while (_workers.Count > WorkersRunning)
+        //        {
+        //            var w = await GetFreeWorkerAsync();
+        //            if (w != null)
+        //            {
+        //                _workers.Remove(w);
+        //                w.Dispose();
+        //            }
+        //        }
+        //    }
+        //    finally
+        //    {
+        //        _SetWorkerCountLock.Release();
+        //    }
+        //    return true;
+        //}
 
         public bool IsDisposed { get; private set; }
         public void Dispose()

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
+    // https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection
     [JsonConverter(typeof(JSObjectConverter<RTCPeerConnection>))]
     public class RTCPeerConnection : EventTarget
     {
@@ -19,9 +20,9 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public ValueTask AddIceCandidate(RTCIceCandidate candidate) => JSRef.CallVoidAsync("addIceCandidate", candidate);
         public ValueTask AddIceCandidate(string candidate) => JSRef.CallVoidAsync("addIceCandidate", candidate);
         public void Close() => JSRef.CallVoid("close");
-        public async Task<T> CreateAnswer<T>() where T : IRTCSessionDescription => await JSRef.GetAsync<T>("createAnswer");
+        public async Task<T> CreateAnswer<T>() where T : IRTCSessionDescription => await JSRef.CallAsync<T>("createAnswer");
         public RTCDataChannel CreateDataChannel(string label, RTCDataChannelOptions? options = null) => JSRef.Call<RTCDataChannel>("createDataChannel", label, options);
-        public async Task<T> CreateOffer<T>() where T : IRTCSessionDescription => await JSRef.GetAsync<T>("createOffer");
+        public async Task<T> CreateOffer<T>() where T : IRTCSessionDescription => await JSRef.CallAsync<T>("createOffer");
         public void SetLocalDescription(IRTCSessionDescription desc) => JSRef.CallVoid("setLocalDescription", desc);
         public void SetRemoteDescription(IRTCSessionDescription desc) => JSRef.CallVoid("setRemoteDescription", desc);
     }
