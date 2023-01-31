@@ -31,9 +31,6 @@ namespace SpawnDev.BlazorJS.JSObjects
             return GetImageBytes(0, 0, canvas.Width, canvas.Height);
         }
 
-
-        public void ClearRect(int x, int y, int width, int height) => JSRef.CallVoid("clearRect", x, y, width, height);
-
         public byte[]? GetImageBytes(int x, int y, int width, int height)
         {
             byte[]? ret = null;
@@ -78,5 +75,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void DrawImage(SVGImageElement imageData, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
         public void DrawImage(SVGImageElement imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => JSRef.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
+        public void FillRect(int x, int y, int width, int height) => JSRef.CallVoid("fillRect", x, y, width, height);
+        public void ClearRect(int x, int y, int width, int height) => JSRef.CallVoid("clearRect", x, y, width, height);
+        public void StrokeRect(int x, int y, int width, int height) => JSRef.CallVoid("strokeRect", x, y, width, height);
+
+        public string FillStyle { get => JSRef.Get<string>("fillStyle"); set => JSRef.Set("fillStyle", value); }
     }
 }

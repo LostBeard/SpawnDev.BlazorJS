@@ -44,26 +44,30 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public int Width { get { var tmp = JSRef.Get<int?>("width"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("width", value); } }
         public int Height { get { var tmp = JSRef.Get<int?>("height"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("height", value); } }
-        public int OffsetWidth => JSRef.Get<int>("offsetWidth");
-        public int OffsetHeight => JSRef.Get<int>("offsetHeight");
+        //public int OffsetWidth => JSRef.Get<int>("offsetWidth");
+        //public int OffsetHeight => JSRef.Get<int>("offsetHeight");
 
         public HTMLCanvasElement() : base(JS.DocumentCreateElement("canvas")) { }
-        public HTMLCanvasElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         public HTMLCanvasElement(ElementReference canvasElementReference) : base(JS.ReturnMe<IJSInProcessObjectReference>(canvasElementReference)) { }
 
-        public static HTMLCanvasElement Create()
+        public HTMLCanvasElement(int width, int height) : base(JS.DocumentCreateElement("canvas"))
         {
-            var jsRef = JS.DocumentCreateElement("canvas");
-            var ret = new HTMLCanvasElement();
-            return ret;
+            Width = width;
+            Height = height;
         }
-        public static HTMLCanvasElement Create(int width, int height)
-        {
-            var ret = Create();
-            ret.Width = width;
-            ret.Height = height;
-            return ret;
-        }
+        public HTMLCanvasElement(IJSInProcessObjectReference _ref) : base(_ref) { }
+        //public static HTMLCanvasElement Create()
+        //{
+        //    var ret = new HTMLCanvasElement(JS.DocumentCreateElement("canvas"));
+        //    return ret;
+        //}
+        //public static HTMLCanvasElement Create(int width, int height)
+        //{
+        //    var ret = Create();
+        //    ret.Width = width;
+        //    ret.Height = height;
+        //    return ret;
+        //}
 
         public CanvasRenderingContext2D Get2DContext(ContextAttributes2D contextAttributes = null)
         {
@@ -91,7 +95,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void DownloadAsImage(string fileName, bool appendToBody = false)
         {
             var dataUrl = ToDataURL();
-            using(var link = JS.DocumentCreateElement("a"))
+            using (var link = JS.DocumentCreateElement("a"))
             {
                 link.CallVoid("setAttribute", "download", fileName);
                 link.CallVoid("setAttribute", "href", dataUrl.Replace("image/png", "image/octet-stream"));

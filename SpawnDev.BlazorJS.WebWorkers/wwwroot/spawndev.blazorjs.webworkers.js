@@ -110,8 +110,8 @@ var initWebWorkerBlazor = async () => {
         {
             consoleLog('Loading workaround to counter lack of dynamic import support in some browsers (Firefox, others?)');
             var integrity = '';
-            var blazorWasmJsUri = new URL('_content/SpawnDev.BlazorJS.WebWorkers/blazor.webassembly.pretty.js', document.baseURI);
-            //var blazorWasmJsUri = new URL('_framework/blazor.webassembly.js', document.baseURI);
+            //var blazorWasmJsUri = new URL('_content/SpawnDev.BlazorJS.WebWorkers/blazor.webassembly.pretty.js', document.baseURI);
+            var blazorWasmJsUri = new URL('_framework/blazor.webassembly.js', document.baseURI);
             var response = await fetch(blazorWasmJsUri, {
                 cache: 'no-cache',
                 //integrity: integrity,

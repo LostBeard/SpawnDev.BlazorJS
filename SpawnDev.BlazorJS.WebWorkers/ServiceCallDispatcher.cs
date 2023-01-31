@@ -347,9 +347,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     err = args.Get<string?>(0);
                     if (string.IsNullOrEmpty(err)) retVal = (object?)args.Get(finalReturnType, 1);
                 }
-                if (!string.IsNullOrEmpty(err)) 
+                if (!string.IsNullOrEmpty(err))
                     t.TrySetException(new Exception(err));
-                else 
+                else
                     t.TrySetResult(retVal);
             });
             workerTask.ReturnValueType = finalReturnType;
@@ -398,20 +398,33 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 // remove any callbacks
                 var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
                 foreach (var key in keysToRemove) _actionHandles.Remove(key);
-                //
-                var argsLength = args != null ? args.Get<int>("length") : 0;
-                TResult? retVal = default;
-                string? err = null;
-                var finalReturnTypeName = finalReturnType.Name;
-                if (argsLength > 0)
+                //var finalReturnTypeName = finalReturnType.Name;
+                var argsLength = args == null ? 0 : args.Get<int>("length");
+                if (args == null || argsLength != 2)
                 {
-                    err = args.Get<string?>(0);
-                    if (string.IsNullOrEmpty(err)) retVal = args.Get<TResult>(1);
+                    Console.WriteLine($"ServiceCallDispatcher Invalid return args for workerTask");
+                    t.TrySetException(new Exception("Invalid return args for workerTask"));
+                    return;
                 }
+                var err = args.Get<string?>(0);
                 if (!string.IsNullOrEmpty(err))
+                {
                     t.TrySetException(new Exception(err));
-                else
-                    t.TrySetResult(retVal);
+                    return;
+                }
+                try
+                {
+                    var ret = args.Get<TResult>(1);
+                    t.TrySetResult(ret);
+                    return;
+                }
+                catch
+                {
+#if DEBUG && false
+                            Console.WriteLine($"ServiceCallDispatcher 'retVal = args.Get<TResult?>(1);'");
+#endif
+                    t.TrySetResult(default);
+                }
             });
             workerTask.ReturnValueType = finalReturnType;
             workerTask.webWorkerCallMessageOutgoing = workerMsg;

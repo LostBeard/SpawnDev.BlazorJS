@@ -3,9 +3,8 @@ using Microsoft.JSInterop;
 using Radzen;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Test.Services;
+using SpawnDev.BlazorJS.Test.Shared;
 using System.Diagnostics;
-using Size = OpenCvSharp.Size;
-using VideoCapture = SpawnDev.BlazorJS.OpenCVSharp4.VideoCapture;
 using Window = SpawnDev.BlazorJS.JSObjects.Window;
 
 namespace SpawnDev.BlazorJS.Test.Pages
@@ -62,14 +61,12 @@ namespace SpawnDev.BlazorJS.Test.Pages
                     _document = JS.GetDocument<Document>();
                     // near drop in VideoCapture replacement that works very similar to the OpenCV one for convenience
                     _videoCapture = new VideoCapture();
-
                     mediaDevicesService.OnDeviceInfosChanged += MediaDevicesService_OnDeviceInfosChanged;
-
                     // output canvas (for user feedback)
                     _cameraCanvasProcessedEl = new HTMLCanvasElement(_cameraCanvasProcessedElRef);
                     _cameraCanvasProcessedElCtx = _cameraCanvasProcessedEl.Get2DContext();
-
                     StartProcessLoop();
+                    _ = RefreshCameraList();
                 }
             }
         }
@@ -77,71 +74,6 @@ namespace SpawnDev.BlazorJS.Test.Pages
         private void MediaDevicesService_OnDeviceInfosChanged(DeviceInfo[] deviceInfos)
         {
             _ = RefreshCameraList();
-        }
-
-
-        // https://pyimagesearch.com/2015/01/19/find-distance-camera-objectmarker-using-python-opencv/
-        // TODO - add camera calibration step if calibration option (via menu... TODO)
-        // calibration step helps determine focal length for use with distance calculations
-        double GetCameraFocalLength(double widthReal, double widthPixels, double distanceReal)
-        {
-            // F = (P x D) / W
-            // D = Distance between object and camera (real world. inches, cm, etc)
-            // W = Width of object (real world)
-            // P = Pixel width as viewd by camera
-            // F = FocalLength
-            return (widthPixels * distanceReal) / widthReal;
-        }
-
-        double GetCameraDistance(double widthReal, double widthPixels, double focalLength)
-        {
-            // D = (W x F) / P
-            // W = Width of object (real world)
-            // F = FocalLength
-            // P = Pixel width as viewd by camera
-            // D = Distance between object and camera (real world. inches, cm, etc)
-            return (widthReal * focalLength) / widthPixels;
-        }
-
-        public Element? GetFullscreenElement()
-        {
-            try
-            {
-                return JS.Get<Element?>("document.fullscreenElement");
-            }
-            catch { }
-            return null;
-        }
-
-        public bool IsFullscreen()
-        {
-            using var fullscreenElement = GetFullscreenElement();
-            return fullscreenElement != null;
-        }
-
-        public bool IsWindowHeightEqualsDisplayHeight()
-        {
-            if (_window == null) return false;
-            var screenHeight = JS.Get<int>("screen.height");
-            var windowHeight = _window.InnerHeight;
-            //Console.WriteLine($"screenHeight: {screenHeight} windowHeight: {windowHeight}");
-            return windowHeight == screenHeight;
-        }
-
-        public async Task ExitFullscreen()
-        {
-            Console.WriteLine("ExitFullscreen start");
-            try
-            {
-                await _document.ExitFullscreen();
-                Console.WriteLine("ExitFullscreen success");
-                StateHasChanged();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ExitFullscreen failed {ex.Message}");
-            }
-            Console.WriteLine("ExitFullscreen done");
         }
 
         void StopProcessLoop()
@@ -242,8 +174,6 @@ namespace SpawnDev.BlazorJS.Test.Pages
 
         bool _processingDisabled = false;
         bool _enableProcessing = false;
-        int _canny0 = 20;
-        int _canny1 = 160;
 
         async Task RefreshCameraList()
         {
@@ -257,12 +187,14 @@ namespace SpawnDev.BlazorJS.Test.Pages
         ulong _frameIndex = 0;
         ulong _frameIndexReported = 0;
         int _facesFnd = 0;
+        double _faceDetectionTaskDuration = 0;
         async Task<bool> ProcessNextFrame()
         {
             if (_videoCapture == null) return false;
             if (_enableProcessing)
             {
-                await _openCVService.WhenReady();
+                //if (_faceDetectionTaskDuration > 0) await Task.Delay((int)Math.Round(_faceDetectionTaskDuration));
+                //
                 var arrayBuffer = _videoCapture.ReadArrayBuffer(out var frameSize);
                 if (arrayBuffer != null)
                 {
@@ -271,10 +203,19 @@ namespace SpawnDev.BlazorJS.Test.Pages
                         _videoFrameSize = frameSize;
                         OnInputFrameResized();
                     }
-                    await Task.Delay(1);
+                    await _openCVService.WhenReady();
                     var frameIndex = _frameIndex++;
+                    var sw = new Stopwatch();
+                    sw.Start();
                     _ = _openCVService.FaceDetection(arrayBuffer, frameSize.Width, frameSize.Height).ContinueWith((t) => {
+                        var elapsed = sw.ElapsedMilliseconds;
+                        _faceDetectionTaskDuration = _openCVService.WorkersRunning == 0 ? 0 :((_faceDetectionTaskDuration + elapsed) / 2d) / (double)_openCVService.WorkersRunning;
                         // our result.ArrayBuffer is disposable... make sure it gets disposed after we are done with it
+                        arrayBuffer.Dispose();
+                        if (t.IsFaulted || t.IsCanceled)
+                        {
+                            return;
+                        }
                         var result = t.Result;
                         using var resultArrayBuffer = result.ArrayBuffer;
                         if (resultArrayBuffer != null)
@@ -299,7 +240,6 @@ namespace SpawnDev.BlazorJS.Test.Pages
                                 _cameraCanvasProcessedElCtx.PutImageData(imgData, 0, 0);
                             }
                         }
-                        arrayBuffer?.Dispose();
                     });
                     return true;
                 }

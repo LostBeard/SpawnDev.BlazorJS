@@ -18,8 +18,6 @@ if (JS.IsWindow)
 builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 // SpawnDev.BlazorJS.WebWorkers
 builder.Services.AddSingleton<WebWorkerService>();
-builder.Services.AddSingleton<OpenCVService>();
-builder.Services.AddSingleton<OpenCVJSService>();
 builder.Services.AddSingleton<FaceAPIService>();
 builder.Services.AddSingleton<MediaDevices>();
 builder.Services.AddSingleton<MathsService>();

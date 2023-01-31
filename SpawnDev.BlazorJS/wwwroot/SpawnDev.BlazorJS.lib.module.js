@@ -27,6 +27,8 @@ var initFunc = function () {
 
     JSInterop.globalObject = globalObject;
 
+    JSInterop.debugLevel = 0;
+
     JSInterop.pathObjectInfo = function (rootObject, path) {
         var parent = rootObject ?? globalObject;
         var target;
@@ -81,7 +83,10 @@ var initFunc = function () {
     JSInterop._setProperty = function (obj, name, value) {
         var pathInfo = JSInterop.pathObjectInfo(obj, name);
         if (!pathInfo.exists) {
-            console.log('WARNING: JSInterop._setProperty - property being set does not exist', name);
+            if (JSInterop.debugLevel > 0) {
+                var targetType = pathInfo.parent ? pathInfo.parent.constructor.name : '[NULL]';
+                console.log('WARNING: JSInterop._setProperty - property being set does not exist', targetType, name);
+            }
         }
         // check if value is a wrapped function, use the the wrapped function as the actual value if it is
         if (typeof value === 'object' && value !== null && typeof value.__wrappedFunction === 'function') {
@@ -123,7 +128,10 @@ var initFunc = function () {
     JSInterop._setMember = function (obj, name, value) {
         var pathInfo = JSInterop.pathObjectInfo(obj, name);
         if (!pathInfo.exists) {
-            console.log('WARNING: JSInterop._setProperty - property being set does not exist', name);
+            if (JSInterop.debugLevel > 0) {
+                var targetType = pathInfo.parent ? pathInfo.parent.constructor.name : '[NULL]';
+                console.log('WARNING: JSInterop._setMember - property being set does not exist', targetType, name);
+            }
         }
         // check if value is a wrapped function, use the the wrapped function as the actual value if it is
         if (typeof value === 'object' && value !== null && typeof value.__wrappedFunction === 'function') {
@@ -186,7 +194,8 @@ var initFunc = function () {
 
     JSInterop._returnNew = function (className, args) {
         var { target, parent, targetType } = JSInterop.pathObjectInfo(null, className);
-        return !args ? new target() : new target(...args);
+        var ret = !args ? new target() : new target(...args);
+        return serializeToDotNet(ret);
     };
 
     JSInterop._returnNew2 = function (className, args) {
@@ -221,19 +230,21 @@ var initFunc = function () {
         return fnWrapper;
     };
 
-    var desrializeNetArgs = false;
+    var desrializeNetArgs = true;
 
     function deserializeArrayFromDotNet(argsArray) {
+        if (!argsArray) return;
         for (var i = 0; i < argsArray.length; i++) {
             argsArray[i] = deserializeFromDotNet(argsArray[i]);
         }
     }
 
     function deserializeFromDotNet(value) {
+        let ret = value;
         if (typeof value === 'object' && value !== null && typeof value.__wrappedFunction === 'function') {
-            value = value.__wrappedFunction;
+            ret = value.__wrappedFunction;
         }
-        return value;
+        return ret;
     }
 
     function serializeToDotNet(value, returnType) {
@@ -253,7 +264,10 @@ var initFunc = function () {
         if (typeof obj !== 'object' || !obj) throw 'obj null or undefined';
         var pathInfo = JSInterop.pathObjectInfo(obj, identifier);
         if (!pathInfo.exists) {
-            console.log('WARNING: JSInterop._setProperty - property being set does not exist', identifier);
+            if (JSInterop.debugLevel > 0) {
+                var targetType = pathInfo.parent ? pathInfo.parent.constructor.name : '[NULL]';
+                console.log('WARNING: JSInterop._set - property being set does not exist', targetType, identifier, pathInfo.parent);
+            }
         }
         if (desrializeNetArgs) {
             value = deserializeFromDotNet(value);

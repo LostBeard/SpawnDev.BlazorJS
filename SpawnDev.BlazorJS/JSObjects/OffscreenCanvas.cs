@@ -17,10 +17,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         public int Width { get { var tmp = JSRef.Get<int?>("width"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("width", value); } }
         public int Height { get { var tmp = JSRef.Get<int?>("height"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("height", value); } }
 
-        public CanvasRenderingContext2D Get2DContext(ContextAttributes2D contextAttributes = null)
+        public OffscreenCanvasRenderingContext2D Get2DContext(ContextAttributes2D contextAttributes = null)
         {
-            if (contextAttributes == null) return JSRef.Call<CanvasRenderingContext2D>("getContext", "2d");
-            return JSRef.Call<CanvasRenderingContext2D>("getContext", "2d", contextAttributes);
+            if (contextAttributes == null) return JSRef.Call<OffscreenCanvasRenderingContext2D>("getContext", "2d");
+            return JSRef.Call<OffscreenCanvasRenderingContext2D>("getContext", "2d", contextAttributes);
         }
 
         public WebGLRenderingContext GetWebGLContext(WebGLContextAttributes contextAttributes = null)

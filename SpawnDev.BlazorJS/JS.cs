@@ -67,6 +67,7 @@ namespace SpawnDev.BlazorJS
 #endif
 #if DEBUG
             Log("JS.GlobalThisTypeName", GlobalThisTypeName);
+            JS.Set("JSInterop.debugLevel", 1);
 #endif
         }
 

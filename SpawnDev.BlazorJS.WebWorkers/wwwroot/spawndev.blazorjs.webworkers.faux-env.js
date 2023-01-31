@@ -235,18 +235,22 @@ class HTMLDocument extends Node {
             try {
                 let fn = new Function(node.text);
                 fn.apply(globalThisObj, []);
+                if (node.onload) node.onload();
             } catch (ex) {
                 console.error('ERROR loading document script', href, ex);
+                if (node.onerror) node.onerror();
             }
         } else if (node.src) {
             consoleLog('Loading script src');
             var href = new URL(node.src, this.baseURI);
             try {
                 importScripts(href);
+                if (node.onload) node.onload();
             } catch (ex) {
                 console.error('ERROR loading document script', href, ex);
+                if (node.onerror) node.onerror();
             }
-        } 
+        }
         this.currentScript = null;
     }
     get readyState() {
@@ -275,6 +279,7 @@ class HTMLDocument extends Node {
         return createProxiedObject(new Text(data));
     }
     createElement(tagName) {
+        var proxyWrap = false;
         var makeEl = function () {
             switch (tagName) {
                 case 'html': return new HTMLHtmlElement();
@@ -287,10 +292,12 @@ class HTMLDocument extends Node {
                 case 'template': return new HTMLTemplateElement();
                 case 'svg': return new SVGElement();
                 case 'title': return new HTMLTitleElement();
+                case 'canvas': return new HTMLCanvasElement();
                 default: return new HTMLUnknownElement();
             }
         }
-        var ret = createProxiedObject(makeEl());
+        var ret = makeEl();
+        if (proxyWrap) ret = createProxiedObject(ret);
         consoleLog(this.constructor.name, 'createElement', tagName, ret.constructor.name);
         ret.tagName = tagName.toUpperCase();
         return ret;
@@ -543,6 +550,8 @@ class HTMLScriptElement extends HTMLElement {
         super();
         this._src = '';
         this._text = '';
+        this.onload = null;
+        this.onerror = null;
     }
     get src() { return this._src; }
     set src(value) {
@@ -586,6 +595,26 @@ class HTMLTableElement extends HTMLElement {
     }
 }
 class HTMLTableSectionElement extends HTMLElement {
+    constructor() {
+        super();
+    }
+}
+class HTMLImageElement extends HTMLElement {
+    constructor() {
+        super();
+    }
+}
+class HTMLVideoElement extends HTMLElement {
+    constructor() {
+        super();
+    }
+}
+class HTMLCanvasElement extends OffscreenCanvas {
+    constructor() {
+        super(1, 1);
+    }
+}
+class CanvasRenderingContext2D extends OffscreenCanvasRenderingContext2D {
     constructor() {
         super();
     }
@@ -657,6 +686,24 @@ class History {
     globalThisObj.document = document;
     globalThisObj.localStorage = createProxiedObject(new WebStorage());
     globalThisObj.sessionStorage = createProxiedObject(new WebStorage());
+    globalThisObj.devicePixelRatio = 1;
+    globalThisObj.screen = {
+        availHeight: 1050,
+        availLeft: 3840,
+        availTop: 0,
+        availWidth: 1920,
+        colorDepth: 24,
+        height: 1080,
+        isExtended: true,
+        onchange: null,
+        orientation: {
+            angle: 0,
+            type: 'landscape-primary',
+            onchange: null
+        },
+        pixelDepth: 24,
+        width: 1920,
+    };
     // document.baseURI
     var href = globalThisObj.location.href;
     var webWorkerContentDir = href.substring(0, href.lastIndexOf('/') + 1);

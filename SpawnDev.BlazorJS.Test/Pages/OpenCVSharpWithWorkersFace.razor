@@ -1,4 +1,4 @@
-﻿@page "/opencv"
+﻿@page "/faceapi"
 
 <RadzenCard>
     <div style="">
@@ -22,31 +22,15 @@
     <div>
         Workers: @_openCVService.WorkersRunning
     </div>
-    <div>
-        <RadzenCard>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Canny0 @_canny0</RadzenText>
-            <RadzenSlider @bind-Value=@_canny0 TValue="int" Min="0" Max="255" />
-        </RadzenCard>
-        <RadzenCard>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Canny1 @_canny1</RadzenText>
-            <RadzenSlider @bind-Value=@_canny1 TValue="int" Min="0" Max="255" />
-        </RadzenCard>
-    </div>
     <div style="padding: 4px;">
         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enable Processing</RadzenText>
         <RadzenSwitch @bind-Value=@_enableProcessing Disabled="@_processingDisabled" />
     </div>
     <div>
-        <RadzenRadioButtonList TValue="int" Orientation="Orientation.Vertical" Change=@((args) => OnWebWorkerCountChange(args))>
-            <Items>
-                <RadzenRadioButtonListItem Text="None" Value="0" />
-                @for (var i = 1; i <= _openCVService.MaxWorkerCount; i++)
-                {
-                    var txt = $"{i} WebWorker";
-                    <RadzenRadioButtonListItem Text=@txt Value=@i />
-                }
-            </Items>
-        </RadzenRadioButtonList>
+        <RadzenCard>
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @_openCVService.WorkersIdle / @_openCVService.WorkersRunning / @_openCVService.WorkerCountRequest / @_openCVService.MaxWorkerCount (Idle/Running/Requested/Max)</RadzenText>
+            <RadzenSlider @bind-Value=@_openCVService.WorkerCountRequest TValue="int" Min="0" Max=@_openCVService.MaxWorkerCount />
+        </RadzenCard>
     </div>
     <div style="padding: 4px;">
         <canvas style="zoom: 50%;" @ref="_cameraCanvasProcessedElRef"></canvas>
