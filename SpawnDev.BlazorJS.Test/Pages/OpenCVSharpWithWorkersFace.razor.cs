@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
     public partial class OpenCVSharpWithWorkersFace : IDisposable
     {
         [Inject]
-        FaceAPIService _openCVService { get; set; }
+        FaceAPIService _faceAPIService { get; set; }
 
         [Inject]
         MediaDevicesService? mediaDevicesService { get; set; }
@@ -36,12 +36,6 @@ namespace SpawnDev.BlazorJS.Test.Pages
         Size _videoFrameSize = new Size();
         Stopwatch _swUIUpdate = new Stopwatch();
 
-        void OnWebWorkerCountChange(int? value)
-        {
-            var count = value == null ? 0 : value.Value;
-            _ = _openCVService.SetWorkerCount(count);
-        }
-
         CancellationTokenSource? _loopCancelTokenSource;
 
         double _fps = 0;
@@ -56,7 +50,6 @@ namespace SpawnDev.BlazorJS.Test.Pages
                 if (!_beenInit)
                 {
                     _beenInit = true;
-                    //await _openCVService.InitAsync();
                     _window = JS.GetWindow<Window>();
                     _document = JS.GetDocument<Document>();
                     // near drop in VideoCapture replacement that works very similar to the OpenCV one for convenience
@@ -193,8 +186,6 @@ namespace SpawnDev.BlazorJS.Test.Pages
             if (_videoCapture == null) return false;
             if (_enableProcessing)
             {
-                //if (_faceDetectionTaskDuration > 0) await Task.Delay((int)Math.Round(_faceDetectionTaskDuration));
-                //
                 var arrayBuffer = _videoCapture.ReadArrayBuffer(out var frameSize);
                 if (arrayBuffer != null)
                 {
@@ -203,13 +194,13 @@ namespace SpawnDev.BlazorJS.Test.Pages
                         _videoFrameSize = frameSize;
                         OnInputFrameResized();
                     }
-                    await _openCVService.WhenReady();
+                    await _faceAPIService.WhenReady();
                     var frameIndex = _frameIndex++;
                     var sw = new Stopwatch();
                     sw.Start();
-                    _ = _openCVService.FaceDetection(arrayBuffer, frameSize.Width, frameSize.Height).ContinueWith((t) => {
+                    _ = _faceAPIService.FaceDetection(arrayBuffer, frameSize.Width, frameSize.Height).ContinueWith((t) => {
                         var elapsed = sw.ElapsedMilliseconds;
-                        _faceDetectionTaskDuration = _openCVService.WorkersRunning == 0 ? 0 :((_faceDetectionTaskDuration + elapsed) / 2d) / (double)_openCVService.WorkersRunning;
+                        _faceDetectionTaskDuration = _faceAPIService.WorkersRunning == 0 ? 0 :((_faceDetectionTaskDuration + elapsed) / 2d) / (double)_faceAPIService.WorkersRunning;
                         // our result.ArrayBuffer is disposable... make sure it gets disposed after we are done with it
                         arrayBuffer.Dispose();
                         if (t.IsFaulted || t.IsCanceled)

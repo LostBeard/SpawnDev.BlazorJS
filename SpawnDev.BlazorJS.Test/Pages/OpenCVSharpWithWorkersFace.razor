@@ -20,7 +20,7 @@
         FPS: @_fps
     </div>
     <div>
-        Workers: @_openCVService.WorkersRunning
+        Workers: @_faceAPIService.WorkersRunning
     </div>
     <div style="padding: 4px;">
         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enable Processing</RadzenText>
@@ -28,8 +28,8 @@
     </div>
     <div>
         <RadzenCard>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @_openCVService.WorkersIdle / @_openCVService.WorkersRunning / @_openCVService.WorkerCountRequest / @_openCVService.MaxWorkerCount (Idle/Running/Requested/Max)</RadzenText>
-            <RadzenSlider @bind-Value=@_openCVService.WorkerCountRequest TValue="int" Min="0" Max=@_openCVService.MaxWorkerCount />
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @_faceAPIService.WorkersIdle / @_faceAPIService.WorkersRunning / @_faceAPIService.WorkerCountRequest / @_faceAPIService.MaxWorkerCount (Idle/Running/Requested/Max)</RadzenText>
+            <RadzenSlider @bind-Value=@_faceAPIService.WorkerCountRequest TValue="int" Min="0" Max=@_faceAPIService.MaxWorkerCount />
         </RadzenCard>
     </div>
     <div style="padding: 4px;">
