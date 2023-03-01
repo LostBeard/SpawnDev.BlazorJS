@@ -12,7 +12,7 @@
 
 An easy Javascript interop library designed specifically for client side Blazor.  
 
-Supports Blazor WebAssembly .Net 6, 7 and 8.
+Supports Blazor WebAssembly .Net 6, 7, and 8.
 
 - Use Javascript libraries in Blazor without writing any Javascript code.
 - Alternative access to IJSRuntime JS is globally available without injection and is usable on the first line of Program.cs
