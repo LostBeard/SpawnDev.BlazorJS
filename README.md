@@ -116,10 +116,9 @@ audio.Play();
 
 Firefox WebWorkers note:  
 Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
-I wrote code that changes the scripts on the fly before they are loaded to workaround this limitation until Firefox finishes worker module integration. It is possible some other browsers may have this issue. Issues can be reported here on GitHub.
-  
-https://bugzilla.mozilla.org/show_bug.cgi?id=1540913#c6  
-https://bugzilla.mozilla.org/show_bug.cgi?id=1247687  
+I wrote code that changes the scripts on the fly before they are loaded to workaround this limitation until Firefox finishes worker module integration. It is possible some other browsers may have this issue. 
+
+Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
 
 Example WebWorkerService setup and usage
 
@@ -245,6 +244,9 @@ RTCDataChannel
 NOTE: The above code shows quick examples. Some objects implement IDisposable, such as all JSObject, IJSInProcessObjectReference, and Callback, and need to be disposed when no longer used. Disposable objects returned from a Blazor service in a WebWorker or SharedWorker are automatically disposed after the data has been sent to the calling thread.
 
 ## Support
+
+Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
+
 Inspired by Tewr's BlazorWorker implementation. Thank you! I wrote my implementation from scratch as I needed workers in .Net 7.  
 https://github.com/Tewr/BlazorWorker
 
