@@ -11,7 +11,6 @@ namespace SpawnDev.BlazorJS
     {
         public static void _JSInteropCallVoid(string fn, params object?[] args)
         {
-            AssertInit();
             _js.InvokeVoid($"JSInterop.{fn}", args);
         }
 
@@ -378,7 +377,6 @@ namespace SpawnDev.BlazorJS
 
         internal static T? _JSInteropCall<T>(string fn, params object?[] args)
         {
-            AssertInit();
             T? ret = default;
             var returnType = typeof(T);
             var conversionInfo = GetTypeConversionInfo(returnType);
@@ -395,7 +393,6 @@ namespace SpawnDev.BlazorJS
         }
         public static object? _JSInteropCall(Type returnType, string fn, params object?[] args)
         {
-            AssertInit();
             object? ret = null;
             var conversionInfo = GetTypeConversionInfo(returnType);
             if (!conversionInfo.useDefaultReader)
@@ -411,12 +408,10 @@ namespace SpawnDev.BlazorJS
         }
         public static async ValueTask _JSInteropCallVoidAsync(string fn, params object?[] args)
         {
-            AssertInit();
             await _js.InvokeVoidAsync($"JSInterop.{fn}", args);
         }
         public static async ValueTask<T?> _JSInteropCallAsync<T>(string fn, params object?[] args)
         {
-            AssertInit();
             T? ret = default;
             var returnType = typeof(T);
             var conversionInfo = GetTypeConversionInfo(returnType);
@@ -433,7 +428,6 @@ namespace SpawnDev.BlazorJS
         }
         public static async ValueTask<object?> _JSInteropCallAsync(Type returnType, string fn, params object?[] args)
         {
-            AssertInit();
             object? ret = null;
             var conversionInfo = GetTypeConversionInfo(returnType);
             if (!conversionInfo.useDefaultReader)

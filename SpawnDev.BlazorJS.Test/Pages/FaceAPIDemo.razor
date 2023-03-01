@@ -1,7 +1,7 @@
 ﻿@page "/faceapi"
 
 <RadzenCard>
-    <div style="">
+    <div>
         <button onclick="@(() => _ = RefreshCameraList())">Refresh Camera List</button>
     </div>
     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Camera</RadzenText>
@@ -12,7 +12,13 @@
     </RadzenDropDown>
 </RadzenCard>
 
-<div style="">
+<div>
+    <div style="padding: 4px;">
+        <p>
+            <a href="https://github.com/justadudewhohacks/face-api.js/" target="_blank">face-api.js GitHub Repo</a><br />
+            NOTE: The face-api.js library can take a few seconds to initialize.
+        </p>
+    </div>
     <div>
         Faces: @_facesFnd
     </div>
@@ -26,6 +32,10 @@
         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enable Processing</RadzenText>
         <RadzenSwitch @bind-Value=@_enableProcessing Disabled="@_processingDisabled" />
     </div>
+    <div style="padding: 4px;">
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">With Landmarks</RadzenText>
+        <RadzenSwitch @bind-Value=@_withLandmarks />
+    </div>
     <div>
         <RadzenCard>
             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @_faceAPIService.WorkersIdle / @_faceAPIService.WorkersRunning / @_faceAPIService.WorkerCountRequest / @_faceAPIService.MaxWorkerCount (Idle/Running/Requested/Max)</RadzenText>
@@ -35,6 +45,17 @@
     <div style="padding: 4px;">
         <canvas style="zoom: 50%;" @ref="_cameraCanvasProcessedElRef"></canvas>
     </div>
+    <pre class="prettyprint" lang-cs style="display: none;">
+    public class ProcessFrameResult : IDisposable
+    {
+        public ArrayBuffer? ArrayBuffer { get; set; }
+        public int FacesFound { get; set; }
+        public void Dispose()
+        {
+            ArrayBuffer?.Dispose();
+        }
+    }
+    </pre>
 </div>
 
 @code {

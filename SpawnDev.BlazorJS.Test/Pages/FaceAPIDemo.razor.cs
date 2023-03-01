@@ -1,46 +1,41 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using Radzen;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Test.Shared;
 using System.Diagnostics;
-using Window = SpawnDev.BlazorJS.JSObjects.Window;
 
 namespace SpawnDev.BlazorJS.Test.Pages
 {
-    public partial class OpenCVSharpWithWorkersFace : IDisposable
+    public partial class FaceAPIDemo : IDisposable
     {
         [Inject]
-        FaceAPIService _faceAPIService { get; set; }
+        FaceAPIService? _faceAPIService { get; set; }
 
         [Inject]
-        MediaDevicesService? mediaDevicesService { get; set; }
+        MediaDevicesService? _mediaDevicesService { get; set; }
 
         CallbackGroup _callbackGroup = new CallbackGroup();
-
-        Window? _window;
-        Document? _document;
-
-        ElementReference _rootDiv;
-
         ElementReference _cameraCanvasProcessedElRef;
         HTMLCanvasElement? _cameraCanvasProcessedEl;
         CanvasRenderingContext2D? _cameraCanvasProcessedElCtx;
-
         List<DeviceInfo> _devices = new List<DeviceInfo>();
         DeviceInfo? _selectedDevice = null;
         VideoCapture? _videoCapture = null;
         MediaStream? _mediaStream = null;
-
+        CancellationTokenSource? _loopCancelTokenSource;
         Size _videoFrameSize = new Size();
         Stopwatch _swUIUpdate = new Stopwatch();
-
-        CancellationTokenSource? _loopCancelTokenSource;
 
         double _fps = 0;
         double _processedFrames = 0;
         bool _beenInit = false;
+        bool _processingDisabled = false;
+        bool _enableProcessing = false;
+        ulong _frameIndex = 0;
+        ulong _frameIndexReported = 0;
+        int _facesFnd = 0;
+        bool _withLandmarks = true;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -50,17 +45,14 @@ namespace SpawnDev.BlazorJS.Test.Pages
                 if (!_beenInit)
                 {
                     _beenInit = true;
-                    _window = JS.GetWindow<Window>();
-                    _document = JS.GetDocument<Document>();
-                    // near drop in VideoCapture replacement that works very similar to the OpenCV one for convenience
                     _videoCapture = new VideoCapture();
-                    mediaDevicesService.OnDeviceInfosChanged += MediaDevicesService_OnDeviceInfosChanged;
-                    // output canvas (for user feedback)
+                    _mediaDevicesService.OnDeviceInfosChanged += MediaDevicesService_OnDeviceInfosChanged;
                     _cameraCanvasProcessedEl = new HTMLCanvasElement(_cameraCanvasProcessedElRef);
-                    _cameraCanvasProcessedElCtx = _cameraCanvasProcessedEl.Get2DContext();
+                    _cameraCanvasProcessedElCtx = _cameraCanvasProcessedEl.Get2DContext(new ContextAttributes2D { WillReadFrequently = true });
                     StartProcessLoop();
                     _ = RefreshCameraList();
                 }
+                JS.CallVoid("PR.prettyPrint");
             }
         }
 
@@ -116,33 +108,8 @@ namespace SpawnDev.BlazorJS.Test.Pages
             });
         }
 
-        void OnResizeObserved(IJSInProcessObjectReference e)
-        {
-            var length = e.Get<int>("length");
-            //var devicePixelRatio = _window.DevicePixelRatio;
-            //Console.WriteLine($"OnResizeObserved: {length}");
-            for (var i = 0; i < length; i++)
-            {
-                using var obj = e.Get<ResizeObserverEntry>(i);
-                var w = obj.ContentRect.Width;
-                var h = obj.ContentRect.Height;
-                //Console.WriteLine($"OnResizeObserved: {w}x{h}");
-            }
-            e.Dispose();
-        }
-
         async void OnDeviceChange(DeviceInfo? selected)
         {
-            //if (_localStorage == null) return;
-            //if (selected == null)
-            //{
-            //    _localStorage.RemoveItem("selectedDeviceId");
-            //}
-            //else
-            //{
-            //    _localStorage.SetItem("selectedDeviceId", selected.DeviceId);
-            //}
-            JS.Log("OnDeviceChange", selected);
             _mediaStream?.Dispose();
             _mediaStream = null;
             if (_videoCapture != null)
@@ -150,9 +117,9 @@ namespace SpawnDev.BlazorJS.Test.Pages
                 _videoCapture.Video.Pause();
                 _videoCapture.Video.SrcObject = null;
             }
-            if (selected != null && mediaDevicesService != null && _videoCapture != null)
+            if (selected != null && _mediaDevicesService != null && _videoCapture != null)
             {
-                _mediaStream = await mediaDevicesService.GetMediaStream(videoDeviceId: selected.DeviceId);
+                _mediaStream = await _mediaDevicesService.GetMediaStream(videoDeviceId: selected.DeviceId);
                 _videoCapture.Video.SrcObject = _mediaStream;
                 try
                 {
@@ -165,22 +132,13 @@ namespace SpawnDev.BlazorJS.Test.Pages
             }
         }
 
-        bool _processingDisabled = false;
-        bool _enableProcessing = false;
-
         async Task RefreshCameraList()
         {
-            await mediaDevicesService.UpdateDeviceList();
-            //var enabled = await mediaDevicesService.RequestMediaPermissions();
-            // TODO - use dialog box for camera selectio ntht can be updated when it it shown... current drop down is never updated
-            _devices = mediaDevicesService.DeviceInfos.Where(o => o.Kind == "videoinput").ToList();
+            await _mediaDevicesService.UpdateDeviceList();
+            _devices = _mediaDevicesService.DeviceInfos.Where(o => o.Kind == "videoinput").ToList();
             StateHasChanged();
         }
 
-        ulong _frameIndex = 0;
-        ulong _frameIndexReported = 0;
-        int _facesFnd = 0;
-        double _faceDetectionTaskDuration = 0;
         async Task<bool> ProcessNextFrame()
         {
             if (_videoCapture == null) return false;
@@ -189,47 +147,43 @@ namespace SpawnDev.BlazorJS.Test.Pages
                 var arrayBuffer = _videoCapture.ReadArrayBuffer(out var frameSize);
                 if (arrayBuffer != null)
                 {
-                    if (_videoFrameSize != frameSize)
-                    {
-                        _videoFrameSize = frameSize;
-                        OnInputFrameResized();
-                    }
                     await _faceAPIService.WhenReady();
                     var frameIndex = _frameIndex++;
-                    var sw = new Stopwatch();
-                    sw.Start();
-                    _ = _faceAPIService.FaceDetection(arrayBuffer, frameSize.Width, frameSize.Height).ContinueWith((t) => {
-                        var elapsed = sw.ElapsedMilliseconds;
-                        _faceDetectionTaskDuration = _faceAPIService.WorkersRunning == 0 ? 0 :((_faceDetectionTaskDuration + elapsed) / 2d) / (double)_faceAPIService.WorkersRunning;
-                        // our result.ArrayBuffer is disposable... make sure it gets disposed after we are done with it
-                        arrayBuffer.Dispose();
-                        if (t.IsFaulted || t.IsCanceled)
+                    _ = _faceAPIService.FaceDetection(arrayBuffer, frameSize.Width, frameSize.Height, _withLandmarks).ContinueWith(async (t) => {
+                        try
                         {
-                            return;
-                        }
-                        var result = t.Result;
-                        using var resultArrayBuffer = result.ArrayBuffer;
-                        if (resultArrayBuffer != null)
-                        {
-                            if (frameIndex < _frameIndexReported)
+                            using var result = t.Result;
+                            if (t.IsFaulted || t.IsCanceled || result == null || frameIndex < _frameIndexReported)
                             {
-                                // arrived after a frame that is newer... drop it
                                 return;
                             }
                             _frameIndexReported = frameIndex;
+                            if (_videoFrameSize != frameSize)
+                            {
+                                _videoFrameSize = frameSize;
+                                OnInputFrameResized();
+                            }
+                            var resultArrayBuffer = result.ArrayBuffer;
+                            if (resultArrayBuffer != null && !resultArrayBuffer.IsWrapperDisposed && resultArrayBuffer.ByteLength > 0)
+                            {
+                                using var uint8 = new Uint8Array(resultArrayBuffer);
+                                using var imgData = ImageData.FromUint8Array(uint8, frameSize.Width, frameSize.Height);
+                                if (_cameraCanvasProcessedElCtx != null && _cameraCanvasProcessedEl != null)
+                                {
+                                    _cameraCanvasProcessedEl.Width = frameSize.Width;
+                                    _cameraCanvasProcessedEl.Height = frameSize.Height;
+                                    _cameraCanvasProcessedElCtx.PutImageData(imgData, 0, 0);
+                                }
+                            }
                             if (_facesFnd != result.FacesFound)
                             {
                                 _facesFnd = result.FacesFound;
                                 StateHasChanged();
                             }
-                            using var uint8 = new Uint8Array(resultArrayBuffer);
-                            using var imgData = ImageData.FromUint8Array(uint8, frameSize.Width, frameSize.Height);
-                            if (_cameraCanvasProcessedElCtx != null && _cameraCanvasProcessedEl != null)
-                            {
-                                _cameraCanvasProcessedEl.Width = frameSize.Width;
-                                _cameraCanvasProcessedEl.Height = frameSize.Height;
-                                _cameraCanvasProcessedElCtx.PutImageData(imgData, 0, 0);
-                            }
+                        }
+                        finally
+                        {
+                            arrayBuffer.Dispose();
                         }
                     });
                     return true;
@@ -269,8 +223,12 @@ namespace SpawnDev.BlazorJS.Test.Pages
 
         public void Dispose()
         {
-            // TODO - finish
+            StopProcessLoop();
+            _cameraCanvasProcessedElCtx?.Dispose();
+            _cameraCanvasProcessedEl?.Dispose();
             _callbackGroup.Dispose();
+            _mediaStream?.Dispose();
+            _videoCapture?.Dispose();
         }
     }
 }

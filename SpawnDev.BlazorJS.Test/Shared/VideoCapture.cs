@@ -4,15 +4,35 @@ namespace SpawnDev.BlazorJS.Test.Shared
 {
     public class Size
     {
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
         public Size(int width, int height)
         {
             Width = width;
             Height = height;
         }
         public Size() { }
-        public static Size Zero => new Size();
+        public static Size Zero { get; private set; } = new Size();
+        public override bool Equals(object? obj)
+        {
+            if (obj == null) return false;
+            return Equals((Size)obj);
+        }
+        bool Equals(Size obj)
+        {
+            return obj.Width == Width && obj.Height == Height;
+        }
+        public static bool operator !=(Size obj1, Size obj2) => !(obj1 == obj2);
+        public static bool operator ==(Size obj1, Size obj2)
+        {
+            if (ReferenceEquals(obj1, obj2))
+                return true;
+            if (ReferenceEquals(obj1, null))
+                return false;
+            if (ReferenceEquals(obj2, null))
+                return false;
+            return obj1.Equals(obj2);
+        }
     }
     public class VideoCapture : IDisposable
     {

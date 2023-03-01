@@ -67,6 +67,7 @@ if (JS.IsWindow)
 }
 else if (JS.IsDedicatedWorkerGlobalScope)
 {
+
     //Console.WriteLine($"IsDedicatedWorkerGlobalScope: -----------------");
     //// dedicated worker thread
     //var webWorker = webWorkerService.DedicatedWorkerParent;
