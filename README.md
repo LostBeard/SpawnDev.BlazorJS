@@ -12,7 +12,7 @@
 
 An easy Javascript interop library designed specifically for client side Blazor.  
 
-Supports Blazor WebAssembly .Net 6 and .Net 7.
+Supports Blazor WebAssembly .Net 6, .Net 7, and .Net 8.
 
 
 - Use Javascript libraries in Blazor without writing any Javascript code.
@@ -101,6 +101,12 @@ audio.Play();
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.WebWorkers.svg?label=SpawnDev.BlazorJS.WebWorkers)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers) 
 
 - Easily call Blazor Services in separate threads with WebWorkers and SharedWebWorkers
+
+- Does not require SharedArrayBuffer and therefore does not require the special HTTP headers associated with using it.
+
+- Works in Blazor WASM .Net 6, 7, and 8.
+
+- Works on Firefox
 
 Firefox WebWorkers note:  
 Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
