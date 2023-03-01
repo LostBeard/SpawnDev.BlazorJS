@@ -105,7 +105,14 @@ audio.Play();
 
 - Works in Blazor WASM .Net 6, 7, and 8.
 
-- Works on Firefox
+- Tested on:  
+ Chrome Windows - Working  
+ MS Edge Windows - Working  
+ Firefox Windows - Working  
+ Chrome Android - Working  
+ MS Edge Android - Working  
+ Firefox Android - Working
+
 
 Firefox WebWorkers note:  
 Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
