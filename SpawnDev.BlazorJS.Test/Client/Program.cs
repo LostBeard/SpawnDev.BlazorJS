@@ -7,6 +7,24 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
 
+
+
+
+Type TCSTypedType = typeof(TaskCompletionSource<>);
+var methods = TCSTypedType.GetMethods();
+
+var tseMethods = methods.Where(o => o.Name == "TrySetException").ToList();
+foreach(var tcMethod in tseMethods) {
+    var paramss= tcMethod.GetParameters();
+    var nmmm = true;
+}
+
+
+var TaskField = TCSTypedType.GetProperty("Task");
+var TrySetResultMethod = TCSTypedType.GetMethod("TrySetResult");
+var TrySetExceptionMethod = TCSTypedType.GetMethod("TrySetException", new Type[] { typeof(Exception) });
+
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 if (JS.IsWindow)
 {
@@ -18,9 +36,9 @@ if (JS.IsWindow)
 builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 // SpawnDev.BlazorJS.WebWorkers
 builder.Services.AddSingleton<WebWorkerService>();
-builder.Services.AddSingleton<FaceAPIService>();
+builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
+builder.Services.AddSingleton<IMathsService, MathsService>();
 builder.Services.AddSingleton<MediaDevices>();
-builder.Services.AddSingleton<MathsService>();
 builder.Services.AddSingleton<MediaDevicesService>();
 // Radzen
 builder.Services.AddSingleton<DialogService>();
@@ -49,11 +67,13 @@ if (JS.IsWindow)
     JS.Set("_getWorker", Callback.Create(new Action<bool?>(async (verbose) =>
     {
         using var webWorker = await webWorkerService.GetWebWorker(verbose.HasValue && verbose.Value);
-        var ret = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), 100, new Action<int>((i) =>
-        {
-            Console.WriteLine($"Progress: {i}");
-        }));
-        Console.WriteLine($"ret: {ret}");
+        var faceApiServiceWorker = webWorker.GetService<IFaceAPIService>();
+        await faceApiServiceWorker.CallTest();
+        //var ret = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), 100, new Action<int>((i) =>
+        //{
+        //    Console.WriteLine($"Progress: {i}");
+        //}));
+        Console.WriteLine($"ret: called");
     })));
     JS.Set("_getSharedWorker", Callback.Create(new Action<bool?>(async (verbose) =>
     {
@@ -67,6 +87,19 @@ if (JS.IsWindow)
 }
 else if (JS.IsDedicatedWorkerGlobalScope)
 {
+    // this method can be called using the browser debug console from the webworker context to call into the main window
+    // this allows debugging the service worker call
+    JS.Set("_getWorker", Callback.Create(new Action<bool?>(async (verbose) => {
+
+        var webWorker = webWorkerService.DedicatedWorkerParent;
+        var faceApiServiceWorker = webWorker.GetService<IFaceAPIService>();
+        await faceApiServiceWorker.CallTest();
+        //var ret = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), 100, new Action<int>((i) =>
+        //{
+        //    Console.WriteLine($"Progress: {i}");
+        //}));
+        Console.WriteLine($"ret: called");
+    })));
 
     //Console.WriteLine($"IsDedicatedWorkerGlobalScope: -----------------");
     //// dedicated worker thread

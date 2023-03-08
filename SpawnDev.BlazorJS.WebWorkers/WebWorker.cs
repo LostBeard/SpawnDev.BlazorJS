@@ -12,7 +12,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
         Worker _worker;
         public WebWorker(Worker worker, IServiceProvider serviceProvider) : base(serviceProvider, worker)
         {
-            var g = Supported;
             _worker = worker;
         }
 

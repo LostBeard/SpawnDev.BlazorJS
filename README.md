@@ -140,10 +140,11 @@ builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(bui
 // SpawnDev.BlazorJS.WebWorkers
 builder.Services.AddSingleton<WebWorkerService>();
 // app specific services...
-builder.Services.AddSingleton<MathsService>();
+// worker services should be registered with an interface to work with WebWorker.GetService<TServiceInterface>()
+builder.Services.AddSingleton<IMathsService, MathsService>();
 // build 
 WebAssemblyHost host = builder.Build();
-// init WebWorkerService
+// init WebWorkerService 
 var workerService = host.Services.GetRequiredService<WebWorkerService>();
 await workerService.InitAsync();
 await host.RunAsync();
@@ -155,10 +156,17 @@ await host.RunAsync();
 // Create a WebWorker
 var webWorker = await workerService.GetWebWorker();
 
-// Call a registered service on the worker thread with your arguments
+// Call GetService<ServiceInterface> on a web worker to get a proxy for the service on the web worker.
+// GetService can only be called with Interface types
+var workerMathService = webWorker.GetService<IMathsService>();
+
+// Call async methods on your worker service
+var result = await workerMathService.CalculatePi(piDecimalPlaces);
+
 // Action types can be passed for progress reporting
-var result = await webWorker.InvokeAsync<MathsService, string>("CalculatePiWithActionProgress", piDecimalPlaces, new Action<int>((i) =>
+var result = await workerMathService.CalculatePiWithActionProgress(piDecimalPlaces, new Action<int>((i) =>
 {
+    // the worker thread can call this method to report progress if desired
     piProgress = i;
     StateHasChanged();
 }));
@@ -171,12 +179,11 @@ Calling GetSharedWebWorker in another window with the same sharedWorkerName will
 var sharedWebWorker = await workerService.GetSharedWebWorker("workername");
 
 // Just like WebWorker but shared
-// Call a registered service on the worker thread with your arguments
-var result = await sharedWebWorker.InvokeAsync<MathsService, string>("CalculatePiWithActionProgress", piDecimalPlaces, new Action<int>((i) =>
-{
-    piProgress = i;
-    StateHasChanged();
-}));
+var workerMathService = sharedWebWorker.GetService<IMathsService>();
+
+// Call async methods on your shared worker service
+var result = await workerMathService.CalculatePi(piDecimalPlaces);
+
 ```
 
 # Send events

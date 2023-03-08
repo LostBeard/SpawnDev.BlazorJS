@@ -10,7 +10,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
     public partial class FaceAPIDemo : IDisposable
     {
         [Inject]
-        FaceAPIService? _faceAPIService { get; set; }
+        IFaceAPIService? _faceAPIService { get; set; }
 
         [Inject]
         MediaDevicesService? _mediaDevicesService { get; set; }

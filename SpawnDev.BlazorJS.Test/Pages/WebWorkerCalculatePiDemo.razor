@@ -3,7 +3,7 @@
 <PageTitle>WebWorker</PageTitle>
 
 @inject WebWorkerService webWorkerService
-@inject MathsService mathsService
+@inject IMathsService mathsService
 
 <div class="row">
     <div class="col-5 col-xs-12">
@@ -12,7 +12,10 @@
         Calculate Pi to N decimal places<br />
         <input type="text" @bind="piDecimalPlaces" placeholder="decimal places" /><br />
         <progress max=@piDecimalPlaces value="@piProgress" /><br /><br />
-        <button disabled=@RunDisabled @onclick=OnClick class="btn btn-primary">Run test</button><br /><br />
+        <div>While processing PI without a worker the main thread will be unresponsive</div>
+        <button disabled=@RunDisabled @onclick=OnWithoutThreadClicked class="btn btn-primary">Without Worker</button><br /><br />
+        <div>While processing PI with a worker the main thread will stay responsive</div>
+        <button disabled=@RunDisabled @onclick=OnWithThreadClicked class="btn btn-primary">With Worker</button><br /><br />
         <button disabled="@canDisposeWorker" @onclick="OnDisposeWorker" class="btn btn-secondary">Dispose Worker</button><br />
         <br />
         <br />
@@ -34,62 +37,36 @@
 
     string rn = Environment.NewLine;
 
-    public async Task OnClick(EventArgs _)
-    {
+    async Task OnWithoutThreadClicked() {
         Running = true;
-        output = "";
-        try
-        {
-            var sw = new System.Diagnostics.Stopwatch();
-            if (webWorker == null)
-            {
-                output = $"{rn}{LogDate()} Creating WebWorker...";
-                StateHasChanged();
-                sw.Start();
-                webWorker = await webWorkerService.GetWebWorker();
-                sw.Stop();
-                output += $"{rn}{LogDate()} Background service created in {sw.ElapsedMilliseconds}ms";
-                StateHasChanged();
-            }
-            output += $"{rn}{LogDate()} Calling EstimatePI({piDecimalPlaces})...";
-            sw.Restart();
-            // Actions can be passed for progress callbacks but they only live as long as the call itself does and can have at most 1 parameter
-            var result = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), piDecimalPlaces, new Action<int>((i) =>
-            {
-                piProgress = i;
-                StateHasChanged();
-            }));
-            output += $"{rn}{LogDate()} EstimatePI({piDecimalPlaces}) = {result}";
-            sw.Stop();
-            output += $"{rn}{LogDate()} Computerd Pi to {piDecimalPlaces} places in {sw.ElapsedMilliseconds}ms";
-            StateHasChanged();
-        }
-        catch (Exception e)
-        {
-            output = $"{rn}Error = {e}";
-        }
-        finally
-        {
-            Running = false;
-        }
-    }
-
-    async Task OnWithoutThreadClicked()
-    {
-        var result = await mathsService.EstimatePI(piDecimalPlaces);
+        StateHasChanged();
+        var result = await mathsService.CalculatePi(piDecimalPlaces);
         output += $"{rn}{LogDate()} EstimatePI({piDecimalPlaces}) = {result}";
+        Running = false;
         StateHasChanged();
     }
 
-    public void OnDisposeWorker()
-    {
+    async Task OnWithThreadClicked() {
+        Running = true;
+        StateHasChanged();
+        if (webWorker == null) webWorker = await webWorkerService.GetWebWorker();
+        var mathsServiceWorker = webWorker.GetService<IMathsService>();
+        var result = await mathsServiceWorker.CalculatePiWithActionProgress(piDecimalPlaces, new Action<int>((i) => {
+            piProgress = i;
+            StateHasChanged();
+        }));
+        output += $"{rn}{LogDate()} EstimatePI({piDecimalPlaces}) = {result}";
+        Running = false;
+        StateHasChanged();
+    }
+
+    public void OnDisposeWorker() {
         webWorker?.Dispose();
         webWorker = null;
         Running = false;
     }
 
-    private string LogDate()
-    {
+    private string LogDate() {
         return DateTime.Now.ToString("HH:mm:ss:fff");
     }
 }

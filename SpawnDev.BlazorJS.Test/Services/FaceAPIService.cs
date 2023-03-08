@@ -17,8 +17,24 @@ namespace SpawnDev.BlazorJS.Test.Services
             Detections?.Dispose();
         }
     }
-    public class FaceAPIService : IDisposable
-    {
+
+    public interface IFaceAPIService {
+        bool IsDisposed { get; }
+        bool IsReady { get; }
+        int MaxWorkerCount { get; }
+        int WorkerCountRequest { get; set; }
+        int WorkersIdle { get; }
+        int WorkersRunning { get; }
+
+        void Dispose();
+        Task<ProcessFrameResult?> FaceDetection(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks);
+        Task<ProcessFrameResult?> FaceDetectionInternal(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks);
+        Task<bool> SetWorkerCount(int count);
+        Task WhenReady();
+        ValueTask CallTest();
+    }
+
+    public class FaceAPIService : IDisposable, IFaceAPIService {
         WebWorkerService _webWorkerService;
         WebWorkerPool _workerPool;
         bool _beenInit = false;
@@ -28,8 +44,7 @@ namespace SpawnDev.BlazorJS.Test.Services
         public int MaxWorkerCount => _workerPool.MaxWorkerCount;
         public bool IsReady => _workerPool.AreWorkersRunning ? _workerPool.IsReady : _processFrameRunningLocal;
         public int WorkersRunning => _workerPool.WorkersRunning;
-        public int WorkerCountRequest
-        {
+        public int WorkerCountRequest {
             get => _workerPool == null ? 0 : _workerPool.WorkerCountRequest;
             set => _workerPool.WorkerCountRequest = value;
         }
@@ -38,8 +53,7 @@ namespace SpawnDev.BlazorJS.Test.Services
 
         IJSInProcessObjectReference? _faceapi = null;
 
-        public FaceAPIService(NavigationManager navigator, WebWorkerService webWorkerService)
-        {
+        public FaceAPIService(NavigationManager navigator, WebWorkerService webWorkerService) {
             _webWorkerService = webWorkerService;
             // this worker pool belongs to this service
             // it could also be added as a service to be shared throughout the app
@@ -51,8 +65,7 @@ namespace SpawnDev.BlazorJS.Test.Services
 
         Task _initTask;
 
-        async Task InitAsync()
-        {
+        async Task InitAsync() {
             // load lib
             await JS.LoadScript("libs/face-api.min.js", "faceapi");
             // get lib handle
@@ -63,28 +76,26 @@ namespace SpawnDev.BlazorJS.Test.Services
             await _faceapi.CallVoidAsync("loadFaceLandmarkModel", _modelPath); // model to detect face landmark
             //await _faceapi.CallVoidAsync("loadFaceExpressionModel", _modelPath); //model to detect face expression
         }
-        
 
-        public async Task WhenReady()
-        {
+
+        public async Task WhenReady() {
             if (_workerPool.AreWorkersRunning) await _workerPool.WhenWorkerReady();
             else while (_processFrameRunningLocal) await Task.Delay(5);
         }
 
-        public async Task<ProcessFrameResult?> FaceDetection(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks)
-        {
-            try
-            {
-                if (_workerPool.AreWorkersRunning)
-                {
+        public async ValueTask CallTest() {
+
+        }
+            public async Task<ProcessFrameResult?> FaceDetection(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks) {
+            try {
+                if (_workerPool.AreWorkersRunning) {
                     var worker = await _workerPool.GetFreeWorkerAsync();
-                    if (worker != null)
-                    {
-                        return await worker.InvokeAsync<FaceAPIService, ProcessFrameResult?>(nameof(FaceAPIService.FaceDetection), frameBuffer, width, height, withLandmarks);
+                    if (worker != null) {
+                        var faceAPIServiceWorker = worker.GetService<IFaceAPIService>();
+                        return await faceAPIServiceWorker.FaceDetectionInternal(frameBuffer, width, height, withLandmarks);
                     }
                 }
-                else if (!_processFrameRunningLocal)
-                {
+                else if (!_processFrameRunningLocal) {
                     _processFrameRunningLocal = true;
                     await Task.Delay(1);
                     var ret = await FaceDetectionInternal(frameBuffer, width, height, withLandmarks);
@@ -92,15 +103,13 @@ namespace SpawnDev.BlazorJS.Test.Services
                     return ret;
                 }
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Console.WriteLine("ProcessFrame: " + ex.ToString());
             }
             return null;
         }
 
-        private async Task<ProcessFrameResult?> FaceDetectionInternal(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks)
-        {
+        public async Task<ProcessFrameResult?> FaceDetectionInternal(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks) {
             var ret = new ProcessFrameResult();
             if (frameBuffer == null || width == 0 || height == 0) return null;
             await _initTask;
@@ -112,29 +121,23 @@ namespace SpawnDev.BlazorJS.Test.Services
             using var imageData = ImageData.FromUint8Array(uint8, width, height);
             ctx.PutImageData(imageData, 0, 0);
             JSObject? detections = null;
-            try
-            {
+            try {
                 using var detectAllFacesTask = _faceapi.Call<Promise>("detectAllFaces", canvas);
-                if (withLandmarks)
-                {
+                if (withLandmarks) {
                     using var detectAllFacesWithLandmarksTask = detectAllFacesTask.JSRef.Call<Promise>("withFaceLandmarks");
                     detections = await detectAllFacesWithLandmarksTask.ThenAsync<JSObject>();
                 }
-                else
-                {
+                else {
                     detections = await detectAllFacesTask.ThenAsync<JSObject>();
                 }
             }
-            catch
-            {
+            catch {
                 // continue
             }
-            if (detections != null)
-            {
+            if (detections != null) {
                 // https://github.com/justadudewhohacks/face-api.js/#getting-started-displaying-detection-results
                 _faceapi.CallVoid("draw.drawDetections", canvas, detections);
-                if (withLandmarks)
-                {
+                if (withLandmarks) {
                     _faceapi.CallVoid("draw.drawFaceLandmarks", canvas, detections);
                 }
                 ret.FacesFound = detections.JSRef.Get<int>("length");
@@ -149,24 +152,20 @@ namespace SpawnDev.BlazorJS.Test.Services
         }
 
         public bool IsDisposed { get; private set; }
-        public void Dispose()
-        {
+        public void Dispose() {
             if (IsDisposed) return;
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        protected virtual void Dispose(bool disposing)
-        {
+        protected virtual void Dispose(bool disposing) {
             if (IsDisposed) return;
             IsDisposed = true;
-            if (disposing)
-            {
+            if (disposing) {
                 _workerPool.Dispose();
                 _faceapi?.Dispose();
             }
         }
-        ~FaceAPIService()
-        {
+        ~FaceAPIService() {
             Dispose(false);
         }
     }
