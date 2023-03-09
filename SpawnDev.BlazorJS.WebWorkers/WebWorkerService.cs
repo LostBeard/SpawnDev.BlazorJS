@@ -20,6 +20,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public bool BeenInit { get; private set; }
         DateTime StartTime = DateTime.Now;
         public int MaxWorkerCount { get; private set; } = 0;
+
+        static string WebWorkerJSScript = "_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js";
         static WebWorkerService()
         {
             WebWorkerSupported = !JS.IsUndefined("Worker");
@@ -120,7 +122,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     }
                 }
                 catch { }
-                JS.Log($"Listending for connections: took {missedConnections} missed connections");
+                JS.Log($"Listening for connections: took {missedConnections} missed connections");
             }
             //BroadcastPing();
         }
@@ -221,23 +223,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return string.Join("&", source.AllKeys.SelectMany(source.GetValues, (k, v) => $"{HttpUtility.UrlEncode(k)}={HttpUtility.UrlEncode(v)}"));
         }
 
-        public int TestFunc(int a, int b)
-        {
-            Console.WriteLine("TestFunc called!");
-            return a + b;
-        }
-        public async Task<int> TestFuncAsync(int a, int b)
-        {
-            Console.WriteLine("TestFunc called!");
-            return a + b;
-        }
-
         public async Task<WebWorker?> GetWebWorker(bool verboseMode = false, bool awaitWhenReady = true)
         {
             if (!WebWorkerSupported) return null;
             var queryArgs = new NameValueCollection();
             queryArgs.Add("verbose", verboseMode ? "true" : "false");
-            var worker = new Worker($"_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js?{ToQueryString(queryArgs)}");
+            var worker = new Worker($"{WebWorkerJSScript}?{ToQueryString(queryArgs)}");
             var webWorker = new WebWorker(worker, _serviceProvider);
             Workers.Add(webWorker);
             if (awaitWhenReady) await webWorker.WhenReady;
@@ -249,7 +240,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (!SharedWebWorkerSupported) return null;
             var queryArgs = new NameValueCollection();
             queryArgs.Add("verbose", verboseMode ? "true" : "false");
-            var worker = new SharedWorker($"_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js", sharedWorkerName);
+            var worker = new SharedWorker($"{WebWorkerJSScript}?{ToQueryString(queryArgs)}", sharedWorkerName);
             var webWorker = new SharedWebWorker(sharedWorkerName, worker, _serviceProvider);
             if (awaitWhenReady) await webWorker.WhenReady;
             return webWorker;

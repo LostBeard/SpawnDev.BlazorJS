@@ -99,13 +99,15 @@ audio.Play();
 # SpawnDev.BlazorJS.WebWorkers
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.WebWorkers.svg?label=SpawnDev.BlazorJS.WebWorkers)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers) 
 
-- Easily call Blazor Services in separate threads with WebWorkers and SharedWebWorkers
+- Easily call Blazor Services in separate threads with WebWorkers and SharedWebWorkers 
 
 - Does not require SharedArrayBuffer and therefore does not require the special HTTP headers associated with using it.
 
+- Supports and uses transferable objects whenever possible
+
 - Works in Blazor WASM .Net 6, 7, and 8.
 
-- Tested on:  
+- Tested on (with .Net 8):  
  Chrome Windows - Working  
  MS Edge Windows - Working  
  Firefox Windows - Working  
@@ -116,7 +118,7 @@ audio.Play();
 
 Firefox WebWorkers note:  
 Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
-I wrote code that changes the scripts on the fly before they are loaded to workaround this limitation until Firefox finishes worker module integration. It is possible some other browsers may have this issue. 
+The web worker script now tries to detect this and changes the blazor wasm scripts before they are loaded to workaround this limitation. It is possible some other browsers may have this issue but may not be detected properly.
 
 Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
 
