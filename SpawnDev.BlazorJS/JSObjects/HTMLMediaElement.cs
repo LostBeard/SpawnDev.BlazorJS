@@ -20,6 +20,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             get => JSRef.Get<string>("src");
             set => JSRef.Set("src", value);
         }
+        public double CurrentTime {
+            get => JSRef.Get<double>("currentTime");
+            set => JSRef.Set("currentTime", value);
+        }
         public string? CurrentSrc
         {
             get => JSRef.Get<string>("currentSrc");

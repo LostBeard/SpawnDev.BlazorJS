@@ -59,15 +59,9 @@ namespace SpawnDev.BlazorJS.WebWorkers {
         protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) {
             if (targetMethod == null) return null;
             var returnType = targetMethod.ReturnType;
-            var isTask = typeof(Task).IsAssignableFrom(targetMethod.ReturnType);
-            var isValueTask = !isTask && typeof(ValueTask).IsAssignableFrom(targetMethod.ReturnType);
-            Type finalReturnType;
-            if (isTask || isValueTask) {
-                finalReturnType = returnType.GetGenericArguments().FirstOrDefault() ?? typeof(void);
-            }
-            else {
-                finalReturnType = returnType;
-            }
+            var isTask = returnType.IsTask();
+            var isValueTask = !isTask && returnType.IsValueTask(); ;
+            Type finalReturnType = isTask || isValueTask ? returnType.GetGenericArguments().FirstOrDefault() ?? typeof(void) : returnType;
             if (isTask) {
                 if (finalReturnType == typeof(void)) {
                     return InvokeTaskVoid(targetMethod, args);
@@ -88,19 +82,19 @@ namespace SpawnDev.BlazorJS.WebWorkers {
         }
 
         static Dictionary<Type, MethodInfo> InvokeValueTaskCache = new Dictionary<Type, MethodInfo>();
-        MethodInfo? GetInvokeValueTaskGeneric(Type finalReturnType) {
-            if (InvokeValueTaskCache.TryGetValue(finalReturnType, out var methodInfo)) return methodInfo;
-            var InvokeTaskTypedG = _InvokeValueTaskInfo.MakeGenericMethod(finalReturnType);
-            InvokeValueTaskCache[finalReturnType] = InvokeTaskTypedG;
-            return InvokeTaskTypedG;
+        MethodInfo? GetInvokeValueTaskGeneric(Type type) {
+            if (InvokeValueTaskCache.TryGetValue(type, out var methodInfo)) return methodInfo;
+            var methodInfoTyped = _InvokeValueTaskInfo.MakeGenericMethod(type);
+            InvokeValueTaskCache[type] = methodInfoTyped;
+            return methodInfoTyped;
         }
 
         static Dictionary<Type, MethodInfo?> InvokeTaskCache = new Dictionary<Type, MethodInfo?>();
-        MethodInfo? GetInvokeTaskGeneric(Type finalReturnType) {
-            if (InvokeTaskCache.TryGetValue(finalReturnType, out var methodInfo)) return methodInfo;
-            var InvokeTaskTypedG = _InvokeTaskInfo.MakeGenericMethod(finalReturnType);
-            InvokeTaskCache[finalReturnType] = InvokeTaskTypedG;
-            return InvokeTaskTypedG;
+        MethodInfo? GetInvokeTaskGeneric(Type type) {
+            if (InvokeTaskCache.TryGetValue(type, out var methodInfo)) return methodInfo;
+            var methodInfoTyped = _InvokeTaskInfo.MakeGenericMethod(type);
+            InvokeTaskCache[type] = methodInfoTyped;
+            return methodInfoTyped;
         }
 
         internal object? InvokeTaskTyped(Type type, MethodInfo targetMethod, object?[]? args) {

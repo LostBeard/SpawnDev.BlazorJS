@@ -10,19 +10,55 @@ using SpawnDev.BlazorJS.WebWorkers;
 
 
 
-Type TCSTypedType = typeof(TaskCompletionSource<>);
-var methods = TCSTypedType.GetMethods();
+var tt = new ValueTask<string>();
+var tr = tt.GetType();
+var gtd = tr.GetGenericTypeDefinition();
+var bb = typeof(ValueTask).IsAssignableFrom(tr);
+var b2 = typeof(ValueTask<>).IsAssignableFrom(tr);
+var b3 = tr.GetGenericTypeDefinition() == typeof(ValueTask);
+var b4 = tr.GetGenericTypeDefinition() == typeof(ValueTask<>);
+var b5 = tr.IsValueTask();
 
-var tseMethods = methods.Where(o => o.Name == "TrySetException").ToList();
-foreach(var tcMethod in tseMethods) {
-    var paramss= tcMethod.GetParameters();
-    var nmmm = true;
-}
+
+var p = new Promise();
+
+JS.Set("_pp", p);
+
+_ = Task.Run(async () => {
+    await Task.Delay(10000);
+    p.Resolve("Hello promises!");
+});
 
 
-var TaskField = TCSTypedType.GetProperty("Task");
-var TrySetResultMethod = TCSTypedType.GetMethod("TrySetResult");
-var TrySetExceptionMethod = TCSTypedType.GetMethod("TrySetException", new Type[] { typeof(Exception) });
+
+using var navigator = JS.Get<Navigator>("navigator");
+using var locks = navigator.Locks;
+
+Console.WriteLine($"lock: 1");
+
+using var waitLock = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
+    Console.WriteLine($"lock acquired 3");
+    await Task.Delay(5000);
+    Console.WriteLine($"lock released 4");
+})));
+
+using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
+    Console.WriteLine($"lock acquired 5");
+    await Task.Delay(5000);
+    Console.WriteLine($"lock released 6");
+})));
+
+Console.WriteLine($"lock: 2");
+
+
+
+//var ttt = new AsyncActionCallback<int>(async (int ttttt) => {
+//    Console.WriteLine($"ttttt: {ttttt}");
+//});
+//JS.Set("_ttt", ttt);
+
+
+
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -36,8 +72,11 @@ if (JS.IsWindow)
 builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 // SpawnDev.BlazorJS.WebWorkers
 builder.Services.AddSingleton<WebWorkerService>();
+builder.Services.AddSingleton<WebWorkerPool>();
+// 
 builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
 builder.Services.AddSingleton<IMathsService, MathsService>();
+
 builder.Services.AddSingleton<MediaDevices>();
 builder.Services.AddSingleton<MediaDevicesService>();
 // Radzen
@@ -47,7 +86,7 @@ builder.Services.AddSingleton<TooltipService>();
 builder.Services.AddSingleton<ContextMenuService>();
 // build 
 WebAssemblyHost host = builder.Build();
-// init WebWorkerService
+// initialize WebWorkerService
 var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
 await webWorkerService.InitAsync();
 #region TestingSection
@@ -68,7 +107,7 @@ if (JS.IsWindow)
     {
         using var webWorker = await webWorkerService.GetWebWorker(verbose.HasValue && verbose.Value);
         var faceApiServiceWorker = webWorker.GetService<IFaceAPIService>();
-        await faceApiServiceWorker.CallTest();
+        //await faceApiServiceWorker.CallTest();
         //var ret = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), 100, new Action<int>((i) =>
         //{
         //    Console.WriteLine($"Progress: {i}");
@@ -93,7 +132,7 @@ else if (JS.IsDedicatedWorkerGlobalScope)
 
         var webWorker = webWorkerService.DedicatedWorkerParent;
         var faceApiServiceWorker = webWorker.GetService<IFaceAPIService>();
-        await faceApiServiceWorker.CallTest();
+        //await faceApiServiceWorker.CallTest();
         //var ret = await webWorker.InvokeAsync<MathsService, string>(nameof(MathsService.CalculatePiWithActionProgress), 100, new Action<int>((i) =>
         //{
         //    Console.WriteLine($"Progress: {i}");

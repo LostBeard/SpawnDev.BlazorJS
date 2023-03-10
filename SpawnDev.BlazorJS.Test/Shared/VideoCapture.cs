@@ -1,4 +1,5 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
+using System.Diagnostics;
 
 namespace SpawnDev.BlazorJS.Test.Shared
 {
@@ -57,7 +58,40 @@ namespace SpawnDev.BlazorJS.Test.Shared
             Video = new HTMLVideoElement();
             _cameraCanvasEl = new HTMLCanvasElement();
             _cameraCanvasElCtx = _cameraCanvasEl.Get2DContext(new ContextAttributes2D { WillReadFrequently = true });
+            if (JS.WindowThis != null) JS.WindowThis.OnAnimationFrame += WindowThis_OnAnimationFrame;
         }
+
+        public double CurrentFPS { get; private set; } = 0;
+        int _frames = 0;
+        int _unreportedCount = 0;
+        Stopwatch sw = new Stopwatch();
+        public double LastFromTime = -1;
+
+        public event Action NewFrame;
+
+        private void WindowThis_OnAnimationFrame(double timestamp) {
+            if (!sw.IsRunning) sw.Start();
+            var currentTime = CurrentTime;
+            if (LastFromTime != currentTime) {
+                _frames++;
+                LastFromTime = currentTime;
+                NewFrame?.Invoke();
+            }
+            var elapsed = sw.Elapsed.TotalSeconds;
+            if (elapsed > 1d) {
+                sw.Restart();
+                CurrentFPS = _frames / elapsed;
+                _frames = 0;
+                //
+                _unreportedCount++;
+                if (_unreportedCount == 5) {
+                    _unreportedCount = 0;
+                    Console.WriteLine($"FPS: {CurrentFPS}");
+                }
+            }
+        }
+
+        public double CurrentTime => Video.CurrentTime;
 
         private void VideoSizeChangedCheck()
         {
@@ -120,6 +154,11 @@ namespace SpawnDev.BlazorJS.Test.Shared
 
         public void Dispose()
         {
+            if (JS.WindowThis != null) JS.WindowThis.OnAnimationFrame -= WindowThis_OnAnimationFrame;
+            try {
+                Video.Pause();
+            }
+            catch { }
             _cameraCanvasElCtx.Dispose();
             _cameraCanvasEl.Dispose();
             Video.Dispose();

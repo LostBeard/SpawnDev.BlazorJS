@@ -325,7 +325,6 @@ var initFunc = function () {
         JSInterop._call(globalObject, identifier, args);
     };
 
-
     // Callback - version 0.91
     const callbacks = {};
     JSInterop.DisposeCallbacker = function (callbackerID) {

@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
+namespace SpawnDev.BlazorJS.JSObjects {
 
     [JsonConverter(typeof(JSObjectConverter<Window>))]
-    public class Window : EventTarget
-    {
+    public class Window : EventTarget {
         public Window() : base(JS.Get<IJSInProcessObjectReference>("window")) { }
         public Window(IJSInProcessObjectReference _ref) : base(_ref) { }
         public WebStorage SessionStorage => JSRef.Get<WebStorage>("sessionStorage");
@@ -20,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void ClearTimeout(long requestId) => JSRef.CallVoid("clearTimeout", requestId);
         public long RequestAnimationFrame(Callback callback) => JSRef.Call<long>("requestAnimationFrame", callback);
         public void CancelAnimationFrame(long requestId) => JSRef.CallVoid("cancelAnimationFrame", requestId);
-        public double DevicePixelRatio { get { var tmp = JSRef.Get<double>("devicePixelRatio"); return tmp > 0d ? tmp : 1d;  } }
+        public double DevicePixelRatio { get { var tmp = JSRef.Get<double>("devicePixelRatio"); return tmp > 0d ? tmp : 1d; } }
         public int InnerWidth => JSRef.Get<int>("innerWidth");
         public int InnerHeight => JSRef.Get<int>("innerHeight");
         ///// <summary>
@@ -28,5 +26,38 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///// </summary>
         ///// <returns>ScreenDetails</returns>
         public async Task<ScreenDetails> GetScreenDetails() => await JSRef.CallAsync<ScreenDetails>("getScreenDetails");
+
+        // non-standard .Net extension
+        CallbackGroup _callbacks = new CallbackGroup();
+        public delegate void AnimationFrameDelegate(double timestamp);
+        private Callback _OnAnimationFrameCallback;
+        private long _OnAnimationFrameCallbackHandle = 0;
+        private int _OnAnimationFrameCount = 0;
+        private event AnimationFrameDelegate _OnAnimationFrame;
+        public event AnimationFrameDelegate OnAnimationFrame {
+            add {
+                _OnAnimationFrame += value;
+                _OnAnimationFrameCount = _OnAnimationFrame == null ? 0 : _OnAnimationFrame.GetInvocationList().Length;
+                if (_OnAnimationFrameCount == 1) {
+                    if (_OnAnimationFrameCallback == null) _OnAnimationFrameCallback = Callback.Create<double>(AnimationFrame, _callbacks);
+                    _OnAnimationFrameCallbackHandle = RequestAnimationFrame(_OnAnimationFrameCallback);
+                }
+            }
+            remove {
+                _OnAnimationFrame -= value;
+                _OnAnimationFrameCount = _OnAnimationFrame == null ? 0 : _OnAnimationFrame.GetInvocationList().Length;
+                if (_OnAnimationFrameCount == 0) {
+                    if (_OnAnimationFrameCallbackHandle != 0) {
+                        CancelAnimationFrame(_OnAnimationFrameCallbackHandle);
+                        _OnAnimationFrameCallbackHandle = 0;
+                    }
+                }
+            }
+        }
+        void AnimationFrame(double timestaamp) {    
+            if (_OnAnimationFrameCount > 0)
+                _OnAnimationFrameCallbackHandle = RequestAnimationFrame(_OnAnimationFrameCallback);
+            _OnAnimationFrame?.Invoke(timestaamp);
+        }
     }
 }

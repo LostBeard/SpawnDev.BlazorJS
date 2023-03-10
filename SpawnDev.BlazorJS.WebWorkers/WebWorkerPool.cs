@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.WebWorkers
+﻿using System.Reflection;
+
+namespace SpawnDev.BlazorJS.WebWorkers
 {
     public class WebWorkerPool : IDisposable
     {
@@ -46,7 +48,10 @@
             return false;
         }
 
-        public int WorkersIdle => _workers.Sum(o => !o.WaitingForResponse ? 1 : 0);
+        //public int WorkersIdle => _workers.Sum(o => !o.WaitingForResponse ? 1 : 0);
+
+
+
 
         public bool AreWorkersRunning => WorkersRunning > 0;
         public int WorkersRunning { get; private set; }
@@ -62,6 +67,16 @@
             }
         }
 
+        Queue<WebWorker> IdleWebWorkers { get; set; } = new Queue<WebWorker>();
+        public int WorkersIdle => IdleWebWorkers.Count;
+
+        public bool TryGetIdleWorker(out WebWorker? worker) {
+            return IdleWebWorkers.TryDequeue(out worker);
+        }
+
+        public void ReleaseIdleWorker(WebWorker? worker) {
+            if (worker != null && !IdleWebWorkers.Contains(worker)) IdleWebWorkers.Enqueue(worker);
+        }
 
         async Task<bool> TryStartWorker()
         {
@@ -69,10 +84,25 @@
             if (webWorker == null) return false;
             lock (_workers)
             {
+                webWorker.OnBusyStateChanged += WebWorker_OnBusyStateChanged;
                 _workers.Add(webWorker);
+                if (!IdleWebWorkers.Contains(webWorker)) IdleWebWorkers.Enqueue(webWorker);
                 WorkersRunning++;
             }
             return true;
+        }
+
+        public delegate void BusyStateChangedDelegate(WebWorker sender, bool busy);
+        public event BusyStateChangedDelegate OnBusyStateChanged;
+
+        private void WebWorker_OnBusyStateChanged(ServiceCallDispatcher sender, bool busy) {
+            var webWorker = sender as WebWorker;    
+            if (!busy & !IdleWebWorkers.Contains(webWorker)) {
+                IdleWebWorkers.Enqueue(sender as WebWorker);
+            } else if (busy && !IdleWebWorkers.Contains(webWorker)) {
+                var checkThis = true;   
+            }
+            OnBusyStateChanged?.Invoke(webWorker, busy);
         }
 
         SemaphoreSlim _SetWorkerCountLock = new SemaphoreSlim(1);

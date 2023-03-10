@@ -12,5 +12,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public int VideoWidth => JSRef.Get<int>("videoWidth");
         public int VideoHeight => JSRef.Get<int>("videoHeight");
         public bool SupportsRequestVideoFrameCallback => !JS.IsUndefined(this, "requestVideoFrameCallback");
+        public void RequestVideoFrameCallback(Callback callback) => JSRef.CallVoid("requestVideoFrameCallback", callback);
     }
 }

@@ -96,6 +96,30 @@ var audio = new Audio("https://some_audio_online");
 audio.Play();
 ```
 
+# Promise
+Below is a an example that uses Promises to utilize the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)
+
+```cs
+using var navigator = JS.Get<Navigator>("navigator");
+using var locks = navigator.Locks;
+
+Console.WriteLine($"lock: 1");
+
+using var waitLock = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
+    Console.WriteLine($"lock acquired 3");
+    await Task.Delay(5000);
+    Console.WriteLine($"lock released 4");
+})));
+
+using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
+    Console.WriteLine($"lock acquired 5");
+    await Task.Delay(5000);
+    Console.WriteLine($"lock released 6");
+})));
+
+Console.WriteLine($"lock: 2");
+```
+
 # SpawnDev.BlazorJS.WebWorkers
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.WebWorkers.svg?label=SpawnDev.BlazorJS.WebWorkers)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers) 
 
@@ -247,8 +271,14 @@ VideoFrame
 OffscreenCanvas  
 RTCDataChannel  
 
+# IDisposable 
+NOTE: The above code shows quick examples. Some objects implement IDisposable, such as JSObject, Callback, and IJSInProcessObjectReference types. 
 
-NOTE: The above code shows quick examples. Some objects implement IDisposable, such as all JSObject, IJSInProcessObjectReference, and Callback, and need to be disposed when no longer used. Disposable objects returned from a Blazor service in a WebWorker or SharedWorker are automatically disposed after the data has been sent to the calling thread.
+JSObject types and Callback types will dispose of their interop resources when their finalizer is called if not previously disposed. 
+
+IJSInProcessObjectReference does not dispose of interop resources with a finalizer and MUST be disposed when no longer needed.
+
+IDisposable objects returned from a WebWorker or SharedWorker service are automatically disposed after the data has been sent to the calling thread.
 
 ## Support
 

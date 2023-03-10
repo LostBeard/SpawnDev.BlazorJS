@@ -84,6 +84,20 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             return t;
         }
 
+        public delegate void BusyStateChangedDelegate(ServiceCallDispatcher sender, bool busy);
+        public event BusyStateChangedDelegate OnBusyStateChanged;
+        private bool _busy = false;
+
+        void CheckBusyStateChanged() {
+            if (_busy && _waiting.Count == 0) {
+                _busy = false;
+                OnBusyStateChanged?.Invoke(this, _busy);
+            } else if (!_busy && _waiting.Count > 0) {
+                _busy = true;
+                OnBusyStateChanged?.Invoke(this, _busy);
+            }
+        }
+
         protected async void _worker_OnMessage(MessageEvent e) {
             IJSInProcessObjectReference? args = null;
             try {
@@ -96,6 +110,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                     if (!RecevdInit) {
                         RecevdInit = true;
                         _oninit.TrySetResult(0);
+                        OnBusyStateChanged?.Invoke(this, _busy);
                     }
                 }
                 else if (msgBase.TargetType == "__action" && !string.IsNullOrEmpty(msgBase.RequestId)) {
@@ -127,7 +142,12 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                             //args = e.Get<JSObject?>("data.args");
                         }
                         catch { }
-                        if (args != null) req.OnComplete?.Invoke(args);
+                        if (args != null) {
+                            req.OnComplete?.Invoke(args);
+                        } else {
+                            var checkThis = true;
+                        }
+                        CheckBusyStateChanged();
                     }
                 }
                 else if (msgBase.TargetType == "event" && !string.IsNullOrEmpty(msgBase.TargetName)) {
@@ -154,24 +174,17 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                     }
                     var methodInfo = GetBestInstanceMethod(serviceType, msgBase.TargetName, argsLength);
                     var returnType = methodInfo.ReturnType;
-                    var returnTypeIsVoid = typeof(void) == returnType;
-                    var returnTypeName = returnType.Name;
-                    var isTask = typeof(Task).IsAssignableFrom(methodInfo.ReturnType);
-                    var isValueTask = typeof(ValueTask).IsAssignableFrom(methodInfo.ReturnType);
-                    var isAwaitable = isTask || isValueTask;
-                    Type returnTypeOfTheTask = (isTask || isValueTask) && returnType.GetGenericArguments().Any() ? returnType.GetGenericArguments().First() : typeof(void);
-                    var returnTypeOfTheTaskIsVoid = typeof(void) == returnTypeOfTheTask;
-                    var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
+                    var isAwaitable = returnType.IsAsync();
+                    var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
                     var finalReturnTypeIsVoid = finalReturnType == typeof(void);
                     var finalReturnTypeAllowTransfer = true;
                     var transferAttrMethod = finalReturnTypeIsVoid ? null : (WorkerTransferAttribute?)finalReturnType.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
                     if (transferAttrMethod != null) {
-                        // this property has been marked as non-stransferable
                         finalReturnTypeAllowTransfer = transferAttrMethod.Transfer;
                     }
                     var callArgs0 = PostDeserializeArgs(msgBase.RequestId, methodInfo, argsLength, args.Get);
                     // call the requested method
-                    // TODO ... should the called args dipose of the incoming parameters?
+                    // TODO ... should the called args dispose of the incoming parameters?
                     // dispose any parameters that implement IDisposable and were created for the call
                     var hasReturnValue = !finalReturnTypeIsVoid;
                     object? retValue = null;
@@ -183,7 +196,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                             if (t.Exception != null) {
                                 err = t.Exception.Message;
                             }
-                            else if (!returnTypeOfTheTaskIsVoid) {
+                            else if (!finalReturnTypeIsVoid) {
                                 retValue = returnType.GetProperty("Result").GetValue(retv, null);
                             }
                         }
@@ -192,11 +205,11 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                             if (vt.IsFaulted) {
                                 err = "Call failed";
                             }
-                            else if (!returnTypeOfTheTaskIsVoid) {
+                            else if (!finalReturnTypeIsVoid) {
                                 retValue = returnType.GetProperty("Result").GetValue(retv, null);
                             }
                         }
-                        else if (!returnTypeIsVoid) {
+                        else if (!finalReturnTypeIsVoid) {
                             retValue = retv;
                         }
                     }
@@ -257,14 +270,8 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             var argsLength = args != null ? args.Length : 0;
             var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
             var returnType = methodInfo.ReturnType;
-            var returnTypeIsVoid = typeof(void) == returnType;
-            var returnTypeName = returnType.Name;
-            var isTask = typeof(Task).IsAssignableFrom(methodInfo.ReturnType);
-            var isValueTask = typeof(ValueTask).IsAssignableFrom(methodInfo.ReturnType);
-            var isAwaitable = isTask || isValueTask;
-            Type returnTypeOfTheTask = (isTask || isValueTask) && returnType.GetGenericArguments().Any() ? returnType.GetGenericArguments().First() : typeof(void);
-            var returnTypeOfTheTaskIsVoid = typeof(void) == returnTypeOfTheTask;
-            var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
+            var isAwaitable = returnType.IsAsync();
+            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
             var requestId = Guid.NewGuid().ToString();
             var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
@@ -274,8 +281,6 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                 TargetType = serviceType.FullName,
                 Data = msgData,
             };
-            //var reqTypeName = typeof(TResult).Name;
-            var fnRetTypeName = finalReturnType.Name;
             var t = new TaskCompletionSource<object?>();
             var workerTask = new WebWorkerCallMessageTask((args) => {
                 // remove any callbacks
@@ -298,6 +303,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
             _waiting.Add(workerTask.RequestId, workerTask);
             _port.PostMessage(workerMsg, transferable);
+            CheckBusyStateChanged();
             return t.Task;
         }
         public Task<TResult> InvokeAsync<TService, TResult>(string methodName, params object?[]? args) => CallAsync<TService, TResult>(methodName, args ?? new object[0]);
@@ -306,14 +312,8 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             var serviceType = typeof(TService);
             var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
             var returnType = methodInfo.ReturnType;
-            var returnTypeIsVoid = typeof(void) == returnType;
-            var returnTypeName = returnType.Name;
-            var isTask = typeof(Task).IsAssignableFrom(methodInfo.ReturnType);
-            var isValueTask = typeof(ValueTask).IsAssignableFrom(methodInfo.ReturnType);
-            var isAwaitable = isTask || isValueTask;
-            Type returnTypeOfTheTask = (isTask || isValueTask) && returnType.GetGenericArguments().Any() ? returnType.GetGenericArguments().First() : typeof(void);
-            var returnTypeOfTheTaskIsVoid = typeof(void) == returnTypeOfTheTask;
-            var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
+            var isAwaitable = returnType.IsAsync();
+            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
             var requestId = Guid.NewGuid().ToString();
             var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
@@ -323,8 +323,6 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                 TargetType = typeof(TService).FullName,
                 Data = msgData,
             };
-            var reqTypeName = typeof(TResult).Name;
-            var fnRetTypeName = finalReturnType.Name;
             var t = new TaskCompletionSource<TResult>();
             if (typeof(TResult) != finalReturnType) {
 #if DEBUG
@@ -363,6 +361,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
             _waiting.Add(workerTask.RequestId, workerTask);
             _port.PostMessage(workerMsg, transferable);
+            CheckBusyStateChanged();
             return t.Task;
         }
 
@@ -371,14 +370,8 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             var argsLength = args != null ? args.Length : 0;
             var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
             var returnType = methodInfo.ReturnType;
-            var returnTypeIsVoid = typeof(void) == returnType;
-            var returnTypeName = returnType.Name;
-            var isTask = typeof(Task).IsAssignableFrom(methodInfo.ReturnType);
-            var isValueTask = typeof(ValueTask).IsAssignableFrom(methodInfo.ReturnType);
-            var isAwaitable = isTask || isValueTask;
-            Type returnTypeOfTheTask = (isTask || isValueTask) && returnType.GetGenericArguments().Any() ? returnType.GetGenericArguments().First() : typeof(void);
-            var returnTypeOfTheTaskIsVoid = typeof(void) == returnTypeOfTheTask;
-            var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
+            var isAwaitable = returnType.IsAsync();
+            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
             var requestId = Guid.NewGuid().ToString();
             var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
@@ -388,8 +381,6 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                 TargetType = serviceType.FullName,
                 Data = msgData,
             };
-            //var reqTypeName = finalReturnType.Name;
-            var fnRetTypeName = finalReturnType.Name;
             var workerTask = new WebWorkerCallMessageTask((args) => {
                 Exception? retExc = null;
                 object? retVal = null;
@@ -422,6 +413,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
             _waiting.Add(workerTask.RequestId, workerTask);
             _port.PostMessage(workerMsg, transferable);
+            CheckBusyStateChanged();
         }
 
 
@@ -561,14 +553,8 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             var serviceType = typeof(TService);
             var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
             var returnType = methodInfo.ReturnType;
-            var returnTypeIsVoid = typeof(void) == returnType;
-            var returnTypeName = returnType.Name;
-            var isTask = typeof(Task).IsAssignableFrom(methodInfo.ReturnType);
-            var isValueTask = typeof(ValueTask).IsAssignableFrom(methodInfo.ReturnType);
-            var isAwaitable = isTask || isValueTask;
-            Type returnTypeOfTheTask = (isTask || isValueTask) && returnType.GetGenericArguments().Any() ? returnType.GetGenericArguments().First() : typeof(void);
-            var returnTypeOfTheTaskIsVoid = typeof(void) == returnTypeOfTheTask;
-            var finalReturnType = isTask || isValueTask ? returnTypeOfTheTask : returnType;
+            var isAwaitable = returnType.IsAsync();
+            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
             var requestId = Guid.NewGuid().ToString();
             var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
@@ -578,8 +564,6 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                 TargetType = typeof(TService).FullName,
                 Data = msgData,
             };
-            var reqTypeName = typeof(void).Name;
-            var fnRetTypeName = finalReturnType.Name;
             var t = new TaskCompletionSource<int>();
             if (typeof(void) != finalReturnType) {
 #if DEBUG
@@ -605,6 +589,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
             _waiting.Add(workerTask.RequestId, workerTask);
             _port.PostMessage(workerMsg, transferable);
+            CheckBusyStateChanged();
             return t.Task;
         }
 
@@ -629,6 +614,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
         private static bool IsAsyncMethod(MethodInfo method) => method.GetCustomAttribute(AsyncStateMachineAttributeType) != null;
         private MethodInfo? GetBestInstanceMethod<T>(string identifier, int paramCount) => GetBestInstanceMethod(typeof(T), identifier, paramCount);
         private MethodInfo? GetBestInstanceMethod(Type classType, string identifier, int paramCount) {
+            // TODO - cache
             MethodInfo? best = null;
             var instanceMethods = classType
             .GetMethods(BindingFlags.Public | BindingFlags.Instance)

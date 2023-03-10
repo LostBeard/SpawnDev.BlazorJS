@@ -22,6 +22,6 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public T Call<T>(object? thisObj = null, params object?[] args) => JSRef.Call<T>("applyFn", thisObj, args);
         public ValueTask<T> CallAsync<T>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<T>("applyFn", thisObj, args);
-        public void CallVoid<T>(object? thisObj = null, params object?[] args) => JSRef.CallVoid("applyFn", thisObj, args);
+        public void CallVoid(object? thisObj = null, params object?[] args) => JSRef.CallVoid("applyFn", thisObj, args);
     }
 }

@@ -117,10 +117,6 @@ var initWebWorkerBlazor = async () => {
                 //integrity: integrity,
             });
             var jsStr = await response.text();
-            // this is where we can modify json.entryAssembly or other boot config settings
-            //consoleLog('blazor.boot.json', json);
-            //json.debugBuild = false;
-            //json.linkerEnabled = false;
             function fixModuleScript(jsStr) {
                 // handle things that are automatically handled by import
                 // import.meta.url
