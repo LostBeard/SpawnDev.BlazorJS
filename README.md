@@ -54,7 +54,7 @@ var worker = JS.New("Worker", myWorkerScript);
 
 # Callback
 
-Pass methods to Javascript using the Callback.Create and Callback.CreateOne methods. These method use type arguments to set the type expected for incoming arguments (if any) and the expected return type (if any.) async methods are passed as Promises.
+Pass methods to Javascript using the Callback.Create and Callback.CreateOne methods. These methods use type arguments to set the types expected for incoming arguments (if any) and the expected return type (if any.) async methods are passed as Promises.
 
 Pass lambda callbacks to Javascript
 ```cs
@@ -108,6 +108,33 @@ JSObjects are wrappers around IJSInProcessReference objects that can be passed t
 
 Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (localStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
 
+
+# Promise
+SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class
+
+Below is a an example that uses Promises to utilize the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)
+
+```cs
+using var navigator = JS.Get<Navigator>("navigator");
+using var locks = navigator.Locks;
+
+Console.WriteLine($"lock: 1");
+
+using var waitLock = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
+    Console.WriteLine($"lock acquired 3");
+    await Task.Delay(5000);
+    Console.WriteLine($"lock released 4");
+})));
+
+using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
+    Console.WriteLine($"lock acquired 5");
+    await Task.Delay(5000);
+    Console.WriteLine($"lock released 6");
+})));
+
+Console.WriteLine($"lock: 2");
+```
+
 # Custom JSObjects  
 Implement your own JSObject classes for Javascript objects not already available in the BlazorJS.JSObjects library.
 
@@ -133,30 +160,6 @@ Then use your new object
 ```cs
 var audio = new Audio("https://some_audio_online");
 audio.Play();
-```
-
-# Promise
-Below is a an example that uses Promises to utilize the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)
-
-```cs
-using var navigator = JS.Get<Navigator>("navigator");
-using var locks = navigator.Locks;
-
-Console.WriteLine($"lock: 1");
-
-using var waitLock = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
-    Console.WriteLine($"lock acquired 3");
-    await Task.Delay(5000);
-    Console.WriteLine($"lock released 4");
-})));
-
-using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
-    Console.WriteLine($"lock acquired 5");
-    await Task.Delay(5000);
-    Console.WriteLine($"lock released 6");
-})));
-
-Console.WriteLine($"lock: 2");
 ```
 
 # SpawnDev.BlazorJS.WebWorkers

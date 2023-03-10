@@ -7,6 +7,7 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
 
+#if DEBUG
 using var navigator = JS.Get<Navigator>("navigator");
 using var locks = navigator.Locks;
 
@@ -26,7 +27,6 @@ using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj)
 
 Console.WriteLine($"lock: 2");
 
-
 string SomeNetFn(string input) {
     return $"Recvd: {input}";
 }
@@ -39,17 +39,16 @@ async Task<string> SomeNetFnAsync(string input) {
 
 JS.Set("someNetFnAsync", Callback.CreateOne<string, string>(SomeNetFnAsync));
 
-
 async Task<string> DelayedCall() {
     await Task.Delay(5000);
     return "Hello Async!";
 }
 
-
 var asyncCallback = Callback.Create(DelayedCall);
 
 JS.Set("_asyncCallback", asyncCallback);
 
+#endif
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
