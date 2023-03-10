@@ -51,7 +51,12 @@ Create a new Javascript object
 var worker = JS.New("Worker", myWorkerScript);
 ```
 
-Pass callbacks to Javascript
+
+# Callback
+
+Pass methods to Javascript using the Callback.Create and Callback.CreateOne methods. These method use type arguments to set the type expected for incoming arguments (if any) and the expected return type (if any.) async methods are passed as Promises.
+
+Pass lambda callbacks to Javascript
 ```cs
 JS.Set("testCallback", Callback.Create<string>((strArg) => {
     Console.WriteLine($"Javascript sent: {strArg}");
@@ -61,6 +66,40 @@ JS.Set("testCallback", Callback.Create<string>((strArg) => {
 ```js
 // in Javascript
 testCallback('Hello callback!');
+```
+
+Pass method callbacks to Javascript
+```cs
+string SomeNetFn(string input){
+    return $"Recvd: {input}";
+}
+
+JS.Set("someNetFn", Callback.CreateOne<string, string>(SomeNetFn));
+```
+```js
+// in Javascript
+someNetFn('Hello callback!');
+
+// prints
+Recvd: Hello callback!
+```
+
+Pass async method callbacks to Javascript
+Under the hood, BlazorJS is returning a Promise to javascript when the method is called
+
+```cs
+async Task<string> SomeNetFnAsync(string input){
+    return $"Recvd: {input}";
+}
+
+JS.Set("someNetFnAsync", Callback.CreateOne<string, string>(SomeNetFnAsync));
+```
+```js
+// in Javascript
+await someNetFnAsync('Hello callback!');
+
+// prints
+Recvd: Hello callback!
 ```
 
 # JSObject
@@ -274,9 +313,11 @@ RTCDataChannel
 # IDisposable 
 NOTE: The above code shows quick examples. Some objects implement IDisposable, such as JSObject, Callback, and IJSInProcessObjectReference types. 
 
-JSObject types and Callback types will dispose of their interop resources when their finalizer is called if not previously disposed. 
+JSObject types will dispose of their IJSInProcessObjectReference object when their finalizer is called if not previously disposed. 
 
-IJSInProcessObjectReference does not dispose of interop resources with a finalizer and MUST be disposed when no longer needed.
+Callback types must be disposed unless created with the Callback.CreateOne method, in which case they will dispose themselves after the first callback. Disposing a Callback prevents it from being called.
+
+IJSInProcessObjectReference does not dispose of interop resources with a finalizer and MUST be disposed when no longer needed. Failing to dispose these will cause memory leaks.
 
 IDisposable objects returned from a WebWorker or SharedWorker service are automatically disposed after the data has been sent to the calling thread.
 

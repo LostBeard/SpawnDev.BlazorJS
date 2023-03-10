@@ -7,6 +7,51 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
 
+using var navigator = JS.Get<Navigator>("navigator");
+using var locks = navigator.Locks;
+
+Console.WriteLine($"lock: 1");
+
+using var waitLock = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
+    Console.WriteLine($"lock acquired 3");
+    await Task.Delay(5000);
+    Console.WriteLine($"lock released 4");
+})));
+
+using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
+    Console.WriteLine($"lock acquired 5");
+    await Task.Delay(5000);
+    Console.WriteLine($"lock released 6");
+})));
+
+Console.WriteLine($"lock: 2");
+
+
+string SomeNetFn(string input) {
+    return $"Recvd: {input}";
+}
+
+JS.Set("someNetFn", Callback.CreateOne<string, string>(SomeNetFn));
+
+async Task<string> SomeNetFnAsync(string input) {
+    return $"Recvd: {input}";
+}
+
+JS.Set("someNetFnAsync", Callback.CreateOne<string, string>(SomeNetFnAsync));
+
+
+async Task<string> DelayedCall() {
+    await Task.Delay(5000);
+    return "Hello Async!";
+}
+
+
+var asyncCallback = Callback.Create(DelayedCall);
+
+JS.Set("_asyncCallback", asyncCallback);
+
+
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 if (JS.IsWindow)
 {
