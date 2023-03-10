@@ -86,7 +86,6 @@ namespace SpawnDev.BlazorJS.Test.Shared
                 _unreportedCount++;
                 if (_unreportedCount == 5) {
                     _unreportedCount = 0;
-                    Console.WriteLine($"FPS: {CurrentFPS}");
                 }
             }
         }

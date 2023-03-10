@@ -7,60 +7,6 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
 
-
-
-
-var tt = new ValueTask<string>();
-var tr = tt.GetType();
-var gtd = tr.GetGenericTypeDefinition();
-var bb = typeof(ValueTask).IsAssignableFrom(tr);
-var b2 = typeof(ValueTask<>).IsAssignableFrom(tr);
-var b3 = tr.GetGenericTypeDefinition() == typeof(ValueTask);
-var b4 = tr.GetGenericTypeDefinition() == typeof(ValueTask<>);
-var b5 = tr.IsValueTask();
-
-
-var p = new Promise();
-
-JS.Set("_pp", p);
-
-_ = Task.Run(async () => {
-    await Task.Delay(10000);
-    p.Resolve("Hello promises!");
-});
-
-
-
-using var navigator = JS.Get<Navigator>("navigator");
-using var locks = navigator.Locks;
-
-Console.WriteLine($"lock: 1");
-
-using var waitLock = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
-    Console.WriteLine($"lock acquired 3");
-    await Task.Delay(5000);
-    Console.WriteLine($"lock released 4");
-})));
-
-using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj) => new Promise(async () => {
-    Console.WriteLine($"lock acquired 5");
-    await Task.Delay(5000);
-    Console.WriteLine($"lock released 6");
-})));
-
-Console.WriteLine($"lock: 2");
-
-
-
-//var ttt = new AsyncActionCallback<int>(async (int ttttt) => {
-//    Console.WriteLine($"ttttt: {ttttt}");
-//});
-//JS.Set("_ttt", ttt);
-
-
-
-
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 if (JS.IsWindow)
 {
