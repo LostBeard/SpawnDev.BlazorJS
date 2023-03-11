@@ -110,8 +110,8 @@ Use the extended functions of IJSInProcessObjectReference to work with Javascrip
 
 
 # Promise
-SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class
-Promises can be created in .Net to wrap async methods or Tasks. They are essentially Javascript's version of Task
+SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class.
+Promises can be created in .Net to wrap async methods or Tasks. They are essentially Javascript's version of Task.
 
 Ways to create a Promise in .Net
 ```cs
