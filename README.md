@@ -111,6 +111,43 @@ Use the extended functions of IJSInProcessObjectReference to work with Javascrip
 
 # Promise
 SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class
+Promises can be created in .Net to wrap async methods or Tasks. They are essentially Javascript's version of Task
+
+Ways to create a Promise in .Net
+```cs
+var promise = new Promise();
+// pass to javascript api
+...
+// then later resolve
+promise.Resolve();
+```
+
+Create Promise from lambda
+```cs
+var promise = new Promise(async () => {
+    await Task.Delay(5000);
+});
+// pass to javascript api
+
+```
+Create Promise from lambda with return value
+```cs
+var promise = new Promise<string>(async () => {
+    await Task.Delay(5000);
+    return "Hello world!";
+});
+// pass to javascript api
+```
+Create Promise from Task
+```cs
+var taskSource = new TaskCompletionSource<string>();
+var promise = new Promise<string>(taskSource.Task);
+// pass to javascript api
+...
+// then later resolve
+taskSource.TrySetResult("Hello world!");
+```
+
 
 Below is a an example that uses Promises to utilize the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)
 

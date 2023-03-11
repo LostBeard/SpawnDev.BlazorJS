@@ -2,18 +2,18 @@
 
 // https://devblogs.microsoft.com/dotnet/migrating-realproxy-usage-to-dispatchproxy/
 namespace SpawnDev.BlazorJS.WebWorkers {
-    public class WorkerServiceProxy<TServiceInterface> : DispatchProxy where TServiceInterface : class
+    public class WebWorkerServiceProxy<TServiceInterface> : DispatchProxy where TServiceInterface : class
     {
         internal ServiceCallDispatcher Worker { get; private set; }
         internal MethodInfo _InvokeTaskInfo;
         internal MethodInfo _InvokeValueTaskInfo;
-        public WorkerServiceProxy() : base() {
-            _InvokeTaskInfo = typeof(WorkerServiceProxy<TServiceInterface>).GetMethod(nameof(InvokeTask), BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception($"WorkerServiceProxy static constructor error");
-            _InvokeValueTaskInfo = typeof(WorkerServiceProxy<TServiceInterface>).GetMethod(nameof(InvokeValueTask), BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception($"WorkerServiceProxy static constructor error");
+        public WebWorkerServiceProxy() : base() {
+            _InvokeTaskInfo = typeof(WebWorkerServiceProxy<TServiceInterface>).GetMethod(nameof(InvokeTask), BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception($"WorkerServiceProxy static constructor error");
+            _InvokeValueTaskInfo = typeof(WebWorkerServiceProxy<TServiceInterface>).GetMethod(nameof(InvokeValueTask), BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception($"WorkerServiceProxy static constructor error");
         }
 
         public static TServiceInterface GetWorkerService(ServiceCallDispatcher worker) {
-            var proxy = Create<TServiceInterface, WorkerServiceProxy<TServiceInterface>>() as WorkerServiceProxy<TServiceInterface>;
+            var proxy = Create<TServiceInterface, WebWorkerServiceProxy<TServiceInterface>>() as WebWorkerServiceProxy<TServiceInterface>;
             proxy.Worker = worker;
             var ret = proxy as TServiceInterface;
             if (ret == null) throw new Exception("Failed to create interface proxy");

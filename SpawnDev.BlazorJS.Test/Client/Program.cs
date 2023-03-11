@@ -7,7 +7,7 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
 
-#if DEBUG
+#if DEBUG && false
 using var navigator = JS.Get<Navigator>("navigator");
 using var locks = navigator.Locks;
 
@@ -47,6 +47,39 @@ async Task<string> DelayedCall() {
 var asyncCallback = Callback.Create(DelayedCall);
 
 JS.Set("_asyncCallback", asyncCallback);
+
+var promise = new Promise<string>(async () => {
+    await Task.Delay(5000);
+    return "Hello world!";
+});
+
+
+var hh = async () => {
+    await Task.Delay(5000);
+    return "awesome!";
+};
+
+JS.Set("_promise", hh.Invoke());
+
+var promiseTask = JS.Get<Task<string>>("_promise");
+_ = promiseTask.ContinueWith(t => {
+    Console.WriteLine($"Task completed: {t.Result}");
+});
+
+//var promise = new Promise();
+
+//JS.Set("_promise", promise);
+
+//var promiseTask = JS.Get<Task<string>>("_promise");
+//_ = promiseTask.ContinueWith(t => {
+//    Console.WriteLine($"Task completed: {t.Result}");
+//});
+
+//_ = Task.Run(async () => {
+//    await Task.Delay(5000);
+//    promise.Resolve("apples");
+//});
+
 
 #endif
 

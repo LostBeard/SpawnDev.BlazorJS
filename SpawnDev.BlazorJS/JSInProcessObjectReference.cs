@@ -22,14 +22,14 @@ namespace SpawnDev.BlazorJS
         public static ValueTask<object?> GetAsync(this IJSInProcessObjectReference targetObject, Type returnType, string identifier)=> _JSInteropCallAsync(returnType, "_get", targetObject, identifier);
         #endregion
         #region IJSInProcessObjectReference Call Sync
-        public static T CallApply<T>(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCall<T>("_call", targetObject, identifier, args);
-        public static object? CallApply(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => _JSInteropCall(returnType, "_call", targetObject, identifier, args);
-        public static void CallApplyVoid(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCallVoid("_call", targetObject, identifier, args);
+        public static T CallApply<T>(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCall<T>("_call", targetObject, identifier, PreExportArgs(args));
+        public static object? CallApply(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => _JSInteropCall(returnType, "_call", targetObject, identifier, PreExportArgs(args));
+        public static void CallApplyVoid(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCallVoid("_call", targetObject, identifier, PreExportArgs(args));
         #endregion
         #region IJSInProcessObjectReference Call Async
-        public static ValueTask<T> CallApplyAsync<T>(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCallAsync<T>("_call", targetObject, identifier, args);
-        public static ValueTask<object?> CallApplyAsync(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => _JSInteropCallAsync(returnType, "_call", targetObject, identifier, args);
-        public static ValueTask CallApplyVoidAsync(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCallVoidAsync("_call", targetObject, identifier, args);
+        public static ValueTask<T> CallApplyAsync<T>(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCallAsync<T>("_call", targetObject, identifier, PreExportArgs(args));
+        public static ValueTask<object?> CallApplyAsync(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => _JSInteropCallAsync(returnType, "_call", targetObject, identifier, PreExportArgs(args));
+        public static ValueTask CallApplyVoidAsync(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCallVoidAsync("_call", targetObject, identifier, PreExportArgs(args));
         #endregion
         #endregion
 

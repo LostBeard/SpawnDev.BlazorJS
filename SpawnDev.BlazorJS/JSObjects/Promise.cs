@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using System;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,9 +57,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
     [JsonConverter(typeof(JSObjectConverter<Promise>))]
     public class Promise : JSObject {
         public static explicit operator Promise(Task t) => new Promise(t);
-        //public static explicit operator Promise(Func<Task> t) => new Promise(t);
-
-        public static implicit operator Promise(Func<Task> t) => new Promise(t);
+        public static explicit operator Promise(Func<Task> t) => new Promise(t);
 
         public Promise(Func<Task> task) : base(NullRef) {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) => {
@@ -179,6 +178,15 @@ namespace SpawnDev.BlazorJS.JSObjects {
             })));
         }
 
+        public override void Dispose() {
+            if (IsWrapperDisposed) return;
+            ResolveFunc?.Dispose();
+            ResolveFunc = null;
+            ResolveFunc?.Dispose();
+            ResolveFunc = null;
+            base.Dispose();
+        }
+
         public Function? ResolveFunc { get; protected set; }
         public Function? RejectFunc { get; protected set; }
 
@@ -215,6 +223,47 @@ namespace SpawnDev.BlazorJS.JSObjects {
             cancellationTokenSource?.CancelAfter(timeoutMS);
             return t.Task;
         }
+        static Dictionary<Type, MethodInfo?> ThenAsyncCache = new Dictionary<Type, MethodInfo?>();
+        static MethodInfo? _ThenAsyncInfo = null;
+        MethodInfo? GetThenAsyncGeneric(Type type) {
+            if (_ThenAsyncInfo == null) {
+                var thenASyncParamTypes = new Type[] { typeof(int) };
+                var infos = this.GetType().GetMethods().Where(o => {
+                    if (o.Name != "ThenAsync") return false;
+                    if (!o.IsGenericMethod) return false;
+                    var paramInfos = o.GetParameters();
+                    var paramTypes = paramInfos.Select(o => o.ParameterType).ToList();
+                    if (!paramTypes.SequenceEqual(thenASyncParamTypes)) return false;
+                    return true;
+                }).ToList();
+                _ThenAsyncInfo = infos.FirstOrDefault();
+            }
+            if (ThenAsyncCache.TryGetValue(type, out var methodInfo)) return methodInfo;
+            var methodInfoTyped = _ThenAsyncInfo.MakeGenericMethod(type);
+            ThenAsyncCache[type] = methodInfoTyped;
+            return methodInfoTyped;
+        }
+
+        static Dictionary<Type, Type> PromiseTypedCache = new Dictionary<Type, Type>();
+        static MethodInfo? _PromiseTypedInfo = null;
+        internal static Type GetPromiseTypedGeneric(Type type) {
+            if (PromiseTypedCache.TryGetValue(type, out var methodInfo)) return methodInfo;
+            var typed = typeof(Promise<>).MakeGenericType(type);
+            PromiseTypedCache[type] = typed;
+            return typed;
+        }
+
+        internal static Promise CreateTypedInstance(Type returnType, object task) {
+            Type typed = GetPromiseTypedGeneric(returnType);
+            var o = (Promise)Activator.CreateInstance(typed, task);
+            return o;
+        }
+
+        internal object? ThenAsync(Type returnType, int timeoutMS = 0) {
+            var ret = GetThenAsyncGeneric(returnType).Invoke(this, new object[] { timeoutMS });
+            return ret;
+        }
+
         public Task<T> ThenAsync<T>(CancellationToken cancellationToken) {
             var t = new TaskCompletionSource<T>();
             var callbacks = new CallbackGroup();

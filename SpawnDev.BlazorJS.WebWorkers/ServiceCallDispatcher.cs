@@ -650,7 +650,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
         public TServiceInterface GetService<TServiceInterface>() where TServiceInterface : class {
             var typeofT = typeof(TServiceInterface);
             if (ServiceInterfaces.TryGetValue(typeofT, out var serviceWorker)) return (TServiceInterface)serviceWorker;
-            var ret = WorkerServiceProxy<TServiceInterface>.GetWorkerService(this);
+            var ret = WebWorkerServiceProxy<TServiceInterface>.GetWorkerService(this);
             ServiceInterfaces[typeofT] = ret;
             return ret;
         }

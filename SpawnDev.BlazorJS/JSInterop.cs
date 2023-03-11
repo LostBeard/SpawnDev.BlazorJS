@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.JSObjects;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,11 +10,6 @@ namespace SpawnDev.BlazorJS
 {
     public static partial class JS
     {
-        public static void _JSInteropCallVoid(string fn, params object?[] args)
-        {
-            _js.InvokeVoid($"JSInterop.{fn}", args);
-        }
-
         public class TypeConversionInfo
         {
             public Type ReturnType { get; private set; }
@@ -55,15 +51,32 @@ namespace SpawnDev.BlazorJS
             static string GetPropertyJSName(PropertyInfo prop)
             {
                 // TODO - json name attribute
-                var propName = prop.Name.Substring(0, 1).ToLowerInvariant() + prop.Name.Substring(1);
+                string propName = prop.Name;
+                try {
+                    propName = string.IsNullOrEmpty(propName) ? "" : propName.Substring(0, 1).ToLowerInvariant() + propName.Substring(1);
+                }
+                catch(Exception ex) {
+                    var nmt = true;
+                }
                 return propName;
             }
             public TypeConversionInfo(Type returnType)
             {
+#if DEBUG && false
+                Console.WriteLine($"TypeConversionInfo loading: {returnType.Name}");
+#endif
                 if (returnType == null) throw new Exception("Invalid Return Type");
                 ReturnType = returnType;
                 if (returnType.IsValueType || returnType == typeof(string))
                 {
+                    useDefaultReader = true;
+                    return;
+                }
+                else if (typeof(Callback).IsAssignableFrom(returnType)) {
+                    useDefaultReader = true;
+                    return;
+                }
+                else if (typeof(DotNetObjectReference).IsAssignableFrom(returnType)) {
                     useDefaultReader = true;
                     return;
                 }
@@ -111,14 +124,22 @@ namespace SpawnDev.BlazorJS
                         }
                         return;
                     }
+                    else if (returnType.IsTask()) {
+                        IsTransferable = false;
+                        useJSObjectReader = false;
+                        useDefaultReader = false;
+                        return;
+                    }
                     else if (HasIJSInProcessObjectReferenceConstructor())
                     {
                         IsTransferable = false; // no way to tell from this conversion. this is a generic wrapper for IJSInProcessObjectRefrence
                         useIJSWrapperReader = true;
                         return;
                     }
-                    else
-                    {
+                    else if (typeof(Callback).IsAssignableFrom(returnType)) {
+
+                    }
+                    else {
                         // class
                         // check if the class types requires per property import
                         ClassProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -138,7 +159,21 @@ namespace SpawnDev.BlazorJS
                 }
                 useDefaultReader = true;
             }
-
+            public object? PreExport(object? obj) {
+                object? ret = obj;
+                if (obj == null || ReturnType == null) return ret;
+                if (useDefaultReader) return ret;
+                if (ReturnType.IsTask()) {
+                    var taskReturnType = ReturnType.AsyncReturnType();
+                    if (taskReturnType == typeof(void)) {
+                        ret = new Promise((Task)ret);
+                    }
+                    else {
+                        ret = Promise.CreateTypedInstance(taskReturnType, ret);
+                    }
+                }
+                return ret;
+            }
             public object[] GetTransferablePropertyValues(object? obj)
             {
                 var ret = new List<object>();
@@ -346,6 +381,18 @@ namespace SpawnDev.BlazorJS
                         }
                     }
                 }
+                else if (ReturnType.IsTask()) {
+                    var taskReturnType = ReturnType.AsyncReturnType();
+                    if (taskReturnType == typeof(void)) {
+                        using var promise = new Promise(_ref);
+                        ret = promise.ThenAsync();
+                        _ref = null;    // ret now owns ret, prevent _ref's disposal.
+                    } else {
+                        using var promise = new Promise(_ref);
+                        ret = promise.ThenAsync(taskReturnType);
+                        _ref = null;    // ret now owns ret, prevent _ref's disposal.
+                    }
+                }
                 else if (useJSObjectReader)
                 {
                     ret = Activator.CreateInstance(ReturnType, _ref);
@@ -363,12 +410,20 @@ namespace SpawnDev.BlazorJS
                 _ref?.Dispose();
                 return ret;
             }
+
+        }
+
+        public static TypeConversionInfo? GetObjectTypeConversionInfo(object? obj) {
+            if (obj == null) return null;
+            return GetTypeConversionInfo(obj.GetType());
         }
 
         static Dictionary<Type, TypeConversionInfo> _conversionInfo = new Dictionary<Type, TypeConversionInfo>();
         public static TypeConversionInfo GetTypeConversionInfo(Type type)
         {
-            if (_conversionInfo.TryGetValue(type, out TypeConversionInfo conversionInfo)) return conversionInfo;
+            if (_conversionInfo.TryGetValue(type, out TypeConversionInfo conversionInfo)) {
+                return conversionInfo;
+            }
             conversionInfo = new TypeConversionInfo(type);
             _conversionInfo[type] = conversionInfo;
             return conversionInfo;
@@ -380,6 +435,7 @@ namespace SpawnDev.BlazorJS
             T? ret = default;
             var returnType = typeof(T);
             var conversionInfo = GetTypeConversionInfo(returnType);
+            if (fn != "_call") args = PreExportArgs(args);
             if (!conversionInfo.useDefaultReader)
             {
                 var _ref = _js.Invoke<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
@@ -395,6 +451,7 @@ namespace SpawnDev.BlazorJS
         {
             object? ret = null;
             var conversionInfo = GetTypeConversionInfo(returnType);
+            if (fn != "_call") args = PreExportArgs(args);
             if (!conversionInfo.useDefaultReader)
             {
                 var _ref = _js.Invoke<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
@@ -406,8 +463,8 @@ namespace SpawnDev.BlazorJS
             }
             return ret;
         }
-        public static async ValueTask _JSInteropCallVoidAsync(string fn, params object?[] args)
-        {
+        public static async ValueTask _JSInteropCallVoidAsync(string fn, params object?[] args) {
+            if (fn != "_call") args = PreExportArgs(args);
             await _js.InvokeVoidAsync($"JSInterop.{fn}", args);
         }
         public static async ValueTask<T?> _JSInteropCallAsync<T>(string fn, params object?[] args)
@@ -415,6 +472,7 @@ namespace SpawnDev.BlazorJS
             T? ret = default;
             var returnType = typeof(T);
             var conversionInfo = GetTypeConversionInfo(returnType);
+            if (fn != "_call") args = PreExportArgs(args);
             if (!conversionInfo.useDefaultReader)
             {
                 var _ref = await _js.InvokeAsync<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
@@ -426,10 +484,17 @@ namespace SpawnDev.BlazorJS
             }
             return ret;
         }
+
+        internal static object?[]? PreExportArgs(object?[] args) => args == null ? null : args.Select(o => {
+            var tci = GetObjectTypeConversionInfo(o);
+            return tci == null ? o : tci.PreExport(o);
+        }).ToArray();
+
         public static async ValueTask<object?> _JSInteropCallAsync(Type returnType, string fn, params object?[] args)
         {
             object? ret = null;
             var conversionInfo = GetTypeConversionInfo(returnType);
+            if (fn != "_call") args = PreExportArgs(args);
             if (!conversionInfo.useDefaultReader)
             {
                 var _ref = await _js.InvokeAsync<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
@@ -441,10 +506,16 @@ namespace SpawnDev.BlazorJS
             }
             return ret;
         }
+        public static void _JSInteropCallVoid(string fn, params object?[] args) {
+            if (fn != "_call") args = PreExportArgs(args);
+            _js.InvokeVoid($"JSInterop.{fn}", args);
+        }
+
 
         internal static object? GetDynamic(Type? resultType, IJSInProcessObjectReference _ref, object identifier, object[] args)
         {
             object? result = null;
+            if (identifier != "_call") args = PreExportArgs(args);
             if (resultType == null)
             {
                 JS._JSInteropCallVoid("_getDynamic", _ref, identifier, args, "void", "void");
@@ -458,7 +529,7 @@ namespace SpawnDev.BlazorJS
                 if (isArray)
                 {
                     elementType = resultType.GetElementType();
-                    isIJSObjectArray = resultType != null && typeof(JSObject).IsAssignableFrom(elementType);
+                    isIJSObjectArray = elementType != null && typeof(JSObject).IsAssignableFrom(elementType);
                 }
                 var isIJSObject = resultType != null && typeof(JSObject).IsAssignableFrom(resultType);
                 Type tmpType = isIJSObjectArray || isIJSObject ? typeof(IJSInProcessObjectReference) : resultType;
@@ -471,6 +542,7 @@ namespace SpawnDev.BlazorJS
         internal static async Task<object?> GetDynamicAsync(Type? resultType, IJSInProcessObjectReference _ref, object identifier, object[] args)
         {
             object? result = null;
+            if (identifier != "_call") args = PreExportArgs(args);
             if (resultType == null)
             {
                 await JS._JSInteropCallVoidAsync("_getDynamic", _ref, identifier, args, "void", "void");
@@ -484,7 +556,7 @@ namespace SpawnDev.BlazorJS
                 if (isArray)
                 {
                     elementType = resultType.GetElementType();
-                    isIJSObjectArray = resultType != null && typeof(JSObject).IsAssignableFrom(elementType);
+                    isIJSObjectArray = elementType != null && typeof(JSObject).IsAssignableFrom(elementType);
                 }
                 var isIJSObject = resultType != null && typeof(JSObject).IsAssignableFrom(resultType);
                 Type tmpType = isIJSObjectArray || isIJSObject ? typeof(IJSInProcessObjectReference) : resultType;

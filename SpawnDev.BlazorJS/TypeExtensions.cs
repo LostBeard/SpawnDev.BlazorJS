@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.WebWorkers {
+namespace SpawnDev.BlazorJS {
     public static class TypeExtensions {
         public static bool IsAsync(this Type type) => type.IsTask() || type.IsValueTask();
 
