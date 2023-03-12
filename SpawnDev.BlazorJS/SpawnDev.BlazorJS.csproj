@@ -4,7 +4,7 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>1.8.0</Version>
+		<Version>1.8.1</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>SpawnDev.BlazorJS</Title>
 		<Authors>LostBeard</Authors>
@@ -14,6 +14,7 @@
 		<RepositoryUrl>https://github.com/LostBeard/SpawnDev.BlazorJS.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;BlazorWebAssembly;DotNet</PackageTags>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>

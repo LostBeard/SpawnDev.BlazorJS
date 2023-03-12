@@ -380,7 +380,81 @@ var initFunc = function () {
             return value;
         }
     });
+
+    var invokeJSFromDotNetOrig = null;
     //console.log('SpawnDev.BlazorJS module loaded');
+    function invokeJSFromDotNetOverride(t, n, r, o) {
+        var pt = Blazor.platform;
+        var e = DotNet;
+        var ct = BINDING;
+
+        let s = pt.readStringField(t, 0),
+            a = pt.readInt32Field(t, 4),
+            i = pt.readStringField(t, 8),
+            c = pt.readUint64Field(t, 20);
+
+        // TODO
+        // for BLazorJS methods, also send the JSCallResultType that can be obtained by calling JS.FromGeneric(Type returnType);
+        // if that value does not match the value of "a" the return value will need to be modified
+        //console.log('invokeJSFromDotNetOverride', s, a, i, c);
+            //Default = 0,
+            //JSObjectReference = 1,
+            //JSStreamReference = 2,
+            //JSVoidResult = 3,
+            //JSFunction = 9,
+
+
+        let aOrig = a;
+        var jsResultTypeOverride = -1;
+        if (s.indexOf('JSInterop.') === 1) {
+            jsResultTypeOverride = parseInt(s[0])
+            s = s.substr(1);
+            if (a != jsResultTypeOverride) {
+                a = jsResultTypeOverride;
+            }
+        }
+        //ret = invokeJSFromDotNetOrig(t, n, r, o);
+        if (null !== i) {
+            const n = pt.readUint64Field(t, 12);
+            if (0 !== n) return e.jsCallDispatcher.beginInvokeJSFromDotNet(n, s, i, a, c), 0; {
+                const t = e.jsCallDispatcher.invokeJSFromDotNet(s, i, a, c);
+                return null === t ? 0 : ct.js_string_to_mono_string(t)
+            }
+        }
+        {
+            let t = e.jsCallDispatcher.findJSFunction(s, c).call(null, n, r, o);
+            if (typeof t === 'function') {
+                // wrap it
+                t = wrapFunction(t);
+            }
+            switch (a) {
+                case 9:
+
+                    break;
+                case e.JSCallResultType.Default:
+                    return t;
+                case e.JSCallResultType.JSObjectReference:
+                    return e.createJSObjectReference(t).__jsObjectId;
+                case e.JSCallResultType.JSStreamReference: {
+                    const n = e.createJSStreamReference(t),
+                        r = JSON.stringify(n);
+                    return ct.js_string_to_mono_string(r)
+                }
+                case e.JSCallResultType.JSVoidResult:
+                    return null;
+                default:
+                    throw new Error(`Invalid JS call result type '${a}'.`)
+            }
+        }
+    }
+
+    function patchBlazorInvoke() {
+        if (Blazor._internal && Blazor._internal.invokeJSFromDotNet) {
+            invokeJSFromDotNetOrig = Blazor._internal.invokeJSFromDotNet;
+            Blazor._internal.invokeJSFromDotNet = invokeJSFromDotNetOverride;
+        }
+    }
+    patchBlazorInvoke();
 };
 initFunc();
 

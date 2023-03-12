@@ -42,7 +42,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         CallbackGroup _callbackGroup = new CallbackGroup();
 
         // TODO -didpose
-        BroadcastChannel _eventChannel = new BroadcastChannel(nameof(WebWorkerService));
+        //BroadcastChannel _eventChannel = new BroadcastChannel(nameof(WebWorkerService));
 
         string InstanceId = Guid.NewGuid().ToString();
         class WebWorkerServiceEventMsgBase
@@ -94,7 +94,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (BeenInit) return;
             BeenInit = true;
-            _eventChannel.OnMessage += _eventChannel_OnMessage;
+            //_eventChannel.OnMessage += _eventChannel_OnMessage;
             await Task.Delay(1);
             if (JS.IsDedicatedWorkerGlobalScope)
             {
@@ -152,7 +152,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 Event = eventName,
                 Data = data
             };
-            _eventChannel.PostMessaage(m);
+            //_eventChannel.PostMessaage(m);
         }
 
         Dictionary<string, RunningInstance> KnownRunning = new Dictionary<string, RunningInstance>();

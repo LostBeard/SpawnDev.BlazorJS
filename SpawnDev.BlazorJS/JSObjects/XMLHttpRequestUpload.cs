@@ -7,6 +7,7 @@ using Microsoft.JSInterop;
 using System.Dynamic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SpawnDev.BlazorJS.JsonConverters;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
@@ -24,4 +25,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         public ValueTask<T> CallAsync<T>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<T>("applyFn", thisObj, args);
         public void CallVoid(object? thisObj = null, params object?[] args) => JSRef.CallVoid("applyFn", thisObj, args);
     }
-}
+
+ }

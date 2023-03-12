@@ -13,6 +13,14 @@ namespace SpawnDev.BlazorJS
 {
     public static class IJSInProcessObjectReferenceExtensions
     {
+
+        //public static long GetKSRefId(this IJSInProcessObjectReference _ref) {
+        //    var tt = _ref.GetType();
+        //    var props = tt.GetInterfaces();
+        //    var fds = typeof(IJSInProcessObjectReference).GetFields();
+        //    return (long)typeof(JSObjectReference).GetProperty("Id")?.GetValue(_ref);
+        //}
+
         // Function Call
         public static object? Invoke(this IJSInProcessObjectReference _ref, Type returnType, string identifier, params object[] args) => GetJSInProcessObjectInvoke(returnType).Invoke(_ref, new object[] { identifier, args });
         public static async Task<object?> InvokeAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, params object[] args)

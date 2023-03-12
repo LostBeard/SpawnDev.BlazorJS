@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<WebStorage>))]
+    //[JsonConverter(typeof(JSObjectConverter<WebStorage>))]
     public class WebStorage : JSObject
     {
         public JsonSerializerOptions DefaultJsonSerializerOptions { get; } = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };

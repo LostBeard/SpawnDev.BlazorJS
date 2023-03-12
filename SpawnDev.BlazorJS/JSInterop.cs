@@ -1,23 +1,25 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.JsonConverters;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS
-{
-    public static partial class JS
-    {
-        public class TypeConversionInfo
-        {
+namespace SpawnDev.BlazorJS {
+    public static partial class JS {
+        public class TypeConversionInfo {
             public Type ReturnType { get; private set; }
             public bool useIJSWrapperReader { get; private set; }
             public bool usePropertyReader { get; private set; }
             public bool useJSObjectReader { get; private set; }
             public bool useIterationReader { get; private set; }
             public bool useDictionaryReader { get; private set; }
+            public bool useInterfaceProxy { get; private set; }
+            public bool useTaskReader { get; private set; }
+            public bool isDispatchProxy { get; private set; }
+            public bool isIJSObject { get; private set; }
             public bool useDefaultReader { get; private set; }
             public Type? ElementType { get; set; } = null;
             public Type? DictionaryKeyType { get; set; } = null;
@@ -27,19 +29,15 @@ namespace SpawnDev.BlazorJS
             //public List<string> TransferableProperties = new List<string>();
             public bool IsTransferable { get; private set; }
 
-            bool HasIJSInProcessObjectReferenceConstructor()
-            {
+            bool HasIJSInProcessObjectReferenceConstructor() {
                 ConstructorInfo[] constructors;
-                try
-                {
+                try {
                     constructors = ReturnType.GetConstructors();
                 }
-                catch
-                {
+                catch {
                     return false;
                 }
-                foreach (var c in constructors)
-                {
+                foreach (var c in constructors) {
                     if (c.IsPrivate) continue;
                     var args = c.GetParameters();
                     if (args.Length != 1) continue;
@@ -48,28 +46,38 @@ namespace SpawnDev.BlazorJS
                 return false;
             }
 
-            static string GetPropertyJSName(PropertyInfo prop)
-            {
+            static List<Type> IgnoreInterfaces = new List<Type> {
+                typeof(IJSInProcessObjectReference),
+                typeof(IJSObjectReference),
+                typeof(IJSStreamReference),
+            };
+
+            static string GetPropertyJSName(PropertyInfo prop) {
                 // TODO - json name attribute
                 string propName = prop.Name;
                 try {
                     propName = string.IsNullOrEmpty(propName) ? "" : propName.Substring(0, 1).ToLowerInvariant() + propName.Substring(1);
                 }
-                catch(Exception ex) {
+                catch (Exception ex) {
                     var nmt = true;
                 }
                 return propName;
             }
-            public TypeConversionInfo(Type returnType)
-            {
+            public TypeConversionInfo(Type returnType) {
 #if DEBUG && false
                 Console.WriteLine($"TypeConversionInfo loading: {returnType.Name}");
 #endif
                 if (returnType == null) throw new Exception("Invalid Return Type");
                 ReturnType = returnType;
-                if (returnType.IsValueType || returnType == typeof(string))
-                {
+                if (returnType.IsValueType || returnType == typeof(string)) {
                     useDefaultReader = true;
+                    return;
+                }
+                else if (returnType.IsInterface && !IgnoreInterfaces.Contains(returnType)) {
+                    IsTransferable = false;
+                    useJSObjectReader = false;
+                    useDefaultReader = false;
+                    useInterfaceProxy = true;
                     return;
                 }
                 else if (typeof(Callback).IsAssignableFrom(returnType)) {
@@ -80,23 +88,19 @@ namespace SpawnDev.BlazorJS
                     useDefaultReader = true;
                     return;
                 }
-                else if (returnType.IsArray && returnType.HasElementType)
-                {
+                else if (returnType.IsArray && returnType.HasElementType) {
                     // array
                     // check if the element type requires per element import
                     ElementType = returnType.GetElementType();
-                    if (ElementType != null)
-                    {
+                    if (ElementType != null) {
                         var elementTypeConversionInfo = GetTypeConversionInfo(ElementType);
                         useIterationReader = !elementTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(ElementType);
                         if (useIterationReader) return;
                     }
                 }
-                else if (typeof(System.Collections.IDictionary).IsAssignableFrom(returnType))
-                {
+                else if (typeof(System.Collections.IDictionary).IsAssignableFrom(returnType)) {
                     Type[] arguments = returnType.GetGenericArguments();
-                    if (arguments.Length == 2)
-                    {
+                    if (arguments.Length == 2) {
                         DictionaryKeyType = arguments[0];
                         DictionaryValueType = arguments[1];
                         var keyTypeConversionInfo = GetTypeConversionInfo(DictionaryKeyType);
@@ -106,17 +110,30 @@ namespace SpawnDev.BlazorJS
                         if (useDictionaryReader) return;
                     }
                 }
-                else if (returnType.IsClass && !typeof(Delegate).IsAssignableFrom(returnType))
-                {
-                    if (typeof(JSObject).IsAssignableFrom(returnType))
-                    {
+                else if (typeof(IJSObject).IsAssignableFrom(returnType)) {
+                    IsTransferable = false;
+                    useJSObjectReader = false;
+                    useDefaultReader = false;
+                    isIJSObject = true;
+                    return;
+                }
+                else if (typeof(DispatchProxy).IsAssignableFrom(returnType)) {
+                    IsTransferable = false;
+                    useJSObjectReader = false;
+                    useDefaultReader = true;
+                    isDispatchProxy = true;
+                    return;
+                }
+                else if (typeof(Delegate).IsAssignableFrom(returnType)) {
+                    // this type will likely fail, but is a class... so drop it here
+                }
+                else if (returnType.IsClass) {
+                    if (typeof(JSObject).IsAssignableFrom(returnType)) {
                         IsTransferable = JSObject.TransferableTypes.Contains(returnType);
                         useJSObjectReader = true;
-                        if (!IsTransferable)
-                        {
+                        if (!IsTransferable) {
                             ClassProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                            foreach (var prop in ClassProperties)
-                            {
+                            foreach (var prop in ClassProperties) {
                                 if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
                                 var propJSName = GetPropertyJSName(prop);
                                 returnTypeProperties[propJSName] = prop;
@@ -128,29 +145,24 @@ namespace SpawnDev.BlazorJS
                         IsTransferable = false;
                         useJSObjectReader = false;
                         useDefaultReader = false;
+                        useTaskReader = true;
                         return;
                     }
-                    else if (HasIJSInProcessObjectReferenceConstructor())
-                    {
+                    else if (HasIJSInProcessObjectReferenceConstructor()) {
                         IsTransferable = false; // no way to tell from this conversion. this is a generic wrapper for IJSInProcessObjectRefrence
                         useIJSWrapperReader = true;
                         return;
-                    }
-                    else if (typeof(Callback).IsAssignableFrom(returnType)) {
-
                     }
                     else {
                         // class
                         // check if the class types requires per property import
                         ClassProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                        foreach (var prop in ClassProperties)
-                        {
+                        foreach (var prop in ClassProperties) {
                             if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
                             var propJSName = GetPropertyJSName(prop);
                             returnTypeProperties[propJSName] = prop;
                             var propertyTypeConversionInfo = GetTypeConversionInfo(prop.PropertyType);
-                            if (!propertyTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(prop.PropertyType))
-                            {
+                            if (!propertyTypeConversionInfo.useDefaultReader || typeof(IJSInProcessObjectReference).IsAssignableFrom(prop.PropertyType)) {
                                 usePropertyReader = true;
                             }
                         }
@@ -172,37 +184,33 @@ namespace SpawnDev.BlazorJS
                         ret = Promise.CreateTypedInstance(taskReturnType, ret);
                     }
                 }
+                else if (isIJSObject) {
+                    var tmp = obj as IJSObject;
+                    ret = tmp.JSRef;
+                }
                 return ret;
             }
-            public object[] GetTransferablePropertyValues(object? obj)
-            {
+            public object[] GetTransferablePropertyValues(object? obj) {
                 var ret = new List<object>();
-                if (obj != null)
-                {
-                    if (IsTransferable)
-                    {
+                if (obj != null) {
+                    if (IsTransferable) {
                         ret.Add(obj);
                     }
-                    else if (usePropertyReader)
-                    {
-                        foreach (var kvp in returnTypeProperties)
-                        {
+                    else if (usePropertyReader) {
+                        foreach (var kvp in returnTypeProperties) {
                             var prop = kvp.Value;
-                            if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
-                            {
+                            if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string)) {
                                 continue;
                             }
                             if (!prop.PropertyType.IsClass) continue;
                             if (typeof(IJSInProcessObjectReference) == prop.PropertyType) continue;
                             var transferAttr = (WorkerTransferAttribute?)prop.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
-                            if (transferAttr != null && !transferAttr.Transfer)
-                            {
+                            if (transferAttr != null && !transferAttr.Transfer) {
                                 // this property has been marked as non-stransferable
                                 continue;
                             }
                             object? propVal = null;
-                            try
-                            {
+                            try {
                                 propVal = prop.GetValue(obj);
                             }
                             catch { }
@@ -212,30 +220,24 @@ namespace SpawnDev.BlazorJS
                             ret.AddRange(tmpp);
                         }
                     }
-                    else if (useJSObjectReader)
-                    {
-                        foreach (var kvp in returnTypeProperties)
-                        {
+                    else if (useJSObjectReader) {
+                        foreach (var kvp in returnTypeProperties) {
                             var prop = kvp.Value;
-                            if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
-                            {
+                            if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string)) {
                                 continue;
                             }
                             if (!prop.PropertyType.IsClass) continue;
                             if (typeof(IJSInProcessObjectReference) == prop.PropertyType) continue;
                             var transferAttr = (WorkerTransferAttribute?)prop.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
-                            if (transferAttr != null && !transferAttr.Transfer)
-                            {
+                            if (transferAttr != null && !transferAttr.Transfer) {
                                 // this property has been marked as non-stransferable
                                 continue;
                             }
                             object? propVal = null;
-                            try
-                            {
+                            try {
                                 propVal = prop.GetValue(obj);
                             }
-                            catch (Exception ex)
-                            {
+                            catch (Exception ex) {
                                 var nmt = ex.Message;
                             }
                             if (propVal == null) continue;
@@ -244,34 +246,26 @@ namespace SpawnDev.BlazorJS
                             ret.AddRange(tmpp);
                         }
                     }
-                    else if (useIterationReader && ElementType != null && obj is IEnumerable enumarable)
-                    {
+                    else if (useIterationReader && ElementType != null && obj is IEnumerable enumarable) {
                         var conversionInfo = GetTypeConversionInfo(ElementType);
-                        foreach (var ival in enumarable)
-                        {
+                        foreach (var ival in enumarable) {
                             if (ival == null) continue;
                             var tmpp = conversionInfo.GetTransferablePropertyValues(ival);
                             ret.AddRange(tmpp);
                         }
                     }
-                    else if (useDictionaryReader)
-                    {
-                        if (DictionaryKeyType != null && DictionaryValueType != null)
-                        {
+                    else if (useDictionaryReader) {
+                        if (DictionaryKeyType != null && DictionaryValueType != null) {
                             var keyTypeConversionInfo = GetTypeConversionInfo(DictionaryKeyType);
                             var valueTypeConversionInfo = GetTypeConversionInfo(DictionaryValueType);
-                            if (obj is System.Collections.IDictionary dict)
-                            {
-                                foreach (var key in dict.Keys)
-                                {
+                            if (obj is System.Collections.IDictionary dict) {
+                                foreach (var key in dict.Keys) {
                                     var value = dict[key];
-                                    if (key != null)
-                                    {
+                                    if (key != null) {
                                         var tmpp = keyTypeConversionInfo.GetTransferablePropertyValues(key);
                                         ret.AddRange(tmpp);
                                     }
-                                    if (value != null)
-                                    {
+                                    if (value != null) {
                                         var tmpp = valueTypeConversionInfo.GetTransferablePropertyValues(value);
                                         ret.AddRange(tmpp);
                                     }
@@ -279,27 +273,26 @@ namespace SpawnDev.BlazorJS
                             }
                         }
                     }
+                    else if (useInterfaceProxy) {
+                        // TODO
+                        var nmt = true;
+                    }
                 }
                 return ret.ToArray();
             }
-            public object? FinishImport(IJSInProcessObjectReference? _ref)
-            {
+            public object? FinishImport(IJSInProcessObjectReference? _ref) {
                 object? ret = null;
                 if (_ref == null || ReturnType == null) return null;
-                if (usePropertyReader)
-                {
+                if (usePropertyReader) {
                     var tmpRet = Activator.CreateInstance(ReturnType);
-                    foreach (var kvp in returnTypeProperties)
-                    {
+                    foreach (var kvp in returnTypeProperties) {
                         var propName = kvp.Key;
                         var prop = kvp.Value;
                         object? value;
-                        try
-                        {
+                        try {
                             value = _ref.Get(prop.PropertyType, propName);
                         }
-                        catch
-                        {
+                        catch {
                             // Could not read property. Skipping
                             continue;
                         }
@@ -310,21 +303,16 @@ namespace SpawnDev.BlazorJS
                     _ref.Dispose();
                     _ref = null;
                 }
-                else if (useIterationReader)
-                {
-                    if (ElementType != null)
-                    {
+                else if (useIterationReader) {
+                    if (ElementType != null) {
                         var length = _ref.Get<int>("length");
                         var tmpRet = Array.CreateInstance(ElementType, length);
-                        for (var i = 0; i < length; i++)
-                        {
+                        for (var i = 0; i < length; i++) {
                             object? value;
-                            try
-                            {
+                            try {
                                 value = _ref.Get(ElementType, i);
                             }
-                            catch
-                            {
+                            catch {
                                 // Could not read property. Skipping
                                 continue;
                             }
@@ -336,37 +324,27 @@ namespace SpawnDev.BlazorJS
                         _ref = null;
                     }
                 }
-                else if (useDictionaryReader)
-                {
-                    if (DictionaryKeyType != null && DictionaryValueType != null)
-                    {
+                else if (useDictionaryReader) {
+                    if (DictionaryKeyType != null && DictionaryValueType != null) {
                         var tmpRet = Activator.CreateInstance(ReturnType) as System.Collections.IDictionary;
-                        if (tmpRet != null)
-                        {
+                        if (tmpRet != null) {
                             using var keysArray = JS.Call<IJSInProcessObjectReference>("Object.keys", _ref);
-                            if (keysArray != null)
-                            {
+                            if (keysArray != null) {
                                 var length = keysArray.Get<int>("length");
-                                if (length > 0)
-                                {
+                                if (length > 0) {
                                     using var valuesArray = JS.Call<IJSInProcessObjectReference>("Object.values", _ref);
-                                    if (valuesArray != null)
-                                    {
-                                        for (var i = 0; i < length; i++)
-                                        {
+                                    if (valuesArray != null) {
+                                        for (var i = 0; i < length; i++) {
                                             object? key = null;
                                             object? value = null;
-                                            try
-                                            {
+                                            try {
                                                 key = keysArray.Get(DictionaryKeyType, i);
                                             }
-                                            catch
-                                            {
+                                            catch {
                                                 // Could not read property. Skipping
                                                 continue;
                                             }
-                                            try
-                                            {
+                                            try {
                                                 value = valuesArray.Get(DictionaryValueType, i);
                                             }
                                             catch { }
@@ -381,27 +359,31 @@ namespace SpawnDev.BlazorJS
                         }
                     }
                 }
-                else if (ReturnType.IsTask()) {
+                else if (useTaskReader) {
                     var taskReturnType = ReturnType.AsyncReturnType();
                     if (taskReturnType == typeof(void)) {
                         using var promise = new Promise(_ref);
                         ret = promise.ThenAsync();
                         _ref = null;    // ret now owns ret, prevent _ref's disposal.
-                    } else {
+                    }
+                    else {
                         using var promise = new Promise(_ref);
                         ret = promise.ThenAsync(taskReturnType);
                         _ref = null;    // ret now owns ret, prevent _ref's disposal.
                     }
                 }
-                else if (useJSObjectReader)
-                {
+                else if (useJSObjectReader) {
                     ret = Activator.CreateInstance(ReturnType, _ref);
                     _ref = null;    // ret now owns ret, prevent _ref's disposal.
                 }
-                else if (useIJSWrapperReader)
-                {
+                else if (useIJSWrapperReader) {
                     ret = Activator.CreateInstance(ReturnType, _ref);
                     _ref = null;    // ret now owns ret, prevent _ref's disposal.
+                }
+                else if (useInterfaceProxy) {
+                    ret = IJSObject.GetInterface(ReturnType, _ref);
+                    _ref = null;    // ret now owns ret, prevent _ref's disposal.
+                    var nmt = true;
                 }
                 // _ref must be contained in a JSObject that now owns the _ref and will dispose it later
                 // OR
@@ -419,115 +401,123 @@ namespace SpawnDev.BlazorJS
         }
 
         static Dictionary<Type, TypeConversionInfo> _conversionInfo = new Dictionary<Type, TypeConversionInfo>();
-        public static TypeConversionInfo GetTypeConversionInfo(Type type)
-        {
+        public static TypeConversionInfo GetTypeConversionInfo(Type type) {
             if (_conversionInfo.TryGetValue(type, out TypeConversionInfo conversionInfo)) {
                 return conversionInfo;
             }
-            conversionInfo = new TypeConversionInfo(type);
+            try {
+                conversionInfo = new TypeConversionInfo(type);
+            }
+            catch (Exception ex) {
+                var nmt = true;
+            }
             _conversionInfo[type] = conversionInfo;
             return conversionInfo;
         }
         static TypeConversionInfo GetTypeConversionInfo<T>() => GetTypeConversionInfo(typeof(T));
 
-        internal static T? _JSInteropCall<T>(string fn, params object?[] args)
-        {
+        internal static T? _JSInteropCall<T>(string fn, params object?[] args) {
             T? ret = default;
             var returnType = typeof(T);
-            var conversionInfo = GetTypeConversionInfo(returnType);
-            if (fn != "_call") args = PreExportArgs(args);
-            if (!conversionInfo.useDefaultReader)
-            {
-                var _ref = _js.Invoke<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
-                ret = (T?)conversionInfo.FinishImport(_ref);
+            var converter = RuntimeJsonSerializerOptions.GetConverter(returnType);
+            if (converter.GetJSCallResultTypeOverride(out var jsReturnTypeOverride)) {
+                fn = $"{(byte)jsReturnTypeOverride}JSInterop.{fn}";
+            } else {
+                fn = $"JSInterop.{fn}";
             }
-            else
-            {
-                ret = _js.Invoke<T?>($"JSInterop.{fn}", args);
-            }
-            return ret;
-        }
-        public static object? _JSInteropCall(Type returnType, string fn, params object?[] args)
-        {
-            object? ret = null;
-            var conversionInfo = GetTypeConversionInfo(returnType);
-            if (fn != "_call") args = PreExportArgs(args);
-            if (!conversionInfo.useDefaultReader)
-            {
-                var _ref = _js.Invoke<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
-                ret = conversionInfo.FinishImport(_ref);
-            }
-            else
-            {
-                ret = _js.Invoke(returnType, $"JSInterop.{fn}", args);
-            }
-            return ret;
-        }
-        public static async ValueTask _JSInteropCallVoidAsync(string fn, params object?[] args) {
-            if (fn != "_call") args = PreExportArgs(args);
-            await _js.InvokeVoidAsync($"JSInterop.{fn}", args);
-        }
-        public static async ValueTask<T?> _JSInteropCallAsync<T>(string fn, params object?[] args)
-        {
-            T? ret = default;
-            var returnType = typeof(T);
-            var conversionInfo = GetTypeConversionInfo(returnType);
-            if (fn != "_call") args = PreExportArgs(args);
-            if (!conversionInfo.useDefaultReader)
-            {
-                var _ref = await _js.InvokeAsync<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
-                ret = (T?)conversionInfo.FinishImport(_ref);
-            }
-            else
-            {
-                ret = await _js.InvokeAsync<T>($"JSInterop.{fn}", args);
-            }
+            ret = _js.Invoke<T?>(fn, args);
+            //var conversionInfo = GetTypeConversionInfo(returnType);
+            //if (fn != "_call") args = PreExportArgs(args);
+            //if (!conversionInfo.useDefaultReader) {
+            //    var _ref = _js.Invoke<IJSInProcessObjectReference?>(fn, args);
+            //    ret = (T?)conversionInfo.FinishImport(_ref);
+            //}
+            //else {
+            //    ret = _js.Invoke<T?>(fn, args);
+            //}
             return ret;
         }
 
-        internal static object?[]? PreExportArgs(object?[] args) => args == null ? null : args.Select(o => {
-            var tci = GetObjectTypeConversionInfo(o);
-            return tci == null ? o : tci.PreExport(o);
-        }).ToArray();
-
-        public static async ValueTask<object?> _JSInteropCallAsync(Type returnType, string fn, params object?[] args)
-        {
+        internal static object? _JSInteropCall(Type returnType, string fn, params object?[] args) {
             object? ret = null;
-            var conversionInfo = GetTypeConversionInfo(returnType);
-            if (fn != "_call") args = PreExportArgs(args);
-            if (!conversionInfo.useDefaultReader)
-            {
-                var _ref = await _js.InvokeAsync<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
-                ret = conversionInfo.FinishImport(_ref);
+            var converter = RuntimeJsonSerializerOptions.GetConverter(returnType);
+            if (converter.GetJSCallResultTypeOverride(out var jsReturnTypeOverride)) {
+                fn = $"{(byte)jsReturnTypeOverride}JSInterop.{fn}";
             }
-            else
-            {
-                ret = await _js.InvokeAsync(returnType, $"JSInterop.{fn}", args);
+            else {
+                fn = $"JSInterop.{fn}";
             }
+            ret = _js.Invoke(returnType, fn, args);
+            //var conversionInfo = GetTypeConversionInfo(returnType);
+            //if (fn != "_call") args = PreExportArgs(args);
+            //if (!conversionInfo.useDefaultReader) {
+            //    var _ref = _js.Invoke<IJSInProcessObjectReference?>(fn, args);
+            //    ret = conversionInfo.FinishImport(_ref);
+            //}
+            //else {
+            //    ret = _js.Invoke(returnType, fn, args);
+            //}
             return ret;
         }
+
         public static void _JSInteropCallVoid(string fn, params object?[] args) {
             if (fn != "_call") args = PreExportArgs(args);
             _js.InvokeVoid($"JSInterop.{fn}", args);
         }
 
+        internal static async ValueTask _JSInteropCallVoidAsync(string fn, params object?[] args) {
+            if (fn != "_call") args = PreExportArgs(args);
+            await _js.InvokeVoidAsync($"JSInterop.{fn}", args);
+        }
+        internal static async ValueTask<T?> _JSInteropCallAsync<T>(string fn, params object?[] args) {
+            T? ret = default;
+            var returnType = typeof(T);
+            var conversionInfo = GetTypeConversionInfo(returnType);
+            if (fn != "_call") args = PreExportArgs(args);
+            if (!conversionInfo.useDefaultReader) {
+                var _ref = await _js.InvokeAsync<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
+                ret = (T?)conversionInfo.FinishImport(_ref);
+            }
+            else {
+                ret = await _js.InvokeAsync<T>($"JSInterop.{fn}", args);
+            }
+            return ret;
+        }
 
-        internal static object? GetDynamic(Type? resultType, IJSInProcessObjectReference _ref, object identifier, object[] args)
-        {
+        internal static object?[]? PreExportArgs(object?[]? args) => args == null ? null : args.Select(o => {
+            var tci = GetObjectTypeConversionInfo(o);
+            return tci == null ? o : tci.PreExport(o);
+        }).ToArray();
+        //internal static object?[]? PreExportArgs(object?[]? args) => args;
+
+        public static async ValueTask<object?> _JSInteropCallAsync(Type returnType, string fn, params object?[] args) {
+            object? ret = null;
+            var conversionInfo = GetTypeConversionInfo(returnType);
+            if (fn != "_call") args = PreExportArgs(args);
+            if (!conversionInfo.useDefaultReader) {
+                var _ref = await _js.InvokeAsync<IJSInProcessObjectReference?>($"JSInterop.{fn}", args);
+                ret = conversionInfo.FinishImport(_ref);
+            }
+            else {
+                ret = await _js.InvokeAsync(returnType, $"JSInterop.{fn}", args);
+            }
+            return ret;
+        }
+
+
+
+        internal static object? GetDynamic(Type? resultType, IJSInProcessObjectReference _ref, object identifier, object[] args) {
             object? result = null;
             if (identifier != "_call") args = PreExportArgs(args);
-            if (resultType == null)
-            {
+            if (resultType == null) {
                 JS._JSInteropCallVoid("_getDynamic", _ref, identifier, args, "void", "void");
             }
-            else
-            {
+            else {
                 var finalReturnTypeName = resultType.Name;
                 var isArray = resultType.IsArray;
                 var isIJSObjectArray = false;
                 Type? elementType = null;
-                if (isArray)
-                {
+                if (isArray) {
                     elementType = resultType.GetElementType();
                     isIJSObjectArray = elementType != null && typeof(JSObject).IsAssignableFrom(elementType);
                 }
@@ -539,22 +529,18 @@ namespace SpawnDev.BlazorJS
             }
             return result;
         }
-        internal static async Task<object?> GetDynamicAsync(Type? resultType, IJSInProcessObjectReference _ref, object identifier, object[] args)
-        {
+        internal static async Task<object?> GetDynamicAsync(Type? resultType, IJSInProcessObjectReference _ref, object identifier, object[] args) {
             object? result = null;
             if (identifier != "_call") args = PreExportArgs(args);
-            if (resultType == null)
-            {
+            if (resultType == null) {
                 await JS._JSInteropCallVoidAsync("_getDynamic", _ref, identifier, args, "void", "void");
             }
-            else
-            {
+            else {
                 var finalReturnTypeName = resultType.Name;
                 var isArray = resultType.IsArray;
                 var isIJSObjectArray = false;
                 Type? elementType = null;
-                if (isArray)
-                {
+                if (isArray) {
                     elementType = resultType.GetElementType();
                     isIJSObjectArray = elementType != null && typeof(JSObject).IsAssignableFrom(elementType);
                 }

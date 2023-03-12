@@ -12,6 +12,6 @@ namespace SpawnDev.BlazorJS {
 
         public static bool IsTask(this Type type) => typeof(Task).IsAssignableFrom(type);
 
-        public static bool IsValueTask(this Type type) => typeof(ValueTask).IsAssignableFrom(type) || typeof(ValueTask<>).GetGenericTypeDefinition() == typeof(ValueTask<>);
+        public static bool IsValueTask(this Type type) => typeof(ValueTask).IsAssignableFrom(type) || type.GetGenericTypeDefinition() == typeof(ValueTask<>);
     }
 }

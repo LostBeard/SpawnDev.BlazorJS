@@ -74,8 +74,8 @@ namespace SpawnDev.BlazorJS {
             //netObjRef = null;
             JS.DisposeCallback(callbackerID);
             //_js.InvokeVoid("JSInterop.DisposeCallbacker", callbackerID);
-#if DEBUG  && false
-            Console.WriteLine($"Disposed callbackerID: {callbackerID}");
+#if DEBUG  && true
+            Console.WriteLine($"Disposed callbackerID: {callbackerID} {CallbackType.Name}");
 #endif
         }
 

@@ -1,10 +1,12 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.JsonConverters;
 //using SpawnDev.JS.Tools;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects {
+namespace SpawnDev.BlazorJS.JSObjects
+{
 
     [JsonConverter(typeof(JSObjectConverter<Window>))]
     public class Window : EventTarget {
