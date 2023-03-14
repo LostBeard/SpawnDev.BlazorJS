@@ -38,8 +38,8 @@ function takeOverOnConnectEvent(newConnectFunction) {
     globalThisObj.onconnect = newConnectFunction;
     return tmp;
 }
-// globalThisTypeName == 'SharedWorkerGlobalScope'
-if (globalThisObj.onconnect) {
+
+if (globalThisTypeName == 'SharedWorkerGlobalScope') {
     globalThisObj.onconnect = function (e) {
         _missedConnections.push(e.ports[0]);
     };

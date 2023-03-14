@@ -76,6 +76,9 @@ namespace SpawnDev.BlazorJS {
             }
         }
 
+        public static string InformationalVersion { get; } = typeof(JSObject).Assembly.GetAssemblyInformationalVersion();
+        public static string FileVersion { get; } = typeof(JSObject).Assembly.GetAssemblyFileVersion();
+
         public static void DisposeCallback(string callbackerID) => JSInterop.DisposeCallbacker(callbackerID);
 
         public static AsyncIterator? GetAsyncIterator(IJSInProcessObjectReference targetObject) => Get<AsyncIterator?>(targetObject, "Symbol.asyncIterator");

@@ -122,7 +122,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     }
                 }
                 catch { }
-                JS.Log($"Listening for connections: took {missedConnections} missed connections");
+                JS.Log($"Listening for connections: took {missedConnections.Length} missed connections");
             }
             //BroadcastPing();
         }

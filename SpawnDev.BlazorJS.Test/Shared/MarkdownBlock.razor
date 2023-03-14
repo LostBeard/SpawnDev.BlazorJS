@@ -1,0 +1,43 @@
+﻿@using Markdig
+@using Microsoft.AspNetCore.Components
+
+<div>
+    @((MarkupString)markup)
+</div>
+
+@code {
+    [Inject]
+    HttpClient httpClient { get; set; }
+
+    [Parameter]
+    public string URL { get; set; } = "";
+
+    string markup = "";
+    bool _shouldRender = true;
+
+    protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+        try {
+            var result = await httpClient.GetStringAsync(URL);
+            if (!string.IsNullOrEmpty(result)) {
+                var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+                markup = Markdown.ToHtml(result, pipeline);
+            }
+        }
+        catch (Exception ex) {
+            JS.Log($"Exception: {ex.Message}");
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        await base.OnAfterRenderAsync(firstRender);
+        if (!string.IsNullOrEmpty(markup)) {
+            // already rendered wit hthe markdown
+            _shouldRender = false;
+        }
+    }
+
+    protected override bool ShouldRender() {
+        return _shouldRender;
+    }
+}

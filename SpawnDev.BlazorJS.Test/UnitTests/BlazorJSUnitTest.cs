@@ -3,6 +3,8 @@ using SpawnDev.BlazorJS.Test.Services;
 
 namespace SpawnDev.BlazorJS.Test.UnitTests {
     public class BlazorJSUnitTest {
+
+        // IJSObject
         public interface IWindow {
             string Name { get; set; }
         }
@@ -10,14 +12,6 @@ namespace SpawnDev.BlazorJS.Test.UnitTests {
         [TestMethod]
         public void IJSObjectInterfacePropertySetGet() {
             var w = JS.Get<IWindow>("window");
-            var randName = Guid.NewGuid().ToString();
-            w.Name = randName;
-            if (w.Name != randName) throw new Exception("Interface property set/get failed");
-        }
-
-        [TestMethod]
-        public void JSObjectPropertySetGet() {
-            var w = JS.Get<Window>("window");
             var randName = Guid.NewGuid().ToString();
             w.Name = randName;
             if (w.Name != randName) throw new Exception("Interface property set/get failed");
@@ -33,6 +27,29 @@ namespace SpawnDev.BlazorJS.Test.UnitTests {
             var arrayReadBack = JS.Get<IWindow[]>("_array");
             if (arrayReadBack.ToList().Where(w => w.Name != randName).Any()) throw new Exception("Interface array set/get failed");
         }
+
+        // JSObject
+
+
+        [TestMethod]
+        public void JSObjectPropertySetGet() {
+            var w = JS.Get<Window>("window");
+            var randName = Guid.NewGuid().ToString();
+            w.Name = randName;
+            if (w.Name != randName) throw new Exception("Interface property set/get failed");
+        }
+
+        [TestMethod]
+        public void JSObjectArraySetGet() {
+            var w = JS.Get<Window>("window");
+            var randName = Guid.NewGuid().ToString();
+            w.Name = randName;
+            var array = new Window[] { w, w, w };
+            JS.Set("_array", array);
+            var arrayReadBack = JS.Get<Window[]>("_array");
+            if (arrayReadBack.ToList().Where(w => w.Name != randName).Any()) throw new Exception("Interface array set/get failed");
+        }
+
 
         // Promise
 
