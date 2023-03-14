@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<ArrayBuffer>))]
+    
     public class ArrayBuffer : JSObject
     {
         public int ByteLength => JSRef.Get<int>("byteLength");

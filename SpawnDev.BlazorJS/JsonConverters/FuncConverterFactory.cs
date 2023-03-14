@@ -15,6 +15,8 @@ namespace SpawnDev.BlazorJS.JsonConverters {
             { typeof(Func<>), typeof(FuncConverter<>) },
             { typeof(Func<,>), typeof(FuncConverter<,>) },
             { typeof(Func<,,>), typeof(FuncConverter<,,>) },
+            { typeof(Func<,,,>), typeof(FuncConverter<,,,>) },
+            { typeof(Func<,,,,>), typeof(FuncConverter<,,,,>) },
         };
         public override bool CanConvert(Type type) {
             var baseType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
@@ -46,16 +48,11 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public override Func<TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
             var fn = new Function(_ref);
-            var ret = new Func<TResult>(() =>  fn.Call<TResult>());
-            ret.FunctionSet(fn);
+            var ret = fn.ToFunc<TResult>();
             return ret;
         }
         public override void Write(Utf8JsonWriter writer, Func<TResult> value, JsonSerializerOptions options) {
-            var ret = value.CallbackGet();
-            if (ret == null) {
-                ret = Callback.Create(value);
-                value.CallbackSet(ret);
-            }
+            var ret = value.CallbackGet(true);
             JsonSerializer.Serialize(writer, ret, options);
         }
     }
@@ -72,16 +69,11 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public override Func<T0, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
             var fn = new Function(_ref);
-            var ret = new Func<T0, TResult>((arg0) => fn.Call<TResult>(arg0));
-            ret.FunctionSet(fn);
+            var ret = fn.ToFunc<T0, TResult>();
             return ret;
         }
         public override void Write(Utf8JsonWriter writer, Func<T0, TResult> value, JsonSerializerOptions options) {
-            var ret = value.CallbackGet();
-            if (ret == null) {
-                ret = Callback.Create(value);
-                value.CallbackSet(ret);
-            }
+            var ret = value.CallbackGet(true);
             JsonSerializer.Serialize(writer, ret, options);
         }
     }
@@ -100,16 +92,53 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public override Func<T0, T1, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
             var fn = new Function(_ref);
-            var ret = new Func<T0, T1, TResult>((arg0, arg1) => fn.Call<TResult>(arg0, arg1));
-            ret.FunctionSet(fn);
+            var ret = fn.ToFunc<T0, T1, TResult>();
             return ret;
         }
         public override void Write(Utf8JsonWriter writer, Func<T0, T1, TResult> value, JsonSerializerOptions options) {
-            var ret = value.CallbackGet();
-            if (ret == null) {
-                ret = Callback.Create(value);
-                value.CallbackSet(ret);
-            }
+            var ret = value.CallbackGet(true);
+            JsonSerializer.Serialize(writer, ret, options);
+        }
+    }
+    public class FuncConverter<T0, T1, T2, TResult> : JsonConverter<Func<T0, T1, T2, TResult>>, IJSInProcessObjectReferenceConverter {
+        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
+        public bool OverrideResultType => true;
+        JsonSerializerOptions _options;
+        public FuncConverter(JsonSerializerOptions options) {
+            _options = options;
+        }
+        public override bool CanConvert(Type type) {
+            return type.GetGenericTypeDefinition() == typeof(Func<,,>);
+        }
+        public override Func<T0, T1, T2, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+            var fn = new Function(_ref);
+            var ret = fn.ToFunc<T0, T1, T2, TResult>();
+            return ret;
+        }
+        public override void Write(Utf8JsonWriter writer, Func<T0, T1, T2, TResult> value, JsonSerializerOptions options) {
+            var ret = value.CallbackGet(true);
+            JsonSerializer.Serialize(writer, ret, options);
+        }
+    }
+    public class FuncConverter<T0, T1, T2, T3, TResult> : JsonConverter<Func<T0, T1, T2, T3, TResult>>, IJSInProcessObjectReferenceConverter {
+        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
+        public bool OverrideResultType => true;
+        JsonSerializerOptions _options;
+        public FuncConverter(JsonSerializerOptions options) {
+            _options = options;
+        }
+        public override bool CanConvert(Type type) {
+            return type.GetGenericTypeDefinition() == typeof(Func<,,>);
+        }
+        public override Func<T0, T1, T2, T3, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+            var fn = new Function(_ref);
+            var ret = fn.ToFunc<T0, T1, T2, T3, TResult>();
+            return ret;
+        }
+        public override void Write(Utf8JsonWriter writer, Func<T0, T1, T2, T3, TResult> value, JsonSerializerOptions options) {
+            var ret = value.CallbackGet(true);
             JsonSerializer.Serialize(writer, ret, options);
         }
     }

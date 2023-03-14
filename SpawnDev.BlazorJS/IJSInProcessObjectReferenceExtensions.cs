@@ -13,14 +13,6 @@ namespace SpawnDev.BlazorJS
 {
     public static class IJSInProcessObjectReferenceExtensions
     {
-
-        //public static long GetKSRefId(this IJSInProcessObjectReference _ref) {
-        //    var tt = _ref.GetType();
-        //    var props = tt.GetInterfaces();
-        //    var fds = typeof(IJSInProcessObjectReference).GetFields();
-        //    return (long)typeof(JSObjectReference).GetProperty("Id")?.GetValue(_ref);
-        //}
-
         // Function Call
         public static object? Invoke(this IJSInProcessObjectReference _ref, Type returnType, string identifier, params object[] args) => GetJSInProcessObjectInvoke(returnType).Invoke(_ref, new object[] { identifier, args });
         public static async Task<object?> InvokeAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, params object[] args)
@@ -31,12 +23,12 @@ namespace SpawnDev.BlazorJS
             return (object)task.GetAwaiter().GetResult();
         }
         // Private
-        private static Type AsyncStateMachineAttributeType = typeof(AsyncStateMachineAttribute);
-        private static bool IsAsyncMethod(MethodInfo method) => method.GetCustomAttribute(AsyncStateMachineAttributeType) != null;
+        //private static Type AsyncStateMachineAttributeType = typeof(AsyncStateMachineAttribute);
+        //private static bool IsAsyncMethod(MethodInfo method) => method.GetCustomAttribute(AsyncStateMachineAttributeType) != null;
         private static MethodInfo? GetBestInstanceMethod(Type classType, string identifier, Type[]? paramTypes = null, int genericsCount = 0, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
             MethodInfo? best = null;
-            var bestIsAsync = false;
+            //var bestIsAsync = false;
             if (paramTypes == null) paramTypes = new Type[0];
             var instanceMethods = classType
             .GetMethods(bindingFlags)
@@ -61,14 +53,14 @@ namespace SpawnDev.BlazorJS
                 };
                 foreach (var method in instanceMethods)
                 {
-                    var methodIsAsync = IsAsyncMethod(method);
+                    //var methodIsAsync = IsAsyncMethod(method);
                     Type[] mParams = method.GetParameters().Select(x => x.ParameterType).ToArray();
                     if (isAssignableFrom(mParams, paramTypes))
                     {
                         if (best == null || isAssignableFrom(bestParams, mParams))
                         {
                             best = method;
-                            bestIsAsync = methodIsAsync;
+                            //bestIsAsync = methodIsAsync;
                             bestParams = mParams;
                         }
                     }

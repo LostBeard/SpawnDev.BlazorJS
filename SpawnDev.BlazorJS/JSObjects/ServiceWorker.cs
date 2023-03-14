@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<ServiceWorker>))]
+    
     public class ServiceWorker : EventTarget
     {
         CallbackGroup _callbacks = new CallbackGroup();

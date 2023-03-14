@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<SharedWorkerGlobalScope>))]
+    
     public class SharedWorkerGlobalScope : WorkerGlobalScope
     {
         public SharedWorkerGlobalScope(IJSInProcessObjectReference _ref) : base(_ref) { }

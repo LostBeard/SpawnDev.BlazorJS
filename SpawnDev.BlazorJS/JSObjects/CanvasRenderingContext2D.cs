@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
-    [JsonConverter(typeof(JSObjectConverter<CanvasRenderingContext2D>))]
+    
     public class CanvasRenderingContext2D : JSObject
     {
         public bool ImageSmoothingEnabled

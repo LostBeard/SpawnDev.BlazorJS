@@ -7,9 +7,58 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.JSInterop.Implementation;
 
-namespace SpawnDev.BlazorJS.JsonConverters
-{
+namespace SpawnDev.BlazorJS.JsonConverters {
+    public class JSObjectArrayConverterFactory : JsonConverterFactory {
+        public override bool CanConvert(Type typeToConvert) {
+            return typeToConvert.IsArray && typeToConvert.HasElementType && typeof(JSObject).IsAssignableFrom(typeToConvert.GetElementType());
+        }
+
+        public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options) {
+            var elementType = typeToConvert.GetElementType();
+            var covnerterType = typeof(JSObjectArrayConverter<>).MakeGenericType(new Type[] { elementType });
+            JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { options }, culture: null)!;
+            return converter;
+        }
+    }
+
+    public class JSObjectArrayConverter<T> : JsonConverter<T[]>, IJSInProcessObjectReferenceConverter where T : JSObject {
+        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
+        public bool OverrideResultType => true;
+        JsonSerializerOptions _options;
+        public JSObjectArrayConverter(JsonSerializerOptions options) {
+            _options = options;
+        }
+        public override bool CanConvert(Type typeToConvert) {
+            return typeToConvert.IsArray && typeToConvert.HasElementType && typeof(JSObject).IsAssignableFrom(typeToConvert.GetElementType());
+        }
+        public override T[]? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+            using var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+            if (_ref == null) return null;
+            var length = _ref.Get<int>("length");
+            var tmpRet = Array.CreateInstance(typeof(T), length);
+            for (var i = 0; i < length; i++) {
+                object? value;
+                try {
+                    value = _ref.Get<T>(i);
+                }
+                catch {
+                    continue;
+                }
+                if (value == null) continue;
+                tmpRet.SetValue(value, i);
+            }
+            return (T[])tmpRet;
+        }
+        public override void Write(Utf8JsonWriter writer, T[] value, JsonSerializerOptions options) {
+            writer.WriteStartArray();
+            foreach(var v in value) {
+                JsonSerializer.Serialize(writer, v, options);
+            }
+            writer.WriteEndArray();
+        }
+    }
     public class JSObjectConverterFactory : JsonConverterFactory
     {
         public override bool CanConvert(Type type)
@@ -25,8 +74,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
     }
 
-    // https://github.com/dotnet/aspnetcore/blob/ccb861b89f62c445f175f6a3ca2142f93e7ce5db/src/Components/WebAssembly/JSInterop/src/WebAssemblyJSObjectReferenceJsonConverter.cs#L10
-    // WebAssemblyJSObjectReferenceJsonConverter.cs
     public class JSObjectConverter<TJSObject> : JsonConverter<TJSObject>, IJSInProcessObjectReferenceConverter where TJSObject : JSObject
     {
         public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
@@ -40,8 +87,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             return typeof(TJSObject).IsAssignableFrom(type);
         }
-        public override TJSObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
+        public override TJSObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
             return _ref == null ? null :(TJSObject)Activator.CreateInstance(typeof(TJSObject), _ref);
         }

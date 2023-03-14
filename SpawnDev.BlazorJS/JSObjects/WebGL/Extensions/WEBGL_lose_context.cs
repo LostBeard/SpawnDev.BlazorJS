@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.WebGL.Extensions
 {
-    [JsonConverter(typeof(JSObjectConverter<WEBGL_lose_context>))]
+    
     public class WEBGL_lose_context : JSObject
     {
 

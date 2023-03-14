@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<AsyncIteratorNext>))]
+    
     public class AsyncIteratorNext : JSObject
     {
         public AsyncIteratorNext(IJSInProcessObjectReference _ref) : base(_ref) { }

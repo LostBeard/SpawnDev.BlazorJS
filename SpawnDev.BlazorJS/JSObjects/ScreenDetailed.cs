@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<ScreenDetailed>))]
+    
     public class ScreenDetailed : JSObject
     {
         public ScreenDetailed(IJSInProcessObjectReference _ref) : base(_ref) { }

@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://web.dev/cache-api-quick-guide/
     // https://developer.mozilla.org/en-US/docs/Web/API/Cache
-    [JsonConverter(typeof(JSObjectConverter<Cache>))]
+    
     public class Cache : JSObject
     {
         public Cache(IJSInProcessObjectReference _ref) : base(_ref) { }

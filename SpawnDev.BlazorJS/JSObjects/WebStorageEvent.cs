@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<WebStorageEvent>))]
+    
     public class WebStorageEvent : JSObject
     {
         public WebStorageEvent(IJSInProcessObjectReference _ref) : base(_ref) { }

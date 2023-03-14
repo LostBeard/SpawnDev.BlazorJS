@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
-    [JsonConverter(typeof(JSObjectConverter<RTCSessionDescription>))]
+    
     public class RTCSessionDescription : JSObject, IRTCSessionDescription
     {
         public RTCSessionDescription(IJSInProcessObjectReference _ref) : base(_ref) { }

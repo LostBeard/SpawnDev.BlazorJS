@@ -11,7 +11,7 @@ using SpawnDev.BlazorJS.JsonConverters;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<ProgressEvent>))]
+    
     public class ProgressEvent : JSObject
     {
         public ProgressEvent(IJSInProcessObjectReference _ref) : base(_ref) { }

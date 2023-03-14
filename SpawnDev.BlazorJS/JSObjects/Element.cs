@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? NavigationUI { get; set; }
     }
-    [JsonConverter(typeof(JSObjectConverter<Element>))]
+    
     public class Element : Node
     {
         public Element(IJSInProcessObjectReference _ref) : base(_ref) { }

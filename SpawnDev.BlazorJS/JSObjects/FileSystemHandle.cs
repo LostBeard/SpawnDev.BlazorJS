@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/File
-    [JsonConverter(typeof(JSObjectConverter<FileSystemHandle>))]
+    
     public class FileSystemHandle : JSObject
     {
         public FileSystemHandle(IJSInProcessObjectReference _ref) : base(_ref) { }

@@ -11,7 +11,7 @@ using SpawnDev.BlazorJS.JsonConverters;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<XMLHttpRequest>))]
+    
     public class XMLHttpRequest : XMLHttpRequestEventTarget
     {
         public XMLHttpRequest() : base(JS.New("XMLHttpRequest")) { }

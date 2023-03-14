@@ -9,7 +9,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             Supported = !JS.IsUndefined("SharedWorker");
         }
-        SharedWorker _shareWorker;
+        SharedWorker _shareWorker { get; set; }
         public SharedWebWorker(string name, SharedWorker sharedWorker, IServiceProvider serviceProvider) : base(serviceProvider, sharedWorker.Port)
         {
             _shareWorker = sharedWorker;

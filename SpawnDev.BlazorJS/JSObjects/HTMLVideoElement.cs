@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
-    [JsonConverter(typeof(JSObjectConverter<HTMLVideoElement>))]
+    
     public class HTMLVideoElement : HTMLMediaElement
     {
         public HTMLVideoElement() : base(JS.DocumentCreateElement("video")) { }

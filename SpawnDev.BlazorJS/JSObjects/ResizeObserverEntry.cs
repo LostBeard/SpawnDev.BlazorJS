@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public double BlockSize { get; set; }
     }
 
-    [JsonConverter(typeof(JSObjectConverter<ResizeObserverEntry>))]
+    
     public class ResizeObserverEntry : JSObject
     {
         public List<ResizeObserverSize> BorderBoxSize => JSRef.Get<List<ResizeObserverSize>>("borderBoxSize");

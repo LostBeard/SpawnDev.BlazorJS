@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<Request>))]
+    
     public class Request : JSObject
     {
         public Request(IJSInProcessObjectReference _ref) : base(_ref) { }

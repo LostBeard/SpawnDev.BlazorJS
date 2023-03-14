@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<VideoFrame>))]
+    
     public class VideoFrame : JSObject
     {
         public VideoFrame(IJSInProcessObjectReference _ref) : base(_ref)

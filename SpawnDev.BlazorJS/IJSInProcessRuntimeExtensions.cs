@@ -9,15 +9,15 @@ namespace SpawnDev.BlazorJS
         public static void Set(this IJSInProcessRuntime _js, string identifier, object? value) => JS.Set(identifier, value);
         public static T? Get<T>(this IJSInProcessRuntime _js, string identifier) => JS.Get<T>(identifier);
         public static object? Get(this IJSInProcessRuntime _js, Type returnType, string identifier) => JS.Get(returnType, identifier);
-        public static ValueTask<T> GetAsync<T>(this IJSInProcessRuntime _js, string identifier) => JS.GetAsync<T>(identifier);
-        public static object? GetAsync(this IJSInProcessRuntime _js, Type returnType, string identifier) => JS.GetAsync(returnType, identifier);
+        public static Task<T> GetAsync<T>(this IJSInProcessRuntime _js, string identifier) => JS.GetAsync<T>(identifier);
+        //public static object? GetAsync(this IJSInProcessRuntime _js, Type returnType, string identifier) => JS.GetAsync(returnType, identifier);
 
         public static T CallApply<T>(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApply<T>(identifier, args);
         public static object? CallApply(this IJSInProcessRuntime _js, Type returnType, string identifier, object?[]? args = null) => JS.CallApply(returnType, identifier, args);
         public static void CallApplyVoid(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApplyVoid(identifier, args);
-        public static ValueTask<T> CallApplyAsync<T>(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApplyAsync<T>(identifier, args);
-        public static ValueTask<object?> CallApplyAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object?[]? args = null) => JS.CallApplyAsync(returnType, identifier, args);
-        public static ValueTask CallApplyVoidAsync(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApplyVoidAsync(identifier, args);
+        public static Task<T> CallApplyAsync<T>(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApplyAsync<T>(identifier, args);
+        //public static ValueTask<object?> CallApplyAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object?[]? args = null) => JS.CallApplyAsync(returnType, identifier, args);
+        public static Task CallApplyVoidAsync(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApplyVoidAsync(identifier, args);
 
         // call with up to 10 arguments
         // used instead of "params" becuase params has an issue that will never be fixed that can cause unexpected behavior
@@ -58,53 +58,53 @@ namespace SpawnDev.BlazorJS
         public static void CallVoid(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => JS.CallApplyVoid(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         public static void CallVoid(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => JS.CallApplyVoid(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
 
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier) => JS.CallApplyAsync<T>(identifier);
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier) => JS.CallApplyAsync<T>(identifier);
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => JS.CallApplyAsync<T>(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
 
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier) => JS.CallApplyAsync(returnType, identifier);
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier) => JS.CallApplyAsync(returnType, identifier);
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        //public static ValueTask<object?> CallAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => JS.CallApplyAsync(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
 
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier) => JS.CallApplyVoidAsync(identifier);
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0 });
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1 });
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2 });
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3 });
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-        public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-
-
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier) => JS.CallApplyVoidAsync(identifier);
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0 });
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1 });
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2 });
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3 });
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
 
 
-        public static async ValueTask<object?> InvokeAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, params object[] args)
-        {
-            // TODO - get repalce dynamic usage with other (like is WebWorkers ServiceCallDispatcher)
-            dynamic task = GetJSRuntimeInvokeAsync(returnType).Invoke(_js, new object[] { identifier, args });
-            if (task == null) return null;
-            await task;
-            return (object?)task.GetAwaiter().GetResult();
-        }
+
+
+        //public static async ValueTask<object?> InvokeAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, params object[] args)
+        //{
+        //    // TODO - get repalce dynamic usage with other (like is WebWorkers ServiceCallDispatcher)
+        //    dynamic task = GetJSRuntimeInvokeAsync(returnType).Invoke(_js, new object[] { identifier, args });
+        //    if (task == null) return null;
+        //    await task;
+        //    return (object?)task.GetAwaiter().GetResult();
+        //}
         public static object? Invoke(this IJSInProcessRuntime _js, Type returnType, string identifier, params object[] args) => GetJSRuntimeInvoke(returnType).Invoke(_js, new object[] { identifier, args });
         //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, params object[] args) => _js.InvokeAsync<T>(identifier, args);
         //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, params object[] args) => _js.InvokeVoidAsync(identifier, args);

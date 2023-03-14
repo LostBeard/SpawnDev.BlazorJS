@@ -48,11 +48,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return false;
         }
 
-        //public int WorkersIdle => _workers.Sum(o => !o.WaitingForResponse ? 1 : 0);
-
-
-
-
         public bool AreWorkersRunning => WorkersRunning > 0;
         public int WorkersRunning { get; private set; }
         int _WorkerCountRequest;

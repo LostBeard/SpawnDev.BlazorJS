@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string Facing { get; set; } = "";
     }
 
-    [JsonConverter(typeof(JSObjectConverter<MediaDevices>))]
+    
     public class MediaDevices : EventTarget
     {
         public MediaDevices(IJSInProcessObjectReference _ref) : base(_ref) { }
@@ -163,7 +163,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             return await JSRef.CallAsync<DeviceInfo[]>("enumerateDevices");
         }
 
-        public ValueTask<MediaStream> GetUserMedia(ExpandoObject constraints)
+        public Task<MediaStream> GetUserMedia(ExpandoObject constraints)
         {
             return JSRef.CallAsync<MediaStream>("getUserMedia", constraints);
         }

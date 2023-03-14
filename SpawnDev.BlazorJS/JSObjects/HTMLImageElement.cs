@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<HTMLImageElement>))]
+    
     public class HTMLImageElement : HTMLElement
     {
         public int Width => JSRef.Get<int>("width");

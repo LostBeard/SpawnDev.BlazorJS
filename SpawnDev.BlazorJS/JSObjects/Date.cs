@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<Date>))]
+    
     internal class Date : JSObject
     {
         public Date() : base(JS.New(nameof(Date))) { }

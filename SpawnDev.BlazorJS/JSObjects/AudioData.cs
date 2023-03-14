@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<AudioData>))]
+    
     public class AudioData : JSObject
     {
         public AudioData(IJSInProcessObjectReference _ref) : base(_ref)

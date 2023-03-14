@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<LockManager>))]
+    
     public class LockManager : JSObject {
         public LockManager(IJSInProcessObjectReference _ref) : base(_ref) {
         }

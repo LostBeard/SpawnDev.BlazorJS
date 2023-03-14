@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     // Non-standard implememntation
     // TODO - try to standardize
     // https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase
-    [JsonConverter(typeof(JSObjectConverter<IDBDatabase>))]
+    
     public class IDBDatabase : JSObject
     {
         public bool IsOpen { get; private set; } = false;

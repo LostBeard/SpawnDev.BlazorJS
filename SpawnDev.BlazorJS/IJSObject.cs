@@ -8,11 +8,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS {
-    public interface IWindow {
-        string Name { get; set; }
-        void Alert(string msg);
-    }
-
     public class IJSObject : DispatchProxy {
         public IJSInProcessObjectReference JSRef { get; private set; }
         public Type InterfaceType { get; private set; }
@@ -91,7 +86,6 @@ namespace SpawnDev.BlazorJS {
             var methodName = targetMethod.Name;
             var returnType = targetMethod.ReturnType;
             var argsCount = args == null ? 0 : args.Length;
-            Console.WriteLine($"IJSObject.Invoke({methodName}, args[{argsCount}])");
             try {
                 if (targetMethod.IsSpecialName) {
                     if (methodName.StartsWith("get_")) {
@@ -123,7 +117,7 @@ namespace SpawnDev.BlazorJS {
         }
 
         ~IJSObject() {
-            Console.WriteLine("~IJSObject");
+            // IJSObjects dispose of their IJSInProcessObjectReference objects in the finalizer (here)
             JSRef?.Dispose();
             JSRef = null;
         }

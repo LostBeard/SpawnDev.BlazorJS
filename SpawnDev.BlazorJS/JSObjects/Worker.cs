@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/Worker
     // Worker implements an interface identical to MessagePort so I added an interface definition they can share
-    [JsonConverter(typeof(JSObjectConverter<Worker>))]
+    
     public class Worker : EventTarget, IMessagePort
     {
         protected CallbackGroup _callbacks = new CallbackGroup();

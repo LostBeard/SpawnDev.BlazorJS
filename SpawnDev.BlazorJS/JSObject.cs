@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-    //[JsonConverter(typeof(JSObjectConverter<JSObject>))]
+    //
     public class JSObject : IDisposable
     {
         public static IJSInProcessObjectReference? NullRef { get; } = null;

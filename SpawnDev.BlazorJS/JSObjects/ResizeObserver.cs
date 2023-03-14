@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<ResizeObserver>))]
+    
     public class ResizeObserver : JSObject
     {
         public ResizeObserver(IJSInProcessObjectReference _ref) : base(_ref) { }

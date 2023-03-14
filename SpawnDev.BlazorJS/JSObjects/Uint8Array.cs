@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<Uint8Array>))]
+    
     public class Uint8Array : JSObject
     {
         public Uint8Array(IJSInProcessObjectReference _ref) : base(_ref) { }

@@ -31,9 +31,6 @@ namespace SpawnDev.BlazorJS {
             var instanceField = jsRuntimeType.GetField("Instance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
             object? jsRuntimeObj = instanceField.GetValue(null);
             _js = (IJSInProcessRuntime)jsRuntimeObj;    // (WebAssemblyJSRuntime)
-
-
-
             ModifyJsonSerializerOptions();
             GlobalThisTypeName = GetConstructorName("globalThis");
             switch (GlobalThisTypeName) {
@@ -66,17 +63,20 @@ namespace SpawnDev.BlazorJS {
                 // modify
                 // below line makes sure IJSObjects are properly serialized
                 RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new JSObjectArrayConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectArrayConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new TaskConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
             }
             else {
                 Console.WriteLine($"SpawnDev.BlazorJS.JS ERROR: Failed to modify JsonSerializerOptions");
             }
         }
 
-        public static void DisposeCallback(string callbackerID) => _JSInteropCallVoid("DisposeCallbacker", callbackerID);
+        public static void DisposeCallback(string callbackerID) => JSInterop.DisposeCallbacker(callbackerID);
 
         public static AsyncIterator? GetAsyncIterator(IJSInProcessObjectReference targetObject) => Get<AsyncIterator?>(targetObject, "Symbol.asyncIterator");
 
@@ -131,7 +131,7 @@ namespace SpawnDev.BlazorJS {
         public static IJSInProcessObjectReference DocumentCreateElement(string elementType) => Call<IJSInProcessObjectReference>("document.createElement", elementType);
         public static T DocumentCreateElement<T>(string elementType) where T : JSObject => Call<T>("document.createElement", elementType);
 
-        public static bool JSEquals(object obj1, object obj2) => _JSInteropCall<bool>("__equals", obj1, obj2);
+        public static bool JSEquals(object obj1, object obj2) => JSInterop.IsEqual(obj1, obj2);
 
         //public static T CopyReference<T>(JSObject obj) where T : JSObject => ReturnMe<T>(obj);
         //public static IJSInProcessObjectReference CopyReference(IJSInProcessObjectReference obj) => ReturnMe<IJSInProcessObjectReference>(obj);
@@ -141,11 +141,11 @@ namespace SpawnDev.BlazorJS {
         //    if (sourceDisposeExceptRef) orig.DisposeExceptRef();
         //    return ret;
         //}
-        public static T ReturnMe<T>(object obj) => _JSInteropCall<T>("_returnMe", obj);
+        public static T ReturnMe<T>(object obj) => JSInterop.ReturnMe<T>( obj);
         public static JSObject FromElementReference(ElementReference elementRef) => ReturnMe<JSObject>(elementRef);
         public static IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);
         public static T FromElementReference<T>(ElementReference elementRef) where T : JSObject => (T)Activator.CreateInstance(typeof(T), ReturnMe<IJSInProcessObjectReference>(elementRef));
-        public static IJSInProcessObjectReference NewApply(string className, object?[]? args = null) => _JSInteropCall<IJSInProcessObjectReference>("_returnNew", className, args);
+        public static IJSInProcessObjectReference NewApply(string className, object?[]? args = null) => JSInterop.ReturnNew<IJSInProcessObjectReference>(className, args);
         public static IJSInProcessObjectReference New(string className) => NewApply(className);
         public static IJSInProcessObjectReference New(string className, object arg0) => NewApply(className, new object[] { arg0 });
         public static IJSInProcessObjectReference New(string className, object arg0, object arg1) => NewApply(className, new object[] { arg0, arg1 });
@@ -157,10 +157,10 @@ namespace SpawnDev.BlazorJS {
         public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
         public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         public static IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-        public static bool IsUndefined(JSObject obj, string identifier = "") => _JSInteropCall<string>("_typeof", obj, identifier) == "undefined";
-        public static bool IsUndefined(string identifier) => _JSInteropCall<string>("_typeof", null, identifier) == "undefined";
-        public static string TypeOf(JSObject obj, string identifier = "") => _JSInteropCall<string>("_typeof", obj, identifier);
-        public static string TypeOf(string identifier) => _JSInteropCall<string>("_typeof", null, identifier);
+        public static bool IsUndefined(JSObject obj, string identifier = "") => JSInterop.TypeOf(obj, identifier) == "undefined";
+        public static bool IsUndefined(string identifier) => JSInterop.TypeOf(null, identifier) == "undefined";
+        public static string TypeOf(JSObject obj, string identifier = "") => JSInterop.TypeOf(obj, identifier);
+        public static string TypeOf(string identifier) => JSInterop.TypeOf(null, identifier);
         public static void Log(params object[] args) => CallApplyVoid("console.log", args);
         public static string GetConstructorName(string identifier) => JS.Get<string>($"{identifier}.constructor.name");
 
@@ -182,70 +182,6 @@ namespace SpawnDev.BlazorJS {
                 }
             }
             return t;
-        }
-
-        // Microsoft.JSInterop.JSCallResultTypeHelper
-        // class may change, keep up to date
-        private static readonly Assembly _jsResultTypeAssembly = typeof(JSCallResultType).Assembly;
-        public static JSCallResultType JSCallResultTypeFromGeneric<TResult>() {
-            if (RuntimeJsonSerializerOptions != null) {
-                var converter = RuntimeJsonSerializerOptions.GetConverter(typeof(TResult));
-                if (converter != null) {
-                    if (converter is IJSInProcessObjectReferenceConverter jsonConverterV2 && jsonConverterV2.OverrideResultType) {
-                        return jsonConverterV2.JSCallResultType;
-                    }
-                }
-            }
-            if (typeof(TResult).Assembly == _jsResultTypeAssembly) {
-                if (typeof(TResult) == typeof(IJSObjectReference) ||
-                    typeof(TResult) == typeof(IJSInProcessObjectReference) ||
-                    typeof(TResult) == typeof(IJSUnmarshalledObjectReference)) {
-                    return JSCallResultType.JSObjectReference;
-                }
-                else if (typeof(TResult) == typeof(IJSStreamReference)) {
-                    return JSCallResultType.JSStreamReference;
-                }
-                else if (typeof(TResult) == typeof(void)) {
-                    return JSCallResultType.JSVoidResult;
-                }
-            }
-            return JSCallResultType.Default;
-        }
-
-        static bool GetConverterJSCallResultTypeOverride(JsonConverter jsonConverter, out JSCallResultType overrideType) {
-            if (jsonConverter is IJSInProcessObjectReferenceConverter jsonConverterV2) {
-                overrideType = jsonConverterV2.JSCallResultType;
-                return true;
-            }
-            else {
-                overrideType = JSCallResultType.Default;
-                return false;
-            }
-        }
-
-        public static JSCallResultType JSCallResultTypeFromGeneric(Type type) {
-            if (RuntimeJsonSerializerOptions != null) {
-                var converter = RuntimeJsonSerializerOptions.GetConverter(type);
-                if (converter != null) {
-                    if (converter is IJSInProcessObjectReferenceConverter jsonConverterV2 && jsonConverterV2.OverrideResultType) {
-                        return jsonConverterV2.JSCallResultType;
-                    }
-                }
-            }
-            if (type.Assembly == _jsResultTypeAssembly) {
-                if (type == typeof(IJSObjectReference) ||
-                    type == typeof(IJSInProcessObjectReference) ||
-                    type == typeof(IJSUnmarshalledObjectReference)) {
-                    return JSCallResultType.JSObjectReference;
-                }
-                else if (type == typeof(IJSStreamReference)) {
-                    return JSCallResultType.JSStreamReference;
-                }
-                else if (type == typeof(void)) {
-                    return JSCallResultType.JSVoidResult;
-                }
-            }
-            return JSCallResultType.Default;
         }
     }
 }

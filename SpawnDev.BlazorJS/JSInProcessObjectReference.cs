@@ -1,35 +1,45 @@
 ﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop.Implementation;
+using System.Reflection;
 
 namespace SpawnDev.BlazorJS
 {
     public static partial class JS
     {
-        public static string GetConstructorName(this IJSInProcessObjectReference _ref) => _JSInteropCall<string>("_instanceof", _ref, "");
-        public static string GetConstructorName(this IJSInProcessObjectReference _ref, string identifier) => _JSInteropCall<string>("_instanceof", _ref, identifier);
-        public static List<string> GetPropertyNames(this IJSInProcessObjectReference _ref, bool hasOwnProperty = false) => _JSInteropCall<List<string>>("_getPropertyNames", _ref, null, hasOwnProperty);
-        public static string PropertyType(this IJSInProcessObjectReference _ref, string identifier = "") => _JSInteropCall<string>("_typeof", _ref, identifier);
-        public static string PropertyInstanceOf(this IJSInProcessObjectReference _ref, string identifier = "") => _JSInteropCall<string>("_instanceof", _ref, identifier);
+        static PropertyInfo? JSObjectReferenceIdProp = null;
+        public static long GetJSRefId(this IJSInProcessObjectReference _ref) {
+            if (JSObjectReferenceIdProp == null) {
+                JSObjectReferenceIdProp = typeof(JSObjectReference).GetProperty("Id", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            }
+            return (long)JSObjectReferenceIdProp.GetValue(_ref);
+        }
+
+        public static string GetConstructorName(this IJSInProcessObjectReference _ref) => JSInterop.Get<string>(_ref, "constructor.name");
+        public static List<string> GetPropertyNames(this IJSInProcessObjectReference _ref, bool hasOwnProperty = false) => JSInterop.GetPropertyNames(_ref, "", hasOwnProperty);
+        public static string PropertyType(this IJSInProcessObjectReference _ref, string identifier = "") => JSInterop.TypeOf(_ref, identifier);
+        public static string PropertyInstanceOf(this IJSInProcessObjectReference _ref, string identifier = "") => JSInterop.InstanceOf(_ref, identifier);
 
         #region IJSInProcessObjectReference Base Accessors
-        public static void Set(this IJSInProcessObjectReference targetObject, string identifier, object? value) => _JSInteropCallVoid("_set", targetObject, identifier, value);
-        public static T Get<T>(this IJSInProcessObjectReference targetObject, string identifier) => _JSInteropCall<T>("_get", targetObject, identifier);
-        public static T Get<T>(this IJSInProcessObjectReference targetObject, int identifier) => _JSInteropCall<T>("_get", targetObject, identifier);
-        public static object? Get(this IJSInProcessObjectReference targetObject, Type returnType, string identifier) => _JSInteropCall(returnType, "_get", targetObject, identifier);
-        public static object? Get(this IJSInProcessObjectReference targetObject, Type returnType, int identifier) => _JSInteropCall(returnType, "_get", targetObject, identifier);
+        public static void Set(this IJSInProcessObjectReference targetObject, string identifier, object? value) => JSInterop.Set(targetObject, identifier, value);
+        public static void Set(this IJSInProcessObjectReference targetObject, int identifier, object? value) => JSInterop.Set(targetObject, identifier, value);
+        public static T Get<T>(this IJSInProcessObjectReference targetObject, string identifier) => JSInterop.Get<T>(targetObject, identifier);
+        public static T Get<T>(this IJSInProcessObjectReference targetObject, int identifier) => JSInterop.Get<T>(targetObject, identifier);
+        public static object? Get(this IJSInProcessObjectReference targetObject, Type returnType, string identifier) => JSInterop.Get(returnType, targetObject, identifier);
+        public static object? Get(this IJSInProcessObjectReference targetObject, Type returnType, int identifier) => JSInterop.Get(returnType, targetObject, identifier);
 
         #region IJSInProcessObjectReference Get Async
-        public static ValueTask<T> GetAsync<T>(this IJSInProcessObjectReference targetObject, string identifier) => _JSInteropCallAsync<T>("_get", targetObject, identifier);
-        public static ValueTask<object?> GetAsync(this IJSInProcessObjectReference targetObject, Type returnType, string identifier)=> _JSInteropCallAsync(returnType, "_get", targetObject, identifier);
+        public static Task<T> GetAsync<T>(this IJSInProcessObjectReference targetObject, string identifier) => JSInterop.GetAsync<T>(targetObject, identifier);
+        //public static Task<object?> GetAsync(this IJSInProcessObjectReference targetObject, Type returnType, string identifier)=> _JSInteropCallAsync(returnType, "_get", targetObject, identifier);
         #endregion
         #region IJSInProcessObjectReference Call Sync
-        public static T CallApply<T>(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCall<T>("_call", targetObject, identifier, PreExportArgs(args));
-        public static object? CallApply(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => _JSInteropCall(returnType, "_call", targetObject, identifier, PreExportArgs(args));
-        public static void CallApplyVoid(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCallVoid("_call", targetObject, identifier, PreExportArgs(args));
+        public static T CallApply<T>(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => JSInterop.Call<T>(targetObject, identifier, args);
+        public static object? CallApply(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => JSInterop.Call(returnType, targetObject, identifier, args);
+        public static void CallApplyVoid(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => JSInterop.CallVoid(targetObject, identifier, args);
         #endregion
         #region IJSInProcessObjectReference Call Async
-        public static ValueTask<T> CallApplyAsync<T>(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCallAsync<T>("_call", targetObject, identifier, PreExportArgs(args));
-        public static ValueTask<object?> CallApplyAsync(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => _JSInteropCallAsync(returnType, "_call", targetObject, identifier, PreExportArgs(args));
-        public static ValueTask CallApplyVoidAsync(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => _JSInteropCallVoidAsync("_call", targetObject, identifier, PreExportArgs(args));
+        public static Task<T> CallApplyAsync<T>(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => JSInterop.CallAsync<T>(targetObject, identifier, args);
+//        public static Task<object?> CallApplyAsync(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => _JSInteropCallAsync(returnType, "_call", targetObject, identifier, args);
+        public static Task CallApplyVoidAsync(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => JSInterop.CallVoidAsync(targetObject, identifier, args);
         #endregion
         #endregion
 
@@ -76,41 +86,41 @@ namespace SpawnDev.BlazorJS
 
 
         #region IJSInProcessObjectReference Call Async
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier) => CallApplyAsync<T>(_ref, identifier);
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-        public static ValueTask<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier) => CallApplyAsync<T>(_ref, identifier);
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => CallApplyAsync<T>(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
 
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier) => CallApplyAsync(_ref, returnType, identifier);
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-        public static ValueTask<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier) => CallApplyAsync(_ref, returnType, identifier);
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        //public static Task<object?> CallAsync(this IJSInProcessObjectReference _ref, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => CallApplyAsync(_ref, returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
 
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier) => CallApplyVoidAsync(_ref, identifier);
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0 });
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1 });
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2 });
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3 });
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-        public static ValueTask CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier) => CallApplyVoidAsync(_ref, identifier);
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => CallApplyVoidAsync(_ref, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
 
 
         #endregion

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<ImageData>))]
+    
     public class ImageData : JSObject
     {
         public string ColorSpace => JSRef.Get<string>("colorSpace");

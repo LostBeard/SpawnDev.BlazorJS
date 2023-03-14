@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader
-    [JsonConverter(typeof(JSObjectConverter<ReadableStreamDefaultReader>))]
+    
     public class ReadableStreamDefaultReader : JSObject
     {
         public ReadableStreamDefaultReader(IJSInProcessObjectReference _ref) : base(_ref) { }

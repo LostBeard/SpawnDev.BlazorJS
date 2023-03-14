@@ -112,14 +112,20 @@ namespace SpawnDev.BlazorJS.Test.Services {
             ctx.PutImageData(imageData, 0, 0);
             JSObject? detections = null;
             try {
-                using var detectAllFacesTask = _faceapi.Call<Promise>("detectAllFaces", canvas);
                 if (withLandmarks) {
-                    using var detectAllFacesWithLandmarksTask = detectAllFacesTask.JSRef.Call<Promise>("withFaceLandmarks");
-                    detections = await detectAllFacesWithLandmarksTask.ThenAsync<JSObject>();
+                    using var detectAllFacesTask = _faceapi.Call<JSObject>("detectAllFaces", canvas);
+                    detections = await detectAllFacesTask.JSRef.CallAsync<JSObject>("withFaceLandmarks");
+                } else {
+                    detections = await _faceapi.CallAsync<JSObject>("detectAllFaces", canvas);
                 }
-                else {
-                    detections = await detectAllFacesTask.ThenAsync<JSObject>();
-                }
+                //using var detectAllFacesTask = _faceapi.Call<Promise>("detectAllFaces", canvas);
+                //if (withLandmarks) {
+                //    using var detectAllFacesWithLandmarksTask = detectAllFacesTask.JSRef.Call<Promise>("withFaceLandmarks");
+                //    detections = await detectAllFacesWithLandmarksTask.ThenAsync<JSObject>();
+                //}
+                //else {
+                //    detections = await detectAllFacesTask.ThenAsync<JSObject>();
+                //}
             }
             catch {
                 // continue

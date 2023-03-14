@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://web.dev/cache-api-quick-guide/
-    [JsonConverter(typeof(JSObjectConverter<CacheStorage>))]
     public class CacheStorage : JSObject
     {
         public CacheStorage(IJSInProcessObjectReference _ref) : base(_ref) { }

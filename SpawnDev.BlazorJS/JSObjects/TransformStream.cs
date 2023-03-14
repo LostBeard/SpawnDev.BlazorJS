@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<TransformStream>))]
+    
     public class TransformStream : JSObject
     {
         public TransformStream(IJSInProcessObjectReference _ref) : base(_ref)

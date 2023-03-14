@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<MediaStreamTrack>))]
+    
     public class MediaStreamTrack : JSObject
     {
         public bool Active => JSRef.Get<bool>("active");

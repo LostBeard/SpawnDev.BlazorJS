@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<Navigator>))]
+    
     public class Navigator : JSObject
     {
         public Navigator() : base(JS.Get<IJSInProcessObjectReference>("navigator")) { }

@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Blob
-    [JsonConverter(typeof(JSObjectConverter<Blob>))]
+    
     public class Blob : JSObject
     {
         public Blob(IJSInProcessObjectReference _ref) : base(_ref) { }

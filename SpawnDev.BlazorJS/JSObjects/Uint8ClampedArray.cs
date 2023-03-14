@@ -4,7 +4,7 @@ using SpawnDev.BlazorJS.JsonConverters;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<Uint8ClampedArray>))]
+    
     public class Uint8ClampedArray : JSObject
     {
         public Uint8ClampedArray(IJSInProcessObjectReference _ref) : base(_ref) { }

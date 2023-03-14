@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-
-    [JsonConverter(typeof(JSObjectConverter<Window>))]
     public class Window : EventTarget {
         public Window() : base(JS.Get<IJSInProcessObjectReference>("window")) { }
         public Window(IJSInProcessObjectReference _ref) : base(_ref) { }
+        public string? Name { get => JSRef.Get<string>("name"); set => JSRef.Set("name", value); }
         public WebStorage SessionStorage => JSRef.Get<WebStorage>("sessionStorage");
         public WebStorage LocalStorage => JSRef.Get<WebStorage>("localStorage");
         public Navigator Navigator => JSRef.Get<Navigator>("navigator");

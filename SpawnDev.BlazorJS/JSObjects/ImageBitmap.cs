@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<ImageBitmap>))]
+    
     public class ImageBitmap : JSObject
     {
         public ImageBitmap(IJSInProcessObjectReference _ref) : base(_ref)

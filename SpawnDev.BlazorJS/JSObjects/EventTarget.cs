@@ -13,10 +13,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Passive { get; set; } = null;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public AbortSignal Signal { get; set; } = null;
+        public AbortSignal? Signal { get; set; } = null;
     }
 
-    [JsonConverter(typeof(JSObjectConverter<EventTarget>))]
+    
     public class EventTarget : JSObject
     {
         //public EventTarget(string className) : base(className) { }

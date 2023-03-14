@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     // Non-Standard implementation
     // TODO
     // https://developer.mozilla.org/en-US/docs/Web/API/Response
-    [JsonConverter(typeof(JSObjectConverter<Response>))]
+    
     public class Response : JSObject
     {
         public bool Ok => JSRef.Get<bool>("ok");
@@ -66,9 +66,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    headers.JSRef.CallVoid("set", "Content-Length", data.Length);
         //}
 
-        public ValueTask<Blob> Blob() => JSRef.CallAsync<Blob>("blob");
-        public ValueTask<string> Text() => JSRef.CallAsync<string>("text");
-        public ValueTask<ArrayBuffer> ArrayBuffer() => JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
+        public Task<Blob> Blob() => JSRef.CallAsync<Blob>("blob");
+        public Task<string> Text() => JSRef.CallAsync<string>("text");
+        public Task<ArrayBuffer> ArrayBuffer() => JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
 
         public void HeaderSet(string key, string value)
         {

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<BroadcastChannel>))]
+    
     public class BroadcastChannel : EventTarget
     {
         public BroadcastChannel(IJSInProcessObjectReference _ref) : base(_ref) { }

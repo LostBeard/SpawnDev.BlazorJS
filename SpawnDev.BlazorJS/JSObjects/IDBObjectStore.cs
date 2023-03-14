@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/IDBObjectStore
-    [JsonConverter(typeof(JSObjectConverter<IDBObjectStore>))]
+    
     public class IDBObjectStore : JSObject
     {
         public IDBObjectStore(IJSInProcessObjectReference _ref) : base(_ref) { }

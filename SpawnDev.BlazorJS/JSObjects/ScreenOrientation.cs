@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<ScreenOrientation>))]
+    
     public class ScreenOrientation : JSObject
     {
         public ScreenOrientation(IJSInProcessObjectReference _ref) : base(_ref) { }

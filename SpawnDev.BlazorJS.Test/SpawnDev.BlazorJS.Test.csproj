@@ -3,10 +3,8 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>1.8.1</Version>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Version>1.9.0</Version>
 		<WasmBuildNative>true</WasmBuildNative>
-		<EnableMLUnsupportedPlatformTargetCheck>false</EnableMLUnsupportedPlatformTargetCheck>
 	</PropertyGroup>
 
 	<ItemGroup>

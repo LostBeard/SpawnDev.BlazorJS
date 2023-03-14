@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpawnDev.BlazorJS.JSObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,26 +8,36 @@ using System.Threading.Tasks;
 namespace SpawnDev.BlazorJS.JsonConverters {
     public static class TaskExtensions {
 
-        static Dictionary<object, Callback> _callbacks = new Dictionary<object, Callback>();
+        static Dictionary<object, JSObject> _promises = new Dictionary<object, JSObject>();
 
-        public static void CallbackDispose(this Task _this) {
-            if (_callbacks.TryGetValue(_this, out var callback)) {
-                _callbacks.Remove(_this);
-                callback.Dispose();
+        public static void PromiseDispose(this Task _this) {
+            if (_promises.TryGetValue(_this, out var promise)) {
+                _promises.Remove(_this);
+                promise.Dispose();
             }
         }
-        public static Callback? CallbackGet(this Task _this) => _callbacks.TryGetValue(_this, out var callback) ? callback : null;
-        public static void CallbackSet(this Task _this, Callback callback) => _callbacks.Add(_this, callback);
+        public static Promise? PromiseGet(this Task _this, bool allowCreate = false) {
+            Promise? ret = null;
+            if (_promises.TryGetValue(_this, out var tmp)) return (Promise)tmp;
+            if (allowCreate) _promises[_this] = ret = new Promise(_this);
+            return ret;
+        }
+        public static void PromiseSet(this Task _this, Promise promise) => _promises.Add(_this, promise);
 
 
-        public static void CallbackDispose<T0>(this Task<T0> _this) {
-            if (_callbacks.TryGetValue(_this, out var callback)) {
-                _callbacks.Remove(_this);
-                callback.Dispose();
+        public static void PromiseDispose<T0>(this Task<T0> _this) {
+            if (_promises.TryGetValue(_this, out var promise)) {
+                _promises.Remove(_this);
+                promise.Dispose();
             }
         }
-        public static Callback? CallbackGet<T0>(this Task<T0> _this) => _callbacks.TryGetValue(_this, out var callback) ? callback : null;
-        public static void CallbackSet<T0>(this Task<T0> _this, Callback callback) => _callbacks.Add(_this, callback);
+        public static Promise<T0>? PromiseGet<T0>(this Task<T0> _this, bool allowCreate = false) {
+            Promise<T0>? ret = null;
+            if (_promises.TryGetValue(_this, out var tmp)) return (Promise<T0>)tmp;
+            if (allowCreate) _promises[_this] = ret = new Promise<T0>(_this);
+            return ret;
+        }
+        public static void PromiseSet<T0>(this Task<T0> _this, Promise promise) => _promises.Add(_this, promise);
 
     }
 }

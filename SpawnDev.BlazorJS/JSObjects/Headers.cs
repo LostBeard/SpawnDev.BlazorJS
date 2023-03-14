@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<Headers>))]
+    
     public class Headers : JSObject
     {
         public Headers() : base(JS.New(nameof(Headers))) { }

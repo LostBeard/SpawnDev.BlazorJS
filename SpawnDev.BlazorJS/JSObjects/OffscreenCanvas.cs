@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<OffscreenCanvas>))]
+    
     public class OffscreenCanvas : JSObject
     {
         public OffscreenCanvas(int width, int height) : base(JS.New(nameof(OffscreenCanvas), width, height)) { }

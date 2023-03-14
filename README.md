@@ -102,12 +102,43 @@ await someNetFnAsync('Hello callback!');
 Recvd: Hello callback!
 ```
 
-# JSObject
+# IJSObject Interface Converter
+
+SpawnDev.BlazorJS now supports serializing and deserializing javascript objects to and from interfaces. Just like objects derived from JSObject, IJSObject objects internally use IJSInProcessObjectReference. The main difference is IJSObjects use DispatchProxy to implement the desired interface at runtime instead of requiring a type that inherits JSObject. Currently SpawnDev.BlazorJS does not provide any interfaces for javascript objects or apis but interfaces are simple to set up.
+
+Example
+```cs
+// create an interface for your javascript object
+public interface IWindow {
+    string Name { get; set; }
+    // ...
+}
+
+// use your interface to interact with the javascript object
+public void IJSObjectInterfaceTest() {
+    var w = JS.Get<IWindow>("window");
+    var randName = Guid.NewGuid().ToString();
+    w.Name = randName;
+    if (w.Name != randName) throw new Exception("Interface property set/get failed");
+}
+```
+
+
+# JSObject Base Class
 
 JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow strongly typed access to the underlying object.
 
 Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (localStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
 
+```cs
+// below the JSObject derived Window class is used
+public void JSObjectPropertySetGet() {
+    var w = JS.Get<Window>("window");
+    var randName = Guid.NewGuid().ToString();
+    w.Name = randName;
+    if (w.Name != randName) throw new Exception("Interface property set/get failed");
+}
+```
 
 # Promise
 SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class.
@@ -184,7 +215,6 @@ audio.CallVoid("play");
 You can do this...  
 Create a custom JSObject wrapper
 ```cs
-[JsonConverter(typeof(JSObjectConverter<Audio>))]
 public class Audio : JSObject
 {
     public Audio(IJSInProcessObjectReference _ref) : base(_ref) { }

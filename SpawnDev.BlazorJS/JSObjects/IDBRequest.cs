@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     // TODO verify workign after itnerop changes
     // check proepr dispoal of jsobjcets
-    [JsonConverter(typeof(JSObjectConverter<IDBRequest>))]
+    
     public class IDBRequest : EventTarget
     {
         public CallbackGroup callbackGroup { get; private set; } = new CallbackGroup();

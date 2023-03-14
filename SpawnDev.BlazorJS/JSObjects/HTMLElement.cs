@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<HTMLElement>))]
+    
     public class HTMLElement : Element
     {
         public HTMLElement(IJSInProcessObjectReference _ref) : base(_ref) { }

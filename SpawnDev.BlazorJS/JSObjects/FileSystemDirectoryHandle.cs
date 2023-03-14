@@ -9,7 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     // TODO - NEEDS TESTING SINCE JSINTEROP CHANGE!!!!
     // https://developer.mozilla.org/en-US/docs/Web/API/File
-    [JsonConverter(typeof(JSObjectConverter<FileSystemDirectoryHandle>))]
+    
     public class FileSystemDirectoryHandle : FileSystemHandle
     {
         public FileSystemDirectoryHandle(IJSInProcessObjectReference _ref) : base(_ref) { }

@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<ServiceWorkerContainer>))]
+    
     public class ServiceWorkerContainer : EventTarget
     {
         public ServiceWorker Controller => JSRef.Get<ServiceWorker>("controller");
-        public ValueTask<ServiceWorkerRegistration> Ready => JSRef.GetAsync<ServiceWorkerRegistration>("ready");
+        public Task<ServiceWorkerRegistration> Ready => JSRef.GetAsync<ServiceWorkerRegistration>("ready");
         public ServiceWorkerContainer(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         public async Task<ServiceWorkerRegistration> Register(string scriptURL, RegisterOptions options = null)

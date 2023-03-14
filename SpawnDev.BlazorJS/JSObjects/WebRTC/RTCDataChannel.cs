@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel
     // https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample
-    [JsonConverter(typeof(JSObjectConverter<RTCDataChannel>))]
+    
     public class RTCDataChannel : EventTarget
     {
         public RTCDataChannel(IJSInProcessObjectReference _ref) : base(_ref) { }

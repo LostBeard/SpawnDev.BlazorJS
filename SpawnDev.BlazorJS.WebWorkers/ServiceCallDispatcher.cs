@@ -45,8 +45,6 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             _port.OnMessage += _worker_OnMessage;
             _port.OnMessageError += _port_OnError;
             additionalCallArgs.Add(new CallSideParamter("caller", () => this, typeof(ServiceCallDispatcher)));
-
-            additionalCallArgs.Add(new CallSideParamter("universeAnswer", () => 42, typeof(int)));
         }
 
         private void _port_OnError() {
@@ -235,7 +233,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                         object[] transfer = new object?[0];
                         if (hasReturnValue && retValue != null) {
                             if (finalReturnTypeAllowTransfer) {
-                                var conversionInfo = JS.GetTypeConversionInfo(finalReturnType);
+                                var conversionInfo = TypeConversionInfo.GetTypeConversionInfo(finalReturnType);
                                 transfer = conversionInfo.GetTransferablePropertyValues(retValue);
                             }
                             //if (transfer.Length > 0) Console.WriteLine($"transfering: {transfer.Length} {transfer[0].GetType().Name}");
@@ -475,7 +473,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                     else if (argI < args.Length) {
                         var argVal = args[argI];
                         if (allowTransferable) {
-                            var covnersionInfo = JS.GetTypeConversionInfo(methodParamType);
+                            var covnersionInfo = TypeConversionInfo.GetTypeConversionInfo(methodParamType);
                             var propTransferable = covnersionInfo.GetTransferablePropertyValues(argVal);
                             trasnferableList.AddRange(propTransferable);
                         }

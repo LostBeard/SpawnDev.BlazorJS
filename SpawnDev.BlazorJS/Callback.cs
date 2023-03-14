@@ -1,65 +1,43 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS {
-    // TODO - Add support for nested JSObject parameters in callbacks
     public abstract class Callback : IDisposable {
-        //static IJSInProcessRuntime _js { get { return JSObject._js; } }
-        static ulong IsCallbackerID = 0;
-        static ulong IsCallbackerID2 = 0;
+        static ulong CallbackIdCounter { get; set; } = 0;
         [JsonPropertyName("isDisposed")]
         public bool IsDisposed { get; private set; } = false;
-        //public object netObjRef { get; private set; } = null;
-        public DotNetObjectReference<Callback> netObjRef { get; }
-        [JsonPropertyName("__callbackerID")]
-        public string callbackerID { get; private set; } = "";
-        public string[] paramTypes { get; private set; } = new string[0];
-        public string returnType { get; private set; } = "";
+        [JsonPropertyName("_callback")]
+        public DotNetObjectReference<Callback> _callback { get; }
+        [JsonPropertyName("_callbackId")]
+        public string _callbackId { get; private set; }
+        [JsonPropertyName("_paramTypes")]
+        public int[] _paramTypes { get; private set; } = new int[0];
+        [JsonPropertyName("_returnVoid")]
+        public bool _returnVoid { get; private set; }
         protected bool once { get; private set; } = false;
         [JsonIgnore]
         public Type CallbackType { get; private set; }
         public Callback() {
+            CallbackIdCounter = CallbackIdCounter == ulong.MaxValue ? 1 : CallbackIdCounter + 1;
+            if (CallbackIdCounter == ulong.MaxValue) {
+                CallbackIdCounter = 0;
+            }
+            _callbackId = $"{CallbackIdCounter}";
             CallbackType = this.GetType();
-            netObjRef = DotNetObjectReference.Create(this);
-            // get callback parameter types
-            // we need to make sure any callback parameters that are assignable to type JSObject are transferred as IJSInProcessObjectReference type
-            // also that IJSInProcessObjectReference is passed properly
+            _callback = DotNetObjectReference.Create(this);
             var methodInfo = CallbackType.GetMethod("Invoke");
             if (methodInfo != null) {
                 var paramInfos = methodInfo.GetParameters();
-                paramTypes = new string[paramInfos.Length];
-                for (var i = 0; i < paramTypes.Length; i++) {
+                _paramTypes = new int[paramInfos.Length];
+                for (var i = 0; i < _paramTypes.Length; i++) {
                     var paramType = paramInfos[i].ParameterType;
-                    if (typeof(JSObject).IsAssignableFrom(paramType)) {
-                        paramTypes[i] = "IJSObject";
-                    }
-                    else if (typeof(IJSInProcessObjectReference).IsAssignableFrom(paramType)) {
-                        paramTypes[i] = "IJSObject";
-                    }
-                    else {
-                        paramTypes[i] = paramType.Name;
-                    }
+                    var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(paramType);
+                    _paramTypes[i] = (int)jsCallResultType;
                 }
-                returnType = methodInfo.ReturnType.Name;
+                _returnVoid = methodInfo.ReturnType == typeof(void);
             }
-            if (returnType == "Task") {
-                if (CallbackType.Name.Contains("Task")) {
-                    var nmt = true;
-                }
-                else {
-                    throw new Exception("TASK is not a valid return type!");
-                }
-            }
-            if (IsCallbackerID == ulong.MaxValue) {
-                IsCallbackerID = 0;
-                if (IsCallbackerID2 == ulong.MaxValue) IsCallbackerID2 = 0;
-                IsCallbackerID2++;
-            }
-            callbackerID = $"callback_{IsCallbackerID++}_{IsCallbackerID2}";
-#if DEBUG && false
-            Console.WriteLine($"Created callbackerID: {callbackerID} {CallbackType.Name} {string.Join(", ", paramTypes)}");
-#endif
         }
 
         //~Callback() {
@@ -69,12 +47,12 @@ namespace SpawnDev.BlazorJS {
         void Dispose(bool disposing){
             if (IsDisposed) return;
             IsDisposed = true;
-            netObjRef.Dispose();
+            _callback.Dispose();
             //if (netObjRef is IDisposable disposable) disposable.Dispose();
             //netObjRef = null;
-            JS.DisposeCallback(callbackerID);
+            JS.DisposeCallback(_callbackId);
             //_js.InvokeVoid("JSInterop.DisposeCallbacker", callbackerID);
-#if DEBUG  && true
+#if DEBUG  && false
             Console.WriteLine($"Disposed callbackerID: {callbackerID} {CallbackType.Name}");
 #endif
         }
@@ -188,6 +166,7 @@ namespace SpawnDev.BlazorJS {
             ret.once = true;
             return ret;
         }
+
         // Async Actions
         public static AsyncActionCallback Create(Func<Task> callback, CallbackGroup group = null) {
             var ret = new AsyncActionCallback(callback);
@@ -327,7 +306,7 @@ namespace SpawnDev.BlazorJS {
             _callback = callback;
         }
         [JSInvokable]
-        public Promise Invoke() {
+        public Promise<TResult> Invoke() {
             if (once) Dispose();
             return new Promise<TResult>(_callback());
         }
@@ -339,7 +318,7 @@ namespace SpawnDev.BlazorJS {
             _callback = callback;
         }
         [JSInvokable]
-        public Promise Invoke(T1 arg0) {
+        public Promise<TResult> Invoke(T1 arg0) {
             if (once) Dispose();
             return new Promise<TResult>(_callback(arg0));
         }
@@ -351,7 +330,7 @@ namespace SpawnDev.BlazorJS {
             _callback = callback;
         }
         [JSInvokable]
-        public Promise Invoke(T1 arg0, T2 arg1) {
+        public Promise<TResult> Invoke(T1 arg0, T2 arg1) {
             if (once) Dispose();
             return new Promise<TResult>(_callback(arg0, arg1));
         }
@@ -363,7 +342,7 @@ namespace SpawnDev.BlazorJS {
             _callback = callback;
         }
         [JSInvokable]
-        public Promise Invoke(T1 arg0, T2 arg1, T3 arg2) {
+        public Promise<TResult> Invoke(T1 arg0, T2 arg1, T3 arg2) {
             if (once) Dispose();
             return new Promise<TResult>(_callback(arg0, arg1, arg2));
         }
@@ -375,7 +354,7 @@ namespace SpawnDev.BlazorJS {
             _callback = callback;
         }
         [JSInvokable]
-        public Promise Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3) {
+        public Promise<TResult> Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3) {
             if (once) Dispose();
             return new Promise<TResult>(_callback(arg0, arg1, arg2, arg3));
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
-    [JsonConverter(typeof(JSObjectConverter<HTMLMediaElement>))]
+    
     public class HTMLMediaElement : HTMLElement
     {
         public HTMLMediaElement(IJSInProcessObjectReference _ref) : base(_ref) { }

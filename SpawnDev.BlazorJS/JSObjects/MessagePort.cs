@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/MessagePort
-    [JsonConverter(typeof(JSObjectConverter<MessagePort>))]
+    
     public class MessagePort : EventTarget, IMessagePort
     {
         CallbackGroup _callbacks = new CallbackGroup();
@@ -76,32 +76,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             _callbacks.Dispose();
             base.Dispose();
-        }
-    }
-
-
-    public class Test1
-    {
-        public Test1()
-        {
-
-        }
-        private Callback _OnMessageCallback;
-        private event Action<MessageEvent> _OnMessage;
-        public event Action<MessageEvent> OnMessage
-        {
-            add
-            {
-                if (_OnMessage == null)
-                    Console.WriteLine("add here");
-                _OnMessage += value;
-            }
-            remove
-            {
-                _OnMessage -= value;
-                if (_OnMessage == null)
-                    Console.WriteLine("remove here");
-            }
         }
     }
 }

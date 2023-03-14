@@ -9,12 +9,6 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    //public class SharedWorkerMessageEvent
-    //{
-    //    public string Data { get; set; }
-    //}
-
-    [JsonConverter(typeof(JSObjectConverter<SharedWorker>))]
     public class SharedWorker : EventTarget
     {
         public MessagePort Port => JSRef.Get<MessagePort>("port");

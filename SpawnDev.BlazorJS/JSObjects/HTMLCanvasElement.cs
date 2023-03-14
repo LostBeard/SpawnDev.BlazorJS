@@ -40,7 +40,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public bool? XrCompatible { get; set; } = null;
     }
 
-    [JsonConverter(typeof(JSObjectConverter<HTMLCanvasElement>))]
+    
     public class HTMLCanvasElement : HTMLElement
     {
         public int Width { get { var tmp = JSRef.Get<int?>("width"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("width", value); } }

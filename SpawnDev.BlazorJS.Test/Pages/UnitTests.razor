@@ -1,0 +1,48 @@
+﻿@page "/UnitTests"
+
+<h3>Unit Tests for SpawnDev.BlazorJS</h3>
+<p>
+    This page runs tests to verify SpawnDev.BlazorJS is working as expected. (In progress...)
+</p>
+    
+<div>
+    <button onclick="@(()=> unitTestService.RunTests())" disabled="@(unitTestService.State == TestState.Running)">Run Tests</button>
+    <button onclick="@(()=> unitTestService.CancelTests())" disabled="@(unitTestService.State != TestState.Running)">Cancel Tests</button>
+</div>
+<div>
+    <table>
+        @foreach (var test in unitTestService.Tests) {
+            <tr style="padding: 2px;">
+                <td style="padding: 2px 6px 2px 6px;">
+                    <span style="font-weight: bold;">@(test.TestTypeName)</span>
+                </td>
+                <td style="padding: 2px 6px 2px 6px;">
+                    <span style="font-weight: bold;">@(test.TestMethodName)</span>
+                </td>
+                <td style="padding: 2px 6px 2px 6px;">
+                    @switch (test.State) {
+                        case TestState.None:
+                            <span>none</span>
+                            break;
+                        case TestState.Running:
+                            <span style="font-weight: bold; color: blue;">running</span>
+                            break;
+                        case TestState.Done:
+                            switch (test.Result) {
+                                case TestResult.Success:
+                                    <span style="color: green;">success (@($"{test.Duration} ms"))</span>
+                                    break;
+                                case TestResult.Error:
+                                    <span style="color: red;">@test.Error</span>
+                                    break;
+                            }
+                            break;
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@code {
+
+    }

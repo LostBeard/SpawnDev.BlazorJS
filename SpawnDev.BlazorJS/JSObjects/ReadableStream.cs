@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
 
-    [JsonConverter(typeof(JSObjectConverter<ReadableStream>))]
+    
     public class ReadableStream : JSObject
     {
         public ReadableStream(IJSInProcessObjectReference _ref) : base(_ref) { }

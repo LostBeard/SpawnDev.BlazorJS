@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection
-    [JsonConverter(typeof(JSObjectConverter<RTCPeerConnection>))]
+    
     public class RTCPeerConnection : EventTarget
     {
         
@@ -18,8 +18,8 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public string SignalingState => JSRef.Get<string>("signalingState");
         public RTCSessionDescription CurrentLocalDescription => JSRef.Get<RTCSessionDescription>("currentLocalDescription");
         public RTCSessionDescription CurrentRemoteDescription => JSRef.Get<RTCSessionDescription>("currentRemoteDescription");
-        public ValueTask AddIceCandidate(RTCIceCandidate candidate) => JSRef.CallVoidAsync("addIceCandidate", candidate);
-        public ValueTask AddIceCandidate(string candidate) => JSRef.CallVoidAsync("addIceCandidate", candidate);
+        public Task AddIceCandidate(RTCIceCandidate candidate) => JSRef.CallVoidAsync("addIceCandidate", candidate);
+        public Task AddIceCandidate(string candidate) => JSRef.CallVoidAsync("addIceCandidate", candidate);
         public void Close() => JSRef.CallVoid("close");
         public async Task<T> CreateAnswer<T>() where T : IRTCSessionDescription => await JSRef.CallAsync<T>("createAnswer");
         public RTCDataChannel CreateDataChannel(string label, RTCDataChannelOptions? options = null) => JSRef.Call<RTCDataChannel>("createDataChannel", label, options);

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    [JsonConverter(typeof(JSObjectConverter<SVGImageElement>))]
+    
     public class SVGImageElement : JSObject
     {
         public SVGImageElement(IJSInProcessObjectReference _ref) : base(_ref) { }

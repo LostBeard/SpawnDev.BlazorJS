@@ -29,6 +29,7 @@ if (navigator.userAgent && navigator.userAgent.indexOf('Firefox') > -1) {
     console.log('WARNING: Firefox may not support dynamic import in workers. WebWorkers may not work.');
 }
 
+// important for SharedWorker
 // catch any incoming connetions that happen while .Net is loading
 var _missedConnections = [];
 function takeOverOnConnectEvent(newConnectFunction) {
@@ -37,7 +38,8 @@ function takeOverOnConnectEvent(newConnectFunction) {
     globalThisObj.onconnect = newConnectFunction;
     return tmp;
 }
-if (globalThisTypeName == 'SharedWorkerGlobalScope') {
+// globalThisTypeName == 'SharedWorkerGlobalScope'
+if (globalThisObj.onconnect) {
     globalThisObj.onconnect = function (e) {
         _missedConnections.push(e.ports[0]);
     };
