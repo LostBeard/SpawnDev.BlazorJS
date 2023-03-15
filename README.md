@@ -23,7 +23,7 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 - Strongly typed javascript object deserialization/serialization with interfaces
 - Strongly typed javascript object deserialization/serialization with the JSObject base class
 - Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WEbRTC, DOM, etc...
-- Add threading support with SpawnDev.BlazorJS.WebWorkers to enable calling services in separate threads (.Net 6, 7, 8)
+- Add threading support with SpawnDev.BlazorJS.WebWorkers to enable calling services in separate threads
 
 # JS
 
