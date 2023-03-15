@@ -38,8 +38,6 @@ builder.Services.AddSingleton<DialogService>();
 builder.Services.AddSingleton<NotificationService>();
 builder.Services.AddSingleton<TooltipService>();
 builder.Services.AddSingleton<ContextMenuService>();
-// UnitTestService
-builder.Services.AddSingleton<UnitTestService>();
 // build 
 WebAssemblyHost host = builder.Build();
 // initialize WebWorkerService

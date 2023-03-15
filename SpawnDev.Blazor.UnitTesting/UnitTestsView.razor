@@ -1,0 +1,57 @@
+﻿<div>
+    <div style="padding: 2px 6px 2px 6px;">
+        <button onclick="@(()=> unitTestService.RunTests())" disabled="@(unitTestService.State == TestState.Running)">Run Tests</button>
+        <button onclick="@(()=> unitTestService.CancelTests())" disabled="@(unitTestService.State != TestState.Running)">Cancel Tests</button>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th></th>
+                <th>Test Type</th>
+                <th>Method</th>
+                <th>Duration</th>
+                <th>Result</th>
+            </tr>
+            @foreach (var test in unitTestService.Tests)
+            {
+                <tr style="padding: 2px;">
+                    <td>
+                        <button onclick="@(()=> unitTestService.RunTests(test))" disabled="@(unitTestService.State == TestState.Running || test.State == TestState.Running)">Run</button>
+                    </td>
+                    <td style="padding: 2px 6px 2px 6px;">
+                        <span style="font-weight: bold;">@(test.TestTypeName)</span>
+                    </td>
+                    <td style="padding: 2px 6px 2px 6px;">
+                        <span style="font-weight: bold;">@(test.TestMethodName)</span>
+                    </td>
+                    <td style="padding: 2px 6px 2px 6px;">
+                        <span style="">@(test.State == TestState.Done ? $"{test.Duration} ms" : "-")</span>
+                    </td>
+                    <td style="padding: 2px 6px 2px 6px;">
+                        @switch (test.State)
+                        {
+                            case TestState.None:
+                                <span>-</span>
+                                break;
+                            case TestState.Running:
+                                <span style="font-weight: bold; color: blue;">running</span>
+                                break;
+                            case TestState.Done:
+                                switch (test.Result)
+                                {
+                                    case TestResult.Success:
+                                        <span style="color: green;">@test.ResultText</span>
+                                        break;
+                                    case TestResult.Error:
+                                        <span style="color: red;">@test.Error</span>
+                                        break;
+                                }
+                                break;
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+

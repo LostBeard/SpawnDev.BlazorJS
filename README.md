@@ -4,7 +4,7 @@
 | Package | Description | Link |
 |---------|-------------|------|
 |**[SpawnDev.BlazorJS](#spawndevblazorjs)**| Enhanced Blazor WebAssembly Javascript interop | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS) |
-|**[SpawnDev.BlazorJS.WebWorkers](#spawndevblazorjswebworkers)**| Blazor WebAssembly WebWorkers and SharedWebWorkers | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS) |
+|**[SpawnDev.BlazorJS.WebWorkers](#spawndevblazorjswebworkers)**| Blazor WebAssembly WebWorkers and SharedWebWorkers | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.WebWorkers.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers) |
  
 
 # SpawnDev.BlazorJS
@@ -23,7 +23,7 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 - Strongly typed javascript object deserialization/serialization with interfaces
 - Strongly typed javascript object deserialization/serialization with the JSObject base class
 - Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WEbRTC, DOM, etc...
-- Add threading support with SpawnDev.BlazorJS.WebWorkers to enable calling services in separate threads
+- Use SpawnDev.BlazorJS.WebWorkers to enable calling Blazor services in web worker threads
 
 # JS
 
