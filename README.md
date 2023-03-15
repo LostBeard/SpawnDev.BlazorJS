@@ -14,12 +14,16 @@ An easy Javascript interop library designed specifically for client side Blazor.
 
 Supports Blazor WebAssembly .Net 6, 7, and 8.
 
-- Use Javascript libraries in Blazor without writing any Javascript code.
+- Use Javascript libraries in Blazor without writing any Javascript code
 - Alternative access to IJSRuntime JS is globally available without injection and is usable on the first line of Program.cs
 - Get and set global properties via JS.Set and JS.Get
 - Create new Javascript objects with JS.New
 - Get and set object properties via IJSInProcessObjectReference extended methods
-- Create Callbacks that can be sent to Javascript event listeners or assigned to javascript variables
+- Easily pass .Net methods to javascript using the Callback.Create or Callback.CreateOne methods
+- Strongly typed javascript object deserialization/serialization with interfaces
+- Strongly typed javascript object deserialization/serialization with the JSObject base class
+- Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WEbRTC, DOM, etc...
+- Add threading support with SpawnDev.BlazorJS.WebWorkers to enable calling services in separate threads (.Net 6, 7, 8)
 
 # JS
 

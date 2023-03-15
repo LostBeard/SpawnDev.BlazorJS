@@ -138,7 +138,6 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                         _waiting.Remove(msgBase.RequestId);
                         try {
                             args = msgBase.GetData<IJSInProcessObjectReference>();
-                            //args = e.Get<JSObject?>("data.args");
                         }
                         catch { }
                         if (args != null) {
@@ -157,7 +156,6 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                     //Console.WriteLine($"msgBase.MethodName: {msgBase.ServiceTypeFullName}::{msgBase.MethodName}");
                     try {
                         args = msgBase.GetData<IJSInProcessObjectReference>();
-                        //args = e.Get<JSObject?>("data.args");
                     }
                     catch { }
                     var argsLength = args != null ? args.Get<int>("length") : 0;
