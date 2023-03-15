@@ -1,11 +1,8 @@
 ﻿using Microsoft.JSInterop;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
-namespace SpawnDev.BlazorJS
-{
-    public static class IJSInProcessRuntimeExtensions
-    {
+namespace SpawnDev.BlazorJS {
+    public static class IJSInProcessRuntimeExtensions {
         public static void Set(this IJSInProcessRuntime _js, string identifier, object? value) => JS.Set(identifier, value);
         public static T? Get<T>(this IJSInProcessRuntime _js, string identifier) => JS.Get<T>(identifier);
         public static object? Get(this IJSInProcessRuntime _js, Type returnType, string identifier) => JS.Get(returnType, identifier);
@@ -109,12 +106,11 @@ namespace SpawnDev.BlazorJS
         //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, params object[] args) => _js.InvokeAsync<T>(identifier, args);
         //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, params object[] args) => _js.InvokeVoidAsync(identifier, args);
         // Method info calls
-        private static Type AsyncStateMachineAttributeType = typeof(AsyncStateMachineAttribute);
-        private static bool IsAsyncMethod(MethodInfo method) => method.GetCustomAttribute(AsyncStateMachineAttributeType) != null;
-        private static MethodInfo? GetBestInstanceMethod(Type classType, string identifier, Type[]? paramTypes = null, int genericsCount = 0, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
-        {
+        //private static Type AsyncStateMachineAttributeType = typeof(AsyncStateMachineAttribute);
+        //private static bool IsAsyncMethod(MethodInfo method) => method.GetCustomAttribute(AsyncStateMachineAttributeType) != null;
+        private static MethodInfo? GetBestInstanceMethod(Type classType, string identifier, Type[]? paramTypes = null, int genericsCount = 0, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance) {
             MethodInfo? best = null;
-            var bestIsAsync = false;
+            //var bestIsAsync = false;
             if (paramTypes == null) paramTypes = new Type[0];
             var instanceMethods = classType
             .GetMethods(bindingFlags)
@@ -122,31 +118,24 @@ namespace SpawnDev.BlazorJS
             .Where(m => (!m.IsGenericMethod && genericsCount == 0) || (m.IsGenericMethod && m.GetGenericArguments().Length == genericsCount))
             .Where(m => m.GetParameters().Length == paramTypes.Length)
             .ToList();
-            if (instanceMethods.Count == 1)
-            {
+            if (instanceMethods.Count == 1) {
                 best = instanceMethods[0];
             }
-            else if (instanceMethods.Count > 1)
-            {
+            else if (instanceMethods.Count > 1) {
                 Type[] bestParams = new Type[0];
-                Func<Type[], Type[], bool> isAssignableFrom = (a, b) =>
-                {
-                    for (int i = 0; i < a.Length; i++)
-                    {
+                Func<Type[], Type[], bool> isAssignableFrom = (a, b) => {
+                    for (int i = 0; i < a.Length; i++) {
                         if (!a[i].IsAssignableFrom(b[i])) return false;
                     }
                     return true;
                 };
-                foreach (var method in instanceMethods)
-                {
-                    var methodIsAsync = IsAsyncMethod(method);
+                foreach (var method in instanceMethods) {
+                    //var methodIsAsync = IsAsyncMethod(method);
                     Type[] mParams = method.GetParameters().Select(x => x.ParameterType).ToArray();
-                    if (isAssignableFrom(mParams, paramTypes))
-                    {
-                        if (best == null || isAssignableFrom(bestParams, mParams))
-                        {
+                    if (isAssignableFrom(mParams, paramTypes)) {
+                        if (best == null || isAssignableFrom(bestParams, mParams)) {
                             best = method;
-                            bestIsAsync = methodIsAsync;
+                            //bestIsAsync = methodIsAsync;
                             bestParams = mParams;
                         }
                     }
@@ -159,13 +148,11 @@ namespace SpawnDev.BlazorJS
         private static System.Lazy<MethodInfo> IJSInProcessRuntime_InvokeAsync = new System.Lazy<MethodInfo>(() => GetBestInstanceMethod(typeof(JSInProcessRuntime), "InvokeAsync", new Type[] { typeof(string), typeof(object[]) }, 1));
         private static Dictionary<Type, MethodInfo> GenericInvokeAsyncMethods { get; } = new Dictionary<Type, MethodInfo>();
         private static Dictionary<Type, MethodInfo> GenericInvokeMethods { get; } = new Dictionary<Type, MethodInfo>();
-        private static MethodInfo GetJSRuntimeInvokeAsync(Type type)
-        {
+        private static MethodInfo GetJSRuntimeInvokeAsync(Type type) {
             if (GenericInvokeAsyncMethods.TryGetValue(type, out MethodInfo generic)) return generic;
             return GenericInvokeAsyncMethods[type] = IJSInProcessRuntime_InvokeAsync.Value.MakeGenericMethod(type);
         }
-        private static MethodInfo GetJSRuntimeInvoke(Type type)
-        {
+        private static MethodInfo GetJSRuntimeInvoke(Type type) {
             if (GenericInvokeMethods.TryGetValue(type, out MethodInfo generic)) return generic;
             return GenericInvokeMethods[type] = IJSInProcessRuntime_Invoke.Value.MakeGenericMethod(type);
         }

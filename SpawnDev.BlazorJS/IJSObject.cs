@@ -1,11 +1,5 @@
 ﻿using Microsoft.JSInterop;
-using Microsoft.JSInterop.Implementation;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.ComponentModel;
 using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS {
     public class IJSObject : DispatchProxy {

@@ -1,14 +1,6 @@
-﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JSObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS.JsonConverters {
-
-
     public static class ActionExtensions {
         internal class FNDisposables {
             public Callback? Callback { get; set; }
@@ -40,9 +32,6 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public static Function? FunctionGet(this Action _this) => _functions.TryGetValue(_this, out var fn) ? fn : null;
         public static void FunctionSet(this Action _this, Function fn) => _functions.Add(_this, fn);
 
-
-
-
         public static void CallbackDispose<T0>(this Action<T0> _this) {
             if (_callbacks.TryGetValue(_this, out var callback)) {
                 _callbacks.Remove(_this);
@@ -61,8 +50,6 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public static void CallbackSet<T0>(this Action<T0> _this, Callback callback) => _callbacks.Add(_this, callback);
         public static Function? FunctionGet<T0>(this Action<T0> _this) => _functions.TryGetValue(_this, out var fn) ? fn : null;
         public static void FunctionSet<T0>(this Action<T0> _this, Function fn) => _functions.Add(_this, fn);
-            
-
 
         public static void CallbackDispose<T0, T1>(this Action<T0, T1> _this) {
             if (_callbacks.TryGetValue(_this, out var callback)) {

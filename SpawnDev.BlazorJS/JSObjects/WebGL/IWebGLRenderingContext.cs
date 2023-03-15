@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    public class WebGLActiveInfo
-    {
+﻿namespace SpawnDev.BlazorJS.JSObjects {
+    public class WebGLActiveInfo {
         public string Name { get; set; }
         public int Size { get; set; }
         public int Type { get; set; }
     }
-    public class WebGLShaderPrecisionFormat
-    {
+    public class WebGLShaderPrecisionFormat {
         public int RangeMin { get; set; }
         public int RangeMax { get; set; }
         public int Precision { get; set; }

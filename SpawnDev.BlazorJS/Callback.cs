@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS {
         //    Dispose(false);
         //}
 
-        void Dispose(bool disposing){
+        void Dispose(bool disposing) {
             if (IsDisposed) return;
             IsDisposed = true;
             _callback.Dispose();

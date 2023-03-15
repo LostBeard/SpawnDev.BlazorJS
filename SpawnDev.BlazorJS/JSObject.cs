@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS
-{
+namespace SpawnDev.BlazorJS {
     //
-    public class JSObject : IDisposable
-    {
+    public class JSObject : IDisposable {
         public static IJSInProcessObjectReference? NullRef { get; } = null;
         [JsonIgnore]
         public IJSInProcessObjectReference? JSRef { get; private set; }
@@ -17,18 +14,15 @@ namespace SpawnDev.BlazorJS
         public JSObject(IJSInProcessObjectReference _ref) => FromReference(_ref);
 
         // TODO - deprecate?
-        protected virtual void FromReference(IJSInProcessObjectReference _ref)
-        {
+        protected virtual void FromReference(IJSInProcessObjectReference _ref) {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
             if (JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
             JSRef = _ref;
         }
-        protected virtual void LosingReference()
-        {
+        protected virtual void LosingReference() {
 
         }
-        protected void ReplaceReference(IJSInProcessObjectReference _ref)
-        {
+        protected void ReplaceReference(IJSInProcessObjectReference _ref) {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
             if (JSRef != null) LosingReference();
             JSRef?.Dispose();
@@ -36,15 +30,13 @@ namespace SpawnDev.BlazorJS
             FromReference(_ref);
         }
 
-        public T JSRefMove<T>() where T : JSObject
-        {
+        public T JSRefMove<T>() where T : JSObject {
             if (JSRef == null) throw new Exception("JSRefMove failed. Reference not set.");
             var _ref = JSRef;
             DisposeExceptRef();
             return (T)Activator.CreateInstance(typeof(T), _ref);
         }
-        public IJSInProcessObjectReference? JSRefMove()
-        {
+        public IJSInProcessObjectReference? JSRefMove() {
             var _ref = JSRef;
             DisposeExceptRef();
             return _ref;
@@ -52,47 +44,39 @@ namespace SpawnDev.BlazorJS
         public T JSRefCopy<T>() where T : JSObject => JS.ReturnMe<T>(this);
         public IJSInProcessObjectReference JSRefCopy() => JS.ReturnMe<IJSInProcessObjectReference>(this);
 
-        public void DisposeExceptRef()
-        {
+        public void DisposeExceptRef() {
             if (JSRef != null) LosingReference();
             JSRef = null;
             Dispose();
         }
-        protected virtual void Dispose(bool disposing)
-        {
+        protected virtual void Dispose(bool disposing) {
             if (IsWrapperDisposed) return;
             IsWrapperDisposed = true;
-            if (disposing)
-            {
+            if (disposing) {
                 // managed assets
                 if (JSRef != null) LosingReference();
             }
             JSRef?.Dispose();
             JSRef = null;
         }
-        public virtual void Dispose()
-        {
+        public virtual void Dispose() {
             if (IsWrapperDisposed) return;
             Dispose(true);
             GC.SuppressFinalize(this);
         }
         public static bool UndisposedHandleVerboseMode { get; set; } = true;
-        ~JSObject()
-        {
-            if (UndisposedHandleVerboseMode)
-            {
+        ~JSObject() {
+            if (UndisposedHandleVerboseMode) {
                 var thisType = this.GetType();
                 var refDispsoed = JSRef == null;
-                if (!refDispsoed)
-                {
+                if (!refDispsoed) {
                     Console.WriteLine($"DEBUG WARNING: JSObject JSDebugName[{JSDebugName}] was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
                 }
             }
             Dispose(false);
         }
 
-        protected static void DisposeAndNull(ref IDisposable? disposable)
-        {
+        protected static void DisposeAndNull(ref IDisposable? disposable) {
             disposable?.Dispose();
             disposable = null;
         }

@@ -1,13 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class ServiceWorker : EventTarget
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class ServiceWorker : EventTarget {
         CallbackGroup _callbacks = new CallbackGroup();
         public string State => JSRef.Get<string>("state");
         public string ScriptURL => JSRef.Get<string>("scriptURL");
@@ -27,16 +21,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         //{
         //    FromReference(CreateNew("Worker", url));
         //}
-        protected override void FromReference(IJSInProcessObjectReference _ref)
-        {
+        protected override void FromReference(IJSInProcessObjectReference _ref) {
             base.FromReference(_ref);
             AddEventListener("statechange", Callback.Create<MessageEvent>((e) => {
                 OnStateChange?.Invoke(e);
                 e.Dispose();
             }, _callbacks));
         }
-        public override void Dispose()
-        {
+        public override void Dispose() {
             _callbacks.Dispose();
             base.Dispose();
         }

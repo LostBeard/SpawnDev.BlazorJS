@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.JSInterop;
-using System.Dynamic;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using SpawnDev.BlazorJS.JsonConverters;
+﻿using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class XMLHttpRequest : XMLHttpRequestEventTarget
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+
+    public class XMLHttpRequest : XMLHttpRequestEventTarget {
         public XMLHttpRequest() : base(JS.New("XMLHttpRequest")) { }
         public XMLHttpRequest(IJSInProcessObjectReference _ref) : base(_ref) { }
         public XMLHttpRequestUpload Upload => JSRef.Get<XMLHttpRequestUpload>("upload");

@@ -1,13 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
 using System.Dynamic;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class Request : JSObject
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class Request : JSObject {
         public Request(IJSInProcessObjectReference _ref) : base(_ref) { }
         public bool BodyUsed => JSRef.Get<bool>("bodyUsed");
         public string Url => JSRef.Get<string>("url");

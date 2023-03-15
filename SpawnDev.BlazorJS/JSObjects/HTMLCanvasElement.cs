@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
 using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    public class ContextAttributes2D
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class ContextAttributes2D {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Alpha { get; set; } = null;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -16,8 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public bool? WillReadFrequently { get; set; } = null;
     }
 
-    public class WebGLContextAttributes
-    {
+    public class WebGLContextAttributes {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Alpha { get; set; } = null;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -40,9 +35,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public bool? XrCompatible { get; set; } = null;
     }
 
-    
-    public class HTMLCanvasElement : HTMLElement
-    {
+
+    public class HTMLCanvasElement : HTMLElement {
         public int Width { get { var tmp = JSRef.Get<int?>("width"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("width", value); } }
         public int Height { get { var tmp = JSRef.Get<int?>("height"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("height", value); } }
         //public int OffsetWidth => JSRef.Get<int>("offsetWidth");
@@ -51,8 +45,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public HTMLCanvasElement() : base(JS.DocumentCreateElement("canvas")) { }
         public HTMLCanvasElement(ElementReference canvasElementReference) : base(JS.ReturnMe<IJSInProcessObjectReference>(canvasElementReference)) { }
 
-        public HTMLCanvasElement(int width, int height) : base(JS.DocumentCreateElement("canvas"))
-        {
+        public HTMLCanvasElement(int width, int height) : base(JS.DocumentCreateElement("canvas")) {
             Width = width;
             Height = height;
         }
@@ -70,20 +63,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    return ret;
         //}
 
-        public CanvasRenderingContext2D Get2DContext(ContextAttributes2D contextAttributes = null)
-        {
+        public CanvasRenderingContext2D Get2DContext(ContextAttributes2D contextAttributes = null) {
             if (contextAttributes == null) return JSRef.Call<CanvasRenderingContext2D>("getContext", "2d");
             return JSRef.Call<CanvasRenderingContext2D>("getContext", "2d", contextAttributes);
         }
 
-        public WebGLRenderingContext GetWebGLContext(WebGLContextAttributes contextAttributes = null)
-        {
+        public WebGLRenderingContext GetWebGLContext(WebGLContextAttributes contextAttributes = null) {
             if (contextAttributes == null) return JSRef.Call<WebGLRenderingContext>("getContext", "webgl");
             return JSRef.Call<WebGLRenderingContext>("getContext", "webgl", contextAttributes);
         }
 
-        public WebGL2RenderingContext GetWebGL2Context(WebGLContextAttributes contextAttributes = null)
-        {
+        public WebGL2RenderingContext GetWebGL2Context(WebGLContextAttributes contextAttributes = null) {
             if (contextAttributes == null) return JSRef.Call<WebGL2RenderingContext>("getContext", "webgl2");
             return JSRef.Call<WebGL2RenderingContext>("getContext", "webgl2", contextAttributes);
         }
@@ -93,11 +83,9 @@ namespace SpawnDev.BlazorJS.JSObjects
 
 
         // NOTE - may not work on some browsers if not added to DOM first (even if temporary)
-        public void DownloadAsImage(string fileName, bool appendToBody = false)
-        {
+        public void DownloadAsImage(string fileName, bool appendToBody = false) {
             var dataUrl = ToDataURL();
-            using (var link = JS.DocumentCreateElement("a"))
-            {
+            using (var link = JS.DocumentCreateElement("a")) {
                 link.CallVoid("setAttribute", "download", fileName);
                 link.CallVoid("setAttribute", "href", dataUrl.Replace("image/png", "image/octet-stream"));
                 if (appendToBody) JS.DocumentBodyAppendChild(link);
@@ -106,8 +94,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             }
         }
 
-        public static string Color4ToHexString(byte r, byte g, byte b, byte a)
-        {
+        public static string Color4ToHexString(byte r, byte g, byte b, byte a) {
             var hex = "#" + BitConverter.ToString(new byte[] { r, g, b, a }).Replace("-", "");
             return hex;
         }

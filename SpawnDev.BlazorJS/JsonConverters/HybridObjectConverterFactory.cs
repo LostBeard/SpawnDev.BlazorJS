@@ -1,15 +1,9 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JsonConverters {
-    // usePropertyReader implementation from TypeConversionInfo
     public class HybridObjectConverterFactory : JsonConverterFactory {
         // this converter is for converting class types that would normally be passed as JSON but has special property types that need to be loaded individually to work
         public override bool CanConvert(Type typeToConvert) {

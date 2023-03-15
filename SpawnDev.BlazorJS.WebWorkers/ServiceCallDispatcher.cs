@@ -90,7 +90,8 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             if (_busy && _waiting.Count == 0) {
                 _busy = false;
                 OnBusyStateChanged?.Invoke(this, _busy);
-            } else if (!_busy && _waiting.Count > 0) {
+            }
+            else if (!_busy && _waiting.Count > 0) {
                 _busy = true;
                 OnBusyStateChanged?.Invoke(this, _busy);
             }
@@ -142,7 +143,8 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                         catch { }
                         if (args != null) {
                             req.OnComplete?.Invoke(args);
-                        } else {
+                        }
+                        else {
                             var checkThis = true;
                         }
                         CheckBusyStateChanged();

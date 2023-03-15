@@ -2,10 +2,8 @@
 using Microsoft.JSInterop.Implementation;
 using System.Reflection;
 
-namespace SpawnDev.BlazorJS
-{
-    public static partial class JS
-    {
+namespace SpawnDev.BlazorJS {
+    public static partial class JS {
         static PropertyInfo? JSObjectReferenceIdProp = null;
         public static long GetJSRefId(this IJSInProcessObjectReference _ref) {
             if (JSObjectReferenceIdProp == null) {
@@ -38,7 +36,7 @@ namespace SpawnDev.BlazorJS
         #endregion
         #region IJSInProcessObjectReference Call Async
         public static Task<T> CallApplyAsync<T>(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => JSInterop.CallAsync<T>(targetObject, identifier, args);
-//        public static Task<object?> CallApplyAsync(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => _JSInteropCallAsync(returnType, "_call", targetObject, identifier, args);
+        //        public static Task<object?> CallApplyAsync(this IJSInProcessObjectReference targetObject, Type returnType, string identifier, object?[]? args = null) => _JSInteropCallAsync(returnType, "_call", targetObject, identifier, args);
         public static Task CallApplyVoidAsync(this IJSInProcessObjectReference targetObject, string identifier, object?[]? args = null) => JSInterop.CallVoidAsync(targetObject, identifier, args);
         #endregion
         #endregion

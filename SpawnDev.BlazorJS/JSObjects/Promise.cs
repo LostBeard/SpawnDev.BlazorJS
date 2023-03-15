@@ -1,14 +1,6 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects {
-
     public class Promise<TResult> : JSObject {
         public static explicit operator Promise<TResult>(Task<TResult> t) => new Promise<TResult>(t);
         public static explicit operator Promise<TResult>(Func<Task<TResult>> t) => new Promise<TResult>(t);

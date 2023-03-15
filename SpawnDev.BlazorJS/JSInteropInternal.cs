@@ -1,11 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS {
     public static partial class JSInterop {
@@ -168,6 +163,6 @@ namespace SpawnDev.BlazorJS {
         internal static List<string> GetPropertyNames(object? obj, string identifier = "", bool hasOwnProperty = true) {
             return _js.Invoke<List<string>>("JSInterop._getPropertyNames", obj, identifier, hasOwnProperty);
         }
-        
+
     }
 }

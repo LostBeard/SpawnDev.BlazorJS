@@ -2,8 +2,7 @@
 
 // https://devblogs.microsoft.com/dotnet/migrating-realproxy-usage-to-dispatchproxy/
 namespace SpawnDev.BlazorJS.WebWorkers {
-    public class WebWorkerServiceProxy<TServiceInterface> : DispatchProxy where TServiceInterface : class
-    {
+    public class WebWorkerServiceProxy<TServiceInterface> : DispatchProxy where TServiceInterface : class {
         internal ServiceCallDispatcher Worker { get; private set; }
         internal MethodInfo _InvokeTaskInfo;
         internal MethodInfo _InvokeValueTaskInfo;

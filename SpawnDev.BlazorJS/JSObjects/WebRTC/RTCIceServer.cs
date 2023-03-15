@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects.WebRTC
-{
+namespace SpawnDev.BlazorJS.JSObjects.WebRTC {
     // https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer
-    public class RTCIceServer
-    {
+    public class RTCIceServer {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Credential { get; set; } = null;
 

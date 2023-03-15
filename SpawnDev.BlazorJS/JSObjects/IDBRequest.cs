@@ -1,16 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    // TODO verify workign after itnerop changes
-    // check proepr dispoal of jsobjcets
-    
-    public class IDBRequest : EventTarget
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    // TODO verify working
+    public class IDBRequest : EventTarget {
         public CallbackGroup callbackGroup { get; private set; } = new CallbackGroup();
         public IDBRequest(IJSInProcessObjectReference _ref) : base(_ref) { }
 
@@ -18,52 +10,43 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public T GetResult<T>() => JSRef.Get<T>("result");   // Function used for this proerpty to allow T return type
 
-        public void OnError(Action<IJSInProcessObjectReference> handler)
-        {
+        public void OnError(Action<IJSInProcessObjectReference> handler) {
             On("onerror", handler, true);
         }
-        public void OnSuccess(Action<IJSInProcessObjectReference> handler)
-        {
+        public void OnSuccess(Action<IJSInProcessObjectReference> handler) {
             On("onsuccess", handler, true);
         }
-        public void OnSuccess<T>(Action<T> resultHandler)
-        {
+        public void OnSuccess<T>(Action<T> resultHandler) {
             On("onsuccess", (IJSInProcessObjectReference arg0) => {
-                using (var target = arg0.Get<IJSInProcessObjectReference>("target"))
-                {
+                using (var target = arg0.Get<IJSInProcessObjectReference>("target")) {
                     var result = target.Get<T>("result");
                     resultHandler.Invoke(result);
                 }
                 arg0.Dispose();
             }, true);
         }
-        public void On(string eventName, Action<IJSInProcessObjectReference> handler, bool disposeAfterCalled = false)
-        {
-            JSRef.Set(eventName, Callback.Create((IJSInProcessObjectReference arg0) =>
-            {
+        public void On(string eventName, Action<IJSInProcessObjectReference> handler, bool disposeAfterCalled = false) {
+            JSRef.Set(eventName, Callback.Create((IJSInProcessObjectReference arg0) => {
                 handler?.Invoke(arg0);
                 arg0.Dispose();
                 if (disposeAfterCalled) Dispose();
             }, callbackGroup));
         }
 
-        public override void Dispose()
-        {
+        public override void Dispose() {
             if (IsWrapperDisposed) return;
             callbackGroup.Dispose();
             base.Dispose();
         }
 
-        public static Task<T> ToAsync<T>(IDBRequest request)
-        {
+        public static Task<T> ToAsync<T>(IDBRequest request) {
             var t = new TaskCompletionSource<T>();
             request.OnError((arg0) => { t.SetException(new Exception("IDBRequest failed. Exception info TODO")); });
             request.OnSuccess<T>((result) => t.TrySetResult(result));
             return t.Task;
         }
 
-        public static Task ToAsync(IDBRequest request)
-        {
+        public static Task ToAsync(IDBRequest request) {
             var t = new TaskCompletionSource();
             request.OnError((arg0) => { t.SetException(new Exception("IDBRequest failed. Exception info TODO")); });
             request.OnSuccess((result) => t.TrySetResult());

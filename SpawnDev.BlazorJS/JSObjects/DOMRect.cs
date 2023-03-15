@@ -1,7 +1,5 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
-{
-    public class DOMRect
-    {
+﻿namespace SpawnDev.BlazorJS.JSObjects {
+    public class DOMRect {
         public double X { get; set; } = 0;
         public double Y { get; set; } = 0;
         public double Width { get; set; } = 0;

@@ -1,15 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects.WebRTC
-{
+namespace SpawnDev.BlazorJS.JSObjects.WebRTC {
     // https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection
-    
-    public class RTCPeerConnection : EventTarget
-    {
-        
+    public class RTCPeerConnection : EventTarget {
         public RTCPeerConnection(IJSInProcessObjectReference _ref) : base(_ref) { }
         public RTCPeerConnection() : base(JS.New(nameof(RTCPeerConnection))) { }
         public RTCPeerConnection(RTCConfiguration configuration) : base(JS.New(nameof(RTCPeerConnection), configuration)) { }

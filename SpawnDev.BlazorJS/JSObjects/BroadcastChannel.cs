@@ -1,12 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class BroadcastChannel : EventTarget
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class BroadcastChannel : EventTarget {
         public BroadcastChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string Name => JSRef.Get<string>("name");
         public BroadcastChannel(string channelName) : base(JS.New("BroadcastChannel", channelName)) { }
@@ -15,8 +10,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public event ErrorDelete OnError;
         public delegate void MessageDelegate(MessageEvent msg);
         public event MessageDelegate OnMessage;
-        protected override void FromReference(IJSInProcessObjectReference _ref)
-        {
+        protected override void FromReference(IJSInProcessObjectReference _ref) {
             base.FromReference(_ref);
             AddEventListener("message", Callback.Create<MessageEvent>((e) => {
                 OnMessagePre(e);
@@ -28,24 +22,20 @@ namespace SpawnDev.BlazorJS.JSObjects
             }, _callbacks));
         }
 
-        protected virtual void OnMessagePre(MessageEvent e)
-        {
+        protected virtual void OnMessagePre(MessageEvent e) {
             OnMessage?.Invoke(e);
         }
 
-        protected virtual void OnErrorPre()
-        {
+        protected virtual void OnErrorPre() {
             OnError?.Invoke();
         }
 
         public void Close() => JSRef.CallVoid("close");
-        public void PostMessaage(object message)
-        {
+        public void PostMessaage(object message) {
             JSRef.CallVoid("postMessage", message);
         }
 
-        public override void Dispose()
-        {
+        public override void Dispose() {
             _callbacks.Dispose();
             base.Dispose();
         }

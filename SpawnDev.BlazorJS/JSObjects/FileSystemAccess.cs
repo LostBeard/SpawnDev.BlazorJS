@@ -1,18 +1,12 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
 using System.Dynamic;
-using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    public class FileSystemAccessPickerFilter
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class FileSystemAccessPickerFilter {
         public string description { get; set; } = "";
         public Dictionary<string, List<string>> accept = new Dictionary<string, List<string>>();
     }
-    public class FileSystemAccess : IDisposable
-    {
+    public class FileSystemAccess : IDisposable {
         // https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
         // https://web.dev/file-system-access/
         // 
@@ -20,17 +14,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         IJSInProcessObjectReference window;
         public static bool Supported => JS.TypeOf("window.showOpenFilePicker") != "undefined";
 
-        public FileSystemAccess()
-        {
+        public FileSystemAccess() {
             window = JS.Get<IJSInProcessObjectReference>("window");
             //Supported = IJSObject.TypeOf("window.showOpenFilePicker") == "undefined";
             Console.WriteLine("!!! The class FileSystemAccess is being used but has not beem tested completely. Please report bugs"); ;
         }
 
-        // 
-
-        public async Task<List<FileSystemFileHandle>> ShowOpenFilePicker(bool multiple = true, bool excludeAcceptAllOption = false, List<FileSystemAccessPickerFilter> filters = null)
-        {
+        public async Task<List<FileSystemFileHandle>> ShowOpenFilePicker(bool multiple = true, bool excludeAcceptAllOption = false, List<FileSystemAccessPickerFilter> filters = null) {
             dynamic pickerOptions = new ExpandoObject();
             pickerOptions.excludeAcceptAllOption = excludeAcceptAllOption;
             pickerOptions.multiple = multiple;
@@ -42,8 +32,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             return ret;
         }
 
-        public async Task<JSObject> ShowSaveFilePicker(ExpandoObject pickerOptions = null)
-        {
+        public async Task<JSObject> ShowSaveFilePicker(ExpandoObject pickerOptions = null) {
             if (pickerOptions == null)
                 return await window.CallAsync<JSObject>("showSaveFilePicker");
             else
@@ -51,10 +40,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
 
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/showDirectoryPicker
-        public async Task<FileSystemDirectoryHandle> ShowDirectoryPicker()
-        {
-            try
-            {
+        public async Task<FileSystemDirectoryHandle> ShowDirectoryPicker() {
+            try {
                 return await window.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker");
             }
             catch { }
@@ -70,13 +57,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    return false;
         //}
 
-        static async Task<List<T>> IterateAsync<T>(IJSInProcessObjectReference iteratee)
-        {
+        static async Task<List<T>> IterateAsync<T>(IJSInProcessObjectReference iteratee) {
             var ret = new List<T>();
-            while (true)
-            {
-                using (var next = await iteratee.CallAsync<IJSInProcessObjectReference>("next"))
-                {
+            while (true) {
+                using (var next = await iteratee.CallAsync<IJSInProcessObjectReference>("next")) {
                     if (next.Get<bool>("done")) break;
                     ret.Add(next.Get<T>("value"));
                 }
@@ -95,8 +79,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         //}
 
         public bool IsDisposed { get; private set; } = false;
-        public void Dispose()
-        {
+        public void Dispose() {
             if (IsDisposed) return;
             IsDisposed = true;
             window.Dispose();

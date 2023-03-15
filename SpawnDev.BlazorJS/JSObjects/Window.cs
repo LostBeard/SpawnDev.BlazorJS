@@ -1,12 +1,6 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-//using SpawnDev.JS.Tools;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
+namespace SpawnDev.BlazorJS.JSObjects {
     public class Window : EventTarget {
         public Window() : base(JS.Get<IJSInProcessObjectReference>("window")) { }
         public Window(IJSInProcessObjectReference _ref) : base(_ref) { }
@@ -26,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///// Experimental state. Not supported in most browsers. (Works in Chrome)
         ///// </summary>
         ///// <returns>ScreenDetails</returns>
-        public async Task<ScreenDetails> GetScreenDetails() => await JSRef.CallAsync<ScreenDetails>("getScreenDetails");
+        public Task<ScreenDetails> GetScreenDetails() => JSRef.CallAsync<ScreenDetails>("getScreenDetails");
 
         // non-standard .Net extension
         CallbackGroup _callbacks = new CallbackGroup();
@@ -55,7 +49,7 @@ namespace SpawnDev.BlazorJS.JSObjects
                 }
             }
         }
-        void AnimationFrame(double timestaamp) {    
+        void AnimationFrame(double timestaamp) {
             if (_OnAnimationFrameCount > 0)
                 _OnAnimationFrameCallbackHandle = RequestAnimationFrame(_OnAnimationFrameCallback);
             _OnAnimationFrame?.Invoke(timestaamp);

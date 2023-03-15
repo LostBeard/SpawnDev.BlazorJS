@@ -1,17 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class ScreenDetailed : JSObject
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class ScreenDetailed : JSObject {
         public ScreenDetailed(IJSInProcessObjectReference _ref) : base(_ref) { }
         public int AvailHeight => JSRef.Get<int>("availHeight");
         public int AvailLeft => JSRef.Get<int>("availLeft");

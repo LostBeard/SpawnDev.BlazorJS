@@ -1,12 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class Node : EventTarget
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class Node : EventTarget {
         public Node(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string NodeName => JSRef.Get<string>("nodeName");
         public string BaseURI => JSRef.Get<string>("baseURI");

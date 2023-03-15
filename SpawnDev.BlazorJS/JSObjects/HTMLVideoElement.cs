@@ -1,13 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
+namespace SpawnDev.BlazorJS.JSObjects {
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
-    
-    public class HTMLVideoElement : HTMLMediaElement
-    {
+    public class HTMLVideoElement : HTMLMediaElement {
         public HTMLVideoElement() : base(JS.DocumentCreateElement("video")) { }
         public HTMLVideoElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         public int VideoWidth => JSRef.Get<int>("videoWidth");

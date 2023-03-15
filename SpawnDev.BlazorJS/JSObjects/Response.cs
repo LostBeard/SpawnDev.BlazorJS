@@ -1,13 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    public class ResponseOptions
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class ResponseOptions {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? Status { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -20,9 +15,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     // Non-Standard implementation
     // TODO
     // https://developer.mozilla.org/en-US/docs/Web/API/Response
-    
-    public class Response : JSObject
-    {
+
+    public class Response : JSObject {
         public bool Ok => JSRef.Get<bool>("ok");
         public Response(IJSInProcessObjectReference _ref) : base(_ref) { }
         public Response() : base(JS.New(nameof(Response))) { }
@@ -35,7 +29,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         //public Response(DataView body) : base(JS.New(nameof(Response), body)) { }
         //public Response(FormData body) : base(JS.New(nameof(Response), body)) { }
         //public Response(URLSearchParams body) : base(JS.New(nameof(Response), body)) { }
-
 
         //public Response(string data, string contentType = "text/plain;charset=UTF-8") : base(NullRef)
         //{
@@ -70,24 +63,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Task<string> Text() => JSRef.CallAsync<string>("text");
         public Task<ArrayBuffer> ArrayBuffer() => JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
 
-        public void HeaderSet(string key, string value)
-        {
+        public void HeaderSet(string key, string value) {
             using var headers = JSRef.Get<IJSInProcessObjectReference>("headers");
             headers.CallVoid("set", key, value);
         }
-        public void HeaderSet(string key, double value)
-        {
+        public void HeaderSet(string key, double value) {
             using var headers = JSRef.Get<IJSInProcessObjectReference>("headers");
             headers.CallVoid("set", key, value);
         }
-        public void HeaderSet(string key, long value)
-        {
+        public void HeaderSet(string key, long value) {
             using var headers = JSRef.Get<IJSInProcessObjectReference>("headers");
             headers.CallVoid("set", key, value);
         }
 
-        public async Task<byte[]> ReadBytes()
-        {
+        public async Task<byte[]> ReadBytes() {
             using var tmp = await JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
             return tmp.ReadBytes();
         }

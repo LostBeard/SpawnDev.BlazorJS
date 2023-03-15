@@ -5,7 +5,6 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS {
     // Facilitates the JSInterop javascript code
@@ -144,7 +143,7 @@ namespace SpawnDev.BlazorJS {
         //    if (sourceDisposeExceptRef) orig.DisposeExceptRef();
         //    return ret;
         //}
-        public static T ReturnMe<T>(object obj) => JSInterop.ReturnMe<T>( obj);
+        public static T ReturnMe<T>(object obj) => JSInterop.ReturnMe<T>(obj);
         public static JSObject FromElementReference(ElementReference elementRef) => ReturnMe<JSObject>(elementRef);
         public static IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);
         public static T FromElementReference<T>(ElementReference elementRef) where T : JSObject => (T)Activator.CreateInstance(typeof(T), ReturnMe<IJSInProcessObjectReference>(elementRef));

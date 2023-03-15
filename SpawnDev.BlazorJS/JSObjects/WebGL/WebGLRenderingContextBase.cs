@@ -1,9 +1,7 @@
 ﻿
-namespace SpawnDev.BlazorJS.JSObjects
-{
+namespace SpawnDev.BlazorJS.JSObjects {
     // https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.14.9
-    public partial class WebGLRenderingContext
-    {
+    public partial class WebGLRenderingContext {
 
         /* ClearBufferMask */
         public readonly int DEPTH_BUFFER_BIT = 0x00000100;

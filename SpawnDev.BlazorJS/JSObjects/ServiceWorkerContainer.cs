@@ -1,30 +1,18 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.JSInterop;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class ServiceWorkerContainer : EventTarget
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class ServiceWorkerContainer : EventTarget {
         public ServiceWorker Controller => JSRef.Get<ServiceWorker>("controller");
         public Task<ServiceWorkerRegistration> Ready => JSRef.GetAsync<ServiceWorkerRegistration>("ready");
         public ServiceWorkerContainer(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public async Task<ServiceWorkerRegistration> Register(string scriptURL, RegisterOptions options = null)
-        {
+        public async Task<ServiceWorkerRegistration> Register(string scriptURL, RegisterOptions options = null) {
             if (options != null) return await JSRef.CallAsync<ServiceWorkerRegistration>("register", scriptURL, options);
             return await JSRef.CallAsync<ServiceWorkerRegistration>("register", scriptURL);
         }
 
-        public class RegisterOptions
-        {
+        public class RegisterOptions {
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string Scope { get; set; }
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

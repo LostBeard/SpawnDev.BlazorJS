@@ -1,28 +1,18 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
+namespace SpawnDev.BlazorJS.JSObjects {
     // https://developer.mozilla.org/en-US/docs/Web/API/Worker
-    // Worker implements an interface identical to MessagePort so I added an interface definition they can share
-    
-    public class Worker : EventTarget, IMessagePort
-    {
+    public class Worker : EventTarget, IMessagePort {
         protected CallbackGroup _callbacks = new CallbackGroup();
 
-        public Worker(IJSInProcessObjectReference _ref) : base(_ref)
-        {
+        public Worker(IJSInProcessObjectReference _ref) : base(_ref) {
             InitEventsHandlers();
         }
-        public Worker(string url) : base(JS.New(nameof(Worker), url))
-        {
+        public Worker(string url) : base(JS.New(nameof(Worker), url)) {
             InitEventsHandlers();
         }
 
-        private void InitEventsHandlers()
-        {
+        private void InitEventsHandlers() {
             _OnMessageCallback = Callback.Create<MessageEvent>((e) => _OnMessage?.Invoke(e), _callbacks);
             _OnMessageErrorCallback = Callback.Create(() => _OnMessageError?.Invoke(), _callbacks);
             _OnErrorCallback = Callback.Create(() => _OnError?.Invoke(), _callbacks);
@@ -32,16 +22,13 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         private Callback _OnErrorCallback;
         private event Action _OnError;
-        public event Action OnError
-        {
-            add
-            {
+        public event Action OnError {
+            add {
                 _OnError += value;
                 if (_OnError.GetInvocationList().Length == 1)
                     AddEventListener("error", _OnErrorCallback);
             }
-            remove
-            {
+            remove {
                 if (_OnError.GetInvocationList().Length == 1)
                     RemoveEventListener("error", _OnErrorCallback);
                 _OnError -= value;
@@ -50,16 +37,13 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         private Callback _OnMessageCallback;
         private event Action<MessageEvent> _OnMessage;
-        public event Action<MessageEvent> OnMessage
-        {
-            add
-            {
+        public event Action<MessageEvent> OnMessage {
+            add {
                 _OnMessage += value;
                 if (_OnMessage.GetInvocationList().Length == 1)
                     AddEventListener("message", _OnMessageCallback);
             }
-            remove
-            {
+            remove {
                 if (_OnMessage.GetInvocationList().Length == 1)
                     RemoveEventListener("message", _OnMessageCallback);
                 _OnMessage -= value;
@@ -68,16 +52,13 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         private Callback _OnMessageErrorCallback;
         private event Action _OnMessageError;
-        public event Action OnMessageError
-        {
-            add
-            {
+        public event Action OnMessageError {
+            add {
                 _OnMessageError += value;
                 if (_OnMessageError.GetInvocationList().Length == 1)
                     AddEventListener("messageerror", _OnMessageErrorCallback);
             }
-            remove
-            {
+            remove {
                 if (_OnMessageError.GetInvocationList().Length == 1)
                     RemoveEventListener("messageerror", _OnMessageErrorCallback);
                 _OnMessageError -= value;
@@ -86,16 +67,13 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         private Callback _OnRejectionHandledCallback;
         private event Action _OnRejectionHandled;
-        public event Action OnRejectionHandled
-        {
-            add
-            {
+        public event Action OnRejectionHandled {
+            add {
                 _OnRejectionHandled += value;
                 if (_OnRejectionHandled.GetInvocationList().Length == 1)
                     AddEventListener("rejectionhandled", _OnRejectionHandledCallback);
             }
-            remove
-            {
+            remove {
                 if (_OnRejectionHandled.GetInvocationList().Length == 1)
                     RemoveEventListener("rejectionhandled", _OnRejectionHandledCallback);
                 _OnRejectionHandled -= value;
@@ -104,16 +82,13 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         private Callback _OnUnhandledRejectionCallback;
         private event Action _OnUnhandledRejection;
-        public event Action OnUnhandledRejection
-        {
-            add
-            {
+        public event Action OnUnhandledRejection {
+            add {
                 _OnUnhandledRejection += value;
                 if (_OnUnhandledRejection.GetInvocationList().Length == 1)
                     AddEventListener("unhandledrejection", _OnUnhandledRejectionCallback);
             }
-            remove
-            {
+            remove {
                 if (_OnUnhandledRejection.GetInvocationList().Length == 1)
                     RemoveEventListener("unhandledrejection", _OnUnhandledRejectionCallback);
                 _OnUnhandledRejection -= value;
@@ -125,8 +100,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void PostMessage(object message) => JSRef.CallVoid("postMessage", message);
         public void PostMessage(object message, object[] transfer) => JSRef.CallVoid("postMessage", message, transfer);
 
-        public override void Dispose()
-        {
+        public override void Dispose() {
             _callbacks.Dispose();
             base.Dispose();
         }

@@ -1,19 +1,9 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace SpawnDev.BlazorJS.JSObjects.WebRTC
-{
+namespace SpawnDev.BlazorJS.JSObjects.WebRTC {
     // https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel
     // https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample
-    
-    public class RTCDataChannel : EventTarget
-    {
+    public class RTCDataChannel : EventTarget {
         public RTCDataChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
         public ushort Id => JSRef.Get<ushort>("id");
         public string Label => JSRef.Get<string>("label");

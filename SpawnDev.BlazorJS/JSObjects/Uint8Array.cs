@@ -1,15 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Dynamic;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class Uint8Array : JSObject
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class Uint8Array : JSObject {
         public Uint8Array(IJSInProcessObjectReference _ref) : base(_ref) { }
         // https://github.com/dotnet/aspnetcore/issues/35597
         // MS improved their .Net byte[] <-> JS Uint8Array recently but there is a bug ...
@@ -26,8 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public long ByteLength => JSRef.Get<long>("byteLength");
         public long ByteOffset => JSRef.Get<long>("byteOffset");
         public bool IsPartialView => JSRef.Get<long>("buffer.byteLength") != JSRef.Get<long>("byteLength");
-        public byte[] ReadBytes()
-        {
+        public byte[] ReadBytes() {
             return JS.ReturnMe<byte[]>(JSRef);
         }
     }

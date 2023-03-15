@@ -1,16 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-
-    
-    public class ReadableStream : JSObject
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class ReadableStream : JSObject {
         public ReadableStream(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         CallbackGroup callbacks = new CallbackGroup();
@@ -20,35 +12,29 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public ReadableStream(ExpandoObject options) : base(JS.New(nameof(ReadableStream), options)) { }
 
-        public Uint8Array? Read()
-        {
+        public Uint8Array? Read() {
             Uint8Array? ret = null;
-            try
-            {
+            try {
                 ret = JSRef.Call<Uint8Array>("read");
             }
             catch { }
             return ret;
         }
 
-        public AsyncIterator GetAsyncIterator()
-        {
+        public AsyncIterator GetAsyncIterator() {
             var ret = JSRef.Get<AsyncIterator>("Symbol.asyncIterator");
             return ret;
         }
 
-        public ReadableStreamDefaultReader GetReader()
-        {
+        public ReadableStreamDefaultReader GetReader() {
             return JSRef.Call<ReadableStreamDefaultReader>("getReader");
         }
 
-        public void Destroy()
-        {
+        public void Destroy() {
             JSRef.CallVoid("destroy");
         }
 
-        public override void Dispose()
-        {
+        public override void Dispose() {
             if (IsWrapperDisposed) return;
             base.Dispose();
             callbacks.Dispose();

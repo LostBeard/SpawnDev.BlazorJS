@@ -1,13 +1,9 @@
-﻿using SpawnDev.BlazorJS.JSObjects;
-
-namespace SpawnDev.BlazorJS
-{
-    public static partial class JS
-    {
+﻿namespace SpawnDev.BlazorJS {
+    public static partial class JS {
 
         #region Global Base Accessors
         public static void Set(string identifier, object? value) => JSInterop.SetGlobal(identifier, value);
-         #region Global Get Sync
+        #region Global Get Sync
         public static T Get<T>(string identifier) => JSInterop.GetGlobal<T>(identifier);
         public static object? Get(Type returnType, string identifier) => JSInterop.GetGlobal(returnType, identifier);
         #endregion

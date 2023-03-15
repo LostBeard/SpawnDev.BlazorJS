@@ -1,13 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using System.Collections.Generic;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    //
-    public class WebStorage : JSObject
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class WebStorage : JSObject {
         public JsonSerializerOptions DefaultJsonSerializerOptions { get; } = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         public WebStorage(IJSInProcessObjectReference _ref) : base(_ref) { }
         public int Length => JSRef.Get<int>("length");

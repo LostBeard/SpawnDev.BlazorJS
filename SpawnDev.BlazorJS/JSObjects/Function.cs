@@ -1,9 +1,8 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JsonConverters;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects {
-    
+
     public class Function : JSObject {
         public Function(IJSInProcessObjectReference _ref) : base(_ref) { }
 
@@ -15,8 +14,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
         /// <param name="args"></param>
         public Function(params string[] args) : base(JS.NewApply("Function", args)) { }
 
-
-
         public T Apply<T>(object? thisObj = null, object?[]? args = null) => JSRef.Call<T>("apply", thisObj, args);
         public Task<T> ApplyAsync<T>(object? thisObj = null, object?[]? args = null) => JSRef.CallAsync<T>("apply", thisObj, args);
         public void ApplyVoid(object? thisObj = null, object?[]? args = null) => JSRef.CallVoid("apply", thisObj, args);
@@ -24,8 +21,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public T Call<T>(object? thisObj = null, params object?[] args) => JSRef.Call<T>("apply", thisObj, args);
         public Task<T> CallAsync<T>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<T>("apply", thisObj, args);
         public void CallVoid(object? thisObj = null, params object?[] args) => JSRef.CallVoid("apply", thisObj, args);
-
-
 
         //public T Apply<T>(object? thisObj = null, object?[]? args = null) => JSRef.Call<T>("applyFn", thisObj, args);
         //public Task<T> ApplyAsync<T>(object? thisObj = null, object?[]? args = null) => JSRef.CallAsync<T>("applyFn", thisObj, args);

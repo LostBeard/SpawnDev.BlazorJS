@@ -1,13 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class MediaStream : EventTarget
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class MediaStream : EventTarget {
         public bool Active => JSRef.Get<bool>("active");
         public bool Ended => JSRef.Get<bool>("ended");
         public string Id => JSRef.Get<string>("id");
@@ -18,8 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public MediaStream(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        protected override void FromReference(IJSInProcessObjectReference _ref)
-        {
+        protected override void FromReference(IJSInProcessObjectReference _ref) {
             base.FromReference(_ref);
             AddEventListener("ended", Callback.Create(_OnEnded, callbacks));
             AddEventListener("addtrack", Callback.Create(_OnAddTrack, callbacks));
@@ -28,32 +21,26 @@ namespace SpawnDev.BlazorJS.JSObjects
             AddEventListener("inactive", Callback.Create(_OnInactive, callbacks));
         }
 
-        void _OnActive()
-        {
+        void _OnActive() {
             Console.WriteLine("MediaStream: _OnActive");
         }
 
-        void _OnInactive()
-        {
+        void _OnInactive() {
             Console.WriteLine("MediaStream: _OnInactive");
         }
 
-        void _OnRemoveTrack()
-        {
+        void _OnRemoveTrack() {
             Console.WriteLine("MediaStream: _OnRemoveTrack");
         }
 
-        void _OnAddTrack()
-        {
+        void _OnAddTrack() {
             Console.WriteLine("MediaStream: _OnAddTrack");
         }
 
-        void _OnEnded()
-        {
+        void _OnEnded() {
             Console.WriteLine("MediaStream: _OnEnded");
         }
-        public override void Dispose()
-        {
+        public override void Dispose() {
             base.Dispose();
             Console.WriteLine("MediaStream.Dispose()");
             callbacks?.Dispose();
@@ -63,23 +50,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void AddTrack(MediaStreamTrack track) => JSRef.CallVoid("addTrack", track);
         public MediaStream Clone() => JSRef.Call<MediaStream>("clone");
         public MediaStreamTrack GetTrackById(string id) => JSRef.Call<MediaStreamTrack>("getTrackById", id);
-        public int GetTracksLength()
-        {
+        public int GetTracksLength() {
             using var tmp = JSRef.Get<IJSInProcessObjectReference>("getTracks");
             return tmp.Get<int>("length");
         }
         public MediaStreamTrack[] GetTracks() => JSRef.Call<MediaStreamTrack[]>("getTracks");
         public MediaStreamTrack[] GetVideoTracks() => JSRef.Call<MediaStreamTrack[]>("getVideoTracks");
         public MediaStreamTrack[] GetAudioTracks() => JSRef.Call<MediaStreamTrack[]>("getAudioTracks");
-        public MediaStreamTrack GetFirstVideoTrack()
-        {
+        public MediaStreamTrack GetFirstVideoTrack() {
             var tracks = GetVideoTracks();
             for (var i = 1; i < tracks.Length; i++) tracks[i].Dispose();
             return tracks.Length == 0 ? null : tracks[0];
         }
 
-        public MediaStreamVideoTrackSettings GetFirstVideoTrackSettings()
-        {
+        public MediaStreamVideoTrackSettings GetFirstVideoTrackSettings() {
             using var track = GetFirstVideoTrack();
 #if DEBUG && false
             Console.WriteLine(track == null ? "track == null" : "track != null");
@@ -91,14 +75,12 @@ namespace SpawnDev.BlazorJS.JSObjects
             return track == null ? null : track.GetSettings<MediaStreamVideoTrackSettings>();
         }
 
-        public MediaStreamAudioTrackSettings GetFirstAudioTrackSettings()
-        {
+        public MediaStreamAudioTrackSettings GetFirstAudioTrackSettings() {
             using var track = GetFirstAudioTrack();
             return track == null ? null : track.GetSettings<MediaStreamAudioTrackSettings>();
         }
 
-        public MediaStreamTrack GetFirstAudioTrack()
-        {
+        public MediaStreamTrack GetFirstAudioTrack() {
             var tracks = GetAudioTracks();
             for (var i = 1; i < tracks.Length; i++) tracks[i].Dispose();
             return tracks.Length == 0 ? null : tracks[0];
@@ -106,11 +88,9 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         //
 
-        public void StopAllTracks()
-        {
+        public void StopAllTracks() {
             var tracks = GetTracks();
-            foreach (var t in tracks)
-            {
+            foreach (var t in tracks) {
                 t.Stop();
                 t.Dispose();
             }
@@ -128,33 +108,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    return ret;
         //}
 
-        public void RemoveAllTracks(bool stopTracks = true)
-        {
+        public void RemoveAllTracks(bool stopTracks = true) {
             var tracks = GetTracks();
-            foreach (var t in tracks)
-            {
+            foreach (var t in tracks) {
                 if (stopTracks) t.Stop();
                 RemoveTrack(t);
                 t.Dispose();
             }
         }
 
-        public void RemoveAllVideoTracks(bool stopTracks = true)
-        {
+        public void RemoveAllVideoTracks(bool stopTracks = true) {
             var tracks = GetVideoTracks();
-            foreach (var t in tracks)
-            {
+            foreach (var t in tracks) {
                 if (stopTracks) t.Stop();
                 RemoveTrack(t);
                 t.Dispose();
             }
         }
 
-        public void RemoveAllAudioTracks(bool stopTracks = true)
-        {
+        public void RemoveAllAudioTracks(bool stopTracks = true) {
             var tracks = GetAudioTracks();
-            foreach (var t in tracks)
-            {
+            foreach (var t in tracks) {
                 if (stopTracks) t.Stop();
                 RemoveTrack(t);
                 t.Dispose();

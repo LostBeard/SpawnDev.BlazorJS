@@ -25,13 +25,11 @@ namespace SpawnDev.BlazorJS.Test.Services {
 
         void Dispose();
         Task<ProcessFrameResult?> FaceDetection(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks);
-        //Task<ProcessFrameResult?> FaceDetectionInternal(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks);
         Task<bool> SetWorkerCount(int count);
         Task WhenReady();
     }
 
     public class FaceAPIService : IDisposable, IFaceAPIService {
-        //WebWorkerService _webWorkerService;
         WebWorkerPool _workerPool;
         bool _beenInit = false;
         bool _processFrameRunningLocal = false;
@@ -75,29 +73,6 @@ namespace SpawnDev.BlazorJS.Test.Services {
             if (_workerPool.AreWorkersRunning) await _workerPool.WhenWorkerReady();
             else while (_processFrameRunningLocal) await Task.Delay(5);
         }
-
-        //public async Task<ProcessFrameResult?> FaceDetection(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks) {
-        //    await Task.Yield();
-        //    try {
-        //        if (_workerPool.AreWorkersRunning) {
-        //            var worker = await _workerPool.GetFreeWorkerAsync();
-        //            if (worker != null) {
-        //                var faceAPIServiceWorker = worker.GetService<IFaceAPIService>();
-        //                return await faceAPIServiceWorker.FaceDetectionInternal(frameBuffer, width, height, withLandmarks);
-        //            }
-        //        }
-        //        else if (!_processFrameRunningLocal) {
-        //            _processFrameRunningLocal = true;
-        //            var ret = await FaceDetectionInternal(frameBuffer, width, height, withLandmarks);
-        //            _processFrameRunningLocal = false;
-        //            return ret;
-        //        }
-        //    }
-        //    catch (Exception ex) {
-        //        Console.WriteLine("ProcessFrame: " + ex.ToString());
-        //    }
-        //    return null;
-        //}
 
         public async Task<ProcessFrameResult?> FaceDetection(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks) {
             var ret = new ProcessFrameResult();

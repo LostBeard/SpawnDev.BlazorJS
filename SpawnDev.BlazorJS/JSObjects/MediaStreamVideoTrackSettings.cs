@@ -1,11 +1,8 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
-{
-    public class MediaStreamTrackSettings
-    {
+﻿namespace SpawnDev.BlazorJS.JSObjects {
+    public class MediaStreamTrackSettings {
         public string DeviceId { get; set; }
     }
-    public class MediaStreamVideoTrackSettings : MediaStreamTrackSettings
-    {
+    public class MediaStreamVideoTrackSettings : MediaStreamTrackSettings {
         public string ResizeMode { get; set; }
         public double AspectRatio { get; set; }
         public double Brightness { get; set; }
@@ -19,8 +16,7 @@
         public double Sharpness { get; set; }
         public int Width { get; set; }
     }
-    public class MediaStreamAudioTrackSettings : MediaStreamTrackSettings
-    {
+    public class MediaStreamAudioTrackSettings : MediaStreamTrackSettings {
         public double ChannelCount { get; set; }
         public double Latency { get; set; }
         public double SampleRate { get; set; }

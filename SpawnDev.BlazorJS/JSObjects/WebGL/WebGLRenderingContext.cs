@@ -1,15 +1,9 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
+namespace SpawnDev.BlazorJS.JSObjects {
     // https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.14.9
-    
-    public partial class WebGLRenderingContext : JSObject
-    {
+
+    public partial class WebGLRenderingContext : JSObject {
 
         public WebGLRenderingContext(IJSInProcessObjectReference _ref) : base(_ref) { }
 
@@ -213,15 +207,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void Viewport(int x, int y, int width, int height) => JSRef.CallVoid("viewport", x, y, width, height);
 
         // Helper functions (non-spec) 
-        public WebGLProgram CreateProgram(string vertexShader, string fragmentShader)
-        {
+        public WebGLProgram CreateProgram(string vertexShader, string fragmentShader) {
             //vertex shader
             using var vsShader = CreateShader(VERTEX_SHADER);
             ShaderSource(vsShader, vertexShader);
             CompileShader(vsShader);
             var vsShaderSucc = GetShaderParameter<bool>(vsShader, COMPILE_STATUS);
-            if (!vsShaderSucc)
-            {
+            if (!vsShaderSucc) {
                 var compilationLog = GetShaderInfoLog(vsShader);
                 DeleteShader(vsShader);
                 throw new Exception($"Error compile vertex shader for WebGLProgram. {compilationLog}");
@@ -231,8 +223,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             ShaderSource(psShader, fragmentShader);
             CompileShader(psShader);
             var psShaderSucc = GetShaderParameter<bool>(psShader, COMPILE_STATUS);
-            if (!psShaderSucc)
-            {
+            if (!psShaderSucc) {
                 var compilationLog = GetShaderInfoLog(psShader);
                 DeleteShader(vsShader);
                 DeleteShader(psShader);

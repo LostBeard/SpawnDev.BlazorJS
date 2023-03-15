@@ -1,12 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class MediaStreamTrack : JSObject
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class MediaStreamTrack : JSObject {
         public bool Active => JSRef.Get<bool>("active");
         public bool Enabled => JSRef.Get<bool>("enabled");
         public bool Muted => JSRef.Get<bool>("muted");
@@ -18,26 +13,14 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public MediaStreamTrack(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public T GetSettings<T>() where T : MediaStreamTrackSettings
-        {
+        public T GetSettings<T>() where T : MediaStreamTrackSettings {
             return JSRef.Call<T>("getSettings");
         }
-        public MediaStreamTrackSettings GetSettings()
-        {
+        public MediaStreamTrackSettings GetSettings() {
             return JSRef.Call<MediaStreamTrackSettings>("getSettings");
         }
 
-        public void GetCapabilities()
-        {
-
-        }
-
-        public void GetConstraints()
-        {
-
-        }
-        public void Stop()
-        {
+        public void Stop() {
             JSRef.CallVoid("stop");
         }
     }

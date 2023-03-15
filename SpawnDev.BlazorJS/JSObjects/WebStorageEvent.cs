@@ -1,12 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
-using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects
-{
-    
-    public class WebStorageEvent : JSObject
-    {
+namespace SpawnDev.BlazorJS.JSObjects {
+    public class WebStorageEvent : JSObject {
         public WebStorageEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string Key => JSRef.Get<string>("key");
         public string OldValue => JSRef.Get<string>("oldValue");
