@@ -1,8 +1,8 @@
 ﻿@using System.Reflection
 @page "/JSObjectTypeInfo/{Name?}"
 
-<div>
-    <div style="display: flex; flex-direction: row;">
+<div style="max-width: 100%;">
+    <div style="display: flex; flex-direction: row; max-width: 100%;">
         <div style="flex-grow: 0; flex-shrink: 1; background-color: #181818; border-radius: 1rem; padding: 1rem;">
             <div style="text-align: center;">
                 <h3>JSObjects</h3>
@@ -16,88 +16,90 @@
                 }
             </ul>
         </div>
-        <div style="flex-grow: 1; flex-shrink: 1; padding: 1rem;">
-            @if (Type == null)
-            {
-                <MarkdownBlock URL="https://raw.githubusercontent.com/LostBeard/SpawnDev.BlazorJS/main/README.md#jsobjectbaseclass" />
-            }
-            else
-            {
-                var baseTypeNames = Type.GetBaseTypes().Where(o => o != typeof(object)).ToList();
-                var baseTypeName = string.Join(", ", Type.GetBaseTypes().Where(o => o != typeof(object)).Select(o => o.GetFormattedName()));
-                <h3>@Type.GetFormattedName()</h3>
-                <div>
-                    BaseType:
-                    @foreach (var baseType in baseTypeNames)
-                    {
-                        if (baseType != baseTypeNames.Last())
+        <div style="padding: 1rem; position: relative; width: 100%; height: 100%;">
+            <div style="padding: 1rem; position: absolute; width: 100%; height: 100%;">
+                @if (Type == null)
+                {
+                    <MarkdownBlock URL="https://raw.githubusercontent.com/LostBeard/SpawnDev.BlazorJS/main/README.md#jsobjectbaseclass" />
+                }
+                else
+                {
+                    var baseTypeNames = Type.GetBaseTypes().Where(o => o != typeof(object)).ToList();
+                    var baseTypeName = string.Join(", ", Type.GetBaseTypes().Where(o => o != typeof(object)).Select(o => o.GetFormattedName()));
+                    <h3>@Type.GetFormattedName()</h3>
+                    <div>
+                        BaseType:
+                        @foreach (var baseType in baseTypeNames)
                         {
-                            <a href="@JSObjectInfoHref(baseType)">@baseType.GetFormattedName(), </a>
+                            if (baseType != baseTypeNames.Last())
+                            {
+                                <a href="@JSObjectInfoHref(baseType)">@baseType.GetFormattedName(), </a>
+                            }
+                            else
+                            {
+                                <a href="@JSObjectInfoHref(baseType)">@baseType.GetFormattedName()</a>
+                            }
                         }
-                        else
-                        {
-                            <a href="@JSObjectInfoHref(baseType)">@baseType.GetFormattedName()</a>
-                        }
-                    }
-                </div>
+                    </div>
 
-                <h2>Constructors</h2>
-                foreach (var prop in Type.GetConstructors(BindingFlags.Instance | BindingFlags.Public))
-                {
-                    var paramStr = string.Join(", ", prop.GetParameters().Select(o => ParameterInfoToString(o)));
-                    <div>
-                        @(Type.GetFormattedName())(@paramStr)
-                    </div>
+                    <h2>Constructors</h2>
+                    foreach (var prop in Type.GetConstructors(BindingFlags.Instance | BindingFlags.Public))
+                    {
+                        var paramStr = string.Join(", ", prop.GetParameters().Select(o => ParameterInfoToString(o)));
+                        <div>
+                            @(Type.GetFormattedName())(@paramStr)
+                        </div>
+                    }
+                    // instance
+                    <h2>Instance Properties</h2>
+                    foreach (var prop in Type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                    {
+                        if (prop.IsSpecialName) continue;
+                        if (prop.DeclaringType == typeof(object)) continue;
+                        var getSetStr = "";
+                        if (prop.CanRead && prop.CanWrite) getSetStr += "{ get; set; }";
+                        else if (prop.CanRead) getSetStr += "{ get; }";
+                        else if (prop.CanWrite) getSetStr += "{ set; }";
+                        <div>
+                            @prop.DeclaringType.GetFormattedName().@prop.PropertyType.GetFormattedName() @prop.Name @getSetStr
+                        </div>
+                    }
+                    <h2>Instance Methods</h2>
+                    foreach (var prop in Type.GetMethods(BindingFlags.Instance | BindingFlags.Public))
+                    {
+                        if (prop.IsSpecialName) continue;
+                        if (prop.DeclaringType == typeof(object)) continue;
+                        var paramStr = string.Join(", ", prop.GetParameters().Select(o => ParameterInfoToString(o)));
+                        <div>
+                            @prop.DeclaringType.GetFormattedName().@prop.ReturnType.GetFormattedName() @(prop.Name)(@paramStr)
+                        </div>
+                    }
+                    // static
+                    <h2>Static Properties</h2>
+                    foreach (var prop in Type.GetProperties(BindingFlags.Static | BindingFlags.Public))
+                    {
+                        if (prop.IsSpecialName) continue;
+                        if (prop.DeclaringType == typeof(object)) continue;
+                        var getSetStr = "";
+                        if (prop.CanRead && prop.CanWrite) getSetStr += "{ get; set; }";
+                        else if (prop.CanRead) getSetStr += "{ get; }";
+                        else if (prop.CanWrite) getSetStr += "{ set; }";
+                        <div>
+                            @prop.DeclaringType.GetFormattedName().@prop.PropertyType.GetFormattedName() @prop.Name @getSetStr
+                        </div>
+                    }
+                    <h2>Static Methods</h2>
+                    foreach (var prop in Type.GetMethods(BindingFlags.Static | BindingFlags.Public))
+                    {
+                        if (prop.IsSpecialName) continue;
+                        if (prop.DeclaringType == typeof(object)) continue;
+                        var paramStr = string.Join(", ", prop.GetParameters().Select(o => ParameterInfoToString(o)));
+                        <div>
+                            @prop.DeclaringType.GetFormattedName().@prop.ReturnType.GetFormattedName() @(prop.Name)(@paramStr)
+                        </div>
+                    }
                 }
-                // instance
-                <h2>Instance Properties</h2>
-                foreach (var prop in Type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
-                {
-                    if (prop.IsSpecialName) continue;
-                    if (prop.DeclaringType == typeof(object)) continue;
-                    var getSetStr = "";
-                    if (prop.CanRead && prop.CanWrite) getSetStr += "{ get; set; }";
-                    else if (prop.CanRead) getSetStr += "{ get; }";
-                    else if (prop.CanWrite) getSetStr += "{ set; }";
-                    <div>
-                        @prop.DeclaringType.GetFormattedName().@prop.PropertyType.GetFormattedName() @prop.Name @getSetStr
-                    </div>
-                }
-                <h2>Instance Methods</h2>
-                foreach (var prop in Type.GetMethods(BindingFlags.Instance | BindingFlags.Public))
-                {
-                    if (prop.IsSpecialName) continue;
-                    if (prop.DeclaringType == typeof(object)) continue;
-                    var paramStr = string.Join(", ", prop.GetParameters().Select(o => ParameterInfoToString(o)));
-                    <div>
-                        @prop.DeclaringType.GetFormattedName().@prop.ReturnType.GetFormattedName() @(prop.Name)(@paramStr)
-                    </div>
-                }
-                // static
-                <h2>Static Properties</h2>
-                foreach (var prop in Type.GetProperties(BindingFlags.Static | BindingFlags.Public))
-                {
-                    if (prop.IsSpecialName) continue;
-                    if (prop.DeclaringType == typeof(object)) continue;
-                    var getSetStr = "";
-                    if (prop.CanRead && prop.CanWrite) getSetStr += "{ get; set; }";
-                    else if (prop.CanRead) getSetStr += "{ get; }";
-                    else if (prop.CanWrite) getSetStr += "{ set; }";
-                    <div>
-                        @prop.DeclaringType.GetFormattedName().@prop.PropertyType.GetFormattedName() @prop.Name @getSetStr
-                    </div>
-                }
-                <h2>Static Methods</h2>
-                foreach (var prop in Type.GetMethods(BindingFlags.Static | BindingFlags.Public))
-                {
-                    if (prop.IsSpecialName) continue;
-                    if (prop.DeclaringType == typeof(object)) continue;
-                    var paramStr = string.Join(", ", prop.GetParameters().Select(o => ParameterInfoToString(o)));
-                    <div>
-                        @prop.DeclaringType.GetFormattedName().@prop.ReturnType.GetFormattedName() @(prop.Name)(@paramStr)
-                    </div>
-                }
-            }
+            </div>
         </div>
     </div>
 </div>

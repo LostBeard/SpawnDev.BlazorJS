@@ -119,7 +119,7 @@ html, body, .container {
 }
 
 .container {
-    padding: 3rem;
+    padding: 1.5rem;
     font-family: var(--rz-text-font-family);
     color: var(--rz-text-color);
     font-size: var(--rz-body-font-size);
@@ -145,4 +145,9 @@ th, td {
 }
 input {
     color: black;
+}
+
+pre {
+    overflow-x: auto;
+    max-width: 100%;
 }
