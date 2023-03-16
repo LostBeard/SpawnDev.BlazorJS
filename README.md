@@ -115,6 +115,7 @@ Example
 // create an interface for your javascript object
 public interface IWindow {
     string Name { get; set; }
+    void Alert(string msg = "");
     // ...
 }
 
@@ -162,8 +163,6 @@ var name = window.Name;
 window.Alert("Hello!");
 ```
 
-
-
 # Promise
 SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class.
 Promises can be created in .Net to wrap async methods or Tasks. They are essentially Javascript's version of Task.
@@ -202,7 +201,6 @@ var promise = new Promise<string>(taskSource.Task);
 // then later resolve
 taskSource.TrySetResult("Hello world!");
 ```
-
 
 Below is a an example that uses Promises to utilize the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)
 

@@ -21,7 +21,8 @@
     string _markDown = "";
     string _markDownSection = "";
     Uri? _markDownUri { get; set; }
-    List<MarkdownSection> _sections = new List<MarkdownSection>();
+
+
 
     protected override async Task OnParametersSetAsync()
     {
@@ -34,11 +35,22 @@
     public class MarkdownSection
     {
         public MarkdownSection? Parent { get; set; }
+        public List<MarkdownSection> Children { get; set; } = new List<MarkdownSection>();
         public string SectionNameFull { get; set; } = "";
         public string SectionName { get; set; } = "";
         public int SectionDepth { get; set; }
         public StringBuilder sb = new StringBuilder();
         public string MarkDown => sb.ToString();
+        public string MarkDownFull => GetFullSection();
+
+        public string GetFullSection()
+        {
+            var sections = new List<MarkdownSection>{ this };
+            sections.AddRange(Children.SelectMany(o => o.Children).ToList());
+            var sb = new StringBuilder();
+            sections.ForEach(o => sb.AppendLine(o.MarkDown));
+            return sb.ToString();
+        }
 
         public static List<MarkdownSection> Parse(string markDown)
         {
@@ -62,6 +74,10 @@
                     m = Regex.Match(line.Trim(), @"^(#+)(.+)$");
                     section.SectionNameFull = m.Success ? m.Groups[2].Value.Trim() : "";
                     section.Parent = sections.Where(o => o.SectionDepth < section.SectionDepth).LastOrDefault();
+                    if (section.Parent != null)
+                    {
+                        section.Parent.Children.Add(section);
+                    }
                     sections.Add(section);
                 }
                 if (section == null)
@@ -93,7 +109,7 @@
                 var frag = _markDownUri.Fragment.ToLowerInvariant().Trim('#');
                 var sections = MarkdownSection.Parse(markDown);
                 var section = sections.Where(o => o.SectionName.Equals(frag, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                markDown = section == null ? "" : section.MarkDown;
+                markDown = section == null ? "" : section.MarkDownFull;
             }
             _markup = Markdown.ToHtml(markDown, pipeline);
         }
