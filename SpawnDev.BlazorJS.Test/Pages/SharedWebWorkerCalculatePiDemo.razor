@@ -1,13 +1,14 @@
 ﻿@page "/SharedWebWorker"
-
-<PageTitle>WebWorker</PageTitle>
-
 @inject WebWorkerService webWorkerService
 @inject IMathsService mathsService
 
+<PageTitle>SharedWebWorker</PageTitle>
+
+<MarkdownBlock URL="https://raw.githubusercontent.com/LostBeard/SpawnDev.BlazorJS/main/README.md#SharedWebWorker" />
+
 <div class="row">
     <div class="col-5 col-xs-12">
-        <h1>SpawnDev.BlazorJS.WebWorkers.SharedWebWorker</h1>
+        <h2>Demo</h2>
         <br /><br />
         Calculate Pi to N decimal places<br />
         <input type="text" @bind="piDecimalPlaces" placeholder="decimal places" /><br />
@@ -17,8 +18,6 @@
         <div>While processing PI with a worker the main thread will stay responsive</div>
         <button disabled=@RunDisabled @onclick=OnWithThreadClicked class="btn btn-primary">With SharedWorker</button><br /><br />
         <button disabled="@canDisposeWorker" @onclick="OnDisposeWorker" class="btn btn-secondary">Dispose SharedWorker</button><br />
-        <br />
-        <br />
         <strong>Output:</strong>
         <hr />
         <pre style="min-width: 800px; min-height: 300px;">

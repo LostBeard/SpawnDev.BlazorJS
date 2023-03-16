@@ -134,7 +134,7 @@ JSObjects are wrappers around IJSInProcessReference objects that can be passed t
 
 Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (localStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
 
-Below shows a section of the SpawnDev.BlazorJS.JSObjects.Window class
+Below shows a section of the SpawnDev.BlazorJS.JSObjects.Window class. Window's base type, EventTarget, inherits from JSObject.
 ```cs
 public class Window : EventTarget {
     // all JSObject types must have this constructor
@@ -371,23 +371,23 @@ webWorker.SendEvent("progress", new PiProgress { Progress = piProgress });
 
 Example
 ```cs
-        public class ProcessFrameResult : IDisposable
-        {
-            [WorkerTransfer(false)]
-            public ArrayBuffer? ArrayBuffer { get; set; }
-            public byte[]? HomographyBytes { get; set; }
-            public void Dispose(){
-                ArrayBuffer?.Dispose();
-            }
-        }
+public class ProcessFrameResult : IDisposable
+{
+    [WorkerTransfer(false)]
+    public ArrayBuffer? ArrayBuffer { get; set; }
+    public byte[]? HomographyBytes { get; set; }
+    public void Dispose(){
+        ArrayBuffer?.Dispose();
+    }
+}
 
-        [return: WorkerTransfer(false)]
-        public async Task<ProcessFrameResult?> ProcessFrame([WorkerTransfer(false)] ArrayBuffer? frameBuffer, int width, int height, int _canny0, int _canny1, double _needlePatternSize)
-        {
-            var ret = new ProcessFrameResult();
-            // ...
-            return ret;
-        }
+[return: WorkerTransfer(false)]
+public async Task<ProcessFrameResult?> ProcessFrame([WorkerTransfer(false)] ArrayBuffer? frameBuffer, int width, int height, int _canny0, int _canny1, double _needlePatternSize)
+{
+    var ret = new ProcessFrameResult();
+    // ...
+    return ret;
+}
 ```
 
 In the above example; the WorkerTransferAttribute on the return type set to false will prevent all properties of the return type from being transferred.

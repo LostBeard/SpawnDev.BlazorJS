@@ -1,13 +1,14 @@
 ﻿@page "/WebWorker"
-
-<PageTitle>WebWorker</PageTitle>
-
 @inject WebWorkerService webWorkerService
 @inject IMathsService mathsService
 
+<PageTitle>WebWorker</PageTitle>
+
+<MarkdownBlock URL="https://raw.githubusercontent.com/LostBeard/SpawnDev.BlazorJS/main/README.md#SpawnDevBlazorJSWebWorkers" />
+
 <div class="row">
     <div class="col-5 col-xs-12">
-        <h1>SpawnDev.BlazorJS.WebWorkers.WebWorker</h1>
+        <h2>Demo</h2>
         <br /><br />
         Calculate Pi to N decimal places<br />
         <input type="text" @bind="piDecimalPlaces" placeholder="decimal places" /><br />
@@ -17,8 +18,6 @@
         <div>While processing PI with a worker the main thread will stay responsive</div>
         <button disabled=@RunDisabled @onclick=OnWithThreadClicked class="btn btn-primary">With Worker</button><br /><br />
         <button disabled="@canDisposeWorker" @onclick="OnDisposeWorker" class="btn btn-secondary">Dispose Worker</button><br />
-        <br />
-        <br />
         <strong>Output:</strong>
         <hr />
         <pre style="min-width: 800px; min-height: 300px;">
@@ -37,7 +36,8 @@
 
     string rn = Environment.NewLine;
 
-    async Task OnWithoutThreadClicked() {
+    async Task OnWithoutThreadClicked()
+    {
         Running = true;
         StateHasChanged();
         var result = await mathsService.CalculatePi(piDecimalPlaces);
@@ -46,12 +46,14 @@
         StateHasChanged();
     }
 
-    async Task OnWithThreadClicked() {
+    async Task OnWithThreadClicked()
+    {
         Running = true;
         StateHasChanged();
         if (webWorker == null) webWorker = await webWorkerService.GetWebWorker();
         var mathsServiceWorker = webWorker.GetService<IMathsService>();
-        var result = await mathsServiceWorker.CalculatePiWithActionProgress(piDecimalPlaces, new Action<int>((i) => {
+        var result = await mathsServiceWorker.CalculatePiWithActionProgress(piDecimalPlaces, new Action<int>((i) =>
+        {
             piProgress = i;
             StateHasChanged();
         }));
@@ -60,13 +62,15 @@
         StateHasChanged();
     }
 
-    public void OnDisposeWorker() {
+    public void OnDisposeWorker()
+    {
         webWorker?.Dispose();
         webWorker = null;
         Running = false;
     }
 
-    private string LogDate() {
+    private string LogDate()
+    {
         return DateTime.Now.ToString("HH:mm:ss:fff");
     }
 }
