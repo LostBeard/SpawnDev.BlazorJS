@@ -1,7 +1,14 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 :root {
+    --rz-border-width: 1px;
+    --rz-root-font-size: 16px;
+    --rz-body-font-size: 1.125rem;
+    --rz-body-line-height: 1.429;
     --rz-body-background-color: rgb(10,8,8);
+    --rz-text-font-family: Source Sans Pro, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    --rz-icon-size: 1.25rem;
+    --rz-icon-font-family: Material Icons;
 }
 
 html, body {
