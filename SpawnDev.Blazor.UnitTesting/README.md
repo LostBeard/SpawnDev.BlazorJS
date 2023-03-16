@@ -6,7 +6,7 @@
 |**SpawnDev.Blazor.UnitTesting**| Blazor Unit Testing | [![NuGet version](https://badge.fury.io/nu/SpawnDev.Blazor.UnitTesting.svg)](https://www.nuget.org/packages/SpawnDev.Blazor.UnitTesting) |
  
 
-# SpawnDev.BlazorJS
+# SpawnDev.Blazor.UnitTesting
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.Blazor.UnitTesting.svg?label=SpawnDev.Blazor.UnitTesting)](https://www.nuget.org/packages/SpawnDev.Blazor.UnitTesting) 
 
 Unit testing for Blazor
@@ -14,8 +14,6 @@ Unit testing for Blazor
 Supports .Net Blazor 6, 7, and 8.
 
 Simply create a page for your test. Add the UnitTestsView component and assign the TestAssemblies and/or TestTypes parameters.
-
-Example usage
 
 Give your unit test class the TestClass attribute and tag your public instance test methods with the TestMethod attribute. Example unit test class below.
 

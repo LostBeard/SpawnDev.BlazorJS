@@ -10,7 +10,7 @@
 		<Authors>LostBeard</Authors>
 		<Description>Easily call Services in separate threads with WebWorkers and SharedWebWorkers</Description>
 		<PackageProjectUrl>https://github.com/LostBeard/SpawnDev.BlazorJS</PackageProjectUrl>
-		<PackageReadmeFile>Read.md</PackageReadmeFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/LostBeard/SpawnDev.BlazorJS.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;BlazorWebAssembly;Multithreading;DotNet</PackageTags>

@@ -134,15 +134,35 @@ JSObjects are wrappers around IJSInProcessReference objects that can be passed t
 
 Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (localStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
 
+Below shows a section of the SpawnDev.BlazorJS.JSObjects.Window class
 ```cs
-// below the JSObject derived Window class is used
-public void JSObjectPropertySetGet() {
-    var w = JS.Get<Window>("window");
-    var randName = Guid.NewGuid().ToString();
-    w.Name = randName;
-    if (w.Name != randName) throw new Exception("Interface property set/get failed");
+public class Window : EventTarget {
+    // all JSObject types must have this constructor
+    public Window(IJSInProcessObjectReference _ref) : base(_ref) { }
+    // here is a property with both getter and setter
+    public string? Name { get => JSRef.Get<string>("name"); set => JSRef.Set("name", value); }
+    // here is a read only property that returns another JSObject type
+    public WebStorage LocalStorage => JSRef.Get<WebStorage>("localStorage");
+    // here are methods
+    public long SetTimeout(Callback callback, double delay) => JSRef.Call<long>("setTimeout", callback, delay);
+    public void ClearTimeout(long requestId) => JSRef.CallVoid("clearTimeout", requestId);    
+    // ... 
 }
 ```
+
+Below the JSObject derived Window class is used
+```cs
+// below the JSObject derived Window class is used
+using var window = JS.Get<Window>("window");
+var randName = Guid.NewGuid().ToString();
+// set and get properties
+window.Name = randName;
+var name = window.Name;
+// call methods
+window.Alert("Hello!");
+```
+
+
 
 # Promise
 SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class.

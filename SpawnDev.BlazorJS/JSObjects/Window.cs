@@ -50,10 +50,10 @@ namespace SpawnDev.BlazorJS.JSObjects {
                 }
             }
         }
-        void AnimationFrame(double timestaamp) {
+        void AnimationFrame(double timestamp) {
             if (_OnAnimationFrameCount > 0)
                 _OnAnimationFrameCallbackHandle = RequestAnimationFrame(_OnAnimationFrameCallback);
-            _OnAnimationFrame?.Invoke(timestaamp);
+            _OnAnimationFrame?.Invoke(timestamp);
         }
     }
 }

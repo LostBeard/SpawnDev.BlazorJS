@@ -1,8 +1,10 @@
 ﻿@using Markdig
 @using Microsoft.AspNetCore.Components
+@using System.Text;
+@using System.Text.RegularExpressions;
 
 <div>
-    @((MarkupString)markup)
+    @((MarkupString)_markup)
 </div>
 
 @code {
@@ -12,32 +14,105 @@
     [Parameter]
     public string URL { get; set; } = "";
 
-    string markup = "";
-    bool _shouldRender = true;
+    MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
 
-    protected override async Task OnInitializedAsync() {
-        await base.OnInitializedAsync();
-        try {
-            var result = await httpClient.GetStringAsync(URL);
-            if (!string.IsNullOrEmpty(result)) {
-                var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-                markup = Markdown.ToHtml(result, pipeline);
+    string _markup = "";
+    bool _shouldRender = true;
+    string _markDown = "";
+    string _markDownSection = "";
+    Uri? _markDownUri { get; set; }
+    List<MarkdownSection> _sections = new List<MarkdownSection>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _markDownUri = string.IsNullOrEmpty(URL) ? null : new Uri(URL);
+        await LoadMarkdown();
+        _shouldRender = true;
+        await base.OnParametersSetAsync();
+    }
+
+    public class MarkdownSection
+    {
+        public MarkdownSection? Parent { get; set; }
+        public string SectionNameFull { get; set; } = "";
+        public string SectionName { get; set; } = "";
+        public int SectionDepth { get; set; }
+        public StringBuilder sb = new StringBuilder();
+        public string MarkDown => sb.ToString();
+
+        public static List<MarkdownSection> Parse(string markDown)
+        {
+            markDown = markDown.Trim();
+            //var stringLineEnding = "\n";
+            //if (markDown.Contains("\r\n")) stringLineEnding = "\r\n";
+            //if (markDown.Contains("\r")) stringLineEnding = "\r";
+            var lines = markDown.Replace("\r\n", "\n").Replace("\r", "\n").Split("\n");
+            var sections = new List<MarkdownSection>();
+            MarkdownSection? section = null;
+            foreach (var line in lines)
+            {
+                var tmp = Regex.Replace(line, "[^a-zA-Z-#]", "").ToLowerInvariant();
+                var m = Regex.Match(tmp, @"^(#+)([^\s]+)$");
+                if (m.Success)
+                {
+                    // new section
+                    section = new MarkdownSection();
+                    section.SectionName = m.Groups[2].Value;
+                    section.SectionDepth = m.Groups[1].Value.Length;
+                    m = Regex.Match(line.Trim(), @"^(#+)(.+)$");
+                    section.SectionNameFull = m.Success ? m.Groups[2].Value.Trim() : "";
+                    section.Parent = sections.Where(o => o.SectionDepth < section.SectionDepth).LastOrDefault();
+                    sections.Add(section);
+                }
+                if (section == null)
+                {
+                    section = new MarkdownSection();
+                    sections.Add(section);
+                }
+                section.sb.AppendLine(line);
             }
-        }
-        catch (Exception ex) {
-            JS.Log($"Exception: {ex.Message}");
+            return sections;
         }
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
+    async Task LoadMarkdown()
+    {
+        var markDown = "";
+        if (_markDownUri != null)
+        {
+            try
+            {
+                markDown = await httpClient.GetStringAsync(_markDownUri);
+            }
+            catch (Exception ex)
+            {
+                JS.Log($"Exception: {ex.Message}");
+            }
+            if (!string.IsNullOrEmpty(_markDownUri.Fragment))
+            {
+                var frag = _markDownUri.Fragment.ToLowerInvariant().Trim('#');
+                var sections = MarkdownSection.Parse(markDown);
+                var section = sections.Where(o => o.SectionName.Equals(frag, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                markDown = section == null ? "" : section.MarkDown;
+            }
+            _markup = Markdown.ToHtml(markDown, pipeline);
+        }
+        if (!string.IsNullOrEmpty(markDown)) _markDown = markDown;
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
         await base.OnAfterRenderAsync(firstRender);
-        if (!string.IsNullOrEmpty(markup)) {
-            // already rendered wit hthe markdown
+        if (_shouldRender)
+        {
+            // render complete. disable further rerenders until params change
             _shouldRender = false;
         }
     }
 
-    protected override bool ShouldRender() {
+    protected override bool ShouldRender()
+    {
         return _shouldRender;
     }
 }
