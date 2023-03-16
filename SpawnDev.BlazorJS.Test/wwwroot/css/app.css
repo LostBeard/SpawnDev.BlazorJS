@@ -2,6 +2,8 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-image: url(../media/honeycomb-tile-dark-red4.gif);
+    background-repeat: repeat;
 }
 
 h1:focus {
@@ -151,3 +153,4 @@ pre {
     overflow-x: auto;
     max-width: 100%;
 }
+
