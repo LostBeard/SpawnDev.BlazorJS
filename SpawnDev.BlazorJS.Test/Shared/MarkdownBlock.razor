@@ -98,16 +98,6 @@
         {
             try
             {
-                var tmp = await httpClient.GetStringAsync("types/es5.d.ts");
-                //var tmp = await httpClient.GetStringAsync("https://developer.mozilla.org/en-US/docs/Web/API/Window");
-                Console.WriteLine($"tmp: {tmp}");
-            }
-            catch (Exception ex)
-            {
-                JS.Log($"tmp Exception: {ex.Message}");
-            }
-            try
-            {
                 markDown = await httpClient.GetStringAsync(_markDownUri);
             }
             catch (Exception ex)

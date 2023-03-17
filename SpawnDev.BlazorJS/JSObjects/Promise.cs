@@ -68,9 +68,10 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Function? ResolveFunc { get; protected set; }
         public Function? RejectFunc { get; protected set; }
 
-        public void ThenCatch(ActionCallback<TResult> thenCallback, ActionCallback<string> catchCallback) {
-            JSInterop.SetPromiseThenCatch(this, thenCallback, catchCallback);
-        }
+        public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
+        public void Then(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
+        public void Then(ActionCallback thenCallback, ActionCallback<string> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
+        public void Then(ActionCallback<TResult> thenCallback, ActionCallback<string> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
 
         public void Resolve(TResult result) => ResolveFunc.CallVoid(null, result);
         public void Reject() => RejectFunc.CallVoid();
@@ -82,7 +83,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            ThenCatch(Callback.Create<TResult>((result) => {
+            Then(Callback.Create<TResult>((result) => {
                 if (t.TrySetResult(result)) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
@@ -105,7 +106,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Task<TResult> ThenAsync(CancellationToken cancellationToken) {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
-            ThenCatch(Callback.Create<TResult>((result) => {
+            Then(Callback.Create<TResult>((result) => {
                 if (t.TrySetResult(result)) {
                     callbacks.Dispose();
                 }
@@ -193,12 +194,17 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Function? ResolveFunc { get; protected set; }
         public Function? RejectFunc { get; protected set; }
 
-        public void ThenCatch(ActionCallback thenCallback, ActionCallback<string> catchCallback) {
-            JSInterop.SetPromiseThenCatch(this, thenCallback, catchCallback);
-        }
-        public void ThenCatch<TResult>(ActionCallback<TResult> thenCallback, ActionCallback<string> catchCallback) {
-            JSInterop.SetPromiseThenCatch(this, thenCallback, catchCallback);
-        }
+        //public void ThenCatch(ActionCallback thenCallback, ActionCallback<string> catchCallback) {
+        //    JSInterop.SetPromiseThenCatch(this, thenCallback, catchCallback);
+        //}
+        //public void ThenCatch<TResult>(ActionCallback<TResult> thenCallback, ActionCallback<string> catchCallback) {
+        //    JSInterop.SetPromiseThenCatch(this, thenCallback, catchCallback);
+        //}
+
+        public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
+        public void Then<TResult>(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
+        public void Then(ActionCallback thenCallback, ActionCallback<string> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
+        public void Then<TResult>(ActionCallback<TResult> thenCallback, ActionCallback<string> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
 
         public void Resolve(object? value) => ResolveFunc.CallVoid(null, value);
         public void Resolve() => ResolveFunc.CallVoid();
@@ -211,7 +217,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
             var t = new TaskCompletionSource();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            ThenCatch(Callback.Create(() => {
+            Then(Callback.Create(() => {
                 if (t.TrySetResult()) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
@@ -235,7 +241,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Task ThenAsync(CancellationToken cancellationToken) {
             var t = new TaskCompletionSource();
             var callbacks = new CallbackGroup();
-            ThenCatch(Callback.Create(() => {
+            Then(Callback.Create(() => {
                 if (t.TrySetResult()) {
                     callbacks.Dispose();
                 }
@@ -258,7 +264,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            ThenCatch(Callback.Create<TResult>((result) => {
+            Then(Callback.Create<TResult>((result) => {
                 if (t.TrySetResult(result)) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
@@ -282,7 +288,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Task<TResult> ThenAsync<TResult>(CancellationToken cancellationToken) {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
-            ThenCatch(Callback.Create<TResult>((result) => {
+            Then(Callback.Create<TResult>((result) => {
                 if (t.TrySetResult(result)) {
                     callbacks.Dispose();
                 }

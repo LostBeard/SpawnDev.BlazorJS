@@ -6,15 +6,15 @@ namespace SpawnDev.BlazorJS {
     public static partial class JSInterop {
         static IJSInProcessRuntime _js = JS._js;
 
-        internal static void SetPromiseThenCatch<T>(Promise<T> promise, ActionCallback<T> thenCallback, ActionCallback<string> catchCallback) {
-            JS.CallVoid("JSInterop.setPromiseThenCatch", promise, thenCallback, catchCallback);
-        }
-        internal static void SetPromiseThenCatch(Promise promise, ActionCallback thenCallback, ActionCallback<string> catchCallback) {
-            JS.CallVoid("JSInterop.setPromiseThenCatch", promise, thenCallback, catchCallback);
-        }
-        internal static void SetPromiseThenCatch<TResult>(Promise promise, ActionCallback<TResult> thenCallback, ActionCallback<string> catchCallback) {
-            JS.CallVoid("JSInterop.setPromiseThenCatch", promise, thenCallback, catchCallback);
-        }
+        //internal static void SetPromiseThenCatch<T>(Promise<T> promise, ActionCallback<T> thenCallback, ActionCallback<string> catchCallback) {
+        //    JS.CallVoid("JSInterop.setPromiseThenCatch", promise, thenCallback, catchCallback);
+        //}
+        //internal static void SetPromiseThenCatch(Promise promise, ActionCallback thenCallback, ActionCallback<string> catchCallback) {
+        //    JS.CallVoid("JSInterop.setPromiseThenCatch", promise, thenCallback, catchCallback);
+        //}
+        //internal static void SetPromiseThenCatch<TResult>(Promise promise, ActionCallback<TResult> thenCallback, ActionCallback<string> catchCallback) {
+        //    JS.CallVoid("JSInterop.setPromiseThenCatch", promise, thenCallback, catchCallback);
+        //}
 
         internal static void SetGlobal(string identifier, object? value) {
             _js.InvokeVoid("JSInterop._setGlobal", identifier, value);
