@@ -30,11 +30,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
             Version = version;
         }
 
-        //public IDBDatabase OpenDB(string dbName, ulong version = 1)
-        //{
-
-        //}
-
         public Task<bool> Open() {
             var t = new TaskCompletionSource<bool>();
             if (IsOpen) {
@@ -81,11 +76,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
             STRICT,
             RELAXED,
         }
-
-        //public async Task Add()
-        //{
-
-        //}
 
         public IDBTransaction Transaction(string storeName, TransactionMode mode = TransactionMode.READWRITE, TransactionDurability durability = TransactionDurability.DEFAULT) {
             return Transaction(new string[] { storeName }, mode, durability);

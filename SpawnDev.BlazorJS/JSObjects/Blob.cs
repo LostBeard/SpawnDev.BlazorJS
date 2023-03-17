@@ -15,8 +15,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Blob(IEnumerable<string> buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
         public long Size => JSRef.Get<long>("size");
         public string Type => JSRef.Get<string>("type");
-        public async Task<string> Text() => await JSRef.CallAsync<string>("text");
-        public async Task<ArrayBuffer> ArrayBuffer() => await JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
+        public Task<string> Text() => JSRef.CallAsync<string>("text");
+        public Task<ArrayBuffer> ArrayBuffer() => JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
         public Blob Slice(long startPos, long endPos, string contentType) => JSRef.Call<Blob>("slice", startPos, endPos, contentType);
         public ReadableStream Stream() => JSRef.Call<ReadableStream>("stream");
         static string atob(string str) {

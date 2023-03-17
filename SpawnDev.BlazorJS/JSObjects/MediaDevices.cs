@@ -135,12 +135,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
             return false;
         }
 
-        public async Task<DeviceInfo[]> EnumerateDevices() {
-            return await JSRef.CallAsync<DeviceInfo[]>("enumerateDevices");
-        }
+        public Task<DeviceInfo[]> EnumerateDevices() => JSRef.CallAsync<DeviceInfo[]>("enumerateDevices");
 
-        public Task<MediaStream> GetUserMedia(ExpandoObject constraints) {
-            return JSRef.CallAsync<MediaStream>("getUserMedia", constraints);
-        }
+        public Task<MediaStream> GetUserMedia(ExpandoObject constraints) => JSRef.CallAsync<MediaStream>("getUserMedia", constraints);
     }
 }

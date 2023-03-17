@@ -32,11 +32,11 @@ namespace SpawnDev.BlazorJS.JSObjects {
             return ret;
         }
 
-        public async Task<JSObject> ShowSaveFilePicker(ExpandoObject pickerOptions = null) {
+        public Task<JSObject> ShowSaveFilePicker(ExpandoObject pickerOptions = null) {
             if (pickerOptions == null)
-                return await window.CallAsync<JSObject>("showSaveFilePicker");
+                return window.CallAsync<JSObject>("showSaveFilePicker");
             else
-                return await window.CallAsync<JSObject>("showSaveFilePicker", pickerOptions);
+                return window.CallAsync<JSObject>("showSaveFilePicker", pickerOptions);
         }
 
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/showDirectoryPicker

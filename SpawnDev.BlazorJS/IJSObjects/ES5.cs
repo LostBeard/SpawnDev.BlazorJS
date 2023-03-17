@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+/**
+ * This file was auto-generated from es5.d.ts TypeScript definitions file 
+ * The interfaces have not been tested or and the generator is in early testing stage
+ **/
 
 namespace SpawnDev.BlazorJS.IJSObjects
 {
-    interface Symbol
+    public partial interface Symbol
     {
         string ToString();
         object ValueOf();
     }
-    interface PropertyDescriptor
+    public partial interface PropertyDescriptor
     {
         object Get();
         void Set(object v);
     }
-    interface PropertyDescriptorMap
+    public partial interface PropertyDescriptorMap
     {
     }
-    interface PropertyKey
+    public partial interface PropertyKey
     {
     }
-    interface Object
+    public partial interface Object
     {
         string ToString();
         string ToLocaleString();
@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS.IJSObjects
         bool IsPrototypeOf(Object v);
         bool PropertyIsEnumerable(PropertyKey v);
     }
-    interface ObjectConstructor
+    public partial interface ObjectConstructor
     {
         object GetPrototypeOf(object o);
         object GetOwnPropertyDescriptor(object o, PropertyKey p);
@@ -48,17 +48,17 @@ namespace SpawnDev.BlazorJS.IJSObjects
         bool IsExtensible(object o);
         string[] Keys(object o);
     }
-    interface Function
+    public partial interface Function
     {
         object Apply(object thisArg, object? argArray);
         object Call(object thisArg, params object[] argArray);
         object Bind(object thisArg, params object[] argArray);
         string ToString();
     }
-    interface FunctionConstructor
+    public partial interface FunctionConstructor
     {
     }
-    interface CallableFunction
+    public partial interface CallableFunction : Function
     {
         T Apply<T, R>(T thisArg);
         T Apply<T, A, R>(T thisArg, A args);
@@ -70,7 +70,7 @@ namespace SpawnDev.BlazorJS.IJSObjects
         Func<R> Bind<T, A0, A1, A2, A3, A, R>(T thisArg, A0 arg0, A1 arg1, A2 arg2, A3 arg3);
         Func<R> Bind<T, AX, R>(T thisArg, params object[] args);
     }
-    interface NewableFunction
+    public partial interface NewableFunction : Function
     {
         void Apply<T>(T thisArg);
         void Apply<T, A>(T thisArg, A args);
@@ -82,12 +82,11 @@ namespace SpawnDev.BlazorJS.IJSObjects
         object Bind<A0, A1, A2, A3, A, R>(object thisArg, A0 arg0, A1 arg1, A2 arg2, A3 arg3);
         object Bind<AX, R>(object thisArg, params object[] args);
     }
-    interface IArguments
+    public partial interface IArguments
     {
     }
-    interface String
+    public partial interface String
     {
-        double LocaleCompare(string that, object? locales, object? options);
         string ToString();
         string CharAt(double pos);
         double CharCodeAt(double index);
@@ -110,42 +109,41 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string Substr(double from, object? length);
         string ValueOf();
     }
-    interface StringConstructor
+    public partial interface StringConstructor
     {
         string FromCharCode(params object[] codes);
     }
-    interface Boolean
+    public partial interface Boolean
     {
         bool ValueOf();
     }
-    interface BooleanConstructor
+    public partial interface BooleanConstructor
     {
     }
-    interface Number
+    public partial interface Number
     {
-        string ToLocaleString(object? locales, object? options);
         string ToString(object? radix);
         string ToFixed(object? fractionDigits);
         string ToExponential(object? fractionDigits);
         string ToPrecision(object? precision);
         double ValueOf();
     }
-    interface NumberConstructor
+    public partial interface NumberConstructor
     {
     }
-    interface TemplateStringsArray
+    public partial interface TemplateStringsArray<T> : ReadonlyArray<T>
     {
     }
-    interface ImportMeta
+    public partial interface ImportMeta
     {
     }
-    interface ImportCallOptions
+    public partial interface ImportCallOptions
     {
     }
-    interface ImportAssertions
+    public partial interface ImportAssertions
     {
     }
-    interface Math
+    public partial interface Math
     {
         double Abs(double x);
         double Acos(double x);
@@ -166,11 +164,8 @@ namespace SpawnDev.BlazorJS.IJSObjects
         double Sqrt(double x);
         double Tan(double x);
     }
-    interface Date
+    public partial interface Date
     {
-        string ToLocaleString(object? locales, object? options);
-        string ToLocaleDateString(object? locales, object? options);
-        string ToLocaleTimeString(object? locales, object? options);
         string ToString();
         string ToDateString();
         string ToTimeString();
@@ -215,75 +210,75 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToISOString();
         string ToJSON(object? key);
     }
-    interface DateConstructor
+    public partial interface DateConstructor
     {
         double Parse(string s);
         double UTC(double year, double monthIndex, object? date, object? hours, object? minutes, object? seconds, object? ms);
         double Now();
     }
-    interface RegExpMatchArray
+    public partial interface RegExpMatchArray<T> : SpawnDev.BlazorJS.IJSObjects.Array<T>
     {
     }
-    interface RegExpExecArray
+    public partial interface RegExpExecArray<T> : SpawnDev.BlazorJS.IJSObjects.Array<T>
     {
     }
-    interface RegExp
+    public partial interface RegExp
     {
         object Exec(string str);
         bool Test(string str);
         object Compile(string pattern, object? flags);
     }
-    interface RegExpConstructor
+    public partial interface RegExpConstructor
     {
     }
-    interface Error
+    public partial interface Error
     {
     }
-    interface ErrorConstructor
+    public partial interface ErrorConstructor
     {
     }
-    interface EvalError
+    public partial interface EvalError : Error
     {
     }
-    interface EvalErrorConstructor
+    public partial interface EvalErrorConstructor : ErrorConstructor
     {
     }
-    interface RangeError
+    public partial interface RangeError : Error
     {
     }
-    interface RangeErrorConstructor
+    public partial interface RangeErrorConstructor : ErrorConstructor
     {
     }
-    interface ReferenceError
+    public partial interface ReferenceError : Error
     {
     }
-    interface ReferenceErrorConstructor
+    public partial interface ReferenceErrorConstructor : ErrorConstructor
     {
     }
-    interface SyntaxError
+    public partial interface SyntaxError : Error
     {
     }
-    interface SyntaxErrorConstructor
+    public partial interface SyntaxErrorConstructor : ErrorConstructor
     {
     }
-    interface TypeError
+    public partial interface TypeError : Error
     {
     }
-    interface TypeErrorConstructor
+    public partial interface TypeErrorConstructor : ErrorConstructor
     {
     }
-    interface URIError
+    public partial interface URIError : Error
     {
     }
-    interface URIErrorConstructor
+    public partial interface URIErrorConstructor : ErrorConstructor
     {
     }
-    interface JSON
+    public partial interface JSON
     {
         object Parse(string text, object? reviver);
         string Stringify(object value, object? replacer, object? space);
     }
-    interface ReadonlyArray<T>
+    public partial interface ReadonlyArray<T>
     {
         string ToString();
         string ToLocaleString();
@@ -294,12 +289,12 @@ namespace SpawnDev.BlazorJS.IJSObjects
         double LastIndexOf(T searchElement, object? fromIndex);
         object Every<S>(Func<object> predicate, object? thisArg);
     }
-    interface ConcatArray<T>
+    public partial interface ConcatArray<T>
     {
         string Join(object? separator);
         T[] Slice(object? start, object? end);
     }
-    interface Array<T>
+    public partial interface Array<T>
     {
         string ToString();
         string ToLocaleString();
@@ -330,43 +325,43 @@ namespace SpawnDev.BlazorJS.IJSObjects
         T ReduceRight(Func<T> callbackfn, T initialValue);
         U ReduceRight<U>(Func<U> callbackfn, U initialValue);
     }
-    interface ArrayConstructor
+    public partial interface ArrayConstructor
     {
         object IsArray(object arg);
     }
-    interface TypedPropertyDescriptor<T>
+    public partial interface TypedPropertyDescriptor<T>
     {
     }
-    interface PromiseLike<T>
+    public partial interface PromiseLike<T>
     {
         TResult1 Then<TResult1, TResult2>(object? onfulfilled, object? onrejected);
     }
-    interface Promise<T>
+    public partial interface Promise<T>
     {
         TResult1 Then<TResult1, TResult2>(object? onfulfilled, object? onrejected);
         TResult Catch<TResult>(object? onrejected);
     }
-    interface ArrayLike<T>
+    public partial interface ArrayLike<T>
     {
     }
-    interface ThisType<T>
+    public partial interface ThisType<T>
     {
     }
-    interface ArrayBuffer
+    public partial interface ArrayBuffer
     {
         ArrayBuffer Slice(double begin, object? end);
     }
-    interface ArrayBufferTypes
+    public partial interface ArrayBufferTypes
     {
     }
-    interface ArrayBufferConstructor
+    public partial interface ArrayBufferConstructor
     {
         object IsView(object arg);
     }
-    interface ArrayBufferView
+    public partial interface ArrayBufferView
     {
     }
-    interface DataView
+    public partial interface DataView
     {
         double GetFloat32(double byteOffset, object? littleEndian);
         double GetFloat64(double byteOffset, object? littleEndian);
@@ -385,10 +380,10 @@ namespace SpawnDev.BlazorJS.IJSObjects
         void SetUint16(double byteOffset, double value, object? littleEndian);
         void SetUint32(double byteOffset, double value, object? littleEndian);
     }
-    interface DataViewConstructor
+    public partial interface DataViewConstructor
     {
     }
-    interface Int8Array
+    public partial interface Int8Array
     {
         object CopyWithin(double target, double start, object? end);
         bool Every(Func<object> predicate, object? thisArg);
@@ -417,13 +412,13 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToString();
         Int8Array ValueOf();
     }
-    interface Int8ArrayConstructor
+    public partial interface Int8ArrayConstructor
     {
         Int8Array Of(params object[] items);
         Int8Array From(ArrayLike<double> arrayLike);
         T From<T>(ArrayLike<T> arrayLike, Func<double> mapfn, object? thisArg);
     }
-    interface Uint8Array
+    public partial interface Uint8Array
     {
         object CopyWithin(double target, double start, object? end);
         bool Every(Func<object> predicate, object? thisArg);
@@ -452,13 +447,13 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToString();
         Uint8Array ValueOf();
     }
-    interface Uint8ArrayConstructor
+    public partial interface Uint8ArrayConstructor
     {
         Uint8Array Of(params object[] items);
         Uint8Array From(ArrayLike<double> arrayLike);
         T From<T>(ArrayLike<T> arrayLike, Func<double> mapfn, object? thisArg);
     }
-    interface Uint8ClampedArray
+    public partial interface Uint8ClampedArray
     {
         object CopyWithin(double target, double start, object? end);
         bool Every(Func<object> predicate, object? thisArg);
@@ -487,13 +482,13 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToString();
         Uint8ClampedArray ValueOf();
     }
-    interface Uint8ClampedArrayConstructor
+    public partial interface Uint8ClampedArrayConstructor
     {
         Uint8ClampedArray Of(params object[] items);
         Uint8ClampedArray From(ArrayLike<double> arrayLike);
         T From<T>(ArrayLike<T> arrayLike, Func<double> mapfn, object? thisArg);
     }
-    interface Int16Array
+    public partial interface Int16Array
     {
         object CopyWithin(double target, double start, object? end);
         bool Every(Func<object> predicate, object? thisArg);
@@ -522,13 +517,13 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToString();
         Int16Array ValueOf();
     }
-    interface Int16ArrayConstructor
+    public partial interface Int16ArrayConstructor
     {
         Int16Array Of(params object[] items);
         Int16Array From(ArrayLike<double> arrayLike);
         T From<T>(ArrayLike<T> arrayLike, Func<double> mapfn, object? thisArg);
     }
-    interface Uint16Array
+    public partial interface Uint16Array
     {
         object CopyWithin(double target, double start, object? end);
         bool Every(Func<object> predicate, object? thisArg);
@@ -557,13 +552,13 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToString();
         Uint16Array ValueOf();
     }
-    interface Uint16ArrayConstructor
+    public partial interface Uint16ArrayConstructor
     {
         Uint16Array Of(params object[] items);
         Uint16Array From(ArrayLike<double> arrayLike);
         T From<T>(ArrayLike<T> arrayLike, Func<double> mapfn, object? thisArg);
     }
-    interface Int32Array
+    public partial interface Int32Array
     {
         object CopyWithin(double target, double start, object? end);
         bool Every(Func<object> predicate, object? thisArg);
@@ -592,13 +587,13 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToString();
         Int32Array ValueOf();
     }
-    interface Int32ArrayConstructor
+    public partial interface Int32ArrayConstructor
     {
         Int32Array Of(params object[] items);
         Int32Array From(ArrayLike<double> arrayLike);
         T From<T>(ArrayLike<T> arrayLike, Func<double> mapfn, object? thisArg);
     }
-    interface Uint32Array
+    public partial interface Uint32Array
     {
         object CopyWithin(double target, double start, object? end);
         bool Every(Func<object> predicate, object? thisArg);
@@ -627,13 +622,13 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToString();
         Uint32Array ValueOf();
     }
-    interface Uint32ArrayConstructor
+    public partial interface Uint32ArrayConstructor
     {
         Uint32Array Of(params object[] items);
         Uint32Array From(ArrayLike<double> arrayLike);
         T From<T>(ArrayLike<T> arrayLike, Func<double> mapfn, object? thisArg);
     }
-    interface Float32Array
+    public partial interface Float32Array
     {
         object CopyWithin(double target, double start, object? end);
         bool Every(Func<object> predicate, object? thisArg);
@@ -662,13 +657,13 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToString();
         Float32Array ValueOf();
     }
-    interface Float32ArrayConstructor
+    public partial interface Float32ArrayConstructor
     {
         Float32Array Of(params object[] items);
         Float32Array From(ArrayLike<double> arrayLike);
         T From<T>(ArrayLike<T> arrayLike, Func<double> mapfn, object? thisArg);
     }
-    interface Float64Array
+    public partial interface Float64Array
     {
         object CopyWithin(double target, double start, object? end);
         bool Every(Func<object> predicate, object? thisArg);
@@ -696,10 +691,25 @@ namespace SpawnDev.BlazorJS.IJSObjects
         string ToString();
         Float64Array ValueOf();
     }
-    interface Float64ArrayConstructor
+    public partial interface Float64ArrayConstructor
     {
         Float64Array Of(params object[] items);
         Float64Array From(ArrayLike<double> arrayLike);
         T From<T>(ArrayLike<T> arrayLike, Func<double> mapfn, object? thisArg);
     }
+    public partial interface String
+    {
+        double LocaleCompare(string that, object? locales, object? options);
+    }
+    public partial interface Number
+    {
+        string ToLocaleString(object? locales, object? options);
+    }
+    public partial interface Date
+    {
+        string ToLocaleString(object? locales, object? options);
+        string ToLocaleDateString(object? locales, object? options);
+        string ToLocaleTimeString(object? locales, object? options);
+    }
+
 }

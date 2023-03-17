@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         }
         public T? GetSrcObject<T>() => JSRef.Get<T>("srcObject");
 
-        public async Task Play() => await JSRef.CallVoidAsync("play");
+        public Task Play() => JSRef.CallVoidAsync("play");
         public void Pause() => JSRef.CallVoid("pause");
     }
 }

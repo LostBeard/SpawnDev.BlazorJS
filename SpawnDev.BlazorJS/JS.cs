@@ -20,7 +20,6 @@ namespace SpawnDev.BlazorJS {
         public static bool IsDedicatedWorkerGlobalScope => GlobalThis is DedicatedWorkerGlobalScope;
         public static bool IsSharedWorkerGlobalScope => GlobalThis is SharedWorkerGlobalScope;
         public static bool IsServiceWorkerGlobalScope => GlobalThis is ServiceWorkerGlobalScope;
-
         internal static JsonSerializerOptions? RuntimeJsonSerializerOptions { get; private set; }
 
         static JS() {
@@ -59,8 +58,7 @@ namespace SpawnDev.BlazorJS {
             var options = prop.GetValue(_js, null);
             if (options != null) {
                 RuntimeJsonSerializerOptions = (JsonSerializerOptions)Convert.ChangeType(options, typeof(JsonSerializerOptions));
-                // modify
-                // below line makes sure IJSObjects are properly serialized
+                // below lines make sure BlazorJS objects are properly serialized
                 RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new JSObjectArrayConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectConverterFactory());

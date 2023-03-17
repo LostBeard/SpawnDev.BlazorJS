@@ -8,15 +8,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public bool IsOpen { get { return JSRef != null; } }
         public string Name { get; private set; } = "";
 
-        public static async Task<CacheStorage> OpenCache(string name) {
-            var ret = await JS.CallAsync<CacheStorage>("caches.open", name);
-            return ret;
-        }
+        public static Task<CacheStorage> OpenCache(string name) => JS.CallAsync<CacheStorage>("caches.open", name);
 
-        public static async Task<List<string>> CacheNames() {
-            var ret = await JS.CallAsync<List<string>>("caches.keys");
-            return ret;
-        }
+        public static Task<List<string>> CacheNames() => JS.CallAsync<List<string>>("caches.keys");
 
         public async Task<List<string>> CacheKeys() {
             var ret = new List<string>();
@@ -58,20 +52,14 @@ namespace SpawnDev.BlazorJS.JSObjects {
             }, callbackGroup));
         }
 
-        public async Task<bool> Has(string path) {
-            return await JSRef.InvokeAsync<bool>("has", path);
-        }
+        public Task<bool> Has(string url) => JSRef.CallAsync<bool>("has", url);
 
-        public void Put(string path, Response response) {
-            JSRef.InvokeVoid("put", path, response);
-        }
+        public void Put(string url, Response response) => JSRef.CallVoid("put", url, response);
 
-        public void Delete(string path) {
-            JSRef.InvokeVoid("delete", path);
-        }
+        public void Delete(string url) => JSRef.CallVoid("delete", url);
 
-        public async Task AddAll(IEnumerable<string> urls) {
+        //public async Task AddAll(IEnumerable<string> urls) {
 
-        }
+        //}
     }
 }

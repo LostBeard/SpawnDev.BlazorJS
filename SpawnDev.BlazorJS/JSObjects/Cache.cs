@@ -9,15 +9,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public bool IsOpen { get { return JSRef != null; } }
         public string Name { get; private set; } = "";
 
-        public static async Task<Cache> OpenCache(string name) {
-            var ret = await JS.CallAsync<Cache>("caches.open", name);
-            return ret;
-        }
+        public static Task<Cache> OpenCache(string name) => JS.CallAsync<Cache>("caches.open", name);
 
-        public static async Task<List<string>> CacheNames() {
-            var ret = await JS.CallAsync<List<string>>("caches.keys");
-            return ret;
-        }
+        public static Task<List<string>> CacheNames() => JS.CallAsync<List<string>>("caches.keys");
 
         public async Task<List<string>> CacheKeys() {
             var ret = new List<string>();
@@ -31,6 +25,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
             return ret;
         }
 
+        // TODO - update
         public Task<Response> Match(string url) {
             var t = new TaskCompletionSource<Response>();
             Match(url, (r) => t.TrySetResult(r));
@@ -38,7 +33,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         }
 
         // use callbacks and promise syntax to avoid inability to catch DotNet exception when Match returns an undefined value to the promise then callback
-        // retest - not tested since Blazor DotNet 3
+        // retest - not tested since Blazor DotNet 3 !!!!!!
         public void Match(string url, Action<Response> callback) {
             var callbackGroup = new CallbackGroup();
             var promise = JSRef.Call<IJSInProcessObjectReference>("match", url);
@@ -59,20 +54,14 @@ namespace SpawnDev.BlazorJS.JSObjects {
             }, callbackGroup));
         }
 
-        public async Task<bool> Has(string url) {
-            return await JSRef.InvokeAsync<bool>("has", url);
-        }
+        public Task<bool> Has(string url) => JSRef.CallAsync<bool>("has", url);
 
-        public void Put(string url, Response response) {
-            JSRef.InvokeVoid("put", url, response);
-        }
+        public void Put(string url, Response response) => JSRef.CallVoid("put", url, response);
 
-        public void Delete(string url) {
-            JSRef.InvokeVoid("delete", url);
-        }
+        public void Delete(string url) => JSRef.CallVoid("delete", url);
 
-        public async Task AddAll(IEnumerable<string> urls) {
+        //public async Task AddAll(IEnumerable<string> urls) {
 
-        }
+        //}
     }
 }

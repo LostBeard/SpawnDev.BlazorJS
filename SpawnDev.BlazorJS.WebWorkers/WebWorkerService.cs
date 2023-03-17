@@ -5,7 +5,8 @@ using System.Web;
 
 namespace SpawnDev.BlazorJS.WebWorkers {
     // chrome://inspect/#workers
-    public class WebWorkerService {
+    public class WebWorkerService : IDisposable
+    {
         public static bool SharedWebWorkerSupported { get; private set; }
         public static bool WebWorkerSupported { get; private set; }
         public List<WebWorker> Workers { get; } = new List<WebWorker>();
@@ -34,10 +35,8 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             MaxWorkerCount = hardwareConcurrency == null || hardwareConcurrency.Value == 0 ? 0 : hardwareConcurrency.Value;
         }
 
-        // TODO -didpose
         CallbackGroup _callbackGroup = new CallbackGroup();
 
-        // TODO -didpose
         //BroadcastChannel _eventChannel = new BroadcastChannel(nameof(WebWorkerService));
 
         string InstanceId = Guid.NewGuid().ToString();
@@ -211,6 +210,11 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             var webWorker = new SharedWebWorker(sharedWorkerName, worker, _serviceProvider);
             if (awaitWhenReady) await webWorker.WhenReady;
             return webWorker;
+        }
+
+        public void Dispose()
+        {
+            _callbackGroup.Dispose();
         }
     }
 }
