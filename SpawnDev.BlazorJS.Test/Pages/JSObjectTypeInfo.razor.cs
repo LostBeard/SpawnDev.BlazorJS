@@ -32,6 +32,24 @@ namespace SpawnDev.BlazorJS.Test.Pages
             }
             return type.Name;
         }
+        public static string GetFormattedName(this MethodInfo mi)
+        {
+            try
+            {
+                if (mi.IsGenericMethod)
+                {
+                    var name = mi.Name;
+                    var generics = mi.GetGenericArguments();
+                    string genericArguments = generics.Select(x => x.GetFormattedName()).Aggregate((x1, x2) => $"{x1}, {x2}");
+                    return $"{name}<{genericArguments}>";
+                }
+            }
+            catch (Exception ex)
+            {
+                var nmt = true;
+            }
+            return mi.Name;
+        }
 
         public static List<Type> GetBaseTypes(this Type type)
         {

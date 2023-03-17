@@ -13,7 +13,7 @@ namespace SpawnDev.BlazorJS {
         public bool IsWrapperDisposed { get; private set; } = false;
         public JSObject(IJSInProcessObjectReference _ref) => FromReference(_ref);
 
-        // TODO - deprecate?
+        // some constructors of types that inherit from JSObjet will pass NullRef to the base constructor and then create the JSRef instance in their constructor and then set it with FromReference
         protected virtual void FromReference(IJSInProcessObjectReference _ref) {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
             if (JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
@@ -68,8 +68,8 @@ namespace SpawnDev.BlazorJS {
         ~JSObject() {
             if (UndisposedHandleVerboseMode) {
                 var thisType = this.GetType();
-                var refDispsoed = JSRef == null;
-                if (!refDispsoed) {
+                var refDisposed = JSRef == null;
+                if (!refDisposed) {
                     Console.WriteLine($"DEBUG WARNING: JSObject JSDebugName[{JSDebugName}] was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
                 }
             }

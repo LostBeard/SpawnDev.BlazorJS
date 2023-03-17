@@ -142,13 +142,13 @@ html, body, .container {
 pre {
     background-color: var(--rz-text-tertiary-color);
     padding: 1rem;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     color: var(--rz-body-background-color);
     font-size: 1rem;
 }
 table {
     background-color: var(--rz-text-tertiary-color);
-    border-radius: 1rem;
+    border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
     color: var(--rz-body-background-color);
     font-size: 1rem;
 }
