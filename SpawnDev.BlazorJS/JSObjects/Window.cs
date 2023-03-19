@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public WebStorage SessionStorage => JSRef.Get<WebStorage>("sessionStorage");
         public WebStorage LocalStorage => JSRef.Get<WebStorage>("localStorage");
         public Navigator Navigator => JSRef.Get<Navigator>("navigator");
+        public Document Document => JSRef.Get<Document>("document");
         public Screen Screen => JSRef.Get<Screen>("screen");
         public void Alert(string msg = "") => JSRef.CallVoid("alert", msg);
         public long SetTimeout(Callback callback, double delay) => JSRef.Call<long>("setTimeout", callback, delay);

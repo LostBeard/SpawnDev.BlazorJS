@@ -96,18 +96,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
             }
         }
 
-        //public List<MediaStreamVideoTrackSettings> GetVideoTrackSettings()
-        //{
-        //    var ret = new List<MediaStreamVideoTrackSettings>();
-        //    var tracks = GetVideoTracks();
-        //    foreach (var t in tracks)
-        //    {
-        //        ret.Add((MediaStreamVideoTrackSettings)t.GetSettings());
-        //        t.Dispose();
-        //    }
-        //    return ret;
-        //}
-
         public void RemoveAllTracks(bool stopTracks = true) {
             var tracks = GetTracks();
             foreach (var t in tracks) {

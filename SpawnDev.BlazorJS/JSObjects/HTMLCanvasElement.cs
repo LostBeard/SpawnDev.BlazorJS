@@ -37,8 +37,10 @@ namespace SpawnDev.BlazorJS.JSObjects {
 
 
     public class HTMLCanvasElement : HTMLElement {
-        public int Width { get { var tmp = JSRef.Get<int?>("width"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("width", value); } }
-        public int Height { get { var tmp = JSRef.Get<int?>("height"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef.Set("height", value); } }
+        public int Width { get => JSRef.Get<int?>("width") ?? 0; set => JSRef.Set("width", value); }
+        public int Height { get => JSRef.Get<int?>("height") ?? 0; set => JSRef.Set("height", value); } 
+        public int ClientWidth => JSRef.Get<int?>("clientWidth") ?? 0;
+        public int ClientHeight => JSRef.Get<int?>("clientHeight") ?? 0;
         //public int OffsetWidth => JSRef.Get<int>("offsetWidth");
         //public int OffsetHeight => JSRef.Get<int>("offsetHeight");
 

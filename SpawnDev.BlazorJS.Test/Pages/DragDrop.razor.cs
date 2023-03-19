@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SpawnDev.BlazorJS.JSObjects;
-using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.Test.Pages
 {
@@ -36,6 +35,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
                 source.AddEventListener("dragover", Callback.Create<DragEvent>(OnDragOver, _callbacks));
                 source.AddEventListener("dragstart", Callback.Create<DragEvent>(OnDragStart, _callbacks));
                 source.AddEventListener("drop", Callback.Create<DragEvent>(OnDrop, _callbacks));
+                StateHasChanged();
             }
         }
 

@@ -22,5 +22,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public string ClassName { get => JSRef.Get<string>("className"); set => JSRef.Set("className", value); }
         public string[] ClassNames => ClassName.Split(' ').ToArray();
         public string? GetAttribute(string name) => JSRef.Call<string?>("getAttribute", name);
+        public void RemoveAttribute(string name) => JSRef.CallVoid("removeAttribute", name);
+        public void SetAttribute(string name, string value) => JSRef.CallVoid("setAttribute", name, value);
     }
 }

@@ -119,7 +119,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public void GenerateMipmap(int target) => JSRef.CallVoid("generateMipmap", target);
         public WebGLActiveInfo GetActiveAttrib(WebGLProgram program, uint index) => JSRef.Call<WebGLActiveInfo>("getActiveAttrib", program, index);
         public WebGLActiveInfo GetActiveUniform(WebGLProgram program, uint index) => JSRef.Call<WebGLActiveInfo>("getActiveUniform", program, index);
-        public List<WebGLShader> GetAttachedShaders(WebGLProgram program) => JSRef.Call<List<WebGLShader>>("getAttachedShaders", program);
+        public WebGLShader[] GetAttachedShaders(WebGLProgram program) => JSRef.Call<WebGLShader[]>("getAttachedShaders", program);
         public int GetAttribLocation(WebGLProgram program, string name) => JSRef.Call<int>("getAttribLocation", program, name);
         public T GetBufferParameter<T>(int target, int pname) => JSRef.Call<T>("getBufferParameter", target, pname);
         public int GetError() => JSRef.Call<int>("getError");

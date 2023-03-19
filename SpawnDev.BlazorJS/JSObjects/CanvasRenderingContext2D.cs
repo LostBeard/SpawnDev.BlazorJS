@@ -1,16 +1,20 @@
 ﻿using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
+namespace SpawnDev.BlazorJS.JSObjects
+{
     // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
-    public class CanvasRenderingContext2D : JSObject {
-        public bool ImageSmoothingEnabled {
+    public class CanvasRenderingContext2D : JSObject
+    {
+        public bool ImageSmoothingEnabled
+        {
             get => JSRef.Get<bool>("imageSmoothingEnabled");
             set => JSRef.Set("imageSmoothingEnabled", value);
         }
         public CanvasRenderingContext2D(IJSInProcessObjectReference _ref) : base(_ref) { }
         public HTMLCanvasElement Canvas => JSRef.Get<HTMLCanvasElement>("canvas");
         //public ImageData GetImageData() => _ref.Call<ImageData>("getImageData");
-        public ImageData? GetImageData() {
+        public ImageData? GetImageData()
+        {
             using var canvas = Canvas;
             return GetImageData(0, 0, canvas.Width, canvas.Height);
         }
@@ -18,27 +22,36 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public void PutImageData(ImageData imageData, int dx, int dy) => JSRef.CallVoid("putImageData", imageData, dx, dy);
         public void PutImageData(ImageData imageData, int dx, int dy, int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight) => JSRef.CallVoid("putImageData", imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
 
-        public byte[]? GetImageBytes() {
+        public string Font { get => JSRef.Get<string>("font"); set => JSRef.Set("font", value); }
+
+        public TextMetrics MeasureText(string text) => JSRef.Call<TextMetrics>("measureText", text);
+
+        public byte[]? GetImageBytes()
+        {
             using var canvas = Canvas;
             return GetImageBytes(0, 0, canvas.Width, canvas.Height);
         }
 
-        public byte[]? GetImageBytes(int x, int y, int width, int height) {
+        public byte[]? GetImageBytes(int x, int y, int width, int height)
+        {
             byte[]? ret = null;
             using ImageData? frameData = GetImageData(x, y, width, height);
-            if (frameData != null) {
+            if (frameData != null)
+            {
                 using var frameDataData = frameData.Data;
                 ret = frameDataData.ReadBytes();
             }
             return ret;
         }
 
-        public void PutImageBytes(byte[] srcBytes, int srcWidth, int srcHeight, int dx = 0, int dy = 0) {
+        public void PutImageBytes(byte[] srcBytes, int srcWidth, int srcHeight, int dx = 0, int dy = 0)
+        {
             using var imageData = ImageData.FromBytes(srcBytes, srcWidth, srcHeight);
             PutImageData(imageData, dx, dy);
         }
 
-        public void PutImageBytes(byte[] imageBytes, int srcWidth, int srcHeight, int dx, int dy, int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight) {
+        public void PutImageBytes(byte[] imageBytes, int srcWidth, int srcHeight, int dx, int dy, int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight)
+        {
             using var imageData = ImageData.FromBytes(imageBytes, srcWidth, srcHeight);
             PutImageData(imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
         }
