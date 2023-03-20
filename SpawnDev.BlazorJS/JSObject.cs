@@ -1,24 +1,44 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS {
     //
+    public class JSInProcessObjectReferenceUndefined : IJSInProcessObjectReference
+    {
+        [JsonPropertyName("__undefinedref__")]
+        public bool UndefinedTag { get; } = true;
+        public void Dispose() { }
+        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+        public TValue Invoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] TValue>(string identifier, params object?[]? args) => throw new NotImplementedException();
+        public ValueTask<TValue> InvokeAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] TValue>(string identifier, object?[]? args) => throw new NotImplementedException();
+        public ValueTask<TValue> InvokeAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] TValue>(string identifier, CancellationToken cancellationToken, object?[]? args) => throw new NotImplementedException();
+    }
     public class JSObject : IDisposable {
         public static IJSInProcessObjectReference? NullRef { get; } = null;
+        internal static IJSInProcessObjectReference? UndefinedRef { get; } = new JSInProcessObjectReferenceUndefined();
         [JsonIgnore]
         public IJSInProcessObjectReference? JSRef { get; private set; }
         [JsonIgnore]
         public bool IsWrapperDisposed { get; private set; } = false;
         public JSObject(IJSInProcessObjectReference _ref) => FromReference(_ref);
 
+        [JsonIgnore]
+        public bool IsJSRefUndefined { get; private set; } = false;
+
         // some constructors of types that inherit from JSObjet will pass NullRef to the base constructor and then create the JSRef instance in their constructor and then set it with FromReference
         protected virtual void FromReference(IJSInProcessObjectReference _ref) {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
             if (JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
+            IsJSRefUndefined = typeof(JSInProcessObjectReferenceUndefined).IsAssignableFrom(_ref.GetType());
             JSRef = _ref;
         }
+
+        public static T Undefined<T>() where T : JSObject => (T)Activator.CreateInstance(typeof(T), JSObject.UndefinedRef);
+        public static JSObject Undefined() => (JSObject)Activator.CreateInstance(typeof(JSObject), JSObject.UndefinedRef);
+
         protected virtual void LosingReference() {
 
         }
@@ -27,6 +47,7 @@ namespace SpawnDev.BlazorJS {
             if (JSRef != null) LosingReference();
             JSRef?.Dispose();
             JSRef = null;
+            IsJSRefUndefined = false;
             FromReference(_ref);
         }
 
@@ -47,6 +68,7 @@ namespace SpawnDev.BlazorJS {
         public void DisposeExceptRef() {
             if (JSRef != null) LosingReference();
             JSRef = null;
+            IsJSRefUndefined = false;
             Dispose();
         }
         protected virtual void Dispose(bool disposing) {
@@ -58,6 +80,7 @@ namespace SpawnDev.BlazorJS {
             }
             JSRef?.Dispose();
             JSRef = null;
+            IsJSRefUndefined = false;
         }
         public virtual void Dispose() {
             if (IsWrapperDisposed) return;
@@ -75,6 +98,8 @@ namespace SpawnDev.BlazorJS {
             }
             Dispose(false);
         }
+
+        internal bool SerializeToUndefined { get; set; }
 
         protected static void DisposeAndNull(ref IDisposable? disposable) {
             disposable?.Dispose();

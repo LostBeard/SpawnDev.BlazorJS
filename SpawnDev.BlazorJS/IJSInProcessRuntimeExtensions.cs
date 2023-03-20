@@ -7,18 +7,15 @@ namespace SpawnDev.BlazorJS {
         public static T? Get<T>(this IJSInProcessRuntime _js, string identifier) => JS.Get<T>(identifier);
         public static object? Get(this IJSInProcessRuntime _js, Type returnType, string identifier) => JS.Get(returnType, identifier);
         public static Task<T> GetAsync<T>(this IJSInProcessRuntime _js, string identifier) => JS.GetAsync<T>(identifier);
-        //public static object? GetAsync(this IJSInProcessRuntime _js, Type returnType, string identifier) => JS.GetAsync(returnType, identifier);
-
         public static T CallApply<T>(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApply<T>(identifier, args);
         public static object? CallApply(this IJSInProcessRuntime _js, Type returnType, string identifier, object?[]? args = null) => JS.CallApply(returnType, identifier, args);
         public static void CallApplyVoid(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApplyVoid(identifier, args);
         public static Task<T> CallApplyAsync<T>(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApplyAsync<T>(identifier, args);
-        //public static ValueTask<object?> CallApplyAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, object?[]? args = null) => JS.CallApplyAsync(returnType, identifier, args);
         public static Task CallApplyVoidAsync(this IJSInProcessRuntime _js, string identifier, object?[]? args = null) => JS.CallApplyVoidAsync(identifier, args);
 
         // call with up to 10 arguments
-        // used instead of "params" becuase params has an issue that will never be fixed that can cause unexpected behavior
-        // (Example: if a single argument of an string[] is passed, the params variable will be an array of string instead of a 2 dimensiaonal array with the first item being the array of strings passed) 
+        // used instead of "params" because params has an issue that will never be fixed that can cause unexpected behavior
+        // (Example: if a single argument of string[] is passed, the params variable will be an array of string instead of a 2 dimensiaonal array with the first item being the array of strings passed) 
         public static T Call<T>(this IJSInProcessRuntime _js, string identifier) => JS.CallApply<T>(identifier);
         public static T Call<T>(this IJSInProcessRuntime _js, string identifier, object? arg0) => JS.CallApply<T>(identifier, new object?[] { arg0 });
         public static T Call<T>(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1) => JS.CallApply<T>(identifier, new object?[] { arg0, arg1 });
@@ -91,9 +88,6 @@ namespace SpawnDev.BlazorJS {
         //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => JS.CallApplyVoidAsync(identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
 
-
-
-
         //public static async ValueTask<object?> InvokeAsync(this IJSInProcessRuntime _js, Type returnType, string identifier, params object[] args)
         //{
         //    // TODO - get repalce dynamic usage with other (like is WebWorkers ServiceCallDispatcher)
@@ -103,11 +97,7 @@ namespace SpawnDev.BlazorJS {
         //    return (object?)task.GetAwaiter().GetResult();
         //}
         public static object? Invoke(this IJSInProcessRuntime _js, Type returnType, string identifier, params object[] args) => GetJSRuntimeInvoke(returnType).Invoke(_js, new object[] { identifier, args });
-        //public static ValueTask<T> CallAsync<T>(this IJSInProcessRuntime _js, string identifier, params object[] args) => _js.InvokeAsync<T>(identifier, args);
-        //public static ValueTask CallVoidAsync(this IJSInProcessRuntime _js, string identifier, params object[] args) => _js.InvokeVoidAsync(identifier, args);
-        // Method info calls
-        //private static Type AsyncStateMachineAttributeType = typeof(AsyncStateMachineAttribute);
-        //private static bool IsAsyncMethod(MethodInfo method) => method.GetCustomAttribute(AsyncStateMachineAttributeType) != null;
+
         private static MethodInfo? GetBestInstanceMethod(Type classType, string identifier, Type[]? paramTypes = null, int genericsCount = 0, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance) {
             MethodInfo? best = null;
             //var bestIsAsync = false;
@@ -130,7 +120,6 @@ namespace SpawnDev.BlazorJS {
                     return true;
                 };
                 foreach (var method in instanceMethods) {
-                    //var methodIsAsync = IsAsyncMethod(method);
                     Type[] mParams = method.GetParameters().Select(x => x.ParameterType).ToArray();
                     if (isAssignableFrom(mParams, paramTypes)) {
                         if (best == null || isAssignableFrom(bestParams, mParams)) {
@@ -144,14 +133,8 @@ namespace SpawnDev.BlazorJS {
             return best;
         }
         // JSInProcessRuntime
-        private static System.Lazy<MethodInfo> IJSInProcessRuntime_Invoke = new System.Lazy<MethodInfo>(() => GetBestInstanceMethod(typeof(JSInProcessRuntime), "Invoke", new Type[] { typeof(string), typeof(object[]) }, 1));
-        private static System.Lazy<MethodInfo> IJSInProcessRuntime_InvokeAsync = new System.Lazy<MethodInfo>(() => GetBestInstanceMethod(typeof(JSInProcessRuntime), "InvokeAsync", new Type[] { typeof(string), typeof(object[]) }, 1));
-        private static Dictionary<Type, MethodInfo> GenericInvokeAsyncMethods { get; } = new Dictionary<Type, MethodInfo>();
+        private static Lazy<MethodInfo> IJSInProcessRuntime_Invoke = new Lazy<MethodInfo>(() => GetBestInstanceMethod(typeof(JSInProcessRuntime), "Invoke", new Type[] { typeof(string), typeof(object[]) }, 1));
         private static Dictionary<Type, MethodInfo> GenericInvokeMethods { get; } = new Dictionary<Type, MethodInfo>();
-        private static MethodInfo GetJSRuntimeInvokeAsync(Type type) {
-            if (GenericInvokeAsyncMethods.TryGetValue(type, out MethodInfo generic)) return generic;
-            return GenericInvokeAsyncMethods[type] = IJSInProcessRuntime_InvokeAsync.Value.MakeGenericMethod(type);
-        }
         private static MethodInfo GetJSRuntimeInvoke(Type type) {
             if (GenericInvokeMethods.TryGetValue(type, out MethodInfo generic)) return generic;
             return GenericInvokeMethods[type] = IJSInProcessRuntime_Invoke.Value.MakeGenericMethod(type);

@@ -215,6 +215,10 @@ var initFunc = function () {
         if (callbacks[callbackerID]) delete callbacks[callbackerID];
     };
     DotNet.attachReviver(function (key, value) {
+        if (value && typeof value === 'object' && value.hasOwnProperty("__undefinedref__")) {
+            return;
+        }
+        else 
         if (value && typeof value === 'object' && typeof value.__wrappedFunction === 'function') {
             return value.__wrappedFunction;
         }

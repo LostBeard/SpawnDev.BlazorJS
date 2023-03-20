@@ -1,19 +1,11 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.JSInterop;
-using Microsoft.JSInterop.Implementation;
 using Radzen;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.JSObjects;
-using SpawnDev.BlazorJS.JsonConverters;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 if (JS.IsWindow)
@@ -49,7 +41,8 @@ SharedWebWorker? _testSharedWorker = null;
 if (JS.IsWindow)
 {
     // window thread
-    JS.Set("_getSharedTest", Callback.Create(new Action<bool?>(async (verbose) => {
+    JS.Set("_getSharedTest", Callback.Create(new Action<bool?>(async (verbose) =>
+    {
         if (_testSharedWorker == null) _testSharedWorker = await webWorkerService.GetSharedWebWorker("apples", verbose.HasValue && verbose.Value);
     })));
     JS.Set("_getTest", Callback.Create(new Action<bool?>(async (verbose) =>
@@ -86,7 +79,8 @@ else if (JS.IsDedicatedWorkerGlobalScope)
 {
     // this method can be called using the browser debug console from the webworker context to call into the main window
     // this allows debugging the service worker call
-    JS.Set("_getWorker", Callback.Create(new Action<bool?>(async (verbose) => {
+    JS.Set("_getWorker", Callback.Create(new Action<bool?>(async (verbose) =>
+    {
 
         var webWorker = webWorkerService.DedicatedWorkerParent;
         var faceApiServiceWorker = webWorker.GetService<IFaceAPIService>();

@@ -225,6 +225,17 @@ using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj)
 Console.WriteLine($"lock: 2");
 ```
 
+# Undefined
+Some Javascript API calls may have optional parameters that behave differently depending on if you pass a null versus undefined. 
+
+```cs
+var undefinedWindow = JSObject.Undefined<Window>();
+// undefinedWindow is an instance of Window that is revived is javascript as undefined
+JS.Set("_undefinedWindow", undefinedWindow);
+var isUndefined = JS.IsUndefined("_undefinedWindow");
+// isUndefined == true here
+```
+
 # Custom JSObjects  
 Implement your own JSObject classes for Javascript objects not already available in the BlazorJS.JSObjects library.
 

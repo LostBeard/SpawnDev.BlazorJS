@@ -48,10 +48,7 @@ namespace SpawnDev.BlazorJS {
             if (IsDisposed) return;
             IsDisposed = true;
             _callback.Dispose();
-            //if (netObjRef is IDisposable disposable) disposable.Dispose();
-            //netObjRef = null;
             JS.DisposeCallback(_callbackId);
-            //_js.InvokeVoid("JSInterop.DisposeCallbacker", callbackerID);
 #if DEBUG  && false
             Console.WriteLine($"Disposed callbackerID: {callbackerID} {CallbackType.Name}");
 #endif
@@ -282,7 +279,7 @@ namespace SpawnDev.BlazorJS {
     public class CallbackGroup : IDisposable {
         public List<Callback> group = new List<Callback>();
 
-        public Callback Add(Callback wrapper) {
+        public T Add<T>(T wrapper) where T : Callback{
             group.Add(wrapper);
             return wrapper;
         }
