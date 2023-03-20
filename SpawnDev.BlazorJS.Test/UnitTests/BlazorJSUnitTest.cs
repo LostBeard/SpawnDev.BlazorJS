@@ -129,6 +129,25 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
+        public async Task JSObjectPromiseRejectVoid()
+        {
+            var randValue = Guid.NewGuid().ToString();
+            using var promise = new Promise();
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(1);
+                promise.Reject();
+            });
+            try
+            {
+                await promise.ThenAsync();
+                throw new Exception("Promise should have caused an exception");
+            }
+            catch
+            { }
+        }
+
+        [TestMethod]
         public async Task JSObjectPromiseFromTaskVoid()
         {
             var randValue = Guid.NewGuid().ToString();

@@ -88,8 +88,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create((string error) => {
-                if (t.TrySetException(new Exception(error))) {
+            }, callbacks), Callback.Create(() => {
+                if (t.TrySetException(new Exception("Unknown error"))) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
@@ -110,8 +110,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
                 if (t.TrySetResult(result)) {
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create((string error) => {
-                if (t.TrySetException(new Exception(error))) {
+            }, callbacks), Callback.Create(() => {
+                if (t.TrySetException(new Exception("Unknown error"))) {
                     callbacks.Dispose();
                 }
             }, callbacks));
@@ -222,8 +222,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create((string error) => {
-                if (t.TrySetException(new Exception(error))) {
+            }, callbacks), Callback.Create(() => {
+                if (t.TrySetException(new Exception("Unknown error"))) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
@@ -245,8 +245,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
                 if (t.TrySetResult()) {
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create((string error) => {
-                if (t.TrySetException(new Exception(error))) {
+            }, callbacks), Callback.Create(() => {
+                if (t.TrySetException(new Exception("Unknown error"))) {
                     callbacks.Dispose();
                 }
             }, callbacks));
@@ -269,8 +269,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create((string error) => {
-                if (t.TrySetException(new Exception(error))) {
+            }, callbacks), Callback.Create(() => {
+                if (t.TrySetException(new Exception("Unknown error"))) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
@@ -292,8 +292,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
                 if (t.TrySetResult(result)) {
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create((string error) => {
-                if (t.TrySetException(new Exception(error))) {
+            }, callbacks), Callback.Create(() => {
+                if (t.TrySetException(new Exception("Unknown error"))) {
                     callbacks.Dispose();
                 }
             }, callbacks));
