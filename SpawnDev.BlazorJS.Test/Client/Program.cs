@@ -7,6 +7,29 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
 
+
+void MethodWithUndefinableParams(string varName, Undefinable<Window>? window)
+{
+    JS.Set(varName, window);
+}
+
+Window? w = JS.Get<Window>("window");
+// test to show window is passed normally
+MethodWithUndefinableParams("_willBeDefined", w);
+
+w = null;
+// to pass as undefined
+MethodWithUndefinableParams("_willBeUndefined", w);
+
+// if you need to pass null to an Undefinable parameter...
+MethodWithUndefinableParams("_willBeNull", Undefinable<Window>.Null);
+
+//var undefinedWindow = JSObject.Undefined<Window>();
+// undefinedWindow is an instance of Window that is revived is javascript as undefined
+JS.Set("_undefinedWindow", JSObject.UndefinedRef);
+var isUndefined = JS.IsUndefined("_undefinedWindow");
+// isUndefined == true here
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 if (JS.IsWindow)
 {

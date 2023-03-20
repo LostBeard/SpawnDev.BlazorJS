@@ -4,21 +4,12 @@ using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS {
-    //
-    public class JSInProcessObjectReferenceUndefined : IJSInProcessObjectReference
+namespace SpawnDev.BlazorJS
+{
+    public class JSObject : IDisposable
     {
-        [JsonPropertyName("__undefinedref__")]
-        public bool UndefinedTag { get; } = true;
-        public void Dispose() { }
-        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
-        public TValue Invoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] TValue>(string identifier, params object?[]? args) => throw new NotImplementedException();
-        public ValueTask<TValue> InvokeAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] TValue>(string identifier, object?[]? args) => throw new NotImplementedException();
-        public ValueTask<TValue> InvokeAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] TValue>(string identifier, CancellationToken cancellationToken, object?[]? args) => throw new NotImplementedException();
-    }
-    public class JSObject : IDisposable {
         public static IJSInProcessObjectReference? NullRef { get; } = null;
-        internal static IJSInProcessObjectReference? UndefinedRef { get; } = new JSInProcessObjectReferenceUndefined();
+        public static JSInProcessObjectReferenceUndefined? UndefinedRef { get; } = new JSInProcessObjectReferenceUndefined();
         [JsonIgnore]
         public IJSInProcessObjectReference? JSRef { get; private set; }
         [JsonIgnore]
@@ -29,7 +20,8 @@ namespace SpawnDev.BlazorJS {
         public bool IsJSRefUndefined { get; private set; } = false;
 
         // some constructors of types that inherit from JSObjet will pass NullRef to the base constructor and then create the JSRef instance in their constructor and then set it with FromReference
-        protected virtual void FromReference(IJSInProcessObjectReference _ref) {
+        protected virtual void FromReference(IJSInProcessObjectReference _ref)
+        {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
             if (JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
             IsJSRefUndefined = typeof(JSInProcessObjectReferenceUndefined).IsAssignableFrom(_ref.GetType());
@@ -39,10 +31,12 @@ namespace SpawnDev.BlazorJS {
         public static T Undefined<T>() where T : JSObject => (T)Activator.CreateInstance(typeof(T), JSObject.UndefinedRef);
         public static JSObject Undefined() => (JSObject)Activator.CreateInstance(typeof(JSObject), JSObject.UndefinedRef);
 
-        protected virtual void LosingReference() {
+        protected virtual void LosingReference()
+        {
 
         }
-        protected void ReplaceReference(IJSInProcessObjectReference _ref) {
+        protected void ReplaceReference(IJSInProcessObjectReference _ref)
+        {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
             if (JSRef != null) LosingReference();
             JSRef?.Dispose();
@@ -51,13 +45,15 @@ namespace SpawnDev.BlazorJS {
             FromReference(_ref);
         }
 
-        public T JSRefMove<T>() where T : JSObject {
+        public T JSRefMove<T>() where T : JSObject
+        {
             if (JSRef == null) throw new Exception("JSRefMove failed. Reference not set.");
             var _ref = JSRef;
             DisposeExceptRef();
             return (T)Activator.CreateInstance(typeof(T), _ref);
         }
-        public IJSInProcessObjectReference? JSRefMove() {
+        public IJSInProcessObjectReference? JSRefMove()
+        {
             var _ref = JSRef;
             DisposeExceptRef();
             return _ref;
@@ -65,16 +61,19 @@ namespace SpawnDev.BlazorJS {
         public T JSRefCopy<T>() where T : JSObject => JS.ReturnMe<T>(this);
         public IJSInProcessObjectReference JSRefCopy() => JS.ReturnMe<IJSInProcessObjectReference>(this);
 
-        public void DisposeExceptRef() {
+        public void DisposeExceptRef()
+        {
             if (JSRef != null) LosingReference();
             JSRef = null;
             IsJSRefUndefined = false;
             Dispose();
         }
-        protected virtual void Dispose(bool disposing) {
+        protected virtual void Dispose(bool disposing)
+        {
             if (IsWrapperDisposed) return;
             IsWrapperDisposed = true;
-            if (disposing) {
+            if (disposing)
+            {
                 // managed assets
                 if (JSRef != null) LosingReference();
             }
@@ -82,17 +81,21 @@ namespace SpawnDev.BlazorJS {
             JSRef = null;
             IsJSRefUndefined = false;
         }
-        public virtual void Dispose() {
+        public virtual void Dispose()
+        {
             if (IsWrapperDisposed) return;
             Dispose(true);
             GC.SuppressFinalize(this);
         }
         public static bool UndisposedHandleVerboseMode { get; set; } = true;
-        ~JSObject() {
-            if (UndisposedHandleVerboseMode) {
+        ~JSObject()
+        {
+            if (UndisposedHandleVerboseMode)
+            {
                 var thisType = this.GetType();
                 var refDisposed = JSRef == null;
-                if (!refDisposed) {
+                if (!refDisposed)
+                {
                     Console.WriteLine($"DEBUG WARNING: JSObject JSDebugName[{JSDebugName}] was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
                 }
             }
@@ -101,7 +104,8 @@ namespace SpawnDev.BlazorJS {
 
         internal bool SerializeToUndefined { get; set; }
 
-        protected static void DisposeAndNull(ref IDisposable? disposable) {
+        protected static void DisposeAndNull(ref IDisposable? disposable)
+        {
             disposable?.Dispose();
             disposable = null;
         }

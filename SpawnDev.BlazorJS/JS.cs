@@ -59,6 +59,7 @@ namespace SpawnDev.BlazorJS {
             if (options != null) {
                 RuntimeJsonSerializerOptions = (JsonSerializerOptions)Convert.ChangeType(options, typeof(JsonSerializerOptions));
                 // below lines make sure BlazorJS objects are properly serialized
+                RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
                 RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new JSObjectArrayConverterFactory());
@@ -162,7 +163,7 @@ namespace SpawnDev.BlazorJS {
         public static bool IsUndefined(string identifier) => JSInterop.TypeOf(null, identifier) == "undefined";
         public static string TypeOf(JSObject obj, string identifier = "") => JSInterop.TypeOf(obj, identifier);
         public static string TypeOf(string identifier) => JSInterop.TypeOf(null, identifier);
-        public static void Log(params object[] args) => CallApplyVoid("console.log", args);
+        public static void Log(params object?[] args) => CallApplyVoid("console.log", args);
         public static string GetConstructorName(string identifier) => JS.Get<string>($"{identifier}.constructor.name");
 
         static Dictionary<string, Type?> typeCache { get; } = new Dictionary<string, Type?>();

@@ -19,9 +19,9 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 - Get and set global properties via JS.Set and JS.Get
 - Create new Javascript objects with JS.New
 - Get and set object properties via IJSInProcessObjectReference extended methods
-- Easily pass .Net methods to javascript using the Callback.Create or Callback.CreateOne methods
-- Strongly typed javascript object deserialization/serialization with interfaces
-- Strongly typed javascript object deserialization/serialization with the JSObject base class
+- Easily pass .Net methods to Javascript using the Callback.Create or Callback.CreateOne methods
+- Strongly typed Javascript object deserialization/serialization with interfaces
+- Strongly typed Javascript object deserialization/serialization with the JSObject base class
 - Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WEbRTC, DOM, etc...
 - Use SpawnDev.BlazorJS.WebWorkers to enable calling Blazor services in web worker threads
 
@@ -89,7 +89,7 @@ Recvd: Hello callback!
 ```
 
 Pass async method callbacks to Javascript
-Under the hood, BlazorJS is returning a Promise to javascript when the method is called
+Under the hood, BlazorJS is returning a Promise to Javascript when the method is called
 
 ```cs
 async Task<string> SomeNetFnAsync(string input){
@@ -108,18 +108,18 @@ Recvd: Hello callback!
 
 # IJSObject Interface Converter
 
-SpawnDev.BlazorJS now supports serializing and deserializing javascript objects to and from interfaces. Just like objects derived from JSObject, IJSObject objects internally use IJSInProcessObjectReference. The main difference is IJSObjects use DispatchProxy to implement the desired interface at runtime instead of requiring a type that inherits JSObject. Currently SpawnDev.BlazorJS does not provide any interfaces for javascript objects or apis but interfaces are simple to set up.
+SpawnDev.BlazorJS now supports serializing and deserializing Javascript objects to and from interfaces. Just like objects derived from JSObject, IJSObject objects internally use IJSInProcessObjectReference. The main difference is IJSObjects use DispatchProxy to implement the desired interface at runtime instead of requiring a type that inherits JSObject. Currently SpawnDev.BlazorJS does not provide any interfaces for Javascript objects or apis but interfaces are simple to set up.
 
 Example
 ```cs
-// create an interface for your javascript object
+// create an interface for your Javascript object
 public interface IWindow {
     string Name { get; set; }
     void Alert(string msg = "");
     // ...
 }
 
-// use your interface to interact with the javascript object
+// use your interface to interact with the Javascript object
 public void IJSObjectInterfaceTest() {
     var w = JS.Get<IWindow>("window");
     var randName = Guid.NewGuid().ToString();
@@ -170,7 +170,7 @@ Promises can be created in .Net to wrap async methods or Tasks. They are essenti
 Ways to create a Promise in .Net
 ```cs
 var promise = new Promise();
-// pass to javascript api
+// pass to Javascript api
 ...
 // then later resolve
 promise.Resolve();
@@ -181,7 +181,7 @@ Create Promise from lambda
 var promise = new Promise(async () => {
     await Task.Delay(5000);
 });
-// pass to javascript api
+// pass to Javascript api
 
 ```
 Create Promise from lambda with return value
@@ -190,13 +190,13 @@ var promise = new Promise<string>(async () => {
     await Task.Delay(5000);
     return "Hello world!";
 });
-// pass to javascript api
+// pass to Javascript api
 ```
 Create Promise from Task
 ```cs
 var taskSource = new TaskCompletionSource<string>();
 var promise = new Promise<string>(taskSource.Task);
-// pass to javascript api
+// pass to Javascript api
 ...
 // then later resolve
 taskSource.TrySetResult("Hello world!");
@@ -225,15 +225,35 @@ using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj)
 Console.WriteLine($"lock: 2");
 ```
 
-# Undefined
-Some Javascript API calls may have optional parameters that behave differently depending on if you pass a null versus undefined. 
+# Passing undefined to Javascript
+Some Javascript API calls may have optional parameters that behave differently depending on if you pass a null versus undefined. You can now retain string typing on JSObject method calls and support passing undefined for JSObject parameters.
 
 ```cs
+// Create an instance of the Window JSObject class that is revived in Javascript as undefined
 var undefinedWindow = JSObject.Undefined<Window>();
-// undefinedWindow is an instance of Window that is revived is javascript as undefined
+// undefinedWindow is an instance of Window that is revived in Javascript as undefined
 JS.Set("_undefinedWindow", undefinedWindow);
 var isUndefined = JS.IsUndefined("_undefinedWindow");
 // isUndefined == true here
+```
+
+Or use the new Undefined\<T\> type
+```cs
+void MethodWithUndefinableParams(string varName, Undefinable<Window>? window)
+{
+    JS.Set(varName, window);
+}
+
+Window? w = JS.Get<Window>("window");
+// test to show window is passed normally
+MethodWithUndefinableParams("_willBeDefined", w);
+
+w = null;
+// to pass as undefined
+MethodWithUndefinableParams("_willBeUndefined", w);
+
+// if you need to pass null to an Undefinable parameter...
+MethodWithUndefinableParams("_willBeNull", Undefinable<Window>.Null);
 ```
 
 # Custom JSObjects  

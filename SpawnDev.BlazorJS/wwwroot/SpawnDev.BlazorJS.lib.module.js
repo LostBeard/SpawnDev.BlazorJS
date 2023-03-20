@@ -146,7 +146,7 @@ var initFunc = function () {
             case DotNet.JSCallResultType.Default:
                 return value;
             case DotNet.JSCallResultType.JSObjectReference:
-                return DotNet.createJSObjectReference(value);
+                return value === null ? null : DotNet.createJSObjectReference(value);
             case DotNet.JSCallResultType.JSStreamReference: {
                 const n = DotNet.createJSStreamReference(value),
                     r = JSON.stringify(n);
