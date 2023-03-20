@@ -17,7 +17,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC {
         public Task<T> CreateAnswer<T>() where T : IRTCSessionDescription => JSRef.CallAsync<T>("createAnswer");
         public RTCDataChannel CreateDataChannel(string label, RTCDataChannelOptions? options = null) => JSRef.Call<RTCDataChannel>("createDataChannel", label, options);
         public Task<T> CreateOffer<T>() where T : IRTCSessionDescription => JSRef.CallAsync<T>("createOffer");
-        public void SetLocalDescription(IRTCSessionDescription desc) => JSRef.CallVoid("setLocalDescription", desc);
-        public void SetRemoteDescription(IRTCSessionDescription desc) => JSRef.CallVoid("setRemoteDescription", desc);
+        public Task SetLocalDescription(IRTCSessionDescription desc) => JSRef.CallVoidAsync("setLocalDescription", desc);
+        public Task SetRemoteDescription(IRTCSessionDescription desc) => JSRef.CallVoidAsync("setRemoteDescription", desc);
     }
 }

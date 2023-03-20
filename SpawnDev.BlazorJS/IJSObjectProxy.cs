@@ -2,7 +2,8 @@
 using System.Reflection;
 
 namespace SpawnDev.BlazorJS {
-    public class IJSObject : DispatchProxy {
+    public interface IJSObject { }
+    public class IJSObjectProxy : DispatchProxy {
         public IJSInProcessObjectReference JSRef { get; private set; }
         public Type InterfaceType { get; private set; }
 
@@ -21,7 +22,7 @@ namespace SpawnDev.BlazorJS {
             if (GetInterfaceCache.TryGetValue(type, out var methodInfo)) return methodInfo;
             if (_GetInterfaceInfo == null) {
                 var thenASyncParamTypes = new Type[] { typeof(IJSInProcessObjectReference) };
-                var infos = typeof(IJSObject).GetMethods().Where(o => {
+                var infos = typeof(IJSObjectProxy).GetMethods().Where(o => {
                     if (o.Name != "GetInterface") return false;
                     if (!o.IsGenericMethod) return false;
                     var paramInfos = o.GetParameters();
@@ -43,13 +44,13 @@ namespace SpawnDev.BlazorJS {
         }
 #endif
 
-        public static TServiceInterface GetInterface<TServiceInterface>(IJSInProcessObjectReference _ref) where TServiceInterface : class {
-            var typeofT = typeof(TServiceInterface);
+        public static T GetInterface<T>(IJSInProcessObjectReference _ref) where T : class, IJSObject {
+            var typeofT = typeof(T);
             if (!typeofT.IsInterface) throw new Exception("GetInterface must be called with an interface");
-            var proxy = Create<TServiceInterface, IJSObject>() as IJSObject;
+            var proxy = Create<T, IJSObjectProxy>() as IJSObjectProxy;
             proxy.JSRef = _ref;
             proxy.InterfaceType = typeofT;
-            return proxy as TServiceInterface;
+            return proxy as T;
         }
 
         string GetTargetMethodName(MethodInfo? targetMethod) {
@@ -110,7 +111,7 @@ namespace SpawnDev.BlazorJS {
             return ret;
         }
 
-        ~IJSObject() {
+        ~IJSObjectProxy() {
             // IJSObjects dispose of their IJSInProcessObjectReference objects in the finalizer (here)
             JSRef?.Dispose();
             JSRef = null;

@@ -5,10 +5,12 @@ using System.Linq.Expressions;
 namespace SpawnDev.BlazorJS.Test.UnitTests
 {
     [TestClass]
-    public class BlazorJSUnitTest {
+    public class BlazorJSUnitTest
+    {
 
         // IJSObject
-        public interface IWindow {
+        public interface IWindow : IJSObject
+        {
             string Name { get; set; }
         }
 
@@ -27,7 +29,8 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
-        public void IJSObjectInterfacePropertySetGet() {
+        public void IJSObjectInterfacePropertySetGet()
+        {
             var w = JS.Get<IWindow>("window");
             var randName = Guid.NewGuid().ToString();
             w.Name = randName;
@@ -35,7 +38,8 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
-        public void IJSObjectInterfaceArraySetGet() {
+        public void IJSObjectInterfaceArraySetGet()
+        {
             var w = JS.Get<IWindow>("window");
             var randName = Guid.NewGuid().ToString();
             w.Name = randName;
@@ -47,7 +51,8 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
 
         // JSObject
         [TestMethod]
-        public void JSObjectPropertySetGet() {
+        public void JSObjectPropertySetGet()
+        {
             var w = JS.Get<Window>("window");
             var randName = Guid.NewGuid().ToString();
             w.Name = randName;
@@ -55,7 +60,8 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
-        public void JSObjectArraySetGet() {
+        public void JSObjectArraySetGet()
+        {
             var w = JS.Get<Window>("window");
             var randName = Guid.NewGuid().ToString();
             w.Name = randName;
@@ -67,10 +73,12 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
 
         // Promise
         [TestMethod]
-        public async Task JSObjectPromiseResolve() {
+        public async Task JSObjectPromiseResolve()
+        {
             var randValue = Guid.NewGuid().ToString();
             using var promise = new Promise<string>();
-            _ = Task.Run(async () => {
+            _ = Task.Run(async () =>
+            {
                 await Task.Delay(1);
                 promise.Resolve(randValue);
             });
@@ -79,11 +87,13 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
-        public async Task JSObjectPromiseFromTask() {
+        public async Task JSObjectPromiseFromTask()
+        {
             var randValue = Guid.NewGuid().ToString();
             var tcs = new TaskCompletionSource<string>();
             using var promise = new Promise<string>(tcs.Task);
-            _ = Task.Run(async () => {
+            _ = Task.Run(async () =>
+            {
                 await Task.Delay(1);
                 tcs.TrySetResult(randValue);
             });
@@ -92,10 +102,12 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
-        public async Task JSObjectPromiseFromLambda() {
+        public async Task JSObjectPromiseFromLambda()
+        {
             var randValue = Guid.NewGuid().ToString();
             var tcs = new TaskCompletionSource<string>();
-            using var promise = new Promise<string>(async () => {
+            using var promise = new Promise<string>(async () =>
+            {
                 await Task.Delay(1);
                 return randValue;
             });
@@ -104,10 +116,12 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
-        public async Task JSObjectPromiseResolveVoid() {
+        public async Task JSObjectPromiseResolveVoid()
+        {
             var randValue = Guid.NewGuid().ToString();
             using var promise = new Promise();
-            _ = Task.Run(async () => {
+            _ = Task.Run(async () =>
+            {
                 await Task.Delay(1);
                 promise.Resolve(randValue);
             });
@@ -115,11 +129,13 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
-        public async Task JSObjectPromiseFromTaskVoid() {
+        public async Task JSObjectPromiseFromTaskVoid()
+        {
             var randValue = Guid.NewGuid().ToString();
             var tcs = new TaskCompletionSource();
             using var promise = new Promise(tcs.Task);
-            _ = Task.Run(async () => {
+            _ = Task.Run(async () =>
+            {
                 await Task.Delay(1);
                 tcs.TrySetResult();
             });
@@ -127,10 +143,12 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
-        public async Task JSObjectPromiseFromLambdaVoid() {
+        public async Task JSObjectPromiseFromLambdaVoid()
+        {
             var randValue = Guid.NewGuid().ToString();
             var tcs = new TaskCompletionSource();
-            using var promise = new Promise(async () => {
+            using var promise = new Promise(async () =>
+            {
                 await Task.Delay(1);
             });
             await promise.ThenAsync();

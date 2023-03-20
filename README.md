@@ -106,32 +106,54 @@ await someNetFnAsync('Hello callback!');
 Recvd: Hello callback!
 ```
 
-# IJSObject Interface Converter
+# IJSObject Interface
+SpawnDev.BlazorJS can now wrap Javascript objects using interfaces. Just like objects derived from the JSObject class, IJSObject interfaces internally use IJSInProcessObjectReference to wrap a Javascript object for direct manipulation and can be passed to and from Javascript. The main difference is IJSObjects use DispatchProxy to implement the desired interface at runtime instead of requiring a type that inherits JSObject. Currently SpawnDev.BlazorJS does not provide any interfaces for Javascript objects or apis but interfaces are simple to set up.
 
-SpawnDev.BlazorJS now supports serializing and deserializing Javascript objects to and from interfaces. Just like objects derived from JSObject, IJSObject objects internally use IJSInProcessObjectReference. The main difference is IJSObjects use DispatchProxy to implement the desired interface at runtime instead of requiring a type that inherits JSObject. Currently SpawnDev.BlazorJS does not provide any interfaces for Javascript objects or apis but interfaces are simple to set up.
-
-Example
+IJSObject Example
 ```cs
-// create an interface for your Javascript object
-public interface IWindow {
+// create an interface for your Javascript object that implements IJSObject
+public interface IWindow : IJSObject 
+{
     string Name { get; set; }
     void Alert(string msg = "");
     // ...
 }
 
-// use your interface to interact with the Javascript object
+// use your IJSObject interface to interact with the Javascript object
 public void IJSObjectInterfaceTest() {
     var w = JS.Get<IWindow>("window");
     var randName = Guid.NewGuid().ToString();
+    // directly set the window.name property
     w.Name = randName;
+    // verify the read back
     if (w.Name != randName) throw new Exception("Interface property set/get failed");
 }
 ```
 
-
 # JSObject Base Class
 
-JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow strongly typed access to the underlying object.
+JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow strongly typed access to the underlying object. JSObjects take a bit more work to set up but offer more versatility.
+
+JSObject type wrapper example (same as the IJSObject interface example above but with JSObject)
+```cs
+// create a class for your Javascript object that inherits from JSObject
+public class Window : JSObject 
+{
+    public string Name { get => JSRef.Get<string>("name"); set => JSRef.Set("name", value); }
+    public void Alert(string msg = "") => JSRef.CallVoid(msg);
+    // ...
+}
+
+// use the JSObject class to interact with the Javascript object
+public void JSObjectClassTest() {
+    var w = JS.Get<Window>("window");
+    var randName = Guid.NewGuid().ToString();
+    // directly set the window.name property
+    w.Name = randName;
+    // verify the read back
+    if (w.Name != randName) throw new Exception("Interface property set/get failed");
+}
+```
 
 Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (localStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
 

@@ -106,7 +106,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                     if (useDictionaryReader) return;
                 }
             }
-            else if (typeof(IJSObject).IsAssignableFrom(returnType)) {
+            else if (typeof(IJSObjectProxy).IsAssignableFrom(returnType)) {
                 IsTransferable = false;
                 useJSObjectReader = false;
                 useDefaultReader = false;
@@ -380,7 +380,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                 _ref = null;    // ret now owns ret, prevent _ref's disposal.
             }
             else if (useInterfaceProxy) {
-                ret = IJSObject.GetInterface(ReturnType, _ref);
+                ret = IJSObjectProxy.GetInterface(ReturnType, _ref);
                 _ref = null;    // ret now owns ret, prevent _ref's disposal.
                 var nmt = true;
             }
