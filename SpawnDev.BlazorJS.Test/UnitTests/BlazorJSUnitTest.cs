@@ -179,7 +179,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         [TestMethod]
         public void UndefinableTestBool()
         {
-            // an example method that parameters that may take undefined as values 
+            // an example method with a parameter that can also be null or undefined
             // T of Undefinable<T> must be nullable
             void MethodWithUndefinableParams(string varName, Undefinable<bool?>? window)
             {

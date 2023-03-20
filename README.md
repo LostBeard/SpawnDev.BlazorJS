@@ -230,16 +230,20 @@ Some Javascript API calls may have optional parameters that behave differently d
 
 New Undefinable\<T\> type. 
 
+Example from Test app unit tests
 ```cs
-// an example method that takes a bool which can also be undefined or null
+// an example method with a parameter that can also be null or undefined
+// T of Undefinable<T> must be nullable
 void MethodWithUndefinableParams(string varName, Undefinable<bool?>? window)
 {
     JS.Set(varName, window);
 }
 
 bool? w = false;
-// test to show window is passed normally
+// test to show the value is passed normally
 MethodWithUndefinableParams("_willBeDefined2", w);
+bool? r = JS.Get<bool?>("_willBeDefined2");
+if (r != w) throw new Exception("Unexpected result");
 
 w = null;
 // null defaults to passing as undefined
@@ -251,8 +255,8 @@ MethodWithUndefinableParams("_willBeNull2", Undefinable<bool?>.Null);
 if (JS.IsUndefined("_willBeNull2")) throw new Exception("Unexpected result");
 
 // another way to pass undefined
-MethodWithUndefinableParams("_willBeUndefined2a", Undefinable<bool?>.Undefined);
-if (!JS.IsUndefined("_willBeUndefined2a")) throw new Exception("Unexpected result");
+MethodWithUndefinableParams("_willAlsoBeUndefined2", Undefinable<bool?>.Undefined);
+if (!JS.IsUndefined("_willAlsoBeUndefined2")) throw new Exception("Unexpected result");
 ```
 
 If using JSObjects you can also use JSObject.Undefined\<T\> to create an instance that will be passed to Javascript as undefined.
