@@ -1,12 +1,27 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-    public class Undefinable<T> 
+    public class Undefinable<T>
     {
-        public static Undefinable<T> Null => new Undefinable<T>(false);
-        public static Undefinable<T> Undefined => new Undefinable<T>();
+        static Undefinable()
+        {
+            // Runtime check that T is a nullable type (compile time constraint not available)
+            // Currently only firing exception if the type default value isn't null. This allows classes without the ? annotation
+            //var isTypeNullable = Nullable.GetUnderlyingType(typeof(T)) != null;
+            var isTypeDefaultNull = default(T) == null;
+            if (!isTypeDefaultNull)
+            {
+                throw new Exception("T of Undefinable<T> must be a nullable type.");
+            }
+        }
+        public static Undefinable<T> Null => _Null.Value;
+        public static Undefinable<T> Undefined => _Undefined.Value;
+        private static Lazy<Undefinable<T>> _Null = new Lazy<Undefinable<T>>(() => new Undefinable<T>(false));
+        private static Lazy<Undefinable<T>> _Undefined = new Lazy<Undefinable<T>>(() => new Undefinable<T>());
+
         [JsonIgnore]
         public T? Value { get; set; }
         [JsonIgnore]
