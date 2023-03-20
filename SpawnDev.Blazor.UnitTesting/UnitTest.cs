@@ -18,6 +18,7 @@ namespace SpawnDev.Blazor.UnitTesting
         public TestState State { get; set; } = TestState.None;
         public double Duration { get; set; }
         public string Error { get; set; } = "";
+        public string StackTrace { get; set; } = "";
         public UnitTest(Type testClass, MethodInfo methodInfo)
         {
             TestType = testClass;

@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS
         {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
             if (JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
-            IsJSRefUndefined = typeof(JSInProcessObjectReferenceUndefined).IsAssignableFrom(_ref.GetType());
+            IsJSRefUndefined = _ref != null && typeof(JSInProcessObjectReferenceUndefined).IsAssignableFrom(_ref.GetType());
             JSRef = _ref;
         }
 

@@ -106,6 +106,8 @@ namespace SpawnDev.Blazor.UnitTesting
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.StackTrace);
+                test.StackTrace = ex.StackTrace ?? "";
                 test.Error = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 test.Result = TestResult.Error;
             }
