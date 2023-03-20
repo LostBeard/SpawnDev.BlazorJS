@@ -231,23 +231,28 @@ Some Javascript API calls may have optional parameters that behave differently d
 New Undefinable\<T\> type. 
 
 ```cs
-
-// an example method that parameters that may take undefined as values
-void MethodWithUndefinableParams(string varName, Undefinable<Window>? window)
+// an example method that takes a bool which can also be undefined or null
+void MethodWithUndefinableParams(string varName, Undefinable<bool?>? window)
 {
     JS.Set(varName, window);
 }
 
-Window? w = JS.Get<Window>("window");
+bool? w = false;
 // test to show window is passed normally
-MethodWithUndefinableParams("_willBeDefined", w);
+MethodWithUndefinableParams("_willBeDefined2", w);
 
 w = null;
-// to pass as undefined
-MethodWithUndefinableParams("_willBeUndefined", w);
+// null defaults to passing as undefined
+MethodWithUndefinableParams("_willBeUndefined2", w);
+if (!JS.IsUndefined("_willBeUndefined2")) throw new Exception("Unexpected result");
 
-// if you need to pass null to an Undefinable parameter...
-MethodWithUndefinableParams("_willBeNull", Undefinable<Window>.Null);
+// if you need to pass null to an Undefinable parameter use Undefinable<T?>.Null
+MethodWithUndefinableParams("_willBeNull2", Undefinable<bool?>.Null);
+if (JS.IsUndefined("_willBeNull2")) throw new Exception("Unexpected result");
+
+// another way to pass undefined
+MethodWithUndefinableParams("_willBeUndefined2a", Undefinable<bool?>.Undefined);
+if (!JS.IsUndefined("_willBeUndefined2a")) throw new Exception("Unexpected result");
 ```
 
 If using JSObjects you can also use JSObject.Undefined\<T\> to create an instance that will be passed to Javascript as undefined.
