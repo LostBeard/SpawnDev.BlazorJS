@@ -225,20 +225,14 @@ using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj)
 Console.WriteLine($"lock: 2");
 ```
 
-# Passing undefined to Javascript
+# Undefinable\<T\> Passing undefined to Javascript
 Some Javascript API calls may have optional parameters that behave differently depending on if you pass a null versus undefined. You can now retain string typing on JSObject method calls and support passing undefined for JSObject parameters.
 
-```cs
-// Create an instance of the Window JSObject class that is revived in Javascript as undefined
-var undefinedWindow = JSObject.Undefined<Window>();
-// undefinedWindow is an instance of Window that is revived in Javascript as undefined
-JS.Set("_undefinedWindow", undefinedWindow);
-var isUndefined = JS.IsUndefined("_undefinedWindow");
-// isUndefined == true here
-```
+New Undefinable\<T\> type. 
 
-Or use the new Undefined\<T\> type
 ```cs
+
+// an example method that parameters that may take undefined as values
 void MethodWithUndefinableParams(string varName, Undefinable<Window>? window)
 {
     JS.Set(varName, window);
@@ -255,6 +249,18 @@ MethodWithUndefinableParams("_willBeUndefined", w);
 // if you need to pass null to an Undefinable parameter...
 MethodWithUndefinableParams("_willBeNull", Undefinable<Window>.Null);
 ```
+
+If using JSObjects you can also use JSObject.Undefined\<T\> to create an instance that will be passed to Javascript as undefined.
+
+```cs
+// Create an instance of the Window JSObject class that is revived in Javascript as undefined
+var undefinedWindow = JSObject.Undefined<Window>();
+// undefinedWindow is an instance of Window that is revived in Javascript as undefined
+JS.Set("_undefinedWindow", undefinedWindow);
+var isUndefined = JS.IsUndefined("_undefinedWindow");
+// isUndefined == true here
+```
+
 
 # Custom JSObjects  
 Implement your own JSObject classes for Javascript objects not already available in the BlazorJS.JSObjects library.

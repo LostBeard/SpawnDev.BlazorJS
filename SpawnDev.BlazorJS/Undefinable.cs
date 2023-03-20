@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-    public class Undefinable<T>
+    public class Undefinable<T> 
     {
         public static Undefinable<T> Null => new Undefinable<T>(false);
+        public static Undefinable<T> Undefined => new Undefinable<T>();
         [JsonIgnore]
         public T? Value { get; set; }
         [JsonIgnore]

@@ -1,5 +1,6 @@
 ﻿using SpawnDev.Blazor.UnitTesting;
 using SpawnDev.BlazorJS.JSObjects;
+using System.Linq.Expressions;
 
 namespace SpawnDev.BlazorJS.Test.UnitTests
 {
@@ -9,6 +10,20 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         // IJSObject
         public interface IWindow {
             string Name { get; set; }
+        }
+
+        [TestMethod]
+        public void GetUndefinedVarReturnsDefaultInt()
+        {
+            var w = JS.Get<int>("_somethingThatDoesNotExist");
+            if (w != default) throw new Exception("Unexpected result");
+        }
+
+        [TestMethod]
+        public void GetUndefinedVarReturnsDefaultNullable()
+        {
+            var w = JS.Get<int?>("_somethingThatDoesNotExist");
+            if (w != default) throw new Exception("Unexpected result");
         }
 
         [TestMethod]
@@ -119,6 +134,76 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
                 await Task.Delay(1);
             });
             await promise.ThenAsync();
+        }
+
+        [TestMethod]
+        public void JSObjectUndefinedTest()
+        {
+            // Get an instance of the Window JSObject class that is revived in Javascript as undefined
+            var undefinedWindow = JSObject<Window>.Undefined;
+            JS.Set("_undefinedWindow", undefinedWindow);
+            var isUndefined = JS.IsUndefined("_undefinedWindow");
+            // isUndefined == true here
+            if (!isUndefined) throw new Exception("Unexpected result");
+        }
+
+        [TestMethod]
+        public void UndefinableTestInt()
+        {
+            // an example method that parameters that may take undefined as values
+            void MethodWithUndefinableParams(string varName, Undefinable<int?>? window)
+            {
+                JS.Set(varName, window);
+            }
+
+            int? w = 5;
+            // test to show the value is passed normally
+            MethodWithUndefinableParams("_willBeDefined1", w);
+            int? r = JS.Get<int?>("_willBeDefined1");
+            if (r != w) throw new Exception("Unexpected result");
+
+            w = null;
+            // null defaults to passing as undefined
+            MethodWithUndefinableParams("_willBeUndefined1", w);
+            if (!JS.IsUndefined("_willBeUndefined1")) throw new Exception("Unexpected result");
+
+            // if you need to pass null to an Undefinable parameter use Undefinable<T?>.Null
+            MethodWithUndefinableParams("_willBeNull1", Undefinable<int?>.Null);
+            if (JS.IsUndefined("_willBeNull1")) throw new Exception("Unexpected result");
+
+            // another way to pass undefined
+            MethodWithUndefinableParams("_willAlsoBeUndefined1", Undefinable<int?>.Undefined);
+            if (!JS.IsUndefined("_willAlsoBeUndefined1")) throw new Exception("Unexpected result");
+        }
+
+        [TestMethod]
+        public void UndefinableTestBool()
+        {
+            // an example method that parameters that may take undefined as values 
+            // T of Undefinable<T> must be nullable
+            void MethodWithUndefinableParams(string varName, Undefinable<bool?>? window)
+            {
+                JS.Set(varName, window);
+            }
+
+            bool? w = false;
+            // test to show the value is passed normally
+            MethodWithUndefinableParams("_willBeDefined2", w);
+            bool? r = JS.Get<bool?>("_willBeDefined2");
+            if (r != w) throw new Exception("Unexpected result");
+
+            w = null;
+            // null defaults to passing as undefined
+            MethodWithUndefinableParams("_willBeUndefined2", w);
+            if (!JS.IsUndefined("_willBeUndefined2")) throw new Exception("Unexpected result");
+
+            // if you need to pass null to an Undefinable parameter use Undefinable<T?>.Null
+            MethodWithUndefinableParams("_willBeNull2", Undefinable<bool?>.Null);
+            if (JS.IsUndefined("_willBeNull2")) throw new Exception("Unexpected result");
+
+            // another way to pass undefined
+            MethodWithUndefinableParams("_willAlsoBeUndefined2", Undefinable<bool?>.Undefined);
+            if (!JS.IsUndefined("_willAlsoBeUndefined2")) throw new Exception("Unexpected result");
         }
     }
 }

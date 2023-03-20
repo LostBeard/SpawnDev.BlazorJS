@@ -6,6 +6,14 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+
+    public class JSObject<T> : JSObject where T : JSObject
+    {
+        private static Lazy<T> _Undefined = new Lazy<T>(() => (T)Activator.CreateInstance(typeof(T), JSObject.UndefinedRef));
+        public static T Undefined => _Undefined.Value;
+        public JSObject(IJSInProcessObjectReference _ref) : base(_ref){ }
+    }
+
     public class JSObject : IDisposable
     {
         public static IJSInProcessObjectReference? NullRef { get; } = null;
@@ -28,13 +36,11 @@ namespace SpawnDev.BlazorJS
             JSRef = _ref;
         }
 
-        public static T Undefined<T>() where T : JSObject => (T)Activator.CreateInstance(typeof(T), JSObject.UndefinedRef);
-        public static JSObject Undefined() => (JSObject)Activator.CreateInstance(typeof(JSObject), JSObject.UndefinedRef);
-
         protected virtual void LosingReference()
         {
 
         }
+
         protected void ReplaceReference(IJSInProcessObjectReference _ref)
         {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
