@@ -379,13 +379,19 @@ await host.RunAsync();
 ```cs
 
 // Create a WebWorker
+
+[Inject]
+WebWorkerService workerService { get; set; }
+ 
+ // ...
+
 var webWorker = await workerService.GetWebWorker();
 
 // Call GetService<ServiceInterface> on a web worker to get a proxy for the service on the web worker.
 // GetService can only be called with Interface types
 var workerMathService = webWorker.GetService<IMathsService>();
 
-// Call async methods on your worker service
+// Call async methods on your worker service 
 var result = await workerMathService.CalculatePi(piDecimalPlaces);
 
 // Action types can be passed for progress reporting
