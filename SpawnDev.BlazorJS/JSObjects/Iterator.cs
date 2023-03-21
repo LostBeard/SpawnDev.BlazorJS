@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class SyncIterator : JSObject
+    public class Iterator : JSObject
     {
-        public SyncIterator(IJSInProcessObjectReference _ref) : base(_ref) { }
+        public Iterator(IJSInProcessObjectReference _ref) : base(_ref) { }
         public IteratorResult Next() => JSRef.Call<IteratorResult>("next");
         public IteratorResult<TValue> Next<TValue>() => JSRef.Call<IteratorResult<TValue>>("next");
     }

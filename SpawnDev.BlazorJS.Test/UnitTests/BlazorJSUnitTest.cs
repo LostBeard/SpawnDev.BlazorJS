@@ -38,6 +38,15 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
+        public void IJSObjectInterfaceNullSetGet()
+        {
+            IWindow? w = null;
+            JS.Set("_nullinterface", w);
+            w = JS.Get<IWindow?>("_nullinterface");
+            if (w != null) throw new Exception("Unexpected result");
+        }
+
+        [TestMethod]
         public void IJSObjectInterfaceArraySetGet()
         {
             var w = JS.Get<IWindow>("window");
