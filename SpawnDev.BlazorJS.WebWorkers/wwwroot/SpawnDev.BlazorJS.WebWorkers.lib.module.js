@@ -24,6 +24,10 @@
 //}
 
 //export function afterStarted(blazor) {
-//    globalObject.__blazor = blazor;
 //    console.log("webworkers afterStarted");
+//    if (typeof JSInterop._afterWebWorkersStarted === 'function') {
+//        let callback = JSInterop._afterWebWorkersStarted;
+//        delete JSInterop._afterStarted;
+//        callback();
+//    }
 //}

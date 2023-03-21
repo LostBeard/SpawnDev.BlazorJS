@@ -263,9 +263,14 @@ var initFunc = function () {
 initFunc();
 
 //export function beforeStart(options, extensions) {
-//    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! blazorJS beforeStart");
+//    console.log("blazorjs beforeStart");
 //}
 
 //export function afterStarted(blazor) {
-//    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! blazorJS afterStarted");
+//    //console.log("blazorjs afterStarted");
+//    if (typeof JSInterop._afterStarted === 'function') {
+//        let callback = JSInterop._afterStarted;
+//        delete JSInterop._afterStarted;
+//        callback();
+//    }
 //}

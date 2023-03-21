@@ -63,11 +63,25 @@ namespace SpawnDev.BlazorJS
                     GlobalThis = Get<JSObject>("globalThis");
                     break;
             }
+            // register a callback that the blazorjs javascript module will call after the app has initliazed
+            //Set("JSInterop._afterStarted", Callback.CreateOne(AfterStarted));
 #if DEBUG
             Log("JS.GlobalThisTypeName", GlobalThisTypeName);
             Set("JSInterop.debugLevel", 1);
 #endif
         }
+
+        /// <summary>
+        /// Called by the BlazorJS Javscript module via the Blazor afterStarted call
+        /// </summary>
+        //async Task AfterStarted()
+        //{
+        //    // 
+        //    Log("> AfterStarted called!");
+        //    Log($"{BackgroundServiceTypes.Count} Background services registered");
+        //    await Task.Delay(1000);
+        //    Log("< AfterStarted called!");
+        //}
 
         public string InformationalVersion { get; } = typeof(JSObject).Assembly.GetAssemblyInformationalVersion();
         public string FileVersion { get; } = typeof(JSObject).Assembly.GetAssemblyFileVersion();
