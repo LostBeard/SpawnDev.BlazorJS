@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS
     {
         Task InitAsync();
     }
-    public static class IServiceCollectionExtensions
+    public static class BackgroundServices
     {
         /// <summary>
         /// Adds the BlazorJSRuntime singleton service and initializes it.
@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS
             _this.AddSingleton(serviceProvider => (BlazorJSRuntime)serviceProvider.GetRequiredService<IBlazorJSRuntime>());
             return _this;
         }
-        internal static List<Type> BackgroundServiceTypes { get; private set; } = new List<Type>();
+        internal static Dictionary<Type, IBackgroundService?> Services { get; private set; } = new Dictionary<Type, IBackgroundService?>();
 
         /// <summary>
         /// Background services are singletons that will be created immediately after app init
@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static IServiceCollection AddBackgroundService<TService>(this IServiceCollection _this) where TService : class, IBackgroundService
         {
-            BackgroundServiceTypes.Add(typeof(TService));
+            Services.Add(typeof(TService), null);
             _this.AddSingleton<TService>();
             return _this;
         }
@@ -43,7 +43,7 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static IServiceCollection AddBackgroundService<TService, TImplementation>(this IServiceCollection _this) where TImplementation : class, TService, IBackgroundService where TService : class
         {
-            BackgroundServiceTypes.Add(typeof(TService));
+            Services.Add(typeof(TService), null);
             _this.AddSingleton<TService, TImplementation>();
             return _this;
         }
@@ -56,9 +56,15 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static async Task<WebAssemblyHost> StartBackgroundServices(this WebAssemblyHost _this)
         {
-            foreach (var type in BackgroundServiceTypes)
+            // let all the constructors fire first
+            foreach (var kvp in Services)
             {
-                var service = (IBackgroundService)_this.Services.GetRequiredService(type);
+                var service = (IBackgroundService)_this.Services.GetRequiredService(kvp.Key);
+                Services[kvp.Key] = service;
+            }
+            // call InitAsync on each
+            foreach (var service in Services.Values)
+            {
                 await service.InitAsync();
             }
             return _this;
