@@ -27,6 +27,14 @@ namespace SpawnDev.BlazorJS
         public bool IsJSRefUndefined { get; private set; } = false;
 
         // some constructors of types that inherit from JSObjet will pass NullRef to the base constructor and then create the JSRef instance in their constructor and then set it with FromReference
+
+
+        /// <summary>
+        /// This virtual method is called when JSRef is going to be set. base.FromReference(_ref) must be called. 
+        /// This can be used to allow custom post deserialization initialization such as attaching to events.
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <exception cref="Exception"></exception>
         protected virtual void FromReference(IJSInProcessObjectReference _ref)
         {
             if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");

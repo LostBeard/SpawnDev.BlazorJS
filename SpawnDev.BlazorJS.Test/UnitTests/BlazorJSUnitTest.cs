@@ -16,11 +16,11 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
                 JS.Set(varName, unionTypeValue);
             }
 
-            var stringValue = "Hello world!";
+            string stringValue = "Hello world!";
             UnionTypeTestMethod("_stringUnionValue", stringValue);
             if (stringValue != JS.Get<string?>("_stringUnionValue")) throw new Exception("Unexpected result");
 
-            var boolValue = true;
+            bool boolValue = true;
             UnionTypeTestMethod("_boolUnionValue", boolValue);
             if (boolValue != JS.Get<bool?>("_boolUnionValue")) throw new Exception("Unexpected result");
         }
