@@ -18,7 +18,7 @@ builder.Services.AddBlazorJSRuntime();
 builder.Services.AddWebWorkerService();
 // Add WebWorkerPool service (WIP. optional)
 builder.Services.AddSingleton<WebWorkerPool>();
-// Add app services that will be called on the main thread and/or worker threads
+// Add app services that will be called on the main thread and/or worker threads (Worker services must use interfaces)
 builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
 builder.Services.AddSingleton<IMathsService, MathsService>();
 // More app services

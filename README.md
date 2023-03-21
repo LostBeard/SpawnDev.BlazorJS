@@ -30,19 +30,29 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 Getting started. Add the BlazorJSRuntime service in your Program.cs
 
 ```cs
-...
+// ...
 using SpawnDev.BlazorJS;
+using SpawnDev.BlazorJS.WebWorkers;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+// Add services
+builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+// Add SpawnDev.BlazorJS.BlazorJSRuntime
+builder.Services.AddBlazorJSRuntime();
+// Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
+builder.Services.AddWebWorkerService();
+// Add WebWorkerPool service (WIP. optional)
+builder.Services.AddSingleton<WebWorkerPool>();
+// Add app services that will be called on the main thread and/or worker threads (Worker services must use interfaces)
+builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
+builder.Services.AddSingleton<IMathsService, MathsService>();
+// More app services
+// ...
+// build and Init using BlazorJSRunAsync (instead of RunAsync)
+await builder.Build().BlazorJSRunAsync();
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
-// SpawnDev.BlazorJS.BlazorJSRuntime service
-builder.Services.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS);
-
-await builder.Build().RunAsync();
 ```
 
 And use.
@@ -394,27 +404,23 @@ using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.WebWorkers;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-if (JS.IsWindow)
-{
-    // we can skip adding dom objects in non UI threads
-    builder.RootComponents.Add<App>("#app");
-    builder.RootComponents.Add<HeadOutlet>("head::after");
-}
-// add services
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
+// Add services
 builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-// SpawnDev.BlazorJS.BlazorJSRuntime service
-builder.Services.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS);
-// SpawnDev.BlazorJS.WebWorkers.WebWorkerService service
-builder.Services.AddSingleton<WebWorkerService>();
-// app specific services...
-// worker services should be registered with an interface to work with WebWorker.GetService<TServiceInterface>()
+// Add SpawnDev.BlazorJS.BlazorJSRuntime
+builder.Services.AddBlazorJSRuntime();
+// Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
+builder.Services.AddWebWorkerService();
+// Add WebWorkerPool service (WIP. optional)
+builder.Services.AddSingleton<WebWorkerPool>();
+// Add app services that will be called on the main thread and/or worker threads (Worker services must use interfaces)
+builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
 builder.Services.AddSingleton<IMathsService, MathsService>();
-// build 
-WebAssemblyHost host = builder.Build();
-// init WebWorkerService 
-var workerService = host.Services.GetRequiredService<WebWorkerService>();
-await workerService.InitAsync();
-await host.RunAsync();
+// More app services
+// ...
+// build and Init using BlazorJSRunAsync (instead of RunAsync)
+await builder.Build().BlazorJSRunAsync();
 ```
 
 ## WebWorker
