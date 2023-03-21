@@ -53,7 +53,6 @@ namespace SpawnDev.BlazorJS {
         //public static object? Call(this IJSInProcessRuntime _js, Type returnType, string identifier, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => JSInterop.CallApply(returnType, identifier, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
 
         public static object? Invoke(this IJSInProcessRuntime _js, Type returnType, string identifier, params object[] args) => GetJSRuntimeInvoke(returnType).Invoke(_js, new object[] { identifier, args });
-
         private static MethodInfo? GetBestInstanceMethod(Type classType, string identifier, Type[]? paramTypes = null, int genericsCount = 0, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
             MethodInfo? best = null;

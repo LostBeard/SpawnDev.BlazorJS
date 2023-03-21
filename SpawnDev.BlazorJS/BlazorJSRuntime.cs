@@ -3,17 +3,14 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
-using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
-using System.Threading.Tasks.Sources;
 
 namespace SpawnDev.BlazorJS
 {
     public partial class BlazorJSRuntime : IBlazorJSRuntime
     {
-        public static IJSInProcessRuntime? _js { get; private set; } = null;
+        internal static readonly IJSInProcessRuntime _js;
         public static readonly BlazorJSRuntime JS;
         internal static JsonSerializerOptions? RuntimeJsonSerializerOptions { get; private set; }
         public Window? WindowThis { get; private set; } = null;
@@ -29,11 +26,19 @@ namespace SpawnDev.BlazorJS
 
         static BlazorJSRuntime()
         {
-            var jsRuntimeType = typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime");
-            var instanceField = jsRuntimeType.GetField("Instance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-            object? jsRuntimeObj = instanceField.GetValue(null);
-            _js = (IJSInProcessRuntime)jsRuntimeObj;    // (WebAssemblyJSRuntime)
-            ModifyJsonSerializerOptions();
+            _js = (IJSInProcessRuntime)typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime").GetField("Instance", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+            RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_js, null);
+            RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
+            RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new JSObjectArrayConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectArrayConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new TaskConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
             JS = new BlazorJSRuntime();
         }
 
@@ -62,31 +67,6 @@ namespace SpawnDev.BlazorJS
             Log("JS.GlobalThisTypeName", GlobalThisTypeName);
             Set("JSInterop.debugLevel", 1);
 #endif
-        }
-        static void ModifyJsonSerializerOptions()
-        {
-            var prop = typeof(Microsoft.JSInterop.JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.NonPublic | BindingFlags.Instance);
-            var options = prop.GetValue(_js, null);
-            if (options != null)
-            {
-                RuntimeJsonSerializerOptions = (JsonSerializerOptions)Convert.ChangeType(options, typeof(JsonSerializerOptions));
-                // below lines make sure BlazorJS objects are properly serialized
-                RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
-                RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new JSObjectArrayConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectArrayConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new TaskConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
-            }
-            else
-            {
-                Console.WriteLine($"SpawnDev.BlazorJS.JS ERROR: Failed to modify JsonSerializerOptions");
-            }
         }
 
         public string InformationalVersion { get; } = typeof(JSObject).Assembly.GetAssemblyInformationalVersion();
@@ -155,17 +135,7 @@ namespace SpawnDev.BlazorJS
         // document.CreateElement
         public IJSInProcessObjectReference DocumentCreateElement(string elementType) => Call<IJSInProcessObjectReference>("document.createElement", elementType);
         public T DocumentCreateElement<T>(string elementType) where T : JSObject => Call<T>("document.createElement", elementType);
-
         public static bool JSEquals(object obj1, object obj2) => JSInterop.IsEqual(obj1, obj2);
-
-        //public static T CopyReference<T>(JSObject obj) where T : JSObject => ReturnMe<T>(obj);
-        //public static IJSInProcessObjectReference CopyReference(IJSInProcessObjectReference obj) => ReturnMe<IJSInProcessObjectReference>(obj);
-        //public static T MoveReference<T>(JSObject orig, bool sourceDisposeExceptRef = true) where T : JSObject
-        //{
-        //    var ret = (T)Activator.CreateInstance(typeof(T), orig.JSRef);
-        //    if (sourceDisposeExceptRef) orig.DisposeExceptRef();
-        //    return ret;
-        //}
         public T ReturnMe<T>(object obj) => JSInterop.ReturnMe<T>(obj);
         public JSObject FromElementReference(ElementReference elementRef) => ReturnMe<JSObject>(elementRef);
         public IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);
@@ -188,29 +158,5 @@ namespace SpawnDev.BlazorJS
         public string TypeOf(string identifier) => JSInterop.TypeOf(null, identifier);
         public void Log(params object?[] args) => CallApplyVoid("console.log", args);
         public string GetConstructorName(string identifier) => Get<string>($"{identifier}.constructor.name");
-
-        static Dictionary<string, Type?> typeCache { get; } = new Dictionary<string, Type?>();
-        /// <summary>
-        /// For whatever reason Type.GetType was failing when trying to find a Type in the same assembly as this class... no idea why. Below code worked when it failed
-        /// </summary>
-        /// <param name="typeName"></param>
-        /// <returns></returns>
-        public static Type? GetType(string typeName)
-        {
-            Type? t = null;
-            lock (typeCache)
-            {
-                if (!typeCache.TryGetValue(typeName, out t))
-                {
-                    foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
-                    {
-                        t = a.GetType(typeName);
-                        if (t != null) break;
-                    }
-                    typeCache[typeName] = t;
-                }
-            }
-            return t;
-        }
     }
 }
