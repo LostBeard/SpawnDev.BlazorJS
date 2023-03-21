@@ -21,6 +21,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
         public int MaxWorkerCount { get; private set; } = 0;
 
         static string WebWorkerJSScript = "_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js";
+        static BlazorJSRuntime JS => BlazorJSRuntime.JS;
         static WebWorkerService() {
             WebWorkerSupported = !JS.IsUndefined("Worker");
             SharedWebWorkerSupported = !JS.IsUndefined("SharedWorker");

@@ -60,7 +60,7 @@ namespace SpawnDev.BlazorJS.Test.Pages {
                     _timer.Elapsed += _timer_Elapsed;
                     _timer.Enabled = true;
                 }
-                JS.CallVoid("PR.prettyPrint");
+                BlazorJSRuntime.JS.CallVoid("PR.prettyPrint");
             }
         }
 

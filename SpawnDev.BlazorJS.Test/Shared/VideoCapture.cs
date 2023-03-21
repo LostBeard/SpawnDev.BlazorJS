@@ -58,7 +58,7 @@ namespace SpawnDev.BlazorJS.Test.Shared
             Video = new HTMLVideoElement();
             _cameraCanvasEl = new HTMLCanvasElement();
             _cameraCanvasElCtx = _cameraCanvasEl.Get2DContext(new ContextAttributes2D { WillReadFrequently = true });
-            if (JS.WindowThis != null) JS.WindowThis.OnAnimationFrame += WindowThis_OnAnimationFrame;
+            if (BlazorJSRuntime.JS.WindowThis != null) BlazorJSRuntime.JS.WindowThis.OnAnimationFrame += WindowThis_OnAnimationFrame;
         }
 
         public double CurrentFPS { get; private set; } = 0;
@@ -153,7 +153,7 @@ namespace SpawnDev.BlazorJS.Test.Shared
 
         public void Dispose()
         {
-            if (JS.WindowThis != null) JS.WindowThis.OnAnimationFrame -= WindowThis_OnAnimationFrame;
+            if (BlazorJSRuntime.JS.WindowThis != null) BlazorJSRuntime.JS.WindowThis.OnAnimationFrame -= WindowThis_OnAnimationFrame;
             try {
                 Video.Pause();
             }

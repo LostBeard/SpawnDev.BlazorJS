@@ -4,7 +4,7 @@ using SpawnDev.BlazorJS.JsonConverters;
 
 namespace SpawnDev.BlazorJS {
     public static partial class JSInterop {
-        static IJSInProcessRuntime _js = JS._js;
+        static IJSInProcessRuntime _js = BlazorJSRuntime._js;
 
         //internal static void SetPromiseThenCatch<T>(Promise<T> promise, ActionCallback<T> thenCallback, ActionCallback<string> catchCallback) {
         //    JS.CallVoid("JSInterop.setPromiseThenCatch", promise, thenCallback, catchCallback);

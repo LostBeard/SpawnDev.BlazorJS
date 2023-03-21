@@ -8,21 +8,23 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
     public class BlazorJSUnitTest
     {
 
+
+
         [TestMethod]
         public void UnionTypeTest()
         {
             void UnionTypeTestMethod(string varName, Union<bool?, string?>? unionTypeValue)
             {
-                JS.Set(varName, unionTypeValue);
+                BlazorJSRuntime.JS.Set(varName, unionTypeValue);
             }
 
             string stringValue = "Hello world!";
             UnionTypeTestMethod("_stringUnionValue", stringValue);
-            if (stringValue != JS.Get<string?>("_stringUnionValue")) throw new Exception("Unexpected result");
+            if (stringValue != BlazorJSRuntime.JS.Get<string?>("_stringUnionValue")) throw new Exception("Unexpected result");
 
             bool boolValue = true;
             UnionTypeTestMethod("_boolUnionValue", boolValue);
-            if (boolValue != JS.Get<bool?>("_boolUnionValue")) throw new Exception("Unexpected result");
+            if (boolValue != BlazorJSRuntime.JS.Get<bool?>("_boolUnionValue")) throw new Exception("Unexpected result");
         }
 
         // IJSObject
@@ -34,21 +36,21 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         [TestMethod]
         public void GetUndefinedVarReturnsDefaultInt()
         {
-            var w = JS.Get<int>("_somethingThatDoesNotExist");
+            var w = BlazorJSRuntime.JS.Get<int>("_somethingThatDoesNotExist");
             if (w != default) throw new Exception("Unexpected result");
         }
 
         [TestMethod]
         public void GetUndefinedVarReturnsDefaultNullable()
         {
-            var w = JS.Get<int?>("_somethingThatDoesNotExist");
+            var w = BlazorJSRuntime.JS.Get<int?>("_somethingThatDoesNotExist");
             if (w != default) throw new Exception("Unexpected result");
         }
 
         [TestMethod]
         public void IJSObjectInterfacePropertySetGet()
         {
-            var w = JS.Get<IWindow>("window");
+            var w = BlazorJSRuntime.JS.Get<IWindow>("window");
             var randName = Guid.NewGuid().ToString();
             w.Name = randName;
             if (w.Name != randName) throw new Exception("Interface property set/get failed");
@@ -58,20 +60,20 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         public void IJSObjectInterfaceNullSetGet()
         {
             IWindow? w = null;
-            JS.Set("_nullinterface", w);
-            w = JS.Get<IWindow?>("_nullinterface");
+            BlazorJSRuntime.JS.Set("_nullinterface", w);
+            w = BlazorJSRuntime.JS.Get<IWindow?>("_nullinterface");
             if (w != null) throw new Exception("Unexpected result");
         }
 
         [TestMethod]
         public void IJSObjectInterfaceArraySetGet()
         {
-            var w = JS.Get<IWindow>("window");
+            var w = BlazorJSRuntime.JS.Get<IWindow>("window");
             var randName = Guid.NewGuid().ToString();
             w.Name = randName;
             var array = new IWindow[] { w, w, w };
-            JS.Set("_array", array);
-            var arrayReadBack = JS.Get<IWindow[]>("_array");
+            BlazorJSRuntime.JS.Set("_array", array);
+            var arrayReadBack = BlazorJSRuntime.JS.Get<IWindow[]>("_array");
             if (arrayReadBack.ToList().Where(w => w.Name != randName).Any()) throw new Exception("Interface array set/get failed");
         }
 
@@ -79,7 +81,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         [TestMethod]
         public void JSObjectPropertySetGet()
         {
-            var w = JS.Get<Window>("window");
+            var w = BlazorJSRuntime.JS.Get<Window>("window");
             var randName = Guid.NewGuid().ToString();
             w.Name = randName;
             if (w.Name != randName) throw new Exception("Interface property set/get failed");
@@ -88,12 +90,12 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         [TestMethod]
         public void JSObjectArraySetGet()
         {
-            var w = JS.Get<Window>("window");
+            var w = BlazorJSRuntime.JS.Get<Window>("window");
             var randName = Guid.NewGuid().ToString();
             w.Name = randName;
             var array = new Window[] { w, w, w };
-            JS.Set("_array", array);
-            var arrayReadBack = JS.Get<Window[]>("_array");
+            BlazorJSRuntime.JS.Set("_array", array);
+            var arrayReadBack = BlazorJSRuntime.JS.Get<Window[]>("_array");
             if (arrayReadBack.ToList().Where(w => w.Name != randName).Any()) throw new Exception("Interface array set/get failed");
         }
 
@@ -204,8 +206,8 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         {
             // Get an instance of the Window JSObject class that is revived in Javascript as undefined
             var undefinedWindow = JSObject<Window>.Undefined;
-            JS.Set("_undefinedWindow", undefinedWindow);
-            var isUndefined = JS.IsUndefined("_undefinedWindow");
+            BlazorJSRuntime.JS.Set("_undefinedWindow", undefinedWindow);
+            var isUndefined = BlazorJSRuntime.JS.IsUndefined("_undefinedWindow");
             // isUndefined == true here
             if (!isUndefined) throw new Exception("Unexpected result");
         }
@@ -216,27 +218,27 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             // an example method that parameters that may take undefined as values
             void MethodWithUndefinableParams(string varName, Undefinable<int?>? window)
             {
-                JS.Set(varName, window);
+                BlazorJSRuntime.JS.Set(varName, window);
             }
 
             int? w = 5;
             // test to show the value is passed normally
             MethodWithUndefinableParams("_willBeDefined1", w);
-            int? r = JS.Get<int?>("_willBeDefined1");
+            int? r = BlazorJSRuntime.JS.Get<int?>("_willBeDefined1");
             if (r != w) throw new Exception("Unexpected result");
 
             w = null;
             // null defaults to passing as undefined
             MethodWithUndefinableParams("_willBeUndefined1", w);
-            if (!JS.IsUndefined("_willBeUndefined1")) throw new Exception("Unexpected result");
+            if (!BlazorJSRuntime.JS.IsUndefined("_willBeUndefined1")) throw new Exception("Unexpected result");
 
             // if you need to pass null to an Undefinable parameter use Undefinable<T?>.Null
             MethodWithUndefinableParams("_willBeNull1", Undefinable<int?>.Null);
-            if (JS.IsUndefined("_willBeNull1")) throw new Exception("Unexpected result");
+            if (BlazorJSRuntime.JS.IsUndefined("_willBeNull1")) throw new Exception("Unexpected result");
 
             // another way to pass undefined
             MethodWithUndefinableParams("_willAlsoBeUndefined1", Undefinable<int?>.Undefined);
-            if (!JS.IsUndefined("_willAlsoBeUndefined1")) throw new Exception("Unexpected result");
+            if (!BlazorJSRuntime.JS.IsUndefined("_willAlsoBeUndefined1")) throw new Exception("Unexpected result");
         }
 
         [TestMethod]
@@ -246,27 +248,27 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             // T of Undefinable<T> must be nullable
             void MethodWithUndefinableParams(string varName, Undefinable<bool?>? window)
             {
-                JS.Set(varName, window);
+                BlazorJSRuntime.JS.Set(varName, window);
             }
 
             bool? w = false;
             // test to show the value is passed normally
             MethodWithUndefinableParams("_willBeDefined2", w);
-            bool? r = JS.Get<bool?>("_willBeDefined2");
+            bool? r = BlazorJSRuntime.JS.Get<bool?>("_willBeDefined2");
             if (r != w) throw new Exception("Unexpected result");
 
             w = null;
             // null defaults to passing as undefined
             MethodWithUndefinableParams("_willBeUndefined2", w);
-            if (!JS.IsUndefined("_willBeUndefined2")) throw new Exception("Unexpected result");
+            if (!BlazorJSRuntime.JS.IsUndefined("_willBeUndefined2")) throw new Exception("Unexpected result");
 
             // if you need to pass null to an Undefinable parameter use Undefinable<T?>.Null
             MethodWithUndefinableParams("_willBeNull2", Undefinable<bool?>.Null);
-            if (JS.IsUndefined("_willBeNull2")) throw new Exception("Unexpected result");
+            if (BlazorJSRuntime.JS.IsUndefined("_willBeNull2")) throw new Exception("Unexpected result");
 
             // another way to pass undefined
             MethodWithUndefinableParams("_willAlsoBeUndefined2", Undefinable<bool?>.Undefined);
-            if (!JS.IsUndefined("_willAlsoBeUndefined2")) throw new Exception("Unexpected result");
+            if (!BlazorJSRuntime.JS.IsUndefined("_willAlsoBeUndefined2")) throw new Exception("Unexpected result");
         }
     }
 }

@@ -48,7 +48,7 @@ namespace SpawnDev.BlazorJS {
             if (IsDisposed) return;
             IsDisposed = true;
             _callback.Dispose();
-            JS.DisposeCallback(_callbackId);
+            BlazorJSRuntime.JS.DisposeCallback(_callbackId);
 #if DEBUG  && false
             Console.WriteLine($"Disposed callbackerID: {callbackerID} {CallbackType.Name}");
 #endif

@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.Test.Services
         public MediaDevicesService()
         {
             if (!Supported) return;
-            mediaDevices = JS.Get<MediaDevices>("navigator.mediaDevices");
+            mediaDevices = BlazorJSRuntime.JS.Get<MediaDevices>("navigator.mediaDevices");
             mediaDevices.OnDeviceChange(() => { _ = UpdateDeviceList(); });
         }
 

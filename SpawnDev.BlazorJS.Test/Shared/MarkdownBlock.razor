@@ -102,7 +102,7 @@
             }
             catch (Exception ex)
             {
-                JS.Log($"Exception: {ex.Message}");
+                BlazorJSRuntime.JS.Log($"Exception: {ex.Message}");
             }
             if (!string.IsNullOrEmpty(_markDownUri.Fragment))
             {

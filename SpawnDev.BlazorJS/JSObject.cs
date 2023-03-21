@@ -71,8 +71,10 @@ namespace SpawnDev.BlazorJS
             DisposeExceptRef();
             return _ref;
         }
-        public T JSRefCopy<T>() where T : JSObject => JS.ReturnMe<T>(this);
-        public IJSInProcessObjectReference JSRefCopy() => JS.ReturnMe<IJSInProcessObjectReference>(this);
+        public T JSRefCopy<T>() where T : JSObject => JSInterop.ReturnMe<T>(this);
+        public IJSInProcessObjectReference JSRefCopy() => JSInterop.ReturnMe<IJSInProcessObjectReference>(this);
+
+        protected static BlazorJSRuntime JS => BlazorJSRuntime.JS;
 
         public void DisposeExceptRef()
         {

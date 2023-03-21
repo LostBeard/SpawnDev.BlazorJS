@@ -11,13 +11,15 @@ namespace SpawnDev.BlazorJS.JSObjects {
         // https://web.dev/file-system-access/
         // 
 
+        static protected BlazorJSRuntime JS => BlazorJSRuntime.JS;
+
         IJSInProcessObjectReference window;
         public static bool Supported => JS.TypeOf("window.showOpenFilePicker") != "undefined";
 
         public FileSystemAccess() {
             window = JS.Get<IJSInProcessObjectReference>("window");
             //Supported = IJSObject.TypeOf("window.showOpenFilePicker") == "undefined";
-            Console.WriteLine("!!! The class FileSystemAccess is being used but has not beem tested completely. Please report bugs"); ;
+            Console.WriteLine("!!! The class FileSystemAccess is being used but has not seem tested completely. Please report bugs"); ;
         }
 
         public async Task<List<FileSystemFileHandle>> ShowOpenFilePicker(bool multiple = true, bool excludeAcceptAllOption = false, List<FileSystemAccessPickerFilter> filters = null) {

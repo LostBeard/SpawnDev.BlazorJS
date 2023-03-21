@@ -21,7 +21,7 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         }
 
         public static JSCallResultType FromGeneric(Type returnType) {
-            var jsonConverter = JS.RuntimeJsonSerializerOptions.GetConverter(returnType);
+            var jsonConverter = BlazorJSRuntime.RuntimeJsonSerializerOptions.GetConverter(returnType);
             var resultTypeOrig = FromGenericOrig(returnType);
             var jsReturnTypeOverride = JSCallResultType.Default;
             var overrideIt = false;
@@ -36,7 +36,7 @@ namespace SpawnDev.BlazorJS.JsonConverters {
 
         public static JSCallResultType FromGeneric<TResult>() {
             var returnType = typeof(TResult);
-            var jsonConverter = JS.RuntimeJsonSerializerOptions.GetConverter(returnType);
+            var jsonConverter = BlazorJSRuntime.RuntimeJsonSerializerOptions.GetConverter(returnType);
             var resultTypeOrig = FromGenericOrig<TResult>();
             var jsReturnTypeOverride = JSCallResultType.Default;
             var overrideIt = false;

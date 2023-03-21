@@ -46,7 +46,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             _port.OnMessageError += _port_OnError;
             additionalCallArgs.Add(new CallSideParamter("caller", () => this, typeof(ServiceCallDispatcher)));
         }
-
+        protected static BlazorJSRuntime JS = BlazorJSRuntime.JS;
         private void _port_OnError() {
             JS.Log("_port_OnError");
         }
@@ -248,7 +248,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                 }
             }
             catch (Exception ex) {
-                JS.Log("ERROR: ", e);
+                BlazorJSRuntime.JS.Log("ERROR: ", e);
                 Console.WriteLine($"ERROR: {ex.Message}");
                 Console.WriteLine($"ERROR stacktrace: {ex.StackTrace}");
             }

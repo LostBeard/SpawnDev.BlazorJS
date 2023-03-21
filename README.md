@@ -15,19 +15,41 @@ An easy Javascript interop library designed specifically for client side Blazor.
 Supports Blazor WebAssembly .Net 6, 7, and 8.
 
 - Use Javascript libraries in Blazor without writing any Javascript code
-- Alternative access to IJSRuntime JS is globally available without injection and is usable on the first line of Program.cs
-- Get and set global properties via JS.Set and JS.Get
-- Create new Javascript objects with JS.New
-- Get and set object properties via IJSInProcessObjectReference extended methods
+- An alternative JSRuntime that wraps the default one adding additional functionality.
+- Create new Javascript objects directly from Blazor
+- Get and set Javascript object properties as well as access methods.
 - Easily pass .Net methods to Javascript using the Callback.Create or Callback.CreateOne methods
-- Strongly typed Javascript object deserialization/serialization with interfaces
-- Strongly typed Javascript object deserialization/serialization with the JSObject base class
+- Wrap Javascript objects for direct manipulation from Blazor
+- - Easily access Javascript objects by wrapping them in a simple interface that implements IJSObject
+- - Alternatively use the JSObject base class to wrap your objects for more control
 - Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WebRTC, DOM, etc...
 - Use SpawnDev.BlazorJS.WebWorkers to enable calling Blazor services in web worker threads
+- Supports Promises, Union method parameters, passing undefined to Javascript, and more.
 
-# JS 
+# BlazorJSRuntime 
+Getting started. Add the BlazorJSRuntime service in your Program.cs
 
 ```cs
+...
+using SpawnDev.BlazorJS;
+
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
+
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+// SpawnDev.BlazorJS.BlazorJSRuntime service
+builder.Services.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS);
+
+await builder.Build().RunAsync();
+```
+
+And use.
+```cs
+[Inject]
+BlazorJSRuntime JS { get; set; }
+
 // Get Set
 var innerHeight = JS.Get<int>("window.innerHeight");
 JS.Set("document.title", "Hello World!");
@@ -293,7 +315,7 @@ if (boolValue != JS.Get<bool?>("_boolUnionValue")) throw new Exception("Unexpect
 
 # Undefinable
 ## Use Undefinable\<T\> type to pass undefined to Javascript
-Some Javascript API calls may have optional parameters that behave differently depending on if you pass a null versus undefined. You can now retain string typing on JSObject method calls and support passing undefined for JSObject parameters.
+Some Javascript API calls may have optional parameters that behave differently depending on if you pass a null versus undefined. You can now retain strong typing on JSObject method calls and support passing undefined for JSObject parameters.
 
 New Undefinable\<T\> type. 
 
@@ -380,7 +402,9 @@ if (JS.IsWindow)
 }
 // add services
 builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-// SpawnDev.BlazorJS.WebWorkers
+// SpawnDev.BlazorJS.BlazorJSRuntime service
+builder.Services.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS);
+// SpawnDev.BlazorJS.WebWorkers.WebWorkerService service
 builder.Services.AddSingleton<WebWorkerService>();
 // app specific services...
 // worker services should be registered with an interface to work with WebWorker.GetService<TServiceInterface>()

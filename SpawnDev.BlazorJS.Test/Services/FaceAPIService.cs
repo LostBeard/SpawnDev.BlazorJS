@@ -46,8 +46,9 @@ namespace SpawnDev.BlazorJS.Test.Services {
         public Task<bool> SetWorkerCount(int count) => _workerPool.SetWorkerCount(count);
 
         IJSInProcessObjectReference? _faceapi = null;
-
-        public FaceAPIService(NavigationManager navigator, WebWorkerPool workerPool) {
+        BlazorJSRuntime JS;
+        public FaceAPIService(BlazorJSRuntime js, NavigationManager navigator, WebWorkerPool workerPool) {
+            JS = js;
             _workerPool = workerPool;
             _appBaseUri = navigator.BaseUri;
             _modelPath = $"{_appBaseUri}{_modelPath}";

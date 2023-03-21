@@ -7,15 +7,20 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
 
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-if (JS.IsWindow)
+if (BlazorJSRuntime.JS.IsWindow)
 {
     // we can skip adding dom objects in non UI threads
     builder.RootComponents.Add<App>("#app");
     builder.RootComponents.Add<HeadOutlet>("head::after");
 }
+
 // add services
 builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+// SpawnDev.BlazorJS.JSRuntime
+builder.Services.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS);
+builder.Services.AddSingleton<WebWorkerService>();
 // SpawnDev.BlazorJS.WebWorkers
 builder.Services.AddSingleton<WebWorkerService>();
 builder.Services.AddSingleton<WebWorkerPool>();
@@ -33,6 +38,7 @@ builder.Services.AddSingleton<ContextMenuService>();
 // build 
 WebAssemblyHost host = builder.Build();
 // initialize WebWorkerService
+var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
 await webWorkerService.InitAsync();
 #region TestingSection

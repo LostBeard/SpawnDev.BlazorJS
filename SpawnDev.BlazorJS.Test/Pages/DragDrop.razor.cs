@@ -17,6 +17,10 @@ namespace SpawnDev.BlazorJS.Test.Pages
 
     public partial class DragDrop : IDisposable
     {
+
+        [Inject]
+        BlazorJSRuntime JS { get; set; }
+
         ElementReference _dragDropContainer { get; set; }
         CallbackGroup _callbacks = new CallbackGroup();
         List<SomeItemType> _someItems = new List<SomeItemType>();

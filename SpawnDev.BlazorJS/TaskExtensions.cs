@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS
+﻿using System.Threading.Tasks.Sources;
+
+namespace SpawnDev.BlazorJS
 {
     public static class TaskExtensions
     {

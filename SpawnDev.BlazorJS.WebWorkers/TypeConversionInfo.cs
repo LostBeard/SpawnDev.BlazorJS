@@ -327,11 +327,11 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                 if (DictionaryKeyType != null && DictionaryValueType != null) {
                     var tmpRet = Activator.CreateInstance(ReturnType) as System.Collections.IDictionary;
                     if (tmpRet != null) {
-                        using var keysArray = JS.Call<IJSInProcessObjectReference>("Object.keys", _ref);
+                        using var keysArray = BlazorJSRuntime.JS.Call<IJSInProcessObjectReference>("Object.keys", _ref);
                         if (keysArray != null) {
                             var length = keysArray.Get<int>("length");
                             if (length > 0) {
-                                using var valuesArray = JS.Call<IJSInProcessObjectReference>("Object.values", _ref);
+                                using var valuesArray = BlazorJSRuntime.JS.Call<IJSInProcessObjectReference>("Object.values", _ref);
                                 if (valuesArray != null) {
                                     for (var i = 0; i < length; i++) {
                                         object? key = null;
