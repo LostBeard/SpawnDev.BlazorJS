@@ -273,7 +273,7 @@ audio.Play();
 ```
 
 # Union
-## Use the Union\<T1, T2, ...\> type for your JSObject method parameters for strong typing while allowing unrelated types just like in TypeScript.
+## Use the Union\<T1, T2, ...\> type with method parameters for strong typing while allowing unrelated types just like in TypeScript.
 
 ```cs
 void UnionTypeTestMethod(string varName, Union<bool?, string?>? unionTypeValue)
