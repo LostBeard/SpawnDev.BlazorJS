@@ -1,5 +1,5 @@
 
-## NuGet
+# NuGet
 
 | Package | Description | Link |
 |---------|-------------|------|
@@ -22,10 +22,10 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 - Easily pass .Net methods to Javascript using the Callback.Create or Callback.CreateOne methods
 - Strongly typed Javascript object deserialization/serialization with interfaces
 - Strongly typed Javascript object deserialization/serialization with the JSObject base class
-- Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WEbRTC, DOM, etc...
+- Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WebRTC, DOM, etc...
 - Use SpawnDev.BlazorJS.WebWorkers to enable calling Blazor services in web worker threads
 
-# JS
+# JS 
 
 ```cs
 // Get Set
@@ -49,12 +49,10 @@ var myVar = window.Get<int>("myVar");
 window.CallVoid("addEventListener", "resize", Callback.Create(() => Console.WriteLine("WindowResized")));
 ```
 
-
 Create a new Javascript object
 ```cs
-var worker = JS.New("Worker", myWorkerScript);
+IJSInProcessObjectReference worker = JS.New("Worker", myWorkerScript);
 ```
-
 
 # Callback
 
@@ -139,6 +137,8 @@ JSObject type wrapper example (same as the IJSObject interface example above but
 // create a class for your Javascript object that inherits from JSObject
 public class Window : JSObject 
 {
+    // required constructor
+    public Window(IJSInProcessObjectReference _ref) : base(_ref) { }
     public string Name { get => JSRef.Get<string>("name"); set => JSRef.Set("name", value); }
     public void Alert(string msg = "") => JSRef.CallVoid(msg);
     // ...
@@ -185,7 +185,7 @@ var name = window.Name;
 window.Alert("Hello!");
 ```
 
-# Promise
+## Promise
 SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class.
 Promises can be created in .Net to wrap async methods or Tasks. They are essentially Javascript's version of Task.
 
@@ -247,7 +247,34 @@ using var waitLock2 = locks.Request("my_lock", Callback.CreateOne((Lock lockObj)
 Console.WriteLine($"lock: 2");
 ```
 
-# Undefinable\<T\> Passing undefined to Javascript
+## Custom JSObjects  
+Implement your own JSObject classes for Javascript objects not already available in the BlazorJS.JSObjects library.
+
+Instead of this (simple but not as reusable)
+```cs
+var audio = JS.New("Audio", "https://some_audio_online");
+audio.CallVoid("play");
+```
+You can do this...  
+Create a custom JSObject wrapper
+```cs
+public class Audio : JSObject
+{
+    public Audio(IJSInProcessObjectReference _ref) : base(_ref) { }
+    public Audio(string url) : base(JS.New("Audio", url)) { }
+    public void Play() => JSRef.CallVoid("play");
+}
+```
+
+Then use your new object
+```cs
+var audio = new Audio("https://some_audio_online");
+audio.Play();
+```
+
+
+# Undefinable
+## Using Undefinable\<T\> to pass undefined to Javascript
 Some Javascript API calls may have optional parameters that behave differently depending on if you pass a null versus undefined. You can now retain string typing on JSObject method calls and support passing undefined for JSObject parameters.
 
 New Undefinable\<T\> type. 
@@ -290,33 +317,6 @@ var undefinedWindow = JSObject.Undefined<Window>();
 JS.Set("_undefinedWindow", undefinedWindow);
 var isUndefined = JS.IsUndefined("_undefinedWindow");
 // isUndefined == true here
-```
-
-
-# Custom JSObjects  
-Implement your own JSObject classes for Javascript objects not already available in the BlazorJS.JSObjects library.
-
-Instead of this (simple but not as reusable)
-```cs
-var audio = JS.New("Audio", "https://some_audio_online");
-audio.CallVoid("play");
-```
-
-You can do this...  
-Create a custom JSObject wrapper
-```cs
-public class Audio : JSObject
-{
-    public Audio(IJSInProcessObjectReference _ref) : base(_ref) { }
-    public Audio(string url) : base(JS.New("Audio", url)) { }
-    public void Play() => JSRef.CallVoid("play");
-}
-```
-
-Then use your new object
-```cs
-var audio = new Audio("https://some_audio_online");
-audio.Play();
 ```
 
 # SpawnDev.BlazorJS.WebWorkers
@@ -375,7 +375,7 @@ await workerService.InitAsync();
 await host.RunAsync();
 ```
 
-# WebWorker
+## WebWorker
 ```cs
 
 // Create a WebWorker
@@ -403,7 +403,7 @@ var result = await workerMathService.CalculatePiWithActionProgress(piDecimalPlac
 }));
 ```
 
-# SharedWebWorker
+## SharedWebWorker
 Calling GetSharedWebWorker in another window with the same sharedWorkerName will return the same SharedWebWorker
 ```cs
 // Create or get SHaredWebWorker with the provided sharedWorkerName
@@ -417,7 +417,7 @@ var result = await workerMathService.CalculatePi(piDecimalPlaces);
 
 ```
 
-# Send events
+## Send events
 ```cs
 // Optionally listen for event messages
 worker.OnMessage += (sender, msg) =>
@@ -487,7 +487,7 @@ IJSInProcessObjectReference does not dispose of interop resources with a finaliz
 
 IDisposable objects returned from a WebWorker or SharedWorker service are automatically disposed after the data has been sent to the calling thread.
 
-## Support
+# Support
 
 Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
 
