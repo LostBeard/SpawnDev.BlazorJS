@@ -272,9 +272,27 @@ var audio = new Audio("https://some_audio_online");
 audio.Play();
 ```
 
+# Union
+## Use the Union\<T1, T2, ...\> type for your JSObject method parameters for strong typing while allowing unrelated types just like in TypeScript.
+
+```cs
+void UnionTypeTestMethod(string varName, Union<bool?, string?>? unionTypeValue)
+{
+    JS.Set(varName, unionTypeValue);
+}
+
+var stringValue = "Hello world!";
+UnionTypeTestMethod("_stringUnionValue", stringValue);
+if (stringValue != JS.Get<string?>("_stringUnionValue")) throw new Exception("Unexpected result");
+
+var boolValue = true;
+UnionTypeTestMethod("_boolUnionValue", boolValue);
+if (boolValue != JS.Get<bool?>("_boolUnionValue")) throw new Exception("Unexpected result");
+```
+
 
 # Undefinable
-## Using Undefinable\<T\> to pass undefined to Javascript
+## Use Undefinable\<T\> type to pass undefined to Javascript
 Some Javascript API calls may have optional parameters that behave differently depending on if you pass a null versus undefined. You can now retain string typing on JSObject method calls and support passing undefined for JSObject parameters.
 
 New Undefinable\<T\> type. 

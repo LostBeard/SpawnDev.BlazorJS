@@ -59,6 +59,7 @@ namespace SpawnDev.BlazorJS {
             if (options != null) {
                 RuntimeJsonSerializerOptions = (JsonSerializerOptions)Convert.ChangeType(options, typeof(JsonSerializerOptions));
                 // below lines make sure BlazorJS objects are properly serialized
+                RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
                 RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
