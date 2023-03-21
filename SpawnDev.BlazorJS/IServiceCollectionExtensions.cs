@@ -65,14 +65,25 @@ namespace SpawnDev.BlazorJS
         }
 
         /// <summary>
-        /// Use this method instead of RunAsync to enable BlazorJS support for IBackgroundService services registered with the IServiceCollection.AddBackgroundService method
+        /// Use this method instead of RunAsync to enable BlazorJS support for IBackgroundService services registered with the IServiceCollection.AddBackgroundService method.
+        /// And to also enable disable app rendering in workers to prevent unexpected behavior
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
         public static async Task BlazorJSRunAsync(this WebAssemblyHost _this)
         {
             await _this.StartBackgroundServices();
-            await _this.RunAsync();
+            var tcs = new TaskCompletionSource<object>();
+            if (BlazorJSRuntime.JS.IsWorker)
+            {
+                // This is a worker so we are going to use this to allow services in workers without the html renderer trying to load pages
+                await tcs.Task;
+            }
+            else
+            {
+                // run as normal
+                await _this.RunAsync();
+            }
         }
     }
 }

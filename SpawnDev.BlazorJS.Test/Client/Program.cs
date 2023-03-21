@@ -16,15 +16,15 @@ builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(bui
 builder.Services.AddBlazorJSRuntime();
 // Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
 builder.Services.AddWebWorkerService();
-// Add WebWorkerPool service (WIP)
+// Add WebWorkerPool service (WIP. optional)
 builder.Services.AddSingleton<WebWorkerPool>();
-// Add app services the app will call on the main thread and/or web worker threads
+// Add app services that will be called on the main thread and/or worker threads
 builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
 builder.Services.AddSingleton<IMathsService, MathsService>();
 // More app services
 builder.Services.AddSingleton<MediaDevices>();
 builder.Services.AddSingleton<MediaDevicesService>();
-// Radzen UI elements
+// Radzen UI services
 builder.Services.AddSingleton<DialogService>();
 builder.Services.AddSingleton<NotificationService>();
 builder.Services.AddSingleton<TooltipService>();
