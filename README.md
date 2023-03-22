@@ -380,27 +380,16 @@ var isUndefined = JS.IsUndefined("_undefinedWindow");
 
 - Works in Blazor WASM .Net 6, 7, and 8.
 
-| Browser         | WebWorker Status |
-|-----------------|------------------|
-| Chrome          | <br>&#9745; WebWorker<br>&#9744; SharedWebWorker<br>| 
-|MS Edge          | <br>&#9745; WebWorker<br>&#9745; SharedWebWorker<br>| 
+Tested working in the following browsers (tested with .Net 8.) Chrome Android does not currently support SharedWorkers. 
 
-- Tested WebWon (with .Net 8):  
- Chrome Windows - Working  
- MS Edge Windows - Working  
- Firefox Windows - Working  
- Chrome Android - Working  
- MS Edge Android - Working  
- Firefox Android - Working
-
-- Tested on (with .Net 8):  
- Chrome Windows - Working  
- MS Edge Windows - Working  
- Firefox Windows - Working  
- Chrome Android - Working  
- MS Edge Android - Working  
- Firefox Android - Working
-
+| Browser         | WebWorker Status | SharedWebWorker Status |
+|-----------------|------------------|------------------------|
+| Chrome          | ✔ | ✔ |
+| MS Edge         | ✔ | ✔ |
+| Firefox         | ✔ | ✔ | 
+| Chrome Android  | ✔ | ❌ (SharedWorker not supported by browser) |
+| MS Edge Android | ✔ | ✔ |
+| Firefox Android | ✔ | ✔ | 
 
 Firefox WebWorkers note:  
 Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
