@@ -16,9 +16,8 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static IServiceCollection AddBlazorJSRuntime(this IServiceCollection _this)
         {
-            _this.AddSingleton<IBlazorJSRuntime>(BlazorJSRuntime.JS);
-            _this.AddSingleton(serviceProvider => (BlazorJSRuntime)serviceProvider.GetRequiredService<IBlazorJSRuntime>());
-            return _this;
+            // Adds BlazorJSRuntime as BlazorJSRuntime and IBlazorJSRuntime
+            return _this.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS).AddSingleton(serviceProvider => (IBlazorJSRuntime)serviceProvider.GetRequiredService<BlazorJSRuntime>());
         }
         internal static Dictionary<Type, IBackgroundService?> Services { get; private set; } = new Dictionary<Type, IBackgroundService?>();
 
@@ -31,8 +30,7 @@ namespace SpawnDev.BlazorJS
         public static IServiceCollection AddBackgroundService<TService>(this IServiceCollection _this) where TService : class, IBackgroundService
         {
             Services.Add(typeof(TService), null);
-            _this.AddSingleton<TService>();
-            return _this;
+            return _this.AddSingleton<TService>();
         }
 
         /// <summary>
@@ -44,8 +42,7 @@ namespace SpawnDev.BlazorJS
         public static IServiceCollection AddBackgroundService<TService, TImplementation>(this IServiceCollection _this) where TImplementation : class, TService, IBackgroundService where TService : class
         {
             Services.Add(typeof(TService), null);
-            _this.AddSingleton<TService, TImplementation>();
-            return _this;
+            return _this.AddSingleton<TService, TImplementation>();
         }
 
         /// <summary>

@@ -27,32 +27,24 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 - Supports Promises, Union method parameters, passing undefined to Javascript, and more.
 
 # BlazorJSRuntime 
-Getting started. Add the BlazorJSRuntime service in your Program.cs
+Getting started. Using BlazorJS requires 2 changes to your Program.cs.
+- Add the BlazorJSRuntime service with builder.Services.AddBlazorJSRuntime()
+- Initialize BlazorJSRuntime by calling builder.Build().BlazorJSRunAsync() instead of builder.Build().RunAsync()
 
 ```cs
-// ...
+// ... other usings
 using SpawnDev.BlazorJS;
-using SpawnDev.BlazorJS.WebWorkers;
 
+// ... normal builder code
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
-// Add services
-builder.Services.AddSingleton((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+// Services section
 // Add SpawnDev.BlazorJS.BlazorJSRuntime
 builder.Services.AddBlazorJSRuntime();
-// Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
-builder.Services.AddWebWorkerService();
-// Add WebWorkerPool service (WIP. optional)
-builder.Services.AddSingleton<WebWorkerPool>();
-// Add app services that will be called on the main thread and/or worker threads (Worker services must use interfaces)
-builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
-builder.Services.AddSingleton<IMathsService, MathsService>();
-// More app services
-// ...
+// ... more app services
 // build and Init using BlazorJSRunAsync (instead of RunAsync)
 await builder.Build().BlazorJSRunAsync();
-
 ```
 
 And use.
@@ -374,11 +366,11 @@ var isUndefined = JS.IsUndefined("_undefinedWindow");
 
 - Easily call Blazor Services in separate threads with WebWorkers and SharedWebWorkers 
 
+- Works in Blazor WASM .Net 6, 7, and 8.
+
 - Does not require SharedArrayBuffer and therefore does not require the special HTTP headers associated with using it.
 
 - Supports and uses transferable objects whenever possible
-
-- Works in Blazor WASM .Net 6, 7, and 8.
 
 Tested working in the following browsers (tested with .Net 8.) Chrome Android does not currently support SharedWorkers. 
 
@@ -397,7 +389,7 @@ The web worker script now tries to detect this and changes the blazor wasm scrip
 
 Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
 
-Example WebWorkerService setup and usage
+Example WebWorkerService setup and usage. 
 
 ```cs
 // Program.cs
