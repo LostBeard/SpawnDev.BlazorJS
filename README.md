@@ -380,6 +380,19 @@ var isUndefined = JS.IsUndefined("_undefinedWindow");
 
 - Works in Blazor WASM .Net 6, 7, and 8.
 
+| Browser         | WebWorker Status |
+|-----------------|------------------|
+| Chrome          | <br>&#9745; WebWorker<br>&#9744; SharedWebWorker<br>| 
+|MS Edge          | <br>&#9745; WebWorker<br>&#9745; SharedWebWorker<br>| 
+
+- Tested WebWon (with .Net 8):  
+ Chrome Windows - Working  
+ MS Edge Windows - Working  
+ Firefox Windows - Working  
+ Chrome Android - Working  
+ MS Edge Android - Working  
+ Firefox Android - Working
+
 - Tested on (with .Net 8):  
  Chrome Windows - Working  
  MS Edge Windows - Working  
