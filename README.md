@@ -388,7 +388,7 @@ Tested working in the following browsers (tested with .Net 8.) Chrome Android do
 | MS Edge         | ✔ | ✔ |
 | Firefox         | ✔ | ✔ | 
 | Chrome Android  | ✔ | ❌ (SharedWorker not supported by browser) |
-| MS Edge Android | ✔ | ✔ |
+| MS Edge Android | ✔ | ❌ (SharedWorker not supported by browser) |
 | Firefox Android | ✔ | ✔ | 
 
 Firefox WebWorkers note:  
