@@ -38,17 +38,25 @@
     [TestMethod]
     public async Task WebWorkerTest()
     {
+        if (!webWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
         using var worker = await webWorkerService.GetWebWorker();
         var mathService = worker.GetService<IMathsService>();
         var randValue = Guid.NewGuid().ToString();
         await mathService.SetValueTest(randValue);
-        var readBack = await  mathService.GetValueTest();
+        var readBack = await mathService.GetValueTest();
         if (readBack != randValue) throw new Exception("Unexpected result");
     }
 
     [TestMethod]
     public async Task SharedWebWorkerTest()
     {
+        if (!webWorkerService.SharedWebWorkerSupported)
+        {
+            throw new Exception("SharedWorker not supported by browser. Expected failure.");
+        }
         using var worker = await webWorkerService.GetSharedWebWorker();
         var mathService = worker.GetService<IMathsService>();
         var randValue = Guid.NewGuid().ToString();
@@ -60,19 +68,33 @@
     [TestMethod]
     public async Task SharedWebWorkerDoubleTest()
     {
-        using var workerA = await webWorkerService.GetSharedWebWorker();
-        using var workerB = await webWorkerService.GetSharedWebWorker();
-        var mathServiceA = workerA.GetService<IMathsService>();
+        if (!webWorkerService.SharedWebWorkerSupported)
+        {
+            throw new Exception("SharedWorker not supported by browser. Expected failure.");
+        }
+        using var workerA1 = await webWorkerService.GetSharedWebWorker("workerA");
+        using var workerA2 = await webWorkerService.GetSharedWebWorker("workerA");
+        using var workerB = await webWorkerService.GetSharedWebWorker("workerB");
+        var mathServiceA1 = workerA1.GetService<IMathsService>();
+        var mathServiceA2 = workerA2.GetService<IMathsService>();
         var mathServiceB = workerB.GetService<IMathsService>();
-        var randValue = Guid.NewGuid().ToString();
-        await mathServiceA.SetValueTest(randValue);
-        var readBack = await mathServiceB.GetValueTest();
-        if (readBack != randValue) throw new Exception("Unexpected result");
+        var valueSetWorkerA1 = Guid.NewGuid().ToString();
+        await mathServiceA1.SetValueTest(valueSetWorkerA1);
+        var valueGetWorkerB = await mathServiceB.GetValueTest();
+        var valueGetWorkerA1 = await mathServiceA1.GetValueTest();
+        var valueGetWorkerA2 = await mathServiceA2.GetValueTest();
+        if (valueGetWorkerA1 != valueSetWorkerA1) throw new Exception("Unexpected result");
+        if (valueGetWorkerA2 != valueSetWorkerA1) throw new Exception("SharedWorker appears not shared");
+        if (valueGetWorkerB == valueSetWorkerA1) throw new Exception("SharedWorker with different name unexpectedly same as first SharedWorker");
     }
 
     [TestMethod]
     public async Task WebWorkerDoubleTest()
     {
+        if (!webWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
         using var workerA = await webWorkerService.GetWebWorker();
         using var workerB = await webWorkerService.GetWebWorker();
         var mathServiceA = workerA.GetService<IMathsService>();

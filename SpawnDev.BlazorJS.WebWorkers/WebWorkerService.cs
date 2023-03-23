@@ -7,40 +7,31 @@ namespace SpawnDev.BlazorJS.WebWorkers {
     // chrome://inspect/#workers
     public class WebWorkerService : IDisposable, IBackgroundService
     {
-        public static bool SharedWebWorkerSupported { get; private set; }
-        public static bool WebWorkerSupported { get; private set; }
+        public bool SharedWebWorkerSupported { get; private set; }
+        public bool WebWorkerSupported { get; private set; }
         public List<WebWorker> Workers { get; } = new List<WebWorker>();
         public List<SharedWebWorker> SharedWorkers { get; } = new List<SharedWebWorker>();
-        static WebWorkerService? _staticThis = null;
-        HttpClient _httpClient;
-        NavigationManager _navigator;
         IServiceProvider _serviceProvider;
         public string AppBaseUri { get; }
         public bool BeenInit { get; private set; }
         DateTime StartTime = DateTime.Now;
         public int MaxWorkerCount { get; private set; } = 0;
-
+        public string ThisSharedWorkerName { get; private set; } = "";
+        //BroadcastChannel _eventChannel = new BroadcastChannel(nameof(WebWorkerService));
+        CallbackGroup _callbackGroup = new CallbackGroup();
+        string InstanceId { get; } = Guid.NewGuid().ToString();
         static string WebWorkerJSScript = "_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js";
-        static BlazorJSRuntime JS => BlazorJSRuntime.JS;
-        static WebWorkerService() {
+        BlazorJSRuntime JS;
+        public WebWorkerService(IServiceProvider serviceProvider, BlazorJSRuntime js) {
+            JS = js;
             WebWorkerSupported = !JS.IsUndefined("Worker");
             SharedWebWorkerSupported = !JS.IsUndefined("SharedWorker");
-        }
-        public WebWorkerService(NavigationManager navigator, HttpClient httpClient, IServiceProvider serviceProvider) {
-            _staticThis = this;
-            _httpClient = httpClient;
-            _navigator = navigator;
             _serviceProvider = serviceProvider;
-            AppBaseUri = _navigator.BaseUri;
+            AppBaseUri = JS.Get<string>("document.baseURI");
             var hardwareConcurrency = JS.Get<int?>("navigator.hardwareConcurrency");
             MaxWorkerCount = hardwareConcurrency == null || hardwareConcurrency.Value == 0 ? 0 : hardwareConcurrency.Value;
         }
-
-        CallbackGroup _callbackGroup = new CallbackGroup();
-
-        //BroadcastChannel _eventChannel = new BroadcastChannel(nameof(WebWorkerService));
-
-        string InstanceId = Guid.NewGuid().ToString();
+       
         class WebWorkerServiceEventMsgBase {
             public string SrcId { get; set; } = "";
             public string Event { get; set; } = "";
@@ -65,8 +56,6 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             StartTime = StartTime,
             LastSeen = DateTime.Now,
         };
-
-        string ThisSharedWorkerName;
 
         public ServiceCallDispatcher? DedicatedWorkerParent { get; private set; } = null;
 
@@ -104,7 +93,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                     }
                 }
                 catch { }
-                JS.Log($"Listening for connections: took {missedConnections.Length} missed connections");
+                JS.Log($"SharedWorker {ThisSharedWorkerName} listening for connections: took {SharedWorkerIncomingConnections.Count} missed connections");
             }
             //BroadcastPing();
         }
@@ -203,6 +192,13 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             return webWorker;
         }
 
+        /// <summary>
+        /// Returns a SharedWebWorker
+        /// </summary>
+        /// <param name="sharedWorkerName">SharedWebWorkers are identified by name. 1 shared worker will be created per name.</param>
+        /// <param name="verboseMode"></param>
+        /// <param name="awaitWhenReady"></param>
+        /// <returns></returns>
         public async Task<SharedWebWorker?> GetSharedWebWorker(string sharedWorkerName = "", bool verboseMode = false, bool awaitWhenReady = true) {
             if (!SharedWebWorkerSupported) return null;
             var queryArgs = new NameValueCollection();

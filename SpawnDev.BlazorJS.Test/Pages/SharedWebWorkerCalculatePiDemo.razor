@@ -16,8 +16,8 @@
         <div>While processing PI without a worker the main thread will be unresponsive</div>
         <button disabled=@RunDisabled @onclick=OnWithoutThreadClicked class="btn btn-primary">Without SharedWorker</button><br /><br />
         <div>While processing PI with a worker the main thread will stay responsive</div>
-        <button disabled=@RunDisabled @onclick=OnWithThreadClicked class="btn btn-primary">With SharedWorker</button><br /><br />
-        <button disabled="@canDisposeWorker" @onclick="OnDisposeWorker" class="btn btn-secondary">Dispose SharedWorker</button><br />
+        <button disabled=@WorkerDisabled @onclick=OnWithThreadClicked class="btn btn-primary">With SharedWorker @(supported ? "" : " [ UNSUPPORTED ]")</button><br /><br />
+        <button disabled=@canDisposeWorker @onclick="OnDisposeWorker" class="btn btn-secondary">Dispose SharedWorker</button><br />
         <strong>Output:</strong>
         <hr />
         <pre style="min-width: 800px; min-height: 300px;">
@@ -32,6 +32,8 @@
     SharedWebWorker? webWorker;
     string? canDisposeWorker => webWorker != null ? null : "disabled";
     string? RunDisabled => Running ? "disabled" : null;
+    string? WorkerDisabled => Running || !supported ? "disabled" : null;
+    bool supported => webWorkerService != null && webWorkerService.SharedWebWorkerSupported;
     bool Running = false;
 
     string rn = Environment.NewLine;
