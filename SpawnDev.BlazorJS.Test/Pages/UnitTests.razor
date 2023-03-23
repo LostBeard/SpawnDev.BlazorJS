@@ -51,6 +51,23 @@
     }
 
     [TestMethod]
+    public async Task WebWorkersTest()
+    {
+        if (!webWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        using var workerA = await webWorkerService.GetWebWorker();
+        using var workerB = await webWorkerService.GetWebWorker();
+        var mathServiceA = workerA.GetService<IMathsService>();
+        var mathServiceB = workerB.GetService<IMathsService>();
+        var randValue = Guid.NewGuid().ToString();
+        await mathServiceA.SetValueTest(randValue);
+        var readBack = await mathServiceB.GetValueTest();
+        if (readBack == randValue) throw new Exception("Unexpected result");
+    }
+
+    [TestMethod]
     public async Task SharedWebWorkerTest()
     {
         if (!webWorkerService.SharedWebWorkerSupported)
@@ -66,12 +83,14 @@
     }
 
     [TestMethod]
-    public async Task SharedWebWorkerDoubleTest()
+    public async Task SharedWebWorkersByName()
     {
         if (!webWorkerService.SharedWebWorkerSupported)
         {
             throw new Exception("SharedWorker not supported by browser. Expected failure.");
         }
+        // workerA1 and workerA2 will refer to the same shared worker
+        // workerB is a separate worker instance
         using var workerA1 = await webWorkerService.GetSharedWebWorker("workerA");
         using var workerA2 = await webWorkerService.GetSharedWebWorker("workerA");
         using var workerB = await webWorkerService.GetSharedWebWorker("workerB");
@@ -86,22 +105,5 @@
         if (valueGetWorkerA1 != valueSetWorkerA1) throw new Exception("Unexpected result");
         if (valueGetWorkerA2 != valueSetWorkerA1) throw new Exception("SharedWorker appears not shared");
         if (valueGetWorkerB == valueSetWorkerA1) throw new Exception("SharedWorker with different name unexpectedly same as first SharedWorker");
-    }
-
-    [TestMethod]
-    public async Task WebWorkerDoubleTest()
-    {
-        if (!webWorkerService.WebWorkerSupported)
-        {
-            throw new Exception("Worker not supported by browser. Expected failure.");
-        }
-        using var workerA = await webWorkerService.GetWebWorker();
-        using var workerB = await webWorkerService.GetWebWorker();
-        var mathServiceA = workerA.GetService<IMathsService>();
-        var mathServiceB = workerB.GetService<IMathsService>();
-        var randValue = Guid.NewGuid().ToString();
-        await mathServiceA.SetValueTest(randValue);
-        var readBack = await mathServiceB.GetValueTest();
-        if (readBack == randValue) throw new Exception("Unexpected result");
     }
 }
