@@ -11,12 +11,28 @@ namespace SpawnDev.Blazor.UnitTesting {
         [Parameter]
         public IEnumerable<Assembly>? TestAssemblies { get; set; }
 
+        [Parameter]
+        public Func<Type, object?>? TypeInstanceResolver { get; set; }
+
         bool _beenInit = false;
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
             LoadFromParams();
+        }
+
+        public UnitTestsView()
+        {
+            unitTestService.OnUnitTestResolverEvent += UnitTestService_OnUnitTestResolverEvent;
+        }
+
+        private void UnitTestService_OnUnitTestResolverEvent(UnitTestRunner.UnitTestResolverEvent resolverEvent)
+        {
+            if (TypeInstanceResolver != null)
+            {
+                resolverEvent.TypeInstance = TypeInstanceResolver(resolverEvent.TestType);
+            }
         }
 
         void LoadFromParams()

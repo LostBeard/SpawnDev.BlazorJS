@@ -23,7 +23,7 @@ const globalThisTypeName = globalThisObj.constructor.name;
 
 var dynamicImportSupported = true;
 // this detection is a bit of a hack but dynamic import support testing is hit or miss also
-// TODO - test on firefix mobile/mac/linux
+// TODO - test on Firefox mobile/mac/linux
 if (navigator.userAgent && navigator.userAgent.indexOf('Firefox') > -1) {
     dynamicImportSupported = false;
     console.log('WARNING: Firefox may not support dynamic import in workers. WebWorkers may not work.');
@@ -57,10 +57,13 @@ var consoleLog = function () {
 consoleLog('spawndev.blazorjs.webworkers: started');
 consoleLog('location.href', location.href);
 var _frameworkPath = '';
+var _appPath = '';
 if (location.href.indexOf('_content/SpawnDev.BlazorJS.WebWorkers') > 0) {
     _frameworkPath = new URL(`../../_framework/`, location.href).toString();
+    _appPath = new URL(`../../`, location.href).toString();
 } else {
     _frameworkPath = new URL(`_framework/`, location.href).toString();
+    _appPath = new URL(`./`, location.href).toString();
 }
 consoleLog('_frameworkPath', _frameworkPath);
 
@@ -108,8 +111,7 @@ var initWebWorkerBlazor = async () => {
         if (dynamicImportSupported) {
             document.initDocument();
         }
-        else
-        {
+        else {
             consoleLog('Loading workaround to counter lack of dynamic import support in some browsers (Firefox, others?)');
             var integrity = '';
             //var blazorWasmJsUri = new URL('_content/SpawnDev.BlazorJS.WebWorkers/blazor.webassembly.pretty.js', document.baseURI);
@@ -182,26 +184,33 @@ var initWebWorkerBlazor = async () => {
     // https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/environments?view=aspnetcore-7.0
     Blazor.start({
         loadBootResource: function (type, name, defaultUri, integrity) {
-            var newUri = `${_frameworkPath}${name}`;
-            //console.log(`Loading: '${type}', '${name}', '${defaultUri}', '${integrity}', '${newUri}'`);
-            if (name === 'blazor.boot.json') {
-                return (async () => {
-                    var response = await fetch(newUri, {
-                        cache: 'no-cache',
-                        integrity: integrity,
-                    });
-                    var responseClone = response.clone();
-                    var json = await responseClone.json();
-                    // this is where we can modify json.entryAssembly or other boot config settings
-                    //consoleLog('blazor.boot.json', json);
-                    //json.debugBuild = false;
-                    //json.linkerEnabled = false;
-                    consoleLog('blazor.boot.json::entryAssembly', json.entryAssembly);
-                    var newRsponse = new Response(JSON.stringify(json), response);
-                    return newRsponse;
-                })();
-            } else if (name === 'blazor.webassembly.js') {
+            if (type == 'configuration') {
+                var newUri = `${_appPath}${name}`;
+                //console.log(`Loading: '${type}', '${name}', '${defaultUri}', '${integrity}', '${newUri}'`);
+                return newUri;
+            }
+            else {
+                var newUri = `${_frameworkPath}${name}`;
+                //console.log(`Loading: '${type}', '${name}', '${defaultUri}', '${integrity}', '${newUri}'`);
+                if (name === 'blazor.boot.json') {
+                    return (async () => {
+                        var response = await fetch(newUri, {
+                            cache: 'no-cache',
+                            integrity: integrity,
+                        });
+                        var responseClone = response.clone();
+                        var json = await responseClone.json();
+                        // this is where we can modify json.entryAssembly or other boot config settings
+                        //consoleLog('blazor.boot.json', json);
+                        //json.debugBuild = false;
+                        //json.linkerEnabled = false;
+                        consoleLog('blazor.boot.json::entryAssembly', json.entryAssembly);
+                        var newRsponse = new Response(JSON.stringify(json), response);
+                        return newRsponse;
+                    })();
+                } else if (name === 'blazor.webassembly.js') {
 
+                }
             }
             return newUri;
         }

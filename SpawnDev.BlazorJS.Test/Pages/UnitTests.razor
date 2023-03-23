@@ -8,11 +8,78 @@
     This page runs tests to verify SpawnDev.BlazorJS is working as expected.
 </p>
 
-<UnitTestsView TestAssemblies="_assemblies"></UnitTestsView>
+<UnitTestsView TypeInstanceResolver="TestTypeResolver" TestAssemblies="_assemblies" TestTypes="_types"></UnitTestsView>
 
 @code {
-    IEnumerable<Assembly>? _assemblies = new List<Assembly> {
-        //typeof(UnitTestsView).Assembly,
-        typeof(UnitTests).Assembly
-    };
+
+    [Inject]
+    WebWorkerService webWorkerService { get; set; }
+
+    IEnumerable<Assembly>? _assemblies = new List<Assembly>();
+    IEnumerable<Type>? _types = new List<Type>();
+
+    protected override void OnInitialized()
+    {
+        _types = new List<Type> {
+            this.GetType(),
+        };
+        _assemblies = new List<Assembly> {
+            //typeof(UnitTestsView).Assembly,
+            typeof(UnitTests).Assembly
+        };
+    }
+
+    object? TestTypeResolver(Type testType)
+    {
+        if (testType == this.GetType()) return this;
+        return null;
+    }
+
+    [TestMethod]
+    public async Task WebWorkerTest()
+    {
+        using var worker = await webWorkerService.GetWebWorker();
+        var mathService = worker.GetService<IMathsService>();
+        var randValue = Guid.NewGuid().ToString();
+        await mathService.SetValueTest(randValue);
+        var readBack = await  mathService.GetValueTest();
+        if (readBack != randValue) throw new Exception("Unexpected result");
+    }
+
+    [TestMethod]
+    public async Task SharedWebWorkerTest()
+    {
+        using var worker = await webWorkerService.GetSharedWebWorker();
+        var mathService = worker.GetService<IMathsService>();
+        var randValue = Guid.NewGuid().ToString();
+        await mathService.SetValueTest(randValue);
+        var readBack = await mathService.GetValueTest();
+        if (readBack != randValue) throw new Exception("Unexpected result");
+    }
+
+    [TestMethod]
+    public async Task SharedWebWorkerDoubleTest()
+    {
+        using var workerA = await webWorkerService.GetSharedWebWorker();
+        using var workerB = await webWorkerService.GetSharedWebWorker();
+        var mathServiceA = workerA.GetService<IMathsService>();
+        var mathServiceB = workerB.GetService<IMathsService>();
+        var randValue = Guid.NewGuid().ToString();
+        await mathServiceA.SetValueTest(randValue);
+        var readBack = await mathServiceB.GetValueTest();
+        if (readBack != randValue) throw new Exception("Unexpected result");
+    }
+
+    [TestMethod]
+    public async Task WebWorkerDoubleTest()
+    {
+        using var workerA = await webWorkerService.GetWebWorker();
+        using var workerB = await webWorkerService.GetWebWorker();
+        var mathServiceA = workerA.GetService<IMathsService>();
+        var mathServiceB = workerB.GetService<IMathsService>();
+        var randValue = Guid.NewGuid().ToString();
+        await mathServiceA.SetValueTest(randValue);
+        var readBack = await mathServiceB.GetValueTest();
+        if (readBack == randValue) throw new Exception("Unexpected result");
+    }
 }

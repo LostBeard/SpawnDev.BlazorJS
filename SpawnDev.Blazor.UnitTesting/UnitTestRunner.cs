@@ -61,6 +61,19 @@ namespace SpawnDev.Blazor.UnitTesting
             TestStatusChanged?.Invoke();
         }
 
+        public class UnitTestResolverEvent
+        {
+            public object? TypeInstance { get; set; } = null;
+            public Type TestType { get; private set; }
+            public UnitTestResolverEvent(Type testType)
+            {
+                TestType = testType;
+            }
+        }
+
+        public delegate void UnitTestResolverEventDelegate(UnitTestResolverEvent resolverEvent);
+        public event UnitTestResolverEventDelegate OnUnitTestResolverEvent;
+
         public void ResetTests()
         {
             Tests.ForEach(o => o.Reset());
@@ -78,7 +91,10 @@ namespace SpawnDev.Blazor.UnitTesting
         object? GetTestTypeInstance(Type testType)
         {
             if (_instances.TryGetValue(testType, out var instance)) return instance;
-            var ret = Activator.CreateInstance(testType);
+            object? ret = null;
+            var ev = new UnitTestResolverEvent(testType);
+            OnUnitTestResolverEvent?.Invoke(ev);
+            ret = ev.TypeInstance != null ? ev.TypeInstance : Activator.CreateInstance(testType);
             _instances[testType] = ret;
             return ret;
         }

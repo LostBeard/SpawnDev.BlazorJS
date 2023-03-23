@@ -1,4 +1,5 @@
-﻿using SpawnDev.BlazorJS.WebWorkers;
+﻿using Markdig.Extensions.TaskLists;
+using SpawnDev.BlazorJS.WebWorkers;
 using System;
 using System.Diagnostics;
 
@@ -18,6 +19,8 @@ namespace SpawnDev.BlazorJS.Test.Services
         Task<string> CalculatePiWithActionProgress(int digits, Action<int>? progress = null);
         Task<double> EstimatePI(int sumLength);
         Task<double> EstimatePISlice(int sumStart, int sumLength);
+        Task SetValueTest(string newValue);
+        Task<string> GetValueTest();
     }
 
     /// <summary>
@@ -149,6 +152,19 @@ namespace SpawnDev.BlazorJS.Test.Services
                     return x;
                 })
                 .Sum(x => 1.0 / x);
+        }
+
+        string TestValue = "orig";
+
+        public Task SetValueTest(string newValue)
+        {
+            TestValue = newValue;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetValueTest()
+        {
+            return Task.FromResult(TestValue);
         }
     }
 }

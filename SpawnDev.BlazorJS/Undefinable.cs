@@ -17,7 +17,7 @@ namespace SpawnDev.BlazorJS
         }
         public static Undefinable<T> Null => _Null.Value;
         public static Undefinable<T> Undefined => _Undefined.Value;
-        private static Lazy<Undefinable<T>> _Null = new Lazy<Undefinable<T>>(() => new Undefinable<T>(false));
+        private static Lazy<Undefinable<T>> _Null = new Lazy<Undefinable<T>>(() => new Undefinable<T>() { IsUndefinedIfNull = false });
         private static Lazy<Undefinable<T>> _Undefined = new Lazy<Undefinable<T>>(() => new Undefinable<T>());
 
         [JsonIgnore]
@@ -31,8 +31,7 @@ namespace SpawnDev.BlazorJS
         //public static implicit operator T?(UndefinedIfNull<T> instance) => instance.Value;
         public static implicit operator Undefinable<T>(T instance) => new Undefinable<T>(instance);
         public Undefinable() { }
-        public Undefinable(bool isUndefinedIfNull) => IsUndefinedIfNull = isUndefinedIfNull;
-        public Undefinable(T? value = default, bool isUndefinedIfNull = true)
+        public Undefinable(T? value, bool isUndefinedIfNull = true)
         {
             Value = value;
             IsUndefinedIfNull = isUndefinedIfNull;
