@@ -85,12 +85,46 @@ if (disableHotReload) {
 }
 
 var initWebWorkerBlazor = async () => {
-    async function initializeBlazor() {
-        // the app base directory is 2 folders up
-        if (document.baseURI.indexOf('_content/') > 0) {
-            document.baseURI = new URL(document.baseURI + '../../').toString();
+    // the app base directory is 2 folders up
+    if (document.baseURI.indexOf('_content/') > 0) {
+        document.baseURI = new URL(document.baseURI + '../../').toString();
+    }
+    consoleLog('document.baseURI', document.baseURI);
+    // Get index.html
+    var indexHtmlUri = new URL('index.html', document.baseURI);
+    var response = await fetch(indexHtmlUri, {
+        cache: 'no-cache',
+    });
+    var indexHtmlSrc = await response.text();
+    var indexHtmlScripts = [];
+    var blazorWebAssemblyJSIndex = -1;
+    function getIndexHtmlScripts() {
+        var scriptPatt = new RegExp('<script\\s+(.*?)(?:\\s+\\/>|\\s*><\\/script>)', 'gm');
+        var m;
+        do {
+            m = scriptPatt.exec(indexHtmlSrc);
+            if (m) {
+                let scriptTagBody = m[1];
+                let scriptSrc = /src="(.+?)"/.exec(scriptTagBody)[1];
+                let webworkerEnabled = !!/\bwebworker-enabled\b/.exec(scriptTagBody);
+                let isBlazorWebAssemblyJS = scriptSrc == '_framework/blazor.webassembly.js';
+                consoleLog('webworkerEnabled', webworkerEnabled, scriptSrc);
+                if (webworkerEnabled || isBlazorWebAssemblyJS) {
+                    if (isBlazorWebAssemblyJS) {
+                        blazorWebAssemblyJSIndex = indexHtmlScripts.length;
+                    }
+                    indexHtmlScripts.push(scriptSrc);
+                }
+            }
+        } while (m);
+        if (blazorWebAssemblyJSIndex == -1) {
+            blazorWebAssemblyJSIndex = indexHtmlScripts.length;
+            indexHtmlScripts.push('_framework/blazor.webassembly.js');
         }
-        consoleLog('document.baseURI', document.baseURI);
+    }
+    getIndexHtmlScripts();
+    async function initializeBlazor() {
+
         // setup standard document
         var htmlEl = document.appendChild(document.createElement('html'));
         var headEl = htmlEl.appendChild(document.createElement('head'));
@@ -103,9 +137,16 @@ var initWebWorkerBlazor = async () => {
         var errorDiv = bodyEl.appendChild(document.createElement('div'));
         errorDiv.setAttribute('id', 'blazor-error-ui');
         // <script src="_framework/blazor.webassembly.js" autostart="false"></script>
-        var blazorWASMScriptEl = bodyEl.appendChild(document.createElement('script'));
-        blazorWASMScriptEl.setAttribute('autostart', "false");
-        blazorWASMScriptEl.setAttribute('src', '_framework/blazor.webassembly.js');
+        // load webworker-enabled scripts in order found in index.html (and _framework/blazor.webassembly.js)
+        for (var i = 0; i < indexHtmlScripts.length; i++) {
+            let s = indexHtmlScripts[i];
+            let scriptEl = bodyEl.appendChild(document.createElement('script'));
+            scriptEl.setAttribute('src', s);
+            if (i == blazorWebAssemblyJSIndex) {
+                scriptEl.setAttribute('autostart', "false");
+            }
+        }
+        
         //blazorWASMScriptEl.setAttribute('src', '_content/SpawnDev.BlazorJS.WebWorkers/blazor.webassembly.pretty.js');
         // init document
         if (dynamicImportSupported) {
