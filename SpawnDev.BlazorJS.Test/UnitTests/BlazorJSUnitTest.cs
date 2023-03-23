@@ -27,6 +27,41 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             if (boolValue != BlazorJSRuntime.JS.Get<bool?>("_boolUnionValue")) throw new Exception("Unexpected result");
         }
 
+
+        [TestMethod]
+        public void UnionNullTypeTest()
+        {
+            void UnionTypeTestMethod(string varName, Union<bool?, string?>? unionTypeValue)
+            {
+                BlazorJSRuntime.JS.Set(varName, unionTypeValue);
+            }
+
+            bool? nullableBoolValue = null;
+            UnionTypeTestMethod("_boolUnionValue", nullableBoolValue);
+            if (nullableBoolValue != BlazorJSRuntime.JS.Get<bool?>("_boolUnionValue")) throw new Exception("Unexpected result");
+        }
+
+        /// <summary>
+        /// Demonstrates using Undefinable with a Union type
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        [TestMethod]
+        public void UnionTypeWithUndefinedOptionTest()
+        {
+            void UnionTypeTestMethod(string varName, Union<bool?, string?, Undefinable?> unionTypeValue)
+            {
+                BlazorJSRuntime.JS.Set(varName, unionTypeValue);
+            }
+
+            UnionTypeTestMethod("_unionValue", Undefinable.Undefined);
+            if (!BlazorJSRuntime.JS.IsUndefined("_unionValue")) throw new Exception("Unexpected result");
+
+            bool? nullableBoolValue = null;
+            UnionTypeTestMethod("_boolUnionValue", nullableBoolValue);
+            if (nullableBoolValue != BlazorJSRuntime.JS.Get<bool?>("_boolUnionValue")) throw new Exception("Unexpected result");
+
+        }
+
         // IJSObject
         public interface IWindow : IJSObject
         {
