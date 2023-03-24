@@ -6,12 +6,15 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS
 {
     public static class IJSInProcessObjectReferenceExtensions
     {
         static PropertyInfo? JSObjectReferenceIdProp = null;
+
+        public static IJSInProcessObjectReference CreateCopy(this IJSInProcessObjectReference _ref) => JSInterop.ReturnMe<IJSInProcessObjectReference>(_ref);
         public static long GetJSRefId(this IJSInProcessObjectReference _ref)
         {
             if (JSObjectReferenceIdProp == null)
@@ -131,5 +134,33 @@ namespace SpawnDev.BlazorJS
 
 
         #endregion
-    }
+
+        public static T NewApply<T>(this IJSInProcessObjectReference _ref, object?[]? args = null) => JSInterop.ReturnNew<T>(_ref, args);
+        public static IJSInProcessObjectReference NewApply(this IJSInProcessObjectReference _ref, object?[]? args = null) => JSInterop.ReturnNew<IJSInProcessObjectReference>(_ref, args);
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref) => NewApply(_ref);
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0) => NewApply(_ref, new object[] { arg0 });
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0, object arg1) => NewApply(_ref, new object[] { arg0, arg1 });
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2) => NewApply(_ref, new object[] { arg0, arg1, arg2 });
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3) => NewApply(_ref, new object[] { arg0, arg1, arg2, arg3 });
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4) => NewApply(_ref, new object[] { arg0, arg1, arg2, arg3, arg4 });
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => NewApply(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) => NewApply(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => NewApply(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => NewApply(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        public static IJSInProcessObjectReference New(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => NewApply(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+
+        public static T New<T>(this IJSInProcessObjectReference _ref) => NewApply<T>(_ref);
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0) => NewApply<T>(_ref, new object[] { arg0 });
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1) => NewApply<T>(_ref, new object[] { arg0, arg1 });
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2 });
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3 });
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3, arg4 });
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+
+
+}
 }

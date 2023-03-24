@@ -132,6 +132,11 @@ namespace SpawnDev.BlazorJS
             foreach (var src in sources) tasks.Add(LoadScript(src));
             await Task.WhenAll(tasks);
         }
+        public async Task<ModuleNamespaceObject?> Import(string modulePath)
+        {
+            var jsRef = await _js.InvokeAsync<IJSInProcessObjectReference?>("import", modulePath);
+            return jsRef == null ? null : new ModuleNamespaceObject(jsRef);
+        }
         // window
         public IJSInProcessObjectReference GetWindow() => Get<IJSInProcessObjectReference>("window");
         public T GetWindow<T>() where T : JSObject => Get<T>("window");

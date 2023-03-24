@@ -1,5 +1,6 @@
 ﻿using SpawnDev.Blazor.UnitTesting;
 using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.JsonConverters;
 using System.Linq.Expressions;
 
 namespace SpawnDev.BlazorJS.Test.UnitTests
@@ -7,8 +8,81 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
     [TestClass]
     public class BlazorJSUnitTest
     {
+        BlazorJSRuntime JS;
+        public BlazorJSUnitTest()
+        {
+            JS = BlazorJSRuntime.JS;
+        }
 
+        [TestMethod]
+        public void ActionConverterSerializationTest()
+        {
+            int testValue = 42;
+            var testAction = new Action<int>((val) =>
+            {
+                if (val != testValue) throw new Exception("Unexpected result");
+                Console.WriteLine($"Callback called: {val}");
+            });
+            // set a global Javascript var to our Action<int>
+            // if this is the first time this action is passed to Javascript a Callback will be created and associated to this Action for use in future serialization
+            // the auto created Callback must be disposed by calling the extension method Action.DisposeJS()
+            JS.Set("_actionCallback", testAction);
+            // read back in our Action as a Javascript Function reference and call it
+            var fn = JS.Get<Function>("_actionCallback");
+            fn.CallVoid(null, testValue);
+            // console output: Callback called: 42
+            // dispose the Callback associated with this Action
+            testAction.DisposeJS();
+        }
 
+        [TestMethod]
+        public async Task ActionConverterTest()
+        {
+            int testValue = 42;
+            var origAction = new Action<int>((val) =>
+            {
+                if (val != testValue) throw new Exception("Unexpected result");
+                Console.WriteLine($"Callback called: {val}");
+            });
+            // set a global Javascript var to our Action<int>
+            // if this is the first time this Action is passed to Javascript a Callback will be created and associated to this Action for use in future serialization
+            // the auto created Callback must be disposed by calling the extension method Action.DisposeJS()
+            JS.Set("_actionCallback", origAction);
+            // read back in our Action as an Action 
+            // internally a Javascript Function reference is created and associated with this Action.
+            // the auto created Function must be disposed by calling the extension method Action.DisposeJS()
+            var readAction = JS.Get<Action<int>>("_actionCallback");
+            readAction(testValue);
+            // console output: Callback called: 42
+            // dispose the Function created and associated with the read Action
+            readAction.DisposeJS();
+            // dispose the Callback created and associated with the original Action
+            origAction.DisposeJS();
+        }
+
+        [TestMethod]
+        public void FuncConverterTest()
+        {
+            int testValue = 42;
+            var origFunc = new Func<int, int>((val) =>
+            {
+                return val;
+            });
+            // set a global Javascript var to our Func<int>
+            // if this is the first time this Func is passed to Javascript a Callback will be created and associated to this Func for use in future serialization
+            // the auto created Callback must be disposed by calling the extension method Func.DisposeJS()
+            JS.Set("_funcCallback", origFunc);
+            // read back in our Func as an Func 
+            // internally a Javascript Function reference is created and associated with this Func.
+            // the auto created Function must be disposed by calling the extension method Func.DisposeJS()
+            var readFunc = JS.Get<Func<int, int>>("_funcCallback");
+            var readVal = readFunc(testValue);
+            if (readVal != testValue) throw new Exception("Unexpected result");
+            // dispose the Function created and associated with the read Func
+            readFunc.DisposeJS();
+            // dispose the Callback created and associated with the original Func
+            origFunc.DisposeJS();
+        }
 
         [TestMethod]
         public void UnionTypeTest()

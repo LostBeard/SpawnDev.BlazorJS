@@ -78,9 +78,36 @@ Create a new Javascript object
 IJSInProcessObjectReference worker = JS.New("Worker", myWorkerScript);
 ```
 
+# Action and Func serialization
+BlazorJS supports serialization of both Func and Action types. Internally the BlazorJS.Callback object is used. Serialized and deserialized Action and Func objects must call their DisposeJS() extension method to dispose the auto created and associated Callback and/or Function objects.
+
+Func example from BlazorJSUnitTests.cs that is used to verify proper serialization and deserialization of Func<,>
+```cs
+int testValue = 42;
+var origFunc = new Func<int, int>((val) =>
+{
+    return val;
+});
+// set a global Javascript var to our Func<int>
+// if this is the first time this Func is passed to Javascript a Callback will be created and associated to this Func for use in future serialization
+// the auto created Callback must be disposed by calling the extension method Func.DisposeJS()
+JS.Set("_funcCallback", origFunc);
+// read back in our Func as an Func 
+// internally a Javascript Function reference is created and associated with this Func.
+// the auto created Function must be disposed by calling the extension method Func.DisposeJS()
+var readFunc = JS.Get<Func<int, int>>("_funcCallback");
+var readVal = readFunc(testValue);
+if (readVal != testValue) throw new Exception("Unexpected result");
+// dispose the Function created and associated with the read Func
+readFunc.DisposeJS();
+// dispose the Callback created and associated with the original Func
+origFunc.DisposeJS();
+```
+
+
 # Callback
 
-Pass methods to Javascript using the Callback.Create and Callback.CreateOne methods. These methods use type arguments to set the types expected for incoming arguments (if any) and the expected return type (if any.) async methods are passed as Promises.
+The Callback object is used internally to support Action and Func serialization. It can be used for a bit more control over the lifetime of you callbacks. Pass methods to Javascript using the Callback.Create and Callback.CreateOne methods. These methods use type arguments to set the types expected for incoming arguments (if any) and the expected return type (if any.) async methods are passed as Promises.
 
 Pass lambda callbacks to Javascript
 ```cs

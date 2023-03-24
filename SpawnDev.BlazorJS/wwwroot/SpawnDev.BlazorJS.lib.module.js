@@ -92,8 +92,8 @@ var initFunc = function () {
         return serializeToDotNet(obj, returnType);
     };
 
-    JSInterop._returnNew = function (className, args, returnType) {
-        var { target, parent, targetType } = JSInterop.pathObjectInfo(null, className);
+    JSInterop._returnNew = function (obj, className, args, returnType) {
+        var { target, parent, targetType } = JSInterop.pathObjectInfo(obj, className);
         var ret = !args ? new target() : new target(...args);
         return serializeToDotNet(ret, returnType);
     };
@@ -102,7 +102,7 @@ var initFunc = function () {
         var target = JSInterop.pathToTarget(obj, name);
         var ret = [];
         for (var k in target) {
-            if (!hasOwnProperty || target.hasOwnProperty(k)) ret.push(k);
+            if (!hasOwnProperty || (typeof target.hasOwnProperty === 'function' && target.hasOwnProperty(k))) ret.push(k);
         }
         return ret;
     };
@@ -166,7 +166,7 @@ var initFunc = function () {
         if (!pathInfo.exists) {
             if (JSInterop.debugLevel > 0) {
                 var targetType = pathInfo.parent ? pathInfo.parent.constructor.name : '[NULL]';
-                console.log('WARNING: JSInterop._set - property being set does not exist', targetType, identifier, pathInfo.parent);
+                console.log('WARNING: JSInterop._set - property being set does not exist', targetType, identifier);
             }
         }
         pathInfo.parent[pathInfo.propertyName] = value;
@@ -215,14 +215,14 @@ var initFunc = function () {
         if (callbacks[callbackerID]) delete callbacks[callbackerID];
     };
     DotNet.attachReviver(function (key, value) {
-        if (value && typeof value === 'object' && value.hasOwnProperty("__undefinedref__")) {
+        if (value && typeof value === 'object' && typeof value.__undefinedref__ !== 'undefined') {
             return;
         }
         else 
         if (value && typeof value === 'object' && typeof value.__wrappedFunction === 'function') {
             return value.__wrappedFunction;
         }
-        else if (value && typeof value === 'object' && value.hasOwnProperty("_callbackId") && value.hasOwnProperty("_callback")) {
+        else if (value && typeof value === 'object' && typeof value._callbackId !== 'undefined') {
             let callbackId = value._callbackId;
             if (!callbacks[callbackId]) {
                 callbacks[callbackId] = function fn() {

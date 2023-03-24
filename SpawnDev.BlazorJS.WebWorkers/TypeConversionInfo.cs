@@ -1,11 +1,26 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System.Collections;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using Array = System.Array;
 
 namespace SpawnDev.BlazorJS.WebWorkers {
-    public class TypeConversionInfo {
+    public class TypeConversionInfo
+    {
+        public static IReadOnlyCollection<Type> TransferableTypes { get; } = new List<Type> {
+            typeof(ArrayBuffer),
+            typeof(MessagePort),
+            typeof(ReadableStream),
+            typeof(WritableStream),
+            typeof(TransformStream),
+            typeof(AudioData),
+            typeof(ImageBitmap),
+            typeof(VideoFrame),
+            typeof(OffscreenCanvas),
+            typeof(RTCDataChannel),
+        }.AsReadOnly();
         public Type ReturnType { get; private set; }
         public bool useIJSWrapperReader { get; private set; }
         public bool usePropertyReader { get; private set; }
@@ -125,7 +140,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             }
             else if (returnType.IsClass) {
                 if (typeof(JSObject).IsAssignableFrom(returnType)) {
-                    IsTransferable = JSObject.TransferableTypes.Contains(returnType);
+                    IsTransferable = TransferableTypes.Contains(returnType);
                     useJSObjectReader = true;
                     if (!IsTransferable) {
                         ClassProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public);

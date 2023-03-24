@@ -45,7 +45,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         //public int OffsetHeight => JSRef.Get<int>("offsetHeight");
 
         public HTMLCanvasElement() : base(JS.DocumentCreateElement("canvas")) { }
-        public HTMLCanvasElement(ElementReference canvasElementReference) : base(JS.ReturnMe<IJSInProcessObjectReference>(canvasElementReference)) { }
+        public HTMLCanvasElement(ElementReference canvasElementReference) : base(JS.ToJSRef(canvasElementReference)) { }
 
         public HTMLCanvasElement(int width, int height) : base(JS.DocumentCreateElement("canvas")) {
             Width = width;

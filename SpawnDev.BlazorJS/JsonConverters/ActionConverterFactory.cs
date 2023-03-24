@@ -15,7 +15,10 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         };
         public override bool CanConvert(Type type) {
             var baseType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
-            if (SupportedGenericTypes.ContainsKey(baseType)) return true;
+            if (SupportedGenericTypes.ContainsKey(baseType))
+            {
+                return true;
+            }
             return false;
         }
 

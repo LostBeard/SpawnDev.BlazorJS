@@ -129,14 +129,38 @@ namespace SpawnDev.BlazorJS {
             return _js.Invoke(returnType, "JSInterop._returnMe", obj1, jsCallResultType);
         }
 
+        internal static IJSInProcessObjectReference ReturnNew(IJSInProcessObjectReference targetObject, object?[]? args = null)
+        {
+            var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<IJSInProcessObjectReference>();
+            return _js.Invoke<IJSInProcessObjectReference>("JSInterop._returnNew", targetObject, null, args, jsCallResultType);
+        }
+
+        internal static T ReturnNew<T>(IJSInProcessObjectReference targetObject, object?[]? args = null)
+        {
+            var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
+            return _js.Invoke<T>("JSInterop._returnNew", targetObject, null, args, jsCallResultType);
+        }
+
+        internal static object? ReturnNew(IJSInProcessObjectReference targetObject, Type returnType, object?[]? args = null)
+        {
+            var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(returnType);
+            return _js.Invoke(returnType, "JSInterop._returnNew", targetObject, null, args, jsCallResultType);
+        }
+
+        internal static IJSInProcessObjectReference ReturnNew(string className, object?[]? args = null)
+        {
+            var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<IJSInProcessObjectReference>();
+            return _js.Invoke<IJSInProcessObjectReference>("JSInterop._returnNew", null, className, args, jsCallResultType);
+        }
+
         internal static T ReturnNew<T>(string className, object?[]? args = null) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
-            return _js.Invoke<T>("JSInterop._returnNew", className, args, jsCallResultType);
+            return _js.Invoke<T>("JSInterop._returnNew", null, className, args, jsCallResultType);
         }
 
         internal static object? ReturnNew(Type returnType, string className, object?[]? args = null) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(returnType);
-            return _js.Invoke(returnType, "JSInterop._returnNew", className, args, jsCallResultType);
+            return _js.Invoke(returnType, "JSInterop._returnNew", null, className, args, jsCallResultType);
         }
 
         internal static void Set(IJSInProcessObjectReference targetObject, string identifier, object? value) {

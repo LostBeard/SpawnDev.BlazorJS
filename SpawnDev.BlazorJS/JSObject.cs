@@ -102,7 +102,7 @@ namespace SpawnDev.BlazorJS
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        public static bool UndisposedHandleVerboseMode { get; set; } = true;
+        public static bool UndisposedHandleVerboseMode { get; set; } = false;
         ~JSObject()
         {
             if (UndisposedHandleVerboseMode)
@@ -111,32 +111,10 @@ namespace SpawnDev.BlazorJS
                 var refDisposed = JSRef == null;
                 if (!refDisposed)
                 {
-                    Console.WriteLine($"DEBUG WARNING: JSObject JSDebugName[{JSDebugName}] was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
+                    Console.WriteLine($"DEBUG WARNING: JSObject JSDebugName was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
                 }
             }
             Dispose(false);
         }
-
-        internal bool SerializeToUndefined { get; set; }
-
-        protected static void DisposeAndNull(ref IDisposable? disposable)
-        {
-            disposable?.Dispose();
-            disposable = null;
-        }
-        [JsonIgnore]
-        public string JSDebugName { get; set; } = "";
-        public static IReadOnlyCollection<Type> TransferableTypes { get; } = new List<Type> {
-            typeof(ArrayBuffer),
-            typeof(MessagePort),
-            typeof(ReadableStream),
-            typeof(WritableStream),
-            typeof(TransformStream),
-            typeof(AudioData),
-            typeof(ImageBitmap),
-            typeof(VideoFrame),
-            typeof(OffscreenCanvas),
-            typeof(RTCDataChannel),
-        }.AsReadOnly();
     }
 }
