@@ -1,7 +1,6 @@
 ﻿using SpawnDev.Blazor.UnitTesting;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
-using System.Linq.Expressions;
 
 namespace SpawnDev.BlazorJS.Test.UnitTests
 {
@@ -33,6 +32,19 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             // console output: Callback called: 42
             // dispose the Callback associated with this Action
             testAction.DisposeJS();
+        }
+
+        [TestMethod]
+        public async Task ActionSetTimeoutTest()
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            var callback = () =>
+            {
+                tcs.TrySetResult(true);
+            };
+            JS.CallVoid("setTimeout", callback, 100);
+            await tcs.Task;
+            callback.DisposeJS();
         }
 
         [TestMethod]
@@ -72,7 +84,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             // if this is the first time this Func is passed to Javascript a Callback will be created and associated to this Func for use in future serialization
             // the auto created Callback must be disposed by calling the extension method Func.DisposeJS()
             JS.Set("_funcCallback", origFunc);
-            // read back in our Func as an Func 
+            // read back in our Func as a Func 
             // internally a Javascript Function reference is created and associated with this Func.
             // the auto created Function must be disposed by calling the extension method Func.DisposeJS()
             var readFunc = JS.Get<Func<int, int>>("_funcCallback");

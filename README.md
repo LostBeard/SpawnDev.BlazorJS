@@ -81,7 +81,19 @@ IJSInProcessObjectReference worker = JS.New("Worker", myWorkerScript);
 # Action and Func serialization
 BlazorJS supports serialization of both Func and Action types. Internally the BlazorJS.Callback object is used. Serialized and deserialized Action and Func objects must call their DisposeJS() extension method to dispose the auto created and associated Callback and/or Function objects.
 
-Func example from BlazorJSUnitTests.cs that is used to verify proper serialization and deserialization of Func<,>
+Action test from BlazorJSUnitTests.cs
+```cs
+var tcs = new TaskCompletionSource<bool>();
+var callback = () =>
+{
+    tcs.TrySetResult(true);
+};
+JS.CallVoid("setTimeout", callback, 100);
+await tcs.Task;
+callback.DisposeJS();
+```
+
+Func<,> test from BlazorJSUnitTests.cs
 ```cs
 int testValue = 42;
 var origFunc = new Func<int, int>((val) =>
@@ -103,7 +115,6 @@ readFunc.DisposeJS();
 // dispose the Callback created and associated with the original Func
 origFunc.DisposeJS();
 ```
-
 
 # Callback
 
