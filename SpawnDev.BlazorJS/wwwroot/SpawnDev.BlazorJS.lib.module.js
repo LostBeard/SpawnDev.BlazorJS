@@ -189,8 +189,9 @@ var initFunc = function () {
         if (!obj || (typeof obj !== 'object' && typeof obj !== 'function')) throw 'obj null or undefined';
         var { target, parent, targetType } = JSInterop.pathObjectInfo(obj, identifier);
         if (targetType === "function") {
-            var fnBound = target.bind(parent);
-            ret = fnBound.apply(null, args);
+            //var fnBound = target.bind(parent);
+            //ret = fnBound.apply(null, args);
+            ret = target.apply(parent, args);
         } else {
             throw 'Call target is not a function';
         }

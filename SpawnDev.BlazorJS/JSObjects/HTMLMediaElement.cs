@@ -27,6 +27,11 @@ namespace SpawnDev.BlazorJS.JSObjects {
             get => JSRef.Get<float>("volume");
             set => JSRef.Set("volume", value);
         }
+        public bool AutoPlay
+        {
+            get => JSRef.Get<bool>("autoplay");
+            set => JSRef.Set("autoplay", value);
+        }
         public bool Muted
         {
             get => JSRef.Get<bool>("muted");
@@ -46,7 +51,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
             set => JSRef.Set("crossOrigin", value);
         }
 
-        
+
+        public event Action OnCanPlay { add => JSRef?.CallVoid("addEventListener", "canplay", value); remove => JSRef?.CallVoid("removeEventListener", "canplay", value); }
+
         public T? GetSrcObject<T>() => JSRef.Get<T>("srcObject");
 
         public Task Play() => JSRef.CallVoidAsync("play");
