@@ -11,21 +11,12 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         }
 
         public static bool CanConvertType(Type type) {
-            //var ignored = IgnoreInterfaces.Contains(type);
-            //if (ignored) return false;
-            //var isIJSObject = typeof(IJSObject).IsAssignableFrom(type);
-            //if (isIJSObject) return true;
             return typeof(IJSObject).IsAssignableFrom(type);
         }
 
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options) {
             var covnerterType = typeof(IJSObjectConverter<>).MakeGenericType(new Type[] { typeToConvert });
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(
-                covnerterType,
-                BindingFlags.Instance | BindingFlags.Public,
-                binder: null,
-                args: new object[] { options }, culture: null)!;
-
+            JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
             return converter;
         }
     }
@@ -34,12 +25,6 @@ namespace SpawnDev.BlazorJS.JsonConverters {
     // WebAssemblyJSObjectReferenceJsonConverter.cs
     public class IJSObjectConverter<TInterface> : JsonConverter<TInterface>, IJSInProcessObjectReferenceConverter where TInterface : class, IJSObject
     {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public IJSObjectConverter(JsonSerializerOptions options) {
-            _options = options;
-        }
         public override bool CanConvert(Type type) {
             return typeof(TInterface).IsAssignableFrom(type);
         }

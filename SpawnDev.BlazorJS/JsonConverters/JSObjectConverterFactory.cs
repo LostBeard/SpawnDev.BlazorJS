@@ -15,20 +15,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var covnerterType = typeof(JSObjectConverter<>).MakeGenericType(new Type[] { typeToConvert });
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { options }, culture: null)!;
+            JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
             return converter;
         }
     }
 
     public class JSObjectConverter<TJSObject> : JsonConverter<TJSObject>, IJSInProcessObjectReferenceConverter where TJSObject : JSObject
     {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public JSObjectConverter(JsonSerializerOptions options)
-        {
-            _options = options;
-        }
         public override bool CanConvert(Type type)
         {
             return typeof(TJSObject).IsAssignableFrom(type);

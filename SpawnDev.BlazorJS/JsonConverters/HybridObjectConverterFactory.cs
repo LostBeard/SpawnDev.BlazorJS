@@ -25,18 +25,15 @@ namespace SpawnDev.BlazorJS.JsonConverters {
 
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options) {
             var converterType = typeof(HybridObjectConverter<>).MakeGenericType(typeToConvert);
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { options }, culture: null)!;
+            JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
             return converter;
         }
     }
     public class HybridObjectConverter<T> : JsonConverter<T>, IJSInProcessObjectReferenceConverter where T : class {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
+
         PropertyInfo[] classProps;
-        public HybridObjectConverter(JsonSerializerOptions options) {
+        public HybridObjectConverter() {
             classProps = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            _options = options;
         }
 
         string GetPropertyJSName(PropertyInfo prop) {
@@ -45,7 +42,7 @@ namespace SpawnDev.BlazorJS.JsonConverters {
             try {
                 propName = string.IsNullOrEmpty(propName) ? "" : propName.Substring(0, 1).ToLowerInvariant() + propName.Substring(1);
             }
-            catch (Exception ex) {
+            catch {
                 var nmt = true;
             }
             return propName;

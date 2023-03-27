@@ -12,18 +12,13 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options) {
             var elementType = typeToConvert.GetElementType();
             var covnerterType = typeof(IJSObjectArrayConverter<>).MakeGenericType(new Type[] { elementType });
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { options }, culture: null)!;
+            JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
             return converter;
         }
     }
 
     public class IJSObjectArrayConverter<T> : JsonConverter<T[]>, IJSInProcessObjectReferenceConverter where T : class {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public IJSObjectArrayConverter(JsonSerializerOptions options) {
-            _options = options;
-        }
+
         public override bool CanConvert(Type typeToConvert) {
             return typeToConvert.IsArray && typeToConvert.HasElementType && IJSObjectConverterFactory.CanConvertType(typeToConvert.GetElementType());
         }

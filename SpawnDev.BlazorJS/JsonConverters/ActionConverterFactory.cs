@@ -27,19 +27,13 @@ namespace SpawnDev.BlazorJS.JsonConverters {
             var genericTypes = type.GetGenericArguments();
             if (SupportedGenericTypes.TryGetValue(baseType, out var converterBaseType)) {
                 var converterType = type.IsGenericType ? converterBaseType.MakeGenericType(genericTypes) : converterBaseType;
-                JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { options }, culture: null)!;
+                JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
                 return converter;
             }
             return null;
         }
     }
     public class ActionConverter : JsonConverter<Action>, IJSInProcessObjectReferenceConverter {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public ActionConverter(JsonSerializerOptions options) {
-            _options = options;
-        }
         public override bool CanConvert(Type type) {
             return type.GetGenericTypeDefinition() == typeof(Action);
         }
@@ -55,12 +49,7 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         }
     }
     public class ActionConverter<T0> : JsonConverter<Action<T0>>, IJSInProcessObjectReferenceConverter {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public ActionConverter(JsonSerializerOptions options) {
-            _options = options;
-        }
+
         public override bool CanConvert(Type type) {
             return type.GetGenericTypeDefinition() == typeof(Action<>);
         }
@@ -76,12 +65,7 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         }
     }
     public class ActionConverter<T0, T1> : JsonConverter<Action<T0, T1>>, IJSInProcessObjectReferenceConverter {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public ActionConverter(JsonSerializerOptions options) {
-            _options = options;
-        }
+
         public override bool CanConvert(Type type) {
             return type.GetGenericTypeDefinition() == typeof(Action<,>);
         }
@@ -97,14 +81,9 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         }
     }
     public class ActionConverter<T0, T1, T2> : JsonConverter<Action<T0, T1, T2>>, IJSInProcessObjectReferenceConverter {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public ActionConverter(JsonSerializerOptions options) {
-            _options = options;
-        }
+
         public override bool CanConvert(Type type) {
-            return type.GetGenericTypeDefinition() == typeof(Action<,>);
+            return type.GetGenericTypeDefinition() == typeof(Action<,,>);
         }
         public override Action<T0, T1, T2> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
@@ -119,14 +98,9 @@ namespace SpawnDev.BlazorJS.JsonConverters {
     }
 
     public class ActionConverter<T0, T1, T2, T3> : JsonConverter<Action<T0, T1, T2, T3>>, IJSInProcessObjectReferenceConverter {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public ActionConverter(JsonSerializerOptions options) {
-            _options = options;
-        }
+
         public override bool CanConvert(Type type) {
-            return type.GetGenericTypeDefinition() == typeof(Action<,>);
+            return type.GetGenericTypeDefinition() == typeof(Action<,,,>);
         }
         public override Action<T0, T1, T2, T3> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);

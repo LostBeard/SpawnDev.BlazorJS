@@ -20,24 +20,19 @@ namespace SpawnDev.BlazorJS.JsonConverters {
             var genericTypes = typeToConvert.GetGenericArguments();
             if (genericTypes.Length > 0) {
                 var covnerterType = typeof(TaskConverter<>).MakeGenericType(genericTypes);
-                JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { options }, culture: null)!;
+                JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
                 return converter;
             }
             else if (typeToConvert == typeof(Task)) {
                 var covnerterType = typeof(TaskConverter);
-                JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { options }, culture: null)!;
+                JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
                 return converter;
             }
             return null;
         }
     }
     public class TaskConverter : JsonConverter<Task>, IJSInProcessObjectReferenceConverter {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public TaskConverter(JsonSerializerOptions options) {
-            _options = options;
-        }
+
         public override bool CanConvert(Type type) {
             return type == typeof(Task);
         }
@@ -52,12 +47,7 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         }
     }
     public class TaskConverter<TResult> : JsonConverter<Task<TResult>>, IJSInProcessObjectReferenceConverter {
-        public JSCallResultType JSCallResultType { get; } = JSCallResultType.JSObjectReference;
-        public bool OverrideResultType => true;
-        JsonSerializerOptions _options;
-        public TaskConverter(JsonSerializerOptions options) {
-            _options = options;
-        }
+
         public override bool CanConvert(Type type) {
             return type.GetGenericTypeDefinition() == typeof(Task<>);
         }
