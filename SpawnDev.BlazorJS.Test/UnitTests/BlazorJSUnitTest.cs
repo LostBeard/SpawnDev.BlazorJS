@@ -1,4 +1,5 @@
-﻿using SpawnDev.Blazor.UnitTesting;
+﻿using Microsoft.JSInterop;
+using SpawnDev.Blazor.UnitTesting;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 
@@ -11,6 +12,40 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         public BlazorJSUnitTest()
         {
             JS = BlazorJSRuntime.JS;
+        }
+
+        [TestMethod]
+        public void IJSInProcessObjectReferenceCallbackArgTest()
+        {
+            using var w = JS.Get<Window>("window");
+            var testName = Guid.NewGuid().ToString();
+            w.Name = testName;
+            using var testAction = Callback.CreateOne((IJSInProcessObjectReference val) =>
+            {
+                var readName = val.Get<string>("name");
+                if (readName != testName) throw new Exception("Unexpected result");
+            });
+            JS.Set("_actionCallback", testAction);
+            // read back in our Action as a Javascript Function reference and call it
+            var fn = JS.Get<Function>("_actionCallback");
+            fn.CallVoid(null, w);
+        }
+
+        [TestMethod]
+        public void JSObjectReferenceCallbackArgTest()
+        {
+            using var w = JS.Get<Window>("window");
+            var testName = Guid.NewGuid().ToString();
+            w.Name = testName;
+            using var testAction = Callback.CreateOne((Window val) =>
+            {
+                var readName = val.Name;
+                if (readName != testName) throw new Exception("Unexpected result");
+            });
+            JS.Set("_actionCallback", testAction);
+            // read back in our Action as a Javascript Function reference and call it
+            var fn = JS.Get<Function>("_actionCallback");
+            fn.CallVoid(null, w);
         }
 
         [TestMethod]

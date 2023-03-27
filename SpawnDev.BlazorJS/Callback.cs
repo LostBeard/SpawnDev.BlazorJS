@@ -33,7 +33,7 @@ namespace SpawnDev.BlazorJS {
                 _paramTypes = new int[paramInfos.Length];
                 for (var i = 0; i < _paramTypes.Length; i++) {
                     var paramType = paramInfos[i].ParameterType;
-                    var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(paramType);
+                    var jsCallResultType = JSCallResultTypeHelperOverride.FromGenericForCallback(paramType);
                     _paramTypes[i] = (int)jsCallResultType;
                 }
                 _returnVoid = methodInfo.ReturnType == typeof(void);

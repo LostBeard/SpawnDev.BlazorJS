@@ -7,6 +7,7 @@ namespace SpawnDev.BlazorJS.JsonConverters {
     /// If the value needs to be overridden, the new valueis returned with 128 added to the new JSCallResultType
     /// </summary>
     internal class JSCallResultTypeHelperOverride {
+        const int OverrideFlag = 128;
         private static MethodInfo? FromGenericMethodInfo = null;
         static Dictionary<Type, MethodInfo> FromGenericTypedCache = new Dictionary<Type, MethodInfo>();
         static MethodInfo GetFromGenericTyped(Type type) {
@@ -20,33 +21,74 @@ namespace SpawnDev.BlazorJS.JsonConverters {
             return result;
         }
 
+        /// <summary>
+        /// By default all callback args are passed as JSCallResultType.Default
+        /// The return value from this method tells the JSInterop.serializeToDotNet method that we want to pre-serialize to the format returned before the default serialization (json)
+        /// </summary>
+        /// <param name="returnType"></param>
+        /// <returns></returns>
+        public static JSCallResultType FromGenericForCallback(Type returnType)
+        {
+            var ret = JSCallResultType.Default;
+            var jsonConverter = BlazorJSRuntime.RuntimeJsonSerializerOptions.GetConverter(returnType);
+            if (jsonConverter is IJSInProcessObjectReferenceConverter)
+            {
+                ret = JSCallResultType.JSObjectReference;
+            }
+            else
+            {
+                ret = FromGenericOrig(returnType);
+            }
+            return ret == JSCallResultType.Default ? ret : ret + OverrideFlag;
+        }
+
+        public static JSCallResultType FromGenericForCallback<TResult>()
+        {
+            var returnType = typeof(TResult);
+            var ret = JSCallResultType.Default;
+            var jsonConverter = BlazorJSRuntime.RuntimeJsonSerializerOptions.GetConverter(returnType);
+            if (jsonConverter is IJSInProcessObjectReferenceConverter)
+            {
+                ret = JSCallResultType.JSObjectReference;
+            }
+            else
+            {
+                ret = FromGenericOrig(returnType);
+            }
+            return ret == JSCallResultType.Default ? ret : ret + OverrideFlag;
+        }
+
+
+        /// <summary>
+        /// FromGeneric returns the value from the original FromGeneric method unless the default is json and IJSInprocessObjectReference is desired instead
+        /// </summary>
+        /// <param name="returnType"></param>
+        /// <returns></returns>
         public static JSCallResultType FromGeneric(Type returnType) {
             var jsonConverter = BlazorJSRuntime.RuntimeJsonSerializerOptions.GetConverter(returnType);
             var resultTypeOrig = FromGenericOrig(returnType);
-            var jsReturnTypeOverride = JSCallResultType.Default;
-            var overrideIt = false;
-            if (jsonConverter is IJSInProcessObjectReferenceConverter jsonConverterV2) {
-                jsReturnTypeOverride = jsonConverterV2.JSCallResultType;
-                if (resultTypeOrig != jsReturnTypeOverride) {
-                    jsReturnTypeOverride += 128;
+            if (resultTypeOrig == JSCallResultType.Default)
+            {
+                if (jsonConverter is IJSInProcessObjectReferenceConverter)
+                {
+                    resultTypeOrig = JSCallResultType.JSObjectReference + OverrideFlag;
                 }
             }
-            return jsReturnTypeOverride;
+            return resultTypeOrig;
         }
 
         public static JSCallResultType FromGeneric<TResult>() {
             var returnType = typeof(TResult);
             var jsonConverter = BlazorJSRuntime.RuntimeJsonSerializerOptions.GetConverter(returnType);
-            var resultTypeOrig = FromGenericOrig<TResult>();
-            var jsReturnTypeOverride = JSCallResultType.Default;
-            var overrideIt = false;
-            if (jsonConverter is IJSInProcessObjectReferenceConverter jsonConverterV2) {
-                jsReturnTypeOverride = jsonConverterV2.JSCallResultType;
-                if (resultTypeOrig != jsReturnTypeOverride) {
-                    jsReturnTypeOverride += 128;
+            var resultTypeOrig = FromGenericOrig(returnType);
+            if (resultTypeOrig == JSCallResultType.Default)
+            {
+                if (jsonConverter is IJSInProcessObjectReferenceConverter)
+                {
+                    resultTypeOrig = JSCallResultType.JSObjectReference + OverrideFlag;
                 }
             }
-            return jsReturnTypeOverride;
+            return resultTypeOrig;
         }
 
         public static JSCallResultType FromGenericOrig(Type resultType) {
