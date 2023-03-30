@@ -63,7 +63,7 @@ JS.CallVoid("addEventListener", "resize", Callback.Create(() => Console.WriteLin
 
 
 
-## NOTE - Async vs Sync Javascript calls
+## IMPORTANT NOTE - Async vs Sync Javascript calls
 The BlazorJSRuntime behaves differently than the default Blazor JSRuntime. BlazorJSRuntime is more of a 1 to 1 mapping to Javascript. 
 
 When calling Javascript methods that are not asynchronous and do not return a Promise you need to use the synchronous BlazorJSRuntime methods Call, CallVoid, or Get. 
