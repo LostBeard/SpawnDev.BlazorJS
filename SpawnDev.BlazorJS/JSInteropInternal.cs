@@ -19,6 +19,7 @@ namespace SpawnDev.BlazorJS {
             BlazorJSRuntime.JS.CallVoid("JSInterop.setPromiseThenCatch", promise, thenCallback, catchCallback);
         }
 
+        // *********************************************************************************************************************
         internal static void SetGlobal(string identifier, object? value) {
             _js.InvokeVoid("JSInterop._setGlobal", identifier, value);
         }

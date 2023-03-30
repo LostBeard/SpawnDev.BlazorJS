@@ -1,10 +1,10 @@
 
 # NuGet
 
-| Package | Description | Link |
-|---------|-------------|------|
-|**[SpawnDev.BlazorJS](#spawndevblazorjs)**| Enhanced Blazor WebAssembly Javascript interop | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS) |
-|**[SpawnDev.BlazorJS.WebWorkers](#spawndevblazorjswebworkers)**| Blazor WebAssembly WebWorkers and SharedWebWorkers | [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.WebWorkers.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers) |
+| Package | Description |
+|---------|-------------|
+|**[SpawnDev.BlazorJS](#spawndevblazorjs)** <br /> [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS)| Enhanced Blazor WebAssembly Javascript interop | 
+|**[SpawnDev.BlazorJS.WebWorkers](#spawndevblazorjswebworkers)** <br /> [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.WebWorkers.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers)| Blazor WebAssembly WebWorkers and SharedWebWorkers |
  
 
 # SpawnDev.BlazorJS
@@ -60,6 +60,64 @@ JS.Set("document.title", "Hello World!");
 var item = JS.Call<string?>("localStorage.getItem", "itemName");
 JS.CallVoid("addEventListener", "resize", Callback.Create(() => Console.WriteLine("WindowResized"), _callBacks));
 ```
+
+
+
+## NOTE - Async vs Sync Javascript calls
+The BlazorJSRuntime behaves differently than the default Blazor JSRuntime. BlazorJSRuntime is more of a 1 to 1 mapping to Javascript. 
+
+When calling Javascript methods that are not asynchronous and do not return a Promise you need to use the synchronous BlazorJSRuntime methods Call, CallVoid, or Get. 
+Unlike the default Blazor JSRuntime which would allow the use of InvokeAsync, you must use the synchronous BlazorJSRuntime methods.
+
+Use synchronous BlazorJSRuntime calls for synchronous Javascrtipt methods. 
+BlazorJSRuntime CallAsync would throw an error if used on the below Javascript method.
+
+```js
+// Javascript
+function AddNum(num1, num2){
+    return num1 + num2;
+}
+```
+
+```cs
+// C#
+var total = JS.Call<int>("AddNum", 20, 22);
+// total == 42 here
+```
+
+
+Use asynchronous BlazorJSRuntime calls for asynchronous Javascript methods.
+```js
+// Javascript
+async function AddNum(num1, num2){
+    return num1 + num2;
+}
+```
+
+```cs
+// C#
+var total = await JS.CallAsync<int>("AddNum", 20, 22);
+// total == 42 here
+```
+
+Use asynchronous BlazorJSRuntime calls for methods that return a Promise.
+```js
+// Javascript
+function AddNum(num1, num2){
+    return new Promise((resolve, reject)=>{
+        resolve(num1 + num2);
+    });
+}
+```
+
+```cs
+// C#
+var total = await JS.CallAsync<int>("AddNum", 20, 22);
+// total == 42 here
+```
+
+
+
 
 # IJSInProcessObjectReference extended
 
