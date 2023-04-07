@@ -298,237 +298,237 @@ namespace SpawnDev.BlazorJS {
 
     // Async Func
     public class AsyncFuncCallback<TResult> : Callback {
-        Func<Task<TResult>> _callback;
+        Func<Task<TResult>> __callback;
         public AsyncFuncCallback(Func<Task<TResult>> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise<TResult> Invoke() {
             if (once) Dispose();
-            return new Promise<TResult>(_callback());
+            return new Promise<TResult>(__callback());
         }
     }
 
     public class AsyncFuncCallback<T1, TResult> : Callback {
-        Func<T1, Task<TResult>> _callback;
+        Func<T1, Task<TResult>> __callback;
         public AsyncFuncCallback(Func<T1, Task<TResult>> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise<TResult> Invoke(T1 arg0) {
             if (once) Dispose();
-            return new Promise<TResult>(_callback(arg0));
+            return new Promise<TResult>(__callback(arg0));
         }
     }
 
     public class AsyncFuncCallback<T1, T2, TResult> : Callback {
-        Func<T1, T2, Task<TResult>> _callback;
+        Func<T1, T2, Task<TResult>> __callback;
         public AsyncFuncCallback(Func<T1, T2, Task<TResult>> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise<TResult> Invoke(T1 arg0, T2 arg1) {
             if (once) Dispose();
-            return new Promise<TResult>(_callback(arg0, arg1));
+            return new Promise<TResult>(__callback(arg0, arg1));
         }
     }
 
     public class AsyncFuncCallback<T1, T2, T3, TResult> : Callback {
-        Func<T1, T2, T3, Task<TResult>> _callback;
+        Func<T1, T2, T3, Task<TResult>> __callback;
         public AsyncFuncCallback(Func<T1, T2, T3, Task<TResult>> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise<TResult> Invoke(T1 arg0, T2 arg1, T3 arg2) {
             if (once) Dispose();
-            return new Promise<TResult>(_callback(arg0, arg1, arg2));
+            return new Promise<TResult>(__callback(arg0, arg1, arg2));
         }
     }
 
     public class AsyncFuncCallback<T1, T2, T3, T4, TResult> : Callback {
-        Func<T1, T2, T3, T4, Task<TResult>> _callback;
+        Func<T1, T2, T3, T4, Task<TResult>> __callback;
         public AsyncFuncCallback(Func<T1, T2, T3, T4, Task<TResult>> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise<TResult> Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3) {
             if (once) Dispose();
-            return new Promise<TResult>(_callback(arg0, arg1, arg2, arg3));
+            return new Promise<TResult>(__callback(arg0, arg1, arg2, arg3));
         }
     }
 
     // Synch Func
     public class FuncCallback<TResult> : Callback {
-        Func<TResult> _callback;
+        Func<TResult> __callback;
         public FuncCallback(Func<TResult> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public TResult Invoke() {
             if (once) Dispose();
-            return _callback();
+            return __callback();
         }
     }
     public class FuncCallback<T1, TResult> : Callback {
-        Func<T1, TResult> _callback;
+        Func<T1, TResult> __callback;
         public FuncCallback(Func<T1, TResult> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public TResult Invoke(T1 arg0) {
             if (once) Dispose();
-            return _callback(arg0);
+            return __callback(arg0);
         }
     }
     public class FuncCallback<T1, T2, TResult> : Callback {
-        Func<T1, T2, TResult> _callback;
+        Func<T1, T2, TResult> __callback;
         public FuncCallback(Func<T1, T2, TResult> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public TResult Invoke(T1 arg0, T2 arg1) {
             if (once) Dispose();
-            return _callback(arg0, arg1);
+            return __callback(arg0, arg1);
         }
     }
     public class FuncCallback<T1, T2, T3, TResult> : Callback {
-        Func<T1, T2, T3, TResult> _callback;
+        Func<T1, T2, T3, TResult> __callback;
         public FuncCallback(Func<T1, T2, T3, TResult> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public TResult Invoke(T1 arg0, T2 arg1, T3 arg2) {
             if (once) Dispose();
-            return _callback(arg0, arg1, arg2);
+            return __callback(arg0, arg1, arg2);
         }
     }
     public class FuncCallback<T1, T2, T3, T4, TResult> : Callback {
-        Func<T1, T2, T3, T4, TResult> _callback;
+        Func<T1, T2, T3, T4, TResult> __callback;
         public FuncCallback(Func<T1, T2, T3, T4, TResult> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public TResult Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3) {
             if (once) Dispose();
-            return _callback(arg0, arg1, arg2, arg3);
+            return __callback(arg0, arg1, arg2, arg3);
         }
     }
 
     // Async Actions
     public class AsyncActionCallback : Callback {
-        Func<Task> _callback;
+        Func<Task> __callback;
         public AsyncActionCallback(Func<Task> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise Invoke() {
             if (once) Dispose();
-            return new Promise(_callback());
+            return new Promise(__callback());
         }
     }
 
     public class AsyncActionCallback<T1> : Callback {
-        Func<T1, Task> _callback;
+        Func<T1, Task> __callback;
         public AsyncActionCallback(Func<T1, Task> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise Invoke(T1 arg0) {
             if (once) Dispose();
-            return new Promise(_callback(arg0));
+            return new Promise(__callback(arg0));
         }
     }
 
     public class AsyncActionCallback<T1, T2> : Callback {
-        Func<T1, T2, Task> _callback;
+        Func<T1, T2, Task> __callback;
         public AsyncActionCallback(Func<T1, T2, Task> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise Invoke(T1 arg0, T2 arg1) {
             if (once) Dispose();
-            return new Promise(_callback(arg0, arg1));
+            return new Promise(__callback(arg0, arg1));
         }
     }
 
     public class AsyncActionCallback<T1, T2, T3> : Callback {
-        Func<T1, T2, T3, Task> _callback;
+        Func<T1, T2, T3, Task> __callback;
         public AsyncActionCallback(Func<T1, T2, T3, Task> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise Invoke(T1 arg0, T2 arg1, T3 arg2) {
             if (once) Dispose();
-            return new Promise(_callback(arg0, arg1, arg2));
+            return new Promise(__callback(arg0, arg1, arg2));
         }
     }
 
     public class AsyncActionCallback<T1, T2, T3, T4> : Callback {
-        Func<T1, T2, T3, T4, Task> _callback;
+        Func<T1, T2, T3, T4, Task> __callback;
         public AsyncActionCallback(Func<T1, T2, T3, T4, Task> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public Promise Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3) {
             if (once) Dispose();
-            return new Promise(_callback(arg0, arg1, arg2, arg3));
+            return new Promise(__callback(arg0, arg1, arg2, arg3));
         }
     }
 
     // Synch Actions
     public class ActionCallback : Callback {
-        Action _callback;
+        Action __callback;
         public ActionCallback(Action callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public void Invoke() {
             if (once) Dispose();
-            _callback();
+            __callback();
         }
     }
     public class ActionCallback<T1> : Callback {
-        Action<T1> _callback;
+        Action<T1> __callback;
         public ActionCallback(Action<T1> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public void Invoke(T1 arg0) {
             if (once) Dispose();
-            _callback(arg0);
+            __callback(arg0);
         }
     }
     public class ActionCallback<T1, T2> : Callback {
-        Action<T1, T2> _callback;
+        Action<T1, T2> __callback;
         public ActionCallback(Action<T1, T2> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public void Invoke(T1 arg0, T2 arg1) {
             if (once) Dispose();
-            _callback(arg0, arg1);
+            __callback(arg0, arg1);
         }
     }
     public class ActionCallback<T1, T2, T3> : Callback {
-        Action<T1, T2, T3> _callback;
+        Action<T1, T2, T3> __callback;
         public ActionCallback(Action<T1, T2, T3> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public void Invoke(T1 arg0, T2 arg1, T3 arg2) {
             if (once) Dispose();
-            _callback(arg0, arg1, arg2);
+            __callback(arg0, arg1, arg2);
         }
     }
     public class ActionCallback<T1, T2, T3, T4> : Callback {
-        Action<T1, T2, T3, T4> _callback;
+        Action<T1, T2, T3, T4> __callback;
         public ActionCallback(Action<T1, T2, T3, T4> callback) : base() {
-            _callback = callback;
+            __callback = callback;
         }
         [JSInvokable]
         public void Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3) {
             if (once) Dispose();
-            _callback(arg0, arg1, arg2, arg3);
+            __callback(arg0, arg1, arg2, arg3);
         }
     }
 }

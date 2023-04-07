@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System.Reflection;
@@ -165,7 +166,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                     }
                     object? service = null;
                     try {
-                        service = _serviceProvider.GetService(serviceType);
+                        service = _serviceProvider.GetRequiredService(serviceType);
                     }
                     catch {
                         throw new Exception($"ERROR: {nameof(ServiceCallDispatcher)} OnMessage - Service not registered {serviceType.FullName}");

@@ -9,9 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     public class Event : JSObject
     {
-        public Event(IJSInProcessObjectReference _ref) : base(_ref)
-        {
-        }
+        public Event(IJSInProcessObjectReference _ref) : base(_ref) { }
         public bool Bubbles => JSRef.Get<bool>("bubbles");
         public bool Cancelable => JSRef.Get<bool>("cancelable");
         public bool Composed => JSRef.Get<bool>("composed");

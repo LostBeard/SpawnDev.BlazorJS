@@ -3,8 +3,8 @@ using System.Dynamic;
 
 namespace SpawnDev.BlazorJS.JSObjects {
     public class FileSystemAccessPickerFilter {
-        public string description { get; set; } = "";
-        public Dictionary<string, List<string>> accept = new Dictionary<string, List<string>>();
+        public string Description { get; set; } = "";
+        public Dictionary<string, List<string>> Accept { get; set; } = new Dictionary<string, List<string>>();
     }
     public class FileSystemAccess : IDisposable {
         // https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
@@ -42,7 +42,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         }
 
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/showDirectoryPicker
-        public async Task<FileSystemDirectoryHandle> ShowDirectoryPicker() {
+        public async Task<FileSystemDirectoryHandle?> ShowDirectoryPicker() {
             try {
                 return await window.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker");
             }

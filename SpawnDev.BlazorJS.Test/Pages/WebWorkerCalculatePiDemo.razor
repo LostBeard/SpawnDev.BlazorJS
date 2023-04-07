@@ -54,12 +54,24 @@
         StateHasChanged();
         if (webWorker == null) webWorker = await webWorkerService.GetWebWorker();
         var mathsServiceWorker = webWorker.GetService<IMathsService>();
-        var result = await mathsServiceWorker.CalculatePiWithActionProgress(piDecimalPlaces, new Action<int>((i) =>
+        try
         {
-            piProgress = i;
-            StateHasChanged();
-        }));
-        output += $"{rn}{LogDate()} EstimatePI({piDecimalPlaces}) = {result}";
+            var result = await mathsServiceWorker.CalculatePiWithActionProgress(piDecimalPlaces, new Action<int>((i) =>
+            {
+                piProgress = i;
+                StateHasChanged();
+            })).WaitAsync(TimeSpan.FromSeconds(5));
+            output += $"{rn}{LogDate()} EstimatePI({piDecimalPlaces}) = {result}";
+        }
+        catch (TimeoutException)
+        {
+            output += $"{rn}{LogDate()} EstimatePI({piDecimalPlaces}) = timedout";
+        }
+        finally
+        {
+            webWorker?.Dispose();
+            webWorker = null;
+        }
         Running = false;
         StateHasChanged();
     }

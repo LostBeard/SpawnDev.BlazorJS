@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using static SpawnDev.BlazorJS.JSObjects.Promise;
 
 namespace SpawnDev.BlazorJS.JSObjects {
     public class Promise<TResult> : JSObject {
@@ -181,9 +182,10 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Function? ResolveFunc { get; protected set; }
         public Function? RejectFunc { get; protected set; }
 
+        public void ThenCatch<TError>(ActionCallback thenCallback, ActionCallback<TError> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
         public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
         public void Then<TResult>(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
-        public void Then<TResult, TError>(ActionCallback<TResult> thenCallback, ActionCallback<TError> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
+        public void ThenCatch<TResult, TError>(ActionCallback<TResult> thenCallback, ActionCallback<TError> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
 
         public void Resolve(object? value) => ResolveFunc.CallVoid(null, value);
         public void Resolve() => ResolveFunc.CallVoid();
@@ -209,6 +211,43 @@ namespace SpawnDev.BlazorJS.JSObjects {
             }, callbacks));
             cancellationTokenSource?.Token.Register(() => {
                 if (t.TrySetException(new Exception("Timed out"))) {
+                    cancellationTokenSource?.Dispose();
+                    callbacks.Dispose();
+                }
+            });
+            cancellationTokenSource?.CancelAfter(timeoutMS);
+            return t.Task;
+        }
+        public class PromiseCatchException<T> : Exception
+        {
+            public T CatchValue { get; set; } 
+            public PromiseCatchException(T catchValue)
+            {
+                CatchValue = catchValue;
+            }
+        }
+
+        public Task ThenCatchAsync<TCatch>(int timeoutMS = 0)
+        {
+            var t = new TaskCompletionSource();
+            var callbacks = new CallbackGroup();
+            var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
+            ThenCatch(Callback.Create(() => {
+                if (t.TrySetResult())
+                {
+                    cancellationTokenSource?.Dispose();
+                    callbacks.Dispose();
+                }
+            }, callbacks), callbacks.Add(new ActionCallback<TCatch>((catchValue) => {
+                if (t.TrySetException(new PromiseCatchException<TCatch>(catchValue)))
+                {
+                    cancellationTokenSource?.Dispose();
+                    callbacks.Dispose();
+                }
+            })));
+            cancellationTokenSource?.Token.Register(() => {
+                if (t.TrySetException(new Exception("Timed out")))
+                {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }

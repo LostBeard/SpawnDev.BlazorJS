@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
     {
         public static IServiceCollection AddWebWorkerService(this IServiceCollection _this)
         {
-            return _this.AddBackgroundService<WebWorkerService>();
+            return _this.AddSingleton<WebWorkerService>();
         }
     }
 }

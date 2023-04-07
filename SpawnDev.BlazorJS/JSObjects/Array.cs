@@ -13,6 +13,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public T Pop<T>() => JSRef.Call<T>("pop");
         public T Shift<T>() => JSRef.Call<T>("shift");
         public void SetItem<T>(int index, object? value) => JSRef.Set(index, value);
+        public T GetItem<T>(int index) => JSRef.Get<T>(index);
+        public object? GetItem(Type type, int index) => JSRef.Get(type, index);
         public Array Concat(Array array) => JSRef.Call<Array>("concat", array);
         public string Join(string separator = "") => JSRef.Call<string>("join", separator);
         public void Map(Function function) => JSRef.CallVoid("map", function);

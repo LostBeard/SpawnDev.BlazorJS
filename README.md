@@ -118,7 +118,6 @@ var total = await JS.CallAsync<int>("AddNum", 20, 22);
 
 
 
-
 # IJSInProcessObjectReference extended
 
 ```cs

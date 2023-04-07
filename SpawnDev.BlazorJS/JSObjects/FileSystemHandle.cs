@@ -9,24 +9,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public string Kind => JSRef.Get<string>("kind");
         public bool IsSameEntry(FileSystemHandle fsHandle) => JSRef.Call<bool>("isSameEntry", fsHandle);
 
-        public static async Task<List<T>> IterateAsync<T>(IJSInProcessObjectReference iteratee) {
-            var ret = new List<T>();
-            while (true) {
-                using (var next = await iteratee.CallAsync<IJSInProcessObjectReference>("next")) {
-                    if (next.Get<bool>("done")) break;
-                    ret.Add(next.Get<T>("value"));
-                }
-            }
-            return ret;
-        }
-
-        //public enum ReadWritePermissions
-        //{
-        //    NOT_ALLOWED,
-        //    READ,
-        //    READ_WRITE,
-        //}
-
         public async Task<string> GetReadWritePermissions() {
             if (await IsWritable()) return "rw";
             if (await IsReadable()) return "r";

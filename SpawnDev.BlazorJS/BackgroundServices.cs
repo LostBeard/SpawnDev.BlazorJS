@@ -9,6 +9,7 @@ namespace SpawnDev.BlazorJS
     }
     public static class BackgroundServices
     {
+        static IServiceCollection? serviceCollection = null;
         /// <summary>
         /// Adds the BlazorJSRuntime singleton service and initializes it.
         /// </summary>
@@ -17,33 +18,11 @@ namespace SpawnDev.BlazorJS
         public static IServiceCollection AddBlazorJSRuntime(this IServiceCollection _this)
         {
             // Adds BlazorJSRuntime as BlazorJSRuntime and IBlazorJSRuntime
+            serviceCollection = _this;
+            _this.AddSingleton<IServiceCollection>(_this);
             return _this.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS).AddSingleton(serviceProvider => (IBlazorJSRuntime)serviceProvider.GetRequiredService<BlazorJSRuntime>());
         }
         internal static Dictionary<Type, IBackgroundService?> Services { get; private set; } = new Dictionary<Type, IBackgroundService?>();
-
-        /// <summary>
-        /// Background services are singletons that will be created immediately after app init
-        /// </summary>
-        /// <typeparam name="TService"></typeparam>
-        /// <param name="_this"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddBackgroundService<TService>(this IServiceCollection _this) where TService : class, IBackgroundService
-        {
-            Services.Add(typeof(TService), null);
-            return _this.AddSingleton<TService>();
-        }
-
-        /// <summary>
-        /// Background services are singletons that will be created immediately after app init
-        /// </summary>
-        /// <typeparam name="TService"></typeparam>
-        /// <param name="_this"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddBackgroundService<TService, TImplementation>(this IServiceCollection _this) where TImplementation : class, TService, IBackgroundService where TService : class
-        {
-            Services.Add(typeof(TService), null);
-            return _this.AddSingleton<TService, TImplementation>();
-        }
 
         /// <summary>
         /// Background services will have their InitAsync methods called in the order the were registered
@@ -51,18 +30,29 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
-        public static async Task<WebAssemblyHost> StartBackgroundServices(this WebAssemblyHost _this)
+        static async Task<WebAssemblyHost> StartBackgroundServices(this WebAssemblyHost _this)
         {
+            var bgServices = serviceCollection.Where(o => {
+                var bgImpl = typeof(IBackgroundService).IsAssignableFrom(o.ImplementationType);
+                var bgType = typeof(IBackgroundService).IsAssignableFrom(o.ServiceType);
+                return bgImpl || bgType;
+            }).ToList();
             // let all the constructors fire first
-            foreach (var kvp in Services)
+            foreach (var kvp in bgServices)
             {
-                var service = (IBackgroundService)_this.Services.GetRequiredService(kvp.Key);
-                Services[kvp.Key] = service;
+#if DEBUG
+                Console.WriteLine($"Getting background service: {kvp.ServiceType.Name}");
+#endif
+                var service = (IBackgroundService)_this.Services.GetRequiredService(kvp.ServiceType);
+                Services[kvp.ServiceType] = service;
             }
             // call InitAsync on each
-            foreach (var service in Services.Values)
+            foreach (var kvp in Services)
             {
-                await service.InitAsync();
+#if DEBUG
+                Console.WriteLine($"InitAsync background service: {kvp.Key.Name}");
+#endif
+                await kvp.Value.InitAsync();
             }
             return _this;
         }

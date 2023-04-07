@@ -1,12 +1,14 @@
 ﻿using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
+namespace SpawnDev.BlazorJS.JSObjects
+{
     // https://developer.mozilla.org/en-US/docs/Web/API/File
-    public class FileSystemFileHandle : FileSystemHandle {
+    public class FileSystemFileHandle : FileSystemHandle
+    {
         public FileSystemFileHandle(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public async Task<File> GetFile() {
-            return await JSRef.CallAsync<File>("getFile");
-        }
+        public Task<File> GetFile() => JSRef.CallAsync<File>("getFile");
+        public Task<FileSystemWritableFileStream> CreateWritable() => JSRef.CallAsync<FileSystemWritableFileStream>("createWritable");
+        
     }
 }
