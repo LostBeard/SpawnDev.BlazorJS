@@ -64,6 +64,9 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public string IceConnectionState => JSRef.Get<string>("iceConnectionState");
         public void RestartIce() => JSRef.CallVoid("restartIce");
         public ActionCallback OnConnectionStateChange { set { JSRef.Set("onconnectionstatechange", value); } }
+
+        //public EventCallback<RTCDataChannelEvent> OnDataChannel { get => new EventCallback<RTCDataChannelEvent>((o)=> JSRef.Set("ondatachannel", o), (o) => JSRef.Set("ondatachannel", null)); set { } }
+
         public ActionCallback<RTCDataChannelEvent> OnDataChannel { set { JSRef.Set("ondatachannel", value); } }
         public ActionCallback<RTCPeerConnectionEvent> OnIceCandidate { set { JSRef.Set("onicecandidate", value); } }
         public ActionCallback<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { set { JSRef.Set("onicecandidateerror", value); } }

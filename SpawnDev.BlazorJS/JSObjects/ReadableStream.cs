@@ -34,9 +34,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
             JSRef.CallVoid("destroy");
         }
 
-        public override void Dispose() {
-            if (IsWrapperDisposed) return;
-            base.Dispose();
+        protected override void LosingReference()
+        {
             callbacks.Dispose();
         }
     }

@@ -123,6 +123,59 @@ var initWebWorkerBlazor = async () => {
         }
     }
     getIndexHtmlScripts();
+    async function getScript(href) {
+        var response = await fetch(new URL(href, document.baseURI), {
+            cache: 'no-cache',
+        });
+        return await response.text();
+    }
+    globalThisObj.importOverride = async function (src) {
+        consoleLog('importOverride', src);
+        var jsStr = await getScript(src);
+        jsStr = fixModuleScript(jsStr);
+        let fn = new Function(jsStr);
+        var ret = fn.apply(createProxiedObject(globalThisObj), []);
+        if (!ret) ret = createProxiedObject({});
+        return ret;
+    }
+    function fixModuleScript(jsStr) {
+        // handle things that are automatically handled by import
+        // import.meta.url
+        jsStr = jsStr.replace(new RegExp('\\bimport\\.meta\\.url\\b', 'g'), `document.baseURI`);
+        // import.meta
+        jsStr = jsStr.replace(new RegExp('\\bimport\\.meta\\b', 'g'), `{ url: location.href }`);
+        // import
+        jsStr = jsStr.replace(new RegExp('\\bimport\\(', 'g'), 'importOverride(');
+        // export
+        // https://www.geeksforgeeks.org/what-is-export-default-in-javascript/
+        // handle exports from
+        // lib modules
+        // Ex(_content/SpawnDev.BlazorJS/SpawnDev.BlazorJS.lib.module.js)
+        // export function beforeStart(options, extensions) {
+        // export function afterStarted(options, extensions) {
+        var exportPatt = /\bexport[ \t]+function[ \t]+([^ \t(]+)/g;
+        jsStr = jsStr.replace(exportPatt, '_exportsOverride.$1 = function $1');
+        // handle exports from
+        // dotnet.7.0.0.amub20uvka.js
+        // export default createDotnetRuntime
+        exportPatt = /\bexport[ \t]+default[ \t]+([^ \t;]+)/g;
+        jsStr = jsStr.replace(exportPatt, '_exportsOverride.default = $1');
+        // export { dotnet, exit, INTERNAL };
+        exportPatt = /\bexport[ \t]+(\{[^}]+\})/g;
+        jsStr = jsStr.replace(exportPatt, '_exportsOverride = Object.assign(_exportsOverride, $1)');
+        //var n = 0;
+        //var m = null;
+        //exportPatt = new RegExp('\\bexport\\b.*?(?:;|$)', 'gm');
+        //do {
+        //    m = exportPatt.exec(jsStr);
+        //    if (m) {
+        //        n++;
+        //        console.log('export', n, m[0]);
+        //    }
+        //} while (m);
+        var modulize = `let _exportsOverride = {}; ${jsStr}; return _exportsOverride;`;
+        return modulize;
+    }
     async function initializeBlazor() {
 
         // setup standard document
@@ -144,80 +197,16 @@ var initWebWorkerBlazor = async () => {
             scriptEl.setAttribute('src', s);
             if (i == blazorWebAssemblyJSIndex) {
                 scriptEl.setAttribute('autostart', "false");
+                if (!dynamicImportSupported) {
+                    // convert dynamic imports in blazorWebAssembly and its imports
+                    let jsStr = await getScript(s);
+                    jsStr = fixModuleScript(jsStr);
+                    scriptEl.text = jsStr;
+                }
             }
         }
-        
-        //blazorWASMScriptEl.setAttribute('src', '_content/SpawnDev.BlazorJS.WebWorkers/blazor.webassembly.pretty.js');
         // init document
-        if (dynamicImportSupported) {
-            document.initDocument();
-        }
-        else {
-            consoleLog('Loading workaround to counter lack of dynamic import support in some browsers (Firefox, others?)');
-            var integrity = '';
-            //var blazorWasmJsUri = new URL('_content/SpawnDev.BlazorJS.WebWorkers/blazor.webassembly.pretty.js', document.baseURI);
-            var blazorWasmJsUri = new URL('_framework/blazor.webassembly.js', document.baseURI);
-            var response = await fetch(blazorWasmJsUri, {
-                cache: 'no-cache',
-                //integrity: integrity,
-            });
-            var jsStr = await response.text();
-            function fixModuleScript(jsStr) {
-                // handle things that are automatically handled by import
-                // import.meta.url
-                jsStr = jsStr.replace(new RegExp('\\bimport\\.meta\\.url\\b', 'g'), `document.baseURI`);
-                // import.meta
-                jsStr = jsStr.replace(new RegExp('\\bimport\\.meta\\b', 'g'), `{ url: location.href }`);
-                // import
-                jsStr = jsStr.replace(new RegExp('\\bimport\\(', 'g'), 'importOverride(');
-                // export
-                // https://www.geeksforgeeks.org/what-is-export-default-in-javascript/
-                // handle exports from
-                // lib modules
-                // Ex(_content/SpawnDev.BlazorJS/SpawnDev.BlazorJS.lib.module.js)
-                // export function beforeStart(options, extensions) {
-                // export function afterStarted(options, extensions) {
-                var exportPatt = /\bexport[ \t]+function[ \t]+([^ \t(]+)/g;
-                jsStr = jsStr.replace(exportPatt, '_exportsOverride.$1 = function $1');
-                // handle exports from
-                // dotnet.7.0.0.amub20uvka.js
-                // export default createDotnetRuntime
-                exportPatt = /\bexport[ \t]+default[ \t]+([^ \t;]+)/g;
-                jsStr = jsStr.replace(exportPatt, '_exportsOverride.default = $1');
-                // export { dotnet, exit, INTERNAL };
-                exportPatt = /\bexport[ \t]+(\{[^}]+\})/g;
-                jsStr = jsStr.replace(exportPatt, '_exportsOverride = Object.assign(_exportsOverride, $1)');
-                //var n = 0;
-                //var m = null;
-                //exportPatt = new RegExp('\\bexport\\b.*?(?:;|$)', 'gm');
-                //do {
-                //    m = exportPatt.exec(jsStr);
-                //    if (m) {
-                //        n++;
-                //        console.log('export', n, m[0]);
-                //    }
-                //} while (m);
-                var modulize = `let _exportsOverride = {}; ${jsStr}; return _exportsOverride;`;
-                return modulize;
-            }
-            globalThisObj.importOverride = async function (src) {
-                consoleLog('importOverride', src);
-                var response = await fetch(src, {
-                    cache: 'no-cache',
-                    //integrity: integrity,
-                });
-                var jsStr = await response.text();
-                jsStr = fixModuleScript(jsStr);
-                let fn = new Function(jsStr);
-                var ret = fn.apply(createProxiedObject(globalThisObj), []);
-                if (!ret) ret = createProxiedObject({});
-                return ret;
-            }
-            jsStr = fixModuleScript(jsStr);
-            //console.log("jsStr", jsStr);
-            blazorWASMScriptEl.text = jsStr;
-            document.initDocument();
-        }
+        document.initDocument();
     }
     await initializeBlazor();
 

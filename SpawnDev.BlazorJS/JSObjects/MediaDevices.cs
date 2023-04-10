@@ -16,10 +16,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public static bool GetDisplayMediaSupported => !JS.IsUndefined("navigator.mediaDevices") && !JS.IsUndefined("navigator.mediaDevices.getDisplayMedia");
         CallbackGroup callbacks = new CallbackGroup();
         public void OnDeviceChange(Action callback) { AddEventListener("devicechange", Callback.Create(callback, callbacks)); }
-        public override void Dispose() {
-            if (IsWrapperDisposed) return;
+        protected override void LosingReference()
+        {
             callbacks.Dispose();
-            base.Dispose();
         }
 
         public async Task<MediaStream> GetMediaDeviceStream(DeviceInfo deviceVideo, DeviceInfo deviceAudio) {

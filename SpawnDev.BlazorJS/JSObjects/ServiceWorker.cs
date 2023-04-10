@@ -28,9 +28,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
                 e.Dispose();
             }, _callbacks));
         }
-        public override void Dispose() {
+        protected override void LosingReference()
+        {
             _callbacks.Dispose();
-            base.Dispose();
         }
         //public void PostMessaage(object message, IEnumerable<ArrayBuffer> transfer = null)
         //{

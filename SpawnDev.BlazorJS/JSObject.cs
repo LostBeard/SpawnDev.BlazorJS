@@ -96,7 +96,7 @@ namespace SpawnDev.BlazorJS
             JSRef = null;
             IsJSRefUndefined = false;
         }
-        public virtual void Dispose()
+        public void Dispose()
         {
             if (IsWrapperDisposed) return;
             Dispose(true);

@@ -34,10 +34,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public void PostMessaage(object message) {
             JSRef.CallVoid("postMessage", message);
         }
-
-        public override void Dispose() {
+        protected override void LosingReference()
+        {
             _callbacks.Dispose();
-            base.Dispose();
         }
     }
 }

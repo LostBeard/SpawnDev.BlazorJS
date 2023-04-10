@@ -33,10 +33,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
             }, callbackGroup));
         }
 
-        public override void Dispose() {
-            if (IsWrapperDisposed) return;
+        protected override void LosingReference()
+        {
             callbackGroup.Dispose();
-            base.Dispose();
         }
 
         public static Task<T> ToAsync<T>(IDBRequest request) {

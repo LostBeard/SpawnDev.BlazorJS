@@ -40,10 +40,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
         void _OnEnded() {
             Console.WriteLine("MediaStream: _OnEnded");
         }
-        public override void Dispose() {
-            base.Dispose();
-            Console.WriteLine("MediaStream.Dispose()");
-            callbacks?.Dispose();
+        protected override void LosingReference()
+        {
+            callbacks.Dispose();
         }
 
         public void RemoveTrack(MediaStreamTrack track) => JSRef.CallVoid("removeTrack", track);

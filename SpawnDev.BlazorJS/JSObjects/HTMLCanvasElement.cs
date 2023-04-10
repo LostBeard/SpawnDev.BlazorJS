@@ -80,8 +80,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
             return JSRef.Call<WebGL2RenderingContext>("getContext", "webgl2", contextAttributes);
         }
 
-        public string ToDataURL(string type = "image/png") => JSRef.Call<string>(type);
-        public string ToDataURL(string type, float encoderOptions) => JSRef.Call<string>(type, encoderOptions);
+        public string ToDataURL(string type = "image/png") => JSRef.Call<string>("toDataURL", type);
+        public string ToDataURL(string type, float encoderOptions) => JSRef.Call<string>("toDataURL", type, encoderOptions);
 
 
         // NOTE - may not work on some browsers if not added to DOM first (even if temporary)
