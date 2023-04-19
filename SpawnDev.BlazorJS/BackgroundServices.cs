@@ -63,11 +63,11 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
-        public static async Task BlazorJSRunAsync(this WebAssemblyHost _this)
+        public static async Task BlazorJSRunAsync(this WebAssemblyHost _this, bool workersSkipPageRendering = true)
         {
             await _this.StartBackgroundServices();
             var tcs = new TaskCompletionSource<object>();
-            if (BlazorJSRuntime.JS.IsWorker)
+            if (BlazorJSRuntime.JS.IsWorker && workersSkipPageRendering)
             {
                 // This is a worker so we are going to use this to allow services in workers without the html renderer trying to load pages
                 await tcs.Task;

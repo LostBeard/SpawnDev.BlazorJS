@@ -704,7 +704,7 @@ class History {
         pixelDepth: 24,
         width: 1920,
     };
-    // document.baseURI
+    // document.baseURI (defaults to worker directory here, can be set later)
     var href = globalThisObj.location.href;
     var webWorkerContentDir = href.substring(0, href.lastIndexOf('/') + 1);
     document.baseURI = webWorkerContentDir;

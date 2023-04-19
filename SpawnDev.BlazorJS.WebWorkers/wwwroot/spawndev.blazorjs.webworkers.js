@@ -1,8 +1,9 @@
 'use strict';
 
 // Todd Tanner
-// 2022
+// 2022 - 2023
 // SpawnDev.BlazorJS.WebWorkers
+// _content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js
 
 var checkIfGlobalThis = function (it) {
     return it && it.Math == Math && it;
@@ -47,28 +48,23 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
 
 var disableHotReload = true;
 var verboseWebWorkers = location.search.indexOf('verbose=true') > -1;
-// at the moment verbose must be false because an unknown issue is causing Blazor to fail without any errors if it is enabled
 var consoleLog = function () {
     if (!verboseWebWorkers) return;
     console.log(...arguments);
 };
 
-// _content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js
 consoleLog('spawndev.blazorjs.webworkers: started');
 consoleLog('location.href', location.href);
-var _frameworkPath = '';
-var _appPath = '';
-if (location.href.indexOf('_content/SpawnDev.BlazorJS.WebWorkers') > 0) {
-    _frameworkPath = new URL(`../../_framework/`, location.href).toString();
-    _appPath = new URL(`../../`, location.href).toString();
-} else {
-    _frameworkPath = new URL(`_framework/`, location.href).toString();
-    _appPath = new URL(`./`, location.href).toString();
-}
-consoleLog('_frameworkPath', _frameworkPath);
+// location.href is this script
+// location.href == 'https://localhost:7191/_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js?verbose=false'
 
 consoleLog('spawndev.blazorjs.webworkers: loading fake window environment');
-importScripts(_frameworkPath + '../_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.faux-env.js');
+importScripts('spawndev.blazorjs.webworkers.faux-env.js');
+// barebones dom has been created
+// set document.baseURI
+document.baseURI = new URL(`../../`, location.href).toString();
+consoleLog('document.baseURI', document.baseURI);
+// document.baseURI == 'https://localhost:7191/'
 
 var stallForDebuggerSeconds = 0;
 if (stallForDebuggerSeconds) {
@@ -85,17 +81,14 @@ if (disableHotReload) {
 }
 
 var initWebWorkerBlazor = async () => {
-    // the app base directory is 2 folders up
-    if (document.baseURI.indexOf('_content/') > 0) {
-        document.baseURI = new URL(document.baseURI + '../../').toString();
+    async function getText(href) {
+        var response = await fetch(new URL(href, document.baseURI), {
+            cache: 'force-cache',
+        });
+        return await response.text();
     }
-    consoleLog('document.baseURI', document.baseURI);
     // Get index.html
-    var indexHtmlUri = new URL('index.html', document.baseURI);
-    var response = await fetch(indexHtmlUri, {
-        cache: 'no-cache',
-    });
-    var indexHtmlSrc = await response.text();
+    var indexHtmlSrc = await getText('index.html');
     var indexHtmlScripts = [];
     var blazorWebAssemblyJSIndex = -1;
     function getIndexHtmlScripts() {
@@ -123,15 +116,9 @@ var initWebWorkerBlazor = async () => {
         }
     }
     getIndexHtmlScripts();
-    async function getScript(href) {
-        var response = await fetch(new URL(href, document.baseURI), {
-            cache: 'no-cache',
-        });
-        return await response.text();
-    }
     globalThisObj.importOverride = async function (src) {
         consoleLog('importOverride', src);
-        var jsStr = await getScript(src);
+        var jsStr = await getText(src);
         jsStr = fixModuleScript(jsStr);
         let fn = new Function(jsStr);
         var ret = fn.apply(createProxiedObject(globalThisObj), []);
@@ -199,7 +186,7 @@ var initWebWorkerBlazor = async () => {
                 scriptEl.setAttribute('autostart', "false");
                 if (!dynamicImportSupported) {
                     // convert dynamic imports in blazorWebAssembly and its imports
-                    let jsStr = await getScript(s);
+                    let jsStr = await getText(s);
                     jsStr = fixModuleScript(jsStr);
                     scriptEl.text = jsStr;
                 }
@@ -214,37 +201,9 @@ var initWebWorkerBlazor = async () => {
     // https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/environments?view=aspnetcore-7.0
     Blazor.start({
         loadBootResource: function (type, name, defaultUri, integrity) {
-            if (type == 'configuration') {
-                var newUri = `${_appPath}${name}`;
-                //console.log(`Loading: '${type}', '${name}', '${defaultUri}', '${integrity}', '${newUri}'`);
-                return newUri;
-            }
-            else {
-                var newUri = `${_frameworkPath}${name}`;
-                //console.log(`Loading: '${type}', '${name}', '${defaultUri}', '${integrity}', '${newUri}'`);
-                if (name === 'blazor.boot.json') {
-                    return (async () => {
-                        var response = await fetch(newUri, {
-                            cache: 'no-cache',
-                            integrity: integrity,
-                        });
-                        var responseClone = response.clone();
-                        var json = await responseClone.json();
-                        // this is where we can modify json.entryAssembly or other boot config settings
-                        //consoleLog('blazor.boot.json', json);
-                        //json.debugBuild = false;
-                        //json.linkerEnabled = false;
-                        consoleLog('blazor.boot.json::entryAssembly', json.entryAssembly);
-                        var newRsponse = new Response(JSON.stringify(json), response);
-                        return newRsponse;
-                    })();
-                } else if (name === 'blazor.webassembly.js') {
-
-                }
-            }
-            return newUri;
+            var newURL = new URL(defaultUri, document.baseURI);
+            return newURL.toString();
         }
     });
-
 };
 initWebWorkerBlazor();

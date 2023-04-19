@@ -166,7 +166,7 @@ var initFunc = function () {
         if (!pathInfo.exists) {
             if (JSInterop.debugLevel > 0) {
                 var targetType = pathInfo.parent ? pathInfo.parent.constructor.name : '[NULL]';
-                console.log('WARNING: JSInterop._set - property being set does not exist', targetType, identifier);
+                console.log('NOTICE: JSInterop._set - property being set does not exist', targetType, identifier);
             }
         }
         pathInfo.parent[pathInfo.propertyName] = value;
@@ -263,15 +263,21 @@ var initFunc = function () {
 };
 initFunc();
 
+
 //export function beforeStart(options, extensions) {
 //    console.log("blazorjs beforeStart");
 //}
 
 //export function afterStarted(blazor) {
-//    //console.log("blazorjs afterStarted");
-//    if (typeof JSInterop._afterStarted === 'function') {
-//        let callback = JSInterop._afterStarted;
-//        delete JSInterop._afterStarted;
-//        callback();
-//    }
+
+//    Object.defineProperty(Blazor, 'DotNet', {
+//        value: globalThis.DotNet,
+//        writable: false,
+//    });
+//    ////console.log("blazorjs afterStarted");
+//    //if (typeof JSInterop._afterStarted === 'function') {
+//    //    let callback = JSInterop._afterStarted;
+//    //    delete JSInterop._afterStarted;
+//    //    callback();
+//    //}
 //}

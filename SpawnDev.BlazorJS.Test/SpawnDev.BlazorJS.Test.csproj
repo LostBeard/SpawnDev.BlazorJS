@@ -3,15 +3,15 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.1.7</Version>
-		<WasmBuildNative>true</WasmBuildNative>
+		<Version>2.1.10</Version>
+		<WasmBuildNative>false</WasmBuildNative>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Markdig" Version="0.31.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0-preview.2.23153.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0-preview.2.23153.2" PrivateAssets="all" />
-		<PackageReference Include="Radzen.Blazor" Version="4.7.13" />
+		<PackageReference Include="Radzen.Blazor" Version="4.9.1" />
 	</ItemGroup>
 
 	<ItemGroup>

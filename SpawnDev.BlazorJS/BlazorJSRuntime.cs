@@ -63,8 +63,6 @@ namespace SpawnDev.BlazorJS
                     GlobalThis = Get<JSObject>("globalThis");
                     break;
             }
-            // register a callback that the blazorjs javascript module will call after the app has initliazed
-            //Set("JSInterop._afterStarted", Callback.CreateOne(AfterStarted));
 #if DEBUG
             Log("JS.GlobalThisTypeName", GlobalThisTypeName);
             Set("JSInterop.debugLevel", 1);

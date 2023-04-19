@@ -33,5 +33,31 @@ builder.Services.AddSingleton<DialogService>();
 builder.Services.AddSingleton<NotificationService>();
 builder.Services.AddSingleton<TooltipService>();
 builder.Services.AddSingleton<ContextMenuService>();
+
+#if DEBUG || true
+
+var host = builder.Build();
+
+BlazorJSRuntime.JS.Set("_testWorker", new ActionCallback<bool>(async (verbose) => { 
+    var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();    
+    var worker = await webWorkerService.GetWebWorker(verbose);
+    var math = worker.GetService<IMathsService>();
+    var ret = await math.EstimatePI(100);
+    Console.WriteLine(ret);
+}));
+BlazorJSRuntime.JS.Set("_testWorkerAndDispose", new ActionCallback<bool>(async (verbose) => {
+    var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
+    using var worker = await webWorkerService.GetWebWorker(verbose);
+    var math = worker.GetService<IMathsService>();
+    var ret = await math.EstimatePI(100);
+    Console.WriteLine(ret);
+}));
+
+await host.BlazorJSRunAsync();
+
+#else
+
 // build and Init using BlazorJSRunAsync (instead of RunAsync)
 await builder.Build().BlazorJSRunAsync();
+
+#endif
