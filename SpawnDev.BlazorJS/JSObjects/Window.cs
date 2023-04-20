@@ -10,6 +10,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Navigator Navigator => JSRef.Get<Navigator>("navigator");
         public Document Document => JSRef.Get<Document>("document");
         public Screen Screen => JSRef.Get<Screen>("screen");
+        public CacheStorage Caches => JSRef.Get<CacheStorage>("caches");
         public void Alert(string msg = "") => JSRef.CallVoid("alert", msg);
         public long SetTimeout(Callback callback, double delay) => JSRef.Call<long>("setTimeout", callback, delay);
         public void ClearTimeout(long requestId) => JSRef.CallVoid("clearTimeout", requestId);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SpawnDev.BlazorJS.JSObjects;
 using System.Collections.Specialized;
 using System.Web;
@@ -22,12 +23,20 @@ namespace SpawnDev.BlazorJS.WebWorkers {
         string InstanceId { get; } = Guid.NewGuid().ToString();
         static string WebWorkerJSScript = "_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js";
         BlazorJSRuntime JS;
-        public WebWorkerService(IServiceProvider serviceProvider, BlazorJSRuntime js) {
+        public WebWorkerService(IServiceProvider serviceProvider, IWebAssemblyHostEnvironment hostEnvironment, BlazorJSRuntime js) {
             JS = js;
             WebWorkerSupported = !JS.IsUndefined("Worker");
             SharedWebWorkerSupported = !JS.IsUndefined("SharedWorker");
             _serviceProvider = serviceProvider;
             AppBaseUri = JS.Get<string>("document.baseURI");
+            var appBaseUriObj = new Uri(AppBaseUri);
+            var workerScriptUri = new Uri(appBaseUriObj, WebWorkerJSScript);
+            WebWorkerJSScript = workerScriptUri.ToString();
+#if DEBUG
+            Console.WriteLine("hostEnvironment.BaseAddress: " + hostEnvironment.BaseAddress);
+            Console.WriteLine("AppBaseUri: " + AppBaseUri);
+            Console.WriteLine("WebWorkerJSScript: " + WebWorkerJSScript);
+#endif
             var hardwareConcurrency = JS.Get<int?>("navigator.hardwareConcurrency");
             MaxWorkerCount = hardwareConcurrency == null || hardwareConcurrency.Value == 0 ? 0 : hardwareConcurrency.Value;
         }
