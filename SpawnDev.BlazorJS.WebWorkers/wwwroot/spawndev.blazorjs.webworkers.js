@@ -83,14 +83,14 @@ async function hasDynamicImport() {
 
 var initWebWorkerBlazor = async function () {
     var dynamicImportSupported = await hasDynamicImport();
-    // this detection is a bit of a hack but dynamic import support testing is hit or miss also
+    // Firefox, and possibly some other browsers, do not support dynamic module import (import) in workers.
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
+    // Some scripts will have to be patched on the fly if import is not supported.
     if (!dynamicImportSupported) {
         consoleLog("import is not supported. A workaround will be used.");
     } else {
-        consoleLog('import is supported');
+        consoleLog('import is supported.');
     }
-
 
     async function getText(href) {
         var response = await fetch(new URL(href, document.baseURI), {
