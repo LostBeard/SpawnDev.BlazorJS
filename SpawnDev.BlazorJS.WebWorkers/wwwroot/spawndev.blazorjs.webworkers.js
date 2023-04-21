@@ -22,14 +22,6 @@ const globalThisObj =
 
 const globalThisTypeName = globalThisObj.constructor.name;
 
-var dynamicImportSupported = true;
-// this detection is a bit of a hack but dynamic import support testing is hit or miss also
-// TODO - test on Firefox mobile/mac/linux
-if (navigator.userAgent && navigator.userAgent.indexOf('Firefox') > -1) {
-    dynamicImportSupported = false;
-    console.log('WARNING: Firefox may not support dynamic import in workers. WebWorkers may not work.');
-}
-
 // important for SharedWorker
 // catch any incoming connetions that happen while .Net is loading
 var _missedConnections = [];
@@ -80,7 +72,26 @@ if (disableHotReload) {
     globalThisObj[scriptInjectedSentinel] = true
 }
 
-var initWebWorkerBlazor = async () => {
+async function hasDynamicImport() {
+    try {
+        await import('data:text/javascript;base64,Cg==');
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+var initWebWorkerBlazor = async function () {
+    var dynamicImportSupported = await hasDynamicImport();
+    // this detection is a bit of a hack but dynamic import support testing is hit or miss also
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
+    if (!dynamicImportSupported) {
+        consoleLog("import is not supported. A workaround will be used.");
+    } else {
+        consoleLog('import is supported');
+    }
+
+
     async function getText(href) {
         var response = await fetch(new URL(href, document.baseURI), {
             cache: 'force-cache',
