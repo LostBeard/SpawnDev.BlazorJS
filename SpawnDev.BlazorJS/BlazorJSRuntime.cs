@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS
     public partial class BlazorJSRuntime : IBlazorJSRuntime
     {
         internal static readonly IJSInProcessRuntime _js;
-        public static readonly BlazorJSRuntime JS;
+        public static BlazorJSRuntime JS { get; internal set; }
         internal static JsonSerializerOptions? RuntimeJsonSerializerOptions { get; private set; }
         public Window? WindowThis { get; private set; } = null;
         public DedicatedWorkerGlobalScope? DedicateWorkerThis { get; private set; } = null;
@@ -39,7 +39,7 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
-            JS = new BlazorJSRuntime();
+            //JS = new BlazorJSRuntime();
         }
 
         internal BlazorJSRuntime()

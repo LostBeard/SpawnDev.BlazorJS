@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.JsonConverters;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.WebWorkers;
@@ -14,6 +15,12 @@ JSObject.UndisposedHandleVerboseMode = true;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+// Modify JSRuntime.JsonSerializerOptions (WARNING: Modifying this can cause unexpected results. Test thoroughly.)
+builder.Services.AddJSRuntimeJsonOptions(jsRuntimeJsonOptions => {
+#if DEBUG
+    Console.WriteLine($"JSRuntime JsonConverters count: {jsRuntimeJsonOptions.Converters.Count}");
+#endif
+});
 // Add services
 builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 // Add SpawnDev.BlazorJS.BlazorJSRuntime

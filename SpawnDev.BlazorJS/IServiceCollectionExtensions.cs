@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
 
 namespace SpawnDev.BlazorJS
 {
@@ -7,8 +8,19 @@ namespace SpawnDev.BlazorJS
     {
         Task InitAsync();
     }
-    public static class BackgroundServices
+    public static class IServiceCollectionExtensions
     {
+        /// <summary>
+        /// WARNING: Modifying the JSRuntime.JsonSerializerOptions can have unexpected results.
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddJSRuntimeJsonOptions(this IServiceCollection _this, Action<JsonSerializerOptions> configure)
+        {
+            if (BlazorJSRuntime.RuntimeJsonSerializerOptions != null) configure(BlazorJSRuntime.RuntimeJsonSerializerOptions);
+            return _this;
+        }
         static IServiceCollection? serviceCollection = null;
         /// <summary>
         /// Adds the BlazorJSRuntime singleton service and initializes it.
@@ -17,10 +29,12 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static IServiceCollection AddBlazorJSRuntime(this IServiceCollection _this)
         {
-            // Adds BlazorJSRuntime as BlazorJSRuntime and IBlazorJSRuntime
             serviceCollection = _this;
+            // add IServiceCollection singleton
             _this.AddSingleton<IServiceCollection>(_this);
-            return _this.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS).AddSingleton(serviceProvider => (IBlazorJSRuntime)serviceProvider.GetRequiredService<BlazorJSRuntime>());
+            // add BlazorJSRuntime and IBlazorJSRuntime singleton
+            BlazorJSRuntime.JS = new BlazorJSRuntime();
+            return _this.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS).AddSingleton<IBlazorJSRuntime>(BlazorJSRuntime.JS);
         }
         internal static Dictionary<Type, IBackgroundService?> Services { get; private set; } = new Dictionary<Type, IBackgroundService?>();
 
@@ -32,11 +46,7 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         static async Task<WebAssemblyHost> StartBackgroundServices(this WebAssemblyHost _this)
         {
-            var bgServices = serviceCollection.Where(o => {
-                var bgImpl = typeof(IBackgroundService).IsAssignableFrom(o.ImplementationType);
-                var bgType = typeof(IBackgroundService).IsAssignableFrom(o.ServiceType);
-                return bgImpl || bgType;
-            }).ToList();
+            var bgServices = serviceCollection.Where(o => typeof(IBackgroundService).IsAssignableFrom(o.ServiceType) || typeof(IBackgroundService).IsAssignableFrom(o.ImplementationType)).ToList();
             // let all the constructors fire first
             foreach (var kvp in bgServices)
             {
