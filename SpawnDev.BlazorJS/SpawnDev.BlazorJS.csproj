@@ -22,7 +22,7 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="..\LICENSE.txt" Pack="true" PackagePath=""/>
+		<None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">

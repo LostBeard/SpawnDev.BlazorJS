@@ -6,6 +6,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Element ActiveElement => JSRef.Get<Element>("sctiveElement");
         public T CreateElement<T>(string tagName) where T : JSObject => JSRef.Call<T>("createElement", tagName);
         public IJSInProcessObjectReference CreateElement(string tagName) => JSRef.Call<IJSInProcessObjectReference>("createElement", tagName);
-        public async ValueTask ExitFullscreen() => JSRef.CallVoidAsync("exitFullscreen");
+        public Task ExitFullscreen() => JSRef.CallVoidAsync("exitFullscreen");
     }
 }

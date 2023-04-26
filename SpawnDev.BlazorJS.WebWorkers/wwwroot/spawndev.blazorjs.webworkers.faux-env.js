@@ -1,7 +1,7 @@
 'use strict';
 
 // Todd Tanner
-// 2022
+// 2022 - 2023
 // built as part of SpawnDev.BlazorJS.WebWorkers
 // This script creates a minimal Window scope environment to allow Blazor to boot up
 

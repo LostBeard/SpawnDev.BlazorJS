@@ -162,7 +162,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
                     var argsLength = args != null ? args.Get<int>("length") : 0;
                     var serviceType = GetType(msgBase.TargetType);
                     if (serviceType == null) {
-                        throw new Exception($"ERROR: {nameof(ServiceCallDispatcher)} OnMessage - Service type not found {msgBase.TargetType}");// TODO - catch all errors and send to caller on other thread
+                        throw new Exception($"ERROR: {nameof(ServiceCallDispatcher)} OnMessage - Service type not found {msgBase.TargetType}");
                     }
                     object? service = null;
                     try {
