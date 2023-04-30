@@ -9,9 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     public class DataTransfer : JSObject
     {
-        public DataTransfer(IJSInProcessObjectReference _ref) : base(_ref)
-        {
-        }
+        public DataTransfer(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string DropEffect { get => JSRef.Get<string>("dropEffect"); set => JSRef.Set("dropEffect", value); }
         public string EffectAllowed { get => JSRef.Get<string>("effectAllowed"); set => JSRef.Set("effectAllowed", value); }
     }

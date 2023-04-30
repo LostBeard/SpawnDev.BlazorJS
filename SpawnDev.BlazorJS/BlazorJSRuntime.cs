@@ -39,7 +39,6 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
-            //JS = new BlazorJSRuntime();
         }
 
         internal BlazorJSRuntime()

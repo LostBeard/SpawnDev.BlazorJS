@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+    // Example use: (inside a JSObject class)
+    // public EventCallback<MediaRecorderErrorEvent> OnError { get => new EventCallback<MediaRecorderErrorEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { } }
     public abstract class EventCallbackBase
     {
 
