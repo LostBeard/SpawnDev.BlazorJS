@@ -83,7 +83,7 @@ async function hasDynamicImport() {
 
 // Below method is used to fix fetch calls in blazor.webassembly.js 
 async function webWorkersFetch(url, options) {
-    console.log("webWorkersFetch", url);
+    consoleLog("webWorkersFetch", url);
     const newUrl = new URL(url, document.baseURI);
     return await fetch(newUrl, options);
 }
