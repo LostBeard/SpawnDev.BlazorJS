@@ -58,6 +58,11 @@ namespace SpawnDev.BlazorJS
             On = (o) => jsRef.CallVoid(onFn, name, o);
             if (!string.IsNullOrEmpty(offFn)) Off = (o) => jsRef.CallVoid(offFn, name, o);
         }
+
+        public EventCallback(IJSInProcessObjectReference jsRef, string propertyName) : this((o) => jsRef.Set(propertyName, o), (o) => jsRef.Set(propertyName, null))
+        {
+
+        }
     }
     public class AttachedEventInfo<T1> : AttachedEventInfoBase
     {
@@ -99,10 +104,16 @@ namespace SpawnDev.BlazorJS
             On = on;
             Off = off;
         }
+
         public EventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
         {
             On = (o) => jsRef.CallVoid(onFn, name, o);
             if (!string.IsNullOrEmpty(offFn)) Off = (o) => jsRef.CallVoid(offFn, name, o);
+        }
+
+        public EventCallback(IJSInProcessObjectReference jsRef, string propertyName) : this((o) => jsRef.Set(propertyName, o), (o) => jsRef.Set(propertyName, null))
+        {
+
         }
     }
     public class AttachedEventInfo<T1, T2> : AttachedEventInfoBase

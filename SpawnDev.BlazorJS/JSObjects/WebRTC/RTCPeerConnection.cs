@@ -61,20 +61,28 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public Task SetLocalDescription(IRTCSessionDescription desc) => JSRef.CallVoidAsync("setLocalDescription", desc);
         public Task SetLocalDescription() => JSRef.CallVoidAsync("setLocalDescription");
         public Task SetRemoteDescription(IRTCSessionDescription desc) => JSRef.CallVoidAsync("setRemoteDescription", desc);
+        public Promise SetRemoteDescriptionPromise(IRTCSessionDescription desc) => JSRef.Call<Promise>("setRemoteDescription", desc);
         public string IceConnectionState => JSRef.Get<string>("iceConnectionState");
         public void RestartIce() => JSRef.CallVoid("restartIce");
-        public ActionCallback OnConnectionStateChange { set { JSRef.Set("onconnectionstatechange", value); } }
 
-        //public EventCallback<RTCDataChannelEvent> OnDataChannel { get => new EventCallback<RTCDataChannelEvent>((o)=> JSRef.Set("ondatachannel", o), (o) => JSRef.Set("ondatachannel", null)); set { } }
+        public EventCallback OnConnectionStateChange { get => new EventCallback(JSRef, "onconnectionstatechange"); set { } }
+        public EventCallback<RTCDataChannelEvent> OnDataChannel { get => new EventCallback<RTCDataChannelEvent>(JSRef, "ondatachannel"); set { } }
+        public EventCallback<RTCPeerConnectionEvent> OnIceCandidate { get => new EventCallback<RTCPeerConnectionEvent>(JSRef, "onicecandidate"); set { } }
+        public EventCallback<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { get => new EventCallback<RTCPeerConnectionIceErrorEvent>(JSRef, "onicecandidateerror"); set { } }
+        public EventCallback OnIceConnectionStateChange { get => new EventCallback(JSRef, "oniceconnectionstatechange"); set { } }
+        public EventCallback OnIceGatheringStateChange { get => new EventCallback(JSRef, "onicegatheringstatechange"); set { } }
+        public EventCallback OnNegotiationNeeded { get => new EventCallback(JSRef, "onnegotiationneeded"); set { } }
+        public EventCallback OnSignalingStateChange { get => new EventCallback(JSRef, "onsignalingstatechange"); set { } }
+        public EventCallback<RTCDataChannelEvent> OnTrack { get => new EventCallback<RTCDataChannelEvent>(JSRef, "ontrack"); set { } }
 
-        public ActionCallback<RTCDataChannelEvent> OnDataChannel { set { JSRef.Set("ondatachannel", value); } }
-        public ActionCallback<RTCPeerConnectionEvent> OnIceCandidate { set { JSRef.Set("onicecandidate", value); } }
-        public ActionCallback<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { set { JSRef.Set("onicecandidateerror", value); } }
-        public ActionCallback OnIceConnectionStateChange { set { JSRef.Set("oniceconnectionstatechange", value); } }
-        public ActionCallback OnIceGatheringStateChange { set { JSRef.Set("onicegatheringstatechange", value); } }
-        public ActionCallback OnNegotiationNeeded { set { JSRef.Set("onnegotiationneeded", value); } }
-        public ActionCallback OnSignalingStateChange { set { JSRef.Set("onsignalingstatechange", value); } }
-        public ActionCallback<RTCTrackEvent> OnTrack { set { JSRef.Set("ontrack", value); } }
+        //public ActionCallback<RTCDataChannelEvent> OnDataChannel { set { JSRef.Set("ondatachannel", value); } }
+        //public ActionCallback<RTCPeerConnectionEvent> OnIceCandidate { set { JSRef.Set("onicecandidate", value); } }
+        //public ActionCallback<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { set { JSRef.Set("onicecandidateerror", value); } }
+        //public ActionCallback OnIceConnectionStateChange { set { JSRef.Set("oniceconnectionstatechange", value); } }
+        //public ActionCallback OnIceGatheringStateChange { set { JSRef.Set("onicegatheringstatechange", value); } }
+        //public ActionCallback OnNegotiationNeeded { set { JSRef.Set("onnegotiationneeded", value); } }
+        //public ActionCallback OnSignalingStateChange { set { JSRef.Set("onsignalingstatechange", value); } }
+        //public ActionCallback<RTCTrackEvent> OnTrack { set { JSRef.Set("ontrack", value); } }
 
     }
 }

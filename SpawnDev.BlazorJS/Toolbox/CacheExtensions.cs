@@ -8,7 +8,75 @@ namespace SpawnDev.BlazorJS.Toolbox
     public static class CacheExtensions
     {
         private static JsonSerializerOptions JsonSerializerDeserializeOptions { get; set; } = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, AllowTrailingCommas = true, ReadCommentHandling = JsonCommentHandling.Skip };
+        /// <summary>
+        /// Non-standard shortcut method to get the cache keys as an array of the Request.url strings instead of Request objects
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<List<string>> KeyUrls(this Cache _this)
+        {
+            var tmp = await _this.Keys();
+            var ret = tmp.Select(o => o.Url).ToList();
+            tmp.DisposeAll();
+            return ret;
+        }
 
+        static BlazorJSRuntime JS => BlazorJSRuntime.JS;
+        static string _HostName = "";
+        static string HostName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_HostName))
+                {
+                    var href = JS.Get<string>("location.href");
+                    var uri = new Uri(href);
+                    _HostName = uri.Host;
+                }
+                return _HostName;
+            }
+        }
+
+        public static Task<List<string>> GetAllFiles(this Cache _this) => _this.GetFiles("/", true);
+        public static async Task<List<string>> GetFiles(this Cache _this, string inFolder = "/", bool recursive = false)
+        {
+            var ret = await _this.GetAllHostFiles(HostName, true);
+            if (!inFolder.EndsWith("/")) inFolder += "/";
+            ret = ret.Where(o => {
+                if (!o.StartsWith(inFolder)) return false;
+                if (!recursive)
+                {
+                    var subPath = o.Substring(inFolder.Length);
+                    var queryPos = subPath.IndexOf('?');
+                    if (queryPos > -1) subPath = subPath.Substring(0, queryPos);
+                    if (subPath.Contains("/")) return false;
+                }
+                return true;
+            }).ToList();
+            return ret;
+        }
+
+        /// <summary>
+        /// Returns a list of absolute
+        /// </summary>
+        /// <param name="hostname"></param>
+        /// <returns></returns>
+        public static async Task<List<string>> GetAllHostFiles(this Cache _this, string hostname, bool returnAbsolutePaths = false)
+        {
+            var ret = new List<string>();
+            var requests = await _this.Keys();
+            var hostnameTmp = hostname.Contains("://") ? hostname : $"https://{hostname}";
+            var hostUri = new Uri(hostnameTmp);
+            foreach (var request in requests)
+            {
+                var url = request.Url;
+                var urlUri = new Uri(url);
+                if (hostUri.Host != urlUri.Host) continue;
+                var file = returnAbsolutePaths ? urlUri.AbsolutePath : url;
+                ret.Add(file);
+            }
+            requests.DisposeAll();
+            return ret;
+        }
         public static Task WriteBytes(this Cache _this, string url, byte[] content, string contentType = "")
         {
             using var uint8 = new Uint8Array(content);

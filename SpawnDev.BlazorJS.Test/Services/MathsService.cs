@@ -1,6 +1,5 @@
-﻿using Markdig.Extensions.TaskLists;
+﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SpawnDev.BlazorJS.WebWorkers;
-using System;
 using System.Diagnostics;
 
 namespace SpawnDev.BlazorJS.Test.Services
@@ -21,6 +20,7 @@ namespace SpawnDev.BlazorJS.Test.Services
         Task<double> EstimatePISlice(int sumStart, int sumLength);
         Task SetValueTest(string newValue);
         Task<string> GetValueTest();
+        Task<string> ReadAppSettingsValue(string key);
     }
 
     /// <summary>
@@ -28,9 +28,10 @@ namespace SpawnDev.BlazorJS.Test.Services
     /// </summary>
     public class MathsService : IMathsService {
         WebWorkerService _webWorkerService;
-
-        public MathsService(WebWorkerService webWorkerService) {
+        WebAssemblyHostConfiguration _configuration;
+        public MathsService(WebWorkerService webWorkerService, WebAssemblyHostConfiguration configuration) {
             _webWorkerService = webWorkerService;
+            _configuration = configuration;
         }
 
         // nicholas on StackOverflow
@@ -165,6 +166,11 @@ namespace SpawnDev.BlazorJS.Test.Services
         public Task<string> GetValueTest()
         {
             return Task.FromResult(TestValue);
+        }
+
+        public Task<string> ReadAppSettingsValue(string key)
+        {
+            return Task.FromResult(_configuration[key] ?? "");
         }
     }
 }

@@ -81,6 +81,13 @@ async function hasDynamicImport() {
     }
 }
 
+// Below method is used to fix fetch calls in blazor.webassembly.js 
+async function webWorkersFetch(url, options) {
+    console.log("webWorkersFetch", url);
+    const newUrl = new URL(url, document.baseURI);
+    return await fetch(newUrl, options);
+}
+
 var initWebWorkerBlazor = async function () {
     var dynamicImportSupported = await hasDynamicImport();
     // Firefox, and possibly some other browsers, do not support dynamic module import (import) in workers.
@@ -195,12 +202,15 @@ var initWebWorkerBlazor = async function () {
             scriptEl.setAttribute('src', s);
             if (i == blazorWebAssemblyJSIndex) {
                 scriptEl.setAttribute('autostart', "false");
+                // fix fetch relative paths
+                let jsStr = await getText(s);
+                jsStr = jsStr.replace(/ fetch\(/g, ' webWorkersFetch(');
+                // fix dynamic imports (if neeed)
                 if (!dynamicImportSupported) {
                     // convert dynamic imports in blazorWebAssembly and its imports
-                    let jsStr = await getText(s);
                     jsStr = fixModuleScript(jsStr);
-                    scriptEl.text = jsStr;
                 }
+                scriptEl.text = jsStr;
             }
         }
         // init document

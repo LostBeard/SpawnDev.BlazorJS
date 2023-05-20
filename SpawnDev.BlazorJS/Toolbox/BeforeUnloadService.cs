@@ -36,10 +36,5 @@ namespace SpawnDev.BlazorJS.Toolbox
                 return null;
             })));
         }
-
-        public Task InitAsync()
-        {
-            return Task.FromResult(0);
-        }
     }
 }

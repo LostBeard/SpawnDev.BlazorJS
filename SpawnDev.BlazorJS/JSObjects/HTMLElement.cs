@@ -8,5 +8,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public int OffsetWidth => JSRef.Get<int>("offsetWidth");
         public int OffsetHeight => JSRef.Get<int>("offsetHeight");
         public static explicit operator HTMLElement(ElementReference elRef) => new HTMLElement(elRef);
+        public void Focus() => JSRef.CallVoid("focus");
     }
 }

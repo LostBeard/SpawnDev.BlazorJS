@@ -29,17 +29,22 @@ builder.Services.AddBlazorJSRuntime();
 builder.Services.AddWebWorkerService();
 // Add WebWorkerPool service (WIP. optional)
 builder.Services.AddSingleton<WebWorkerPool>();
+// More app specific services
+builder.Services.AddSingleton(builder.Configuration); // used to demo appsettings reading in workers
+builder.Services.AddSingleton<MediaDevices>();
+builder.Services.AddSingleton<MediaDevicesService>();
 // Add app services that will be called on the main thread and/or worker threads (Worker services must use interfaces)
 builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
 builder.Services.AddSingleton<IMathsService, MathsService>();
-// More app services
-builder.Services.AddSingleton<MediaDevices>();
-builder.Services.AddSingleton<MediaDevicesService>();
+
 // Radzen UI services
 builder.Services.AddSingleton<DialogService>();
 builder.Services.AddSingleton<NotificationService>();
 builder.Services.AddSingleton<TooltipService>();
 builder.Services.AddSingleton<ContextMenuService>();
+
+Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
+
 
 #if DEBUG || true
 

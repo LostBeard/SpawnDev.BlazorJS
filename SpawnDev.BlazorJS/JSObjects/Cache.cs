@@ -114,16 +114,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <returns></returns>
         public Task<Request[]> Keys(string request, CacheMatchOptions options) => JSRef.CallAsync<Request[]>("keys", request, options);
-        /// <summary>
-        /// Non-standard shortcut method to get the cache keys as an array of the Request.url strings instead of Request objects
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<string>> KeyUrls()
-        {
-            var tmp = await Keys();
-            var ret = tmp.Select(o => o.Url).ToList();
-            tmp.DisposeAll();
-            return ret;
-        }
+
     }
 }

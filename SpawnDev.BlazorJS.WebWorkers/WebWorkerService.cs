@@ -6,7 +6,7 @@ using System.Web;
 
 namespace SpawnDev.BlazorJS.WebWorkers {
     // chrome://inspect/#workers
-    public class WebWorkerService : IDisposable, IBackgroundService
+    public class WebWorkerService : IDisposable, IAsyncBackgroundService
     {
         public bool SharedWebWorkerSupported { get; private set; }
         public bool WebWorkerSupported { get; private set; }

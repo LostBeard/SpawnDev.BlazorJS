@@ -13,7 +13,10 @@
 @code {
 
     [Inject]
-    WebWorkerService webWorkerService { get; set; }
+    WebWorkerService _webWorkerService { get; set; }
+
+    [Inject]
+    IMathsService _mathService { get; set; }
 
     IEnumerable<Assembly>? _assemblies = new List<Assembly>();
     IEnumerable<Type>? _types = new List<Type>();
@@ -36,13 +39,33 @@
     }
 
     [TestMethod]
-    public async Task WebWorkerTest()
+    public async Task WebWorkerAppSettingsReadTest()
     {
-        if (!webWorkerService.WebWorkerSupported)
+        if (!_webWorkerService.WebWorkerSupported)
         {
             throw new Exception("Worker not supported by browser. Expected failure.");
         }
-        using var worker = await webWorkerService.GetWebWorker();
+        // test key to read from appsettings.json
+        var testKey = "Message";
+        // get value loaded in this context to compare to worker returned value
+        var testValueWindow = await _mathService.ReadAppSettingsValue(testKey);
+        // get worker and read the value fro mthat context
+        using var worker = await _webWorkerService.GetWebWorker();
+        var mathService = worker.GetService<IMathsService>();
+        var testValueWorker = await mathService.ReadAppSettingsValue(testKey);
+        // compare
+        if (testValueWorker != testValueWindow) throw new Exception("Unexpected result");
+        Console.WriteLine($"WebWorkerAppSettingsReadTest value: {testValueWorker}");
+    }
+
+    [TestMethod]
+    public async Task WebWorkerTest()
+    {
+        if (!_webWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        using var worker = await _webWorkerService.GetWebWorker();
         var mathService = worker.GetService<IMathsService>();
         var randValue = Guid.NewGuid().ToString();
         await mathService.SetValueTest(randValue);
@@ -53,12 +76,12 @@
     [TestMethod]
     public async Task WebWorkersTest()
     {
-        if (!webWorkerService.WebWorkerSupported)
+        if (!_webWorkerService.WebWorkerSupported)
         {
             throw new Exception("Worker not supported by browser. Expected failure.");
         }
-        using var workerA = await webWorkerService.GetWebWorker();
-        using var workerB = await webWorkerService.GetWebWorker();
+        using var workerA = await _webWorkerService.GetWebWorker();
+        using var workerB = await _webWorkerService.GetWebWorker();
         var mathServiceA = workerA.GetService<IMathsService>();
         var mathServiceB = workerB.GetService<IMathsService>();
         var randValue = Guid.NewGuid().ToString();
@@ -70,11 +93,11 @@
     [TestMethod]
     public async Task SharedWebWorkerTest()
     {
-        if (!webWorkerService.SharedWebWorkerSupported)
+        if (!_webWorkerService.SharedWebWorkerSupported)
         {
             throw new Exception("SharedWorker not supported by browser. Expected failure.");
         }
-        using var worker = await webWorkerService.GetSharedWebWorker();
+        using var worker = await _webWorkerService.GetSharedWebWorker();
         var mathService = worker.GetService<IMathsService>();
         var randValue = Guid.NewGuid().ToString();
         await mathService.SetValueTest(randValue);
@@ -85,15 +108,15 @@
     [TestMethod]
     public async Task SharedWebWorkersByName()
     {
-        if (!webWorkerService.SharedWebWorkerSupported)
+        if (!_webWorkerService.SharedWebWorkerSupported)
         {
             throw new Exception("SharedWorker not supported by browser. Expected failure.");
         }
         // workerA1 and workerA2 will refer to the same shared worker
         // workerB is a separate worker instance
-        using var workerA1 = await webWorkerService.GetSharedWebWorker("workerA");
-        using var workerA2 = await webWorkerService.GetSharedWebWorker("workerA");
-        using var workerB = await webWorkerService.GetSharedWebWorker("workerB");
+        using var workerA1 = await _webWorkerService.GetSharedWebWorker("workerA");
+        using var workerA2 = await _webWorkerService.GetSharedWebWorker("workerA");
+        using var workerB = await _webWorkerService.GetSharedWebWorker("workerB");
         var mathServiceA1 = workerA1.GetService<IMathsService>();
         var mathServiceA2 = workerA2.GetService<IMathsService>();
         var mathServiceB = workerB.GetService<IMathsService>();

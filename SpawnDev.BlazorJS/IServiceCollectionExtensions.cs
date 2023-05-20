@@ -6,6 +6,10 @@ namespace SpawnDev.BlazorJS
 {
     public interface IBackgroundService
     {
+
+    }
+    public interface IAsyncBackgroundService : IBackgroundService
+    {
         Task InitAsync();
     }
     public static class IServiceCollectionExtensions
@@ -22,6 +26,7 @@ namespace SpawnDev.BlazorJS
             return _this;
         }
         static IServiceCollection? serviceCollection = null;
+        static bool _AddBlazorJSRuntimeCalled = false;
         /// <summary>
         /// Adds the BlazorJSRuntime singleton service and initializes it.
         /// </summary>
@@ -29,6 +34,8 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static IServiceCollection AddBlazorJSRuntime(this IServiceCollection _this)
         {
+            if (_AddBlazorJSRuntimeCalled) return _this;
+            _AddBlazorJSRuntimeCalled = true;
             serviceCollection = _this;
             // add IServiceCollection singleton
             _this.AddSingleton<IServiceCollection>(_this);
@@ -59,10 +66,13 @@ namespace SpawnDev.BlazorJS
             // call InitAsync on each
             foreach (var kvp in Services)
             {
+                if (kvp.Value is IAsyncBackgroundService asyncBG)
+                {
 #if DEBUG
-                Console.WriteLine($"InitAsync background service: {kvp.Key.Name}");
+                    Console.WriteLine($"InitAsync background service: {kvp.Key.Name}");
 #endif
-                await kvp.Value.InitAsync();
+                    await asyncBG.InitAsync();
+                }
             }
             return _this;
         }
