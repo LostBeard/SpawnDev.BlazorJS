@@ -10,11 +10,11 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public MediaStream(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public EventCallback OnEnded { get => new EventCallback(o => AddEventListener("ended", o), o => RemoveEventListener("ended", o)); set { } }
-        public EventCallback OnAddTrack { get => new EventCallback(o => AddEventListener("addtrack", o), o => RemoveEventListener("addtrack", o)); set { } }
-        public EventCallback OnRemoveTrack { get => new EventCallback(o => AddEventListener("removetrack", o), o => RemoveEventListener("removetrack", o)); set { } }
-        public EventCallback OnActive { get => new EventCallback(o => AddEventListener("active", o), o => RemoveEventListener("active", o)); set { } }
-        public EventCallback OnInactive { get => new EventCallback(o => AddEventListener("inactive", o), o => RemoveEventListener("inactive", o)); set { } }
+        public JSEventCallback OnEnded { get => new JSEventCallback(o => AddEventListener("ended", o), o => RemoveEventListener("ended", o)); set { } }
+        public JSEventCallback OnAddTrack { get => new JSEventCallback(o => AddEventListener("addtrack", o), o => RemoveEventListener("addtrack", o)); set { } }
+        public JSEventCallback OnRemoveTrack { get => new JSEventCallback(o => AddEventListener("removetrack", o), o => RemoveEventListener("removetrack", o)); set { } }
+        public JSEventCallback OnActive { get => new JSEventCallback(o => AddEventListener("active", o), o => RemoveEventListener("active", o)); set { } }
+        public JSEventCallback OnInactive { get => new JSEventCallback(o => AddEventListener("inactive", o), o => RemoveEventListener("inactive", o)); set { } }
 
         public void RemoveTrack(MediaStreamTrack track) => JSRef.CallVoid("removeTrack", track);
         public void AddTrack(MediaStreamTrack track) => JSRef.CallVoid("addTrack", track);

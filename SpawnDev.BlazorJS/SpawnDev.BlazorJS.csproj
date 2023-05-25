@@ -4,7 +4,7 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.1.14</Version>
+		<Version>2.1.15</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>SpawnDev.BlazorJS</Title>
 		<Authors>LostBeard</Authors>
@@ -26,8 +26,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.13" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.16" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.16" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">

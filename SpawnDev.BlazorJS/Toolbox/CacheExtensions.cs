@@ -36,6 +36,34 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
         }
 
+        public static Task<List<string>> GetAllDirectories(this Cache _this) => _this.GetDirectories("/", true);
+        public static async Task<List<string>> GetDirectories(this Cache _this, string inFolder = "/", bool recursive = false)
+        {
+            var ret = await _this.GetAllHostFiles(HostName, true);
+            if (!inFolder.EndsWith("/")) inFolder += "/";
+            var dirs = new List<string>();
+            foreach (var o in  ret)
+            {
+                if (!o.StartsWith(inFolder)) continue;
+                var subPath = o.Substring(inFolder.Length);
+                var pathParts = subPath.Split("/", StringSplitOptions.RemoveEmptyEntries);
+                var dir = inFolder;
+                foreach (var part in pathParts)
+                {
+                    dir += $"{inFolder}/";
+                    if (!dirs.Contains(dir))
+                    {
+                        dirs.Add(dir);
+                    }
+                    if (!recursive)
+                    {
+                        break;
+                    }
+                }
+            }
+            return ret;
+        }
+
         public static Task<List<string>> GetAllFiles(this Cache _this) => _this.GetFiles("/", true);
         public static async Task<List<string>> GetFiles(this Cache _this, string inFolder = "/", bool recursive = false)
         {
@@ -105,6 +133,16 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
         }
 
+        public static Task WriteBlob(this Cache _this, string url, Blob buffer, string contentType = "")
+        {
+            using (var response = new Response(buffer))
+            {
+                if (!string.IsNullOrEmpty(contentType)) response.HeaderSet("Content-Type", contentType);
+                response.HeaderSet("Content-Length", buffer.Size.ToString());
+                return _this.Put(url, response);
+            }
+        }
+
         public static Task WriteText(this Cache _this, string url, string content, string contentType = "")
         {
             return _this.WriteBytes(url, Encoding.UTF8.GetBytes(content), contentType);
@@ -127,6 +165,12 @@ namespace SpawnDev.BlazorJS.Toolbox
             return response == null ? null : await response.ArrayBuffer();
         }
 
+        public static async Task<Blob?> ReadBlob(this Cache _this, string url, CacheMatchOptions? options = null)
+        {
+            using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);
+            return response == null ? null : await response.Blob();
+        }
+
         public static async Task<string?> ReadText(this Cache _this, string url, CacheMatchOptions? options = null)
         {
             using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);
@@ -146,6 +190,18 @@ namespace SpawnDev.BlazorJS.Toolbox
             if (response == null) return null;
             using var headers = response.JSRef.Get<JSObject>("headers");
             return headers == null ? "" : headers.JSRef.Get<string>("content-type") ?? "";
+        }
+
+        public static string GetFilename(this Cache _this, string url, bool nameOnly = false)
+        {
+            var ret = url.Split('/').Last();
+            if (nameOnly)
+            {
+                // remove query string and hash
+                ret = ret.Split('?').First();
+                ret = ret.Split('#').First();
+            }
+            return ret;
         }
 
         public static async Task<long?> GetSize(this Cache _this, string url, CacheMatchOptions? options = null)

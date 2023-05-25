@@ -65,15 +65,15 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public string IceConnectionState => JSRef.Get<string>("iceConnectionState");
         public void RestartIce() => JSRef.CallVoid("restartIce");
 
-        public EventCallback OnConnectionStateChange { get => new EventCallback(JSRef, "onconnectionstatechange"); set { } }
-        public EventCallback<RTCDataChannelEvent> OnDataChannel { get => new EventCallback<RTCDataChannelEvent>(JSRef, "ondatachannel"); set { } }
-        public EventCallback<RTCPeerConnectionEvent> OnIceCandidate { get => new EventCallback<RTCPeerConnectionEvent>(JSRef, "onicecandidate"); set { } }
-        public EventCallback<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { get => new EventCallback<RTCPeerConnectionIceErrorEvent>(JSRef, "onicecandidateerror"); set { } }
-        public EventCallback OnIceConnectionStateChange { get => new EventCallback(JSRef, "oniceconnectionstatechange"); set { } }
-        public EventCallback OnIceGatheringStateChange { get => new EventCallback(JSRef, "onicegatheringstatechange"); set { } }
-        public EventCallback OnNegotiationNeeded { get => new EventCallback(JSRef, "onnegotiationneeded"); set { } }
-        public EventCallback OnSignalingStateChange { get => new EventCallback(JSRef, "onsignalingstatechange"); set { } }
-        public EventCallback<RTCDataChannelEvent> OnTrack { get => new EventCallback<RTCDataChannelEvent>(JSRef, "ontrack"); set { } }
+        public JSEventCallback OnConnectionStateChange { get => new JSEventCallback(JSRef, "onconnectionstatechange"); set { } }
+        public JSEventCallback<RTCDataChannelEvent> OnDataChannel { get => new JSEventCallback<RTCDataChannelEvent>(JSRef, "ondatachannel"); set { } }
+        public JSEventCallback<RTCPeerConnectionEvent> OnIceCandidate { get => new JSEventCallback<RTCPeerConnectionEvent>(JSRef, "onicecandidate"); set { } }
+        public JSEventCallback<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { get => new JSEventCallback<RTCPeerConnectionIceErrorEvent>(JSRef, "onicecandidateerror"); set { } }
+        public JSEventCallback OnIceConnectionStateChange { get => new JSEventCallback(JSRef, "oniceconnectionstatechange"); set { } }
+        public JSEventCallback OnIceGatheringStateChange { get => new JSEventCallback(JSRef, "onicegatheringstatechange"); set { } }
+        public JSEventCallback OnNegotiationNeeded { get => new JSEventCallback(JSRef, "onnegotiationneeded"); set { } }
+        public JSEventCallback OnSignalingStateChange { get => new JSEventCallback(JSRef, "onsignalingstatechange"); set { } }
+        public JSEventCallback<RTCDataChannelEvent> OnTrack { get => new JSEventCallback<RTCDataChannelEvent>(JSRef, "ontrack"); set { } }
 
         //public ActionCallback<RTCDataChannelEvent> OnDataChannel { set { JSRef.Set("ondatachannel", value); } }
         //public ActionCallback<RTCPeerConnectionEvent> OnIceCandidate { set { JSRef.Set("onicecandidate", value); } }

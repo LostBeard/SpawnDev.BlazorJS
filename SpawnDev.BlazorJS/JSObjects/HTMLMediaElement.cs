@@ -51,7 +51,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
             set => JSRef.Set("crossOrigin", value);
         }
 
-        public EventCallback OnCanPlay { get => new EventCallback(JSRef, "canplay", "addEventListener", "removeEventListener"); set { } }
+        public JSEventCallback OnCanPlay { get => new JSEventCallback(JSRef, "canplay", "addEventListener", "removeEventListener"); set { } }
         public T? GetSrcObject<T>() => JSRef.Get<T>("srcObject");
         public Task Play() => JSRef.CallVoidAsync("play");
         public void Pause() => JSRef.CallVoid("pause");

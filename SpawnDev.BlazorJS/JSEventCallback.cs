@@ -4,7 +4,9 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS
 {
     // Example use: (inside a JSObject class)
-    // public EventCallback<MediaRecorderErrorEvent> OnError { get => new EventCallback<MediaRecorderErrorEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { } }
+    // public JSEventCallback<MediaRecorderErrorEvent> OnError { get => new JSEventCallback<MediaRecorderErrorEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { } }
+    //
+    // 
     public abstract class EventCallbackBase
     {
 
@@ -19,12 +21,12 @@ namespace SpawnDev.BlazorJS
         public Action Action { get; }
         public AttachedEventInfo(Action action, ActionCallback callback) => (Action, Callback) = (action, callback);
     }
-    public class EventCallback : EventCallbackBase
+    public class JSEventCallback : EventCallbackBase
     {
         static Dictionary<Action, AttachedEventInfo> attachedEvents = new Dictionary<Action, AttachedEventInfo>();
         public Action<ActionCallback> On { get; private set; }
         public Action<ActionCallback>? Off { get; private set; }
-        public static EventCallback operator +(EventCallback a, Action b)
+        public static JSEventCallback operator +(JSEventCallback a, Action b)
         {
             if (!attachedEvents.TryGetValue(b, out var info))
             {
@@ -36,7 +38,7 @@ namespace SpawnDev.BlazorJS
             return a;
         }
 
-        public static EventCallback operator -(EventCallback a, Action b)
+        public static JSEventCallback operator -(JSEventCallback a, Action b)
         {
             if (!attachedEvents.TryGetValue(b, out var info)) return a;
             a.Off?.Invoke(info.Callback);
@@ -48,18 +50,18 @@ namespace SpawnDev.BlazorJS
             }
             return a;
         }
-        public EventCallback(Action<ActionCallback> on, Action<ActionCallback>? off = null) : base()
+        public JSEventCallback(Action<ActionCallback> on, Action<ActionCallback>? off = null) : base()
         {
             On = on;
             Off = off;
         }
-        public EventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
+        public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
         {
             On = (o) => jsRef.CallVoid(onFn, name, o);
             if (!string.IsNullOrEmpty(offFn)) Off = (o) => jsRef.CallVoid(offFn, name, o);
         }
 
-        public EventCallback(IJSInProcessObjectReference jsRef, string propertyName) : this((o) => jsRef.Set(propertyName, o), (o) => jsRef.Set(propertyName, null))
+        public JSEventCallback(IJSInProcessObjectReference jsRef, string propertyName) : this((o) => jsRef.Set(propertyName, o), (o) => jsRef.Set(propertyName, null))
         {
 
         }
@@ -70,12 +72,12 @@ namespace SpawnDev.BlazorJS
         public Action<T1> Action { get; }
         public AttachedEventInfo(Action<T1> action, ActionCallback<T1> callback) => (Action, Callback) = (action, callback);
     }
-    public class EventCallback<T1> : EventCallbackBase
+    public class JSEventCallback<T1> : EventCallbackBase
     {
         static Dictionary<Action<T1>, AttachedEventInfo<T1>> attachedEvents = new Dictionary<Action<T1>, AttachedEventInfo<T1>>();
         public Action<ActionCallback<T1>> On { get; private set; }
         public Action<ActionCallback<T1>>? Off { get; private set; }
-        public static EventCallback<T1> operator +(EventCallback<T1> a, Action<T1> b)
+        public static JSEventCallback<T1> operator +(JSEventCallback<T1> a, Action<T1> b)
         {
             if (!attachedEvents.TryGetValue(b, out var info))
             {
@@ -87,7 +89,7 @@ namespace SpawnDev.BlazorJS
             return a;
         }
 
-        public static EventCallback<T1> operator -(EventCallback<T1> a, Action<T1> b)
+        public static JSEventCallback<T1> operator -(JSEventCallback<T1> a, Action<T1> b)
         {
             if (!attachedEvents.TryGetValue(b, out var info)) return a;
             a.Off?.Invoke(info.Callback);
@@ -99,19 +101,19 @@ namespace SpawnDev.BlazorJS
             }
             return a;
         }
-        public EventCallback(Action<ActionCallback<T1>> on, Action<ActionCallback<T1>>? off = null) : base()
+        public JSEventCallback(Action<ActionCallback<T1>> on, Action<ActionCallback<T1>>? off = null) : base()
         {
             On = on;
             Off = off;
         }
 
-        public EventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
+        public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
         {
             On = (o) => jsRef.CallVoid(onFn, name, o);
             if (!string.IsNullOrEmpty(offFn)) Off = (o) => jsRef.CallVoid(offFn, name, o);
         }
 
-        public EventCallback(IJSInProcessObjectReference jsRef, string propertyName) : this((o) => jsRef.Set(propertyName, o), (o) => jsRef.Set(propertyName, null))
+        public JSEventCallback(IJSInProcessObjectReference jsRef, string propertyName) : this((o) => jsRef.Set(propertyName, o), (o) => jsRef.Set(propertyName, null))
         {
 
         }
@@ -122,12 +124,12 @@ namespace SpawnDev.BlazorJS
         public Action<T1, T2> Action { get; }
         public AttachedEventInfo(Action<T1, T2> action, ActionCallback<T1, T2> callback) => (Action, Callback) = (action, callback);
     }
-    public class EventCallback<T1, T2> : EventCallbackBase
+    public class JSEventCallback<T1, T2> : EventCallbackBase
     {
         static Dictionary<Action<T1, T2>, AttachedEventInfo<T1, T2>> attachedEvents = new Dictionary<Action<T1, T2>, AttachedEventInfo<T1, T2>>();
         public Action<ActionCallback<T1, T2>> On { get; private set; }
         public Action<ActionCallback<T1, T2>>? Off { get; private set; }
-        public static EventCallback<T1, T2> operator +(EventCallback<T1, T2> a, Action<T1, T2> b)
+        public static JSEventCallback<T1, T2> operator +(JSEventCallback<T1, T2> a, Action<T1, T2> b)
         {
             if (!attachedEvents.TryGetValue(b, out var info))
             {
@@ -139,7 +141,7 @@ namespace SpawnDev.BlazorJS
             return a;
         }
 
-        public static EventCallback<T1, T2> operator -(EventCallback<T1, T2> a, Action<T1, T2> b)
+        public static JSEventCallback<T1, T2> operator -(JSEventCallback<T1, T2> a, Action<T1, T2> b)
         {
             if (!attachedEvents.TryGetValue(b, out var info)) return a;
             a.Off?.Invoke(info.Callback);
@@ -151,12 +153,12 @@ namespace SpawnDev.BlazorJS
             }
             return a;
         }
-        public EventCallback(Action<ActionCallback<T1, T2>> on, Action<ActionCallback<T1, T2>>? off = null) : base()
+        public JSEventCallback(Action<ActionCallback<T1, T2>> on, Action<ActionCallback<T1, T2>>? off = null) : base()
         {
             On = on;
             Off = off;
         }
-        public EventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
+        public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
         {
             On = (o) => jsRef.CallVoid(onFn, name, o);
             if (!string.IsNullOrEmpty(offFn)) Off = (o) => jsRef.CallVoid(offFn, name, o);
@@ -168,12 +170,12 @@ namespace SpawnDev.BlazorJS
         public Action<T1, T2, T3> Action { get; }
         public AttachedEventInfo(Action<T1, T2, T3> action, ActionCallback<T1, T2, T3> callback) => (Action, Callback) = (action, callback);
     }
-    public class EventCallback<T1, T2, T3> : EventCallbackBase
+    public class JSEventCallback<T1, T2, T3> : EventCallbackBase
     {
         static Dictionary<Action<T1, T2, T3>, AttachedEventInfo<T1, T2, T3>> attachedEvents = new Dictionary<Action<T1, T2, T3>, AttachedEventInfo<T1, T2, T3>>();
         public Action<ActionCallback<T1, T2, T3>> On { get; private set; }
         public Action<ActionCallback<T1, T2, T3>>? Off { get; private set; }
-        public static EventCallback<T1, T2, T3> operator +(EventCallback<T1, T2, T3> a, Action<T1, T2, T3> b)
+        public static JSEventCallback<T1, T2, T3> operator +(JSEventCallback<T1, T2, T3> a, Action<T1, T2, T3> b)
         {
             if (!attachedEvents.TryGetValue(b, out var info))
             {
@@ -185,7 +187,7 @@ namespace SpawnDev.BlazorJS
             return a;
         }
 
-        public static EventCallback<T1, T2, T3> operator -(EventCallback<T1, T2, T3> a, Action<T1, T2, T3> b)
+        public static JSEventCallback<T1, T2, T3> operator -(JSEventCallback<T1, T2, T3> a, Action<T1, T2, T3> b)
         {
             if (!attachedEvents.TryGetValue(b, out var info)) return a;
             a.Off?.Invoke(info.Callback);
@@ -197,12 +199,12 @@ namespace SpawnDev.BlazorJS
             }
             return a;
         }
-        public EventCallback(Action<ActionCallback<T1, T2, T3>> on, Action<ActionCallback<T1, T2, T3>>? off = null) : base()
+        public JSEventCallback(Action<ActionCallback<T1, T2, T3>> on, Action<ActionCallback<T1, T2, T3>>? off = null) : base()
         {
             On = on;
             Off = off;
         }
-        public EventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
+        public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
         {
             On = (o) => jsRef.CallVoid(onFn, name, o);
             if (!string.IsNullOrEmpty(offFn)) Off = (o) => jsRef.CallVoid(offFn, name, o);
@@ -214,12 +216,12 @@ namespace SpawnDev.BlazorJS
         public Action<T1, T2, T3, T4> Action { get; }
         public AttachedEventInfo(Action<T1, T2, T3, T4> action, ActionCallback<T1, T2, T3, T4> callback) => (Action, Callback) = (action, callback);
     }
-    public class EventCallback<T1, T2, T3, T4> : EventCallbackBase
+    public class JSEventCallback<T1, T2, T3, T4> : EventCallbackBase
     {
         static Dictionary<Action<T1, T2, T3, T4>, AttachedEventInfo<T1, T2, T3, T4>> attachedEvents = new Dictionary<Action<T1, T2, T3, T4>, AttachedEventInfo<T1, T2, T3, T4>>();
         public Action<ActionCallback<T1, T2, T3, T4>> On { get; private set; }
         public Action<ActionCallback<T1, T2, T3, T4>>? Off { get; private set; }
-        public static EventCallback<T1, T2, T3, T4> operator +(EventCallback<T1, T2, T3, T4> a, Action<T1, T2, T3, T4> b)
+        public static JSEventCallback<T1, T2, T3, T4> operator +(JSEventCallback<T1, T2, T3, T4> a, Action<T1, T2, T3, T4> b)
         {
             if (!attachedEvents.TryGetValue(b, out var info))
             {
@@ -231,7 +233,7 @@ namespace SpawnDev.BlazorJS
             return a;
         }
 
-        public static EventCallback<T1, T2, T3, T4> operator -(EventCallback<T1, T2, T3, T4> a, Action<T1, T2, T3, T4> b)
+        public static JSEventCallback<T1, T2, T3, T4> operator -(JSEventCallback<T1, T2, T3, T4> a, Action<T1, T2, T3, T4> b)
         {
             if (!attachedEvents.TryGetValue(b, out var info)) return a;
             a.Off?.Invoke(info.Callback);
@@ -243,12 +245,12 @@ namespace SpawnDev.BlazorJS
             }
             return a;
         }
-        public EventCallback(Action<ActionCallback<T1, T2, T3, T4>> on, Action<ActionCallback<T1, T2, T3, T4>>? off = null) : base()
+        public JSEventCallback(Action<ActionCallback<T1, T2, T3, T4>> on, Action<ActionCallback<T1, T2, T3, T4>>? off = null) : base()
         {
             On = on;
             Off = off;
         }
-        public EventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
+        public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base()
         {
             On = (o) => jsRef.CallVoid(onFn, name, o);
             if (!string.IsNullOrEmpty(offFn)) Off = (o) => jsRef.CallVoid(offFn, name, o);
