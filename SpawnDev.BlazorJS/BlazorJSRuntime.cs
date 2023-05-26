@@ -68,18 +68,6 @@ namespace SpawnDev.BlazorJS
 #endif
         }
 
-        /// <summary>
-        /// Called by the BlazorJS Javscript module via the Blazor afterStarted call
-        /// </summary>
-        //async Task AfterStarted()
-        //{
-        //    // 
-        //    Log("> AfterStarted called!");
-        //    Log($"{BackgroundServiceTypes.Count} Background services registered");
-        //    await Task.Delay(1000);
-        //    Log("< AfterStarted called!");
-        //}
-
         public string InformationalVersion { get; } = typeof(JSObject).Assembly.GetAssemblyInformationalVersion();
         public string FileVersion { get; } = typeof(JSObject).Assembly.GetAssemblyFileVersion();
 
