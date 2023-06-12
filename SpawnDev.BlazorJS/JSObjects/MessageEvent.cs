@@ -1,10 +1,12 @@
 ﻿using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
+namespace SpawnDev.BlazorJS.JSObjects
+{
     /// <summary>
     /// The MessageEvent interface represents a message received by a target object.
     /// </summary>
-    public class MessageEvent : JSObject {
+    public class MessageEvent : JSObject
+    {
         public MessageEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// The data sent by the message emitter. (data property with T typed get accessor)
@@ -26,5 +28,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
         /// <typeparam name="T">Type to get property as</typeparam>
         /// <returns></returns>
         public T GetSource<T>() => JSRef.Get<T>("source");
+        public Array<MessagePort> Ports => JSRef.Get<Array<MessagePort>>("ports");
     }
 }
