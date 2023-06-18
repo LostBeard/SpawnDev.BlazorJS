@@ -5,10 +5,10 @@ namespace SpawnDev.BlazorJS.JSObjects {
     public class ReadableStream : JSObject {
         public ReadableStream(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        CallbackGroup callbacks = new CallbackGroup();
+        //CallbackGroup callbacks = new CallbackGroup();
 
-        public void OnReadable(Action callback) { JSRef.CallVoid("on", "readable", Callback.Create(callback, callbacks)); }
-        public void OnEnd(Action callback) { JSRef.CallVoid("on", "end", Callback.Create(callback, callbacks)); }
+        //public void OnReadable(Action callback) { JSRef.CallVoid("on", "readable", Callback.Create(callback, callbacks)); }
+        //public void OnEnd(Action callback) { JSRef.CallVoid("on", "end", Callback.Create(callback, callbacks)); }
 
         public ReadableStream(ExpandoObject options) : base(JS.New(nameof(ReadableStream), options)) { }
 
@@ -32,11 +32,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
 
         public void Destroy() {
             JSRef.CallVoid("destroy");
-        }
-
-        protected override void LosingReference()
-        {
-            callbacks.Dispose();
         }
     }
 }

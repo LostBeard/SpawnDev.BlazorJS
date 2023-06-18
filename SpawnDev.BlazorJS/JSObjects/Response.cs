@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Response(Blob body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
         public Response(ArrayBuffer body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
         public Response(ReadableStream body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
-        public Headers Headers() => JSRef.Get<Headers>("headers");
+        public Headers Headers => JSRef.Get<Headers>("headers");
         //public Response(TypedArray body) : base(JS.New(nameof(Response), body)) { }
         //public Response(DataView body) : base(JS.New(nameof(Response), body)) { }
         //public Response(FormData body) : base(JS.New(nameof(Response), body)) { }

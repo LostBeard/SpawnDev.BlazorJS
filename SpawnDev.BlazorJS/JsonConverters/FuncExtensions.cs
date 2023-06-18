@@ -59,7 +59,7 @@ namespace SpawnDev.BlazorJS.JsonConverters {
             if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
             return ret;
         }
-        //public static void CallbackSet<T0, T1, TResult>(this Func<T0, T1, TResult> _this, Callback callback) => _callbacks.Add(_this, callback);
+        //public static void CallbackSet<T0, T1, TValue>(this Func<T0, T1, TValue> _this, Callback callback) => _callbacks.Add(_this, callback);
         public static Function? FunctionGet<T0, T1, TResult>(this Func<T0, T1, TResult> _this) => _functions.TryGetValue(_this, out var fn) ? fn : null;
         public static void FunctionSet<T0, T1, TResult>(this Func<T0, T1, TResult> _this, Function fn) => _functions.Add(_this, fn);
 

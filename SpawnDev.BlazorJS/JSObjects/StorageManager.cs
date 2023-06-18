@@ -90,7 +90,7 @@ namespace SpawnDev.BlazorJS.JSObjects
                 if (nextDir == null) return null;
                 curDir = nextDir;
             }
-            var entries = await curDir.Entries();
+            var entries = await curDir.Values();
             curDir.Dispose();
             return entries;
         }

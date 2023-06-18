@@ -9,7 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public MessageEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// The data sent by the message emitter. (data property with T typed get accessor)
+        /// The data sent by the message emitter. (data property with TValue typed get accessor)
         /// </summary>
         /// <typeparam name="T">Type to get property as</typeparam>
         /// <returns></returns>
@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string LastEventId => JSRef.Get<string>("lastEventId");
         /// <summary>
-        /// A MessageEventSource (which can be a WindowProxy, MessagePort, or ServiceWorker object) representing the message emitter. (source property with T typed get accessor)
+        /// A MessageEventSource (which can be a WindowProxy, MessagePort, or ServiceWorker object) representing the message emitter. (source property with TValue typed get accessor)
         /// </summary>
         /// <typeparam name="T">Type to get property as</typeparam>
         /// <returns></returns>

@@ -51,8 +51,11 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
-        static async Task<WebAssemblyHost> StartBackgroundServices(this WebAssemblyHost _this)
+        static bool StartBackgroundServicesRan = false;
+        public static async Task<WebAssemblyHost> StartBackgroundServices(this WebAssemblyHost _this)
         {
+            if (StartBackgroundServicesRan) return _this;
+            StartBackgroundServicesRan = true;
             var bgServices = serviceCollection.Where(o => typeof(IBackgroundService).IsAssignableFrom(o.ServiceType) || typeof(IBackgroundService).IsAssignableFrom(o.ImplementationType)).ToList();
             // let all the constructors fire first
             foreach (var kvp in bgServices)

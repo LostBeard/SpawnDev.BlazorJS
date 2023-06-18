@@ -1,5 +1,19 @@
 ﻿@page "/"
 
+<div style="padding: 1rem 1rem 1rem 1rem;">
+    <h2>App Build Versions</h2>
+
+    <h4>SpawnDev.BlazorJS</h4>
+    <ul>
+        <li>@BlazorJSRuntime.JS.InformationalVersion</li>
+    </ul>
+
+    <h4>.Net</h4>
+    <ul>
+        <li>@BlazorJSRuntime.JS.FrameworkVersion</li>
+    </ul>
+</div>
+
 <MarkdownBlock URL="https://raw.githubusercontent.com/LostBeard/SpawnDev.BlazorJS/main/README.md" />
 @code {
 

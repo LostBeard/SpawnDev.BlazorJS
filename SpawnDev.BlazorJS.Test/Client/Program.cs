@@ -43,8 +43,7 @@ builder.Services.AddSingleton<NotificationService>();
 builder.Services.AddSingleton<TooltipService>();
 builder.Services.AddSingleton<ContextMenuService>();
 
-Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
-
+//Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
 
 #if DEBUG || true
 

@@ -14,6 +14,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public bool Cancelable => JSRef.Get<bool>("cancelable");
         public bool Composed => JSRef.Get<bool>("composed");
         public EventTarget Target => JSRef.Get<EventTarget>("target");
+        public T TargetAs<T>() where T : EventTarget => JSRef.Get<T>("target");
         public void PreventDefault() => JSRef.CallVoid("preventDefault");
+        public string Type => JSRef.Get<string>("type");
     }
 }

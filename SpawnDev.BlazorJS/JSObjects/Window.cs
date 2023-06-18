@@ -1,7 +1,10 @@
 ﻿using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects {
-    public class Window : EventTarget {
+namespace SpawnDev.BlazorJS.JSObjects
+{
+    public class Window : EventTarget
+    {
         public Window() : base(JS.Get<IJSInProcessObjectReference>("window")) { }
         public Window(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string? Name { get => JSRef.Get<string>("name"); set => JSRef.Set("name", value); }
@@ -32,30 +35,120 @@ namespace SpawnDev.BlazorJS.JSObjects {
         private long _OnAnimationFrameCallbackHandle = 0;
         private int _OnAnimationFrameCount = 0;
         private event AnimationFrameDelegate _OnAnimationFrame;
-        public event AnimationFrameDelegate OnAnimationFrame {
-            add {
+        public event AnimationFrameDelegate OnAnimationFrame
+        {
+            add
+            {
                 _OnAnimationFrame += value;
                 _OnAnimationFrameCount = _OnAnimationFrame == null ? 0 : _OnAnimationFrame.GetInvocationList().Length;
-                if (_OnAnimationFrameCount == 1) {
+                if (_OnAnimationFrameCount == 1)
+                {
                     if (_OnAnimationFrameCallback == null) _OnAnimationFrameCallback = Callback.Create<double>(AnimationFrame, _callbacks);
                     _OnAnimationFrameCallbackHandle = RequestAnimationFrame(_OnAnimationFrameCallback);
                 }
             }
-            remove {
+            remove
+            {
                 _OnAnimationFrame -= value;
                 _OnAnimationFrameCount = _OnAnimationFrame == null ? 0 : _OnAnimationFrame.GetInvocationList().Length;
-                if (_OnAnimationFrameCount == 0) {
-                    if (_OnAnimationFrameCallbackHandle != 0) {
+                if (_OnAnimationFrameCount == 0)
+                {
+                    if (_OnAnimationFrameCallbackHandle != 0)
+                    {
                         CancelAnimationFrame(_OnAnimationFrameCallbackHandle);
                         _OnAnimationFrameCallbackHandle = 0;
                     }
                 }
             }
         }
-        void AnimationFrame(double timestamp) {
+        void AnimationFrame(double timestamp)
+        {
             if (_OnAnimationFrameCount > 0)
                 _OnAnimationFrameCallbackHandle = RequestAnimationFrame(_OnAnimationFrameCallback);
             _OnAnimationFrame?.Invoke(timestamp);
         }
+
+        public bool ShowDirectoryPickerSupported() => !JS.IsUndefined("showDirectoryPicker");
+
+        public Task<FileSystemDirectoryHandle> ShowDirectoryPicker(ShowDirectoryPickerOptions? options = null) => options == null ?
+            JSRef.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker") :
+            JSRef.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker", options);
+
+        public Task<FileSystemFileHandle> ShowOpenFilePicker(ShowOpenFilePickerOptions? options = null) => options == null ?
+            JSRef.CallAsync<FileSystemFileHandle>("showOpenFilePicker") :
+            JSRef.CallAsync<FileSystemFileHandle>("showOpenFilePicker", options);
+
+        public Task<Array<FileSystemFileHandle>> ShowSaveFilePicker(ShowSaveFilePickerOptions? options = null) => options == null ?
+            JSRef.CallAsync<Array<FileSystemFileHandle>>("showSaveFilePicker") :
+            JSRef.CallAsync<Array<FileSystemFileHandle>>("showSaveFilePicker", options);
+
+        public IDBFactory IndexedDB => JSRef.Get<IDBFactory>("indexedDB");
+    }
+
+    public class ShowOpenFilePickerType
+    {
+        public string Description { get; set; } = "";
+        public Dictionary<string, List<string>> Accept { get; set; } = new Dictionary<string, List<string>>();
+    }
+
+    public class ShowSaveFilePickerOptions
+    {
+        /// <summary>
+        /// A String. The suggested file name.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? SuggestedName { get; set; }
+
+        /// <summary>
+        /// A boolean value that defaults to false. By default, the picker should include an option to not apply any file type filters (instigated with the type option below). Setting this option to true means that option is not available.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? ExcludeAcceptAllOption { get; set; }
+
+        /// <summary>
+        /// An Array of allowed file types to save. Each item is an object with the following options:
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ShowOpenFilePickerType>? Types { get; set; }
+    }
+
+    public class ShowOpenFilePickerOptions
+    {
+        /// <summary>
+        /// A boolean value that defaults to false. When set to true multiple files may be selected.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? Multiple { get; set; }
+
+        /// <summary>
+        /// A boolean value that defaults to false. By default the picker should include an option to not apply any file type filters (instigated with the type option below). Setting this option to true means that option is not available.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? ExcludeAcceptAllOption { get; set; }
+
+        /// <summary>
+        /// An Array of allowed file types to pick. Each item is an object with the following options:
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ShowOpenFilePickerType>? Types { get; set; }
+    }
+
+    public class ShowDirectoryPickerOptions
+    {
+        /// <summary>
+        /// By specifying an ID, the browser can remember different directories for different IDs. If the same ID is used for another picker, the picker opens in the same directory.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Id { get; set; }
+        /// <summary>
+        /// A string that defaults to "read" for read-only access or "readwrite" for read and write access to the directory.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Mode { get; set; }
+        /// <summary>
+        /// A FileSystemHandle or a well known directory ("desktop", "documents", "downloads", "music", "pictures", or "videos") to open the dialog in.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? StartIn { get; set; }
     }
 }

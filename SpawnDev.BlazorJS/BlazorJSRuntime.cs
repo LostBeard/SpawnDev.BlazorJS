@@ -68,6 +68,8 @@ namespace SpawnDev.BlazorJS
 #endif
         }
 
+        public string EnvironmentVersion { get; } = Environment.Version.ToString();
+        public string FrameworkVersion { get; } = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Replace(".NET", "", StringComparison.OrdinalIgnoreCase).Trim();
         public string InformationalVersion { get; } = typeof(JSObject).Assembly.GetAssemblyInformationalVersion();
         public string FileVersion { get; } = typeof(JSObject).Assembly.GetAssemblyFileVersion();
 

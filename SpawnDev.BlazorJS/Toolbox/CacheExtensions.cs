@@ -1,12 +1,15 @@
 ﻿using Microsoft.Extensions.Options;
 using SpawnDev.BlazorJS.JSObjects;
+using System.Collections.Immutable;
 using System.Text;
 using System.Text.Json;
+using System.Web;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
     public static class CacheExtensions
     {
+
         private static JsonSerializerOptions JsonSerializerDeserializeOptions { get; set; } = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, AllowTrailingCommas = true, ReadCommentHandling = JsonCommentHandling.Skip };
         /// <summary>
         /// Non-standard shortcut method to get the cache keys as an array of the Request.url strings instead of Request objects
@@ -41,27 +44,25 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             var ret = await _this.GetAllHostFiles(HostName, true);
             if (!inFolder.EndsWith("/")) inFolder += "/";
-            var dirs = new List<string>();
-            foreach (var o in  ret)
+            var dirs = new HashSet<string>();
+            foreach (var o in ret)
             {
                 if (!o.StartsWith(inFolder)) continue;
                 var subPath = o.Substring(inFolder.Length);
                 var pathParts = subPath.Split("/", StringSplitOptions.RemoveEmptyEntries);
                 var dir = inFolder;
-                foreach (var part in pathParts)
+                for (var i = 0; i < pathParts.Length - 1; i++)
                 {
-                    dir += $"{inFolder}/";
-                    if (!dirs.Contains(dir))
-                    {
-                        dirs.Add(dir);
-                    }
+                    var part = pathParts[i];
+                    dir += $"{part}/";
+                    dirs.Add($"/{dir.Trim('/')}");
                     if (!recursive)
                     {
                         break;
                     }
                 }
             }
-            return ret;
+            return dirs.ToList();
         }
 
         public static Task<List<string>> GetAllFiles(this Cache _this) => _this.GetFiles("/", true);
@@ -69,7 +70,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             var ret = await _this.GetAllHostFiles(HostName, true);
             if (!inFolder.EndsWith("/")) inFolder += "/";
-            ret = ret.Where(o => {
+            ret = ret.Where(o =>
+            {
                 if (!o.StartsWith(inFolder)) return false;
                 if (!recursive)
                 {
@@ -81,6 +83,25 @@ namespace SpawnDev.BlazorJS.Toolbox
                 return true;
             }).ToList();
             return ret;
+        }
+
+        public enum CachePathType
+        {
+            NOT_FOUND,
+            DIRECTORY,
+            FILE,
+        }
+
+        public static async Task<CachePathType> GetPathType(this Cache _this, string path)
+        {
+            var files = await _this.GetAllFiles();
+            if (!files.Any()) return CachePathType.NOT_FOUND;
+            path = $"/{path.Trim('/')}/";
+            files = files.Select(o => $"/{o.Trim('/')}/").ToList();
+            if (files.Contains(path)) return CachePathType.FILE;
+            files = files.Where(o => o.StartsWith(path)).ToList();
+            if (files.Any()) return CachePathType.DIRECTORY;
+            return CachePathType.NOT_FOUND;
         }
 
         /// <summary>
@@ -143,12 +164,12 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
         }
 
-        public static Task WriteText(this Cache _this, string url, string content, string contentType = "")
+        public static Task WriteText(this Cache _this, string url, string content, string contentType = "text/plain")
         {
             return _this.WriteBytes(url, Encoding.UTF8.GetBytes(content), contentType);
         }
 
-        public static Task WriteJSON(this Cache _this, string url, object value, string contentType = "")
+        public static Task WriteJSON(this Cache _this, string url, object value, string contentType = "application/json")
         {
             return _this.WriteText(url, JsonSerializer.Serialize(value), contentType);
         }

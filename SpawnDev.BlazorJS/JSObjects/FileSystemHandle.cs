@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public string Kind => JSRef.Get<string>("kind");
         public bool IsSameEntry(FileSystemHandle fsHandle) => JSRef.Call<bool>("isSameEntry", fsHandle);
 
+        public FileSystemHandle ResolveType() => Kind == "directory" ? JS.ReturnMe<FileSystemDirectoryHandle>(this) : JS.ReturnMe<FileSystemFileHandle>(this);
+        public FileSystemDirectoryHandle? ToFileSystemDirectoryHandle() => Kind == "directory" ? JS.ReturnMe<FileSystemDirectoryHandle>(this) : null;
+        public FileSystemFileHandle? ToFileSystemFileHandle() => Kind == "file" ? JS.ReturnMe<FileSystemFileHandle>(this) : null;
+
         public async Task<string> GetReadWritePermissions() {
             if (await IsWritable()) return "rw";
             if (await IsReadable()) return "r";

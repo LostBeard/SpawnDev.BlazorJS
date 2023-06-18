@@ -38,12 +38,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Task<T> CallAsync<T>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<T>("apply", thisObj, args);
         public void CallVoid(object? thisObj = null, params object?[] args) => JSRef.CallVoid("apply", thisObj, args);
 
-        //public T Apply<T>(object? thisObj = null, object?[]? args = null) => JSRef.Call<T>("applyFn", thisObj, args);
-        //public Task<T> ApplyAsync<T>(object? thisObj = null, object?[]? args = null) => JSRef.CallAsync<T>("applyFn", thisObj, args);
+        //public TValue Apply<TValue>(object? thisObj = null, object?[]? args = null) => JSRef.Call<TValue>("applyFn", thisObj, args);
+        //public Task<TValue> ApplyAsync<TValue>(object? thisObj = null, object?[]? args = null) => JSRef.CallAsync<TValue>("applyFn", thisObj, args);
         //public void ApplyVoid(object? thisObj = null, object?[]? args = null) => JSRef.CallVoid("applyFn", thisObj, args);
 
-        //public T Call<T>(object? thisObj = null, params object?[] args) => JSRef.Call<T>("applyFn", thisObj, args);
-        //public Task<T> CallAsync<T>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<T>("applyFn", thisObj, args);
+        //public TValue Call<TValue>(object? thisObj = null, params object?[] args) => JSRef.Call<TValue>("applyFn", thisObj, args);
+        //public Task<TValue> CallAsync<TValue>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<TValue>("applyFn", thisObj, args);
         //public void CallVoid(object? thisObj = null, params object?[] args) => JSRef.CallVoid("applyFn", thisObj, args);
 
         public Action ToAction()

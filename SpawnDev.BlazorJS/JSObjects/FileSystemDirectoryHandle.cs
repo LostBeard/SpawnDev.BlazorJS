@@ -124,7 +124,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
             // not sure why but the Promise returned by getDirectoryHandle is never resolved
 #if true
             FileSystemHandle ret = null;
-            var entries = await Entries();
+            var entries = await Values();
             foreach (var d in entries) {
                 if (d.Name.Equals(name, stringComp)) ret = d;
                 else d.Dispose();
@@ -172,15 +172,31 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Task<FileSystemFileHandle?> GetFileHandle(string name, bool create = false) => JSRef.CallAsync<FileSystemFileHandle?>("getFileHandle", name, new GetHandleOptions { Create = create });
         public Task<FileSystemDirectoryHandle?> GetDirectoryHandle(string name, bool create = false) => JSRef.CallAsync<FileSystemDirectoryHandle?>("getDirectoryHandle", name, new GetHandleOptions { Create = create });
 
-        public async Task<List<FileSystemHandle>> Entries()
+        public async Task<Dictionary<string, FileSystemHandle>> Entries()
         {
             using var valuesIterator = JSRef.Call<AsyncIterator>("values");
             //var files1 = valuesIterator.ToAsyncEnumerable<FileSystemFileHandle>();
             //await foreach(var f in files1)
             //{
             //}
-            var files = await IterateDirectoryAsync(valuesIterator, true, true);
-            return files;
+            //var files = await IterateDirectoryAsync(valuesIterator, true, true);
+            var files = await valuesIterator.ToList<FileSystemHandle>();
+            var typed = files.Select(o => o.ResolveType()).ToList();
+            files.DisposeAll();
+            return typed.ToDictionary(o => o.Name, o => o);
+        }
+        public async Task<List<FileSystemHandle>> Values()
+        {
+            using var valuesIterator = JSRef.Call<AsyncIterator>("values");
+            //var files1 = valuesIterator.ToAsyncEnumerable<FileSystemFileHandle>();
+            //await foreach(var f in files1)
+            //{
+            //}
+            //var files = await IterateDirectoryAsync(valuesIterator, true, true);
+            var files = await valuesIterator.ToList<FileSystemHandle>();
+            var typed = files.Select(o => o.ResolveType()).ToList();
+            files.DisposeAll();
+            return typed;
         }
 
         //public async Task<List<FileSystemHandle>> Entries() {

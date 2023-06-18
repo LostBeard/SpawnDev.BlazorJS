@@ -11,7 +11,7 @@
     }
     //public interface IWebGLRenderingContext
     //{
-    //    T GetExtension<T>(string name);
+    //    TValue GetExtension<TValue>(string name);
     //    void ActiveTexture(int texture);
     //    void AttachShader(WebGLProgram program, WebGLShader shader);
     //    void BindAttribLocation(WebGLProgram program, uint index, string name);
@@ -68,22 +68,22 @@
     //    List<WebGLShader> GetAttachedShaders(WebGLProgram program);
     //    // WebGLHandlesContextLoss
     //    int GetAttribLocation(WebGLProgram program, string name);
-    //    T GetBufferParameter<T>(int target, int pname);
-    //    T GetParameter<T>(int pname);
+    //    TValue GetBufferParameter<TValue>(int target, int pname);
+    //    TValue GetParameter<TValue>(int pname);
     //    // WebGLHandlesContextLoss
     //    int GetError();
-    //    T GetFramebufferAttachmentParameter<T>(int target, int attachment, int pname);
-    //    T GetProgramParameter<T>(WebGLProgram program, int pname);
+    //    TValue GetFramebufferAttachmentParameter<TValue>(int target, int attachment, int pname);
+    //    TValue GetProgramParameter<TValue>(WebGLProgram program, int pname);
     //    string GetProgramInfoLog(WebGLProgram program);
-    //    T GetRenderbufferParameter<T>(int target, int pname);
-    //    T GetShaderParameter<T>(WebGLShader shader, int pname);
+    //    TValue GetRenderbufferParameter<TValue>(int target, int pname);
+    //    TValue GetShaderParameter<TValue>(WebGLShader shader, int pname);
     //    WebGLShaderPrecisionFormat GetShaderPrecisionFormat(int shadertype, int precisiontype);
     //    string GetShaderInfoLog(WebGLShader shader);
     //    string GetShaderSource(WebGLShader shader);
-    //    T GetTexParameter<T>(int target, int pname);
-    //    T GetUniform<T>(WebGLProgram program, WebGLUniformLocation location);
+    //    TValue GetTexParameter<TValue>(int target, int pname);
+    //    TValue GetUniform<TValue>(WebGLProgram program, WebGLUniformLocation location);
     //    WebGLUniformLocation GetUniformLocation(WebGLProgram program, string name);
-    //    T GetVertexAttrib<T>(uint index, int pname);
+    //    TValue GetVertexAttrib<TValue>(uint index, int pname);
     //    // WebGLHandlesContextLoss
     //    int GetVertexAttribOffset(uint index, int pname);
     //    void Hint(int target, int mode);

@@ -31,8 +31,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
         //public void DrawArrays(int mode, int first, int count) => Get_ref.CallVoid("drawArrays", mode, first, count);
         //public void EnableVertexAttribArray(int index) => Get_ref.CallVoid("enableVertexAttribArray", index);
         //public int GetAttribLocation(WebGLProgram program, string name) => _ref.Call<int>("getAttribLocation", program, name);
-        //public T GetProgramParameter<T>(WebGLProgram shader, int pname) => _ref.Call<T>("getProgramParameter", shader, pname);
-        //public T GetShaderParameter<T>(WebGLShader shader, int pname) => _ref.Call<T>("getShaderParameter", shader, pname);
+        //public TValue GetProgramParameter<TValue>(WebGLProgram shader, int pname) => _ref.Call<TValue>("getProgramParameter", shader, pname);
+        //public TValue GetShaderParameter<TValue>(WebGLShader shader, int pname) => _ref.Call<TValue>("getShaderParameter", shader, pname);
         //public WebGLUniformLocation GetUniformLocation(WebGLProgram program, string name) => _ref.Call<WebGLUniformLocation>("getUniformLocation", program, name);
         //public void LinkProgram(WebGLProgram program) => Get_ref.CallVoid("linkProgram", program);
         //public void ReadPixels() => throw new Exception("Not implemeneted");
