@@ -1,7 +1,8 @@
 ﻿using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects {
-    public class Uint8Array : JSObject {
+    public class Uint8Array : TypedArray
+    {
         public Uint8Array(IJSInProcessObjectReference _ref) : base(_ref) { }
         // https://github.com/dotnet/aspnetcore/issues/35597
         // MS improved their .Net byte[] <-> JS Uint8Array recently but there is a bug ...
@@ -18,8 +19,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public long ByteLength => JSRef.Get<long>("byteLength");
         public long ByteOffset => JSRef.Get<long>("byteOffset");
         public bool IsPartialView => JSRef.Get<long>("buffer.byteLength") != JSRef.Get<long>("byteLength");
-        public byte[] ReadBytes() {
-            return JS.ReturnMe<byte[]>(JSRef);
-        }
+        public byte[] ReadBytes() => JS.ReturnMe<byte[]>(JSRef);
     }
 }

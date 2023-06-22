@@ -165,5 +165,15 @@ namespace SpawnDev.BlazorJS
         public string TypeOf(string identifier) => JSInterop.TypeOf(null, identifier);
         public void Log(params object?[] args) => CallApplyVoid("console.log", args);
         public string GetConstructorName(string identifier) => Get<string>($"{identifier}.constructor.name");
+        public string GetConstructorName(JSObject obj, string identifier)
+        {
+            if (obj == null || obj.JSRef == null) return "";
+            try
+            {
+                return obj.JSRef.PropertyInstanceOf(identifier);
+            }
+            catch { }
+            return "";
+        }
     }
 }

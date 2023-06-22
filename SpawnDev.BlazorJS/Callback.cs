@@ -501,6 +501,7 @@ namespace SpawnDev.BlazorJS
     // Async Actions
     public class AsyncActionCallback : Callback
     {
+        public static implicit operator AsyncActionCallback(Func<Task> callback) => new AsyncActionCallback(callback);
         Func<Task> __callback;
         public AsyncActionCallback(Func<Task> callback) : base()
         {
@@ -516,6 +517,7 @@ namespace SpawnDev.BlazorJS
 
     public class AsyncActionCallback<T1> : Callback
     {
+        public static implicit operator AsyncActionCallback<T1>(Func<T1, Task> callback) => new AsyncActionCallback<T1>(callback);
         Func<T1, Task> __callback;
         public AsyncActionCallback(Func<T1, Task> callback) : base()
         {
@@ -531,6 +533,7 @@ namespace SpawnDev.BlazorJS
 
     public class AsyncActionCallback<T1, T2> : Callback
     {
+        public static implicit operator AsyncActionCallback<T1, T2>(Func<T1, T2, Task> callback) => new AsyncActionCallback<T1, T2>(callback);
         Func<T1, T2, Task> __callback;
         public AsyncActionCallback(Func<T1, T2, Task> callback) : base()
         {
@@ -546,6 +549,7 @@ namespace SpawnDev.BlazorJS
 
     public class AsyncActionCallback<T1, T2, T3> : Callback
     {
+        public static implicit operator AsyncActionCallback<T1, T2, T3>(Func<T1, T2, T3, Task> callback) => new AsyncActionCallback<T1, T2, T3>(callback);
         Func<T1, T2, T3, Task> __callback;
         public AsyncActionCallback(Func<T1, T2, T3, Task> callback) : base()
         {
@@ -561,6 +565,7 @@ namespace SpawnDev.BlazorJS
 
     public class AsyncActionCallback<T1, T2, T3, T4> : Callback
     {
+        public static implicit operator AsyncActionCallback<T1, T2, T3, T4>(Func<T1, T2, T3, T4, Task> callback) => new AsyncActionCallback<T1, T2, T3, T4>(callback);
         Func<T1, T2, T3, T4, Task> __callback;
         public AsyncActionCallback(Func<T1, T2, T3, T4, Task> callback) : base()
         {
@@ -577,6 +582,7 @@ namespace SpawnDev.BlazorJS
     // Synch Actions
     public class ActionCallback : Callback
     {
+        public static implicit operator ActionCallback(Action callback) => new ActionCallback(callback);
         Action __callback;
         public ActionCallback(Action callback) : base()
         {
@@ -591,6 +597,7 @@ namespace SpawnDev.BlazorJS
     }
     public class ActionCallback<T1> : Callback
     {
+        public static implicit operator ActionCallback<T1>(Action<T1> callback) => new ActionCallback<T1>(callback);
         Action<T1> __callback;
         public ActionCallback(Action<T1> callback) : base()
         {
@@ -605,6 +612,7 @@ namespace SpawnDev.BlazorJS
     }
     public class ActionCallback<T1, T2> : Callback
     {
+        public static implicit operator ActionCallback<T1, T2>(Action<T1, T2> callback) => new ActionCallback<T1, T2>(callback);
         Action<T1, T2> __callback;
         public ActionCallback(Action<T1, T2> callback) : base()
         {
@@ -619,6 +627,7 @@ namespace SpawnDev.BlazorJS
     }
     public class ActionCallback<T1, T2, T3> : Callback
     {
+        public static implicit operator ActionCallback<T1, T2, T3>(Action<T1, T2, T3> callback) => new ActionCallback<T1, T2, T3>(callback);
         Action<T1, T2, T3> __callback;
         public ActionCallback(Action<T1, T2, T3> callback) : base()
         {
@@ -633,6 +642,7 @@ namespace SpawnDev.BlazorJS
     }
     public class ActionCallback<T1, T2, T3, T4> : Callback
     {
+        public static implicit operator ActionCallback<T1, T2, T3, T4>(Action<T1, T2, T3, T4> callback) => new ActionCallback<T1, T2, T3, T4>(callback);
         Action<T1, T2, T3, T4> __callback;
         public ActionCallback(Action<T1, T2, T3, T4> callback) : base()
         {

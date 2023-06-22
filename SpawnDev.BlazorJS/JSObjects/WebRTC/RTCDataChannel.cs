@@ -7,7 +7,8 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
     /// <summary>
     /// The RTCDataChannel interface represents a network channel which can be used for bidirectional peer-to-peer transfers of arbitrary data. Every data channel is associated with an RTCPeerConnection, and each peer connection can have up to a theoretical maximum of 65,534 data channels (the actual limit may vary from browser to browser).
     /// </summary>
-    public class RTCDataChannel : EventTarget {
+    public class RTCDataChannel : EventTarget
+    {
         public RTCDataChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns an ID number (between 0 and 65,534) which uniquely identifies the RTCDataChannel.
@@ -20,7 +21,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <summary>
         /// Specifies the number of bytes of buffered outgoing data that is considered "low". The default value is 0.
         /// </summary>
-        public long BufferedAmountLowThreshold => JSRef.Get<long>("bufferedAmountLowThreshold");
+        public long BufferedAmountLowThreshold { get => JSRef.Get<long>("bufferedAmountLowThreshold"); set => JSRef.Set("bufferedAmountLowThreshold", value); }
         /// <summary>
         /// Returns a string that contains a name describing the data channel. These labels are not required to be unique.
         /// </summary>
@@ -57,11 +58,6 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// Sends data across the data channel to the remote peer.
         /// </summary>
         /// <param name="data">The data to transmit across the connection. This may be a string, a Blob, an ArrayBuffer, a TypedArray or a DataView object.</param>
-        public void Send(object data) => JSRef.CallVoid("send", data);
-        /// <summary>
-        /// Sends data across the data channel to the remote peer.
-        /// </summary>
-        /// <param name="data">The data to transmit across the connection. This may be a string, a Blob, an ArrayBuffer, a TypedArray or a DataView object.</param>
         public void Send(string data) => JSRef.CallVoid("send", data);
         /// <summary>
         /// Sends data across the data channel to the remote peer.
@@ -73,7 +69,20 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         /// <param name="data">The data to transmit across the connection. This may be a string, a Blob, an ArrayBuffer, a TypedArray or a DataView object.</param>
         public void Send(ArrayBuffer data) => JSRef.CallVoid("send", data);
-
+        /// <summary>
+        /// Sends data across the data channel to the remote peer.
+        /// </summary>
+        /// <param name="data">The data to transmit across the connection. This may be a string, a Blob, an ArrayBuffer, a TypedArray or a DataView object.</param>
+        public void Send(TypedArray data) => JSRef.CallVoid("send", data);
+        /// <summary>
+        /// Sends data across the data channel to the remote peer.
+        /// </summary>
+        /// <param name="data">The data to transmit across the connection. This may be a string, a Blob, an ArrayBuffer, a TypedArray or a DataView object.</param>
+        public void Send(DataView data) => JSRef.CallVoid("send", data);
+        /// <summary>
+        /// A string specifying the type of object that should be used to represent binary data received on the RTCDataChannel. Values are the same as allowed on the WebSocket.binaryType property: blob if Blob objects are being used, or arraybuffer if ArrayBuffer objects are being used. The default is blob
+        /// </summary>
+        public string BinaryType { get => JSRef.Get<string>("binaryType"); set => JSRef.Set("binaryType", value); }
 
         /// <summary>
         /// Sent when the number of bytes of data in the outgoing data buffer falls below the value specified by bufferedAmountLowThreshold.

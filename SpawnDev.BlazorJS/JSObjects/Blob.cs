@@ -60,6 +60,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Blob(IJSInProcessObjectReference _ref) : base(_ref) { }
         public Blob(ArrayBuffer[] buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
         public Blob(IEnumerable<string> buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
+        public Blob(ArrayBuffer[] buffers) : base(JS.New(nameof(Blob), buffers)) { }
+        public Blob(IEnumerable<string> buffers) : base(JS.New(nameof(Blob), buffers)) { }
 
         public long Size => JSRef.Get<long>("size");
         public string Type => JSRef.Get<string>("type");
