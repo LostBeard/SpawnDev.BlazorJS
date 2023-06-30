@@ -10,63 +10,43 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string? Type { get; set; } = null;
     }
 
-    //public class ProgressEvent : Event
-    //{
-    //    public ProgressEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-    //}
-    public class FileReader : EventTarget
-    {
-        public T ResultAs<T>() => JSRef.Get<T>("result");
-        public FileReader(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public FileReader() : base(JS.New(nameof(FileReader))) { }
-        public void ReadAsDataURL(Blob blob) => JSRef.CallVoid("readAsDataURL", blob);
-        public JSEventCallback<ProgressEvent> OnLoad { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("load", o), o => RemoveEventListener("load", o)); set { } }
-        public JSEventCallback<ProgressEvent> OnAbort { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("abort", o), o => RemoveEventListener("abort", o)); set { } }
-        public JSEventCallback<ProgressEvent> OnError { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { } }
-        public JSEventCallback<ProgressEvent> OnLoadStart { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("loadstart", o), o => RemoveEventListener("loadstart", o)); set { } }
-        public JSEventCallback<ProgressEvent> OnLoadEnd { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("loadend", o), o => RemoveEventListener("loadend", o)); set { } }
-        public JSEventCallback<ProgressEvent> OnProgress { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("progress", o), o => RemoveEventListener("progress", o)); set { } }
-        public static Task<string?> ReadAsDataURLAsync(Blob blob)
-        {
-            var fr = new FileReader();
-            var tcs = new TaskCompletionSource<string?>();
-            Action<ProgressEvent>? load = null;
-            load = new Action<ProgressEvent>((evt) =>
-            {
-                if (evt.Type == "load")
-                {
-                    var result = fr.ResultAs<string>();
-                    tcs.TrySetResult(result);
-                }
-                else
-                {
-                    tcs.TrySetException(new Exception("Failed"));
-                }
-                fr.OnLoad -= load;
-                fr.OnLoadEnd -= load;
-                evt.Dispose();
-                fr.Dispose();
-            });
-            fr.OnLoad += load;
-            fr.OnLoadEnd += load;
-            fr.ReadAsDataURL(blob);
-            return tcs.Task;
-        }
-    }
-
     // https://developer.mozilla.org/en-US/docs/Web/API/Blob
     public class Blob : JSObject
     {
         public Blob(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public Blob(ArrayBuffer[] buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
-        public Blob(IEnumerable<string> buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
+
         public Blob(ArrayBuffer[] buffers) : base(JS.New(nameof(Blob), buffers)) { }
+        public Blob(ArrayBuffer[] buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
+
+        public Blob(IEnumerable<string> buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
         public Blob(IEnumerable<string> buffers) : base(JS.New(nameof(Blob), buffers)) { }
+
+        public Blob(Blob[] blobs) : base(JS.New(nameof(Blob), blobs)) { }
+        public Blob(Blob[] blobs, BlobOptions options) : base(JS.New(nameof(Blob), blobs, options)) { }
+
+        public Blob(byte[][] blobs) : base(JS.New(nameof(Blob), blobs)) { }
+        public Blob(byte[][] blobs, BlobOptions options) : base(JS.New(nameof(Blob), blobs, options)) { }
+
+        public Blob(TypedArray[] typedArrays) : base(JS.New(nameof(Blob), typedArrays)) { }
+        public Blob(TypedArray[] typedArrays, BlobOptions options) : base(JS.New(nameof(Blob), typedArrays, options)) { }
+
+        public Blob(DataView[] dataViews) : base(JS.New(nameof(Blob), dataViews)) { }
+        public Blob(DataView[] dataViews, BlobOptions options) : base(JS.New(nameof(Blob), dataViews, options)) { }
+
+        public Blob(Union<ArrayBuffer, TypedArray, DataView, Blob, string>[] dataViews) : base(JS.New(nameof(Blob), dataViews)) { }
+        public Blob(Union<ArrayBuffer, TypedArray, DataView, Blob, string>[] dataViews, BlobOptions options) : base(JS.New(nameof(Blob), dataViews, options)) { }
 
         public long Size => JSRef.Get<long>("size");
         public string Type => JSRef.Get<string>("type");
         public Task<string> Text() => JSRef.CallAsync<string>("text");
         public Task<ArrayBuffer> ArrayBuffer() => JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
+        /// <summary>
+        /// The Blob interface's slice() method creates and returns a new Blob object which contains data from a subset of the blob on which it's called.
+        /// </summary>
+        /// <param name="startPos">An index into the Blob indicating the first byte to include in the new Blob. If you specify a negative value, it's treated as an offset from the end of the Blob toward the beginning. For example, -10 would be the 10th from last byte in the Blob. The default value is 0. If you specify a value for start that is larger than the size of the source Blob, the returned Blob has size 0 and contains no data.</param>
+        /// <param name="endPos">An index into the Blob indicating the first byte that will *not* be included in the new Blob (i.e. the byte exactly at this index is not included). If you specify a negative value, it's treated as an offset from the end of the Blob toward the beginning. For example, -10 would be the 10th from last byte in the Blob. The default value is size.</param>
+        /// <param name="contentType">The content type to assign to the new Blob; this will be the value of its type property. The default value is an empty string.</param>
+        /// <returns></returns>
         public Blob Slice(long startPos, long endPos, string contentType) => JSRef.Call<Blob>("slice", startPos, endPos, contentType);
         public ReadableStream Stream() => JSRef.Call<ReadableStream>("stream");
         static string atob(string str)
@@ -88,7 +68,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             return blob;
         }
 
-        public string ToObjectURLAsync()
+        public string ToObjectURL()
         {
             return URL.CreateObjectURL(this);
         }

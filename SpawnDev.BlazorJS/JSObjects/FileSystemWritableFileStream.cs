@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The file data to write. Can be an ArrayBuffer, a TypedArray, a DataView, a Blob, a String object, or a string literal. This property is required if type is set to write
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public object Data { get; set; }
+        public Union<ArrayBuffer, TypedArray, DataView, Blob, string> Data { get; set; }
 
         /// <summary>
         /// The byte position the current file cursor should move to if type seek is used. Can also be set with if type is write, in which case the write will start at the position.
@@ -29,11 +29,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ulong? Size { get; set; }
     }
+    
     public class FileSystemWritableFileStream : WritableStream
     {
         public FileSystemWritableFileStream(IJSInProcessObjectReference _ref) : base(_ref) { }
         public Task Write(ArrayBuffer data) => JSRef.CallVoidAsync("write", data);
         public Task Write(Blob data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(TypedArray data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(byte[] data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(DataView data) => JSRef.CallVoidAsync("write", data);
         public Task Write(string data) => JSRef.CallVoidAsync("write", data);
         public Task Write(FSWWriteOptions data) => JSRef.CallVoidAsync("write", data);
         public Task Truncate(ulong size) => JSRef.CallVoidAsync("truncate", size);

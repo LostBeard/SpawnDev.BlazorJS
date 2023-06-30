@@ -28,6 +28,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///// <returns>ScreenDetails</returns>
         public Task<ScreenDetails> GetScreenDetails() => JSRef.CallAsync<ScreenDetails>("getScreenDetails");
 
+        public MediaQueryList MatchMedia(string mode) => JSRef.Call<MediaQueryList>("matchMedia", mode);
+
         // non-standard .Net extension
         CallbackGroup _callbacks = new CallbackGroup();
         public delegate void AnimationFrameDelegate(double timestamp);

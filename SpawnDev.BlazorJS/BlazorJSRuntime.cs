@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
+using System;
 using System.Reflection;
 using System.Text.Json;
 
@@ -65,7 +66,25 @@ namespace SpawnDev.BlazorJS
 #if DEBUG
             Log("JS.GlobalThisTypeName", GlobalThisTypeName);
             Set("JSInterop.debugLevel", 1);
+            if (IsWindow)
+            {
+                Log($"IsStandalone: {IsDisplayModeStandalone()}");
+            }
 #endif
+        }
+
+        public bool IsDisplayModeStandalone()
+        {
+            if (WindowThis != null)
+            {
+                try
+                {
+                    using var m = WindowThis.MatchMedia("(display-mode: standalone)");
+                    return m.Matches;
+                }
+                catch { }
+            }
+            return false;
         }
 
         public string EnvironmentVersion { get; } = Environment.Version.ToString();

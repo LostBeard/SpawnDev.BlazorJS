@@ -11,11 +11,11 @@ namespace SpawnDev.BlazorJS.JSObjects {
         // set below value to false when MS finally fixes issue
 
         // UDPATE: Fixed in DotNet 6 RC 1
-        static readonly bool UseCustomInterop = false;
         public Uint8Array(ArrayBuffer arrayBuffer) : base(JS.New(nameof(Uint8Array), arrayBuffer)) { }
         public Uint8Array(int length) : base(JS.New(nameof(Uint8Array), length)) { }
+        public Uint8Array(long length) : base(JS.New(nameof(Uint8Array), length)) { }
         public Uint8Array(byte[] sourceBytes) : base(JS.ReturnMe<IJSInProcessObjectReference>(sourceBytes)) { }
-        public ArrayBuffer Buffer => IsWrapperDisposed || JSRef == null ? null : JSRef.Get<ArrayBuffer>("buffer");
+        public ArrayBuffer Buffer => JSRef.Get<ArrayBuffer>("buffer");
         public long ByteLength => JSRef.Get<long>("byteLength");
         public long ByteOffset => JSRef.Get<long>("byteOffset");
         public bool IsPartialView => JSRef.Get<long>("buffer.byteLength") != JSRef.Get<long>("byteLength");

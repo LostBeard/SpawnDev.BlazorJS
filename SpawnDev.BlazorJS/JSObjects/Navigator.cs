@@ -14,5 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public ServiceWorkerContainer ServiceWorker => JSRef.Get<ServiceWorkerContainer>("serviceWorker");
         public WakeLock WakeLock => JSRef.Get<WakeLock>("wakeLock");
         public Clipboard Clipboard => JSRef.Get<Clipboard>("clipboard");
+        public UserActivation UserActivation => JSRef.Get<UserActivation>("userActivation");
+        public bool OnLine => JSRef.Get<bool>("onLine");
     }
 }
