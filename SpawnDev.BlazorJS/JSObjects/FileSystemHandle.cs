@@ -2,7 +2,7 @@
 using System.Dynamic;
 
 namespace SpawnDev.BlazorJS.JSObjects {
-    // https://developer.mozilla.org/en-US/docs/Web/API/File
+    // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemHandle
     public class FileSystemHandle : JSObject {
         public FileSystemHandle(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string Name => JSRef.Get<string>("name");
@@ -35,23 +35,50 @@ namespace SpawnDev.BlazorJS.JSObjects {
             return false;
         }
 
+        public class FilePermissionsOptions
+        {
+            public string Mode { get; set; } = "";
+            public FilePermissionsOptions(bool readWriteMode = false)
+            {
+                Mode = readWriteMode ? MODE_READ_WRITE : MODE_READ;
+            }
+        }
+
+        // Experimental
+        // Compatibility:
+        // Firefox  unsupported
+        // Chrome   supported
+        // non-standard implementation to prevent need to polyfill when used
         public async Task<string> QueryPermission(bool writePermission = false) {
-            dynamic options = new ExpandoObject();
-            options.mode = writePermission ? "readwrite" : "read";
-            return await JSRef.CallAsync<string>("queryPermission", (object)options);
+            if (JSRef.PropertyType("queryPermission") == "undefined")
+            {
+                return PERMISSION_GRANTED;
+            }
+            return await JSRef.CallAsync<string>("queryPermission", new FilePermissionsOptions(writePermission));
         }
 
         public async Task<string> RequestPermission(bool writePermission = false) {
-            dynamic options = new ExpandoObject();
-            options.mode = writePermission ? "readwrite" : "read";
-            return await JSRef.CallAsync<string>("requestPermission", (object)options);
+            if (JSRef.PropertyType("requestPermission") == "undefined")
+            {
+                return PERMISSION_GRANTED;
+            }
+            return await JSRef.CallAsync<string>("requestPermission", new FilePermissionsOptions(writePermission));
         }
 
+        public static string PERMISSION_GRANTED = "granted";
+        public static string PERMISSION_DENIED = "denied";
+        public static string PERMISSION_PROMPT = "prompt";
+        public static string MODE_READ = "read";
+        public static string MODE_READ_WRITE = "readwrite";
+
         public async Task<bool> VerifyPermission(bool readWrite = true, bool askIfNeeded = true) {
-            dynamic options = new ExpandoObject();
-            options.mode = readWrite ? "readwrite" : "read";
-            if ((await JSRef.CallAsync<string>("queryPermission", (object)options)) == "granted") return true;
-            if (askIfNeeded && (await JSRef.CallAsync<string>("requestPermission", (object)options)) == "granted") return true;
+            var permState = await QueryPermission(readWrite);
+            if (!askIfNeeded || permState == PERMISSION_DENIED)
+            {
+                return permState == PERMISSION_GRANTED;
+            }
+            //if ((await QueryPermission(readWrite)) == PERMISSION_GRANTED) return true;
+            if (askIfNeeded && (await RequestPermission(readWrite)) == PERMISSION_GRANTED) return true;
             return false;
         }
     }

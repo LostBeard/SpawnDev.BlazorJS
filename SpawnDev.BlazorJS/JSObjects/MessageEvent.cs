@@ -18,9 +18,57 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         /// <summary>
         /// non-standard method returns the typeof this.data
-        /// returns "String", "Blob", or "ArrayBuffer"
+        /// returns "String", "Blob", or "ArrayBuffer" (could also return "Object", "Boolean", "Number", other?)
         /// </summary>
         public string TypeOfData => JSRef.PropertyInstanceOf("data");
+
+        public (string?, Blob?) GetTextOrBlob()
+        {
+            switch (TypeOfData)
+            {
+                case "String":
+                    {
+                        // use for returning error message(s)
+                        return (GetData<string>(), null);
+                    }
+                case "ArrayBuffer":
+                    {
+                        using var arrayBuffer = GetData<ArrayBuffer>();
+                        var blob = new Blob(new[] { arrayBuffer });
+                        return (null, blob);
+                    }
+                case "Blob":
+                    {
+                        var blob = GetData<Blob>();
+                        return (null, blob);
+                    }
+                default:
+                    throw new Exception("Unexpected return type");
+            }
+        }
+
+        public async Task<(string?, ArrayBuffer?)> GetTextOrArrayBuffer()
+        {
+            switch (TypeOfData)
+            {
+                case "String":
+                    {
+                        // use for returning error message(s)
+                        return (GetData<string>(), null);
+                    }
+                case "ArrayBuffer":
+                    {
+                        return (null, GetData<ArrayBuffer>());
+                    }
+                case "Blob":
+                    {
+                        using var blob = GetData<Blob>();
+                        return (null, await blob.ArrayBuffer());
+                    }
+                default:
+                    throw new Exception("Unexpected return type");
+            }
+        }
 
         /// <summary>
         /// A string representing the origin of the message emitter.

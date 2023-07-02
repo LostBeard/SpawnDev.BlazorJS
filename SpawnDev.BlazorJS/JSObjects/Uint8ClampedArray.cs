@@ -5,18 +5,11 @@ namespace SpawnDev.BlazorJS.JSObjects {
     public class Uint8ClampedArray : TypedArray
     {
         public Uint8ClampedArray(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public ArrayBuffer Buffer => JSRef.Get<ArrayBuffer>("buffer");
-        public int ByteLength => JSRef.Get<int>("byteLength");
-        public static Uint8ClampedArray FromBytes(byte[] bytes) {
-            using var arrayBuffer = new Uint8Array(bytes);
-            return new Uint8ClampedArray(arrayBuffer);
-        }
-        public Uint8ClampedArray(Uint8Array uint8Array) : base(JS.New(nameof(Uint8ClampedArray), uint8Array)) { }
-        public Uint8ClampedArray(int length) : base(JS.New(nameof(Uint8ClampedArray), length)) { }
-        public byte[] ReadBytes() {
-            using var buffer = Buffer;
-            using var tmp = new Uint8Array(buffer);
-            return tmp.ReadBytes();
-        }
+        public Uint8ClampedArray(byte[] uint8Array) : base(JS.New(nameof(Uint8ClampedArray), uint8Array)) { }
+        public Uint8ClampedArray(TypedArray typedArray) : base(JS.New(nameof(Uint8ClampedArray), typedArray)) { }
+        public Uint8ClampedArray(long length) : base(JS.New(nameof(Uint8ClampedArray), length)) { }
+        public Uint8ClampedArray(ArrayBuffer arrayBuffer) : base(JS.New(nameof(Uint8ClampedArray), arrayBuffer)) { }
+        public Uint8ClampedArray(ArrayBuffer arrayBuffer, long byteOffset) : base(JS.New(nameof(Uint8ClampedArray), arrayBuffer, byteOffset)) { }
+        public Uint8ClampedArray(ArrayBuffer arrayBuffer, long byteOffset, long length) : base(JS.New(nameof(Uint8ClampedArray), arrayBuffer, byteOffset, length)) { }
     }
 }
