@@ -13,15 +13,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
 
         public MediaStreamTrack(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public T GetSettings<T>() where T : MediaStreamTrackSettings {
-            return JSRef.Call<T>("getSettings");
-        }
-        public MediaStreamTrackSettings GetSettings() {
-            return JSRef.Call<MediaStreamTrackSettings>("getSettings");
-        }
+        public T GetSettings<T>() where T : MediaStreamTrackSettings => JSRef.Call<T>("getSettings");
+        public MediaStreamTrackSettings GetSettings() => JSRef.Call<MediaStreamTrackSettings>("getSettings");
 
-        public void Stop() {
-            JSRef.CallVoid("stop");
-        }
+        public void Stop() => JSRef.CallVoid("stop");
     }
 }

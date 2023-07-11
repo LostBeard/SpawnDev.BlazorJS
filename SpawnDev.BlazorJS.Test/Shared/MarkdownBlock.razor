@@ -22,8 +22,6 @@
     string _markDownSection = "";
     Uri? _markDownUri { get; set; }
 
-
-
     protected override async Task OnParametersSetAsync()
     {
         _markDownUri = string.IsNullOrEmpty(URL) ? null : new Uri(URL);

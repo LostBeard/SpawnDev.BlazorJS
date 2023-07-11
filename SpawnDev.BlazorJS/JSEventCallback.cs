@@ -3,24 +3,14 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+    // JSEventCallback
     // Example use: (inside a JSObject class)
-    // public JSEventCallback<MediaRecorderErrorEvent> OnError { get => new JSEventCallback<MediaRecorderErrorEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { } }
+    // public JSEventCallback<MediaRecorderErrorEvent> OnError { get => new JSEventCallback<MediaRecorderErrorEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
     //
-    // 
-    public abstract class EventCallbackBase
-    {
-
-    }
-    public class AttachedEventInfoBase
-    {
-        public int RefCount { get; set; }
-    }
-    public class AttachedEventInfo : AttachedEventInfoBase
-    {
-        public ActionCallback Callback { get; }
-        public Action Action { get; }
-        public AttachedEventInfo(Action action, ActionCallback callback) => (Action, Callback) = (action, callback);
-    }
+    // public JSEventCallback OnDeviceChange { get => new JSEventCallback(o => AddEventListener("devicechange", o), o => RemoveEventListener("devicechange", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+    //
+    // See SpawnDev.BlazorJS.JSObjects for example usage. JSEventCallback is now used extensively throughout JSObjects.
+    //
     public class JSEventCallback : EventCallbackBase
     {
         static Dictionary<Action, AttachedEventInfo> attachedEvents = new Dictionary<Action, AttachedEventInfo>();
@@ -255,5 +245,18 @@ namespace SpawnDev.BlazorJS
             On = (o) => jsRef.CallVoid(onFn, name, o);
             if (!string.IsNullOrEmpty(offFn)) Off = (o) => jsRef.CallVoid(offFn, name, o);
         }
+    }
+    // *******************************************************************
+
+    public abstract class EventCallbackBase { }
+    public class AttachedEventInfoBase
+    {
+        public int RefCount { get; set; }
+    }
+    public class AttachedEventInfo : AttachedEventInfoBase
+    {
+        public ActionCallback Callback { get; }
+        public Action Action { get; }
+        public AttachedEventInfo(Action action, ActionCallback callback) => (Action, Callback) = (action, callback);
     }
 }

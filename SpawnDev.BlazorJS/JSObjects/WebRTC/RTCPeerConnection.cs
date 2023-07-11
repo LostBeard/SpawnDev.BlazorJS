@@ -1,44 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using System.Threading.Channels;
+
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
-    public class RTCRtpTransceiver : JSObject
-    {
-        public RTCRtpTransceiver(IJSInProcessObjectReference _ref) : base(_ref) { }
-    }
-    public class RTCRtpReceiver : JSObject
-    {
-        public RTCRtpReceiver(IJSInProcessObjectReference _ref) : base(_ref) { }
-    }
-    public class RTCTrackEvent : Event
-    {
-        public RTCTrackEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public RTCRtpReceiver Receiver => JSRef.Get<RTCRtpReceiver>("receiver");
-        public MediaStream[] Streams => JSRef.Get<MediaStream[]>("streams");
-        public MediaStreamTrack Track => JSRef.Get<MediaStreamTrack>("track");
-        public RTCRtpTransceiver Transceiver => JSRef.Get<RTCRtpTransceiver>("transceiver");
-    }
-    public class RTCPeerConnectionIceErrorEvent : Event
-    {
-        public RTCPeerConnectionIceErrorEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public string? Address => JSRef.Get<string?>("address");
-        public uint? Port => JSRef.Get<uint?>("port");
-        public uint ErrorCode => JSRef.Get<uint>("errorCode");
-        public string ErrorText => JSRef.Get<string>("errorText");
-        public string Url => JSRef.Get<string>("url");
-    }
-    public class RTCPeerConnectionEvent : Event
-    {
-        public RTCPeerConnectionEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public RTCIceCandidate Candidate => JSRef.Get<RTCIceCandidate>("candidate");
-    }
-    public class RTCDataChannelEvent : Event
-    {
-        public RTCDataChannelEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public RTCDataChannel Channel => JSRef.Get<RTCDataChannel>("channel");
-    }
-
     // https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection
     public class RTCPeerConnection : EventTarget
     {
@@ -65,6 +29,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public string IceConnectionState => JSRef.Get<string>("iceConnectionState");
         public void RestartIce() => JSRef.CallVoid("restartIce");
 
+        // TODO ... switch to JSEventCallback with AddEventListener instead of using property assigning which limits usage more
         public JSEventCallback OnConnectionStateChange { get => new JSEventCallback(JSRef, "onconnectionstatechange"); set { } }
         public JSEventCallback<RTCDataChannelEvent> OnDataChannel { get => new JSEventCallback<RTCDataChannelEvent>(JSRef, "ondatachannel"); set { } }
         public JSEventCallback<RTCPeerConnectionEvent> OnIceCandidate { get => new JSEventCallback<RTCPeerConnectionEvent>(JSRef, "onicecandidate"); set { } }
@@ -73,16 +38,32 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public JSEventCallback OnIceGatheringStateChange { get => new JSEventCallback(JSRef, "onicegatheringstatechange"); set { } }
         public JSEventCallback OnNegotiationNeeded { get => new JSEventCallback(JSRef, "onnegotiationneeded"); set { } }
         public JSEventCallback OnSignalingStateChange { get => new JSEventCallback(JSRef, "onsignalingstatechange"); set { } }
-        public JSEventCallback<RTCDataChannelEvent> OnTrack { get => new JSEventCallback<RTCDataChannelEvent>(JSRef, "ontrack"); set { } }
+        public JSEventCallback<RTCTrackEvent> OnTrack { get => new JSEventCallback<RTCTrackEvent>(JSRef, "ontrack"); set { } }
 
-        //public ActionCallback<RTCDataChannelEvent> OnDataChannel { set { JSRef.Set("ondatachannel", value); } }
-        //public ActionCallback<RTCPeerConnectionEvent> OnIceCandidate { set { JSRef.Set("onicecandidate", value); } }
-        //public ActionCallback<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { set { JSRef.Set("onicecandidateerror", value); } }
-        //public ActionCallback OnIceConnectionStateChange { set { JSRef.Set("oniceconnectionstatechange", value); } }
-        //public ActionCallback OnIceGatheringStateChange { set { JSRef.Set("onicegatheringstatechange", value); } }
-        //public ActionCallback OnNegotiationNeeded { set { JSRef.Set("onnegotiationneeded", value); } }
-        //public ActionCallback OnSignalingStateChange { set { JSRef.Set("onsignalingstatechange", value); } }
-        //public ActionCallback<RTCTrackEvent> OnTrack { set { JSRef.Set("ontrack", value); } }
+        /// <summary>
+        /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
+        /// </summary>
+        /// <param name="track">A MediaStreamTrack object representing the media track to add to the peer connection.</param>
+        /// <returns>The RTCRtpSender object which will be used to transmit the media data.</returns>
+        public RTCRtpSender AddTrack(MediaStreamTrack track) => JSRef.Call<RTCRtpSender>("addTrack", track);
+        /// <summary>
+        /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
+        /// </summary>
+        /// <param name="track">A MediaStreamTrack object representing the media track to add to the peer connection.</param>
+        /// <param name="mediaStreams">One or more local MediaStream objects to which the track should be added.</param>
+        /// <returns></returns>
+        public RTCRtpSender AddTrack(MediaStreamTrack track, params MediaStream[] mediaStreams)
+        {
+            var args = new List<object> { track };
+            args.AddRange(mediaStreams);
+            return JSRef.CallApply<RTCRtpSender>("addTrack", args.ToArray());
+        }
+
+
+        public void RemoveTrack(RTCRtpSender sender) => JSRef.CallVoid("removeTrack", sender);
+
+        public RTCRtpSender[] GetSenders() => JSRef.Call<RTCRtpSender[]>("getSenders");
+        public RTCRtpReceiver[] GetReceivers() => JSRef.Call<RTCRtpReceiver[]>("getReceivers");
 
     }
 }

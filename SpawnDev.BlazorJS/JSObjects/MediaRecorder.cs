@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="stream">The MediaStream that will be recorded. This source media can come from a stream created using navigator.mediaDevices.getUserMedia() or from an <audio>, <video> or <canvas> element.</param>
+        /// <param name="stream">The MediaStream that will be recorded. This source media can come from a stream created using navigator.MediaDevices.getUserMedia() or from an <audio>, <video> or <canvas> element.</param>
         public MediaRecorder(MediaStream stream) : base(JS.New(nameof(MediaRecorder), stream)) { }
         public MediaRecorder(MediaStream stream, MediaRecorderOptions options) : base(JS.New(nameof(MediaRecorder), stream, options)) { }
         public static bool IsTypeSupported(string mimeType) => JS.Call<bool>("MediaRecorder.isTypeSupported", mimeType);

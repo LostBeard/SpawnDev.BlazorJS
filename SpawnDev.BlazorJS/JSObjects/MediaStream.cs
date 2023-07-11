@@ -28,14 +28,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         public MediaStreamTrack[] GetTracks() => JSRef.Call<MediaStreamTrack[]>("getTracks");
         public MediaStreamTrack[] GetVideoTracks() => JSRef.Call<MediaStreamTrack[]>("getVideoTracks");
         public MediaStreamTrack[] GetAudioTracks() => JSRef.Call<MediaStreamTrack[]>("getAudioTracks");
-        public MediaStreamTrack GetFirstVideoTrack()
+        public MediaStreamTrack? GetFirstVideoTrack()
         {
             var tracks = GetVideoTracks();
             for (var i = 1; i < tracks.Length; i++) tracks[i].Dispose();
-            return tracks.Length == 0 ? null : tracks[0];
+            return tracks.FirstOrDefault();
         }
 
-        public MediaStreamVideoTrackSettings GetFirstVideoTrackSettings()
+        public MediaStreamVideoTrackSettings? GetFirstVideoTrackSettings()
         {
             using var track = GetFirstVideoTrack();
 #if DEBUG && false
@@ -48,13 +48,13 @@ namespace SpawnDev.BlazorJS.JSObjects
             return track == null ? null : track.GetSettings<MediaStreamVideoTrackSettings>();
         }
 
-        public MediaStreamAudioTrackSettings GetFirstAudioTrackSettings()
+        public MediaStreamAudioTrackSettings? GetFirstAudioTrackSettings()
         {
             using var track = GetFirstAudioTrack();
             return track == null ? null : track.GetSettings<MediaStreamAudioTrackSettings>();
         }
 
-        public MediaStreamTrack GetFirstAudioTrack()
+        public MediaStreamTrack? GetFirstAudioTrack()
         {
             var tracks = GetAudioTracks();
             for (var i = 1; i < tracks.Length; i++) tracks[i].Dispose();
@@ -69,8 +69,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             foreach (var t in tracks)
             {
                 t.Stop();
-                t.Dispose();
             }
+            tracks.DisposeAll();
         }
 
         public void RemoveAllTracks(bool stopTracks = true)
@@ -80,8 +80,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             {
                 if (stopTracks) t.Stop();
                 RemoveTrack(t);
-                t.Dispose();
             }
+            tracks.DisposeAll();
         }
 
         public void RemoveAllVideoTracks(bool stopTracks = true)
