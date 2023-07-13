@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A Boolean whose value of true if the track is enabled, that is allowed to render the media source stream; or false if it is disabled, that is not rendering the media source stream but silence and blackness. If the track has been disconnected, this value can be changed but has no more effect.<br />
         /// Note: You can implement standard "mute" functionality by setting enabled to false. The muted property refers to a condition in which there's no media because of a technical issue.
         /// </summary>
-        public bool Enabled => JSRef.Get<bool>("enabled");
+        public bool Enabled { get => JSRef.Get<bool>("enabled"); set => JSRef.Set("enabled", value); }
         /// <summary>
         /// Returns a Boolean value indicating whether the track is unable to provide media data due to a technical issue.<br />
         /// Note: You can implement standard "mute" functionality by setting enabled to false, and unmute the media by setting it back to true again.
