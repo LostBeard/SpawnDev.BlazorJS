@@ -5,9 +5,9 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     public class MediaDevices : EventTarget
     {
-        public static string VIDEO_INPUT { get; } = "videoinput";
-        public static string AUDIO_INPUT { get; } = "audioinput";
-        public static string AUDIO_OUTPUT { get; } = "audiooutput";
+        public const string VIDEO_INPUT = "videoinput";
+        public const string AUDIO_INPUT = "audioinput";
+        public const string AUDIO_OUTPUT= "audiooutput";
         public MediaDevices(IJSInProcessObjectReference _ref) : base(_ref) { }
         public static bool Supported => !JS.IsUndefined("navigator.mediaDevices") && !JS.IsUndefined("navigator.mediaDevices.enumerateDevices");
         public static bool GetDisplayMediaSupported => !JS.IsUndefined("navigator.mediaDevices") && !JS.IsUndefined("navigator.mediaDevices.getDisplayMedia");

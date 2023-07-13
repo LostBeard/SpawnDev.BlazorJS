@@ -29,7 +29,10 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public string IceConnectionState => JSRef.Get<string>("iceConnectionState");
         public void RestartIce() => JSRef.CallVoid("restartIce");
 
-        // TODO ... switch to JSEventCallback with AddEventListener instead of using property assigning which limits usage more
+        // TODO ... 
+        // unless there is a compatibility issue ...
+        // switch to JSEventCallback with AddEventListener instead of using property assigning which limits usage more... 
+        // however, a lot of these events should only be handled by a single event handler but that should be up to the consuming code
         public JSEventCallback OnConnectionStateChange { get => new JSEventCallback(JSRef, "onconnectionstatechange"); set { } }
         public JSEventCallback<RTCDataChannelEvent> OnDataChannel { get => new JSEventCallback<RTCDataChannelEvent>(JSRef, "ondatachannel"); set { } }
         public JSEventCallback<RTCPeerConnectionEvent> OnIceCandidate { get => new JSEventCallback<RTCPeerConnectionEvent>(JSRef, "onicecandidate"); set { } }
