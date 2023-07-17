@@ -14,6 +14,7 @@ An easy Javascript interop library designed specifically for client side Blazor.
 
 Supports Blazor WebAssembly .Net 6, 7, and 8.
 
+- Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WebRTC, DOM, etc...
 - Use Javascript libraries in Blazor without writing any Javascript code
 - An alternative JSRuntime that wraps the default one adding additional functionality.
 - Create new Javascript objects directly from Blazor
@@ -22,7 +23,6 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 - Wrap Javascript objects for direct manipulation from Blazor
 - - Easily access Javascript objects by wrapping them in a simple interface that implements IJSObject
 - - Alternatively use the JSObject base class to wrap your objects for more control
-- Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WebRTC, DOM, etc...
 - Use SpawnDev.BlazorJS.WebWorkers to enable calling Blazor services in web worker threads
 - Supports Promises, Union method parameters, passing undefined to Javascript, and more.
 
@@ -47,21 +47,26 @@ builder.Services.AddBlazorJSRuntime();
 await builder.Build().BlazorJSRunAsync();
 ```
 
-And use.
+Inject into components
 ```cs
 [Inject]
 BlazorJSRuntime JS { get; set; }
+```
 
-// Get Set
+Examples uses
+```cs
+// Get and Set
 var innerHeight = JS.Get<int>("window.innerHeight");
 JS.Set("document.title", "Hello World!");
 
 // Call
 var item = JS.Call<string?>("localStorage.getItem", "itemName");
 JS.CallVoid("addEventListener", "resize", Callback.Create(() => Console.WriteLine("WindowResized"), _callBacks));
+
+// Attach events
+using var window = JS.Get<Window>("window");
+window.OnOffline += Window_OnOffline;
 ```
-
-
 
 ## IMPORTANT NOTE - Async vs Sync Javascript calls
 The BlazorJSRuntime behaves differently than the default Blazor JSRuntime. BlazorJSRuntime is more of a 1 to 1 mapping to Javascript. 

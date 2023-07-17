@@ -31,6 +31,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public MediaQueryList MatchMedia(string mode) => JSRef.Call<MediaQueryList>("matchMedia", mode);
 
         public JSEventCallback<StorageEvent> OnStorage { get => new JSEventCallback<StorageEvent>(o => AddEventListener("storage", o), o => RemoveEventListener("storage", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<UIEvent> OnResize { get => new JSEventCallback<UIEvent>(o => AddEventListener("resize", o), o => RemoveEventListener("resize", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback OnOffline { get => new JSEventCallback(o => AddEventListener("offline", o), o => RemoveEventListener("offline", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback OnOnline { get => new JSEventCallback(o => AddEventListener("online", o), o => RemoveEventListener("online", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
 
         // non-standard .Net extension
         CallbackGroup _callbacks = new CallbackGroup();
