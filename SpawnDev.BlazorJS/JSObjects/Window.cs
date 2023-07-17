@@ -131,10 +131,33 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Element Top => JSRef.Get<Element>("top");
         // Methods
+        /// <summary>
+        /// Displays an alert dialog.
+        /// </summary>
+        /// <param name="msg"></param>
         public void Alert(string msg = "") => JSRef.CallVoid("alert", msg);
+        /// <summary>
+        /// Schedules a function to execute in a given amount of time.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="delay"></param>
+        /// <returns></returns>
         public long SetTimeout(Callback callback, double delay) => JSRef.Call<long>("setTimeout", callback, delay);
+        /// <summary>
+        /// Cancels the delayed execution set using setTimeout().
+        /// </summary>
+        /// <param name="requestId"></param>
         public void ClearTimeout(long requestId) => JSRef.CallVoid("clearTimeout", requestId);
+        /// <summary>
+        /// Tells the browser that an animation is in progress, requesting that the browser schedule a repaint of the window for the next animation frame
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
         public long RequestAnimationFrame(ActionCallback<double> callback) => JSRef.Call<long>("requestAnimationFrame", callback);
+        /// <summary>
+        /// Enables you to cancel a callback previously scheduled with Window.requestAnimationFrame.
+        /// </summary>
+        /// <param name="requestId"></param>
         public void CancelAnimationFrame(long requestId) => JSRef.CallVoid("cancelAnimationFrame", requestId);
         /// <summary>
         /// Experimental state. Not supported in most browsers. (Works in Chrome)
