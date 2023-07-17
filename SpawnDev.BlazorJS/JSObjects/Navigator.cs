@@ -16,5 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Clipboard Clipboard => JSRef.Get<Clipboard>("clipboard");
         public UserActivation UserActivation => JSRef.Get<UserActivation>("userActivation");
         public bool OnLine => JSRef.Get<bool>("onLine");
+        public Gamepad[] GetGamepads() => JSRef.Call<Gamepad[]>("getGamepads");
     }
 }

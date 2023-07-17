@@ -27,6 +27,7 @@ namespace SpawnDev.BlazorJS
         public static string GetConstructorName(this IJSInProcessObjectReference _ref) => JSInterop.Get<string>(_ref, "constructor.name");
         public static List<string> GetPropertyNames(this IJSInProcessObjectReference _ref, bool hasOwnProperty = false) => JSInterop.GetPropertyNames(_ref, "", hasOwnProperty);
         public static string PropertyType(this IJSInProcessObjectReference _ref, string identifier = "") => JSInterop.TypeOf(_ref, identifier);
+        public static bool PropertyIsUndefined(this IJSInProcessObjectReference _ref, string identifier = "") => JSInterop.TypeOf(_ref, identifier) == "undefined";
         public static string PropertyInstanceOf(this IJSInProcessObjectReference _ref, string identifier = "") => JSInterop.InstanceOf(_ref, identifier);
 
         #region IJSInProcessObjectReference Base Accessors
