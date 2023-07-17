@@ -4,9 +4,6 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Version>2.2.0</Version>
-		<WasmBuildNative>true</WasmBuildNative>
-		<RunAOTCompilation>true</RunAOTCompilation>
-		<WasmEnableSIMD>false</WasmEnableSIMD>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,3 +20,4 @@
 	</ItemGroup>
 
 </Project>
+
