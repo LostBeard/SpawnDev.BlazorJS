@@ -5,9 +5,9 @@
         <button onclick="@(() => _ = RefreshCameraList())">Refresh Camera List</button>
     </div>
     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Camera</RadzenText>
-    <RadzenDropDown @bind-Value=@_selectedDevice AllowClear="true" TValue="DeviceInfo" Class="w-100" Data=@_devices Change=@(args => OnDeviceChange(args as DeviceInfo))>
+    <RadzenDropDown @bind-Value=@_selectedDevice AllowClear="true" TValue="MediaDeviceInfo" Class="w-100" Data=@_devices Change=@(args => OnDeviceChange(args as MediaDeviceInfo))>
         <Template>
-            Video: @((context as DeviceInfo)?.Label)
+            Video: @((context as MediaDeviceInfo)?.Label)
         </Template>
     </RadzenDropDown>
 </RadzenCard>

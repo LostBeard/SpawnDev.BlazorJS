@@ -4,6 +4,7 @@ using Radzen.Blazor.Rendering;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Test.Shared;
+using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
 using System.Diagnostics;
 using System.Timers;
@@ -24,8 +25,8 @@ namespace SpawnDev.BlazorJS.Test.Pages {
         ElementReference _cameraCanvasProcessedElRef;
         HTMLCanvasElement? _cameraCanvasProcessedEl;
         CanvasRenderingContext2D? _cameraCanvasProcessedElCtx;
-        List<DeviceInfo> _devices = new List<DeviceInfo>();
-        DeviceInfo? _selectedDevice = null;
+        List<MediaDeviceInfo> _devices = new List<MediaDeviceInfo>();
+        MediaDeviceInfo? _selectedDevice = null;
         VideoCapture? _videoCapture = null;
         MediaStream? _mediaStream = null;
         Size _videoFrameSize = new Size();
@@ -189,7 +190,7 @@ namespace SpawnDev.BlazorJS.Test.Pages {
             TryProcessFrame();
         }
 
-        private void MediaDevicesService_OnDeviceInfosChanged(DeviceInfo[] deviceInfos) {
+        private void MediaDevicesService_OnDeviceInfosChanged() {
             _ = RefreshCameraList();
         }
 
@@ -200,7 +201,7 @@ namespace SpawnDev.BlazorJS.Test.Pages {
             _mediaStream = null;
         }
 
-        async void OnDeviceChange(DeviceInfo? selected) {
+        async void OnDeviceChange(MediaDeviceInfo? selected) {
             CloseMediaStream();
             if (_videoCapture != null) {
                 _videoCapture.Video.Pause();

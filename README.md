@@ -135,6 +135,43 @@ Create a new Javascript object
 IJSInProcessObjectReference worker = JS.New("Worker", myWorkerScript);
 ```
 
+# JSEventCallback
+
+Now used extensively throughout the JSObject collection, JSEventCallback allows a clean .Net style way to add and remove .Net callbacks for Javascript events.
+
+With JSEventCallback the operands += and -= can be with .Net callbacks for Javascript events. All reference handling is handled automatically when events are added and removed.
+
+Example taken from the Window JSObject class which inherits from EventTarget.
+```cs
+// This is how JSEventCallback is implemented in the Window class
+public JSEventCallback<StorageEvent> OnStorage { get => new JSEventCallback<StorageEvent>(o => AddEventListener("storage", o), o => RemoveEventListener("storage", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+```
+
+Example event attach detach
+```cs
+
+void AttachEventHandlersExample()
+{
+    using var window = JS.Get<Window>("window");
+    // If this is the first time Window_OnStorage has been attached to an event a .Net reference is automcatially created and held for future use and removal
+    window.OnStorage += Window_OnStorage;
+    // the window JSObject reference can safely be disposed as the .Net reference is attached to Window_OnStorage internally
+}
+void DetachEventHandlersExample()
+{
+    using var window = JS.Get<Window>("window");
+    // If this is the last reference of Window_OnStorage being removed then the .Net reference will automcatically be disposed.
+    // IMPORTANT - detaching is important for preventing resource leaks. .Net references are only released when the reference coutn reaches zero (same number of -= as += used)
+    window.OnStorage -= Window_OnStorage;
+}
+
+void Window_OnStorage(StorageEvent storageEvent)
+{
+    Console.WriteLine($"StorageEvent: {storageEvent.Key} has changed");
+}
+
+```
+
 # Action and Func serialization
 BlazorJS supports serialization of both Func and Action types. Internally the BlazorJS.Callback object is used. Serialized and deserialized Action and Func objects must call their DisposeJS() extension method to dispose the auto created and associated Callback and/or Function objects.
 

@@ -8,8 +8,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Window() : base(JS.Get<IJSInProcessObjectReference>("window")) { }
         public Window(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string? Name { get => JSRef.Get<string>("name"); set => JSRef.Set("name", value); }
-        public WebStorage SessionStorage => JSRef.Get<WebStorage>("sessionStorage");
-        public WebStorage LocalStorage => JSRef.Get<WebStorage>("localStorage");
+        public Storage SessionStorage => JSRef.Get<Storage>("sessionStorage");
+        public Storage LocalStorage => JSRef.Get<Storage>("localStorage");
         public Navigator Navigator => JSRef.Get<Navigator>("navigator");
         public Document Document => JSRef.Get<Document>("document");
         public Screen Screen => JSRef.Get<Screen>("screen");
@@ -29,6 +29,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Task<ScreenDetails> GetScreenDetails() => JSRef.CallAsync<ScreenDetails>("getScreenDetails");
 
         public MediaQueryList MatchMedia(string mode) => JSRef.Call<MediaQueryList>("matchMedia", mode);
+
+        public JSEventCallback<StorageEvent> OnStorage { get => new JSEventCallback<StorageEvent>(o => AddEventListener("storage", o), o => RemoveEventListener("storage", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
 
         // non-standard .Net extension
         CallbackGroup _callbacks = new CallbackGroup();

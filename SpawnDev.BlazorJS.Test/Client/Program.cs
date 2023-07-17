@@ -6,6 +6,7 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
+using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
 
 #if DEBUG
@@ -46,8 +47,8 @@ builder.Services.AddSingleton<ContextMenuService>();
 //Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
 
 #if DEBUG || true
-
 var host = builder.Build();
+
 
 BlazorJSRuntime.JS.Set("_testWorker", new ActionCallback<bool>(async (verbose) => { 
     var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();    

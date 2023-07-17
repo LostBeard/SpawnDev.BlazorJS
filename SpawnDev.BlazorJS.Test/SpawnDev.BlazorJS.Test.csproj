@@ -4,14 +4,15 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Version>2.1.15</Version>
-		<WasmBuildNative>false</WasmBuildNative>
+		<WasmBuildNative>true</WasmBuildNative>
+		<RunAOTCompilation>true</RunAOTCompilation>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Markdig" Version="0.31.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0-preview.5.23302.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0-preview.5.23302.2" PrivateAssets="all" />
-		<PackageReference Include="Radzen.Blazor" Version="4.13.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0-preview.6.23329.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0-preview.6.23329.11" PrivateAssets="all" />
+		<PackageReference Include="Radzen.Blazor" Version="4.13.6" />
 	</ItemGroup>
 
 	<ItemGroup>
