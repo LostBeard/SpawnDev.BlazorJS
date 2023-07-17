@@ -3,9 +3,10 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.1.15</Version>
+		<Version>2.2.0</Version>
 		<WasmBuildNative>true</WasmBuildNative>
 		<RunAOTCompilation>true</RunAOTCompilation>
+		<WasmEnableSIMD>false</WasmEnableSIMD>
 	</PropertyGroup>
 
 	<ItemGroup>
