@@ -166,7 +166,7 @@ void DetachEventHandlersExample()
 {
     using var window = JS.Get<Window>("window");
     // If this is the last reference of Window_OnStorage being removed then the .Net reference will automcatically be disposed.
-    // IMPORTANT - detaching is important for preventing resource leaks. .Net references are only released when the reference coutn reaches zero (same number of -= as += used)
+    // IMPORTANT - detaching is important for preventing resource leaks. .Net references are only released when the reference count reaches zero (same number of -= as += used)
     window.OnStorage -= Window_OnStorage;
 }
 
