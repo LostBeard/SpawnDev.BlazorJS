@@ -139,7 +139,7 @@ IJSInProcessObjectReference worker = JS.New("Worker", myWorkerScript);
 
 Now used extensively throughout the JSObject collection, JSEventCallback allows a clean .Net style way to add and remove .Net callbacks for Javascript events.
 
-With JSEventCallback the operands += and -= can be with .Net callbacks for Javascript events. All reference handling is handled automatically when events are added and removed.
+With JSEventCallback the operands += and -= can be used to attach and detach .Net callbacks to Javascript events. All reference handling is handled automatically when events are added and removed.
 
 Example taken from the Window JSObject class which inherits from EventTarget.
 ```cs
@@ -169,7 +169,6 @@ void Window_OnStorage(StorageEvent storageEvent)
 {
     Console.WriteLine($"StorageEvent: {storageEvent.Key} has changed");
 }
-
 ```
 
 # Action and Func serialization
