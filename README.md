@@ -19,7 +19,7 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 - An alternative JSRuntime that wraps the default one adding additional functionality.
 - Create new Javascript objects directly from Blazor
 - Get and set Javascript object properties as well as access methods.
-- Easily pass .Net methods to Javascript using the Callback.Create or Callback.CreateOne methods
+- Easily pass .Net methods to Javascript using JSEventCallback, Callback.Create or Callback.CreateOne methods
 - Wrap Javascript objects for direct manipulation from Blazor
 - - Easily access Javascript objects by wrapping them in a simple interface that implements IJSObject
 - - Alternatively use the JSObject base class to wrap your objects for more control
@@ -144,7 +144,7 @@ IJSInProcessObjectReference worker = JS.New("Worker", myWorkerScript);
 
 Now used extensively throughout the JSObject collection, JSEventCallback allows a clean .Net style way to add and remove .Net callbacks for Javascript events.
 
-With JSEventCallback the operands += and -= can be used to attach and detach .Net callbacks to Javascript events. All reference handling is handled automatically when events are added and removed.
+With JSEventCallback the operands += and -= can be used to attach and detach .Net callbacks to Javascript events. All reference handling is done automatically when events are added and removed.
 
 Example taken from the Window JSObject class which inherits from EventTarget.
 ```cs
@@ -158,14 +158,14 @@ Example event attach detach
 void AttachEventHandlersExample()
 {
     using var window = JS.Get<Window>("window");
-    // If this is the first time Window_OnStorage has been attached to an event a .Net reference is automcatially created and held for future use and removal
+    // If this is the first time Window_OnStorage has been attached to an event a .Net reference is automatically created and held for future use and removal
     window.OnStorage += Window_OnStorage;
     // the window JSObject reference can safely be disposed as the .Net reference is attached to Window_OnStorage internally
 }
 void DetachEventHandlersExample()
 {
     using var window = JS.Get<Window>("window");
-    // If this is the last reference of Window_OnStorage being removed then the .Net reference will automcatically be disposed.
+    // If this is the last reference of Window_OnStorage being removed then the .Net reference will automatically be disposed.
     // IMPORTANT - detaching is important for preventing resource leaks. .Net references are only released when the reference count reaches zero (same number of -= as += used)
     window.OnStorage -= Window_OnStorage;
 }

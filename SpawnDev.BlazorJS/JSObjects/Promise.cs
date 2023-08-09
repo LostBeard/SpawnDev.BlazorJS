@@ -170,7 +170,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
 
         public Promise(Action<Function, Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
 
-
         protected override void LosingReference()
         {
             if (IsWrapperDisposed) return;

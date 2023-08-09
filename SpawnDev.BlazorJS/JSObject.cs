@@ -45,7 +45,7 @@ namespace SpawnDev.BlazorJS
 
         protected virtual void LosingReference()
         {
-
+            // deprecated... just need to rework Promise to not use it.
         }
 
         protected void ReplaceReference(IJSInProcessObjectReference _ref)

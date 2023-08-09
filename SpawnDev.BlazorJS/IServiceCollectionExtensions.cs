@@ -46,7 +46,8 @@ namespace SpawnDev.BlazorJS
         internal static Dictionary<Type, IBackgroundService?> Services { get; private set; } = new Dictionary<Type, IBackgroundService?>();
 
         /// <summary>
-        /// Background services will have their InitAsync methods called in the order the were registered
+        /// Services implementing IBackgroundService or IAsyncBackgroundService will be started
+        /// Services implementing IAsyncBackgroundService will have their InitAsync methods called in the order the were registered
         /// Background services must be careful to not take too long in their InitAsync methods as other services are waiting to init and the app is waiting to start
         /// </summary>
         /// <param name="_this"></param>
@@ -81,8 +82,9 @@ namespace SpawnDev.BlazorJS
         }
 
         /// <summary>
-        /// Use this method instead of RunAsync to enable BlazorJS support for IBackgroundService services registered with the IServiceCollection.AddBackgroundService method.
-        /// And to also enable disable app rendering in workers to prevent unexpected behavior
+        /// Calling this method is required for BlazorJS and some dependents, such as BlazorJS.WebWorkers, to function properly.<br />
+        /// Using this extension method instead of RunAsync enables support for automatically starting all registered services that implement IBackgroundService or IAsyncBackgroundService 
+        /// and to also disable component rendering in WebWorkers. RunAsync will be called internally when running in a Window global scope.<br />
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
