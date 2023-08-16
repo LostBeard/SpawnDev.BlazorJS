@@ -9,8 +9,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string Endpoint => JSRef.Get<string>("endpoint");
         public double? ExpirationTime => JSRef.Get<double?>("expirationTime");
         public PushManagerSubscribeOptions Options => JSRef.Get<PushManagerSubscribeOptions>("options");
-
         public Task<bool> Unsubscribe() => JSRef.CallAsync<bool>("unsubscribe");
+        public ArrayBuffer GetKey(string keyName) => JSRef.Call<ArrayBuffer>("getKey", keyName);
     }
 
     public class PushManagerSubscribeOptions
