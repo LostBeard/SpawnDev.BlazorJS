@@ -1,10 +1,12 @@
 ﻿using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
+namespace SpawnDev.BlazorJS.JSObjects
+{
     /// <summary>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
     /// </summary>
-    public class BroadcastChannel : EventTarget {
+    public class BroadcastChannel : EventTarget
+    {
         public BroadcastChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string Name => JSRef.Get<string>("name");
         public BroadcastChannel(string channelName) : base(JS.New("BroadcastChannel", channelName)) { }

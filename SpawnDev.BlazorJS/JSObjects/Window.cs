@@ -178,7 +178,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The appinstalled event of the Web Manifest API is fired when the browser has successfully installed a page as an application.
         /// </summary>
-        public JSEventCallback OnAppInstalled { get => new JSEventCallback(o => AddEventListener("afterprint", o), o => RemoveEventListener("afterprint", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback OnAppInstalled { get => new JSEventCallback(o => AddEventListener("appinstalled", o), o => RemoveEventListener("appinstalled", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
         /// The beforeinstallprompt event fires when the browser has detected that a website can be installed as a Progressive Web App.
         /// </summary>

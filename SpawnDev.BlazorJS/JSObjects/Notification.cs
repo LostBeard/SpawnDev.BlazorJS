@@ -21,6 +21,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <b>default</b>: the user choice is unknown and therefore the browser will act as if the value were denied.
         /// </summary>
         public static string Permission => JS.Get<string>("Notification.permission");
+        public static bool IsSupported => !JS.IsUndefined("Notification");
         public static Task<string> RequestPermission() => JS.CallAsync<string>("Notification.requestPermission");
     }
 }
