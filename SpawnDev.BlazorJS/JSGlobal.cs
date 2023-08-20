@@ -2,6 +2,7 @@
     public partial class BlazorJSRuntime {
 
         #region Global Base Accessors
+        public bool Delete(string identifier) => JSInterop.DeleteGlobal(identifier);
         public void Set(string identifier, object? value) => JSInterop.SetGlobal(identifier, value);
         #region Global Get Sync
         public T Get<T>(string identifier) => JSInterop.GetGlobal<T>(identifier);

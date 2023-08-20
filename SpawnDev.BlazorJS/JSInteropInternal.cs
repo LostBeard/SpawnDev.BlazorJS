@@ -27,6 +27,11 @@ namespace SpawnDev.BlazorJS {
             _js.InvokeVoid("JSInterop._setGlobal", identifier, value);
         }
 
+        internal static bool DeleteGlobal(string identifier)
+        {
+            return _js.Invoke<bool>("JSInterop._deleteGlobal", identifier);
+        }
+
         internal static void CallGlobalVoid(string identifier, object?[]? args) {
             _js.InvokeVoid("JSInterop._callGlobal", identifier, args, JSCallResultType.JSVoidResult);
         }
@@ -166,6 +171,11 @@ namespace SpawnDev.BlazorJS {
 
         internal static void Set(IJSInProcessObjectReference targetObject, string identifier, object? value) {
             _js.InvokeVoid("JSInterop._set", targetObject, identifier, value);
+        }
+
+        internal static void Delete(IJSInProcessObjectReference targetObject, string identifier)
+        {
+            _js.InvokeVoid("JSInterop._delete", targetObject, identifier);
         }
 
         internal static void Set(IJSInProcessObjectReference targetObject, int identifier, object? value) {

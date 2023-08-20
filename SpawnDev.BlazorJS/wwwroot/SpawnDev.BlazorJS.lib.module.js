@@ -117,6 +117,14 @@ var initFunc = function () {
         return typeof target;
     };
 
+    JSInterop._delete = function (obj, name) {
+        var info = JSInterop.pathObjectInfo(obj, name);
+        const parent = info.parent;
+        const propertyName = info.propertyName;
+        var ret = delete parent[propertyName];
+        return ret;
+    };
+
     function wrapFunction(fn) {
         var retRef = {
             __wrappedFunction: fn,
@@ -201,6 +209,10 @@ var initFunc = function () {
     //Global
     JSInterop._setGlobal = function (identifier, value) {
         JSInterop._set(globalObject, identifier, value);
+    };
+
+    JSInterop._deleteGlobal = function (identifier) {
+        JSInterop._delete(globalObject, identifier);
     };
 
     JSInterop._getGlobal = function (identifier, returnType) {

@@ -1,11 +1,8 @@
-﻿
-using SpawnDev.BlazorJS;
-using SpawnDev.BlazorJS.JSObjects;
-using System;
+﻿using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
-    public class BeforeUnloadEvent
+    public class OnBeforeUnloadEvent
     {
         public string? ConfirmationText { get; set; } = null;
     }
@@ -13,28 +10,29 @@ namespace SpawnDev.BlazorJS.Toolbox
     public class BeforeUnloadService : IBackgroundService
     {
         public delegate void UnloadDelegate();
-        public delegate void BeforeUnloadDelegate(BeforeUnloadEvent beforeUnloadEvent);
-
+        public delegate void BeforeUnloadDelegate(OnBeforeUnloadEvent beforeUnloadEvent);
         public event BeforeUnloadDelegate OnBeforeUnload;
-        //public event UnloadDelegate OnUnload;
         BlazorJSRuntime JS;
+        Callback BeforeUnloadCallback;
         public BeforeUnloadService(BlazorJSRuntime js)
         {
             JS = js;
+            if (!JS.IsWindow) return;
+            BeforeUnloadCallback = new FuncCallback<BeforeUnloadEvent, string?>(Window_OnBeforeUnload);
             using var window = JS.GetWindow<Window>();
-            window.AddEventListener("beforeunload", Callback.Create(new Func<JSObject, string?>((e) =>
+            window.AddEventListener("beforeunload", BeforeUnloadCallback);
+        }
+        string? Window_OnBeforeUnload(BeforeUnloadEvent e)
+        {
+            var beforeUnloadEvent = new OnBeforeUnloadEvent();
+            OnBeforeUnload?.Invoke(beforeUnloadEvent);
+            if (!string.IsNullOrEmpty(beforeUnloadEvent.ConfirmationText))
             {
-                Console.WriteLine("beforeunload");
-                BeforeUnloadEvent beforeUnloadEvent = new BeforeUnloadEvent();
-                OnBeforeUnload?.Invoke(beforeUnloadEvent);
-                if (!string.IsNullOrEmpty(beforeUnloadEvent.ConfirmationText))
-                {
-                    e.JSRef.CallVoid("preventDefault");
-                    e.JSRef.Set("returnValue", beforeUnloadEvent.ConfirmationText);
-                    return beforeUnloadEvent.ConfirmationText;
-                }
-                return null;
-            })));
+                e.PreventDefault();
+                e.ReturnValue = beforeUnloadEvent.ConfirmationText;
+                return beforeUnloadEvent.ConfirmationText;
+            }
+            return null;
         }
     }
 }
