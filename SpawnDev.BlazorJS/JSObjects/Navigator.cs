@@ -6,6 +6,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities.
     /// </summary>
     public class Navigator : JSObject {
+        /// <summary>
+        /// Gets the global Navigator instance
+        /// </summary>
         public Navigator() : base(JS.Get<IJSInProcessObjectReference>("navigator")) { }
         public Navigator(IJSInProcessObjectReference _ref) : base(_ref) { }
         public MediaDevices MediaDevices => JSRef.Get<MediaDevices>("mediaDevices");

@@ -116,15 +116,18 @@ var initWebWorkerBlazor = async function () {
             m = scriptPatt.exec(indexHtmlSrc);
             if (m) {
                 let scriptTagBody = m[1];
-                let scriptSrc = /src="(.+?)"/.exec(scriptTagBody)[1];
-                let webworkerEnabled = !!/\bwebworker-enabled\b/.exec(scriptTagBody);
-                let isBlazorWebAssemblyJS = scriptSrc == '_framework/blazor.webassembly.js';
-                consoleLog('webworkerEnabled', webworkerEnabled, scriptSrc);
-                if (webworkerEnabled || isBlazorWebAssemblyJS) {
-                    if (isBlazorWebAssemblyJS) {
-                        blazorWebAssemblyJSIndex = indexHtmlScripts.length;
+                let scriptSrcMatch = /src="(.+?)"/.exec(scriptTagBody);
+                if (scriptSrcMatch) {
+                    let scriptSrc = scriptSrcMatch[1];
+                    let webworkerEnabled = !!/\bwebworker-enabled\b/.exec(scriptTagBody);
+                    let isBlazorWebAssemblyJS = scriptSrc == '_framework/blazor.webassembly.js';
+                    consoleLog('webworkerEnabled', webworkerEnabled, scriptSrc);
+                    if (webworkerEnabled || isBlazorWebAssemblyJS) {
+                        if (isBlazorWebAssemblyJS) {
+                            blazorWebAssemblyJSIndex = indexHtmlScripts.length;
+                        }
+                        indexHtmlScripts.push(scriptSrc);
                     }
-                    indexHtmlScripts.push(scriptSrc);
                 }
             }
         } while (m);

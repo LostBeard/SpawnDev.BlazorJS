@@ -7,6 +7,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Window : EventTarget
     {
         public Window(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Gets the global Window instance
+        /// </summary>
         public Window() : base(JS.Get<IJSInProcessObjectReference>("window")) { }
         // Properties
         /// <summary>
