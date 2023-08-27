@@ -110,7 +110,7 @@ var initWebWorkerBlazor = async function () {
     var indexHtmlScripts = [];
     var blazorWebAssemblyJSIndex = -1;
     function getIndexHtmlScripts() {
-        var scriptPatt = new RegExp('<script\\s+(.*?)(?:\\s+\\/>|\\s*><\\/script>)', 'gm');
+        var scriptPatt = new RegExp('<script\\s+(.*?)(?:\\s+\\/>|\\s*>\\s*<\\/script>)', 'gm');
         var m;
         do {
             m = scriptPatt.exec(indexHtmlSrc);
@@ -185,7 +185,6 @@ var initWebWorkerBlazor = async function () {
         return modulize;
     }
     async function initializeBlazor() {
-
         // setup standard document
         var htmlEl = document.appendChild(document.createElement('html'));
         var headEl = htmlEl.appendChild(document.createElement('head'));
