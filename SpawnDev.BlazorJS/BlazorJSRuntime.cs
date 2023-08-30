@@ -24,7 +24,10 @@ namespace SpawnDev.BlazorJS
         public bool IsDedicatedWorkerGlobalScope => GlobalThis is DedicatedWorkerGlobalScope;
         public bool IsSharedWorkerGlobalScope => GlobalThis is SharedWorkerGlobalScope;
         public bool IsServiceWorkerGlobalScope => GlobalThis is ServiceWorkerGlobalScope;
-
+        /// <summary>
+        /// The crossOriginIsolated read-only property returns a boolean value that indicates whether the website is in a cross-origin isolation state. A website is in a cross-origin isolated state, when the response header Cross-Origin-Opener-Policy has the value same-origin and the Cross-Origin-Embedder-Policy header has the value require-corp or credentialless
+        /// </summary>
+        public bool CrossOriginIsolated => JS.Get<bool>("crossOriginIsolated");
         static BlazorJSRuntime()
         {
             _js = (IJSInProcessRuntime)typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime").GetField("Instance", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
