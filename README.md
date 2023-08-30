@@ -26,6 +26,9 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 - Use SpawnDev.BlazorJS.WebWorkers to enable calling Blazor services in web worker threads
 - Supports Promises, Union method parameters, passing undefined to Javascript, and more.
 
+# Issues and Feature requests
+I'm here to help. If you find a bug or missing properties, methods, or Javascript objects please submit an issue [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. I will help as soon as possible.
+
 # BlazorJSRuntime 
 Getting started. Using BlazorJS requires 2 changes to your Program.cs.
 - Add the BlazorJSRuntime service with builder.Services.AddBlazorJSRuntime()
@@ -669,12 +672,15 @@ IDisposable objects returned from a WebWorker or SharedWorker service are automa
 
 Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
 
-Inspired by Tewr's BlazorWorker implementation. Thank you! I wrote my implementation from scratch as I needed workers in .Net 7.  
+SpawnDev.BlazorJS.WebWorkers is inspired by Tewr's BlazorWorker implementation. Thank you!  
 https://github.com/Tewr/BlazorWorker
 
 BlazorJS and WebWorkers Demo  
 https://blazorjs.spawndev.com/
 
-Buy me a coffee  
+Current site under development using Blazor WASM  
+https://www.spawndev.com/  
+
+Buy me a coffee 
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=7QTATH4UGGY9U)
