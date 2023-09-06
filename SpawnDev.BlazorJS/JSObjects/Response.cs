@@ -5,6 +5,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
     public class ResponseOptions {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? Status { get; set; }
+
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? StatusText { get; set; }
 
@@ -12,8 +13,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Dictionary<string, string>? Headers { get; set; }
     }
 
-    // Non-Standard implementation
-    // TODO
+    // unfinished implementation
+    // TODO - finish
     // https://developer.mozilla.org/en-US/docs/Web/API/Response
 
     public class Response : JSObject {
@@ -47,7 +48,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
         //    using var headers = JSRef.Get<JSObject>("headers");
         //    headers.JSRef.CallVoid("set", "Content-Type", contentType);
         //    headers.JSRef.CallVoid("set", "Content-Length", uint8array.ByteLength);
-
         //}
 
         //public Response(byte[] data, string contentType = "application/octet-stream") : base(NullRef)
@@ -77,8 +77,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
         }
 
         public async Task<byte[]> ReadBytes() {
-            using var tmp = await JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
-            return tmp.ReadBytes();
+            using var arrayBuffer = await ArrayBuffer();
+            return arrayBuffer.ReadBytes();
         }
     }
 }

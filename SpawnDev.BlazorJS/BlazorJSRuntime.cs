@@ -6,6 +6,7 @@ using SpawnDev.BlazorJS.JsonConverters;
 using System;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
@@ -197,5 +198,7 @@ namespace SpawnDev.BlazorJS
             catch { }
             return "";
         }
+        public Task<Response> Fetch(string resource) => JS.CallAsync<Response>("fetch", resource);
+        public Task<Response> Fetch(string resource, FetchOptions options) => JS.CallAsync<Response>("fetch", resource, options);
     }
 }
