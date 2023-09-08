@@ -9,7 +9,7 @@
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
-A Blazor WASM library that allows Javascript interop without writing a single line of Javascript.
+Full Blazor WebAssembly and Javascript interop. Create, access properties, call methods, and add/remove event handlers of any Javascript objects the .Net way without writing Javascript.
 
 Supports Blazor WebAssembly .Net 6, 7, and 8.
 
