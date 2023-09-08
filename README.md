@@ -10,11 +10,11 @@
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
-An easy Javascript interop library designed specifically for client side Blazor.  
+An easy Javascript interop library designed specifically for client side Blazor. 
 
 Supports Blazor WebAssembly .Net 6, 7, and 8.
 
-- Over 100 strongly typed JSObject wrappers included in BlazorJS including Promises, WebGL, WebRTC, DOM, etc...
+- Over 100 strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including Promises, WebGL, WebRTC, DOM, etc...
 - Use Javascript libraries in Blazor without writing any Javascript code
 - An alternative JSRuntime that wraps the default one adding additional functionality.
 - Create new Javascript objects directly from Blazor
