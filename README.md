@@ -6,25 +6,24 @@
 |**[SpawnDev.BlazorJS](#spawndevblazorjs)** <br /> [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS)| Enhanced Blazor WebAssembly Javascript interop | 
 |**[SpawnDev.BlazorJS.WebWorkers](#spawndevblazorjswebworkers)** <br /> [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.WebWorkers.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers)| Blazor WebAssembly WebWorkers and SharedWebWorkers |
  
-
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
-An easy Javascript interop library designed specifically for client side Blazor. 
+A Blazor WASM library that allows Javascript interop without writing a single line of Javascript.
 
 Supports Blazor WebAssembly .Net 6, 7, and 8.
 
-- Over 100 strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including Promises, WebGL, WebRTC, DOM, etc...
+- 189+ strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, WebGL, WebRTC, and Promises allow direct interaction with Javascript
 - Use Javascript libraries in Blazor without writing any Javascript code
-- An alternative JSRuntime that wraps the default one adding additional functionality.
+- BlazorJSRuntime wraps the default JSRuntime adding additional functionality
 - Create new Javascript objects directly from Blazor
-- Get and set Javascript object properties as well as access methods.
+- Get and set Javascript object properties as well as access methods
 - Easily pass .Net methods to Javascript using JSEventCallback, Callback.Create or Callback.CreateOne methods
-- Wrap Javascript objects for direct manipulation from Blazor
-- - Easily access Javascript objects by wrapping them in a simple interface that implements IJSObject
-- - Alternatively use the JSObject base class to wrap your objects for more control
+- 2 options for wrapping your Javascript objects for direct manipulation from Blazor (No javascript required!)
+- - Create a class that inherits JSObject and defines the methods, properties, events, and constructors of your Javascript object (best option)
+- - Create an interface that implements IJSObject and defines the methods and properties of your Javascript object (more limited than JSObject option)
 - Use SpawnDev.BlazorJS.WebWorkers to enable calling Blazor services in web worker threads
-- Supports Promises, Union method parameters, passing undefined to Javascript, and more.
+- Supports Promises, Union method parameters, passing undefined to Javascript, and more
 
 # Issues and Feature requests
 I'm here to help. If you find a bug or missing properties, methods, or Javascript objects please submit an issue [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. I will help as soon as possible.
