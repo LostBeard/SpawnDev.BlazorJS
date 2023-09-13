@@ -350,12 +350,12 @@ namespace SpawnDev.BlazorJS.JSObjects
             JSRef.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker") :
             JSRef.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker", options);
 
-        public Task<FileSystemFileHandle> ShowOpenFilePicker(ShowOpenFilePickerOptions? options = null) => options == null ?
-            JSRef.CallAsync<FileSystemFileHandle>("showOpenFilePicker") :
-            JSRef.CallAsync<FileSystemFileHandle>("showOpenFilePicker", options);
+        public Task<Array<FileSystemFileHandle>> ShowOpenFilePicker(ShowOpenFilePickerOptions? options = null) => options == null ?
+            JSRef.CallAsync<Array<FileSystemFileHandle>>("showOpenFilePicker") :
+            JSRef.CallAsync<Array<FileSystemFileHandle>>("showOpenFilePicker", options);
 
-        public Task<Array<FileSystemFileHandle>> ShowSaveFilePicker(ShowSaveFilePickerOptions? options = null) => options == null ?
-            JSRef.CallAsync<Array<FileSystemFileHandle>>("showSaveFilePicker") :
-            JSRef.CallAsync<Array<FileSystemFileHandle>>("showSaveFilePicker", options);
+        public Task<FileSystemFileHandle> ShowSaveFilePicker(ShowSaveFilePickerOptions? options = null) => options == null ?
+            JSRef.CallAsync<FileSystemFileHandle>("showSaveFilePicker") :
+            JSRef.CallAsync<FileSystemFileHandle>("showSaveFilePicker", options);
     }
 }

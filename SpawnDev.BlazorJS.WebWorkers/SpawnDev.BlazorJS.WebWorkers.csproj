@@ -4,7 +4,7 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.6</Version>
+		<Version>2.2.7</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>SpawnDev.BlazorJS.WebWorkers</Title>
 		<Authors>LostBeard</Authors>
@@ -36,8 +36,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0-preview.6.23329.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0-preview.6.23329.11" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0-rc.1.23421.29" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0-rc.1.23421.29" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
