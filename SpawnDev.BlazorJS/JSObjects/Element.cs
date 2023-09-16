@@ -2,15 +2,10 @@
 using Microsoft.JSInterop;
 using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects {
-    public class RequestFullscreenOptions {
-        /// <summary>
-        /// Options hide, show, auto (default)
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? NavigationUI { get; set; }
-    }
-
+namespace SpawnDev.BlazorJS.JSObjects
+{
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element
+    // TODO - finish
     public class Element : Node
     {
         public Element(ElementReference elRef) : base(JS.ReturnMe<IJSInProcessObjectReference>(elRef)) { }
@@ -24,5 +19,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public string? GetAttribute(string name) => JSRef.Call<string?>("getAttribute", name);
         public void RemoveAttribute(string name) => JSRef.CallVoid("removeAttribute", name);
         public void SetAttribute(string name, string value) => JSRef.CallVoid("setAttribute", name, value);
+        public void After(params Node[] nodes) => JSRef.CallApplyVoid("after", nodes);
+        public void Remove() => JSRef.CallVoid("remove");
     }
 }

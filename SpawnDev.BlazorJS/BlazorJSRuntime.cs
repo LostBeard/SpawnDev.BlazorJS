@@ -200,5 +200,7 @@ namespace SpawnDev.BlazorJS
         }
         public Task<Response> Fetch(string resource) => JS.CallAsync<Response>("fetch", resource);
         public Task<Response> Fetch(string resource, FetchOptions options) => JS.CallAsync<Response>("fetch", resource, options);
+        public void SetTimeout(Action callback, int msDelay) => JS.CallVoid("setTimeout", Callback.CreateOne(callback), msDelay);
+        public void SetTimeout(Callback callback, int msDelay) => JS.CallVoid("setTimeout", callback, msDelay);
     }
 }

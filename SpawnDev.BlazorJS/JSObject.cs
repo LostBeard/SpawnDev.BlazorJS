@@ -1,6 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
+using System.Numerics;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS

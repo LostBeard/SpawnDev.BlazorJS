@@ -15,5 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public void RemoveChild(ElementReference node) => JSRef.CallVoid("removeChild", node);
         public bool Contains(JSObject node) => JSRef.Call<bool>("contains");
         public Node ParentNode => JSRef.Get<Node>("parentNode");
+        public Node CloneNode() => JSRef.Call<Node>("cloneNode");
+        public Node CloneNode(bool deep) => JSRef.Call<Node>("cloneNode", deep);
     }
 }

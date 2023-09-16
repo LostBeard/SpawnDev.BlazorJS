@@ -22,23 +22,25 @@ namespace SpawnDev.BlazorJS.Test.Pages
         BlazorJSRuntime JS { get; set; }
 
         ElementReference _dragDropContainer { get; set; }
-        CallbackGroup _callbacks = new CallbackGroup();
+        HTMLElement? _dragDropContainerEl = null;
         List<SomeItemType> _someItems = new List<SomeItemType>();
         HTMLElement? _dragging = null;
         SomeItemType? _draggingItem = null;
+        bool beenInit = false;
 
         protected override void OnAfterRender(bool firstRender)
         {
-            if (firstRender)
+            if (!beenInit)
             {
+                beenInit = true;
                 // create some fake data
                 Enumerable.Range(0, 5).ToList().ForEach(i => _someItems.Add(new SomeItemType(i, $"Draggable Item {i}")));
                 // create and set callbacks
-                using var source = new HTMLElement(_dragDropContainer);
-                source.AddEventListener("dragend", Callback.Create<DragEvent>(OnDragEnd, _callbacks));
-                source.AddEventListener("dragover", Callback.Create<DragEvent>(OnDragOver, _callbacks));
-                source.AddEventListener("dragstart", Callback.Create<DragEvent>(OnDragStart, _callbacks));
-                source.AddEventListener("drop", Callback.Create<DragEvent>(OnDrop, _callbacks));
+                _dragDropContainerEl = new HTMLElement(_dragDropContainer);
+                _dragDropContainerEl.OnDragEnd += OnDragEnd;
+                _dragDropContainerEl.OnDragOver += OnDragOver;
+                _dragDropContainerEl.OnDragStart += OnDragStart;
+                _dragDropContainerEl.OnDrop += OnDrop;
                 StateHasChanged();
             }
         }
@@ -47,7 +49,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
         {
             JS.Log("OnDragStart", e);
             _dragging = e.Target.JSRefMove<HTMLElement>();
-            var itemKey = int.Parse(_dragging.GetAttribute("item-id"));
+            var itemKey = int.Parse(_dragging.GetAttribute("item-id")!);
             _draggingItem = _someItems.Where(o => o.Id == itemKey).FirstOrDefault();
             using var classList = _dragging.ClassList;
             classList.Add("dragging");
@@ -101,7 +103,15 @@ namespace SpawnDev.BlazorJS.Test.Pages
 
         public void Dispose()
         {
-            _callbacks.Dispose();
+            if (beenInit)
+            {
+                beenInit = false;
+                _dragDropContainerEl.OnDragEnd -= OnDragEnd;
+                _dragDropContainerEl.OnDragOver -= OnDragOver;
+                _dragDropContainerEl.OnDragStart -= OnDragStart;
+                _dragDropContainerEl.OnDrop -= OnDrop;
+                _dragDropContainerEl.Dispose();
+            }
         }
     }
 }
