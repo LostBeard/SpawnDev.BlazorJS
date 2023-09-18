@@ -27,5 +27,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback<DragEvent> OnDragOver { get => new JSEventCallback<DragEvent>(o => AddEventListener("dragover", o), o => RemoveEventListener("dragover", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         public JSEventCallback<DragEvent> OnDragStart { get => new JSEventCallback<DragEvent>(o => AddEventListener("dragstart", o), o => RemoveEventListener("dragstart", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         public JSEventCallback<DragEvent> OnDrop { get => new JSEventCallback<DragEvent>(o => AddEventListener("drop", o), o => RemoveEventListener("drop", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+
+        public JSEventCallback<Event> OnLoad { get => new JSEventCallback<Event>(o => AddEventListener("load", o), o => RemoveEventListener("load", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
     }
 }

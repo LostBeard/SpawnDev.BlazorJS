@@ -10,6 +10,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
 
         public string Src { get => JSRef.Get<string>("src"); set => JSRef.Set("src", value); }
 
+        public string CrossOrigin { get => JSRef.Get<string>("crossOrigin"); set => JSRef.Set("crossOrigin", value); }
+
         public HTMLImageElement(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         public HTMLImageElement() : base(JS.New("Image")) { }
