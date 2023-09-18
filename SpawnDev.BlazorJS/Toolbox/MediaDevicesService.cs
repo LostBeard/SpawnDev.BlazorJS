@@ -1,7 +1,5 @@
-﻿using SpawnDev.BlazorJS;
-using SpawnDev.BlazorJS.JSObjects;
+﻿using SpawnDev.BlazorJS.JSObjects;
 using System.Dynamic;
-using System.Text.RegularExpressions;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
@@ -52,28 +50,27 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
         }
 
-        public async Task<MediaStream?> GetMediaStream(string? videoDeviceId = null, string? audioDeviceId = null)
-        {
-            MediaStream? stream = null;
-            try
-            {
-                stream = await MediaDevices.GetMediaDeviceStream(videoDeviceId, audioDeviceId);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("GetMediaDeviceStream error: " + ex.Message);
-            }
-            return stream;
-        }
+        //public async Task<MediaStream?> GetMediaStream(string? videoDeviceId = null, string? audioDeviceId = null)
+        //{
+        //    MediaStream? stream = null;
+        //    try
+        //    {
+        //        stream = await MediaDevices.GetMediaDeviceStream(videoDeviceId, audioDeviceId);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("GetMediaDeviceStream error: " + ex.Message);
+        //    }
+        //    return stream;
+        //}
 
         // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
         public async Task<bool> UpdateDeviceList(bool allowAsk = false)
         {
             if (!Supported) return false;
-            var ret = !await MediaDevices.AreDevicesHidden();
-            AreDevicesHidden = !ret;
+            AreDevicesHidden = await MediaDevices.AreDevicesHidden();
             await _UpdateDeviceList();
-            if (ret || !allowAsk) return ret;
+            if (!AreDevicesHidden || !allowAsk) return !AreDevicesHidden;
             dynamic constraints = new ExpandoObject();
             constraints.audio = true;
             constraints.video = true;
@@ -91,9 +88,8 @@ namespace SpawnDev.BlazorJS.Toolbox
                 Console.WriteLine($"EXCEPTION getUserMedia: {ex.Message}");
             }
             await _UpdateDeviceList();
-            ret = !await MediaDevices.AreDevicesHidden();
-            AreDevicesHidden = !ret;
-            return ret;
+            AreDevicesHidden = await MediaDevices.AreDevicesHidden();
+            return !AreDevicesHidden;
         }
 
         async Task _UpdateDeviceList()

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen;
-using Radzen.Blazor.Rendering;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Test.Shared;
@@ -10,7 +9,8 @@ using System.Diagnostics;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace SpawnDev.BlazorJS.Test.Pages {
+namespace SpawnDev.BlazorJS.Test.Pages
+{
     public partial class FaceAPIDemo : IDisposable {
         [Inject]
         IFaceAPIService? _faceAPIService { get; set; }
@@ -208,7 +208,7 @@ namespace SpawnDev.BlazorJS.Test.Pages {
                 _videoCapture.Video.SrcObject = null;
             }
             if (selected != null && _mediaDevicesService != null && _videoCapture != null) {
-                _mediaStream = await _mediaDevicesService.GetMediaStream(videoDeviceId: selected.DeviceId);
+                _mediaStream = await _mediaDevicesService.MediaDevices.GetMediaDeviceStream(selected.DeviceId, null);
                 _videoCapture.Video.SrcObject = _mediaStream;
                 try {
                     await _videoCapture.Video.Play();
