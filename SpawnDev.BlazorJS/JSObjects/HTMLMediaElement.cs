@@ -42,6 +42,11 @@ namespace SpawnDev.BlazorJS.JSObjects {
             get => JSRef.Get<bool>("paused");
             set => JSRef.Set("paused", value);
         }
+        public bool Loop
+        {
+            get => JSRef.Get<bool>("loop");
+            set => JSRef.Set("loop", value);
+        }
         public string? CurrentSrc {
             get => JSRef.Get<string?>("currentSrc");
         }
