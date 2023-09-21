@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -13,6 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string CrossOrigin { get => JSRef.Get<string>("crossOrigin"); set => JSRef.Set("crossOrigin", value); }
 
         public HTMLImageElement(IJSInProcessObjectReference _ref) : base(_ref) { }
+        public HTMLImageElement(ElementReference elementReference) : base(JS.ToJSRef(elementReference)) { }
         public HTMLImageElement() : base(JS.New("Image")) { }
 
         public static Task<HTMLImageElement> CreateFromImageAsync(string src, string? crossOrigin = null)

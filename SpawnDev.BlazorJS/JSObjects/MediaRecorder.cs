@@ -75,10 +75,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fires periodically each time timeslice milliseconds of media have been recorded (or when the entire media has been recorded, if timeslice wasn't specified). The event, of type BlobEvent, contains the recorded media in its data property.
         /// </summary>
         public JSEventCallback<BlobEvent> OnDataAvailable { get => new JSEventCallback<BlobEvent>(o => AddEventListener("dataavailable", o), o => RemoveEventListener("dataavailable", o)); set { } }
-        public class MediaRecorderErrorEvent : Event
-        {
-            public MediaRecorderErrorEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        }
         /// <summary>
         /// Fired when there are fatal errors that stop recording. The received event is based on the MediaRecorderErrorEvent interface, whose error property contains a DOMException that describes the actual error that occurred.
         /// </summary>
