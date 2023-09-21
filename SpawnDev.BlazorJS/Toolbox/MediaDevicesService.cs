@@ -50,19 +50,19 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
         }
 
-        //public async Task<MediaStream?> GetMediaStream(string? videoDeviceId = null, string? audioDeviceId = null)
-        //{
-        //    MediaStream? stream = null;
-        //    try
-        //    {
-        //        stream = await MediaDevices.GetMediaDeviceStream(videoDeviceId, audioDeviceId);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("GetMediaDeviceStream error: " + ex.Message);
-        //    }
-        //    return stream;
-        //}
+        public async Task<MediaStream?> GetMediaStream(string? videoDeviceId = null, string? audioDeviceId = null)
+        {
+            MediaStream? stream = null;
+            try
+            {
+                stream = await MediaDevices.GetMediaDeviceStream(videoDeviceId, audioDeviceId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("GetMediaDeviceStream error: " + ex.Message);
+            }
+            return stream;
+        }
 
         // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
         public async Task<bool> UpdateDeviceList(bool allowAsk = false)
