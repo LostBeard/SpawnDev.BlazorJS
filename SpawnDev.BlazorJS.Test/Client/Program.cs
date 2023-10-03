@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.JSObjects;
-using SpawnDev.BlazorJS.JsonConverters;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Toolbox;
@@ -28,7 +27,7 @@ builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builde
 builder.Services.AddBlazorJSRuntime();
 // Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
 builder.Services.AddWebWorkerService();
-// Add WebWorkerPool service (WIP. optional)
+// WebWorkerPool service (WIP. optional. Not requried for WebWorkerService)
 builder.Services.AddSingleton<WebWorkerPool>();
 // More app specific services
 builder.Services.AddSingleton(builder.Configuration); // used to demo appsettings reading in workers

@@ -228,7 +228,7 @@ class HTMLDocument extends Node {
     }
     initScriptElement(node) {
         this.currentScript = node;
-        // behaves differently thatn a standard script loader...
+        // behaves differently than a standard script loader...
         // uses the text attribute if available instead of the src (to allow using modified script in text)
         if (node.text) {
             consoleLog('Loading script text');

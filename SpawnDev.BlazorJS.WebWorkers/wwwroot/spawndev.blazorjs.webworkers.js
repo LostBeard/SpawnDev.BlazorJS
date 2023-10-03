@@ -110,30 +110,41 @@ var initWebWorkerBlazor = async function () {
     var indexHtmlScripts = [];
     var blazorWebAssemblyJSIndex = -1;
     function getIndexHtmlScripts() {
-        var scriptPatt = new RegExp('<script\\s+(.*?)(?:\\s+\\/>|\\s*>\\s*<\\/script>)', 'gm');
+        var scriptPatt = /<script\s*(.*?)(?:\s*\/>|\s*>(.*?)<\/script>)/gms;
         var m;
         do {
             m = scriptPatt.exec(indexHtmlSrc);
             if (m) {
-                let scriptTagBody = m[1];
-                let scriptSrcMatch = /src="(.+?)"/.exec(scriptTagBody);
+                let scriptTagAttributes = m[1];
+                let scriptTagBody = m[2];
+                let scriptSrcMatch = scriptTagAttributes && /src="(.+?)"/.exec(scriptTagAttributes);
+                let webworkerEnabled = scriptTagAttributes && /\bwebworker-enabled\b/.exec(scriptTagAttributes);
                 if (scriptSrcMatch) {
+                    // remote script
                     let scriptSrc = scriptSrcMatch[1];
-                    let webworkerEnabled = !!/\bwebworker-enabled\b/.exec(scriptTagBody);
                     let isBlazorWebAssemblyJS = scriptSrc == '_framework/blazor.webassembly.js';
                     consoleLog('webworkerEnabled', webworkerEnabled, scriptSrc);
                     if (webworkerEnabled || isBlazorWebAssemblyJS) {
                         if (isBlazorWebAssemblyJS) {
                             blazorWebAssemblyJSIndex = indexHtmlScripts.length;
                         }
-                        indexHtmlScripts.push(scriptSrc);
+                        indexHtmlScripts.push({
+                            src: scriptSrc
+                        });
                     }
+                } else if (scriptTagBody && webworkerEnabled) {
+                    // inline script
+                    indexHtmlScripts.push({
+                        body: scriptTagBody
+                    });
                 }
             }
         } while (m);
         if (blazorWebAssemblyJSIndex == -1) {
             blazorWebAssemblyJSIndex = indexHtmlScripts.length;
-            indexHtmlScripts.push('_framework/blazor.webassembly.js');
+            indexHtmlScripts.push({
+                src: '_framework/blazor.webassembly.js'
+            });
         }
     }
     getIndexHtmlScripts();
@@ -201,11 +212,12 @@ var initWebWorkerBlazor = async function () {
         for (var i = 0; i < indexHtmlScripts.length; i++) {
             let s = indexHtmlScripts[i];
             let scriptEl = bodyEl.appendChild(document.createElement('script'));
-            scriptEl.setAttribute('src', s);
+            if (s.src) scriptEl.setAttribute('src', s.src);
+            if (s.body) scriptEl.text = s.body;
             if (i == blazorWebAssemblyJSIndex) {
                 scriptEl.setAttribute('autostart', "false");
                 // fix fetch relative paths
-                let jsStr = await getText(s);
+                let jsStr = await getText(s.src);
                 jsStr = jsStr.replace(/ fetch\(/g, ' webWorkersFetch(');
                 // fix dynamic imports (if neeed)
                 if (!dynamicImportSupported) {
