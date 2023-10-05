@@ -120,17 +120,17 @@ namespace SpawnDev.BlazorJS
             {
                 if (cb != null)
                 {
-                    CallbackGroup calbacks = new CallbackGroup();
-                    script.Set("onload", Callback.Create(() =>
+                    CallbackGroup callbacks = new CallbackGroup();
+                    script.Set("onload", callbacks.Add(Callback.Create(() =>
                     {
-                        calbacks.Dispose();
+                        callbacks.Dispose();
                         cb.Invoke(true);
-                    }, calbacks));
-                    script.Set("onerror", Callback.Create(() =>
+                    })));
+                    script.Set("onerror", callbacks.Add(Callback.Create(() =>
                     {
-                        calbacks.Dispose();
+                        callbacks.Dispose();
                         cb.Invoke(false);
-                    }, calbacks));
+                    })));
                 }
                 script.Set("src", src);
                 DocumentHeadAppendChild(script);

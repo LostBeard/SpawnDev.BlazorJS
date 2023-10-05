@@ -37,18 +37,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         public static void CreateFromImage(string src, Action<HTMLImageElement?> callback, string? crossOrigin = null)
         {
             var image = new HTMLImageElement();
-            var imageCallbacks = new CallbackGroup();
-            image.AddEventListener("load", Callback.Create(() =>
+            var callbacks = new CallbackGroup();
+            image.AddEventListener("load", callbacks.Add(Callback.Create(() =>
             {
-                imageCallbacks.Dispose();
+                callbacks.Dispose();
                 callback(image);
-            }, imageCallbacks));
-            image.AddEventListener("error", Callback.Create(() =>
+            })));
+            image.AddEventListener("error", callbacks.Add(Callback.Create(() =>
             {
-                imageCallbacks.Dispose();
+                callbacks.Dispose();
                 image.Dispose();
                 callback(null);
-            }, imageCallbacks));
+            })));
             if (crossOrigin != null) image.CrossOrigin = crossOrigin;
             image.Src = src;
         }

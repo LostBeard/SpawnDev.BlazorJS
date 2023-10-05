@@ -78,17 +78,17 @@ namespace SpawnDev.BlazorJS.JSObjects {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            Then(Callback.Create<TResult>((result) => {
+            Then(callbacks.Add(Callback.Create<TResult>((result) => {
                 if (t.TrySetResult(result)) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create(() => {
+            })), callbacks.Add(Callback.Create(() => {
                 if (t.TrySetException(new Exception("Unknown error"))) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks));
+            })));
             cancellationTokenSource?.Token.Register(() => {
                 if (t.TrySetException(new Exception("Timed out"))) {
                     cancellationTokenSource?.Dispose();
@@ -101,15 +101,15 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Task<TResult> ThenAsync(CancellationToken cancellationToken) {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
-            Then(Callback.Create<TResult>((result) => {
+            Then(callbacks.Add(Callback.Create<TResult>((result) => {
                 if (t.TrySetResult(result)) {
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create(() => {
+            })), callbacks.Add(Callback.Create(() => {
                 if (t.TrySetException(new Exception("Unknown error"))) {
                     callbacks.Dispose();
                 }
-            }, callbacks));
+            })));
             if (cancellationToken != CancellationToken.None) {
                 cancellationToken.Register(() => {
                     if (t.TrySetException(new Exception("Timed out"))) {
@@ -199,17 +199,17 @@ namespace SpawnDev.BlazorJS.JSObjects {
             var t = new TaskCompletionSource();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            Then(Callback.Create(() => {
+            Then(callbacks.Add(Callback.Create(() => {
                 if (t.TrySetResult()) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create(() => {
+            })), callbacks.Add(Callback.Create(() => {
                 if (t.TrySetException(new Exception("Unknown error"))) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks));
+            })));
             cancellationTokenSource?.Token.Register(() => {
                 if (t.TrySetException(new Exception("Timed out"))) {
                     cancellationTokenSource?.Dispose();
@@ -233,13 +233,13 @@ namespace SpawnDev.BlazorJS.JSObjects {
             var t = new TaskCompletionSource();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            ThenCatch(Callback.Create(() => {
+            ThenCatch(callbacks.Add(Callback.Create(() => {
                 if (t.TrySetResult())
                 {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks), callbacks.Add(new ActionCallback<TCatch>((catchValue) => {
+            })), callbacks.Add(new ActionCallback<TCatch>((catchValue) => {
                 if (t.TrySetException(new PromiseCatchException<TCatch>(catchValue)))
                 {
                     cancellationTokenSource?.Dispose();
@@ -260,17 +260,17 @@ namespace SpawnDev.BlazorJS.JSObjects {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            Then(Callback.Create<TResult>((result) => {
+            Then(callbacks.Add(Callback.Create<TResult>((result) => {
                 if (t.TrySetResult(result)) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create(() => {
+            })), callbacks.Add(Callback.Create(() => {
                 if (t.TrySetException(new Exception("Unknown error"))) {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            }, callbacks));
+            })));
             cancellationTokenSource?.Token.Register(() => {
                 if (t.TrySetException(new Exception("Timed out"))) {
                     cancellationTokenSource?.Dispose();
@@ -284,17 +284,17 @@ namespace SpawnDev.BlazorJS.JSObjects {
         {
             var t = new TaskCompletionSource();
             var callbacks = new CallbackGroup();
-            Then(Callback.Create(() => {
+            Then(callbacks.Add(Callback.Create(() => {
                 if (t.TrySetResult())
                 {
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create(() => {
+            })), callbacks.Add(Callback.Create(() => {
                 if (t.TrySetException(new Exception("Unknown error")))
                 {
                     callbacks.Dispose();
                 }
-            }, callbacks));
+            })));
             if (cancellationToken != CancellationToken.None)
             {
                 cancellationToken.Register(() => {
@@ -309,15 +309,15 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Task<TResult> ThenAsync<TResult>(CancellationToken cancellationToken) {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
-            Then(Callback.Create<TResult>((result) => {
+            Then(callbacks.Add(Callback.Create<TResult>((result) => {
                 if (t.TrySetResult(result)) {
                     callbacks.Dispose();
                 }
-            }, callbacks), Callback.Create(() => {
+            })), callbacks.Add(Callback.Create(() => {
                 if (t.TrySetException(new Exception("Unknown error"))) {
                     callbacks.Dispose();
                 }
-            }, callbacks));
+            })));
             if (cancellationToken != CancellationToken.None) {
                 cancellationToken.Register(() => {
                     if (t.TrySetException(new Exception("Timed out"))) {

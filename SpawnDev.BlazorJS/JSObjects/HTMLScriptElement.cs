@@ -18,14 +18,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             var taskCompletionSource = new TaskCompletionSource();
             var callbacks = new CallbackGroup();
-            OnLoad = Callback.Create(()=> { 
+            OnLoad = callbacks.Add(Callback.Create(()=> { 
                 callbacks.Dispose(); 
                 taskCompletionSource.TrySetResult(); 
-            }, callbacks);
-            OnError = Callback.Create(() => { 
+            }));
+            OnError = callbacks.Add(Callback.Create(() => { 
                 callbacks.Dispose(); 
                 taskCompletionSource.TrySetException(new Exception("Script load failed")); 
-            }, callbacks);
+            }));
             return taskCompletionSource.Task;
         }
     }
