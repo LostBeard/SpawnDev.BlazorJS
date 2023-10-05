@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
+using Radzen.Blazor;
 using SpawnDev.Blazor.UnitTesting;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
+using File = SpawnDev.BlazorJS.JSObjects.File;
 
 namespace SpawnDev.BlazorJS.Test.UnitTests
 {
@@ -151,6 +153,23 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             bool boolValue = true;
             UnionTypeTestMethod("_boolUnionValue", boolValue);
             if (boolValue != JS.Get<bool?>("_boolUnionValue")) throw new Exception("Unexpected result");
+        }
+
+        /// <summary>
+        /// Uses File to test an IEnumerable Union type<br />
+        /// Creates a new File instance using a string and a blob
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        [TestMethod]
+        public async Task UnionTypeArrayTest()
+        {
+            var fullString = "Hello World!";
+            var strPart1 = fullString.Substring(0, fullString.IndexOf(" "));
+            var strPart2 = fullString.Substring(fullString.IndexOf(" "));
+            using var blob = new Blob(new string[] { strPart2 });
+            using var file = new File([ strPart1, blob ], "filename.txt");
+            var txt = await file.Text();
+            if (txt != fullString) throw new Exception("Unexpected result");
         }
 
 

@@ -598,7 +598,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 var callSideArg = GetCallSideParameter(methodParam);
                 if (callSideArg != null)
                 {
-
                     ret[i] = callSideArg.GetValue();
                     continue;
                 }
