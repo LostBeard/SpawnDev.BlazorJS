@@ -7,25 +7,31 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class HTMLScriptElement : JSObject
+    public class HTMLScriptElement : HTMLElement
     {
         public string Src { get => JSRef.Get<string>("src"); set => JSRef.Set("src", value); }
         public HTMLScriptElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         public HTMLScriptElement() : base(JS.DocumentCreateElement("script")) { }
-        public ActionCallback OnLoad { set => JSRef.Set("onload", value); }
-        public ActionCallback OnError { set => JSRef.Set("onerror", value); }
         public Task OnLoadAsync()
         {
             var taskCompletionSource = new TaskCompletionSource();
-            var callbacks = new CallbackGroup();
-            OnLoad = callbacks.Add(Callback.Create(()=> { 
-                callbacks.Dispose(); 
-                taskCompletionSource.TrySetResult(); 
-            }));
-            OnError = callbacks.Add(Callback.Create(() => { 
-                callbacks.Dispose(); 
-                taskCompletionSource.TrySetException(new Exception("Script load failed")); 
-            }));
+            Action? cleanUp = null;
+            var onLoad = new Action<Event>((e) =>
+            {
+                cleanUp?.Invoke();
+                taskCompletionSource.TrySetResult();
+            });
+            var onError = new Action<Event>((e) =>
+            {
+                cleanUp?.Invoke();
+                taskCompletionSource.TrySetException(new Exception("Script load failed"));
+            });
+            cleanUp = new Action(() => {
+                OnLoad -= onLoad;
+                OnError -= onError;
+            });
+            OnLoad += onLoad;
+            OnError += onError;
             return taskCompletionSource.Task;
         }
     }

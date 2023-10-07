@@ -9,5 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Task ExitFullscreen() => JSRef.CallVoidAsync("exitFullscreen");
         public Element? FullscreenElement => JSRef.Get<Element?>("fullscreenElement");
         public JSEventCallback OnFullscreenChange { get => new JSEventCallback(o => AddEventListener("fullscreenchange", o), o => RemoveEventListener("fullscreenchange", o)); set { } }
+        public HTMLHeadElement Head => JSRef.Get<HTMLHeadElement>("head");
+        public HTMLBodyElement Body => JSRef.Get<HTMLBodyElement>("body");
     }
 }

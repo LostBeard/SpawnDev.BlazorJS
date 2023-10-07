@@ -19,11 +19,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         public object? GetItem(Type type, int index) => JSRef.Get(type, index);
         public Array Concat(Array array) => JSRef.Call<Array>("concat", array);
         public string Join(string separator = "") => JSRef.Call<string>("join", separator);
-        public void Map(Function function) => JSRef.CallVoid("map", function);
-        public void Map<T>(Action<T> mapTo)
+        public Array<TResult> Map<TResult>(Function function) => JSRef.Call<Array<TResult>>("map", function);
+        public Array<TResult> Map<T, TResult>(Func<T, TResult> mapTo)
         {
             using var cb = Callback.Create(mapTo);
-            JSRef.CallVoid("map", cb);
+            return JSRef.Call<Array<TResult>>("map", cb);
+        }
+        public void ForEach<T>(Action<T> mapTo)
+        {
+            using var cb = Callback.Create(mapTo);
+            JSRef.CallVoid("forEach", cb);
         }
         public T[] ToArray<T>() => Enumerable.Range(0, Length).Select(i => At<T>(i)).ToArray();
         public T[] ToArray<T>(int start, int count) => Enumerable.Range(start, count).Select(i => At<T>(i)).ToArray();
@@ -50,11 +55,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         public object? GetItem(Type type, int index) => JSRef.Get(type, index);
         public Array Concat(Array array) => JSRef.Call<Array>("concat", array);
         public string Join(string separator = "") => JSRef.Call<string>("join", separator);
-        public void Map(Function function) => JSRef.CallVoid("map", function);
-        public void Map(Action<T> mapTo)
+        public Array<TResult> Map<TResult>(Function function) => JSRef.Call<Array<TResult>>("map", function);
+        public Array<TResult> Map<TResult>(Func<T, TResult> mapTo)
         {
             using var cb = Callback.Create(mapTo);
-            JSRef.CallVoid("map", cb);
+            return JSRef.Call<Array<TResult>>("map", cb);
+        }
+        public void ForEach(Action<T> mapTo)
+        {
+            using var cb = Callback.Create(mapTo);
+            JSRef.CallVoid("forEach", cb);
         }
         public T[] ToArray() => Enumerable.Range(0, Length).Select(i => At(i)).ToArray();
         public T[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToArray();
