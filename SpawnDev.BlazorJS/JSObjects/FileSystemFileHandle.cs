@@ -4,12 +4,6 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
 
-    public class CreateWritableOptions
-    {
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? KeepExistingData { get;set; }
-    }
-
     // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle
     public class FileSystemFileHandle : FileSystemHandle
     {
@@ -17,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public Task<File> GetFile() => JSRef.CallAsync<File>("getFile");
         public Task<FileSystemWritableFileStream> CreateWritable() => JSRef.CallAsync<FileSystemWritableFileStream>("createWritable");
-        public Task<FileSystemWritableFileStream> CreateWritable(CreateWritableOptions options) => JSRef.CallAsync<FileSystemWritableFileStream>("createWritable", options);
+        public Task<FileSystemWritableFileStream> CreateWritable(FileSystemCreateWritableOptions options) => JSRef.CallAsync<FileSystemWritableFileStream>("createWritable", options);
         public async Task<long> GetSize()
         {
             using var file = await GetFile();
