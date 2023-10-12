@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public IDBDatabase(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public string[] ObjectStoreNames => JSRef.Get<Array<string>>("objectStoreNames").ToArray();
+        public DOMStringList ObjectStoreNames => JSRef.Get<DOMStringList>("objectStoreNames");
 
         public void Close() => JSRef.CallVoid("close");
 

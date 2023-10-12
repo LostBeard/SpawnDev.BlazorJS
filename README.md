@@ -644,7 +644,7 @@ public async Task<ProcessFrameResult?> ProcessFrame([WorkerTransfer(false)] Arra
 
 In the above example; the WorkerTransferAttribute on the return type set to false will prevent all properties of the return type from being transferred.
 
-### Transferable JSObject types 
+### Transferable JSObject types. Source [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects#supported_objects)
 ArrayBuffer  
 MessagePort  
 ReadableStream  

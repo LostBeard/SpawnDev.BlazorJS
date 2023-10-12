@@ -49,7 +49,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             var openRequest = Open(dbName, dbVersion);
             var tcs = new TaskCompletionSource<IDBDatabase>();
-            if (onUpgradeNeeded != null) openRequest.OnUpgradeNeeded += onUpgradeNeeded;
             Action<string?, IDBDatabase?>? onComplete = null;
             var onSuccess = new Action(() =>
             {
@@ -62,6 +61,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             });
             openRequest.OnSuccess += onSuccess;
             openRequest.OnError += onError;
+            if (onUpgradeNeeded != null) openRequest.OnUpgradeNeeded += onUpgradeNeeded;
             onComplete = new Action<string?, IDBDatabase?>((error, result) =>
             {
                 onComplete = null;
