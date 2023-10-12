@@ -64,7 +64,7 @@ namespace SpawnDev.BlazorJS
             if (JSRef == null) throw new Exception("JSRefMove failed. Reference not set.");
             var _ref = JSRef;
             DisposeExceptRef();
-            return (T)Activator.CreateInstance(typeof(T), _ref);
+            return (T)Activator.CreateInstance(typeof(T), _ref)!;
         }
         public IJSInProcessObjectReference? JSRefMove()
         {

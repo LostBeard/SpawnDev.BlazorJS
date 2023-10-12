@@ -25,6 +25,11 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var cb = Callback.Create(mapTo);
             return JSRef.Call<Array<TResult>>("map", cb);
         }
+        public Array<T> Filter<T>(Func<T, bool> filter)
+        {
+            using var cb = Callback.Create(filter);
+            return JSRef.Call<Array<T>>("filter", cb);
+        }
         public void ForEach<T>(Action<T> mapTo)
         {
             using var cb = Callback.Create(mapTo);
@@ -61,12 +66,18 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var cb = Callback.Create(mapTo);
             return JSRef.Call<Array<TResult>>("map", cb);
         }
-        public void ForEach(Action<T> mapTo)
+        public Array<T> Filter(Func<T, bool> filter)
         {
-            using var cb = Callback.Create(mapTo);
+            using var cb = Callback.Create(filter);
+            return JSRef.Call<Array<T>>("filter", cb);
+        }
+        public void ForEach(Action<T> fn)
+        {
+            using var cb = Callback.Create(fn);
             JSRef.CallVoid("forEach", cb);
         }
-        public T[] ToArray() => Enumerable.Range(0, Length).Select(i => At(i)).ToArray();
+        public T[] ToArray() => JS.ReturnMe<T[]>(JSRef);
+        //public T[] ToArray() => Enumerable.Range(0, Length).Select(i => At(i)).ToArray();
         public T[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToArray();
     }
 }

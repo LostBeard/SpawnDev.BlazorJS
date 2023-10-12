@@ -100,10 +100,8 @@ var initFunc = function () {
 
     JSInterop._getPropertyNames = function (obj, name, hasOwnProperty) {
         var target = JSInterop.pathToTarget(obj, name);
-        var ret = [];
-        for (var k in target) {
-            if (!hasOwnProperty || (typeof target.hasOwnProperty === 'function' && target.hasOwnProperty(k))) ret.push(k);
-        }
+        var ret = Object.keys(target);
+        if (hasOwnProperty && target.hasOwnProperty) ret = ret.filter(o => target.hasOwnProperty(o));
         return ret;
     };
 

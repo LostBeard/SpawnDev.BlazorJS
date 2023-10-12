@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -12,6 +13,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var cb = Callback.Create(fn);
             JSRef.CallVoid("forEach", cb);
         }
-        public Array<Element> Values ()=> JSRef.Call<Array<Element>>("values");
+        public Array<Element> Values() => JSRef.Call<Array<Element>>("values");
+        public Array<T> Values<T>() where T : Element => JSRef.Call<Array<T>>("values");
+        public T[] ToArray<T>() where T : Element => JS.ReturnMe<T[]>(JSRef);
     }
 }
