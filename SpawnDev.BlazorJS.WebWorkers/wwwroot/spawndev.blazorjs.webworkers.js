@@ -84,9 +84,9 @@ var initWebWorkerBlazor = async function () {
     } else {
         consoleLog('import is supported.');
     }
-    // patch globalThis.fetch to use document.baseURI for the relative path base path
-    let fetchOrig = globalThis.fetch;
-    globalThis.fetch = function webWorkersFetch(resource, options) {
+    // patch globalThisObj.fetch to use document.baseURI for the relative path base path
+    let fetchOrig = globalThisObj.fetch;
+    globalThisObj.fetch = function (resource, options) {
         consoleLog("webWorkersFetch", typeof resource, resource);
         if (typeof resource === 'string') {
             // resource is a string
