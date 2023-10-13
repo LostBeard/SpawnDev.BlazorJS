@@ -53,6 +53,10 @@ consoleLog('location.href', location.href);
 // location.href == 'https://localhost:7191/_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js?verbose=false'
 
 consoleLog('spawndev.blazorjs.webworkers: loading fake window environment');
+// txml - xml parser
+// https://github.com/TobiasNickel/tXml
+importScripts('txml.min.js');
+// faux DOM and document environment
 importScripts('spawndev.blazorjs.webworkers.faux-env.js');
 // faux dom and window environment has been created
 // set document.baseURI to the apps basePath (which is relative to this scripts path)
@@ -98,56 +102,37 @@ var initWebWorkerBlazor = async function () {
             return fetchOrig(resource, options);
         }
     };
-    // helper method
+    // fetch getText method
     async function getText(href) {
         var response = await fetch(new URL(href, document.baseURI), {
             cache: 'force-cache',
         });
         return await response.text();
     }
-    // Get index.html
-    var indexHtmlSrc = await getText('index.html');
-    var indexHtmlScripts = [];
-    var blazorWebAssemblyJSIndex = -1;
-    function getIndexHtmlScripts() {
-        var scriptPatt = /<script\s*(.*?)(?:\s*\/>|\s*>(.*?)<\/script>)/gms;
-        var m;
-        do {
-            m = scriptPatt.exec(indexHtmlSrc);
-            if (m) {
-                let scriptTagAttributes = m[1];
-                let scriptTagBody = m[2];
-                let scriptSrcMatch = scriptTagAttributes && /src="(.+?)"/.exec(scriptTagAttributes);
-                let webworkerEnabled = scriptTagAttributes && /\bwebworker-enabled\b/.exec(scriptTagAttributes);
-                if (scriptSrcMatch) {
-                    // remote script
-                    let scriptSrc = scriptSrcMatch[1];
-                    let isBlazorWebAssemblyJS = scriptSrc.includes('_framework/blazor.webassembly.js');
-                    consoleLog('webworkerEnabled', webworkerEnabled, scriptSrc);
-                    if (webworkerEnabled || isBlazorWebAssemblyJS) {
-                        if (isBlazorWebAssemblyJS) {
-                            blazorWebAssemblyJSIndex = indexHtmlScripts.length;
-                        }
-                        indexHtmlScripts.push({
-                            src: scriptSrc
-                        });
+    // Get index.html and parse it (for scripts, etc)
+    function parseHTML(html) {
+        var dom = txml.parse(html);
+        function addParentNode(children, parentNode) {
+            if (parentNode) parentNode.text = '';
+            for (let i = 0; i < children.length; i++) {
+                let child = children[i];
+                if (typeof child === 'string') {
+                    if (parentNode) parentNode.text = child;
+                    children.splice(i, 1);
+                    i--;
+                } else if (child) {
+                    child.parentNode = parentNode;
+                    if (child.children) {
+                        addParentNode(child.children, child);
                     }
-                } else if (scriptTagBody && webworkerEnabled) {
-                    // inline script
-                    indexHtmlScripts.push({
-                        body: scriptTagBody
-                    });
                 }
             }
-        } while (m);
-        if (blazorWebAssemblyJSIndex == -1) {
-            blazorWebAssemblyJSIndex = indexHtmlScripts.length;
-            indexHtmlScripts.push({
-                src: '_framework/blazor.webassembly.js'
-            });
         }
+        addParentNode(dom);
+        return dom;
     }
-    getIndexHtmlScripts();
+    var dom = parseHTML(await getText('index.html'));
+    var indexHtmlScripts = txml.filter(dom, o => o.tagName && o.tagName.toLowerCase() === 'script');
     globalThisObj.importOverride = async function (src) {
         consoleLog('importOverride', src);
         var jsStr = await getText(src);
@@ -210,20 +195,27 @@ var initWebWorkerBlazor = async function () {
         errorDiv.setAttribute('id', 'blazor-error-ui');
         // <script src="_framework/blazor.webassembly.js"></script>
         // load webworker-enabled scripts in order found in index.html (and _framework/blazor.webassembly.js)
-        for (var i = 0; i < indexHtmlScripts.length; i++) {
-            let s = indexHtmlScripts[i];
-            let scriptEl = bodyEl.appendChild(document.createElement('script'));
-            if (s.src) scriptEl.setAttribute('src', s.src);
-            if (s.body) scriptEl.text = s.body;
-            if (i == blazorWebAssemblyJSIndex) {
+        for (var indexHtmlScript of indexHtmlScripts) {
+            let src = indexHtmlScript.attributes.src;
+            let isBlazorWebAssemblyJS = src && src.includes('_framework/blazor.webassembly.js');
+            let isWebWorkerEnabled = typeof indexHtmlScript.attributes['webworker-enabled'] !== 'undefined' && indexHtmlScript.attributes['webworker-enabled'] !== 'false';
+            if (!isBlazorWebAssemblyJS && !isWebWorkerEnabled) continue;
+            let scriptEl = document.createElement('script');
+            if (indexHtmlScript.parentNode && indexHtmlScript.parentNode.tagName.toLowerCase() === 'head') {
+                headEl.appendChild(scriptEl);
+            } else {
+                bodyEl.appendChild(scriptEl);
+            }
+            for (var attr in indexHtmlScript.attributes) {
+                let attrValue = indexHtmlScript.attributes[attr];
+                scriptEl.setAttribute(attr, attrValue);
+            }
+            if (indexHtmlScript.text) scriptEl.text = indexHtmlScript.text;
+            if (isBlazorWebAssemblyJS && !dynamicImportSupported) {
                 // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
-                let jsStr = await getText(s.src);
-                // fix dynamic imports (if neeeded)
-                if (!dynamicImportSupported) {
-                    // convert dynamic imports in blazorWebAssembly and its imports
-                    jsStr = fixModuleScript(jsStr);
-                }
-                scriptEl.text = jsStr;
+                let jsStr = await getText(src);
+                // fix dynamic imports
+                scriptEl.text = fixModuleScript(jsStr);
             }
         }
         // init document

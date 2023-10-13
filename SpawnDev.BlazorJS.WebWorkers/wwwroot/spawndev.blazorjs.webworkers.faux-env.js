@@ -428,7 +428,6 @@ class DocumentFragment extends Node {
 class Element extends Node {
     constructor() {
         super();
-        this._attributes = {};
         this.tagName = '';
         this.namespaceURI = null;
         this._innerHTML = '';
@@ -475,7 +474,10 @@ class Element extends Node {
     setAttribute(attributeName, value) {
         consoleLog(this.constructor.name, 'setAttribute', attributeName);
         this[attributeName] = value;
-        //this._attributes[attributeName] = value;
+    }
+    removeAttribute(attributeName) {
+        consoleLog(this.constructor.name, 'removeAttribute', attributeName);
+        return delete this[attributeName];
     }
     get attributes() { return this; };
 }
