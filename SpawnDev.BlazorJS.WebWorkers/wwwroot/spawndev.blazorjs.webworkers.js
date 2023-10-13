@@ -4,6 +4,8 @@
 // 2022 - 2023
 // SpawnDev.BlazorJS.WebWorkers
 // _content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js
+// this script loads a fake window and DOM environment 
+// and makes the Blazor WASM work in a WebWorker scope
 
 var checkIfGlobalThis = function (it) {
     return it && it.Math == Math && it;
@@ -52,19 +54,10 @@ consoleLog('location.href', location.href);
 
 consoleLog('spawndev.blazorjs.webworkers: loading fake window environment');
 importScripts('spawndev.blazorjs.webworkers.faux-env.js');
-// barebones dom has been created
-// set document.baseURI
+// faux dom and window environment has been created
+// set document.baseURI to the apps basePath (which is relative to this scripts path)
 document.baseURI = new URL(`../../`, location.href).toString();
 consoleLog('document.baseURI', document.baseURI);
-// document.baseURI == 'https://localhost:7191/'
-
-var stallForDebuggerSeconds = 0;
-if (stallForDebuggerSeconds) {
-    console.log(`Waiting ${stallForDebuggerSeconds} seconds for debugging`);
-    var e = new Date().getTime() + (seconds * 1000);
-    while (new Date().getTime() <= e) { }
-    console.log(`Resuming`);
-}
 
 if (disableHotReload) {
     consoleLog('disabling hot reload on this thread');
@@ -81,13 +74,6 @@ async function hasDynamicImport() {
     }
 }
 
-// Below method is used to fix fetch calls in blazor.webassembly.js 
-async function webWorkersFetch(url, options) {
-    consoleLog("webWorkersFetch", url);
-    const newUrl = new URL(url, document.baseURI);
-    return await fetch(newUrl, options);
-}
-
 var initWebWorkerBlazor = async function () {
     var dynamicImportSupported = await hasDynamicImport();
     // Firefox, and possibly some other browsers, do not support dynamic module import (import) in workers.
@@ -98,7 +84,21 @@ var initWebWorkerBlazor = async function () {
     } else {
         consoleLog('import is supported.');
     }
-
+    // patch globalThis.fetch to use document.baseURI for the relative path base path
+    let fetchOrig = globalThis.fetch;
+    globalThis.fetch = function webWorkersFetch(resource, options) {
+        consoleLog("webWorkersFetch", typeof resource, resource);
+        if (typeof resource === 'string') {
+            // resource is a string
+            const newUrl = new URL(resource, document.baseURI);
+            return fetchOrig(newUrl, options);
+        } else {
+            // resource is a Request object
+            // currently not modified. could cause issues if a relative path was used to create the Request object.
+            return fetchOrig(resource, options);
+        }
+    };
+    // helper method
     async function getText(href) {
         var response = await fetch(new URL(href, document.baseURI), {
             cache: 'force-cache',
@@ -122,7 +122,7 @@ var initWebWorkerBlazor = async function () {
                 if (scriptSrcMatch) {
                     // remote script
                     let scriptSrc = scriptSrcMatch[1];
-                    let isBlazorWebAssemblyJS = scriptSrc == '_framework/blazor.webassembly.js';
+                    let isBlazorWebAssemblyJS = scriptSrc.includes('_framework/blazor.webassembly.js');
                     consoleLog('webworkerEnabled', webworkerEnabled, scriptSrc);
                     if (webworkerEnabled || isBlazorWebAssemblyJS) {
                         if (isBlazorWebAssemblyJS) {
@@ -157,6 +157,7 @@ var initWebWorkerBlazor = async function () {
         if (!ret) ret = createProxiedObject({});
         return ret;
     }
+    // this method fixes 'dynamic import scripts' to work in an environment that does not support 'dynamic import scripts'
     function fixModuleScript(jsStr) {
         // handle things that are automatically handled by import
         // import.meta.url
@@ -207,7 +208,7 @@ var initWebWorkerBlazor = async function () {
         // <div id="blazor-error-ui">
         var errorDiv = bodyEl.appendChild(document.createElement('div'));
         errorDiv.setAttribute('id', 'blazor-error-ui');
-        // <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+        // <script src="_framework/blazor.webassembly.js"></script>
         // load webworker-enabled scripts in order found in index.html (and _framework/blazor.webassembly.js)
         for (var i = 0; i < indexHtmlScripts.length; i++) {
             let s = indexHtmlScripts[i];
@@ -215,11 +216,9 @@ var initWebWorkerBlazor = async function () {
             if (s.src) scriptEl.setAttribute('src', s.src);
             if (s.body) scriptEl.text = s.body;
             if (i == blazorWebAssemblyJSIndex) {
-                scriptEl.setAttribute('autostart', "false");
-                // fix fetch relative paths
+                // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
                 let jsStr = await getText(s.src);
-                jsStr = jsStr.replace(/ fetch\(/g, ' webWorkersFetch(');
-                // fix dynamic imports (if neeed)
+                // fix dynamic imports (if neeeded)
                 if (!dynamicImportSupported) {
                     // convert dynamic imports in blazorWebAssembly and its imports
                     jsStr = fixModuleScript(jsStr);
@@ -231,14 +230,5 @@ var initWebWorkerBlazor = async function () {
         document.initDocument();
     }
     await initializeBlazor();
-
-    // Blazor startup configuration
-    // https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/environments?view=aspnetcore-7.0
-    Blazor.start({
-        loadBootResource: function (type, name, defaultUri, integrity) {
-            var newURL = new URL(defaultUri, document.baseURI);
-            return newURL.toString();
-        }
-    });
 };
 initWebWorkerBlazor();

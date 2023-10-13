@@ -48,15 +48,16 @@ builder.Services.AddSingleton<ContextMenuService>();
 #if DEBUG || true
 var host = builder.Build();
 
+var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
-BlazorJSRuntime.JS.Set("_testWorker", new ActionCallback<bool>(async (verbose) => { 
+JS.Set("_testWorker", new ActionCallback<bool>(async (verbose) => { 
     var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();    
     var worker = await webWorkerService.GetWebWorker(verbose);
     var math = worker.GetService<IMathsService>();
     var ret = await math.EstimatePI(100);
     Console.WriteLine(ret);
 }));
-BlazorJSRuntime.JS.Set("_testWorkerAndDispose", new ActionCallback<bool>(async (verbose) => {
+JS.Set("_testWorkerAndDispose", new ActionCallback<bool>(async (verbose) => {
     var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
     using var worker = await webWorkerService.GetWebWorker(verbose);
     var math = worker.GetService<IMathsService>();
