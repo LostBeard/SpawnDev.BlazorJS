@@ -11,7 +11,7 @@ var checkIfGlobalThis = function (it) {
     return it && it.Math == Math && it;
 };
 
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis
 const globalThisObj =
     // eslint-disable-next-line es/no-global-this -- safe
     checkIfGlobalThis(typeof globalThis == 'object' && globalThis) ||
