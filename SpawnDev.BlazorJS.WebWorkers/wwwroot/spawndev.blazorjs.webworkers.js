@@ -58,7 +58,7 @@ consoleLog('spawndev.blazorjs.webworkers: loading fake window environment');
 importScripts('txml.min.js');
 // faux DOM and document environment
 importScripts('spawndev.blazorjs.webworkers.faux-env.js');
-// faux dom and window environment has been created
+// faux dom and window environment has been created (currently empty)
 // set document.baseURI to the apps basePath (which is relative to this scripts path)
 document.baseURI = new URL(`../../`, location.href).toString();
 consoleLog('document.baseURI', document.baseURI);
@@ -104,9 +104,7 @@ var initWebWorkerBlazor = async function () {
     };
     // fetch getText method
     async function getText(href) {
-        var response = await fetch(new URL(href, document.baseURI), {
-            cache: 'force-cache',
-        });
+        var response = await fetch(new URL(href, document.baseURI));
         return await response.text();
     }
     // Get index.html and parse it (for scripts, etc)

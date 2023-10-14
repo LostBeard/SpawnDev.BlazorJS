@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="libs/google-code-prettify/skins/sunburst.css">
     <link href="css/app.css" rel="stylesheet" />
     <link href="SpawnDev.BlazorJS.Test.styles.css" rel="stylesheet" />
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
 </head>
 
 <body>
@@ -30,10 +31,52 @@
         <a class="dismiss">🗙</a>
     </div>
     <script webworker-enabled>
-        console.log('This script should run in all scopes including window and worker dur to the webworker-enabled attribute');
+        // example
+        console.log('This script will run in all scopes including window and worker due to the webworker-enabled attribute');
     </script>
-    <script src="_framework/blazor.webassembly.js"></script>
-    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+    <!-- autostart is set to false so we can detect SIMD support and load the apropriate build -->
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <!-- https://github.com/GoogleChromeLabs/wasm-feature-detect -->
+    <script webworker-enabled src="wasm-feature-detect.1.5.1.js"></script>
+    <!-- The below script tag is used to detect SIMD support on the running device and load the appropriate build -->
+    <script webworker-enabled>
+        // This script detects if SIMD is supported and if not, loads _frameworkCompat/ build resources (no SIMD) instead of _framework/ resources
+        // Example publish commands to build first with SIMD support, and then without SIMD support for compatibility
+        // dotnet publish --nologo --configuration Release --output "%publishFolder%"
+        // dotnet publish --nologo --no-restore --configuration Release -p:WasmEnableSIMD=false --output "%publishCompatFolder%"
+        // then copy the '_framework' folder contents from the 2nd build to 'wwwroot/_frameworkCompat' in your 1st build
+        // the code below will detect SIMD support and use the apropriate build folder
+        // another option is to jsut use the below flag in the project .csproj (in a <PropertyGroup>) and do a single build with SIMD disabled
+        // <WasmEnableSIMD>false</WasmEnableSIMD>
+        // https://github.com/dotnet/runtime/issues/92117
+        // https://github.com/dotnet/runtime/issues/92587
+        (async function() {
+            var url = new URL(location.href);
+            var forceCompatMode = url.searchParams.get('forceCompatMode') === '1';
+            let verboseStart = url.searchParams.get('verboseStart') === '1';
+            var supportsSimd = await wasmFeatureDetect.simd();
+            if (verboseStart) console.log('supportsSimd', supportsSimd);
+            // compat mode build could be built without wasm exception support if needed and detected here
+            var supportsExceptions = await wasmFeatureDetect.exceptions();
+            if (verboseStart) console.log('supportsExceptions', supportsExceptions);
+            var useCompatMode = !supportsSimd;
+            if (forceCompatMode) {
+                if (verboseStart) console.log('forceCompatMode', forceCompatMode);
+                useCompatMode = true;
+            }
+            if (verboseStart) console.log('useCompatMode', useCompatMode);
+            await Blazor.start({
+                loadBootResource: function (type, name, defaultUri, integrity) {
+                    if (verboseStart) console.log(`Loading: '${type}', '${name}', '${defaultUri}', '${integrity}'`);
+                    if (useCompatMode && defaultUri.includes('_framework/')) {
+                        let newUrl = defaultUri.replace('_framework/', '_frameworkCompat/');
+                        if (verboseStart) console.log('Using compat version:', newUrl);
+                        return newUrl;
+                    }
+                }
+            });
+        })();
+    </script>
     <!-- google-code-prettify -->
     <script type="text/javascript" src="libs/google-code-prettify/prettify.js"></script>
 </body>
