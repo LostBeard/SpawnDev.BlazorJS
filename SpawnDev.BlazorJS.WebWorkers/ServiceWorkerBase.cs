@@ -10,38 +10,42 @@ namespace SpawnDev.BlazorJS.WebWorkers
     public class ServiceWorkerBase : IAsyncBackgroundService
     {
         BlazorJSRuntime JS;
+        ServiceWorkerGlobalScope? ServiceWorkerThis = null;
         public ServiceWorkerBase(BlazorJSRuntime js)
         {
             JS = js;
-            if (JS.ServiceWorkerThis != null)
+            ServiceWorkerThis = JS.ServiceWorkerThis;
+            if (ServiceWorkerThis != null)
             {
+                // the service is running a ServiceWorker
                 Console.WriteLine("ServiceWorker: IsServiceWorkerGlobalScope");
-                JS.ServiceWorkerThis.OnFetch += ServiceWorker_OnFetch;
+                ServiceWorkerThis.OnFetch += ServiceWorker_OnFetch;
+                // let he worker script know we are loaded and ready to listen. (may need to handle missed events)
                 JS.CallVoid("ServiceWorkerBaseInit");
+            }
+            else
+            {
+                // not running in a ServiceWorker. 
             }
         }
         void ServiceWorker_OnFetch(FetchEvent e)
         {
             Console.WriteLine($"ServiceWorker_OnFetch: {e.ClientId} {e.Request.Url}");
+            // optionally handle the request
+            // this handles them all for testing
             e.RespondWith(ServiceWorker_OnFetchAsync(e));
         }
         async Task<Response> ServiceWorker_OnFetchAsync(FetchEvent e)
         {
-            Response? ret = null;
-            Console.WriteLine($"ServiceWorker_OnFetchAsync: {e.ClientId} {e.Request.Url}");
+            Response ret;
             try
             {
-                ret = await JS.Fetch(e.Request.Url);
-                Console.WriteLine($"resp.ok: {ret.Ok}");
+                ret = await JS.Fetch(e.Request);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                // return new Response('Server error', { "status": 500, headers: { "Content-Type": "text/plain" } });
+                ret = new Response(ex.Message, new ResponseOptions { Status = 500, StatusText = ex.Message,  Headers = new Dictionary<string, string>{ { "Content-Type", "text/plain" } } });
                 Console.WriteLine($"ServiceWorker_OnFetchAsync failed: {ex.Message}");
-            }
-            if (ret == null)
-            {
-                ret = new Response("File not found", new ResponseOptions { Status = 404, StatusText = "File not found" });
             }
             return ret;
         }
