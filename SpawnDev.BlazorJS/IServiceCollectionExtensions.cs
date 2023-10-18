@@ -94,11 +94,17 @@ namespace SpawnDev.BlazorJS
             var tcs = new TaskCompletionSource<object>();
             if (BlazorJSRuntime.JS.IsWorker && workersSkipPageRendering)
             {
+#if DEBUG
+                Console.WriteLine($"BlazorJSRunAsync mode: Worker");
+#endif
                 // This is a worker so we are going to use this to allow services in workers without the html renderer trying to load pages
                 await tcs.Task;
             }
             else
             {
+#if DEBUG
+                Console.WriteLine($"BlazorJSRunAsync mode: Default");
+#endif
                 // run as normal
                 await _this.RunAsync();
             }

@@ -34,9 +34,13 @@
         // example
         console.log('This script will run in all scopes including window and worker due to the webworker-enabled attribute');
     </script>
-    <!-- autostart is set to false so we can detect SIMD support and load the apropriate build -->
+    <!-- autostart is set to false to allow the app to detect SIMD support and load the apropriate build -->
     <script src="_framework/blazor.webassembly.js" autostart="false"></script>
-    <!-- https://github.com/GoogleChromeLabs/wasm-feature-detect -->
+    <!--
+        WASM Feature Detect - from GoogleChromeLabs
+        CDN UMD Version: https://unpkg.com/wasm-feature-detect/dist/umd/index.js
+        Repo: https://github.com/GoogleChromeLabs/wasm-feature-detect
+    -->
     <script webworker-enabled src="wasm-feature-detect.1.5.1.js"></script>
     <!-- The below script tag is used to detect SIMD support on the running device and load the appropriate build -->
     <script webworker-enabled>
@@ -50,7 +54,7 @@
         // <WasmEnableSIMD>false</WasmEnableSIMD>
         // https://github.com/dotnet/runtime/issues/92117
         // https://github.com/dotnet/runtime/issues/92587
-        (async function() {
+        (async function () {
             var url = new URL(location.href);
             var forceCompatMode = url.searchParams.get('forceCompatMode') === '1';
             let verboseStart = url.searchParams.get('verboseStart') === '1';

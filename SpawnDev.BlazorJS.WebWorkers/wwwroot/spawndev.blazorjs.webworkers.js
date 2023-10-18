@@ -42,6 +42,7 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
 
 var disableHotReload = true;
 var verboseWebWorkers = location.search.indexOf('verbose=true') > -1;
+
 var consoleLog = function () {
     if (!verboseWebWorkers) return;
     console.log(...arguments);
@@ -52,16 +53,31 @@ consoleLog('location.href', location.href);
 // location.href is this script
 // location.href == 'https://localhost:7191/_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js?verbose=false'
 
+// if documentBaseURIIsModified fetch will be repalced with one that uses the modified documentBaseURI as its base path for relative path fetches
+var documentBaseURIIsModified = false;
+var documentBaseURI = (function () {
+    var uri = new URL(`./`, location.href);
+    if (uri.pathname.includes('_content/')) {
+        documentBaseURIIsModified = true;
+        var subpath = uri.pathname.substring(0, uri.pathname.indexOf('_content/'));
+        return new URL(subpath, location.href).toString();
+    }
+    return uri.toString();
+})();
+consoleLog('documentBaseURI', documentBaseURI);
+
+const webWorkersContent = new URL(`_content/SpawnDev.BlazorJS.WebWorkers/`, documentBaseURI).toString();
+
 consoleLog('spawndev.blazorjs.webworkers: loading fake window environment');
 // txml - xml parser
 // https://github.com/TobiasNickel/tXml
-importScripts('txml.min.js');
+importScripts(new URL('txml.min.js', webWorkersContent).toString());
 // faux DOM and document environment
-importScripts('spawndev.blazorjs.webworkers.faux-env.js');
+//importScripts('spawndev.blazorjs.webworkers.faux-env.js');
+importScripts(new URL('spawndev.blazorjs.webworkers.faux-env.js', webWorkersContent).toString());
 // faux dom and window environment has been created (currently empty)
 // set document.baseURI to the apps basePath (which is relative to this scripts path)
-document.baseURI = new URL(`../../`, location.href).toString();
-consoleLog('document.baseURI', document.baseURI);
+document.baseURI = documentBaseURI;
 
 if (disableHotReload) {
     consoleLog('disabling hot reload on this thread');
@@ -70,6 +86,10 @@ if (disableHotReload) {
 }
 
 async function hasDynamicImport() {
+
+    if (globalThisTypeName == 'ServiceWorkerGlobalScope') {
+        return false;
+    }
     try {
         await import('data:text/javascript;base64,Cg==');
         return true;
@@ -89,19 +109,21 @@ var initWebWorkerBlazor = async function () {
         consoleLog('import is supported.');
     }
     // patch globalThisObj.fetch to use document.baseURI for the relative path base path
-    let fetchOrig = globalThisObj.fetch;
-    globalThisObj.fetch = function (resource, options) {
-        consoleLog("webWorkersFetch", typeof resource, resource);
-        if (typeof resource === 'string') {
-            // resource is a string
-            const newUrl = new URL(resource, document.baseURI);
-            return fetchOrig(newUrl, options);
-        } else {
-            // resource is a Request object
-            // currently not modified. could cause issues if a relative path was used to create the Request object.
-            return fetchOrig(resource, options);
-        }
-    };
+    if (documentBaseURIIsModified) {
+        let fetchOrig = globalThisObj.fetch;
+        globalThisObj.fetch = function (resource, options) {
+            consoleLog("webWorkersFetch", typeof resource, resource);
+            if (typeof resource === 'string') {
+                // resource is a string
+                const newUrl = new URL(resource, document.baseURI);
+                return fetchOrig(newUrl, options);
+            } else {
+                // resource is a Request object
+                // currently not modified. could cause issues if a relative path was used to create the Request object.
+                return fetchOrig(resource, options);
+            }
+        };
+    }
     // fetch getText method
     async function getText(href) {
         var response = await fetch(new URL(href, document.baseURI));
@@ -134,21 +156,26 @@ var initWebWorkerBlazor = async function () {
     globalThisObj.importOverride = async function (src) {
         consoleLog('importOverride', src);
         var jsStr = await getText(src);
-        jsStr = fixModuleScript(jsStr);
+        jsStr = fixModuleScript(jsStr, src);
         let fn = new Function(jsStr);
         var ret = fn.apply(createProxiedObject(globalThisObj), []);
         if (!ret) ret = createProxiedObject({});
         return ret;
     }
     // this method fixes 'dynamic import scripts' to work in an environment that does not support 'dynamic import scripts'
-    function fixModuleScript(jsStr) {
+    // it is designed for and tested agaisnt the Blazor WASM runtime.
+    // it may not work on other modules
+    function fixModuleScript(jsStr, src) {
         // handle things that are automatically handled by import
-        // import.meta.url
-        jsStr = jsStr.replace(new RegExp('\\bimport\\.meta\\.url\\b', 'g'), `document.baseURI`);
+        src = new URL(src, document.baseURI).toString();
+        var scriptUrl = JSON.stringify(src);
+        consoleLog('fixModuleScript.scriptUrl', src, scriptUrl);
+        // fix import.meta.url - The full URL to the module
+        jsStr = jsStr.replace(/\bimport\.meta\.url\b/g, scriptUrl);
         // import.meta
-        jsStr = jsStr.replace(new RegExp('\\bimport\\.meta\\b', 'g'), `{ url: location.href }`);
+        jsStr = jsStr.replace(/\bimport\.meta\b/g, `{ url: ${scriptUrl} }`);
         // import
-        jsStr = jsStr.replace(new RegExp('\\bimport\\(', 'g'), 'importOverride(');
+        jsStr = jsStr.replace(/\bimport\(/g, 'importOverride(');
         // export
         // https://www.geeksforgeeks.org/what-is-export-default-in-javascript/
         // handle exports from
@@ -158,24 +185,23 @@ var initWebWorkerBlazor = async function () {
         // export function afterStarted(options, extensions) {
         var exportPatt = /\bexport[ \t]+function[ \t]+([^ \t(]+)/g;
         jsStr = jsStr.replace(exportPatt, '_exportsOverride.$1 = function $1');
+        // To match: _framework/blazor-hotreload.
+        // export async function receiveHotReloadAsync() {
+        exportPatt = /\bexport[ \t]+async[ \t]+function[ \t]+([^ \t(]+)/g;
+        jsStr = jsStr.replace(exportPatt, '_exportsOverride.$1 = async function $1');
         // handle exports from
         // dotnet.7.0.0.amub20uvka.js
         // export default createDotnetRuntime
         exportPatt = /\bexport[ \t]+default[ \t]+([^ \t;]+)/g;
         jsStr = jsStr.replace(exportPatt, '_exportsOverride.default = $1');
+        // export{Be as default,Fe as dotnet,We as exit};
+        // below changes the above line to the below line changing the 'VAR as KEY' to 'KEY:VAR'
+        // export{default:Be,dotnet:Fe,exit:We};
+        exportPatt = /([a-zA-Z0-9]+)\s+as\s+([a-zA-Z0-9]+)/g;
+        jsStr = jsStr.replace(exportPatt, '$2:$1');
         // export { dotnet, exit, INTERNAL };
-        exportPatt = /\bexport[ \t]+(\{[^}]+\})/g;
+        exportPatt = /\bexport\b[ \t]*(\{[^}]+\})/g;
         jsStr = jsStr.replace(exportPatt, '_exportsOverride = Object.assign(_exportsOverride, $1)');
-        //var n = 0;
-        //var m = null;
-        //exportPatt = new RegExp('\\bexport\\b.*?(?:;|$)', 'gm');
-        //do {
-        //    m = exportPatt.exec(jsStr);
-        //    if (m) {
-        //        n++;
-        //        console.log('export', n, m[0]);
-        //    }
-        //} while (m);
         var modulize = `let _exportsOverride = {}; ${jsStr}; return _exportsOverride;`;
         return modulize;
     }
@@ -213,7 +239,7 @@ var initWebWorkerBlazor = async function () {
                 // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
                 let jsStr = await getText(src);
                 // fix dynamic imports
-                scriptEl.text = fixModuleScript(jsStr);
+                scriptEl.text = fixModuleScript(jsStr, src);
             }
         }
         // init document

@@ -18,6 +18,7 @@ namespace SpawnDev.BlazorJS
         public Window? WindowThis { get; private set; } = null;
         public DedicatedWorkerGlobalScope? DedicateWorkerThis { get; private set; } = null;
         public SharedWorkerGlobalScope? SharedWorkerThis { get; private set; } = null;
+        public ServiceWorkerGlobalScope? ServiceWorkerThis { get; private set; } = null;
         public string GlobalThisTypeName { get; private set; }
         public JSObject GlobalThis { get; private set; }
         public bool IsWindow => GlobalThis is Window;
@@ -62,6 +63,10 @@ namespace SpawnDev.BlazorJS
                 case nameof(SharedWorkerGlobalScope):
                     SharedWorkerThis = Get<SharedWorkerGlobalScope>("globalThis");
                     GlobalThis = SharedWorkerThis;
+                    break;
+                case nameof(ServiceWorkerGlobalScope):
+                    ServiceWorkerThis = Get<ServiceWorkerGlobalScope>("globalThis");
+                    GlobalThis = ServiceWorkerThis;
                     break;
                 default:
                     GlobalThis = Get<JSObject>("globalThis");
