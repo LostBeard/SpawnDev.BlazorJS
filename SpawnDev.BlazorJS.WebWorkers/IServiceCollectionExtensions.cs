@@ -13,5 +13,15 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             return _this.AddSingleton<WebWorkerService>();
         }
+        /// <summary>
+        /// Register the type that will be 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_this"></param>
+        /// <returns></returns>
+        public static IServiceCollection RegisterServiceWorker<T>(this IServiceCollection _this) where T : ServiceWorkerBase
+        {
+            return _this.AddSingleton<WebWorkerService>();
+        }
     }
 }

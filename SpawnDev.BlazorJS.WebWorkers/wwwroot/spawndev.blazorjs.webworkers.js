@@ -4,8 +4,8 @@
 // 2022 - 2023
 // SpawnDev.BlazorJS.WebWorkers
 // _content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js
-// this script loads a fake window and DOM environment 
-// and makes the Blazor WASM work in a WebWorker scope
+// this script loads a fake window and DOM environment
+// and makes the Blazor WASM work in a DedicatedWorkerGlobalScope, a SharedWorkerGlobalScope and a ServiceWorkerGlobalScope
 
 var checkIfGlobalThis = function (it) {
     return it && it.Math == Math && it;
@@ -24,20 +24,39 @@ const globalThisObj =
 
 const globalThisTypeName = globalThisObj.constructor.name;
 
-// important for SharedWorker
-// catch any incoming connetions that happen while .Net is loading
-var _missedConnections = [];
-function takeOverOnConnectEvent(newConnectFunction) {
-    var tmp = _missedConnections;
-    _missedConnections = [];
-    globalThisObj.onconnect = newConnectFunction;
-    return tmp;
-}
-
+// in some contexts immediate actions need to be taken that cannot wait for Blazor WASM to start
+// for example:
+// in a shared worker, the onconnect event handler needs to be set immediately to catch all invocations of the event
+// at this time, I ma not sure about fetch on service worker contexts. some debug code is being left until known.
 if (globalThisTypeName == 'SharedWorkerGlobalScope') {
+    // important for SharedWorker
+    // catch any incoming connetions that happen while .Net is loading
+    let _missedConnections = [];
+    globalThisObj.takeOverOnConnectEvent = function (newConnectFunction) {
+        var tmp = _missedConnections;
+        _missedConnections = [];
+        globalThisObj.onconnect = newConnectFunction;
+        return tmp;
+    }
     globalThisObj.onconnect = function (e) {
         _missedConnections.push(e.ports[0]);
     };
+} else if (globalThisTypeName == 'ServiceWorkerGlobalScope') {
+    let _missedFetchEvents = [];
+    let ServiceWorkerBaseInitCalled = false;
+    globalThisObj.addEventListener('fetch', function (e) {
+        if (!ServiceWorkerBaseInitCalled) {
+            _missedFetchEvents.push(e);
+            console.log('!!!!!!!!!!!!!!!! Missed fetch call !!!!!!!!!!!!!!!!!!!!!', _missedFetchEvents.length);
+        }
+    });
+    globalThisObj.ServiceWorkerBaseInit = function () {
+        console.log('ServiceWorkerBaseInit has taken over', _missedFetchEvents.length);
+        ServiceWorkerBaseInitCalled = true;
+        var tmp = _missedFetchEvents;
+        _missedFetchEvents = [];
+        return tmp;
+    }
 }
 
 var disableHotReload = true;
@@ -51,9 +70,11 @@ var consoleLog = function () {
 consoleLog('spawndev.blazorjs.webworkers: started');
 consoleLog('location.href', location.href);
 // location.href is this script
-// location.href == 'https://localhost:7191/_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js?verbose=false'
-
-// if documentBaseURIIsModified fetch will be repalced with one that uses the modified documentBaseURI as its base path for relative path fetches
+// - location.href == 'https://localhost:7191/_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js?verbose=false'
+// or a service worker script
+// - location.href == 'https://localhost:7191/service-worker.js'
+// if documentBaseURIIsModified == true, 
+// - fetch will be replaced with one that uses the modified documentBaseURI as its base path for relative path fetches as is expected in Blazor WASM apps
 var documentBaseURIIsModified = false;
 var documentBaseURI = (function () {
     var uri = new URL(`./`, location.href);
@@ -67,7 +88,6 @@ var documentBaseURI = (function () {
 consoleLog('documentBaseURI', documentBaseURI);
 
 const webWorkersContent = new URL(`_content/SpawnDev.BlazorJS.WebWorkers/`, documentBaseURI).toString();
-
 consoleLog('spawndev.blazorjs.webworkers: loading fake window environment');
 // txml - xml parser
 // https://github.com/TobiasNickel/tXml
@@ -86,7 +106,7 @@ if (disableHotReload) {
 }
 
 async function hasDynamicImport() {
-
+    // ServiceWorkers have issues with dynamic imports even if detection says it is supported 
     if (globalThisTypeName == 'ServiceWorkerGlobalScope') {
         return false;
     }

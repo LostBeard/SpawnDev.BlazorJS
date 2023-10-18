@@ -13,7 +13,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public bool WebWorkerSupported { get; private set; }
         public List<WebWorker> Workers { get; } = new List<WebWorker>();
         public List<SharedWebWorker> SharedWorkers { get; } = new List<SharedWebWorker>();
-        IServiceProvider _serviceProvider;
+        public IServiceProvider ServiceProvider { get; }
         public string AppBaseUri { get; }
         public bool BeenInit { get; private set; }
         DateTime StartTime = DateTime.Now;
@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             JS = js;
             WebWorkerSupported = !JS.IsUndefined("Worker");
             SharedWebWorkerSupported = !JS.IsUndefined("SharedWorker");
-            _serviceProvider = serviceProvider;
+            ServiceProvider = serviceProvider;
             AppBaseUri = JS.Get<string>("document.baseURI");
             var appBaseUriObj = new Uri(AppBaseUri);
             var workerScriptUri = new Uri(appBaseUriObj, WebWorkerJSScript);
@@ -96,7 +96,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (JS.IsDedicatedWorkerGlobalScope)
             {
                 var incomingPort = JS.Get<MessagePort>("self");
-                DedicatedWorkerParent = new ServiceCallDispatcher(_serviceProvider, incomingPort);
+                DedicatedWorkerParent = new ServiceCallDispatcher(ServiceProvider, incomingPort);
                 //_sharedWorkerIncomingConnections.Add(incomingHandler);
                 DedicatedWorkerParent.SendReadyFlag();
             }
@@ -120,6 +120,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 }
                 catch { }
                 JS.Log($"SharedWorker {ThisSharedWorkerName} listening for connections: took {SharedWorkerIncomingConnections.Count} missed connections");
+            }
+            else if (JS.IsServiceWorkerGlobalScope)
+            {
+
             }
             //BroadcastPing();
         }
@@ -208,7 +212,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         void AddIncomingPort(MessagePort incomingPort)
         {
-            var incomingHandler = new ServiceCallDispatcher(_serviceProvider, incomingPort);
+            var incomingHandler = new ServiceCallDispatcher(ServiceProvider, incomingPort);
             SharedWorkerIncomingConnections.Add(incomingHandler);
             incomingPort.Start();
             JS.Log("AddIncomingPort", SharedWorkerIncomingConnections.Count);
@@ -226,7 +230,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var queryArgs = new NameValueCollection();
             queryArgs.Add("verbose", verboseMode ? "true" : "false");
             var worker = new Worker($"{WebWorkerJSScript}?{ToQueryString(queryArgs)}");
-            var webWorker = new WebWorker(worker, _serviceProvider);
+            var webWorker = new WebWorker(worker, ServiceProvider);
             Workers.Add(webWorker);
             if (awaitWhenReady) await webWorker.WhenReady;
             return webWorker;
@@ -245,7 +249,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var queryArgs = new NameValueCollection();
             queryArgs.Add("verbose", verboseMode ? "true" : "false");
             var worker = new SharedWorker($"{WebWorkerJSScript}?{ToQueryString(queryArgs)}", sharedWorkerName);
-            var webWorker = new SharedWebWorker(sharedWorkerName, worker, _serviceProvider);
+            var webWorker = new SharedWebWorker(sharedWorkerName, worker, ServiceProvider);
             if (awaitWhenReady) await webWorker.WhenReady;
             return webWorker;
         }
