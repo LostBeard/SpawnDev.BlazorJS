@@ -50,7 +50,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Task SkipWaiting() => JSRef.CallVoidAsync("skipWaiting");
         #endregion
         #region events
+        public JSEventCallback<ExtendableEvent> OnActivate { get => new JSEventCallback<ExtendableEvent>(o => AddEventListener("activate", o), o => RemoveEventListener("activate", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         public JSEventCallback<FetchEvent> OnFetch { get => new JSEventCallback<FetchEvent>(o => AddEventListener("fetch", o), o => RemoveEventListener("fetch", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<ExtendableEvent> OnInstall { get => new JSEventCallback<ExtendableEvent>(o => AddEventListener("install", o), o => RemoveEventListener("install", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<ExtendableMessageEvent> OnMessage { get => new JSEventCallback<ExtendableMessageEvent>(o => AddEventListener("message", o), o => RemoveEventListener("message", o)); set { } }
+        public JSEventCallback<PushEvent> OnPush { get => new JSEventCallback<PushEvent>(o => AddEventListener("push", o), o => RemoveEventListener("push", o)); set { } }
+        public JSEventCallback<Event> OnPushSubscriptionChange { get => new JSEventCallback<Event>(o => AddEventListener("pushsubscriptionchange", o), o => RemoveEventListener("pushsubscriptionchange", o)); set { } }
+        public JSEventCallback<SyncEvent> OnSync { get => new JSEventCallback<SyncEvent>(o => AddEventListener("sync", o), o => RemoveEventListener("sync", o)); set { } }
         #endregion
     }
 }

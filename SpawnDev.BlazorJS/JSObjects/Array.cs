@@ -76,8 +76,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var cb = Callback.Create(fn);
             JSRef.CallVoid("forEach", cb);
         }
-        public T[] ToArray() => JS.ReturnMe<T[]>(JSRef);
-        //public T[] ToArray() => Enumerable.Range(0, Length).Select(i => At(i)).ToArray();
+        //public T[] ToArray() => JS.ReturnMe<T[]>(JSRef);
+        public T[] ToArray() => Enumerable.Range(0, Length).Select(i => At(i)).ToArray();
         public T[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToArray();
+        public List<T> ToList() => Enumerable.Range(0, Length).Select(i => At(i)).ToList();
+        public List<T> ToList(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToList();
     }
 }

@@ -24,7 +24,7 @@ const globalThisObj =
 
 const globalThisTypeName = globalThisObj.constructor.name;
 
-// in some contexts immediate actions need to be taken that cannot wait for Blazor WASM to start
+// in some contexts, event handlers need to be added immediately and cannot wait for Blazor WASM's async startup
 // for example:
 // in a shared worker, the onconnect event handler needs to be set immediately to catch all invocations of the event
 // at this time, I ma not sure about fetch on service worker contexts. some debug code is being left until known.
@@ -46,8 +46,18 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
     let ServiceWorkerBaseInitCalled = false;
     globalThisObj.addEventListener('fetch', function (e) {
         if (!ServiceWorkerBaseInitCalled) {
+            console.log('!!!!!!!!!!!!!!!! Missed fetch call !!!!!!!!!!!!!!!!!!!!!', e.request.url, e, _missedFetchEvents.length);
+            var waitUntilPromise = new Promise(function(resolve, reject) {
+                e.waitResolve = resolve;
+                e.waitReject = reject;
+            });
+            e.waitUntil(waitUntilPromise);
+            var responsePromise = new Promise(function (resolve, reject) {
+                e.responseResolve = resolve;
+                e.responseReject = reject;
+            });
+            e.respondWith(responsePromise);
             _missedFetchEvents.push(e);
-            console.log('!!!!!!!!!!!!!!!! Missed fetch call !!!!!!!!!!!!!!!!!!!!!', _missedFetchEvents.length);
         }
     });
     globalThisObj.ServiceWorkerBaseInit = function () {
@@ -55,6 +65,7 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
         ServiceWorkerBaseInitCalled = true;
         var tmp = _missedFetchEvents;
         _missedFetchEvents = [];
+        setTimeout(() => tmp.forEach(e => e.waitResolve()), 1);
         return tmp;
     }
 }
