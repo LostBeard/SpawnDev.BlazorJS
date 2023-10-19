@@ -3,49 +3,10 @@ using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
-
-    internal class MissedNotificationEvent : NotificationEvent
-    {
-        public MissedNotificationEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public void WaitResolve() => JSRef.CallVoid("waitResolve");
-        public void WaitReject() => JSRef.CallVoid("waitReject");
-    }
-    internal class MissedPushEvent : PushEvent
-    {
-        public MissedPushEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public void WaitResolve() => JSRef.CallVoid("waitResolve");
-        public void WaitReject() => JSRef.CallVoid("waitReject");
-    }
-    internal class MissedSyncEvent : SyncEvent
-    {
-        public MissedSyncEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public void WaitResolve() => JSRef.CallVoid("waitResolve");
-        public void WaitReject() => JSRef.CallVoid("waitReject");
-    }
-    internal class MissedExtendableMessageEvent : ExtendableMessageEvent
-    {
-        public MissedExtendableMessageEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public void WaitResolve() => JSRef.CallVoid("waitResolve");
-        public void WaitReject() => JSRef.CallVoid("waitReject");
-    }
-    internal class MissedFetchEvent : FetchEvent
-    {
-        public MissedFetchEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public void ResponseResolve(Response response) => JSRef.CallVoid("responseResolve", response);
-        public void ResponseReject() => JSRef.CallVoid("responseReject");
-    }
-
-    internal class MissedExtendableEvent : ExtendableEvent
-    {
-        public MissedExtendableEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public void WaitResolve() => JSRef.CallVoid("waitResolve");
-        public void WaitReject() => JSRef.CallVoid("waitReject");
-    }
-
     public class ServiceWorkerManager : IAsyncBackgroundService, IDisposable
     {
-        BlazorJSRuntime JS;
-        ServiceWorkerGlobalScope? ServiceWorkerThis = null;
+        protected BlazorJSRuntime JS;
+        protected ServiceWorkerGlobalScope? ServiceWorkerThis = null;
         public string InstanceId { get; private set; }  = Guid.NewGuid().ToString();
         public ServiceWorkerManager(BlazorJSRuntime js)
         {
@@ -53,7 +14,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             ServiceWorkerThis = JS.ServiceWorkerThis;
         }
 
-        void Log(params object[] args)
+        protected void Log(params object[] args)
         {
             JS.Log(new object?[] { $"ServiceWorkerManager: {InstanceId}" }.Concat(args).ToArray());
         }
@@ -148,16 +109,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
 
-        protected virtual async Task ServiceWorker_OnNotificationCloseAsync(NotificationEvent e)
-        {
-            Log($"ServiceWorker_OnNotificationCloseAsync");
-        }
-
-        protected virtual async Task ServiceWorker_OnNotificationClickAsync(NotificationEvent e)
-        {
-            Log($"ServiceWorker_OnNotificationClickAsync");
-        }
-
         /// <summary>
         /// This is the default implementation of InitAsync for this class. It calls Register() which registers the default service-worker.js script location.
         /// </summary>
@@ -167,6 +118,70 @@ namespace SpawnDev.BlazorJS.WebWorkers
             await Register();
         }
 
+        protected virtual async Task ServiceWorker_OnInstallAsync(ExtendableEvent e)
+        {
+            //Log($"ServiceWorker_OnInstallAsync");
+            //_ = ServiceWorkerThis!.SkipWaiting();   // returned task can be ignored
+        }
+
+        protected virtual async Task ServiceWorker_OnActivateAsync(ExtendableEvent e)
+        {
+            //Log($"ServiceWorker_OnActivateAsync");
+            //await ServiceWorkerThis!.Clients.Claim();
+        }
+
+        protected virtual async Task<Response> ServiceWorker_OnFetchAsync(FetchEvent e)
+        {
+            //Log($"ServiceWorker_OnFetchAsync", e.Request.Method, e.Request.Url);
+            Response ret;
+            try
+            {
+                ret = await JS.Fetch(e.Request);
+            }
+            catch (Exception ex)
+            {
+                ret = new Response(ex.Message, new ResponseOptions { Status = 500, StatusText = ex.Message, Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } } });
+                //Log($"ServiceWorker_OnFetchAsync failed: {ex.Message}");
+            }
+            return ret;
+        }
+
+        protected virtual async Task ServiceWorker_OnMessageAsync(ExtendableMessageEvent e)
+        {
+            //Log($"ServiceWorker_OnMessageAsync");
+        }
+
+        protected virtual async Task ServiceWorker_OnPushAsync(PushEvent e)
+        {
+            //Log($"ServiceWorker_OnPushAsync");
+        }
+
+        protected virtual void OnPushSubscriptionChange(Event e)
+        {
+            //Log($"OnPushSubscriptionChange");
+        }
+
+        protected virtual async Task ServiceWorker_OnSyncAsync(SyncEvent e)
+        {
+            //Log($"ServiceWorker_OnSyncAsync");
+        }
+
+        protected virtual async Task ServiceWorker_OnNotificationCloseAsync(NotificationEvent e)
+        {
+            //Log($"ServiceWorker_OnNotificationCloseAsync");
+        }
+
+        protected virtual async Task ServiceWorker_OnNotificationClickAsync(NotificationEvent e)
+        {
+            //Log($"ServiceWorker_OnNotificationClickAsync");
+        }
+
+        /// <summary>
+        /// registers the default 'service-worker.js' in the app's base path.<br />
+        /// 'service-worker.js' must import the web worker script like the example below<br />
+        /// importScripts('_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js');
+        /// </summary>
+        /// <returns></returns>
         public async Task Register()
         {
             if (JS.WindowThis != null)
@@ -218,12 +233,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
 
-        protected virtual async Task ServiceWorker_OnInstallAsync(ExtendableEvent e)
-        {
-            Log($"ServiceWorker_OnInstallAsync");
-            _ = ServiceWorkerThis!.SkipWaiting();   // returned task can be ignored
-        }
-
         void ServiceWorker_OnActivate(ExtendableEvent e)
         {
             if (e is MissedExtendableEvent missedFetchEvent)
@@ -238,12 +247,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 e.WaitUntil(ServiceWorker_OnActivateAsync(e));
             }
-        }
-
-        protected virtual async Task ServiceWorker_OnActivateAsync(ExtendableEvent e)
-        {
-            Log($"ServiceWorker_OnActivateAsync");
-            await ServiceWorkerThis!.Clients.Claim();
         }
 
         void ServiceWorker_OnFetch(FetchEvent e)
@@ -262,29 +265,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
 
-        protected virtual async Task<Response> ServiceWorker_OnFetchAsync(FetchEvent e)
-        {
-            Response ret;
-            try
-            {
-                ret = await JS.Fetch(e.Request);
-            }
-            catch (Exception ex)
-            {
-                ret = new Response(ex.Message, new ResponseOptions { Status = 500, StatusText = ex.Message, Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } } });
-                Log($"ServiceWorker_OnFetchAsync failed: {ex.Message}");
-            }
-            return ret;
-        }
-
         void ServiceWorker_OnMessage(ExtendableMessageEvent e)
         {
             e.WaitUntil(ServiceWorker_OnMessageAsync(e));
-        }
-
-        protected virtual async Task ServiceWorker_OnMessageAsync(ExtendableMessageEvent e)
-        {
-            Log($"ServiceWorker_OnMessageAsync");
         }
 
         void ServiceWorker_OnPush(PushEvent e)
@@ -292,26 +275,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
             e.WaitUntil(ServiceWorker_OnPushAsync(e));
         }
 
-        protected virtual async Task ServiceWorker_OnPushAsync(PushEvent e)
-        {
-            Log($"ServiceWorker_OnPushAsync");
-        }
-
-        protected virtual void OnPushSubscriptionChange(Event e)
-        {
-            Log($"OnPushSubscriptionChange");
-        }
-
         void ServiceWorker_OnSync(SyncEvent e)
         {
             e.WaitUntil(ServiceWorker_OnSyncAsync(e));
         }
-
-        protected virtual async Task ServiceWorker_OnSyncAsync(SyncEvent e)
-        {
-            Log($"ServiceWorker_OnSyncAsync");
-        }
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (ServiceWorkerThis != null)
             {
