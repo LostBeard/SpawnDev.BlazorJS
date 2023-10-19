@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A stringifier that returns a string containing the entire URL. If changed, the associated document navigates to the new page. It can be set from a different origin than the associated document
         /// </summary>
-        public string Href => JSRef.Get<string>("href");
+        public string Href { get => JSRef.Get<string>("href"); set => JSRef.Set("href", value); }
         /// <summary>
         /// Returns a string containing the canonical form of the origin of the specific location.
         /// </summary>

@@ -4,6 +4,7 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using static SpawnDev.BlazorJS.IServiceCollectionExtensions;
 
 namespace SpawnDev.BlazorJS
 {
@@ -46,11 +47,21 @@ namespace SpawnDev.BlazorJS
             BlazorJSRuntime.JS = new BlazorJSRuntime();
             return _this.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS).AddSingleton<IBlazorJSRuntime>(BlazorJSRuntime.JS);
         }
-        internal static Dictionary<Type, object> Services { get; private set; } = new Dictionary<Type, object>();
+        internal static List<AutoStartedService> AutoStartedServices { get; private set; } = new List<AutoStartedService>();
+
+        public class AutoStartedService
+        {
+            public object? Service { get; set; }
+            public ServiceDescriptor ServiceDescriptor { get; set; }
+            public GlobalScope GlobalScope { get; set; }
+            public bool GlobalScopeDefault { get; set; }
+            public bool ImplementsIBackgroundService { get; set; }
+            public bool ImplementsIAsyncBackgroundService { get; set; }
+        }
 
         /// <summary>
-        /// Services implementing IBackgroundService or IAsyncBackgroundService will be started
-        /// Services implementing IAsyncBackgroundService will have their InitAsync methods called in the order the were registered
+        /// AutoStartedServices implementing IBackgroundService or IAsyncBackgroundService will be started
+        /// AutoStartedServices implementing IAsyncBackgroundService will have their InitAsync methods called in the order the were registered
         /// Background services must be careful to not take too long in their InitAsync methods as other services are waiting to init and the app is waiting to start
         /// </summary>
         /// <param name="_this"></param>
@@ -61,57 +72,53 @@ namespace SpawnDev.BlazorJS
             if (StartBackgroundServicesRan) return _this;
             StartBackgroundServicesRan = true;
             //
-            var currentContext = AutoStartContext.Default;
             var JS = BlazorJSRuntime.JS;
-            switch (JS.GlobalThisTypeName)
-            {
-                case nameof(DedicatedWorkerGlobalScope):
-                    currentContext = AutoStartContext.DedicatedWorker;
-                    break;
-                case nameof(SharedWorkerGlobalScope):
-                    currentContext = AutoStartContext.SharedWorker;
-                    break;
-                case nameof(ServiceWorkerGlobalScope):
-                    currentContext = AutoStartContext.ServiceWorker;
-                    break;
-                case nameof(Window):
-                    currentContext = AutoStartContext.Window;
-                    break;
-            }
-            //
-            var bgServices = serviceCollection.Where(o => 
-                typeof(IBackgroundService).IsAssignableFrom(o.ServiceType) || 
-                typeof(IBackgroundService).IsAssignableFrom(o.ImplementationType) ||
-                GetAutoStartMode(o.ServiceType) != AutoStartContext.Default
-            ).ToList();
             // let all the constructors fire first
-            foreach (var kvp in bgServices)
+            serviceCollection!.ToList().ForEach(o =>
             {
-#if DEBUG
-                Console.WriteLine($"Getting background service: {kvp.ServiceType.Name}");
-#endif
-                var autoStartMode = GetAutoStartMode(kvp.ServiceType);
-                if (autoStartMode != AutoStartContext.Default)
+                var isIBackgroundService = typeof(IBackgroundService).IsAssignableFrom(o.ServiceType) || typeof(IBackgroundService).IsAssignableFrom(o.ImplementationType);
+                var isIAsyncBackgroundService = typeof(IAsyncBackgroundService).IsAssignableFrom(o.ServiceType) || typeof(IAsyncBackgroundService).IsAssignableFrom(o.ImplementationType);
+                var serviceAutoStartScopeSet = GetAutoStartMode(o.ServiceType);
+                var serviceAutoStartScope = GlobalScope.None;
+                if (serviceAutoStartScopeSet != null)
                 {
-                    var autostartThisContext = (currentContext & autoStartMode) != 0;
-                    if (!autostartThisContext)
-                    {
-#if DEBUG
-                        Console.WriteLine($"Skipping background service in context: {JS.GlobalThisTypeName} {kvp.ServiceType.Name}");
-#endif
-                        continue;
-                    }
+                    serviceAutoStartScope = serviceAutoStartScopeSet.Value;
                 }
-                var service = _this.Services.GetRequiredService(kvp.ServiceType);
-                Services[kvp.ServiceType] = service;
-            }
-            // call InitAsync on each
-            foreach (var kvp in Services)
-            {
-                if (kvp.Value is IAsyncBackgroundService asyncBG)
+                else
                 {
-#if DEBUG
-                    Console.WriteLine($"InitAsync background service: {kvp.Key.Name}");
+                    serviceAutoStartScope = isIBackgroundService ? GlobalScope.All : GlobalScope.None;
+                }
+                if (JS.IsScope(serviceAutoStartScope))
+                {
+#if DEBUG && false
+                    Console.WriteLine($"Starting service: {o.ServiceType.Name} GlobalScope: {JS.GlobalScope} StartScope: {serviceAutoStartScope}");
+#endif
+                    var service = _this.Services.GetRequiredService(o.ServiceType);
+                    var autoStartedService = new AutoStartedService
+                    {
+                        ServiceDescriptor = o,
+                        Service = service,
+                        GlobalScope = serviceAutoStartScope,
+                        ImplementsIAsyncBackgroundService = isIAsyncBackgroundService,
+                        ImplementsIBackgroundService = isIBackgroundService,
+                        GlobalScopeDefault = serviceAutoStartScopeSet == null,
+                    };
+                    AutoStartedServices.Add(autoStartedService);
+                }
+                else
+                {
+#if DEBUG && false
+                    Console.WriteLine($"Skipping service: {o.ServiceType.Name} GlobalScope: {JS.GlobalScope} StartScope: {serviceAutoStartScope}");
+#endif
+                }
+            });
+            // call InitAsync on each IAsyncBackgroundService
+            foreach (var autoStartedService in AutoStartedServices)
+            {
+                if (autoStartedService.Service != null && autoStartedService.Service is IAsyncBackgroundService asyncBG)
+                {
+#if DEBUG && false
+                    Console.WriteLine($"InitAsync background service: {autoStartedService.ServiceDescriptor.ServiceType.Name}");
 #endif
                     await asyncBG.InitAsync();
                 }
@@ -131,7 +138,7 @@ namespace SpawnDev.BlazorJS
             await _this.StartBackgroundServices();
             if (BlazorJSRuntime.JS.IsWindow)
             {
-#if DEBUG
+#if DEBUG && false
                 Console.WriteLine($"BlazorJSRunAsync mode: Default");
 #endif
                 // run as normal where Blazor has the window global context it expects
@@ -139,7 +146,7 @@ namespace SpawnDev.BlazorJS
             }
             else
             {
-#if DEBUG
+#if DEBUG && false
                 Console.WriteLine($"BlazorJSRunAsync mode: Worker");
 #endif
                 // This is a worker so we are going to use this to allow services in workers without the html renderer trying to load pages
@@ -148,14 +155,14 @@ namespace SpawnDev.BlazorJS
             }
         }
 
-        static AutoStartContext GetAutoStartMode(Type type)
+        static GlobalScope? GetAutoStartMode(Type type)
         {
-            return AutoStartModes.TryGetValue(type, out var mode) ? mode : AutoStartContext.Default;
+            return AutoStartModes.TryGetValue(type, out var mode) ? mode : null;
         }
 
 
-        // AddSingleton overloads that also take AutoStartContext
-        static Dictionary<Type, AutoStartContext> AutoStartModes = new Dictionary<Type, AutoStartContext>();
+        // AddSingleton overloads that also take GlobalScope
+        static Dictionary<Type, GlobalScope> AutoStartModes = new Dictionary<Type, GlobalScope>();
 
         /// <summary>
         /// Adds a singleton service of the type specified in <typeparamref name="TService"/> with an
@@ -167,7 +174,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
         /// <seealso cref="ServiceLifetime.Singleton"/>
-        public static IServiceCollection AddSingleton<TService, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TImplementation>(this IServiceCollection services, AutoStartContext autoStartMode)
+        public static IServiceCollection AddSingleton<TService, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TImplementation>(this IServiceCollection services, GlobalScope autoStartMode)
             where TService : class
             where TImplementation : class, TService
         {
@@ -187,7 +194,7 @@ namespace SpawnDev.BlazorJS
         /// <seealso cref="ServiceLifetime.Singleton"/>
         public static IServiceCollection AddSingleton(
             this IServiceCollection services,
-            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type serviceType, AutoStartContext autoStartMode)
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type serviceType, GlobalScope autoStartMode)
         {
             ThrowIfNull(services);
             ThrowIfNull(serviceType);
@@ -204,7 +211,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
         /// <seealso cref="ServiceLifetime.Singleton"/>
-        public static IServiceCollection AddSingleton<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TService>(this IServiceCollection services, AutoStartContext autoStartMode)
+        public static IServiceCollection AddSingleton<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TService>(this IServiceCollection services, GlobalScope autoStartMode)
             where TService : class
         {
             ThrowIfNull(services);
@@ -225,7 +232,7 @@ namespace SpawnDev.BlazorJS
         /// <seealso cref="ServiceLifetime.Singleton"/>
         public static IServiceCollection AddSingleton<TService>(
             this IServiceCollection services,
-            Func<IServiceProvider, TService> implementationFactory, AutoStartContext autoStartMode)
+            Func<IServiceProvider, TService> implementationFactory, GlobalScope autoStartMode)
             where TService : class
         {
             ThrowIfNull(services);
@@ -248,7 +255,7 @@ namespace SpawnDev.BlazorJS
         /// <seealso cref="ServiceLifetime.Singleton"/>
         public static IServiceCollection AddSingleton<TService, TImplementation>(
             this IServiceCollection services,
-            Func<IServiceProvider, TImplementation> implementationFactory, AutoStartContext autoStartMode)
+            Func<IServiceProvider, TImplementation> implementationFactory, GlobalScope autoStartMode)
             where TService : class
             where TImplementation : class, TService
         {
@@ -272,7 +279,7 @@ namespace SpawnDev.BlazorJS
         public static IServiceCollection AddSingleton(
             this IServiceCollection services,
             Type serviceType,
-            object implementationInstance, AutoStartContext autoStartMode)
+            object implementationInstance, GlobalScope autoStartMode)
         {
             ThrowIfNull(services);
             ThrowIfNull(serviceType);
@@ -294,7 +301,7 @@ namespace SpawnDev.BlazorJS
         /// <seealso cref="ServiceLifetime.Singleton"/>
         public static IServiceCollection AddSingleton<TService>(
             this IServiceCollection services,
-            TService implementationInstance, AutoStartContext autoStartMode)
+            TService implementationInstance, GlobalScope autoStartMode)
             where TService : class
         {
             ThrowIfNull(services);
@@ -308,16 +315,4 @@ namespace SpawnDev.BlazorJS
             if (value == null) throw new ArgumentNullException($"{typeof(T).Name} cannot be null");
         }
     }
-    public enum AutoStartContext
-    {
-        Default = 0,    // None if not IBackgroundService, All if IBackgroundService
-        Window = 1,
-        DedicatedWorker = 2,
-        SharedWorker = 4,
-        ServiceWorker = 8,
-        DedicatedAndSharedWorkers = DedicatedWorker | SharedWorker,
-        AllWorkers = DedicatedWorker | SharedWorker | ServiceWorker,
-        All = Window | DedicatedWorker | SharedWorker | ServiceWorker,
-    }
-
 }

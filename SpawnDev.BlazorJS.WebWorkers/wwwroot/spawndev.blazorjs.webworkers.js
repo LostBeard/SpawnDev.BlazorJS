@@ -24,6 +24,17 @@ const globalThisObj =
 
 const globalThisTypeName = globalThisObj.constructor.name;
 
+var disableHotReload = true;
+var verboseWebWorkers = location.search.indexOf('verbose=true') > -1;
+
+var consoleLog = function () {
+    if (!verboseWebWorkers) return;
+    console.log(...arguments);
+};
+
+consoleLog('spawndev.blazorjs.webworkers: started');
+consoleLog('location.href', location.href);
+
 // in some contexts, event handlers need to be added immediately and cannot wait for Blazor WASM's async startup
 // for example:
 // in a shared worker, the onconnect event handler needs to be set immediately to catch all invocations of the event
@@ -42,44 +53,44 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
         _missedConnections.push(e.ports[0]);
     };
 } else if (globalThisTypeName == 'ServiceWorkerGlobalScope') {
-    let _missedFetchEvents = [];
-    let ServiceWorkerBaseInitCalled = false;
-    globalThisObj.addEventListener('fetch', function (e) {
-        if (!ServiceWorkerBaseInitCalled) {
-            console.log('!!!!!!!!!!!!!!!! Missed fetch call !!!!!!!!!!!!!!!!!!!!!', e.request.url, e, _missedFetchEvents.length);
-            var waitUntilPromise = new Promise(function(resolve, reject) {
+    let holdEvents = true;
+    let missedServiceWorkerEventts = [];
+    function handleMissedEvent(e) {
+        if (!holdEvents) return;
+        console.log('ServiceWorker missed event:', e.type, e);
+        if (e.waitUntil) {
+            var waitUntilPromise = new Promise(function (resolve, reject) {
                 e.waitResolve = resolve;
                 e.waitReject = reject;
             });
             e.waitUntil(waitUntilPromise);
+        }
+        if (e.respondWith) {
             var responsePromise = new Promise(function (resolve, reject) {
                 e.responseResolve = resolve;
                 e.responseReject = reject;
             });
             e.respondWith(responsePromise);
-            _missedFetchEvents.push(e);
         }
-    });
-    globalThisObj.ServiceWorkerBaseInit = function () {
-        console.log('ServiceWorkerBaseInit has taken over', _missedFetchEvents.length);
-        ServiceWorkerBaseInitCalled = true;
-        var tmp = _missedFetchEvents;
-        _missedFetchEvents = [];
-        setTimeout(() => tmp.forEach(e => e.waitResolve()), 1);
-        return tmp;
+        missedServiceWorkerEventts.push(e);
     }
+    self.addEventListener('activate', handleMissedEvent);
+    self.addEventListener('fetch', handleMissedEvent);
+    self.addEventListener('install', handleMissedEvent);
+    self.addEventListener('message', handleMissedEvent);
+    self.addEventListener('notificationclick', handleMissedEvent);
+    self.addEventListener('notificationclose', handleMissedEvent);
+    self.addEventListener('push', handleMissedEvent);
+    self.addEventListener('pushsubscriptionchange', handleMissedEvent);
+    self.addEventListener('sync', handleMissedEvent);
+    globalThisObj.GetMissedServiceWorkerEvents = function () {
+        holdEvents = false;
+        var ret = missedServiceWorkerEventts;
+        missedServiceWorkerEventts = [];
+        return ret;
+    };
 }
 
-var disableHotReload = true;
-var verboseWebWorkers = location.search.indexOf('verbose=true') > -1;
-
-var consoleLog = function () {
-    if (!verboseWebWorkers) return;
-    console.log(...arguments);
-};
-
-consoleLog('spawndev.blazorjs.webworkers: started');
-consoleLog('location.href', location.href);
 // location.href is this script
 // - location.href == 'https://localhost:7191/_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js?verbose=false'
 // or a service worker script

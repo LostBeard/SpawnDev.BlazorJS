@@ -35,7 +35,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var appBaseUriObj = new Uri(AppBaseUri);
             var workerScriptUri = new Uri(appBaseUriObj, WebWorkerJSScript);
             WebWorkerJSScript = workerScriptUri.ToString();
-#if DEBUG
+#if DEBUG && false
             Console.WriteLine("hostEnvironment.BaseAddress: " + hostEnvironment.BaseAddress);
             Console.WriteLine("AppBaseUri: " + AppBaseUri);
             Console.WriteLine("WebWorkerJSScript: " + WebWorkerJSScript);

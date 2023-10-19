@@ -53,14 +53,14 @@ namespace SpawnDev.BlazorJS.JSObjects {
 
         }
 
-        protected override void LosingReference()
-        {
-            if (IsWrapperDisposed) return;
-            ResolveFunc?.Dispose();
-            ResolveFunc = null;
-            ResolveFunc?.Dispose();
-            ResolveFunc = null;
-        }
+        //protected override void LosingReference()
+        //{
+        //    if (IsWrapperDisposed) return;
+        //    ResolveFunc?.Dispose();
+        //    ResolveFunc = null;
+        //    ResolveFunc?.Dispose();
+        //    ResolveFunc = null;
+        //}
 
         public Function? ResolveFunc { get; protected set; }
         public Function? RejectFunc { get; protected set; }
@@ -170,15 +170,15 @@ namespace SpawnDev.BlazorJS.JSObjects {
 
         public Promise(Action<Function, Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
 
-        protected override void LosingReference()
-        {
-            if (IsWrapperDisposed) return;
-            ResolveFunc?.Dispose();
-            ResolveFunc = null;
-            ResolveFunc?.Dispose();
-            ResolveFunc = null;
-            base.Dispose();
-        }
+        //protected override void LosingReference()
+        //{
+        //    if (IsWrapperDisposed) return;
+        //    ResolveFunc?.Dispose();
+        //    ResolveFunc = null;
+        //    ResolveFunc?.Dispose();
+        //    ResolveFunc = null;
+        //    base.Dispose();
+        //}
 
         public Function? ResolveFunc { get; protected set; }
         public Function? RejectFunc { get; protected set; }

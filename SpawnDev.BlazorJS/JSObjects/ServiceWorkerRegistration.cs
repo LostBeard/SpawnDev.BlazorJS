@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Task ShowNotification(string title) => JSRef.CallVoidAsync("showNotification", title);
         public Task ShowNotification(string title, ShowNotificationsOptions options) => JSRef.CallVoidAsync("showNotification", title, options);
 
-        public Task Unregister() => JSRef.CallVoidAsync("unregister");
+        public Task<bool> Unregister() => JSRef.CallAsync<bool>("unregister");
         public Task<ServiceWorkerRegistration> Update() => JSRef.CallAsync<ServiceWorkerRegistration>("update");
 
         public JSEventCallback OnUpdateFound { get => new JSEventCallback(o => AddEventListener("updatefound", o), o => RemoveEventListener("updatefound", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }

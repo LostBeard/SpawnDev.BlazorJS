@@ -26,14 +26,15 @@ namespace SpawnDev.BlazorJS
         public bool IsDedicatedWorkerGlobalScope => GlobalThis is DedicatedWorkerGlobalScope;
         public bool IsSharedWorkerGlobalScope => GlobalThis is SharedWorkerGlobalScope;
         public bool IsServiceWorkerGlobalScope => GlobalThis is ServiceWorkerGlobalScope;
+        public GlobalScope GlobalScope { get; private set; } = GlobalScope.None;
         /// <summary>
         /// The crossOriginIsolated read-only property returns a boolean value that indicates whether the website is in a cross-origin isolation state. A website is in a cross-origin isolated state, when the response header Cross-Origin-Opener-Policy has the value same-origin and the Cross-Origin-Embedder-Policy header has the value require-corp or credentialless
         /// </summary>
         public bool CrossOriginIsolated => JS.Get<bool>("crossOriginIsolated");
         static BlazorJSRuntime()
         {
-            _js = (IJSInProcessRuntime)typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime").GetField("Instance", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
-            RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_js, null);
+            _js = (IJSInProcessRuntime)typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime")!.GetField("Instance", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
+            RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(_js, null)!;
             RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
@@ -47,32 +48,52 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
         }
 
+        public bool IsScope(GlobalScope scope) => (GlobalScope & scope) != 0;
+        public bool IfScope(GlobalScope scope, Action method)
+        {
+            if ((GlobalScope & scope) == 0) return false;
+            method.Invoke();
+            return true;
+        }
+
+        public async Task<bool> IfScopeAsync(GlobalScope scope, Func<Task> method)
+        {
+            if ((GlobalScope & scope) == 0) return false;
+            await method.Invoke();
+            return true;
+        }
+
         internal BlazorJSRuntime()
         {
             GlobalThisTypeName = GetConstructorName("globalThis");
+            GlobalScope = GlobalScope.None;
             switch (GlobalThisTypeName)
             {
                 case nameof(Window):
                     WindowThis = Get<Window>("globalThis");
                     GlobalThis = WindowThis;
+                    GlobalScope = GlobalScope.Window;
                     break;
                 case nameof(DedicatedWorkerGlobalScope):
                     DedicateWorkerThis = Get<DedicatedWorkerGlobalScope>("globalThis");
                     GlobalThis = DedicateWorkerThis;
+                    GlobalScope = GlobalScope.DedicatedWorker;
                     break;
                 case nameof(SharedWorkerGlobalScope):
                     SharedWorkerThis = Get<SharedWorkerGlobalScope>("globalThis");
                     GlobalThis = SharedWorkerThis;
+                    GlobalScope = GlobalScope.SharedWorker;
                     break;
                 case nameof(ServiceWorkerGlobalScope):
                     ServiceWorkerThis = Get<ServiceWorkerGlobalScope>("globalThis");
                     GlobalThis = ServiceWorkerThis;
+                    GlobalScope = GlobalScope.ServiceWorker;
                     break;
                 default:
                     GlobalThis = Get<JSObject>("globalThis");
                     break;
             }
-#if DEBUG
+#if DEBUG && false
             Log("JS.GlobalThisTypeName", GlobalThisTypeName);
             Set("JSInterop.debugLevel", 1);
             if (IsWindow)

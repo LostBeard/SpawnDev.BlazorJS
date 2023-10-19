@@ -18,35 +18,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Clients Clients => JSRef.Get<Clients>("clients");
         /// <summary>
-        /// Returns the CacheStorage object associated with the current context. This object enables functionality such as storing assets for offline use, and generating custom responses to requests.
-        /// </summary>
-        public CacheStorage Caches => JSRef.Get<CacheStorage>("caches");
-        /// <summary>
-        /// Provides a mechanism for applications to asynchronously access capabilities of indexed databases; returns an IDBFactory object.
-        /// </summary>
-        public IDBFactory IndexedDB => JSRef.Get<IDBFactory>("indexedDB");
-        /// <summary>
-        /// Returns a boolean indicating whether the current context is secure (true) or not (false)
-        /// </summary>
-        public bool IsSecureContext => JSRef.Get<bool>("IsSecureContext");
-        /// <summary>
-        /// The Window.location read-only property returns a Location object with information about the current location of the document.
-        /// </summary>
-        public Location Location => JSRef.Get<Location>("location");
-        /// <summary>
-        /// The Window.navigator read-only property returns a reference to the Navigator object, which has methods and properties about the application running the script.
-        /// </summary>
-        public Navigator Navigator => JSRef.Get<Navigator>("navigator");
-        /// <summary>
-        /// Returns the global object's origin, serialized as a string.
-        /// </summary>
-        public string Origin => JSRef.Get<string>("origin");
-        /// <summary>
         /// Returns an object reference to the ServiceWorkerGlobalScope object itself
         /// </summary>
-        public ServiceWorkerGlobalScope Self => JSRef.Get<ServiceWorkerGlobalScope>("self");
+        public override ServiceWorkerGlobalScope Self => JSRef.Get<ServiceWorkerGlobalScope>("self");
         #endregion
         #region methods
+        /// <summary>
+        /// The ServiceWorkerGlobalScope.skipWaiting() method of the ServiceWorkerGlobalScope forces the waiting service worker to become the active service worker<br />
+        /// Use this method with Clients.claim() to ensure that updates to the underlying service worker take effect immediately for both the current client and all other active
+        /// </summary>
+        /// <returns></returns>
         public Task SkipWaiting() => JSRef.CallVoidAsync("skipWaiting");
         #endregion
         #region events
@@ -57,6 +38,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback<PushEvent> OnPush { get => new JSEventCallback<PushEvent>(o => AddEventListener("push", o), o => RemoveEventListener("push", o)); set { } }
         public JSEventCallback<Event> OnPushSubscriptionChange { get => new JSEventCallback<Event>(o => AddEventListener("pushsubscriptionchange", o), o => RemoveEventListener("pushsubscriptionchange", o)); set { } }
         public JSEventCallback<SyncEvent> OnSync { get => new JSEventCallback<SyncEvent>(o => AddEventListener("sync", o), o => RemoveEventListener("sync", o)); set { } }
+        public JSEventCallback<NotificationEvent> OnNotificationClose { get => new JSEventCallback<NotificationEvent>(o => AddEventListener("notificationclose", o), o => RemoveEventListener("notificationclose", o)); set { } }
+        public JSEventCallback<NotificationEvent> OnNotificationClick { get => new JSEventCallback<NotificationEvent>(o => AddEventListener("notificationclick", o), o => RemoveEventListener("notificationclick", o)); set { } }
         #endregion
     }
 }

@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities.
+    /// The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Navigator
     /// </summary>
     public class Navigator : JSObject {
         /// <summary>
@@ -17,8 +18,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         public ServiceWorkerContainer ServiceWorker => JSRef.Get<ServiceWorkerContainer>("serviceWorker");
         public WakeLock WakeLock => JSRef.Get<WakeLock>("wakeLock");
         public Clipboard Clipboard => JSRef.Get<Clipboard>("clipboard");
+        public bool CookieEnabled => JSRef.Get<bool>("cookieEnabled");
         public UserActivation UserActivation => JSRef.Get<UserActivation>("userActivation");
         public bool OnLine => JSRef.Get<bool>("onLine");
         public Gamepad[] GetGamepads() => JSRef.Call<Gamepad[]>("getGamepads");
+        public int HardwareConcurrency => JSRef.Get<int>("hardwareConcurrency");
     }
 }

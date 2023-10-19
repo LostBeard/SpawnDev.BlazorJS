@@ -27,6 +27,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Allows an active service worker to set itself as the controller for all clients within its scope.
         /// </summary>
         /// <returns></returns>
-        public Task Claim() => JSRef.CallAsync<WindowClient>("claim");
+        public Task Claim() => JSRef.CallVoidAsync("claim");
     }
 }
