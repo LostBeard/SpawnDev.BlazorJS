@@ -4,11 +4,11 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.18</Version>
+		<Version>2.2.19</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>SpawnDev.BlazorJS.WebWorkers</Title>
 		<Authors>LostBeard</Authors>
-		<Description>Easily call Services in separate threads with WebWorkers and SharedWebWorkers</Description>
+		<Description>Easily call Services in separate threads with WebWorkers and SharedWebWorkers. Run Blazor WASM in the ServiceWorker.</Description>
 		<PackageProjectUrl>https://github.com/LostBeard/SpawnDev.BlazorJS</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
