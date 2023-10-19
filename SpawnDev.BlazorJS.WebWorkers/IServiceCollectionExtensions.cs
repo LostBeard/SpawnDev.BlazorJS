@@ -22,9 +22,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public static IServiceCollection RegisterServiceWorker<TService>(this IServiceCollection _this) where TService : ServiceWorkerManager
         {
             _this.AddSingleton<TService>();
-
-            //_this.AddSingleton<ServiceWorkerManager>();
-
             return _this;
         }
         public static IServiceCollection RegisterServiceWorker<TService, TImplementation>(this IServiceCollection _this) 
@@ -32,9 +29,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             where TImplementation : ServiceWorkerManager, TService
         {
             _this.AddSingleton<TService, TImplementation>();
-
-            //_this.AddSingleton<ServiceWorkerManager>();
-
             return _this;
         }
     }
