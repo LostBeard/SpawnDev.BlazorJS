@@ -21,7 +21,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         public async Task InitAsync()
         {
-            await OnInitialized();
+            await OnInitializedAsync();
             if (ServiceWorkerThis != null)
             {
                 // the service is running a ServiceWorker
@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 ServiceWorkerThis.OnActivate += ServiceWorker_OnActivate;
                 ServiceWorkerThis.OnMessage += ServiceWorker_OnMessage;
                 ServiceWorkerThis.OnPush += ServiceWorker_OnPush;
-                ServiceWorkerThis.OnPushSubscriptionChange += OnPushSubscriptionChange;
+                ServiceWorkerThis.OnPushSubscriptionChange += ServiceWorker_OnPushSubscriptionChange;
                 ServiceWorkerThis.OnSync += ServiceWorker_OnSync;
                 ServiceWorkerThis.OnNotificationClose += ServiceWorker_OnNotificationClose;
                 ServiceWorkerThis.OnNotificationClick += ServiceWorker_OnNotificationClick;
@@ -68,7 +68,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         ServiceWorker_OnPush(e.JSRefMove<MissedPushEvent>());
                         break;
                     case "pushsubscriptionchange":
-                        OnPushSubscriptionChange(e.JSRefMove<Event>());
+                        ServiceWorker_OnPushSubscriptionChange(e.JSRefMove<Event>());
                         break;
                     case "sync":
                         ServiceWorker_OnSync(e.JSRefMove<MissedSyncEvent>());
@@ -113,7 +113,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// This is the default implementation of InitAsync for this class. It calls Register() which registers the default service-worker.js script location.
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task OnInitialized()
+        protected virtual async Task OnInitializedAsync()
         {
             await Register();
         }
@@ -156,9 +156,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
             //Log($"ServiceWorker_OnPushAsync");
         }
 
-        protected virtual void OnPushSubscriptionChange(Event e)
+        protected virtual void ServiceWorker_OnPushSubscriptionChange(Event e)
         {
-            //Log($"OnPushSubscriptionChange");
+            //Log($"ServiceWorker_OnPushSubscriptionChange");
         }
 
         protected virtual async Task ServiceWorker_OnSyncAsync(SyncEvent e)
