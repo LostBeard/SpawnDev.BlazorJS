@@ -63,6 +63,7 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// AutoStartedServices implementing IBackgroundService or IAsyncBackgroundService will be started
         /// AutoStartedServices implementing IAsyncBackgroundService will have their InitAsync methods called in the order the were registered
+        /// Singletons registered with an auto start GlobalScope that matches the current scope will be started
         /// Background services must be careful to not take too long in their InitAsync methods as other services are waiting to init and the app is waiting to start
         /// </summary>
         /// <param name="_this"></param>
