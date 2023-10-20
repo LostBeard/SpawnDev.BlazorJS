@@ -20,11 +20,5 @@
 		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Content Update="Pages\ServiceWorkerInfo.razor">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  </Content>
-	</ItemGroup>
-
 </Project>
 
