@@ -22,7 +22,8 @@ Supports Blazor WebAssembly .Net 6, 7, and 8.
 - 2 options for wrapping your Javascript objects for direct manipulation from Blazor (No javascript required!)
 - - Create a class that inherits JSObject and defines the methods, properties, events, and constructors of your Javascript object (best option)
 - - Create an interface that implements IJSObject and defines the methods and properties of your Javascript object (more limited than JSObject option)
-- Use SpawnDev.BlazorJS.WebWorkers to enable calling Blazor services in web worker threads
+- Use SpawnDev.BlazorJS.WebWorkers to enable calling Blazor services in SharedWorkers and DedicatedWorkers
+- Run Blazor WASM in ServiceWorkers to handle ServiceWorker events in .Net
 - Supports Promises, Union method parameters, passing undefined to Javascript, and more
 
 # Issues and Feature requests
