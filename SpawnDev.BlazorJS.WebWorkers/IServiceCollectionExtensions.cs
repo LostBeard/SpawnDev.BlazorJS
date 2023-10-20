@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
+    /// <summary>
+    /// Adds SpawnDev.BlazorJS.WebWorkers specific methods to IServiceCollection
+    /// </summary>
     public static class IServiceCollectionExtensions
     {
+        static internal Type? ServiceWorkerEventHandlerTService { get; set; } = null;
+        static internal Type? ServiceWorkerEventHandlerTImplementation { get; set; } = null;
+        static internal ServiceWorkerConfig? ServiceWorkerConfig { get; set; } = null;
         /// <summary>
         /// Adds WebWorkerService as a singleton service
         /// </summary>
@@ -19,17 +25,30 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return _this.AddSingleton<WebWorkerService>();
         }
         /// <summary>
-        /// Register a class that implements ServiceWorkerEventHandler to handle ServiceWorker events
+        /// RegisterServiceWorker a class that implements ServiceWorkerEventHandler to handle ServiceWorker events
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TService"></typeparam>
         /// <param name="_this"></param>
+        /// <param name="config"></param>
         /// <returns></returns>
         public static IServiceCollection RegisterServiceWorker<TService>(this IServiceCollection _this, ServiceWorkerConfig? config = null) where TService : ServiceWorkerEventHandler
         {
-            config = config ?? new ServiceWorkerConfig();
-            _this.AddSingleton<ServiceWorkerConfig>(config);
-            _this.AddSingleton(typeof(TService));
-            _this.AddSingleton<ServiceWorkerEventHandler>(sp => sp.GetRequiredService<TService>());
+            ServiceWorkerConfig = config ?? new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.Register };
+            var typeTService = typeof(TService);
+            ServiceWorkerEventHandlerTService = typeTService;
+            ServiceWorkerEventHandlerTImplementation = typeTService;
+            _this.AddSingleton<TService>(GlobalScope.ServiceWorker);
+            _this.AddSingleton<ServiceWorkerEventHandler>(sp => sp.GetRequiredService<TService>(), GlobalScope.ServiceWorker);
+            return _this;
+        }
+        public static IServiceCollection RegisterServiceWorker<TService>(this IServiceCollection _this, GlobalScope startScope, ServiceWorkerConfig? config = null) where TService : ServiceWorkerEventHandler
+        {
+            ServiceWorkerConfig = config ?? new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.Register };
+            var typeTService = typeof(TService);
+            ServiceWorkerEventHandlerTService = typeTService;
+            ServiceWorkerEventHandlerTImplementation = typeTService;
+            _this.AddSingleton<TService>(GlobalScope.ServiceWorker | startScope);
+            _this.AddSingleton<ServiceWorkerEventHandler>(sp => sp.GetRequiredService<TService>(), GlobalScope.ServiceWorker);
             return _this;
         }
         /// <summary>
@@ -39,10 +58,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <returns></returns>
         public static IServiceCollection UnregisterServiceWorker(this IServiceCollection _this)
         {
-            var config = new ServiceWorkerConfig();
-            config.Register = ServiceWorkerStartupRegistration.Unregister;
-            _this.AddSingleton<ServiceWorkerConfig>(config);
-            _this.AddSingleton<ServiceWorkerEventHandler>();
+            ServiceWorkerConfig = new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.Unregister };
             return _this;
         }
     }

@@ -7,12 +7,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
         protected BlazorJSRuntime JS;
         protected ServiceWorkerGlobalScope? ServiceWorkerThis = null;
         public string InstanceId { get; private set; } = Guid.NewGuid().ToString();
-        ServiceWorkerConfig ServiceWorkerConfig;
-        public ServiceWorkerEventHandler(BlazorJSRuntime js, ServiceWorkerConfig serviceWorkerConfig)
+        
+        public ServiceWorkerEventHandler(BlazorJSRuntime js)
         {
             JS = js;
             ServiceWorkerThis = JS.ServiceWorkerThis;
-            ServiceWorkerConfig = serviceWorkerConfig;
         }
 
         protected void Log(params object[] args)
@@ -22,17 +21,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         public async Task InitAsync()
         {
-            if (JS.IsWindow)
-            {
-                if (ServiceWorkerConfig.Register == ServiceWorkerStartupRegistration.Register)
-                {
-                    await Register();
-                }
-                else if (ServiceWorkerConfig.Register == ServiceWorkerStartupRegistration.Unregister)
-                {
-                    await Unregister();
-                }
-            }
             await OnInitializedAsync();
             if (ServiceWorkerThis != null)
             {
@@ -49,46 +37,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 ServiceWorkerThis.OnNotificationClick += ServiceWorker_OnNotificationClick;
                 GetMissedServiceWorkerEvents();
             }
-        }
-
-        /// <summary>
-        /// registers the default 'service-worker.js' in the app's base path.<br />
-        /// 'service-worker.js' must import the web worker script like the example below<br />
-        /// importScripts('_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js');
-        /// </summary>
-        /// <returns></returns>
-        public async Task Register()
-        {
-            if (JS.WindowThis != null)
-            {
-                using var navigator = JS.WindowThis.Navigator;
-                using var serviceWorker = navigator.ServiceWorker;
-                using var registration = await serviceWorker.Register(ServiceWorkerConfig.ScriptURL, ServiceWorkerConfig.Options);
-            }
-        }
-
-        public Task Register(string scriptURL, ServiceWorkerRegistrationOptions? options = null)
-        {
-            ServiceWorkerConfig.Register = ServiceWorkerStartupRegistration.Register;
-            ServiceWorkerConfig.ScriptURL = scriptURL;
-            ServiceWorkerConfig.Options = options;
-            return Register();
-        }
-
-        public async Task<bool> Unregister()
-        {
-            ServiceWorkerConfig.Register = ServiceWorkerStartupRegistration.Unregister;
-            if (JS.WindowThis != null)
-            {
-                using var navigator = JS.WindowThis.Navigator;
-                using var serviceWorker = navigator.ServiceWorker;
-                using var registration = await serviceWorker.GetRegistration();
-                if (registration != null)
-                {
-                    return await registration.Unregister();
-                }
-            }
-            return false;
         }
 
         void GetMissedServiceWorkerEvents()
