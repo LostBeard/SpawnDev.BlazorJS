@@ -633,7 +633,7 @@ public class ProcessFrameResult : IDisposable
     public byte[]? HomographyBytes { get; set; }
     public void Dispose(){
         ArrayBuffer?.Dispose();
-    }
+    }oy2dx2ttj62xaz3td2sq6ofom4jdg5me7gxmsiv7wdgwve
 }
 
 [return: WorkerTransfer(false)]
@@ -661,8 +661,7 @@ RTCDataChannel
 
 
 ## ServiceWorker
-
-As of version 2.2.20 SpawnDev.BlazorJS.WebWorkers supports running Blazor WASM apps in  ServiceWorkers. Your app can now register a class to run in the ServiceWorker to handle ServiceWorker events.
+As of version 2.2.21 SpawnDev.BlazorJS.WebWorkers supports running Blazor WASM apps in ServiceWorkers. Your app can now register a class to run in the ServiceWorker to handle ServiceWorker events.
 
 ### wwwroot/service-worker.js
 Create or modify to match the line below.
