@@ -57,7 +57,7 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
     let missedServiceWorkerEventts = [];
     function handleMissedEvent(e) {
         if (!holdEvents) return;
-        console.log('ServiceWorker missed event:', e.type, e);
+        consoleLog('ServiceWorker missed event:', e.type, e);
         if (e.waitUntil && e.type != 'fetch') {
             var waitUntilPromise = new Promise(function (resolve, reject) {
                 e.waitResolve = resolve;
