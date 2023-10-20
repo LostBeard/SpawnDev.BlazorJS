@@ -13,7 +13,7 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 
 Supports Blazor WebAssembly .Net 6, 7, and 8.
 
-- 189+ strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, WebGL, WebRTC, and Promises allow direct interaction with Javascript
+- 210+ strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, WebGL, WebRTC, and Promises allow direct interaction with Javascript
 - Use Javascript libraries in Blazor without writing any Javascript code
 - BlazorJSRuntime wraps the default JSRuntime adding additional functionality
 - Create new Javascript objects directly from Blazor
