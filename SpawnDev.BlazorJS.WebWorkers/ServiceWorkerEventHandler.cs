@@ -14,11 +14,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             ServiceWorkerThis = JS.ServiceWorkerThis;
         }
 
-        protected void Log(params object[] args)
-        {
-            JS.Log(new object?[] { $"ServiceWorkerEventHandler: {InstanceId}" }.Concat(args).ToArray());
-        }
-
         public async Task InitAsync()
         {
             await OnInitializedAsync();
@@ -282,7 +277,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (ServiceWorkerThis != null)
             {
-                Log("Dispose()");
+                
             }
         }
     }
