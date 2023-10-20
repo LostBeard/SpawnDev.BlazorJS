@@ -678,12 +678,16 @@ importScripts('_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworker
 A minimal Program.cs
 ```cs
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 // SpawnDev.BlazorJS
 builder.Services.AddBlazorJSRuntime();
 // SpawnDev.BlazorJS.WebWorkers
 builder.Services.AddWebWorkerService();
-// Our ServiceWorker handler AppServiceWorker (inherits from ServiceWorkerEventHandler)
+// Register a ServiceWorker handler (AppServiceWorker here) that inherits from ServiceWorkerEventHandler
 builder.Services.RegisterServiceWorker<AppServiceWorker>();
+// Or Unregister the ServiceWorker if no longer desired
+//builder.Services.UnregisterServiceWorker();
 // SpawnDev.BlazorJS startup (replaces RunAsync())
 await builder.Build().BlazorJSRunAsync();
 ```
