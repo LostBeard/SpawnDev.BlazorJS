@@ -25,7 +25,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (ServiceWorkerThis != null)
             {
                 // the service is running a ServiceWorker
-                Log("Blazor WASM ServiceWorker");
                 ServiceWorkerThis.OnFetch += ServiceWorker_OnFetch;
                 ServiceWorkerThis.OnInstall += ServiceWorker_OnInstall;
                 ServiceWorkerThis.OnActivate += ServiceWorker_OnActivate;
