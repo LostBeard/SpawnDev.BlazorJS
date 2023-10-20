@@ -9,12 +9,17 @@ namespace SpawnDev.BlazorJS.WebWorkers
 {
     public static class IServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds WebWorkerService as a singleton service
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
         public static IServiceCollection AddWebWorkerService(this IServiceCollection _this)
         {
             return _this.AddSingleton<WebWorkerService>();
         }
         /// <summary>
-        /// Register the type that will be 
+        /// Register a class that implements ServiceWorkerEventHandler to handle ServiceWorker events
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="_this"></param>
