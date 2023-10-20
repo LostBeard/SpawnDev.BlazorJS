@@ -49,7 +49,7 @@ namespace SpawnDev.BlazorJS
         }
         internal static List<AutoStartedService> AutoStartedServices { get; private set; } = new List<AutoStartedService>();
 
-        public class AutoStartedService
+        internal class AutoStartedService
         {
             public object? Service { get; set; }
             public ServiceDescriptor ServiceDescriptor { get; set; }
@@ -127,9 +127,10 @@ namespace SpawnDev.BlazorJS
         }
 
         /// <summary>
-        /// Calling this method is required for BlazorJS and some dependents, such as BlazorJS.WebWorkers, to function properly.<br />
-        /// Using this extension method instead of RunAsync enables support for automatically starting all registered services that implement IBackgroundService or IAsyncBackgroundService 
-        /// and to also disable component rendering in WebWorkers. RunAsync will be called internally when running in a Window global scope.<br />
+        /// BlazorJSRunAsync() is a scope aware replacement for RunAsync<br />
+        /// RunAsync() will be called internally but only when running in a Window global scope to prevent components from loading in Worker scopes.<br />
+        /// BlazorJSRunAsync() automatically starts IBackgroundService services, IAsyncBackgroundService services<br />
+        /// and singletons services registered with a GlobalScope value that matches the current GlobalScope<br />
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>

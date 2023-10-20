@@ -4,8 +4,8 @@
 // 2022 - 2023
 // SpawnDev.BlazorJS.WebWorkers
 // _content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js
-// this script loads a fake window and DOM environment
-// and makes the Blazor WASM work in a DedicatedWorkerGlobalScope, a SharedWorkerGlobalScope and a ServiceWorkerGlobalScope
+// this script loads a fake window and document environment
+// to enable loading the Blazor WASM app in a DedicatedWorkerGlobalScope, a SharedWorkerGlobalScope or a ServiceWorkerGlobalScope
 
 var checkIfGlobalThis = function (it) {
     return it && it.Math == Math && it;
