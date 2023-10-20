@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using static SpawnDev.BlazorJS.IServiceCollectionExtensions;
 
@@ -94,6 +95,14 @@ namespace SpawnDev.BlazorJS
                     Console.WriteLine($"Starting service: {o.ServiceType.Name} GlobalScope: {JS.GlobalScope} StartScope: {serviceAutoStartScope}");
 #endif
                     var service = _this.Services.GetRequiredService(o.ServiceType);
+                    // make sure it hasn't already been started
+                    // some singletons will have the same implementation registered under more than 1 service type
+                    var existingAutoStartService = AutoStartedServices.Find(o => o.Service == service);
+                    if (existingAutoStartService != null)
+                    {
+                        // already started
+                        return;
+                    }
                     var autoStartedService = new AutoStartedService
                     {
                         ServiceDescriptor = o,

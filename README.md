@@ -678,7 +678,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddBlazorJSRuntime();
 // SpawnDev.BlazorJS.WebWorkers
 builder.Services.AddWebWorkerService();
-// Our ServiceWorker handler AppServiceWorker (inherits from ServiceWorkerManager)
+// Our ServiceWorker handler AppServiceWorker (inherits from ServiceWorkerEventHandler)
 builder.Services.RegisterServiceWorker<AppServiceWorker>();
 // SpawnDev.BlazorJS startup (replaces RunAsync())
 await builder.Build().BlazorJSRunAsync();
@@ -686,11 +686,11 @@ await builder.Build().BlazorJSRunAsync();
 
 ### AppServiceWorker.cs
 A verbose service worker implementation example.
-- Handle ServiceWorker desired events by overriding the ServiceWorkerManager base class virtual methods.
+- Handle ServiceWorker desired events by overriding the ServiceWorkerEventHandler base class virtual methods.
 - The ServiceWorker event handlers are only called when running in a ServiceWorkerGlobalScope context.
 - The AppServiceWorker singleton may be started in any scope and therefore must be scope aware. (For example, do not try to use localStorage in a Worker scope.)
 ```cs
-public class AppServiceWorker : ServiceWorkerManager
+public class AppServiceWorker : ServiceWorkerEventHandler
 {
     public AppServiceWorker(BlazorJSRuntime js) : base(js) { }
     // called before any ServiceWorker events are handled

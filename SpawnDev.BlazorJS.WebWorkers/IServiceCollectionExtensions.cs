@@ -19,16 +19,25 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <typeparam name="T"></typeparam>
         /// <param name="_this"></param>
         /// <returns></returns>
-        public static IServiceCollection RegisterServiceWorker<TService>(this IServiceCollection _this) where TService : ServiceWorkerManager
+        public static IServiceCollection RegisterServiceWorker<TService>(this IServiceCollection _this, ServiceWorkerConfig? config = null) where TService : ServiceWorkerEventHandler
         {
-            _this.AddSingleton<TService>();
+            config = config ?? new ServiceWorkerConfig();
+            _this.AddSingleton<ServiceWorkerConfig>(config);
+            _this.AddSingleton(typeof(TService));
+            _this.AddSingleton<ServiceWorkerEventHandler>(sp => sp.GetRequiredService<TService>());
             return _this;
         }
-        public static IServiceCollection RegisterServiceWorker<TService, TImplementation>(this IServiceCollection _this) 
-            where TService : class
-            where TImplementation : ServiceWorkerManager, TService
+        /// <summary>
+        /// If a ServiceWorker is no longer desired, it can be set unregister.
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
+        public static IServiceCollection UnregisterServiceWorker(this IServiceCollection _this)
         {
-            _this.AddSingleton<TService, TImplementation>();
+            var config = new ServiceWorkerConfig();
+            config.Register = ServiceWorkerStartupRegistration.Unregister;
+            _this.AddSingleton<ServiceWorkerConfig>(config);
+            _this.AddSingleton<ServiceWorkerEventHandler>();
             return _this;
         }
     }

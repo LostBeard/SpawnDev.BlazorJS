@@ -58,14 +58,14 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
     function handleMissedEvent(e) {
         if (!holdEvents) return;
         console.log('ServiceWorker missed event:', e.type, e);
-        if (e.waitUntil) {
+        if (e.waitUntil && e.type != 'fetch') {
             var waitUntilPromise = new Promise(function (resolve, reject) {
                 e.waitResolve = resolve;
                 e.waitReject = reject;
             });
             e.waitUntil(waitUntilPromise);
         }
-        if (e.respondWith) {
+        if (e.respondWith && e.type == 'fetch') {
             var responsePromise = new Promise(function (resolve, reject) {
                 e.responseResolve = resolve;
                 e.responseReject = reject;
@@ -74,9 +74,9 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
         }
         missedServiceWorkerEventts.push(e);
     }
+    self.addEventListener('install', handleMissedEvent);
     self.addEventListener('activate', handleMissedEvent);
     self.addEventListener('fetch', handleMissedEvent);
-    self.addEventListener('install', handleMissedEvent);
     self.addEventListener('message', handleMissedEvent);
     self.addEventListener('notificationclick', handleMissedEvent);
     self.addEventListener('notificationclose', handleMissedEvent);

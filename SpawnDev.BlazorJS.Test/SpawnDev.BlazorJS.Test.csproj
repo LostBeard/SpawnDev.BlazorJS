@@ -3,7 +3,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.20</Version>
+		<Version>2.2.21</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
@@ -18,6 +18,12 @@
 		<ProjectReference Include="..\SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj" />
 		<ProjectReference Include="..\SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj" />
 		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="Pages\ServiceWorkerInfo.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
 	</ItemGroup>
 
 </Project>
