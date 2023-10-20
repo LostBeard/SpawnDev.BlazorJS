@@ -1,3 +1,8 @@
+<p align="center">
+  <a href="#">
+    <img alt="SpawnDev.BlazorJS" width="128px" height="128px" src="https://raw.githubusercontent.com/LostBeard/SpawnDev.BlazorJS/main/SpawnDev.BlazorJS.Test/wwwroot/icon-128.png"></img>
+  </a>
+</p>
 
 # NuGet
 
