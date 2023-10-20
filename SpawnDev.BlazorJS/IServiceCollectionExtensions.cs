@@ -127,10 +127,10 @@ namespace SpawnDev.BlazorJS
         }
 
         /// <summary>
-        /// BlazorJSRunAsync() is a scope aware replacement for RunAsync<br />
+        /// BlazorJSRunAsync() is a scope aware replacement for RunAsync().<br />
         /// RunAsync() will be called internally but only when running in a Window global scope to prevent components from loading in Worker scopes.<br />
-        /// BlazorJSRunAsync() automatically starts IBackgroundService services, IAsyncBackgroundService services<br />
-        /// and singletons services registered with a GlobalScope value that matches the current GlobalScope<br />
+        /// BlazorJSRunAsync() also automatically starts IBackgroundService services, IAsyncBackgroundService services<br />
+        /// and singletons services registered with a GlobalScope enum value that is compatible the current GlobalScope.<br />
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
