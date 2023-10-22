@@ -138,27 +138,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
 #endif
         }
 
-        //        public async Task<FileSystemFileHandle> GetFileHandle(string name, bool create = false, StringComparison stringComp = StringComparison.OrdinalIgnoreCase) {
-        //            // temporary workaround
-        //            // not sure why but the Promise returned by getDirectoryHandle is never resolved
-        //#if true
-        //            FileSystemFileHandle ret = null;
-        //            var entries = await GetFileEntries();
-        //            foreach (var d in entries) {
-        //                if (d.Name.Equals(name, stringComp)) ret = d;
-        //                else d.Dispose();
-        //            }
-        //            return ret;
-        //#else
-        //            dynamic options = new ExpandoObject();
-        //            options.create = create;
-        //            var ret = await GetPropertyAsync<FileSystemFileHandle>("getFileHandle", name, options);
-        //            return ret;
-        //#endif
-        //        }
-
-
-
         public class RemoveEntryOptions
         {
             public bool Recursive { get; set; }

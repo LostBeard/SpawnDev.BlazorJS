@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://web.dev/cache-api-quick-guide/
-    // https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/match
+    // https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage
     public class CacheStorage : JSObject
     {
         public CacheStorage(IJSInProcessObjectReference _ref) : base(_ref) { }
@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Finds the Cache object matching the cacheName, and if found, deletes the Cache object and returns a Promise that resolves to true. If no Cache object is found, it resolves to false.
         /// </summary>
         /// <param name="cacheName"></param>
-        public void Delete(string cacheName) => JSRef.CallVoid("delete", cacheName);
+        public Task<bool> Delete(string cacheName) => JSRef.CallAsync<bool>("delete", cacheName);
         /// <summary>
         /// Returns a Promise that resolves to true if a Cache object matching the cacheName exists.
         /// </summary>

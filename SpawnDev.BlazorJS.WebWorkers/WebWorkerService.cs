@@ -11,6 +11,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
     {
         public bool SharedWebWorkerSupported { get; private set; }
         public bool WebWorkerSupported { get; private set; }
+        public bool ServiceWorkerSupported { get; private set; }
         public List<WebWorker> Workers { get; } = new List<WebWorker>();
         public List<SharedWebWorker> SharedWorkers { get; } = new List<SharedWebWorker>();
         public IServiceProvider ServiceProvider { get; }
@@ -30,6 +31,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             JS = js;
             WebWorkerSupported = !JS.IsUndefined("Worker");
             SharedWebWorkerSupported = !JS.IsUndefined("SharedWorker");
+            ServiceWorkerSupported = !JS.IsUndefined("ServiceWorkerRegistration");
             ServiceProvider = serviceProvider;
             AppBaseUri = JS.Get<string>("document.baseURI");
             var appBaseUriObj = new Uri(AppBaseUri);

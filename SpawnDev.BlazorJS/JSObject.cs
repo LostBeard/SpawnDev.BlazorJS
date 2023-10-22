@@ -1,17 +1,21 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
+using System.Diagnostics;
 using System.Numerics;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-
     public class JSObject<T> : JSObject where T : JSObject
     {
         private static Lazy<T> _Undefined = new Lazy<T>(() => (T)Activator.CreateInstance(typeof(T), JSObject.UndefinedRef));
         public static T Undefined => _Undefined.Value;
-        public JSObject(IJSInProcessObjectReference _ref) : base(_ref){ }
+        public JSObject(IJSInProcessObjectReference _ref) : base(_ref) { }
     }
 
     public class JSObject : IDisposable
@@ -28,8 +32,6 @@ namespace SpawnDev.BlazorJS
         public bool IsJSRefUndefined { get; private set; } = false;
 
         // some constructors of types that inherit from JSObjet will pass NullRef to the base constructor and then create the JSRef instance in their constructor and then set it with FromReference
-
-
         /// <summary>
         /// This virtual method is called when JSRef is going to be set. base.FromReference(_ref) must be called. 
         /// This can be used to allow custom post deserialization initialization such as attaching to events.
@@ -44,32 +46,34 @@ namespace SpawnDev.BlazorJS
             JSRef = _ref;
         }
 
-        protected virtual void LosingReference()
-        {
-            // deprecated... just need to rework Promise to not use it.
-        }
+        //protected virtual void LosingReference()
+        //{
+        //    // deprecated... just need to rework Promise to not use it.
+        //}
 
-        protected void ReplaceReference(IJSInProcessObjectReference _ref)
-        {
-            if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
-            if (JSRef != null) LosingReference();
-            JSRef?.Dispose();
-            JSRef = null;
-            IsJSRefUndefined = false;
-            FromReference(_ref);
-        }
+        //protected void ReplaceReference(IJSInProcessObjectReference _ref)
+        //{
+        //    if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
+        //    if (JSRef != null) LosingReference();
+        //    JSRef?.Dispose();
+        //    JSRef = null;
+        //    IsJSRefUndefined = false;
+        //    FromReference(_ref);
+        //}
 
         public T JSRefMove<T>() where T : JSObject
         {
             if (JSRef == null) throw new Exception("JSRefMove failed. Reference not set.");
             var _ref = JSRef;
-            DisposeExceptRef();
+            JSRef = null;
+            //DisposeExceptRef();
             return (T)Activator.CreateInstance(typeof(T), _ref)!;
         }
         public IJSInProcessObjectReference? JSRefMove()
         {
             var _ref = JSRef;
-            DisposeExceptRef();
+            JSRef = null;
+            //DisposeExceptRef();
             return _ref;
         }
         public T JSRefCopy<T>() where T : JSObject => JSInterop.ReturnMe<T>(this);
@@ -77,22 +81,22 @@ namespace SpawnDev.BlazorJS
 
         protected static BlazorJSRuntime JS => BlazorJSRuntime.JS;
 
-        public void DisposeExceptRef()
-        {
-            if (JSRef != null) LosingReference();
-            JSRef = null;
-            IsJSRefUndefined = false;
-            Dispose();
-        }
+        //public void DisposeExceptRef()
+        //{
+        //    if (JSRef != null) LosingReference();
+        //    JSRef = null;
+        //    IsJSRefUndefined = false;
+        //    Dispose();
+        //}
         protected virtual void Dispose(bool disposing)
         {
             if (IsWrapperDisposed) return;
             IsWrapperDisposed = true;
-            if (disposing)
-            {
-                // managed assets
-                if (JSRef != null) LosingReference();
-            }
+            //if (disposing)
+            //{
+            //    // managed assets
+            //    if (JSRef != null) LosingReference();
+            //}
             JSRef?.Dispose();
             JSRef = null;
             IsJSRefUndefined = false;
@@ -108,10 +112,9 @@ namespace SpawnDev.BlazorJS
         {
             if (UndisposedHandleVerboseMode)
             {
-                var thisType = this.GetType();
-                var refDisposed = JSRef == null;
-                if (!refDisposed)
+                if (JSRef != null)
                 {
+                    var thisType = this.GetType();
                     Console.WriteLine($"DEBUG WARNING: JSObject JSDebugName was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
                 }
             }

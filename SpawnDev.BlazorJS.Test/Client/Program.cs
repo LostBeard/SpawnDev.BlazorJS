@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
 using SpawnDev.BlazorJS;
+using SpawnDev.BlazorJS.Diagnostics;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
@@ -49,6 +50,10 @@ builder.Services.AddSingleton<ContextMenuService>();
 var host = builder.Build();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
+
+//var jsobjectAnalyzer = new JSObjectAnalyzer(JS);
+//var w = JS.Get<Storage>("localStorage");
+//jsobjectAnalyzer.Analyze(w);
 
 JS.Set("_testWorker", new ActionCallback<bool>(async (verbose) => { 
     var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();    

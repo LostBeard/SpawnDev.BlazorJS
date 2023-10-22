@@ -147,8 +147,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         await ServiceWorker_OnInstallAsync(e);
                         missedEvent.WaitResolve();
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        Console.Error.WriteLine(ex.ToString());
                         missedEvent.WaitReject();
                     }
                 });
@@ -170,8 +171,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         await ServiceWorker_OnActivateAsync(e);
                         missedEvent.WaitResolve();
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        Console.Error.WriteLine(ex.ToString());
                         missedEvent.WaitReject();
                     }
                 });
@@ -193,8 +195,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         var response = await ServiceWorker_OnFetchAsync(e);
                         missedEvent.ResponseResolve(response);
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        Console.Error.WriteLine(ex.ToString());
                         missedEvent.ResponseReject();
                     }
                 });
@@ -216,8 +219,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         await ServiceWorker_OnMessageAsync(e);
                         missedEvent.WaitResolve();
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        Console.Error.WriteLine(ex.ToString());
                         missedEvent.WaitReject();
                     }
                 });
@@ -239,8 +243,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         await ServiceWorker_OnPushAsync(e);
                         missedEvent.WaitResolve();
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        Console.Error.WriteLine(ex.ToString());
                         missedEvent.WaitReject();
                     }
                 });
@@ -262,8 +267,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         await ServiceWorker_OnSyncAsync(e);
                         missedEvent.WaitResolve();
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        Console.Error.WriteLine(ex.ToString());
                         missedEvent.WaitReject();
                     }
                 });

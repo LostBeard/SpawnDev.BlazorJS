@@ -11,18 +11,27 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public override bool CanConvert(Type typeToConvert)
         {
             if (!typeToConvert.IsClass) return false;
+            if (typeToConvert.IsInterface) return false;
+            if (typeToConvert.IsArray) return false;
             if (typeof(JSObject).IsAssignableFrom(typeToConvert)) return false;
             if (typeof(IJSObjectProxy).IsAssignableFrom(typeToConvert)) return false;
             if (typeof(Callback).IsAssignableFrom(typeToConvert)) return false;
-            if (typeToConvert.IsInterface) return false;
             if (typeToConvert.IsAsync()) return false;
+            var baseType = typeToConvert.IsGenericType ? typeToConvert.GetGenericTypeDefinition() : typeToConvert;
+            if (baseType == typeof(List<>)) return false;
             var classProps = typeToConvert.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             foreach (var prop in classProps)
             {
                 if (Attribute.IsDefined(prop, typeof(JsonIgnoreAttribute))) continue;
                 var pType = prop.PropertyType;
-                if (typeof(JSObject).IsAssignableFrom(pType)) return true;
-                if (typeof(IJSObjectProxy).IsAssignableFrom(pType)) return true;
+                if (typeof(JSObject).IsAssignableFrom(pType))
+                {
+                    return true;
+                }
+                if (typeof(IJSObjectProxy).IsAssignableFrom(pType))
+                {
+                    return true;
+                }
             }
             return false;
         }

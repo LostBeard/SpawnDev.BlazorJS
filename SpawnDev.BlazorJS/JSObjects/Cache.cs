@@ -69,6 +69,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        public Task Add(Request request) => JSRef.CallVoidAsync("add", request);
+        /// <summary>
+        /// Takes an array of URLs, retrieves them, and adds the resulting response objects to the given cache.
+        /// </summary>
+        /// <param name="requests"></param>
+        /// <returns></returns>
+        public Task AddAll(List<Request> requests) => JSRef.CallVoidAsync("addAll", requests);
+        /// <summary>
+        /// Takes a URL, retrieves it and adds the resulting response object to the given cache. This is functionally equivalent to calling fetch(), then using put() to add the results to the cache.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public Task Add(string request) => JSRef.CallVoidAsync("add", request);
         /// <summary>
         /// Takes an array of URLs, retrieves them, and adds the resulting response objects to the given cache.
