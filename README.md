@@ -641,7 +641,7 @@ public class ProcessFrameResult : IDisposable
     public byte[]? HomographyBytes { get; set; }
     public void Dispose(){
         ArrayBuffer?.Dispose();
-    }oy2dx2ttj62xaz3td2sq6ofom4jdg5me7gxmsiv7wdgwve
+    }
 }
 
 [return: WorkerTransfer(false)]
