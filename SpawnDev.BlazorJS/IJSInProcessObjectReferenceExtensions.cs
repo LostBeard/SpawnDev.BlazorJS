@@ -55,7 +55,7 @@ namespace SpawnDev.BlazorJS
         #endregion
 
         // call with up to 10 arguments
-        // used instead of "params" becuase params has an issue that will never be fixed thata can cause unexpected behavior
+        // used instead of "params" because params has an issue that can cause unexpected behavior
         // (Example: if a single argument of an array of string is passed, the params variable will be an array of string instead of a 2 dimensiaonal array with the first item being the array of strings passed) 
         #region IJSInProcessObjectReference Call Sync 
         public static T Call<T>(this IJSInProcessObjectReference _ref, string identifier) => CallApply<T>(_ref, identifier);
@@ -161,7 +161,5 @@ namespace SpawnDev.BlazorJS
         public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
         public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         public static T New<T>(this IJSInProcessObjectReference _ref, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => NewApply<T>(_ref, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-
-
-}
+    }
 }
