@@ -632,6 +632,7 @@ webWorker.SendEvent("progress", new PiProgress { Progress = piProgress });
 
 [Faster is better.](https://developer.chrome.com/blog/transferable-objects-lightning-fast/) SpawnDev WebWorkers use [transferable objects](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects) by default for better performance, but it can be disabled with WorkerTransferAttribute. Setting WorkerTransfer to false will cause the property, return value, or parameter to be copied to the receiving thread instead of transferred.
 
+
 Example
 ```cs
 public class ProcessFrameResult : IDisposable
