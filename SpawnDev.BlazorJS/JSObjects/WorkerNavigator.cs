@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class WorkerNavigator : JSObject
     {
+        public WorkerNavigator() : base(JS.Get<IJSInProcessObjectReference>("navigator")) { }
         public WorkerNavigator(IJSInProcessObjectReference _ref) : base(_ref) { }
         public int HardwareConcurrency => JSRef.Get<int>("hardwareConcurrency");
         public string? Language => JSRef.Get<string?>("language");

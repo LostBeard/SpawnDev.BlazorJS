@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpawnDev.BlazorJS.JSObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -29,7 +30,7 @@ namespace SpawnDev.BlazorJS.Diagnostics
         {
             JS = js;
         }
-        public JSObjectAnalysisResult? Analyze(JSObject obj)
+        public JSObjectAnalysisResult? Analyze<T>(T obj) where T : JSObject
         {
             if (obj == null || obj.JSRef == null) return null;
             var ret = new JSObjectAnalysisResult();
@@ -43,6 +44,36 @@ namespace SpawnDev.BlazorJS.Diagnostics
             var jsoMethodNames = ret.JSObjectType.GetMethods().Select(o => o.Name).ToList();
             ret.JSProperties = jsPropsNames.Select(o => AnalyzePropertyInternal(obj, o)).Where(o => o != null).ToList();
 
+            JSObject? proto = obj;
+            var protoLast = "";
+            while (proto != null)
+            {
+                var protoName = proto.JSRef.GetConstructorName();
+                if (!string.IsNullOrEmpty(protoName))
+                {
+                    var protoProps = proto.JSRef.GetPropertyNames();
+                    if (!ret.Inheritance.TryGetValue(protoName, out var currentProps))
+                    {
+                        ret.Inheritance.Add(protoName, protoProps);
+                    }
+                    else
+                    {
+                        currentProps.AddRange(protoProps);
+                    }
+                }
+                proto = Reflect.GetPrototypeOf(proto);
+            }
+            var inheritance = ret.JSConstrutorName;
+            var protoTypes = ret.Inheritance.Keys;
+            if (ret.Inheritance.Count > 1)
+            {
+                inheritance = $"{protoTypes.First()} : {(string.Join(", ", protoTypes.Skip(1).ToArray()))}";
+            }
+            else if (ret.Inheritance.Count == 1)
+            {
+                inheritance = $"{protoTypes.First()}";
+            }
+            Console.WriteLine($"Inheritance: {inheritance}");
             return ret;
         }
         bool ignoreUnderscoredProperties = true;
@@ -52,7 +83,7 @@ namespace SpawnDev.BlazorJS.Diagnostics
             var ret = new JSPropertyInfo();
             try
             {
-                var descriptor = JS.Call<JSObject?>("Object.getOwnPropertyDescriptor", parent, propertyName);
+                var descriptor = JS.Call<PropertyDescriptor?>("Object.getOwnPropertyDescriptor", parent, propertyName);
                 //var propertyPath = string.IsNullOrEmpty(parentFullName) ? propertyName : $"{parentFullName}.{propertyName}";
                 var propertyType = parent.JSRef.PropertyType(propertyName);
                 var instanceOf = "";

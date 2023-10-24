@@ -28,7 +28,7 @@ builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builde
 builder.Services.AddBlazorJSRuntime();
 // Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
 builder.Services.AddWebWorkerService();
-// WebWorkerPool service (WIP. optional. Not requried for WebWorkerService)
+// WebWorkerPool service (WIP. optional. Not required for WebWorkerService)
 builder.Services.AddSingleton<WebWorkerPool>();
 // More app specific services
 builder.Services.AddSingleton(builder.Configuration); // used to demo appsettings reading in workers
@@ -51,9 +51,17 @@ var host = builder.Build();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
-//var jsobjectAnalyzer = new JSObjectAnalyzer(JS);
-//var w = JS.Get<Storage>("localStorage");
-//jsobjectAnalyzer.Analyze(w);
+var jsobjectAnalyzer = new JSObjectAnalyzer(JS);
+var window = JS.Get<Window>("window");
+var windowInfo = jsobjectAnalyzer.Analyze(window);
+JS.Log("_windowInfo", windowInfo);
+JS.Set("_windowInfo", windowInfo);
+
+var localStorage = JS.Get<Storage>("localStorage");
+var localStorageInfo = jsobjectAnalyzer.Analyze(localStorage);
+
+JS.Log("_localStorageInfo", localStorageInfo);
+JS.Set("_localStorageInfo", localStorageInfo);
 
 JS.Set("_testWorker", new ActionCallback<bool>(async (verbose) => { 
     var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();    
