@@ -149,7 +149,14 @@ namespace SpawnDev.BlazorJS
             if (serviceInfo.Service != null && serviceInfo.Service is IAsyncBackgroundService asyncBG && !serviceInfo.InitAsyncCalled)
             {
 #if DEBUG && true
-                Console.WriteLine($"InitAsync background service: {serviceInfo.ServiceDescriptor.ServiceType.Name}");
+                if (serviceInfo.DependencyOfType != null)
+                {
+                    Console.WriteLine($"InitAsync background service: {serviceInfo.ServiceDescriptor.ServiceType.Name} dependency of {serviceInfo.DependencyOfType.Name}");
+                }
+                else
+                {
+                    Console.WriteLine($"InitAsync background service: {serviceInfo.ServiceDescriptor.ServiceType.Name}");
+                }
 #endif
                 serviceInfo.InitAsyncCalled = true;
                 await asyncBG.InitAsync();
@@ -187,7 +194,14 @@ namespace SpawnDev.BlazorJS
             serviceInfo.DependencyOrder = AutoStartedServices.Where(o => o.StartupState == StartupState.Started).Count();
             serviceInfo.StartupState = StartupState.Started;
 #if DEBUG && true
-            Console.WriteLine($"Started background service: {serviceInfo.ServiceDescriptor.ServiceType.Name}");
+            if (serviceInfo.DependencyOfType != null)
+            {
+                Console.WriteLine($"Started background service: {serviceInfo.ServiceDescriptor.ServiceType.Name} dependency of {serviceInfo.DependencyOfType.Name}");
+            }
+            else
+            {
+                Console.WriteLine($"Started background service: {serviceInfo.ServiceDescriptor.ServiceType.Name}");
+            }
 #endif
         }
 
