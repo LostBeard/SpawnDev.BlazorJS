@@ -47,7 +47,13 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
         }
-
+        
+        /// <summary>
+        /// Returns true if the current GlobalScope flag is set in supplied scope var.<br />
+        /// Always returns false for GlobalScope enum flags Default, and None.
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns></returns>
         public bool IsScope(GlobalScope scope) => (GlobalScope & scope) != 0;
         public bool IfScope(GlobalScope scope, Action method)
         {

@@ -10,7 +10,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public List<ResizeObserverSize> BorderBoxSize => JSRef.Get<List<ResizeObserverSize>>("borderBoxSize");
         public List<ResizeObserverSize> ContentBoxSize => JSRef.Get<List<ResizeObserverSize>>("contentBoxSize");
         public List<ResizeObserverSize> DevicePixelContentBoxSize => JSRef.Get<List<ResizeObserverSize>>("devicePixelContentBoxSize");
-        public DOMRect ContentRect => JSRef.Get<DOMRect>("contentRect");
+        public DOMRectReadOnly ContentRect => JSRef.Get<DOMRectReadOnly>("contentRect");
         public ResizeObserverEntry(IJSInProcessObjectReference _ref) : base(_ref) { }
     }
 }
