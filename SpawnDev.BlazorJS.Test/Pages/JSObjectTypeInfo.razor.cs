@@ -30,6 +30,18 @@ namespace SpawnDev.BlazorJS.Test.Pages
             {
                 var nmt = true;
             }
+            switch (type.Name)
+            {
+                case "String": return "string";
+                case "Object": return "object";
+                case "Int32": return "int";
+                case "UInt32": return "uint";
+                case "Int64": return "long";
+                case "UInt64": return "ulong";
+                case "Void": return "void";
+                case "Single": return "float";
+                case "Double": return "double";
+            }
             return type.Name;
         }
         public static string GetFormattedName(this MethodInfo mi)

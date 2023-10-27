@@ -12,6 +12,7 @@ namespace SpawnDev.BlazorJS.Diagnostics
     public class JSObjectAnalyzer
     {
         BlazorJSRuntime JS;
+        public event Action<JSPropertyInfo> OnNewJSObjectTypeAdded;
         public static byte[] GetHash(string inputString)
         {
             using (HashAlgorithm algorithm = SHA256.Create())
@@ -26,68 +27,139 @@ namespace SpawnDev.BlazorJS.Diagnostics
 
             return sb.ToString();
         }
+
         public JSObjectAnalyzer(BlazorJSRuntime js)
         {
             JS = js;
         }
-        public JSObjectAnalysisResult? Analyze<T>(T obj) where T : JSObject
+
+        bool ignoreUnderscoredProperties = true;
+
+        public JSPropertyInfo? Analyze<T>(T obj) where T : JSObject
         {
             if (obj == null || obj.JSRef == null) return null;
-            var ret = new JSObjectAnalysisResult();
-            ret.JSObjectType = obj.GetType();
-            ret.JSConstrutorName = obj.JSRef.GetConstructorName();
-            var jsPropsNames = obj.JSRef.GetPropertyNames().Where(o => !o.StartsWith("_")).OrderBy(o => o).ToList();
-            ret.JSPropNamesHash = GetHashString(JsonSerializer.Serialize(jsPropsNames));
-            var members = ret.JSObjectType.GetMembers();
-            var jsoProps = ret.JSObjectType.GetProperties();
-            var jsoPropNames = jsoProps.Select(o => o.Name).ToList();
-            var jsoMethodNames = ret.JSObjectType.GetMethods().Select(o => o.Name).ToList();
-            ret.JSProperties = jsPropsNames.Select(o => AnalyzePropertyInternal(obj, o)).Where(o => o != null).ToList();
+            var ret = new JSPropertyInfo();
+            LoadObjectInf(ret, obj);
+            return ret;
+        }
 
+        // analyzed types keyed on JSPropertyInfo.InstanceOf
+        public Dictionary<string, JSPropertyInfo> Analyzed { get; private set; } = new Dictionary<string, JSPropertyInfo>();
+
+        public bool ShouldAnalyze<T>(T obj) where T : JSObject
+        {
+            var typeOf = obj == null || obj.JSRef == null ? "" : JS.TypeOf(obj);
+            if (string.IsNullOrEmpty(typeOf) || typeOf == "symbol") return false;
+            var instanceOf = obj == null || obj.JSRef == null ? "" : obj.JSRef.GetConstructorName();
+            return !string.IsNullOrEmpty(instanceOf) && !Analyzed.ContainsKey(instanceOf);
+        }
+        public void RequestFullAnalysis<T>(T obj, JSPropertyInfo jsp) where T : JSObject
+        {
+            jsp.FullAnalysis = false;
+            var typeOf = obj == null || obj.JSRef == null ? "" : JS.TypeOf(obj);
+            if (string.IsNullOrEmpty(typeOf) || typeOf == "symbol") return;
+            var instanceOf = obj == null || obj.JSRef == null ? "" : obj.JSRef.GetConstructorName();
+            if (string.IsNullOrEmpty(instanceOf)) return;
+            var ret = !Analyzed.TryGetValue(instanceOf, out var propertyInfo);
+            if (ret)
+            {
+                Analyzed.Add(instanceOf, jsp);
+                jsp.FullAnalysis = true;
+            }
+            else
+            {
+                jsp.TypeOf = propertyInfo.TypeOf;
+                jsp.FunctionLength = propertyInfo.FunctionLength;
+                //jsp.Inheritance = propertyInfo.Inheritance;
+                //jsp.JSProperties = propertyInfo.JSProperties;
+                jsp.InstanceOf = propertyInfo.InstanceOf;
+                jsp.InheritsFrom = propertyInfo.InheritsFrom;
+                jsp.FullAnalysis = false;
+            }
+        }
+
+        void LoadObjectInf(JSPropertyInfo ret, JSObject obj)
+        {
+            RequestFullAnalysis(obj, ret);
+            if (!ret.FullAnalysis) return;
+            ret.TypeOf = JS.TypeOf(obj);
+            ret.FunctionLength = ret.TypeOf == "function" ? obj.JSRef.Get<int>("length") : 0;
             JSObject? proto = obj;
-            var protoLast = "";
+            var allProps = new List<string>();
             while (proto != null)
             {
                 var protoName = proto.JSRef.GetConstructorName();
-                if (!string.IsNullOrEmpty(protoName))
+
+                if (string.IsNullOrEmpty(protoName))
                 {
-                    var protoProps = proto.JSRef.GetPropertyNames();
+                    var art = true;
+                }
+                else
+                {
+                    var realKeys = new List<object>();
+                    var propKeys = Reflect.OwnKeys(proto);
+                    for (int i = 0; i < propKeys.Length; i++)
+                    {
+                        var typeofAt = JS.TypeOf(propKeys, i);
+                        switch (typeofAt)
+                        {
+                            case "symbol":
+                                {
+                                    //var key = propKeys.At<Symbol>(i);
+                                    //realKeys.Add(key);
+                                }
+                                break;
+                            case "string":
+                                {
+                                    var keyStr = propKeys.At<string>(i);
+                                    realKeys.Add(keyStr);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    var protoProps = realKeys.Select(o => o is string oStr && (!ignoreUnderscoredProperties || !oStr.StartsWith("_")) ? oStr : null).Where(o => !string.IsNullOrEmpty(o)).OrderBy(o => o).ToList();
+                    allProps.AddRange(protoProps);
                     if (!ret.Inheritance.TryGetValue(protoName, out var currentProps))
                     {
-                        ret.Inheritance.Add(protoName, protoProps);
+                        currentProps = new Dictionary<string, PropertyDescriptor>();
+                        ret.Inheritance.Add(protoName, currentProps);
                     }
-                    else
+                    foreach (var protoProp in protoProps)
                     {
-                        currentProps.AddRange(protoProps);
+                        currentProps[protoProp] = Reflect.GetOwnPropertyDescriptor(proto, protoProp);
                     }
+
                 }
-                proto = Reflect.GetPrototypeOf(proto);
+                try
+                {
+                    proto = Reflect.GetPrototypeOf(proto);
+                }
+                catch
+                {
+                    proto = null;
+                }
             }
-            var inheritance = ret.JSConstrutorName;
-            var protoTypes = ret.Inheritance.Keys;
-            if (ret.Inheritance.Count > 1)
-            {
-                inheritance = $"{protoTypes.First()} : {(string.Join(", ", protoTypes.Skip(1).ToArray()))}";
-            }
-            else if (ret.Inheritance.Count == 1)
-            {
-                inheritance = $"{protoTypes.First()}";
-            }
-            Console.WriteLine($"Inheritance: {inheritance}");
-            return ret;
+            ret.InstanceOf = ret.Inheritance.Count == 0 ? null : ret.Inheritance.Keys.FirstOrDefault();
+            ret.InheritsFrom = ret.Inheritance.Count < 2 ? null : ret.Inheritance.Keys.ElementAt<string?>(1);
+            allProps = allProps.Distinct().OrderBy(o => o).ToList();
+            ret.JSProperties = allProps.Select(o => AnalyzePropertyValue(obj, o)).Where(o => o != null).ToDictionary(o => o.Name, o => o);
+            JS.Log($"New type analyzed: {ret.InstanceOf}");
+            OnNewJSObjectTypeAdded?.Invoke(ret);
         }
-        bool ignoreUnderscoredProperties = true;
-        JSPropertyInfo? AnalyzePropertyInternal(JSObject parent, string propertyName)
+
+        JSPropertyInfo? AnalyzePropertyValue(JSObject parent, string propertyName)
         {
             if (ignoreUnderscoredProperties && propertyName.StartsWith("_")) return null;
             var ret = new JSPropertyInfo();
+            ret.Name = propertyName;
             try
             {
-                var descriptor = JS.Call<PropertyDescriptor?>("Object.getOwnPropertyDescriptor", parent, propertyName);
-                //var propertyPath = string.IsNullOrEmpty(parentFullName) ? propertyName : $"{parentFullName}.{propertyName}";
-                var propertyType = parent.JSRef.PropertyType(propertyName);
-                var instanceOf = "";
-                switch (propertyType)
+                //ret.Descriptor = JS.Call<PropertyDescriptor?>("Object.getOwnPropertyDescriptor", parent, propertyName);
+                ret.TypeOf = parent.JSRef.PropertyType(propertyName);
+                var isObject = false;
+                switch (ret.TypeOf)
                 {
                     case "undefined":
                     case "number":
@@ -99,24 +171,20 @@ namespace SpawnDev.BlazorJS.Diagnostics
                     case "function":
                     case "object":
                     default:
-                        instanceOf = parent.JSRef.PropertyInstanceOf(propertyName);
+                        isObject = true;
                         break;
                 }
-                ret.Name = propertyName;
-                //ret.FullName = propertyPath;
-                ret.InstanceOf = instanceOf;
-                ret.TypeOf = propertyType;
-                ret.Descriptor = descriptor;
-                if (!string.IsNullOrEmpty(instanceOf))
+                if (isObject)
                 {
                     JSObject? obj = null;
                     try
                     {
                         obj = parent.JSRef.Get<JSObject?>(propertyName);
                     }
-                    catch
+                    catch { }
+                    if (obj != null)
                     {
-
+                        LoadObjectInf(ret, obj);
                     }
                 }
             }

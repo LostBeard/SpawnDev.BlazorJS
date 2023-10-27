@@ -32,7 +32,8 @@ namespace SpawnDev.BlazorJS {
             return _js.Invoke<bool>("JSInterop._deleteGlobal", identifier);
         }
 
-        internal static void CallGlobalVoid(string identifier, object?[]? args) {
+        internal static void CallGlobalVoid(string identifier, object?[]? args)
+        {
             _js.InvokeVoid("JSInterop._callGlobal", identifier, args, JSCallResultType.JSVoidResult);
         }
 
@@ -195,6 +196,16 @@ namespace SpawnDev.BlazorJS {
         }
 
         internal static string InstanceOf(object? obj, string identifier = "") {
+            return _js.Invoke<string>("JSInterop._instanceof", obj, identifier);
+        }
+
+        internal static string TypeOf(object? obj, int identifier)
+        {
+            return _js.Invoke<string>("JSInterop._typeof", obj, identifier);
+        }
+
+        internal static string InstanceOf(object? obj, int identifier)
+        {
             return _js.Invoke<string>("JSInterop._instanceof", obj, identifier);
         }
 

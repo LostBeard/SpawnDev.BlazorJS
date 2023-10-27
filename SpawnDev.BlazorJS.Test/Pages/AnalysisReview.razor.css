@@ -1,0 +1,13 @@
+﻿.page-main
+{
+    display: flex;
+    flex-direction: row;
+}
+.page-left {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+.page-right {
+    flex-grow: 1;
+    flex-shrink: 1;
+}

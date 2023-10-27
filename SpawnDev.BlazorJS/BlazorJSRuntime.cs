@@ -217,6 +217,7 @@ namespace SpawnDev.BlazorJS
         public bool IsUndefined(JSObject obj, string identifier = "") => JSInterop.TypeOf(obj, identifier) == "undefined";
         public bool IsUndefined(string identifier) => JSInterop.TypeOf(null, identifier) == "undefined";
         public string TypeOf(JSObject obj, string identifier = "") => JSInterop.TypeOf(obj, identifier);
+        public string TypeOf(JSObject obj, int identifier) => JSInterop.TypeOf(obj, identifier);
         public string TypeOf(string identifier) => JSInterop.TypeOf(null, identifier);
         public void Log(params object?[] args) => CallApplyVoid("console.log", args);
         public string GetConstructorName(string identifier) => Get<string>($"{identifier}.constructor.name");

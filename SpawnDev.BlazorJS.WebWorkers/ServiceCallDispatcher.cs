@@ -69,7 +69,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         //public delegate void OnMessageDelegate(ServiceCallDispatcher sender, WebWorkerMessageIn msg);
         public event Action<ServiceCallDispatcher, WebWorkerMessageIn> OnMessage;
 
-        static Dictionary<string, Type?> typeCache = new Dictionary<string, Type>();
+        static Dictionary<string, Type?> typeCache { get; } = new Dictionary<string, Type>();
 
         /// <summary>
         /// For whatever reason Type.GetType was failing when trying to find a Type in the same assembly as this class... no idea why. Below code worked when it failed

@@ -44,7 +44,10 @@ namespace SpawnDev.BlazorJS
             if (JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
             IsJSRefUndefined = _ref != null && typeof(JSInProcessObjectReferenceUndefined).IsAssignableFrom(_ref.GetType());
             JSRef = _ref;
+            if (JSRef != null) OnJSObjectCreated?.Invoke(this);
         }
+
+        public static Action<JSObject>? OnJSObjectCreated { get; set; }
 
         //protected virtual void LosingReference()
         //{

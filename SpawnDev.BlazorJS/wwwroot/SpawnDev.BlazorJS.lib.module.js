@@ -98,10 +98,18 @@ var initFunc = function () {
         return serializeToDotNet(ret, returnType);
     };
 
+    /**
+     * returns Reflect.ownKeys where typeof key === 'string' of the target
+     * @param {any} obj
+     * @param {any} name
+     * @param {any} hasOwnProperty
+     * @returns
+     */
     JSInterop._getPropertyNames = function (obj, name, hasOwnProperty) {
         var target = JSInterop.pathToTarget(obj, name);
-        var ret = Object.keys(target);
-        if (hasOwnProperty && target.hasOwnProperty) ret = ret.filter(o => target.hasOwnProperty(o));
+        //var ret = Object.keys(target);
+        //if (hasOwnProperty && target.hasOwnProperty) ret = ret.filter(o => target.hasOwnProperty(o));
+        var ret = Reflect.ownKeys(target).filter(o => typeof o === 'string' && (!hasOwnProperty || !target.hasOwnProperty || target.hasOwnProperty(o)));
         return ret;
     };
 
@@ -133,12 +141,21 @@ var initFunc = function () {
         return retRef;
     }
 
+    function wrapSymbol(fn) {
+        var retRef = {
+            __wrappedSymbol: fn,
+        };
+        return retRef;
+    }
+
     function serializeToDotNet(value, returnType) {
         var typeOfValue = typeof value;
         if (typeOfValue === 'undefined') {
             value = null;
         } else if (typeOfValue === 'function') {
             value = wrapFunction(value);
+        } else if (typeOfValue === 'symbol') {
+            value = wrapSymbol(value);
         }
         if (!returnType) {
             return value;
@@ -229,9 +246,11 @@ var initFunc = function () {
         if (value && typeof value === 'object' && typeof value.__undefinedref__ !== 'undefined') {
             return;
         }
-        else 
-        if (value && typeof value === 'object' && typeof value.__wrappedFunction === 'function') {
+        else if (value && typeof value === 'object' && typeof value.__wrappedFunction === 'function') {
             return value.__wrappedFunction;
+        }
+        else if (value && typeof value === 'object' && typeof value.__wrappedSymbol === 'symbol') {
+            return value.__wrappedSymbol;
         }
         else if (value && typeof value === 'object' && typeof value._callbackId !== 'undefined') {
             let callbackId = value._callbackId;

@@ -1,0 +1,39 @@
+﻿@page "/analysis/{TypeName?}"
+
+@using SpawnDev.BlazorJS.Diagnostics;
+@using SpawnDev.BlazorJS;
+@using SpawnDev.BlazorJS.JSObjects;
+@using System.Reflection;
+@implements IDisposable
+
+<h3>Analysis Review</h3>
+<div class="page-main">
+    <div class="page-left">
+        @foreach (var jsoi in JSObjectAnalyzer.Analyzed.Values.OrderBy(o => o.InstanceOf))
+        {
+            var jsObjectType = GetJSObjectTypeByName(jsoi.InstanceOf!);
+            var navLink = $"analysis/{jsoi.InstanceOf}";
+            <div>
+                <NavLink href="@navLink"> @jsoi.InstanceOf @(jsObjectType == null ? "" : "*")</NavLink>
+            </div>
+        }
+    </div>
+    <div class="page-right">
+        @if (TypeName == null)
+        {
+            <div>
+                Select a type to analyze.
+            </div>
+        }
+        else
+        {
+            <div>
+                <h3>@TypeName</h3>
+                <div>
+                    @((MarkupString)_markup)
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

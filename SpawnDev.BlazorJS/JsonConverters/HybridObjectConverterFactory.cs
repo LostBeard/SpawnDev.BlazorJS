@@ -19,6 +19,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
             if (typeToConvert.IsAsync()) return false;
             var baseType = typeToConvert.IsGenericType ? typeToConvert.GetGenericTypeDefinition() : typeToConvert;
             if (baseType == typeof(List<>)) return false;
+            if (baseType == typeof(Dictionary<,>)) return false;
             var classProps = typeToConvert.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             foreach (var prop in classProps)
             {
@@ -93,7 +94,15 @@ namespace SpawnDev.BlazorJS.JsonConverters
             foreach (var prop in classProps)
             {
                 var propName = GetPropertyJSName(prop);
-                object? propValue = prop.GetValue(value);
+                object? propValue = null;
+                try
+                {
+                    propValue = prop.GetValue(value);
+                }
+                catch (Exception ex)
+                {
+                    var nmt = true;
+                }
                 writer.WritePropertyName(propName);
                 JsonSerializer.Serialize(writer, propValue, options);
             }

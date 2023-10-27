@@ -10,14 +10,15 @@ using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
 
 #if DEBUG
-JSObject.UndisposedHandleVerboseMode = true;
+JSObject.UndisposedHandleVerboseMode = false;
 #endif
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 // Modify JSRuntime.JsonSerializerOptions (WARNING: Modifying this can cause unexpected results. Test thoroughly.)
-builder.Services.AddJSRuntimeJsonOptions(jsRuntimeJsonOptions => {
+builder.Services.AddJSRuntimeJsonOptions(jsRuntimeJsonOptions =>
+{
 #if DEBUG
     Console.WriteLine($"JSRuntime JsonConverters count: {jsRuntimeJsonOptions.Converters.Count}");
 #endif
@@ -44,6 +45,8 @@ builder.Services.AddSingleton<NotificationService>();
 builder.Services.AddSingleton<TooltipService>();
 builder.Services.AddSingleton<ContextMenuService>();
 
+builder.Services.AddSingleton<JSObjectAnalyzer>();
+
 //Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
 
 #if DEBUG || true
@@ -51,31 +54,52 @@ var host = builder.Build();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
-var jsobjectAnalyzer = new JSObjectAnalyzer(JS);
-var window = JS.Get<Window>("window");
-var windowInfo = jsobjectAnalyzer.Analyze(window);
-JS.Log("_windowInfo", windowInfo);
-JS.Set("_windowInfo", windowInfo);
+var jsobjectAnalyzer = host.Services.GetRequiredService<JSObjectAnalyzer>();
 
-var localStorage = JS.Get<Storage>("localStorage");
-var localStorageInfo = jsobjectAnalyzer.Analyze(localStorage);
+//var analyzing = false;
+//JSObject.OnJSObjectCreated = (obj) =>
+//{
+//    if (jsobjectAnalyzer.ShouldAnalyze(obj) && !analyzing)
+//    {
+//        analyzing = true;
+//        jsobjectAnalyzer.Analyze(obj);
+//        analyzing = false;
+//    }
+//};
+////var promise = new Promise();
+////var promiseInfo = jsobjectAnalyzer.Analyze(promise);
 
-JS.Log("_localStorageInfo", localStorageInfo);
-JS.Set("_localStorageInfo", localStorageInfo);
+//var window = JS.Get<Window>("window");
+//var windowInfo = jsobjectAnalyzer.Analyze(window);
+//JS.Log("_windowInfo", windowInfo);
+//JS.Set("_windowInfo", windowInfo);
 
-JS.Set("_testWorker", new ActionCallback<bool>(async (verbose) => { 
-    var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();    
+//var localStorage = JS.Get<Storage>("localStorage");
+//var localStorageInfo = jsobjectAnalyzer.Analyze(localStorage);
+
+//JS.Log("_localStorageInfo", localStorageInfo);
+//JS.Set("_localStorageInfo", localStorageInfo);
+
+JS.Set("_testWorker", new ActionCallback<bool>(async (verbose) =>
+{
+    var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
     var worker = await webWorkerService.GetWebWorker(verbose);
     var math = worker.GetService<IMathsService>();
     var ret = await math.EstimatePI(100);
     Console.WriteLine(ret);
 }));
-JS.Set("_testWorkerAndDispose", new ActionCallback<bool>(async (verbose) => {
+JS.Set("_testWorkerAndDispose", new ActionCallback<bool>(async (verbose) =>
+{
     var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
     using var worker = await webWorkerService.GetWebWorker(verbose);
     var math = worker.GetService<IMathsService>();
     var ret = await math.EstimatePI(100);
     Console.WriteLine(ret);
+}));
+
+JS.Set("_analyze", new ActionCallback<JSObject>(async (obj) =>
+{
+    jsobjectAnalyzer.Analyze(obj);
 }));
 
 await host.BlazorJSRunAsync();
