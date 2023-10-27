@@ -20,9 +20,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public List<string>? SessionTypes { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public MediaCapabilities[]? AudioCapabilities { get; set; }
+        public MediaKeyCapabilities[]? AudioCapabilities { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public MediaCapabilities[]? VideoCapabilities { get; set; }
+        public MediaKeyCapabilities[]? VideoCapabilities { get; set; }
     }
 }

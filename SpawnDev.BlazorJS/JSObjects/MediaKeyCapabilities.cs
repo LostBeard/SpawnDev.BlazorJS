@@ -2,7 +2,7 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class MediaCapabilities
+    public class MediaKeyCapabilities
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? ContentType { get; set; }

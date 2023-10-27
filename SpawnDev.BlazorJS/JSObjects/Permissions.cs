@@ -2,8 +2,10 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-
-    // https://developer.mozilla.org/en-US/docs/Web/API/Permissions/query
+    /// <summary>
+    /// The Permissions interface of the Permissions API provides the core Permission API functionality, such as methods for querying and revoking permissions<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Permissions
+    /// </summary>
     public class Permissions : JSObject
     {
         public Permissions(IJSInProcessObjectReference _ref) : base(_ref) { }

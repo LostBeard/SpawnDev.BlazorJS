@@ -40,7 +40,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Geolocation? Geolocation => JSRef.Get<Geolocation?>("geolocation");
         public GPU? Gpu => JSRef.Get<GPU?>("gpu");
         public HID? Hid => JSRef.Get<HID?>("hid");
-        //public Ink Ink => JSRef.Get<Ink>("ink");
+        public Ink Ink => JSRef.Get<Ink>("ink");
         //public Keyboard Keyboard => JSRef.Get<Keyboard>("keyboard");
         public string Language => JSRef.Get<string>("language");
         public string[] Languages => JSRef.Get<string[]>("languages");
@@ -50,7 +50,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         //public MediaSession MediaSession => JSRef.Get<MediaSession>("mediaSession");
         //public MimeTypeArray MimeTypes => JSRef.Get<MimeTypeArray>("mimeTypes");
         public bool PdfViewerEnabled => JSRef.Get<bool>("pdfViewerEnabled");
-        //public Permissions Permissions => JSRef.Get<Permissions>("permissions");
+        public Permissions Permissions => JSRef.Get<Permissions>("permissions");
         public string Platform => JSRef.Get<string>("platform");
         //public PluginArray Plugins => JSRef.Get<PluginArray>("plugins");
         //public Presentation Presentation => JSRef.Get<Presentation>("presentation");
