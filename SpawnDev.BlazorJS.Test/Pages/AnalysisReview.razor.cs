@@ -98,8 +98,8 @@ public class {TypeName} : {inheritsFrom}
                     var startsWithUpperCase = Regex.IsMatch(propertyName, "^[A-Z]");
                     var eventNameMatch = propertyName != "one" && propertyName != "once" ? Regex.Match(propertyName, "^on([a-z].+)") : null;
                     var eventName = eventNameMatch != null ? eventNameMatch.Groups[1].Value : null;
-                    var jsobjectProp = jsobjectProps.FirstOrDefault(o => o.Name == propertyNameCS);
-                    var jsobjectMethod = jsobjectMethods.FirstOrDefault(o => o.Name == propertyNameCS);
+                    var jsobjectProp = jsobjectProps.FirstOrDefault(o => o.Name.Equals(propertyNameCS, StringComparison.OrdinalIgnoreCase));
+                    var jsobjectMethod = jsobjectMethods.FirstOrDefault(o => o.Name.Equals(propertyNameCS, StringComparison.OrdinalIgnoreCase));
                     var csExists = jsobjectProp != null || jsobjectMethod != null;
 
                     if (existing != csExists) return;
