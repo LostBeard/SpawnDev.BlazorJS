@@ -1,4 +1,6 @@
 ﻿using Microsoft.JSInterop;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Security.Cryptography;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -14,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Methods
-        //public void Decrypt() => JSRef.CallVoid("decrypt");
+        public Task<ArrayBuffer> Decrypt(Union<RsaOaepParams, AesCtrParams, AesCbcParams, AesGcmParams> algorithm, CryptoKey key, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef.CallAsync<ArrayBuffer>("decrypt", algorithm, key, data);
         //public void DeriveBits() => JSRef.CallVoid("deriveBits");
         //public void DeriveKey() => JSRef.CallVoid("deriveKey");
         //public void Digest() => JSRef.CallVoid("digest");
