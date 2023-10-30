@@ -59,7 +59,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Task<string> ExportKeyJwk(CryptoKey key) => JSRef.CallAsync<string>("exportKey", "jwk", key);
+        public Task<JSObject> ExportKeyJwk(CryptoKey key) => JSRef.CallAsync<JSObject>("exportKey", "jwk", key);
         /// <summary>
         /// Use the generateKey() method of the SubtleCrypto interface to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         /// </summary>
