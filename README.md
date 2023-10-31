@@ -13,6 +13,7 @@
 
 [Documentation](https://lostbeard.github.io/blazorjs-docs/)  
 [Help write the documentation](https://github.com/LostBeard/blazorjs-docs)
+[Live Demo](https://blazorjs.spawndev.com/)
  
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
@@ -21,7 +22,7 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 
 Supports Blazor WebAssembly .Net 6, 7, and 8.
 
-- 210+ strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, WebGL, WebRTC, and Promises allow direct interaction with Javascript
+- 260+ strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, and Promises allow direct interaction with Javascript
 - Use Javascript libraries in Blazor without writing any Javascript code
 - BlazorJSRuntime wraps the default JSRuntime adding additional functionality
 - Create new Javascript objects directly from Blazor
