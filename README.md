@@ -12,7 +12,7 @@
 |**[SpawnDev.BlazorJS.WebWorkers](#spawndevblazorjswebworkers)** <br /> [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.WebWorkers.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers)| Blazor WASM WebWorkers, SharedWebWorkers, and ServiceWorker |
 
 [Documentation](https://lostbeard.github.io/blazorjs-docs/)  
-[Help write the documentation](https://github.com/LostBeard/blazorjs-docs)
+[Help write the documentation](https://github.com/LostBeard/blazorjs-docs)  
 [Live Demo](https://blazorjs.spawndev.com/)
  
 # SpawnDev.BlazorJS
