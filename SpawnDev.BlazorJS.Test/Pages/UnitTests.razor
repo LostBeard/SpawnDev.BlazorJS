@@ -161,29 +161,25 @@
         // Now test exporting and then importing the private key (for testing only)
         // export private key
         var privateKey = await subtle.ExportKey<ArrayBuffer>("pkcs8", keyPair.PrivateKey);
-        //var stringPublicKey = ArrayBufferToBase64(publicKey);
         // convert exported private key to a base64 string
-        //var stringPrivateKey = ArrayBufferToBase64(privateKey);
-        // convert base64 private key string to ArrayBuffer
-        //var arrayBufferPrivateKey = Base6ToArrayBuffer4(stringPrivateKey);
+        var stringPrivateKey = ArrayBufferToBase64(privateKey);
+
+        // now the import steps from string
+        // convert base64 private key string back to ArrayBuffer
+        var arrayBufferPrivateKey = Base64ToArrayBuffer(stringPrivateKey);
         // import private key from ArrayBuffer
+        var privateKeyImported = await subtle.ImportKey("pkcs8", arrayBufferPrivateKey, new RsaHashedImportParams { Name = "RSA-OAEP", Hash = "SHA-256" }, true, new string[] { "decrypt" });
 
-        JS.Log("_privateKey", privateKey);
-        JS.Set("_privateKey", privateKey);
+        // use the imported key (should provide same results as above)
+        // convert encrypted ArrayBuffer to base64 string
+        var encryptedTextBase64 = ArrayBufferToBase64(encryptedText);
+        // convert encrypted base64 string to ArrayBuffer
+        var encryptedArrayBuffer = await Base64ToArrayBufferFetch(encryptedTextBase64);
 
-        var tmp = new RsaHashedImportParams { Name = "RSA-OAEP", Hash = "SHA-256" };
-
-        JS.Log("_tmp", tmp);
-        JS.Set("_tmp", tmp);
-
-        subtle.ImportKeyTest("pkcs8", privateKey, new RsaHashedImportParams { Name = "RSA-OAEP", Hash = "SHA-256" }, true, new string[] { "decrypt" });
-        // JS.Log("_privateKeyImported", privateKeyImported);
-        // JS.Set("_privateKeyImported", privateKeyImported);
-
-
-        // //var publicKey = await subtle.ExportKey<ArrayBuffer>("spki", keyPair.PublicKey);
-
-        // var encryptedTextBase64 = ArrayBufferToBase64(encryptedText);
+        // decrypt using imported private key
+        var decryptedText2AB = await subtle.Decrypt(new EncryptParams { Name = "RSA-OAEP" }, privateKeyImported, encryptedArrayBuffer);
+        var decryptedText2 = await ArrayBufferToString(decryptedText2AB);
+        if (testString != decryptedText2) throw new Exception("Unexpected result");
     }
 
     async Task<ArrayBuffer> EncryptDataWithPublicKey(string data, CryptoKey key)
@@ -222,10 +218,17 @@
         return Convert.ToBase64String(bytes);
     }
 
-    ArrayBuffer Base6ToArrayBuffer4(string base64String)
+    ArrayBuffer Base64ToArrayBuffer(string base64String)
     {
         var bytes = Convert.FromBase64String(base64String);
         using var uint8Array = new Uint8Array(bytes);
         return uint8Array.Buffer;
+    }
+
+
+    async Task<ArrayBuffer> Base64ToArrayBufferFetch(string base64String)
+    {
+        var resp = await JS.Fetch($"data:application/octet-binary;base64,{base64String}");
+        return await resp.ArrayBuffer();
     }
 }
