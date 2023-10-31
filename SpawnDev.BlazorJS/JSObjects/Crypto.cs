@@ -8,8 +8,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Crypto : JSObject
     {
+        /// <summary>
+        /// Returns true is the the global variable 'crypto' is defined
+        /// </summary>
+        public static bool IsSupported => !JS.IsUndefined("crypto");
         #region Constructors
         public Crypto(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Gets the global instance of Crypto
+        /// </summary>
+        public Crypto() : base(JS.Get<IJSInProcessObjectReference>("crypto")) { }
         #endregion
 
         #region Properties

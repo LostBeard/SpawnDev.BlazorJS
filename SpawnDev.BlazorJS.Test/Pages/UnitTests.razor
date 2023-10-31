@@ -13,6 +13,9 @@
 @code {
 
     [Inject]
+    BlazorJSRuntime JS { get; set; }
+
+    [Inject]
     WebWorkerService _webWorkerService { get; set; }
 
     [Inject]
@@ -128,5 +131,101 @@
         if (valueGetWorkerA1 != valueSetWorkerA1) throw new Exception("Unexpected result");
         if (valueGetWorkerA2 != valueSetWorkerA1) throw new Exception("SharedWorker appears not shared");
         if (valueGetWorkerB == valueSetWorkerA1) throw new Exception("SharedWorker with different name unexpectedly same as first SharedWorker");
+    }
+
+    [TestMethod]
+    public async Task SubtleCryptoRsaOaepEncryptDecryptTest()
+    {
+        if (!Crypto.IsSupported)
+        {
+            throw new Exception("Crypto not supported by browser.");
+        }
+        using var crypto = new Crypto();
+        using var subtle = crypto.Subtle;
+        var keyPair = await subtle.GenerateKey<CryptoKeyPair>(
+            new RsaHashedKeyGenParams
+                {
+                    Name = "RSA-OAEP",
+                    ModulusLength = 4096,
+                    PublicExponent = new byte[] { 1, 0, 1 },
+                    Hash = "SHA-256"
+                },
+            true,
+            new string[] { "encrypt", "decrypt" }
+        );
+        var testString = "Hello Crypto!";
+        var encryptedText = await EncryptDataWithPublicKey(testString, keyPair.PublicKey);
+        var decryptedText = await DecryptDataWithPrivateKey(encryptedText, keyPair.PrivateKey);
+        if (testString != decryptedText) throw new Exception("Unexpected result");
+
+        // Now test exporting and then importing the private key (for testing only)
+        // export private key
+        var privateKey = await subtle.ExportKey<ArrayBuffer>("pkcs8", keyPair.PrivateKey);
+        //var stringPublicKey = ArrayBufferToBase64(publicKey);
+        // convert exported private key to a base64 string
+        //var stringPrivateKey = ArrayBufferToBase64(privateKey);
+        // convert base64 private key string to ArrayBuffer
+        //var arrayBufferPrivateKey = Base6ToArrayBuffer4(stringPrivateKey);
+        // import private key from ArrayBuffer
+
+        JS.Log("_privateKey", privateKey);
+        JS.Set("_privateKey", privateKey);
+
+        var tmp = new RsaHashedImportParams { Name = "RSA-OAEP", Hash = "SHA-256" };
+
+        JS.Log("_tmp", tmp);
+        JS.Set("_tmp", tmp);
+
+        subtle.ImportKeyTest("pkcs8", privateKey, new RsaHashedImportParams { Name = "RSA-OAEP", Hash = "SHA-256" }, true, new string[] { "decrypt" });
+        // JS.Log("_privateKeyImported", privateKeyImported);
+        // JS.Set("_privateKeyImported", privateKeyImported);
+
+
+        // //var publicKey = await subtle.ExportKey<ArrayBuffer>("spki", keyPair.PublicKey);
+
+        // var encryptedTextBase64 = ArrayBufferToBase64(encryptedText);
+    }
+
+    async Task<ArrayBuffer> EncryptDataWithPublicKey(string data, CryptoKey key)
+    {
+        using var crypto = new Crypto();
+        using var subtle = crypto.Subtle;
+        var dataAB = await StringToArrayBuffer(data);
+        var ret = await subtle.Encrypt(new EncryptParams { Name = "RSA-OAEP" }, key, dataAB);
+        return ret;
+    }
+
+    async Task<string> DecryptDataWithPrivateKey(ArrayBuffer data, CryptoKey key)
+    {
+        using var crypto = new Crypto();
+        using var subtle = crypto.Subtle;
+        var ret = await subtle.Decrypt(new EncryptParams { Name = "RSA-OAEP" }, key, data);
+        var dataStr = await ArrayBufferToString(ret);
+        return dataStr;
+    }
+
+    async Task<ArrayBuffer> StringToArrayBuffer(string data)
+    {
+        using var blob = new Blob(new string[] { data }, new BlobOptions { Type = "text/plain; charset=utf-8" });
+        return await blob.ArrayBuffer();
+    }
+
+    async Task<string> ArrayBufferToString(ArrayBuffer data)
+    {
+        using var blob = new Blob(new ArrayBuffer[] { data });
+        return await blob.Text();
+    }
+
+    string ArrayBufferToBase64(ArrayBuffer arrayBuffer)
+    {
+        var bytes = arrayBuffer.ReadBytes();
+        return Convert.ToBase64String(bytes);
+    }
+
+    ArrayBuffer Base6ToArrayBuffer4(string base64String)
+    {
+        var bytes = Convert.FromBase64String(base64String);
+        using var uint8Array = new Uint8Array(bytes);
+        return uint8Array.Buffer;
     }
 }

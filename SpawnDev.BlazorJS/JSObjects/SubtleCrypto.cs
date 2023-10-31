@@ -1,7 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Security.Cryptography;
-using System;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -74,7 +71,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Use the generateKey() method of the SubtleCrypto interface to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         /// </summary>
-        /// <param name="algorithm">An object defining the type of key to generate and providing extra algorithm-specific parameters.</param>
+        /// <param name="algorithm">
+        /// An object defining the type of key to generate and providing extra algorithm-specific parameters.<br />
+        /// For RSASSA-PKCS1-v1_5, RSA-PSS, or RSA-OAEP: pass an RsaHashedKeyGenParams object.<br />
+        /// For ECDSA or ECDH: pass an EcKeyGenParams object.<br />
+        /// For HMAC: pass an HmacKeyGenParams object.<br />
+        /// For AES-CTR, AES-CBC, AES-GCM, or AES-KW: pass an AesKeyGenParams object.
+        /// </param>
         /// <param name="extractable">A boolean value indicating whether it will be possible to export the key using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().</param>
         /// <param name="keyUsages">An Array indicating what can be done with the key. Possible array values are: encrypt, decrypt, sign, verify, deriveKey, deriveBits, wrapKey, or unwrapKey.</param>
         /// <returns></returns>
@@ -89,6 +92,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="keyUsages">An Array indicating what can be done with the key. Possible array values are: encrypt, decrypt, sign, verify, deriveKey, deriveBits, wrapKey, or unwrapKey.</param>
         /// <returns></returns>
         public Task<CryptoKey> ImportKey(string format, Union<ArrayBuffer, TypedArray, DataView, byte[]> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) => JSRef.CallAsync<CryptoKey>("importKey", format, keyData, algorithm, extractable, keyUsages);
+
+        public void ImportKeyTest(string format, Union<ArrayBuffer, TypedArray, DataView, byte[]> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) => JS.Log("importKey", format, keyData, algorithm, extractable, keyUsages);
+
+
         /// <summary>
         /// The sign() method of the SubtleCrypto interface generates a digital signature.<br />
         /// It takes as its arguments a key to sign with, some algorithm-specific parameters, and the data to sign. It returns a Promise which will be fulfilled with the signature.

@@ -16,7 +16,7 @@
         /// <summary>
         /// A Uint8Array. The public exponent. Unless you have a good reason to use something else, specify 65537 here ([0x01, 0x00, 0x01]).
         /// </summary>
-        public Uint8Array PublicExponent { get; set; }
+        public Union<Uint8Array, byte[]> PublicExponent { get; set; }
         /// <summary>
         /// A string representing the name of the digest function to use. You can pass any of SHA-256, SHA-384, or SHA-512 here.
         /// </summary>

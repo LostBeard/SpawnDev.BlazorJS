@@ -8,6 +8,7 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
+using System.Text.Json;
 
 #if DEBUG
 JSObject.UndisposedHandleVerboseMode = false;
@@ -53,6 +54,9 @@ builder.Services.AddSingleton<JSObjectAnalyzer>();
 var host = builder.Build();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
+
+//object? tmpp = null;
+//var oh = JsonSerializer.Serialize(tmpp);
 
 var jsobjectAnalyzer = host.Services.GetRequiredService<JSObjectAnalyzer>();
 
