@@ -60,11 +60,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         //public PluginArray Plugins => JSRef.Get<PluginArray>("plugins");
         //public Presentation Presentation => JSRef.Get<Presentation>("presentation");
         //public Scheduling Scheduling => JSRef.Get<Scheduling>("scheduling");
-        //public Serial Serial => JSRef.Get<Serial>("serial");
-        //public USB Usb => JSRef.Get<USB>("usb");
+        public Serial? Serial => JSRef.Get<Serial?>("serial");
+        public USB? Usb => JSRef.Get<USB?>("usb");
         //public NavigatorUAData UserAgentData => JSRef.Get<NavigatorUAData>("userAgentData");
         //public VirtualKeyboard VirtualKeyboard => JSRef.Get<VirtualKeyboard>("virtualKeyboard");
-        //public WindowControlsOverlay WindowControlsOverlay => JSRef.Get<WindowControlsOverlay>("windowControlsOverlay");
+        public WindowControlsOverlay? WindowControlsOverlay => JSRef.Get<WindowControlsOverlay?>("windowControlsOverlay");
         //public XRSystem Xr => JSRef.Get<XRSystem>("xr");
         #endregion
         #region Methods
