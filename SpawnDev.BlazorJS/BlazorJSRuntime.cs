@@ -126,12 +126,21 @@ namespace SpawnDev.BlazorJS
         public string EnvironmentVersion { get; } = Environment.Version.ToString();
         public string FrameworkVersion { get; } = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Replace(".NET", "", StringComparison.OrdinalIgnoreCase).Trim();
         public string InformationalVersion { get; } = typeof(JSObject).Assembly.GetAssemblyInformationalVersion();
+        /// <summary>
+        /// Returns the Assembly File Version of the SpawnDev.BlazorJS
+        /// </summary>
         public string FileVersion { get; } = typeof(JSObject).Assembly.GetAssemblyFileVersion();
 
         public void DisposeCallback(string callbackerID) => JSInterop.DisposeCallbacker(callbackerID);
 
         public AsyncIterator? GetAsyncIterator(IJSInProcessObjectReference targetObject) => targetObject.Get<AsyncIterator?>("Symbol.asyncIterator");
 
+        /// <summary>
+        /// Load a non-module script if a specified global var is not defined.
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="ifThisGlobalVarIsUndefined"></param>
+        /// <returns></returns>
         public Task<bool> LoadScript(string src, string? ifThisGlobalVarIsUndefined = null)
         {
             var t = new TaskCompletionSource<bool>();
@@ -174,9 +183,14 @@ namespace SpawnDev.BlazorJS
             foreach (var src in sources) tasks.Add(LoadScript(src));
             await Task.WhenAll(tasks);
         }
-        public async Task<ModuleNamespaceObject?> Import(string modulePath)
+        /// <summary>
+        /// The import() syntax, commonly called dynamic import, is a function-like expression that allows loading an ECMAScript module asynchronously and dynamically into a potentially non-module environment.
+        /// </summary>
+        /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
+        /// <returns>Returns a promise which fulfills to a module namespace object: an object containing all exports from moduleName.</returns>
+        public async Task<ModuleNamespaceObject?> Import(string moduleName)
         {
-            var jsRef = await _js.InvokeAsync<IJSInProcessObjectReference?>("import", modulePath);
+            var jsRef = await _js.InvokeAsync<IJSInProcessObjectReference?>("import", moduleName);
             return jsRef == null ? null : new ModuleNamespaceObject(jsRef);
         }
         // window
