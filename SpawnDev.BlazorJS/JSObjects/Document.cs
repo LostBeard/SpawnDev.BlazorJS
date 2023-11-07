@@ -1,4 +1,7 @@
 ﻿using Microsoft.JSInterop;
+using System.ComponentModel;
+using System.Reflection.Metadata;
+using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -52,6 +55,32 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="selector">A string containing one or more selectors to match. This string must be a valid CSS selector string; if it isn't, a SyntaxError exception is thrown. See Locating DOM elements using selectors for more about selectors and how to manage them.</param>
         /// <returns>An Element object representing the first element in the document that matches the specified set of CSS selectors, or null is returned if there are no matches.</returns>
         public Element? QuerySelector(string selector) => JSRef.Call<Element?>("querySelector", selector);
+        /// <summary>
+        /// The hasFocus() method of the Document interface returns a boolean value indicating whether the document or any element inside the document has focus. This method can be used to determine whether the active element in a document has focus.
+        /// </summary>
+        /// <returns></returns>
+        public bool HasFocus() => JSRef.Call<bool>("hasFocus");
+        /// <summary>
+        /// The Document.open() method opens a document for writing.<br />
+        /// This does come with some side effects.For example:<br />
+        /// All event listeners currently registered on the document, nodes inside the document, or the document's window are removed.<br />
+        /// All existing nodes are removed from the document.
+        /// </summary>
+        /// <returns></returns>
+        public Document Open() => JSRef.Call<Document>("open");
+        /// <summary>
+        /// The Document.append() method inserts a set of Node objects or string objects after the last child of the document. String objects are inserted as equivalent Text nodes.
+        /// </summary>
+        /// <param name="nodes"></param>
+        public void Append(params Union<string, Node>[] nodes) => JSRef.CallApplyVoid("append", nodes);
+        /// <summary>
+        /// The Document.prepend() method inserts a set of Node objects or string objects before the first child of the document. String objects are inserted as equivalent Text nodes.
+        /// </summary>
+        /// <param name="nodes"></param>
+        public void Prepend(params Union<string, Node>[] nodes) => JSRef.CallApplyVoid("prepend", nodes);
+
+
+        public Selection GetSelection() => JSRef.Call<Selection>("getSelection");
         #endregion
 
         #region Properties
