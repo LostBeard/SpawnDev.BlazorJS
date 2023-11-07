@@ -40,7 +40,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Geolocation? Geolocation => JSRef.Get<Geolocation?>("geolocation");
         public GPU? Gpu => JSRef.Get<GPU?>("gpu");
         public HID? Hid => JSRef.Get<HID?>("hid");
-        public Ink Ink => JSRef.Get<Ink>("ink");
+        public Ink? Ink => JSRef.Get<Ink?>("ink");
         public string Language => JSRef.Get<string>("language");
         public string[] Languages => JSRef.Get<string[]>("languages");
         public int MaxTouchPoints => JSRef.Get<int>("maxTouchPoints");

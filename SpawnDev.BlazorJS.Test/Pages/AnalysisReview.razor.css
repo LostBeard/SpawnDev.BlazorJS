@@ -3,11 +3,20 @@
     display: flex;
     flex-direction: row;
 }
+
 .page-left {
     flex-grow: 0;
     flex-shrink: 0;
+    padding: 16px;
 }
+
 .page-right {
     flex-grow: 1;
     flex-shrink: 1;
+    padding: 16px;
 }
+
+.page-right ::deep pre {
+    background-color: #ffffff !important;
+}
+

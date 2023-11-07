@@ -1,4 +1,5 @@
 ﻿using Markdig;
+using Markdown.ColorCode;
 using Microsoft.AspNetCore.Components;
 using SpawnDev.BlazorJS.Diagnostics;
 using SpawnDev.BlazorJS.JSObjects;
@@ -25,7 +26,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
         string _markup = "";
         Type? JSObjectType { get; set; }
 
-        MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+        MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseColorCode().Build();
 
         bool isInit = false;
         public void Dispose()
@@ -272,7 +273,7 @@ public class {TypeName} : {inheritsFrom}
             var markDown = $@"```cs
 {cSharpCode}
 ```";
-            _markup = Markdown.ToHtml(markDown, pipeline);
+            _markup = Markdig.Markdown.ToHtml(markDown, pipeline);
         }
         string ParameterInfoToString(ParameterInfo o)
         {
@@ -290,9 +291,23 @@ public class {TypeName} : {inheritsFrom}
 
         protected override void OnInitialized()
         {
+            
+            base.OnInitialized();
+        }
+
+        bool isInitializing = false;
+
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+            var isInitCall = false;
             if (!isInit)
             {
+                isInitializing = true;
+                StateHasChanged();
+                await Task.Delay(500);
                 isInit = true;
+                isInitCall = true;
                 JSObjectAnalyzer.OnNewJSObjectTypeAdded += JSObjectAnalyzer_OnNewJSObjectTypeAdded;
                 var analyzing = false;
                 JSObject.OnJSObjectCreated = (obj) =>
@@ -306,7 +321,7 @@ public class {TypeName} : {inheritsFrom}
                 };
                 //var promise = new Promise();
                 //var promiseInfo = jsobjectAnalyzer.Analyze(promise);
-                var window = JS.Get<Window>("window");
+                //var window = JS.Get<Window>("window");
             }
             allJsObjectTypes = new List<Type>();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -317,7 +332,12 @@ public class {TypeName} : {inheritsFrom}
                 var jsObjectTypes = aTypes.Where(o => typeof(JSObject).IsAssignableFrom(o));
                 allJsObjectTypes.AddRange(jsObjectTypes);
             }
-            base.OnInitialized();
+            await Task.Delay(500);
+            if (isInitCall)
+            {
+                var window = JS.Get<Window>("window");
+                isInitializing = false;
+            }
         }
         Type? GetJSObjectTypeByName(string? instanceOf)
         {

@@ -9,17 +9,39 @@
 <h3>Analysis Review</h3>
 <div class="page-main">
     <div class="page-left">
-        @foreach (var jsoi in JSObjectAnalyzer.Analyzed.Values.OrderBy(o => o.InstanceOf))
+        @if (isInitializing)
         {
-            var jsObjectType = GetJSObjectTypeByName(jsoi.InstanceOf!);
-            var navLink = $"analysis/{jsoi.InstanceOf}";
             <div>
-                <NavLink href="@navLink"> @jsoi.InstanceOf @(jsObjectType == null ? "" : "*")</NavLink>
+                Analyzing all Javascript global object types to determine API coverage. Please wait.
             </div>
         }
+        else
+        {
+            var total = JSObjectAnalyzer.Analyzed.Values.Count();
+            var jsobjectsExistCount = JSObjectAnalyzer.Analyzed.Values.Where(o => GetJSObjectTypeByName(o.InstanceOf!) != null).Count();
+            var percent = total == 0 ? 0 : (float)jsobjectsExistCount / (float)total;
+            var percentStr = $"{Math.Round(percent * 100f)}%";
+            <div>
+                Coverage: @jsobjectsExistCount of @total (@percentStr)<br /> Javascript types found.
+            </div>
+            <div>
+                * Indicates the type exists<br /> in SpawnDev.BlazorJS.JSObjects
+            </div>
+            @foreach (var jsoi in JSObjectAnalyzer.Analyzed.Values.OrderBy(o => o.InstanceOf))
+            {
+                var jsObjectType = GetJSObjectTypeByName(jsoi.InstanceOf!);
+                var navLink = $"analysis/{jsoi.InstanceOf}";
+                <div>
+                    <NavLink href="@navLink"> @jsoi.InstanceOf @(jsObjectType == null ? "" : "*")</NavLink>
+                </div>
+            }   }
     </div>
     <div class="page-right">
-        @if (TypeName == null)
+        @if (isInitializing)
+        {
+            
+        }
+        else if (TypeName == null)
         {
             <div>
                 Select a type to analyze.
@@ -29,6 +51,9 @@
         {
             <div>
                 <h3>@TypeName</h3>
+                <div>
+                    JSObject properties, methods, and events will be detected with as much accuracy as possible based on current values. Many types will need to be set manually due to the dynamic typing of Javascript.
+                </div>
                 <div>
                     @((MarkupString)_markup)
                 </div>
