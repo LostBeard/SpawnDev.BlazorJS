@@ -35,9 +35,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="tagName"></param>
         /// <returns></returns>
         public IJSInProcessObjectReference CreateElement(string tagName) => JSRef.Call<IJSInProcessObjectReference>("createElement", tagName);
-
+        /// <summary>
+        /// The Document method exitFullscreen() requests that the element on this document which is currently being presented in fullscreen mode be taken out of fullscreen mode, restoring the previous state of the screen. This usually reverses the effects of a previous call to Element.requestFullscreen().
+        /// </summary>
+        /// <returns></returns>
         public Task ExitFullscreen() => JSRef.CallVoidAsync("exitFullscreen");
+        /// <summary>
+        /// The Document method querySelectorAll() returns a static (not live) NodeList representing a list of the document's elements that match the specified group of selectors.
+        /// </summary>
+        /// <param name="selector">A string containing one or more selectors to match against. This string must be a valid CSS selector string; if it's not, a SyntaxError exception is thrown. See Locating DOM elements using selectors for more information about using selectors to identify elements. Multiple selectors may be specified by separating them using commas.</param>
+        /// <returns>A non-live NodeList containing one Element object for each element that matches at least one of the specified selectors or an empty NodeList in case of no matches.</returns>
         public NodeList QuerySelectorAll(string selector) => JSRef.Call<NodeList>("querySelectorAll", selector);
+        /// <summary>
+        /// The Document method querySelector() returns the first Element within the document that matches the specified selector, or group of selectors. If no matches are found, null is returned.
+        /// </summary>
+        /// <param name="selector">A string containing one or more selectors to match. This string must be a valid CSS selector string; if it isn't, a SyntaxError exception is thrown. See Locating DOM elements using selectors for more about selectors and how to manage them.</param>
+        /// <returns>An Element object representing the first element in the document that matches the specified set of CSS selectors, or null is returned if there are no matches.</returns>
         public Element? QuerySelector(string selector) => JSRef.Call<Element?>("querySelector", selector);
         #endregion
 
