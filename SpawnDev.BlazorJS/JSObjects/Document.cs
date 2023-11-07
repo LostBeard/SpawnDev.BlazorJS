@@ -78,8 +78,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="nodes"></param>
         public void Prepend(params Union<string, Node>[] nodes) => JSRef.CallApplyVoid("prepend", nodes);
-
-
+        /// <summary>
+        /// The Window.getSelection() method returns a Selection object representing the range of text selected by the user or the current position of the caret.
+        /// </summary>
+        /// <returns></returns>
         public Selection GetSelection() => JSRef.Call<Selection>("getSelection");
         #endregion
 
