@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
-    public class Node : EventTarget {
+namespace SpawnDev.BlazorJS.JSObjects
+{
+    public class Node : EventTarget
+    {
         public Node(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string NodeName => JSRef.Get<string>("nodeName");
         public string BaseURI => JSRef.Get<string>("baseURI");
@@ -17,5 +19,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Node ParentNode => JSRef.Get<Node>("parentNode");
         public Node CloneNode() => JSRef.Call<Node>("cloneNode");
         public Node CloneNode(bool deep) => JSRef.Call<Node>("cloneNode", deep);
+
+        public JSEventCallback OnSelectStart { get => new JSEventCallback(o => AddEventListener("selectstart", o), o => RemoveEventListener("selectstart", o)); set { /** required **/ } }
     }
 }

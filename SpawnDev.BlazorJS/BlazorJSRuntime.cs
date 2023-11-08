@@ -47,7 +47,7 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
         }
-        
+
         /// <summary>
         /// Returns true if the current GlobalScope flag is set in supplied scope var.<br />
         /// Always returns false for GlobalScope enum flags Default, and None.
@@ -71,7 +71,7 @@ namespace SpawnDev.BlazorJS
 
         internal BlazorJSRuntime()
         {
-            GlobalThisTypeName = GetConstructorName("globalThis");
+            GlobalThisTypeName = Get<string>("globalThis.constructor.name");
             GlobalScope = GlobalScope.None;
             switch (GlobalThisTypeName)
             {
@@ -133,7 +133,7 @@ namespace SpawnDev.BlazorJS
 
         public void DisposeCallback(string callbackerID) => JSInterop.DisposeCallbacker(callbackerID);
 
-        public AsyncIterator? GetAsyncIterator(IJSInProcessObjectReference targetObject) => targetObject.Get<AsyncIterator?>("Symbol.asyncIterator");
+        //public AsyncIterator? GetAsyncIterator(IJSInProcessObjectReference targetObject) => targetObject.Get<AsyncIterator?>("Symbol.asyncIterator");
 
         /// <summary>
         /// Load a non-module script if a specified global var is not defined.
@@ -228,23 +228,27 @@ namespace SpawnDev.BlazorJS
         public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
         public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-        public bool IsUndefined(JSObject obj, string identifier = "") => JSInterop.TypeOf(obj, identifier) == "undefined";
-        public bool IsUndefined(string identifier) => JSInterop.TypeOf(null, identifier) == "undefined";
-        public string TypeOf(JSObject obj, string identifier = "") => JSInterop.TypeOf(obj, identifier);
-        public string TypeOf(JSObject obj, int identifier) => JSInterop.TypeOf(obj, identifier);
-        public string TypeOf(string identifier) => JSInterop.TypeOf(null, identifier);
+        // bool IsUndefined(JSObject obj, object? identifier = null) => JSInterop.TypeOf(obj, identifier) == "undefined";
+        public bool IsUndefined(object identifier) => JSInterop.GlobalTypeOf(identifier) == "undefined";
+        //public string TypeOf(JSObject obj, object? identifier = null) => JSInterop.TypeOf(obj, identifier);
+        //public string TypeOf(JSObject obj, int identifier) => JSInterop.TypeOf(obj, identifier);
+        public string TypeOf(object identifier) => JSInterop.GlobalTypeOf(identifier);
         public void Log(params object?[] args) => CallApplyVoid("console.log", args);
-        public string GetConstructorName(string identifier) => Get<string>($"{identifier}.constructor.name");
-        public string GetConstructorName(JSObject obj, string identifier)
-        {
-            if (obj == null || obj.JSRef == null) return "";
-            try
-            {
-                return obj.JSRef.PropertyInstanceOf(identifier);
-            }
-            catch { }
-            return "";
-        }
+        //public string GetConstructorName(object identifier)
+        //{
+        //    var jso =
+        //    Get<string>($"{identifier}.constructor.name");
+        //}
+        //public string GetConstructorName(JSObject obj, object identifier)
+        //{
+        //    if (obj == null || obj.JSRef == null) return "";
+        //    try
+        //    {
+        //        return obj.JSRef.PropertyInstanceOf(identifier);
+        //    }
+        //    catch { }
+        //    return "";
+        //}
         public Task<Response> Fetch(Request resource) => JS.CallAsync<Response>("fetch", resource);
         public Task<Response> Fetch(string resource) => JS.CallAsync<Response>("fetch", resource);
         public Task<Response> Fetch(string resource, FetchOptions options) => JS.CallAsync<Response>("fetch", resource, options);

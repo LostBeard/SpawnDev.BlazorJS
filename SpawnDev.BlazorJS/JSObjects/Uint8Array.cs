@@ -1,6 +1,11 @@
 ﻿using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects {
+    /// <summary>
+    /// The Uint8Array typed array represents an array of 8-bit unsigned integers. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).<br />
+    /// Uint8Array is a subclass of the hidden TypedArray class.<br />
+    /// 
+    /// </summary>
     public class Uint8Array : TypedArray
     {
         public Uint8Array(IJSInProcessObjectReference _ref) : base(_ref) { }
@@ -15,5 +20,14 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Uint8Array(SharedArrayBuffer sharedArrayBuffer, long byteOffset, long length) : base(JS.New(nameof(Uint8Array), sharedArrayBuffer, byteOffset, length)) { }
         public Uint8Array(byte[] sourceBytes) : base(JS.ReturnMe<IJSInProcessObjectReference>(sourceBytes)) { }
         public override byte[] ReadBytes() => JS.ReturnMe<byte[]>(JSRef);
+        /// <summary>
+        /// Returns a number value of the element size. 1 in the case of Uint8Array.
+        /// </summary>
+        public static int BYTES_PER_ELEMENT => JS.Get<int>($"{nameof(Uint8Array)}.BYTES_PER_ELEMENT");
+        public byte this[long i]
+        {
+            get => JSRef.Get<byte>(i);
+            set => JSRef.Set(i, value);
+        }
     }
 }

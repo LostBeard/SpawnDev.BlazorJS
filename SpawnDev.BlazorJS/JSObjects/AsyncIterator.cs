@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/asyncIterator
+    /// </summary>
     public class AsyncIterator : JSObject
     {
         public AsyncIterator(IJSInProcessObjectReference _ref) : base(_ref) { }

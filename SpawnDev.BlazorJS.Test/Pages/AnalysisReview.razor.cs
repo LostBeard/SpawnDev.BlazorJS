@@ -291,7 +291,7 @@ public class {TypeName} : {inheritsFrom}
 
         protected override void OnInitialized()
         {
-            
+
             base.OnInitialized();
         }
 
@@ -312,11 +312,18 @@ public class {TypeName} : {inheritsFrom}
                 var analyzing = false;
                 JSObject.OnJSObjectCreated = (obj) =>
                 {
-                    if (JSObjectAnalyzer.ShouldAnalyze(obj) && !analyzing)
+                    try
                     {
-                        analyzing = true;
-                        JSObjectAnalyzer.Analyze(obj);
-                        analyzing = false;
+                        if (JSObjectAnalyzer.ShouldAnalyze(obj) && !analyzing)
+                        {
+                            analyzing = true;
+                            JSObjectAnalyzer.Analyze(obj);
+                            analyzing = false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        var nmt = ex.Message;
                     }
                 };
                 //var promise = new Promise();

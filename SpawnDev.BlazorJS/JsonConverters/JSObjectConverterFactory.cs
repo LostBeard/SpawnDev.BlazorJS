@@ -28,8 +28,18 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
         public override TJSObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
+            var typeofT = typeof(TJSObject);
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
-            return _ref == null ? null : (TJSObject)Activator.CreateInstance(typeof(TJSObject), _ref);
+            TJSObject? ret = null;
+            try
+            {
+                ret = _ref == null ? null : (TJSObject)Activator.CreateInstance(typeofT, _ref);
+            }
+            catch (Exception ex)
+            {
+                var nmt = true;
+            }
+            return ret;
         }
         public override void Write(Utf8JsonWriter writer, TJSObject value, JsonSerializerOptions options)
         {

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.JSInterop;
 using Radzen;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Diagnostics;
@@ -55,10 +56,25 @@ var host = builder.Build();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
-//object? tmpp = null;
-//var oh = JsonSerializer.Serialize(tmpp);
+var str = JS.ReturnMe<JSObject>("apples");
+JS.Set("_str", str);
+
+JS.Set("_111", JS.ReturnMe<JSObject>(111));
+var nmt = true;
+
+//var www = JS.Get<IJSInProcessObjectReference>("Symbol.asyncIterator");
+
+////object? tmpp = null;
+////var oh = JsonSerializer.Serialize(tmpp);
 
 var jsobjectAnalyzer = host.Services.GetRequiredService<JSObjectAnalyzer>();
+
+//var javascriptDescriptorReader = new JavascriptObjectReflection(JS);
+
+//var window = JS.WindowThis;
+//var temp = javascriptDescriptorReader.GetJavascriptObjectProperties(window);
+//JS.Set("_temp", temp);
+//var nmt = "";
 
 //var analyzing = false;
 //JSObject.OnJSObjectCreated = (obj) =>
@@ -104,6 +120,45 @@ JS.Set("_testWorkerAndDispose", new ActionCallback<bool>(async (verbose) =>
 JS.Set("_analyze", new ActionCallback<JSObject>(async (obj) =>
 {
     jsobjectAnalyzer.Analyze(obj);
+}));
+
+JS.Set("_log", new ActionCallback<JSObject>((obj) =>
+{
+    JS.Log(obj);
+}));
+
+
+JS.Set("_return", new FuncCallback<JSObject, JSObject>((obj) =>
+{
+    return obj;
+}));
+
+
+
+JS.Set("_testIterator", new ActionCallback(async () =>
+{
+    var obj = JS.Get<JSObject>("delayedResponses");
+    var asyncIterator = await obj.JSRef.CallAsync<AsyncIterator>("Symbol.asyncIterator");
+    IteratorResult? result = await asyncIterator.Next();
+    while (!result.Done)
+    {
+        JS.Log("Result: ", result.GetValue<JSObject>());
+        result = await asyncIterator.Next();
+    }
+    JS.Log("Done");
+}));
+
+JS.Set("_testIterator2", new ActionCallback(async () =>
+{
+    var obj = JS.Get<JSObject>("delayedResponses");
+    var asyncIterator = obj.JSRef.Call<AsyncIterator>(Symbol.AsyncIterator);
+    IteratorResult? result = await asyncIterator.Next();
+    while (!result.Done)
+    {
+        JS.Log("Result: ", result.GetValue<JSObject>());
+        result = await asyncIterator.Next();
+    }
+    JS.Log("Done");
 }));
 
 await host.BlazorJSRunAsync();

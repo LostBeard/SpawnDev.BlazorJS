@@ -20,111 +20,142 @@ namespace SpawnDev.BlazorJS {
         }
 
         // *********************************************************************************************************************
-        internal static void SetGlobal(string identifier, object? value) {
-            _js.InvokeVoid("JSInterop._setGlobal", identifier, value);
-        }
-        internal static void SetGlobal(int identifier, object? value) {
+        //internal static void SetGlobal(string identifier, object? value) {
+        //    _js.InvokeVoid("JSInterop._setGlobal", identifier, value);
+        //}
+        //internal static void SetGlobal(int identifier, object? value) {
+        //    _js.InvokeVoid("JSInterop._setGlobal", identifier, value);
+        //}
+        //internal static void SetGlobal(long identifier, object? value)
+        //{
+        //    _js.InvokeVoid("JSInterop._setGlobal", identifier, value);
+        //}
+        internal static void SetGlobal(object identifier, object? value)
+        {
             _js.InvokeVoid("JSInterop._setGlobal", identifier, value);
         }
 
-        internal static bool DeleteGlobal(string identifier)
+        //internal static bool DeleteGlobal(string identifier)
+        //{
+        //    return _js.Invoke<bool>("JSInterop._deleteGlobal", identifier);
+        //}
+
+        internal static bool DeleteGlobal(object identifier)
         {
             return _js.Invoke<bool>("JSInterop._deleteGlobal", identifier);
         }
 
-        internal static void CallGlobalVoid(string identifier, object?[]? args)
+        internal static void CallGlobalVoid(object identifier, object?[]? args)
         {
             _js.InvokeVoid("JSInterop._callGlobal", identifier, args, JSCallResultType.JSVoidResult);
         }
 
-        internal static Task CallGlobalVoidAsync(string identifier, object?[]? args) {
+        internal static Task CallGlobalVoidAsync(object identifier, object?[]? args) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<Task>();
             return _js.Invoke<Task>("JSInterop._callGlobal", identifier, args, jsCallResultType);
         }
 
-        internal static T CallGlobal<T>(string identifier, object?[]? args) {
+        internal static T CallGlobal<T>(object identifier, object?[]? args) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
             return _js.Invoke<T>("JSInterop._callGlobal", identifier, args, jsCallResultType);
         }
 
-        internal static Task<T> CallGlobalAsync<T>(string identifier, object?[]? args) {
+        internal static Task<T> CallGlobalAsync<T>(object identifier, object?[]? args) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<Task<T>>();
             return _js.Invoke<Task<T>>("JSInterop._callGlobal", identifier, args, jsCallResultType);
         }
 
-        internal static object? CallGlobal(Type returnType, string identifier, object?[]? args) {
+        internal static object? CallGlobal(Type returnType, object identifier, object?[]? args) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(returnType);
             return _js.Invoke(returnType, "JSInterop._callGlobal", identifier, args, jsCallResultType);
         }
 
-        internal static T GetGlobal<T>(string identifier) {
+        internal static T GetGlobal<T>(object identifier) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
             return _js.Invoke<T>("JSInterop._getGlobal", identifier, jsCallResultType);
         }
 
-        internal static Task<T> GetGlobalAsync<T>(string identifier) {
+        internal static Task<T> GetGlobalAsync<T>(object identifier) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<Task<T>>();
             return _js.Invoke<Task<T>>("JSInterop._getGlobal", identifier, jsCallResultType);
         }
 
-        internal static object? GetGlobal(Type returnType, string identifier) {
+        internal static object? GetGlobal(Type returnType, object identifier) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(returnType);
             return _js.Invoke(returnType, "JSInterop._getGlobal", identifier, jsCallResultType);
         }
 
-        internal static T Call<T>(IJSInProcessObjectReference targetObject, string identifier, object?[]? args) {
+        internal static T Call<T>(IJSInProcessObjectReference targetObject, object identifier, object?[]? args) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
             return _js.Invoke<T>("JSInterop._call", targetObject, identifier, args, jsCallResultType);
         }
 
-        internal static Task<T> CallAsync<T>(IJSInProcessObjectReference targetObject, string identifier, object?[]? args) {
+        internal static Task<T> CallAsync<T>(IJSInProcessObjectReference targetObject, object identifier, object?[]? args) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<Task<T>>();
             return _js.Invoke<Task<T>>("JSInterop._call", targetObject, identifier, args, jsCallResultType);
         }
 
-        internal static object? Call(Type returnType, IJSInProcessObjectReference targetObject, string identifier, object?[]? args) {
+        internal static object? Call(Type returnType, IJSInProcessObjectReference targetObject, object identifier, object?[]? args) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(returnType);
             return _js.Invoke(returnType, "JSInterop._call", targetObject, identifier, args, jsCallResultType);
         }
 
-        internal static void CallVoid(IJSInProcessObjectReference targetObject, string identifier, object?[]? args) {
+        internal static void CallVoid(IJSInProcessObjectReference targetObject, object identifier, object?[]? args) {
             _js.InvokeVoid("JSInterop._call", targetObject, identifier, args, JSCallResultType.JSVoidResult);
         }
 
-        internal static Task CallVoidAsync(IJSInProcessObjectReference targetObject, string identifier, object?[]? args) {
+        internal static Task CallVoidAsync(IJSInProcessObjectReference targetObject, object identifier, object?[]? args) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<Task>();
             return _js.Invoke<Task>("JSInterop._call", targetObject, identifier, args, jsCallResultType);
         }
 
-        internal static T Get<T>(IJSInProcessObjectReference targetObject, string identifier) {
+        internal static T Get<T>(IJSInProcessObjectReference targetObject, object identifier)
+        {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
             return _js.Invoke<T>("JSInterop._get", targetObject, identifier, jsCallResultType);
         }
 
-        internal static Task<T> GetAsync<T>(IJSInProcessObjectReference targetObject, string identifier) {
+        internal static Task<T> GetAsync<T>(IJSInProcessObjectReference targetObject, object identifier)
+        {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<Task<T>>();
             return _js.Invoke<Task<T>>("JSInterop._get", targetObject, identifier, jsCallResultType);
         }
 
-        internal static object? Get(Type returnType, IJSInProcessObjectReference targetObject, string identifier) {
+        //internal static T Get<T>(IJSInProcessObjectReference targetObject, object identifier) {
+        //    var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
+        //    return _js.Invoke<T>("JSInterop._get", targetObject, identifier, jsCallResultType);
+        //}
+
+        //internal static Task<T> GetAsync<T>(IJSInProcessObjectReference targetObject, object identifier) {
+        //    var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<Task<T>>();
+        //    return _js.Invoke<Task<T>>("JSInterop._get", targetObject, identifier, jsCallResultType);
+        //}
+
+        internal static object? Get(Type returnType, IJSInProcessObjectReference targetObject, object identifier) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(returnType);
             return _js.Invoke(returnType, "JSInterop._get", targetObject, identifier, jsCallResultType);
         }
 
-        internal static Task<T> GetAsync<T>(IJSInProcessObjectReference targetObject, int identifier) {
-            var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<Task<T>>();
-            return _js.Invoke<Task<T>>("JSInterop._get", targetObject, identifier, jsCallResultType);
-        }
+        //internal static Task<T> GetAsync<T>(IJSInProcessObjectReference targetObject, object identifier) {
+        //    var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<Task<T>>();
+        //    return _js.Invoke<Task<T>>("JSInterop._get", targetObject, identifier, jsCallResultType);
+        //}
 
-        internal static T Get<T>(IJSInProcessObjectReference targetObject, int identifier) {
-            var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
-            return _js.Invoke<T>("JSInterop._get", targetObject, identifier, jsCallResultType);
-        }
+        //internal static T Get<T>(IJSInProcessObjectReference targetObject, object identifier) {
+        //    var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
+        //    return _js.Invoke<T>("JSInterop._get", targetObject, identifier, jsCallResultType);
+        //}
 
-        internal static object? Get(Type returnType, IJSInProcessObjectReference targetObject, int identifier) {
-            var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(returnType);
-            return _js.Invoke(returnType, "JSInterop._get", targetObject, identifier, jsCallResultType);
-        }
+        //internal static T Get<T>(IJSInProcessObjectReference targetObject, object identifier)
+        //{
+        //    var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
+        //    return _js.Invoke<T>("JSInterop._get", targetObject, identifier, jsCallResultType);
+        //}
+
+        //internal static object? Get(Type returnType, IJSInProcessObjectReference targetObject, object identifier) {
+        //    var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric(returnType);
+        //    return _js.Invoke(returnType, "JSInterop._get", targetObject, identifier, jsCallResultType);
+        //}
 
         internal static T ReturnMe<T>(object? obj1) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
@@ -170,18 +201,28 @@ namespace SpawnDev.BlazorJS {
             return _js.Invoke(returnType, "JSInterop._returnNew", null, className, args, jsCallResultType);
         }
 
-        internal static void Set(IJSInProcessObjectReference targetObject, string identifier, object? value) {
+        internal static void Set(IJSInProcessObjectReference targetObject, object identifier, object? value) {
             _js.InvokeVoid("JSInterop._set", targetObject, identifier, value);
         }
 
-        internal static void Delete(IJSInProcessObjectReference targetObject, string identifier)
+        internal static void Delete(IJSInProcessObjectReference targetObject, object identifier)
         {
             _js.InvokeVoid("JSInterop._delete", targetObject, identifier);
         }
 
-        internal static void Set(IJSInProcessObjectReference targetObject, int identifier, object? value) {
-            _js.InvokeVoid("JSInterop._set", targetObject, identifier, value);
-        }
+        //internal static void Set(IJSInProcessObjectReference targetObject, object identifier, object? value) {
+        //    _js.InvokeVoid("JSInterop._set", targetObject, identifier, value);
+        //}
+
+        //internal static void Set(IJSInProcessObjectReference targetObject, object identifier, object? value)
+        //{
+        //    _js.InvokeVoid("JSInterop._set", targetObject, identifier, value);
+        //}
+
+        //internal static void Set(IJSInProcessObjectReference targetObject, object identifier, object? value)
+        //{
+        //    _js.InvokeVoid("JSInterop._set", targetObject, identifier, value);
+        //}
 
         internal static void DisposeCallbacker(string callbackId) {
             _js.InvokeVoid("JSInterop.DisposeCallbacker", callbackId);
@@ -191,25 +232,35 @@ namespace SpawnDev.BlazorJS {
             return _js.Invoke<bool>("JSInterop.__equals", obj1, obj2);
         }
 
-        internal static string TypeOf(object? obj, string identifier = "") {
+        internal static string TypeOf(object obj, object identifier) {
             return _js.Invoke<string>("JSInterop._typeof", obj, identifier);
         }
 
-        internal static string InstanceOf(object? obj, string identifier = "") {
+        internal static string InstanceOf(object obj, object identifier) {
             return _js.Invoke<string>("JSInterop._instanceof", obj, identifier);
         }
 
-        internal static string TypeOf(object? obj, int identifier)
+        internal static string GlobalTypeOf(object identifier)
         {
-            return _js.Invoke<string>("JSInterop._typeof", obj, identifier);
+            return _js.Invoke<string>("JSInterop._typeofGlobal", identifier);
         }
 
-        internal static string InstanceOf(object? obj, int identifier)
+        internal static string GlobalInstanceOf(object identifier)
         {
-            return _js.Invoke<string>("JSInterop._instanceof", obj, identifier);
+            return _js.Invoke<string>("JSInterop._instanceofGlobal", identifier);
         }
 
-        internal static List<string> GetPropertyNames(object? obj, string identifier = "", bool hasOwnProperty = true) {
+        //internal static string TypeOf(object? obj, int identifier)
+        //{
+        //    return _js.Invoke<string>("JSInterop._typeof", obj, identifier);
+        //}
+
+        //internal static string InstanceOf(object? obj, int identifier)
+        //{
+        //    return _js.Invoke<string>("JSInterop._instanceof", obj, identifier);
+        //}
+
+        internal static List<string> GetPropertyNames(object? obj, object? identifier = null, bool hasOwnProperty = true) {
             return _js.Invoke<List<string>>("JSInterop._getPropertyNames", obj, identifier, hasOwnProperty);
         }
 

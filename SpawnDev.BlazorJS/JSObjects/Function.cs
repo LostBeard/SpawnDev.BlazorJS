@@ -6,6 +6,9 @@ namespace SpawnDev.BlazorJS.JSObjects
 
     public class Function : JSObject
     {
+        public string? Name => JSRef.Get<string?>("name");
+        public int Length => JSRef.Get<int>("length");
+
         public Function(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         public T NewApply<T>(object?[]? args = null) => JSInterop.ReturnNew<T>(JSRef, args);

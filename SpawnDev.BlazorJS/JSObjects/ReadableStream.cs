@@ -18,13 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             catch { }
             return ret;
         }
-
-        public AsyncIterator GetAsyncIterator()
-        {
-            var ret = JSRef.Get<AsyncIterator>("Symbol.asyncIterator");
-            return ret;
-        }
-
+        public AsyncIterator GetAsyncIterator() => JSRef.Call<AsyncIterator>(Symbol.AsyncIterator);
         public ReadableStreamDefaultReader GetReader() => JSRef.Call<ReadableStreamDefaultReader>("getReader");
         public void Destroy() => JSRef.CallVoid("destroy");
     }

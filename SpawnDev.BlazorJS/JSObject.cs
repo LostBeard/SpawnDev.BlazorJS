@@ -27,7 +27,7 @@ namespace SpawnDev.BlazorJS
         [JsonIgnore]
         public bool IsWrapperDisposed { get; private set; } = false;
         public JSObject(IJSInProcessObjectReference _ref) => FromReference(_ref);
-
+        public Function? Constructor => JSRef.Get<Function?>("constructor");
         [JsonIgnore]
         public bool IsJSRefUndefined { get; private set; } = false;
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Runtime.CompilerServices;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {

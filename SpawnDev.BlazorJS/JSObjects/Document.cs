@@ -86,7 +86,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Properties
-        public Element? ActiveElement => JSRef.Get<Element>("activeElement");
+        /// <summary>
+        /// The activeElement read-only property of the Document interface returns the Element within the DOM that currently has focus.
+        /// </summary>
+        public Element? ActiveElement => JSRef.Get<Element?>("activeElement");
         /// <summary>
         /// The head read-only property of the Document interface returns the <head> element of the current document.
         /// </summary>
@@ -271,7 +274,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback OnSeeking { get => new JSEventCallback(o => AddEventListener("seeking", o), o => RemoveEventListener("seeking", o)); set { /** required **/ } }
         public JSEventCallback OnSelect { get => new JSEventCallback(o => AddEventListener("select", o), o => RemoveEventListener("select", o)); set { /** required **/ } }
         public JSEventCallback OnSelectionChange { get => new JSEventCallback(o => AddEventListener("selectionchange", o), o => RemoveEventListener("selectionchange", o)); set { /** required **/ } }
-        public JSEventCallback OnSelectStart { get => new JSEventCallback(o => AddEventListener("selectstart", o), o => RemoveEventListener("selectstart", o)); set { /** required **/ } }
         public JSEventCallback OnSlotChange { get => new JSEventCallback(o => AddEventListener("slotchange", o), o => RemoveEventListener("slotchange", o)); set { /** required **/ } }
         public JSEventCallback OnStalled { get => new JSEventCallback(o => AddEventListener("stalled", o), o => RemoveEventListener("stalled", o)); set { /** required **/ } }
         public JSEventCallback OnSubmit { get => new JSEventCallback(o => AddEventListener("submit", o), o => RemoveEventListener("submit", o)); set { /** required **/ } }

@@ -174,7 +174,10 @@
         // convert encrypted ArrayBuffer to base64 string
         var encryptedTextBase64 = ArrayBufferToBase64(encryptedText);
         // convert encrypted base64 string to ArrayBuffer
-        var encryptedArrayBuffer = await Base64ToArrayBufferFetch(encryptedTextBase64);
+
+        //var encryptedArrayBuffer = await Base64ToArrayBufferFetch(encryptedTextBase64);
+
+        var encryptedArrayBuffer = Base64ToArrayBufferAtoB(encryptedTextBase64);
 
         // decrypt using imported private key
         var decryptedText2AB = await subtle.Decrypt(new EncryptParams { Name = "RSA-OAEP" }, privateKeyImported, encryptedArrayBuffer);
@@ -225,10 +228,36 @@
         return uint8Array.Buffer;
     }
 
-
     async Task<ArrayBuffer> Base64ToArrayBufferFetch(string base64String)
     {
         var resp = await JS.Fetch($"data:application/octet-binary;base64,{base64String}");
         return await resp.ArrayBuffer();
     }
+
+    ArrayBuffer Base64ToArrayBufferAtoB(string base64String)
+    {
+        var binaryString = JS.Call<JSObject>("atob", base64String);
+        JS.Set("_binaryString", binaryString);
+        var length = binaryString.JSRef.Get<int>("length");
+        var arrayBuffer = new ArrayBuffer(length);
+        var uint8Array = new Uint8Array(arrayBuffer);
+        for(var i = 0; i < length; i++)
+        {
+            uint8Array[i] = binaryString.JSRef.Call<byte>("charCodeAt", i);
+        }
+        return arrayBuffer;
+    }
+
+    // function base64ToArrayBuffer(base64)
+    // {
+    //     const binaryString = atob(base64);
+    //     const length = binaryString.length;
+    //     const arrayBuffer = new ArrayBuffer(length);
+    //     const uint8Array = new Uint8Array(arrayBuffer);
+    //     for (let i = 0; i < length; i++)
+    //     {
+    //         uint8Array[i] = binaryString.charCodeAt(i);
+    //     }
+    //     return arrayBuffer;
+    // }
 }

@@ -1,14 +1,92 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.Diagnostics
 {
+    public class JavascriptObjectPropertyInfo
+    {
+        public string OwnerInterface => Inheritance.LastOrDefault();
+        public List<string> Inheritance { get; set; }
+        public string Name { get; set; }
+        public PropertyDescriptor Descriptor { get; set; }
+        public string ValueTypeOf { get; set; }
+        public string ValueConstructorName { get; set; }
+    }
+
+    public class JavascriptObjectReflection
+    {
+        BlazorJSRuntime JS;
+        public JavascriptObjectReflection(BlazorJSRuntime js)
+        {
+            JS = js;
+        }
+
+        public List<string>? GetJavascriptObjectInheritance(JSObject? obj, int maxDepth = 24)
+        {
+            if (obj == null) return null;
+            var o = obj;
+            var i = 0;
+            var inheritance = new List<string>();
+            while (o != null && i < maxDepth)
+            {
+                var typeName = o.JSRef.GetConstructorName();
+                if (string.IsNullOrEmpty(typeName)) break;
+                inheritance.Add(typeName);
+                o = Reflect.GetPrototypeOf(o);
+                i += 1;
+            }
+            return null;
+        }
+
+        public JavascriptObjectPropertyInfo? GetJavascriptObjectProperty(JSObject? obj, string property, int maxDepth = 24)
+        {
+            if(obj == null) return null;
+            var o = obj;
+            var i = 0;
+            var inheritance = new List<string>();
+            var propTypeOf = obj.JSRef.PropertyType(property);
+            var propInstanceOf = obj.JSRef.PropertyInstanceOf(property);// JS.GetConstructorName(obj, property);
+            while(o != null && i < maxDepth)
+            {
+                var typeName = o.JSRef.GetConstructorName();
+                if (string.IsNullOrEmpty(typeName)) break;
+                inheritance.Add(typeName);
+                var descriptor = Reflect.GetOwnPropertyDescriptor(o, property);
+                if (descriptor != null)
+                {
+                    return new JavascriptObjectPropertyInfo
+                    {
+                        Descriptor = descriptor,
+                        Inheritance = inheritance.Distinct().ToList(),
+                        Name = property,
+                        ValueTypeOf = propTypeOf,
+                        ValueConstructorName = propInstanceOf,
+                    };
+                }
+                o = Reflect.GetPrototypeOf(o);
+                i += 1;
+            }
+            return null;
+        }
+
+        public Dictionary<string, JavascriptObjectPropertyInfo>? GetJavascriptObjectProperties(JSObject? obj)
+        {
+            if (obj == null) return null;
+            var ret = new Dictionary<string, JavascriptObjectPropertyInfo>();
+            var propertyNames = obj.JSRef!.GetPropertyNames();
+            foreach(var name in propertyNames)
+            {
+                var t = GetJavascriptObjectProperty(obj, name);
+                if (t != null)
+                {
+                    ret.Add(name, t);
+                }
+            }
+            return ret;
+        }
+    }
+
     public class JSObjectAnalyzer
     {
         BlazorJSRuntime JS;
@@ -57,7 +135,7 @@ namespace SpawnDev.BlazorJS.Diagnostics
         {
             jsp.FullAnalysis = false;
             var typeOf = obj == null || obj.JSRef == null ? "" : JS.TypeOf(obj);
-            if (string.IsNullOrEmpty(typeOf) || typeOf == "symbol") return;
+            if (string.IsNullOrEmpty(typeOf)) return;
             var instanceOf = obj == null || obj.JSRef == null ? "" : obj.JSRef.GetConstructorName();
             if (string.IsNullOrEmpty(instanceOf)) return;
             var ret = !Analyzed.TryGetValue(instanceOf, out var propertyInfo);
@@ -97,26 +175,37 @@ namespace SpawnDev.BlazorJS.Diagnostics
                 else
                 {
                     var realKeys = new List<object>();
-                    var propKeys = Reflect.OwnKeys(proto);
-                    for (int i = 0; i < propKeys.Length; i++)
+                    JSObjects.Array? propKeys = null;
+                    try
                     {
-                        var typeofAt = JS.TypeOf(propKeys, i);
-                        switch (typeofAt)
+                        propKeys = Reflect.OwnKeys(proto);
+                    }
+                    catch
+                    {
+
+                    }
+                    if (propKeys != null)
+                    {
+                        for (int i = 0; i < propKeys.Length; i++)
                         {
-                            case "symbol":
-                                {
-                                    //var key = propKeys.At<Symbol>(i);
-                                    //realKeys.Add(key);
-                                }
-                                break;
-                            case "string":
-                                {
-                                    var keyStr = propKeys.At<string>(i);
-                                    realKeys.Add(keyStr);
-                                }
-                                break;
-                            default:
-                                break;
+                            var typeofAt = propKeys.JSRef.PropertyType(i);
+                            switch (typeofAt)
+                            {
+                                case "symbol":
+                                    {
+                                        //var key = propKeys.At<Symbol>(i);
+                                        //realKeys.Add(key);
+                                    }
+                                    break;
+                                case "string":
+                                    {
+                                        var keyStr = propKeys.At<string>(i);
+                                        realKeys.Add(keyStr);
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                     var protoProps = realKeys.Select(o => o is string oStr && (!ignoreUnderscoredProperties || !oStr.StartsWith("_")) ? oStr : null).Where(o => !string.IsNullOrEmpty(o)).OrderBy(o => o).ToList();
@@ -130,7 +219,6 @@ namespace SpawnDev.BlazorJS.Diagnostics
                     {
                         currentProps[protoProp] = Reflect.GetOwnPropertyDescriptor(proto, protoProp);
                     }
-
                 }
                 try
                 {
@@ -166,8 +254,8 @@ namespace SpawnDev.BlazorJS.Diagnostics
                     case "string":
                     case "boolean":
                     case "bigint":
+                        //break;
                     case "symbol":
-                        break;
                     case "function":
                     case "object":
                     default:
