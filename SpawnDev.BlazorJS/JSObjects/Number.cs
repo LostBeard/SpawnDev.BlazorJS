@@ -24,5 +24,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         public static implicit operator byte(Number number) => number.ValueOfByte();
         public static implicit operator int(Number number) => number.ValueOfInt32();
         public static implicit operator uint(Number number) => number.ValueOfUint32();
+        public static bool IsNaN(object value) => JS.Call<bool>($"{nameof(Number)}.isNaN", value);
+
+        public static bool IsInteger(object value) => JS.Call<bool>($"{nameof(Number)}.isInteger", value);
+
+        public static bool IsSafeInteger(object value) => JS.Call<bool>($"{nameof(Number)}.isSafeInteger", value);
+
+        public static bool IsInfinite(object value) => JS.Call<bool>($"{nameof(Number)}.isInfinite", value);
     }
 }
