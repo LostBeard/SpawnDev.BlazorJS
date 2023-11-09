@@ -30,6 +30,6 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public static bool IsSafeInteger(object value) => JS.Call<bool>($"{nameof(Number)}.isSafeInteger", value);
 
-        public static bool IsInfinite(object value) => JS.Call<bool>($"{nameof(Number)}.isInfinite", value);
+        public static bool IsFinite(object value) => JS.Call<bool>($"{nameof(Number)}.isFinite", value);
     }
 }
