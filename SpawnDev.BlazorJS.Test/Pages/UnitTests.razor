@@ -236,6 +236,7 @@
 
     ArrayBuffer Base64ToArrayBufferAtoB(string base64String)
     {
+        // this method is for testing purposes only.
         var binaryString = JS.Call<JSObject>("atob", base64String);
         JS.Set("_binaryString", binaryString);
         var length = binaryString.JSRef.Get<int>("length");
@@ -248,16 +249,17 @@
         return arrayBuffer;
     }
 
-    // function base64ToArrayBuffer(base64)
-    // {
-    //     const binaryString = atob(base64);
-    //     const length = binaryString.length;
-    //     const arrayBuffer = new ArrayBuffer(length);
-    //     const uint8Array = new Uint8Array(arrayBuffer);
-    //     for (let i = 0; i < length; i++)
-    //     {
-    //         uint8Array[i] = binaryString.charCodeAt(i);
-    //     }
-    //     return arrayBuffer;
-    // }
+    [TestMethod]
+    public async Task TestSymbolsAndAsyncIterator()
+    {
+        var obj = JS.Get<JSObject>("delayedResponses");
+        var asyncIterator = obj.JSRef.Call<AsyncIterator>(Symbol.AsyncIterator);
+        IteratorResult? result = await asyncIterator.Next();
+        while (!result.Done)
+        {
+            JS.Log("Result: ", result.GetValue<JSObject>());
+            result = await asyncIterator.Next();
+        }
+        JS.Log("Done");
+    }}
 }

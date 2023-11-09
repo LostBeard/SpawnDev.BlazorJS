@@ -56,11 +56,22 @@ var host = builder.Build();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
-var str = JS.ReturnMe<JSObject>("apples");
-JS.Set("_str", str);
+var sym = new Symbol("desc_test");
+JS.Log("sym", sym);
 
-JS.Set("_111", JS.ReturnMe<JSObject>(111));
-var nmt = true;
+
+//var number = JS.ReturnMe<Number>(155);
+//var g = number * 8;
+
+
+//var strObj = JS.ReturnMe<SpawnDev.BlazorJS.JSObjects.String>("grrr");
+//var gr = strObj + " ok";
+
+//var str = JS.ReturnMe<JSObject>("apples");
+//JS.Set("_str", str);
+
+//JS.Set("_111", JS.ReturnMe<JSObject>(111));
+//var nmt = true;
 
 //var www = JS.Get<IJSInProcessObjectReference>("Symbol.asyncIterator");
 

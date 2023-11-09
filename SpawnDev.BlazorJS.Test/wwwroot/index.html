@@ -33,6 +33,25 @@
     <script webworker-enabled>
         // example
         console.log('This script will run in all scopes including window and worker due to the webworker-enabled attribute');
+        // this object below is used in a unit test that tests Symbol.asyncIterator and the AsyncIterator JSObject
+        // Example delayedResponses source:
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/asyncIterator
+        delayedResponses = {
+            delays: [50, 100, 150],
+
+            wait(delay) {
+                return new Promise((resolve) => {
+                    setTimeout(resolve, delay);
+                });
+            },
+
+            async *[Symbol.asyncIterator]() {
+                for (const delay of this.delays) {
+                    await this.wait(delay);
+                    yield `Delayed response for ${delay} milliseconds`;
+                }
+            },
+        };
     </script>
     <!-- autostart is set to false to allow the app to detect SIMD support and load the apropriate build -->
     <script src="_framework/blazor.webassembly.js" autostart="false"></script>
