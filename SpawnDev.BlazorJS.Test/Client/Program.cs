@@ -9,6 +9,8 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
+using System.Diagnostics;
+using System.Reflection;
 using System.Text.Json;
 
 #if DEBUG
@@ -51,7 +53,7 @@ builder.Services.AddSingleton<JSObjectAnalyzer>();
 
 //Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
 
-#if DEBUG || true
+#if DEBUG && false
 var host = builder.Build();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
@@ -59,6 +61,23 @@ var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 var sym = new Symbol("desc_test");
 JS.Log("sym", sym);
 
+var methods = typeof(IMathsService).GetMethods();
+
+foreach (MethodInfo item in methods)
+{
+    //var stopwatch = Stopwatch.StartNew();
+    //var i = 0;
+    //while(stopwatch.Elapsed.TotalSeconds < 1.0d)
+    //{
+    //    var signature = item.GetMethodSignatureHash();
+    //    i++;
+    //}
+    Console.WriteLine(item.GetMethodSignature());
+}
+
+
+
+var nmtt = true;
 
 //var number = JS.ReturnMe<Number>(155);
 //var g = number * 8;

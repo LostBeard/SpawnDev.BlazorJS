@@ -21,7 +21,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
 
         internal Task<TReturnType> InvokeTask<TReturnType>(MethodInfo targetMethod, object?[]? args) {
             var ttcs = new TaskCompletionSource<TReturnType>();
-            Worker.CallAsync<TServiceInterface>(targetMethod.Name, args, (retExc, retVal) => {
+            Worker.CallAsync<TServiceInterface>(targetMethod, args, (retExc, retVal) => {
                 if (retExc != null) {
                     ttcs.TrySetException(retExc);
                 }
@@ -40,7 +40,7 @@ namespace SpawnDev.BlazorJS.WebWorkers {
 
         internal Task InvokeTaskVoid(MethodInfo targetMethod, object?[]? args) {
             var taskSource = new TaskCompletionSource();
-            Worker.CallAsync<TServiceInterface>(targetMethod.Name, args, (retExc, retVal) => {
+            Worker.CallAsync<TServiceInterface>(targetMethod, args, (retExc, retVal) => {
                 if (retExc != null) {
                     taskSource.TrySetException(retExc);
                 }

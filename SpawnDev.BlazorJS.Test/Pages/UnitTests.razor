@@ -62,6 +62,32 @@
     }
 
     [TestMethod]
+    public async Task WebWorkerTestMultiSigMethods()
+    {
+        if (!_webWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        using var worker = await _webWorkerService.GetWebWorker();
+        var mathService = worker.GetService<IMathsService>();
+        var strValueOrig = "apples";
+        var dblValueOrig = Math.PI;
+        // test call TestMultiSigMethod which has 3 signatures total. this call is intended for the only method with this name and 2 arguments.
+        // this call intended for the one with a double argument.
+        var twoArgReadBack = await mathService.TestMultiSigMethod(strValueOrig, dblValueOrig);
+        var twoArgReadBackExpected = strValueOrig + " " + dblValueOrig;
+        if (twoArgReadBack != twoArgReadBackExpected) throw new Exception("Call to worker TestMultiSigMethod with unique number of arguments failed");
+
+        // test call TestMultiSigMethod which has two signatures with the same number of arguments
+        // this call intended for the one with a string argument.
+        var strValueReadBack = await mathService.TestMultiSigMethod(strValueOrig);
+        if (strValueOrig != strValueReadBack) throw new Exception("Call to worker TestMultiSigMethod with 1 argument failed with string");
+        // this call intended for the one with a double argument.
+        var dblValueReadBack = await mathService.TestMultiSigMethod(dblValueOrig);
+        if (dblValueOrig != dblValueReadBack) throw new Exception("Call to worker TestMultiSigMethod with 1 argument failed with double");
+    }
+
+    [TestMethod]
     public async Task WebWorkerTest()
     {
         if (!_webWorkerService.WebWorkerSupported)
@@ -261,5 +287,6 @@
             result = await asyncIterator.Next();
         }
         JS.Log("Done");
-    }}
+    }
+}
 }

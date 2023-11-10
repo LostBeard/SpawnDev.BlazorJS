@@ -419,12 +419,71 @@ namespace SpawnDev.BlazorJS.WebWorkers
             CheckBusyStateChanged();
             return t.Task;
         }
-
+        public void CallAsync<TService>(MethodInfo methodInfo, object?[]? args, Action<Exception?, object?> callback) where TService : class => CallAsync(typeof(TService), methodInfo, args, callback);
         public void CallAsync<TService>(string methodName, object?[]? args, Action<Exception?, object?> callback) where TService : class => CallAsync(typeof(TService), methodName, args, callback);
         public void CallAsync(Type serviceType, string methodName, object?[]? args, Action<Exception?, object?> callback)
         {
             var argsLength = args != null ? args.Length : 0;
             var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
+            var returnType = methodInfo.ReturnType;
+            var isAwaitable = returnType.IsAsync();
+            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
+            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
+            var requestId = Guid.NewGuid().ToString();
+            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
+            var workerMsg = new WebWorkerMessageOut
+            {
+                RequestId = requestId,
+                TargetName = methodName,
+                TargetType = serviceType.FullName,
+                Data = msgData,
+            };
+            var workerTask = new WebWorkerCallMessageTask((args) =>
+            {
+                Exception? retExc = null;
+                object? retVal = null;
+                // remove any callbacks
+                var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
+                foreach (var key in keysToRemove) _actionHandles.Remove(key);
+                //var finalReturnTypeName = finalReturnType.Name;
+                var argsLength = args == null ? 0 : args.Get<int>("length");
+                if (args == null || argsLength != 2)
+                {
+                    Console.WriteLine($"ServiceCallDispatcher Invalid return args for workerTask");
+                    retExc = new Exception("Invalid return args for workerTask");
+                }
+                else
+                {
+                    var err = args.Get<string?>(0);
+                    if (!string.IsNullOrEmpty(err))
+                    {
+                        retExc = new Exception(err);
+                    }
+                    else if (!finalReturnTypeIsVoid)
+                    {
+                        try
+                        {
+                            retVal = args.Get(finalReturnType, 1);
+                        }
+                        catch (Exception ex)
+                        {
+                            retExc = ex;
+                        }
+                    }
+                }
+                callback?.Invoke(retExc, retVal);
+            });
+            workerTask.ReturnValueType = finalReturnType;
+            workerTask.webWorkerCallMessageOutgoing = workerMsg;
+            _waiting.Add(workerTask.RequestId, workerTask);
+            _port.PostMessage(workerMsg, transferable);
+            CheckBusyStateChanged();
+        }
+        public void CallAsync(Type serviceType, MethodInfo methodInfo, object?[]? args, Action<Exception?, object?> callback)
+        {
+            var argsLength = args != null ? args.Length : 0;
+            var methodName = methodInfo.GetMethodSignature();
+            //var methodInfo = GetBestInstanceMethod(serviceType, methodInfo, argsLength);
             var returnType = methodInfo.ReturnType;
             var isAwaitable = returnType.IsAsync();
             var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
@@ -710,15 +769,23 @@ namespace SpawnDev.BlazorJS.WebWorkers
         private MethodInfo? GetBestInstanceMethod<T>(string identifier, int paramCount) => GetBestInstanceMethod(typeof(T), identifier, paramCount);
         private MethodInfo? GetBestInstanceMethod(Type classType, string identifier, int paramCount)
         {
-            var instanceMethods = classType
-            .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-            .Where(m => m.Name == identifier)
-            .Where(m => !m.IsGenericMethod)
-            // don't count parameters that will be added at call time
-            .Where(m => m.GetParameters().Where(o => GetCallSideParameter(o) == null).Count() == paramCount)
-            .ToList();
-            var best = instanceMethods.FirstOrDefault();
-            return best;
+            if (identifier.Contains(" "))
+            {
+                // full method signature
+                return classType.GetMethodFromSignature(identifier);
+            }
+            else
+            {
+                var instanceMethods = classType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m.Name == identifier)
+                .Where(m => !m.IsGenericMethod)
+                // don't count parameters that will be added at call time
+                .Where(m => m.GetParameters().Where(o => GetCallSideParameter(o) == null).Count() == paramCount)
+                .ToList();
+                var best = instanceMethods.FirstOrDefault();
+                return best;
+            }
         }
 
         public bool IsDisposed { get; private set; } = false;

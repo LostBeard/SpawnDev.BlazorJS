@@ -21,6 +21,10 @@ namespace SpawnDev.BlazorJS.Test.Services
         Task SetValueTest(string newValue);
         Task<string> GetValueTest();
         Task<string> ReadAppSettingsValue(string key);
+        Task<double> TestMultiSigMethod(double value);
+        Task<string> TestMultiSigMethod(string value);
+        Task<double> TestMultiSigMethod(int value);
+        Task<string> TestMultiSigMethod(string value, double dblValue);
     }
 
     /// <summary>
@@ -171,6 +175,26 @@ namespace SpawnDev.BlazorJS.Test.Services
         public Task<string> ReadAppSettingsValue(string key)
         {
             return Task.FromResult(_configuration[key] ?? "");
+        }
+
+        public Task<double> TestMultiSigMethod(double value)
+        {
+            return Task.FromResult(value);
+        }
+
+        public Task<string> TestMultiSigMethod(string value)
+        {
+            return Task.FromResult(value);
+        }
+
+        public Task<double> TestMultiSigMethod(int value)
+        {
+            return Task.FromResult((double)value);
+        }
+
+        public Task<string> TestMultiSigMethod(string value, double dblValue)
+        {
+            return Task.FromResult(value + " " + dblValue);
         }
     }
 }
