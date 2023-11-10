@@ -18,15 +18,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public WorkerNavigator(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// Always returns 'Mozilla', in any browser. This property is kept only for compatibility purposes.
+        /// Always returns 'Mozilla', in any browser. This property is kept only for compatibility purposes.<br />
+        /// Deprecated
         /// </summary>
         public string AppCodeName => JSRef.Get<string>("appCodeName");
         /// <summary>
-        /// Returns the official name of the browser. Do not rely on this property to return the correct value.
+        /// Returns the official name of the browser. Do not rely on this property to return the correct value.<br />
+        /// Deprecated
         /// </summary>
         public string AppName => JSRef.Get<string>("appName");
         /// <summary>
-        /// Returns the version of the browser as a string. Do not rely on this property to return the correct value.
+        /// Returns the version of the browser as a string. Do not rely on this property to return the correct value.<br />
+        /// Deprecated
         /// </summary>
         public string AppVersion => JSRef.Get<string>("appVersion");
         /// <summary>
@@ -74,7 +77,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Always returns 'Gecko', on any browser. This property is kept only for compatibility purposes.<br />
         /// Deprecated
         /// </summary>
-        public string Product => JSRef.Get<string>("product");
+        public string? Product => JSRef.Get<string?>("product");
         /// <summary>
         /// Returns a Serial object, which represents the entry point into the Web Serial API to enable the control of serial ports.
         /// </summary>

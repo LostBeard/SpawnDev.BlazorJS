@@ -141,14 +141,50 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public WindowControlsOverlay? WindowControlsOverlay => JSRef.Get<WindowControlsOverlay?>("windowControlsOverlay");
         //public XRSystem Xr => JSRef.Get<XRSystem>("xr");
-        public string? AppCodeName => JSRef.Get<string?>("appCodeName");
-        public string? AppName => JSRef.Get<string?>("appName");
-        public string? AppVersion => JSRef.Get<string?>("appVersion");
+        /// <summary>
+        /// Always returns 'Mozilla', in any browser. This property is kept only for compatibility purposes.<br />
+        /// Deprecated
+        /// </summary>
+        public string AppCodeName => JSRef.Get<string>("appCodeName");
+        /// <summary>
+        /// Returns the official name of the browser. Do not rely on this property to return the correct value.<br />
+        /// Deprecated
+        /// </summary>
+        public string AppName => JSRef.Get<string>("appName");
+        /// <summary>
+        /// Returns the version of the browser as a string. Do not rely on this property to return the correct value.<br />
+        /// Deprecated
+        /// </summary>
+        public string AppVersion => JSRef.Get<string>("appVersion");
+        /// <summary>
+        /// Reports the value of the user's do-not-track preference. When this value is "1", your website or application should not track the user.<br />
+        /// Deprecated
+        /// </summary>
         public bool? DoNotTrack => JSRef.Get<bool?>("doNotTrack");
+        /// <summary>
+        /// Returns a string representing the platform of the browser. Do not rely on this property to return the correct value.<br />
+        /// Deprecated
+        /// </summary>
         public string? Platform => JSRef.Get<string?>("platform");
+        /// <summary>
+        /// Always returns 'Gecko', on any browser. This property is kept only for compatibility purposes.<br />
+        /// Deprecated
+        /// </summary>
         public string? Product => JSRef.Get<string?>("product");
+        /// <summary>
+        /// Returns either the string '20030107', or '"20100101'.<br />
+        /// Deprecated
+        /// </summary>
         public string? ProductSub => JSRef.Get<string?>("productSub");
+        /// <summary>
+        /// Returns either the empty string, 'Apple Computer Inc.', or 'Google Inc.'.<br />
+        /// Deprecated
+        /// </summary>
         public string? Vendor => JSRef.Get<string?>("vendor");
+        /// <summary>
+        /// Always returns the empty string.<br />
+        /// Deprecated
+        /// </summary>
         public string? VendorSub => JSRef.Get<string?>("vendorSub");
         #endregion
         #region Methods
