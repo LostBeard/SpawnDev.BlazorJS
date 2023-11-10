@@ -598,7 +598,7 @@ protected override async Task OnInitializedAsync()
 ```
 
 
-Another example.
+Another example with a progress callback.
 ```cs
 
 // Create a WebWorker
