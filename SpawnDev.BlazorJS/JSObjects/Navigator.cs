@@ -54,7 +54,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string VendorSub => JSRef.Get<string>("vendorSub");
         //public Keyboard Keyboard => JSRef.Get<Keyboard>("keyboard");
         //public NavigatorManagedData Managed => JSRef.Get<NavigatorManagedData>("managed");
-        //public MediaCapabilities MediaCapabilities => JSRef.Get<MediaCapabilities>("mediaCapabilities");
+        public MediaCapabilities MediaCapabilities => JSRef.Get<MediaCapabilities>("mediaCapabilities");
         //public MediaSession MediaSession => JSRef.Get<MediaSession>("mediaSession");
         //public MimeTypeArray MimeTypes => JSRef.Get<MimeTypeArray>("mimeTypes");
         //public PluginArray Plugins => JSRef.Get<PluginArray>("plugins");

@@ -3,6 +3,7 @@ using Markdown.ColorCode;
 using Microsoft.AspNetCore.Components;
 using SpawnDev.BlazorJS.Diagnostics;
 using SpawnDev.BlazorJS.JSObjects;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -181,9 +182,10 @@ public class {TypeName} : {inheritsFrom}
                         if (isAsync) callMethod += "Async";
                         if (!isVoid) callMethod += $"<{propertyValueType}>";
                         var returnType = isAsync ? $"Task<{propertyValueType}>" : propertyValueType;
-                        var propStr = $@"
-    public {returnType} {propertyNameCS}() => ...
-";
+                        //                        var propStr = $@"
+                        //    public {returnType} {propertyNameCS}() => ...
+                        //";
+                        var propStr = jsobjectMethod.GetMethodSignature(true);
                         AppendToRegion(ref cSharpCode, "Methods", propStr);
                         return;
                     }
@@ -208,8 +210,10 @@ public class {TypeName} : {inheritsFrom}
                         }
                         return;
                     }
-                    if (pInfo.TypeOf == "function")
+                    if (pInfo.TypeOf == "function" || pInfo.InstanceOf == "Function")
                     {
+                        Console.WriteLine($"pInfo.InstanceOf: {pInfo.InstanceOf}");
+                        Console.WriteLine($"pInfo.TypeOf: {pInfo.TypeOf}");
                         var argsList = new List<string>();
                         var argss = Enumerable.Range(0, pInfo.FunctionLength).Select(o => $"object? arg{o}");
                         var argsstr = string.Join(", ", argss);
@@ -253,16 +257,16 @@ public class {TypeName} : {inheritsFrom}
                         }
                     }
                 }
-                AppendToRegion(ref cSharpCode, "Events", "// Existing");
-                AppendToRegion(ref cSharpCode, "Methods", "// Existing");
-                AppendToRegion(ref cSharpCode, "Properties", "// Existing");
+                AppendToRegion(ref cSharpCode, "Events", "// Existing - may not exactly match signature in code. See code if needed.");
+                AppendToRegion(ref cSharpCode, "Methods", "// Existing - may not exactly match signature in code. See code if needed.");
+                AppendToRegion(ref cSharpCode, "Properties", "// Existing - may not exactly match signature in code. See code if needed.");
                 foreach (var pkvp in thisTypeDescriptors)
                 {
                     Process(pkvp, true);
                 }
-                AppendToRegion(ref cSharpCode, "Events", "// New");
-                AppendToRegion(ref cSharpCode, "Methods", "// New");
-                AppendToRegion(ref cSharpCode, "Properties", "// New");
+                AppendToRegion(ref cSharpCode, "Events", "// New - Argument type(s) unknown. Check signature and fix as needed.");
+                AppendToRegion(ref cSharpCode, "Methods", "// New - Return type and parameter type(s) unknown. Check signature and fix as needed.");
+                AppendToRegion(ref cSharpCode, "Properties", "// New - Property type determined by current value. Check signature and fix as needed.");
                 foreach (var pkvp in thisTypeDescriptors)
                 {
                     Process(pkvp, false);
@@ -297,6 +301,7 @@ public class {TypeName} : {inheritsFrom}
 
         bool isInitializing = false;
 
+        bool analyzing = false;
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -309,22 +314,19 @@ public class {TypeName} : {inheritsFrom}
                 isInit = true;
                 isInitCall = true;
                 JSObjectAnalyzer.OnNewJSObjectTypeAdded += JSObjectAnalyzer_OnNewJSObjectTypeAdded;
-                var analyzing = false;
-                JSObject.OnJSObjectCreated = (obj) =>
+                JSObject.OnJSObjectCreated = async (obj) =>
                 {
                     try
                     {
-                        if (JSObjectAnalyzer.ShouldAnalyze(obj) && !analyzing)
+                        if (!analyzing && JSObjectAnalyzer.ShouldAnalyze(obj))
                         {
                             analyzing = true;
                             JSObjectAnalyzer.Analyze(obj);
                             analyzing = false;
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        var nmt = ex.Message;
-                    }
+                    catch 
+                    { }
                 };
                 //var promise = new Promise();
                 //var promiseInfo = jsobjectAnalyzer.Analyze(promise);

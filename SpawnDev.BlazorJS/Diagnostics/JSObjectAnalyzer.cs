@@ -85,27 +85,14 @@ namespace SpawnDev.BlazorJS.Diagnostics
             }
             return ret;
         }
+    
+        
     }
 
     public class JSObjectAnalyzer
     {
         BlazorJSRuntime JS;
         public event Action<JSPropertyInfo> OnNewJSObjectTypeAdded;
-        public static byte[] GetHash(string inputString)
-        {
-            using (HashAlgorithm algorithm = SHA256.Create())
-                return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
-        }
-
-        public static string GetHashString(string inputString)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (byte b in GetHash(inputString))
-                sb.Append(b.ToString("X2"));
-
-            return sb.ToString();
-        }
-
         public JSObjectAnalyzer(BlazorJSRuntime js)
         {
             JS = js;
@@ -160,7 +147,7 @@ namespace SpawnDev.BlazorJS.Diagnostics
         {
             RequestFullAnalysis(obj, ret);
             if (!ret.FullAnalysis) return;
-            ret.TypeOf = JS.TypeOf(obj);
+            ret.TypeOf = obj.JSRef.PropertyType();
             ret.FunctionLength = ret.TypeOf == "function" ? obj.JSRef.Get<int>("length") : 0;
             JSObject? proto = obj;
             var allProps = new List<string>();

@@ -9,9 +9,9 @@ namespace SpawnDev.BlazorJS
 {
     public static class MethodInfoExtension
     {
-        static UInt64 CalculateHash(string read)
+        static ulong CalculateHash(string read)
         {
-            UInt64 hashedValue = 3074457345618258791ul;
+            ulong hashedValue = 3074457345618258791ul;
             for (int i = 0; i < read.Length; i++)
             {
                 hashedValue += read[i];
@@ -19,29 +19,15 @@ namespace SpawnDev.BlazorJS
             }
             return hashedValue;
         }
-        static UInt64 CalculateHash(string read, bool lowTolerance)
-        {
-            UInt64 hashedValue = 0;
-            int i = 0;
-            ulong multiplier = 1;
-            while (i < read.Length)
-            {
-                hashedValue += read[i] * multiplier;
-                multiplier *= 37;
-                if (lowTolerance) i += 2;
-                else i++;
-            }
-            return hashedValue;
-        }
-        public static UInt64 GetMethodSignatureHash(this MethodInfo _this)
+        public static ulong GetMethodSignatureHash(this MethodInfo _this)
         {
             var sig = _this.GetMethodSignature();
             var hash = CalculateHash(sig);
             return hash;
         }
-        public static string GetMethodSignature(this MethodInfo _this)
+
+        public static string GetMethodSignature(this MethodInfo _this, bool includeNames = false)
         {
-            var parameterTypes = _this.GetParameters().Select(o => o.ParameterType.GetFormattedName());
             var strBuilder = new StringBuilder();
             if (_this.IsPublic)
                 strBuilder.Append("public ");
@@ -53,9 +39,24 @@ namespace SpawnDev.BlazorJS
                 strBuilder.Append("protected ");
             if (_this.IsStatic)
                 strBuilder.Append("static ");
-            return $"{strBuilder.ToString()}{_this.ReturnType.GetFormattedName()} {_this.Name}({string.Join(", ", parameterTypes)})";
+            if (includeNames)
+            {
+                var parameterInfos = _this.GetParameters();
+                var paramStrings = new List<string>();
+                foreach (var parameterInfo in parameterInfos)
+                {
+                    paramStrings.Add($"{parameterInfo.ParameterType.GetFormattedName()} {parameterInfo.Name}");
+                }
+                strBuilder.Append($"{_this.ReturnType.GetFormattedName()} {_this.Name}({string.Join(", ", paramStrings)})");
+                return strBuilder.ToString();
+            }
+            else
+            {
+                var parameterTypes = _this.GetParameters().Select(o => o.ParameterType.GetFormattedName());
+                return $"{strBuilder.ToString()}{_this.ReturnType.GetFormattedName()} {_this.Name}({string.Join(", ", parameterTypes)})";
+            }
         }
-        public static MethodInfo? GetMethodFromSignature(this Type _this, string key)
+        public static MethodInfo? GetMethodFromSignature(this Type _this, string key, bool includeNames = false)
         {
             if (!key.Contains(" "))
             {
@@ -63,7 +64,7 @@ namespace SpawnDev.BlazorJS
                 var methods = _this.GetMethods(BindingFlags.Public | BindingFlags.Instance);
                 foreach (MethodInfo item in methods)
                 {
-                    var sig = item.GetMethodSignature();
+                    var sig = item.GetMethodSignature(includeNames);
                     if (sig == key)
                     {
                         return item;
