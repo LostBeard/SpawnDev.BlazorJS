@@ -19,53 +19,137 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public Navigator(IJSInProcessObjectReference _ref) : base(_ref) { }
         #region Properties
-        public MediaDevices MediaDevices => JSRef.Get<MediaDevices>("mediaDevices");
-        public LockManager Locks => JSRef.Get<LockManager>("locks");
-        public StorageManager Storage => JSRef.Get<StorageManager>("storage");
-        public ServiceWorkerContainer ServiceWorker => JSRef.Get<ServiceWorkerContainer>("serviceWorker");
-        public WakeLock WakeLock => JSRef.Get<WakeLock>("wakeLock");
-        public Clipboard Clipboard => JSRef.Get<Clipboard>("clipboard");
-        public bool CookieEnabled => JSRef.Get<bool>("cookieEnabled");
-        public UserActivation UserActivation => JSRef.Get<UserActivation>("userActivation");
-        public bool OnLine => JSRef.Get<bool>("onLine");
-        public int HardwareConcurrency => JSRef.Get<int>("hardwareConcurrency");
-        public string AppCodeName => JSRef.Get<string>("appCodeName");
-        public string AppName => JSRef.Get<string>("appName");
-        public string AppVersion => JSRef.Get<string>("appVersion");
+        /// <summary>
+        /// Returns a Bluetooth object for the current document, providing access to Web Bluetooth API functionality.
+        /// </summary>
         public Bluetooth? Bluetooth => JSRef.Get<Bluetooth?>("bluetooth");
+        /// <summary>
+        /// Returns a Clipboard object that provides read and write access to the system clipboard.
+        /// </summary>
+        public Clipboard Clipboard => JSRef.Get<Clipboard>("clipboard");
+        /// <summary>
+        /// Returns a NetworkInformation object containing information about the network connection of a device.
+        /// </summary>
         public NetworkInformation? Connection => JSRef.Get<NetworkInformation?>("connection");
+        /// <summary>
+        /// Returns false if setting a cookie will be ignored and true otherwise.
+        /// </summary>
+        public bool CookieEnabled => JSRef.Get<bool>("cookieEnabled");
+        /// <summary>
+        /// Returns the CredentialsContainer interface which exposes methods to request credentials and notify the user agent when interesting events occur such as successful sign in or sign out.
+        /// </summary>
         public CredentialsContainer? Credentials => JSRef.Get<CredentialsContainer?>("credentials");
+        /// <summary>
+        /// Returns the amount of device memory in gigabytes. This value is an approximation given by rounding to the nearest power of 2 and dividing that number by 1024.
+        /// </summary>
         public float DeviceMemory => JSRef.Get<float>("deviceMemory");
-        public bool DoNotTrack => JSRef.Get<bool>("doNotTrack");
+        /// <summary>
+        /// Returns a Geolocation object allowing accessing the location of the device.
+        /// </summary>
         public Geolocation? Geolocation => JSRef.Get<Geolocation?>("geolocation");
+        /// <summary>
+        /// Returns the GPU object for the current browsing context. The entry point for the WebGPU API.
+        /// </summary>
         public GPU? Gpu => JSRef.Get<GPU?>("gpu");
+        /// <summary>
+        /// Returns the number of logical processor cores available.
+        /// </summary>
+        public int HardwareConcurrency => JSRef.Get<int>("hardwareConcurrency");
+        /// <summary>
+        /// Returns an HID object providing methods for connecting to HID devices, listing attached HID devices, and event handlers for connected HID devices.
+        /// </summary>
         public HID? Hid => JSRef.Get<HID?>("hid");
+        /// <summary>
+        /// Returns an Ink object for the current document, providing access to Ink API functionality.
+        /// </summary>
         public Ink? Ink => JSRef.Get<Ink?>("ink");
+        /// <summary>
+        /// Returns a string representing the preferred language of the user, usually the language of the browser UI. The null value is returned when this is unknown.
+        /// </summary>
         public string Language => JSRef.Get<string>("language");
+        /// <summary>
+        /// Returns an array of strings representing the languages known to the user, by order of preference.
+        /// </summary>
         public string[] Languages => JSRef.Get<string[]>("languages");
+        /// <summary>
+        /// Returns a LockManager object that provides methods for requesting a new Lock object and querying for an existing Lock object.
+        /// </summary>
+        public LockManager Locks => JSRef.Get<LockManager>("locks");
+        /// <summary>
+        /// Returns the maximum number of simultaneous touch contact points are supported by the current device.
+        /// </summary>
         public int MaxTouchPoints => JSRef.Get<int>("maxTouchPoints");
-        public bool PdfViewerEnabled => JSRef.Get<bool>("pdfViewerEnabled");
-        public Permissions Permissions => JSRef.Get<Permissions>("permissions");
-        public string Platform => JSRef.Get<string>("platform");
-        public string Product => JSRef.Get<string>("product");
-        public string ProductSub => JSRef.Get<string>("productSub");
-        public string UserAgent => JSRef.Get<string>("userAgent");
-        public string Vendor => JSRef.Get<string>("vendor");
-        public string VendorSub => JSRef.Get<string>("vendorSub");
-        //public Keyboard Keyboard => JSRef.Get<Keyboard>("keyboard");
-        //public NavigatorManagedData Managed => JSRef.Get<NavigatorManagedData>("managed");
+        /// <summary>
+        /// Returns a MediaCapabilities object that can expose information about the decoding and encoding capabilities for a given format and output capabilities.
+        /// </summary>
         public MediaCapabilities MediaCapabilities => JSRef.Get<MediaCapabilities>("mediaCapabilities");
+        /// <summary>
+        /// Returns a reference to a MediaDevices object which can then be used to get information about available media devices (MediaDevices.enumerateDevices()), find out what constrainable properties are supported for media on the user's computer and user agent (MediaDevices.getSupportedConstraints()), and to request access to media using MediaDevices.getUserMedia().
+        /// </summary>
+        public MediaDevices MediaDevices => JSRef.Get<MediaDevices>("mediaDevices");
         //public MediaSession MediaSession => JSRef.Get<MediaSession>("mediaSession");
-        //public MimeTypeArray MimeTypes => JSRef.Get<MimeTypeArray>("mimeTypes");
-        //public PluginArray Plugins => JSRef.Get<PluginArray>("plugins");
+        /// <summary>
+        /// Returns a boolean value indicating whether the browser is working online.
+        /// </summary>
+        public bool OnLine => JSRef.Get<bool>("onLine");
+        /// <summary>
+        /// Returns true if the browser can display PDF files inline when navigating to them, and false otherwise.
+        /// </summary>
+        public bool PdfViewerEnabled => JSRef.Get<bool>("pdfViewerEnabled");
+        /// <summary>
+        /// Returns a Permissions object that can be used to query and update permission status of APIs covered by the Permissions API.
+        /// </summary>
+        public Permissions Permissions => JSRef.Get<Permissions>("permissions");
         //public Presentation Presentation => JSRef.Get<Presentation>("presentation");
         //public Scheduling Scheduling => JSRef.Get<Scheduling>("scheduling");
+        /// <summary>
+        /// Returns a Serial object, which represents the entry point into the Web Serial API to enable the control of serial ports.
+        /// </summary>
         public Serial? Serial => JSRef.Get<Serial?>("serial");
+        /// <summary>
+        /// Returns a ServiceWorkerContainer object, which provides access to registration, removal, upgrade, and communication with the ServiceWorker objects for the associated document.
+        /// </summary>
+        public ServiceWorkerContainer ServiceWorker => JSRef.Get<ServiceWorkerContainer>("serviceWorker");
+        /// <summary>
+        /// Returns the singleton StorageManager object used for managing persistence permissions and estimating available storage on a site-by-site/app-by-app basis.
+        /// </summary>
+        public StorageManager Storage => JSRef.Get<StorageManager>("storage");
+        /// <summary>
+        /// Returns a USB object for the current document, providing access to WebUSB API functionality.
+        /// </summary>
         public USB? Usb => JSRef.Get<USB?>("usb");
+        /// <summary>
+        /// Returns a UserActivation object containing information about the current window's user activation state.
+        /// </summary>
+        public UserActivation UserActivation => JSRef.Get<UserActivation>("userActivation");
+        /// <summary>
+        /// Returns the user agent string for the current browser.
+        /// </summary>
+        public string UserAgent => JSRef.Get<string>("userAgent");
         //public NavigatorUAData UserAgentData => JSRef.Get<NavigatorUAData>("userAgentData");
         //public VirtualKeyboard VirtualKeyboard => JSRef.Get<VirtualKeyboard>("virtualKeyboard");
+        /// <summary>
+        /// Returns a WakeLock interface you can use to request screen wake locks and prevent screen from dimming, turning off, or showing a screen saver.
+        /// </summary>
+        public WakeLock? WakeLock => JSRef.Get<WakeLock?>("wakeLock");
+        /// <summary>
+        /// Indicates whether the user agent is controlled by automation.
+        /// </summary>
+        public bool WebDriver => JSRef.Get<bool>("webdriver");
+        /// <summary>
+        /// Returns the WindowControlsOverlay interface which exposes information about the geometry of the title bar in desktop Progressive Web Apps, and an event to know whenever it changes.
+        /// </summary>
         public WindowControlsOverlay? WindowControlsOverlay => JSRef.Get<WindowControlsOverlay?>("windowControlsOverlay");
         //public XRSystem Xr => JSRef.Get<XRSystem>("xr");
+        public string? AppCodeName => JSRef.Get<string?>("appCodeName");
+        public string? AppName => JSRef.Get<string?>("appName");
+        public string? AppVersion => JSRef.Get<string?>("appVersion");
+        public bool? DoNotTrack => JSRef.Get<bool?>("doNotTrack");
+        public string? Platform => JSRef.Get<string?>("platform");
+        public string? Product => JSRef.Get<string?>("product");
+        public string? ProductSub => JSRef.Get<string?>("productSub");
+        public string? Vendor => JSRef.Get<string?>("vendor");
+        public string? VendorSub => JSRef.Get<string?>("vendorSub");
         #endregion
         #region Methods
         public Gamepad[] GetGamepads() => JSRef.Call<Gamepad[]>("getGamepads");
