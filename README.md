@@ -597,7 +597,6 @@ protected override async Task OnInitializedAsync()
 }
 ```
 
-
 Another example with a progress callback.
 ```cs
 
