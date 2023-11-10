@@ -568,6 +568,37 @@ await builder.Build().BlazorJSRunAsync();
 ```
 
 ## WebWorker
+You can use the properties ```WebWorkerService.SharedWebWorkerSupported``` and ```WebWorkerService.WebWorkerSupported``` to check for support. 
+
+For a simple fallback when not supported:  
+- If WebWorkerService.GetWebWorker() returns a WebWorker, use WebWorker.GetService\<T\>().   
+- If WebWorkerService.GetWebWorker() returns a null, use IServiceProvider.GetService\<T\>().
+
+Example component code that uses a service (IMyService) in a WebWorker if supported and in the default Window context if not.
+```cs
+[Inject]
+WebWorkerService workerService { get; set; }
+
+[Inject]
+IServiceProvider serviceProvider { get; set; }
+
+// MyServiceAuto will be IMyService running in the WebWorker context if available and IMyService running in the Window context if not
+IMyService MyService { get; set; }
+
+WebWorker? webWorker { get; set; }
+
+protected override async Task OnInitializedAsync()
+{
+    // GetWebWorker() will return null if workerService.WebWorkerSupported == false
+    webWorker = await workerService.GetWebWorker();
+    // get the WebWorker's service instance if available or this Window's service instance if not
+    MyService = webWorker != null ? webWorker.GetService<IMyService>() : serviceProvider.GetService<IMyService>();
+    await base.OnInitializedAsync();
+}
+```
+
+
+Another example.
 ```cs
 
 // Create a WebWorker
