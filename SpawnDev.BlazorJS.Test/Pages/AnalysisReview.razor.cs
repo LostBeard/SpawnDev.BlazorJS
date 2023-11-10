@@ -335,7 +335,6 @@ public class {TypeName} : {inheritsFrom}
             foreach (var a in assemblies)
             {
                 var aTypes = a.GetTypes();
-                var axTypes = a.GetExportedTypes();
                 var jsObjectTypes = aTypes.Where(o => typeof(JSObject).IsAssignableFrom(o));
                 allJsObjectTypes.AddRange(jsObjectTypes);
             }
