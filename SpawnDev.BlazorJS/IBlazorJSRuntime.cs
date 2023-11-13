@@ -111,7 +111,7 @@ namespace SpawnDev.BlazorJS
         Task<ModuleNamespaceObject?> Import(string moduleName);
         bool IsDisplayModeStandalone();
         bool IsScope(GlobalScope scope);
-        bool IsUndefined(object identifier);
+        bool IsUndefined(string identifier);
         Task<bool> LoadScript(string src, string? ifThisGlobalVarIsUndefined = null);
         void LoadScript(string src, Action<bool> callback);
         Task LoadScripts(string[] sources);
@@ -134,6 +134,6 @@ namespace SpawnDev.BlazorJS
         void SetTimeout(Action callback, int msDelay);
         void SetTimeout(Callback callback, int msDelay);
         IJSInProcessObjectReference ToJSRef(ElementReference elementRef);
-        string TypeOf(object identifier);
+        string TypeOf(string identifier);
     }
 }

@@ -113,7 +113,7 @@ namespace SpawnDev.BlazorJS.Diagnostics
 
         public bool ShouldAnalyze<T>(T obj) where T : JSObject
         {
-            var typeOf = obj == null || obj.JSRef == null ? "" : JS.TypeOf(obj);
+            var typeOf = obj == null || obj.JSRef == null ? "" : obj.JSRef.PropertyType();
             if (string.IsNullOrEmpty(typeOf) || typeOf == "symbol") return false;
             var instanceOf = obj == null || obj.JSRef == null ? "" : obj.JSRef.GetConstructorName();
             return !string.IsNullOrEmpty(instanceOf) && !Analyzed.ContainsKey(instanceOf);
@@ -121,7 +121,7 @@ namespace SpawnDev.BlazorJS.Diagnostics
         public void RequestFullAnalysis<T>(T obj, JSPropertyInfo jsp) where T : JSObject
         {
             jsp.FullAnalysis = false;
-            var typeOf = obj == null || obj.JSRef == null ? "" : JS.TypeOf(obj);
+            var typeOf = obj == null || obj.JSRef == null ? "" : obj.JSRef.PropertyType();
             if (string.IsNullOrEmpty(typeOf)) return;
             var instanceOf = obj == null || obj.JSRef == null ? "" : obj.JSRef.GetConstructorName();
             if (string.IsNullOrEmpty(instanceOf)) return;

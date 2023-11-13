@@ -36,7 +36,7 @@ var initFunc = function () {
             // undefined and null can actually be property keys but that fact is ignored here atm
             target = parent;
             parent = null;
-        } else if (typeof path === 'string' && !(parent && typeof parent[path] !== 'undefined')) {
+        } else if (typeof path === 'string' && typeof parent[path] === 'undefined') {
             var parts = path.split('.');
             propertyName = parts[parts.length - 1];
             for (var i = 0; i < parts.length - 1; i++) {

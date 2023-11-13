@@ -53,31 +53,52 @@ builder.Services.AddSingleton<JSObjectAnalyzer>();
 
 //Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
 
-#if DEBUG && false
+#if DEBUG && true
 var host = builder.Build();
+
+var ms = host.Services.GetRequiredService<IMathsService>();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
 var sym = new Symbol("desc_test");
+
 JS.Log("sym", sym);
 
 var methods = typeof(IMathsService).GetMethods();
 
-foreach (MethodInfo item in methods)
+var tmethod = methods.FirstOrDefault(o => o.Name == "TestGenerics");
+Console.WriteLine(tmethod.SerializeMethodSignature());
+var typedMethod = tmethod.MakeGenericMethod(typeof(string), typeof(int));
+Console.WriteLine(typedMethod.SerializeMethodSignature());
+
+
+var serializedGenericMethod = typedMethod.SerializeMethodSignature();
+
+if (MethodInfoExtension.DeserializeMethodSignature(serializedGenericMethod, out Type? tmm, out MethodInfo? mmm))
 {
-    //var stopwatch = Stopwatch.StartNew();
-    //var i = 0;
-    //while(stopwatch.Elapsed.TotalSeconds < 1.0d)
-    //{
-    //    var signature = item.GetMethodSignatureHash();
-    //    i++;
-    //}
-    Console.WriteLine(item.GetMethodSignature());
+    var ggg = "";
+
+    var rett = mmm.Invoke(ms, new object?[] { "hoora", 626 });
+    var artisawesome = true;
 }
 
+var nmt5 = true;
+
+//foreach (MethodInfo item in methods)
+//{
+//    //var stopwatch = Stopwatch.StartNew();
+//    //var i = 0;
+//    //while(stopwatch.Elapsed.TotalSeconds < 1.0d)
+//    //{
+//    //    var signature = item.GetMethodSignatureHash();
+//    //    i++;
+//    //}
+//    Console.WriteLine(item.GetMethodSignature());
+//}
 
 
-var nmtt = true;
+
+//var nmtt = true;
 
 //var number = JS.ReturnMe<Number>(155);
 //var g = number * 8;

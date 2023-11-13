@@ -92,6 +92,21 @@
     }
 
     [TestMethod]
+    public async Task WebWorkerGenericsTest()
+    {
+        if (!_webWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        using var worker = await _webWorkerService.GetWebWorker();
+        var mathService = worker.GetService<IMathsService>();
+        var value1 = "apples";
+        var value2 = 42;
+        var value2ReadBack = await mathService.TestGenerics(value1, value2);
+        if (value2ReadBack != value2) throw new Exception("Unexpected result");
+    }
+
+    [TestMethod]
     public async Task WebWorkerTest()
     {
         if (!_webWorkerService.WebWorkerSupported)

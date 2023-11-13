@@ -229,10 +229,10 @@ namespace SpawnDev.BlazorJS
         public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
         // bool IsUndefined(JSObject obj, object? identifier = null) => JSInterop.TypeOf(obj, identifier) == "undefined";
-        public bool IsUndefined(object identifier) => JSInterop.GlobalTypeOf(identifier) == "undefined";
+        public bool IsUndefined(string identifier) => JSInterop.GlobalTypeOf(identifier) == "undefined";
         //public string TypeOf(JSObject obj, object? identifier = null) => JSInterop.TypeOf(obj, identifier);
         //public string TypeOf(JSObject obj, int identifier) => JSInterop.TypeOf(obj, identifier);
-        public string TypeOf(object identifier) => JSInterop.GlobalTypeOf(identifier);
+        public string TypeOf(string identifier) => JSInterop.GlobalTypeOf(identifier);
         public void Log(params object?[] args) => CallApplyVoid("console.log", args);
         //public string GetConstructorName(object identifier)
         //{

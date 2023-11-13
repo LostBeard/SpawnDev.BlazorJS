@@ -25,6 +25,8 @@ namespace SpawnDev.BlazorJS.Test.Services
         Task<string> TestMultiSigMethod(string value);
         Task<double> TestMultiSigMethod(int value);
         Task<string> TestMultiSigMethod(string value, double dblValue);
+
+        Task<T2> TestGenerics<T1, T2>(T1 value1, T2 value2);
     }
 
     /// <summary>
@@ -195,6 +197,13 @@ namespace SpawnDev.BlazorJS.Test.Services
         public Task<string> TestMultiSigMethod(string value, double dblValue)
         {
             return Task.FromResult(value + " " + dblValue);
+        }
+
+        public Task<T2> TestGenerics<T1, T2>(T1 value1, T2 value2)
+        {
+            var typeofT1 = typeof(T1);
+            var typeofT2 = typeof(T2);
+            return Task.FromResult(value2);
         }
     }
 }

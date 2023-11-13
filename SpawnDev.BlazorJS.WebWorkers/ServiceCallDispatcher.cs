@@ -186,6 +186,15 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 }
                 else if (!string.IsNullOrEmpty(msgBase.TargetType) && !string.IsNullOrEmpty(msgBase.TargetName))
                 {
+                    // TODO - handle exceptions better.
+                    // Currently some caused by bad calls throw exceptions here which leaves the caller in the other cotnext waiting with no reason
+                    // Also, try to implementing code to allow calling generic methods
+                    object? retValue = null;
+                    string? err = null;
+                    object?[]? callArgs0 = null;
+                    var hasReturnValue = false;
+                    var finalReturnTypeAllowTransfer = true;
+                    var finalReturnType = typeof(void);
                     try
                     {
                         args = msgBase.GetData<IJSInProcessObjectReference>();
@@ -198,56 +207,67 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         throw new Exception($"ERROR: {nameof(ServiceCallDispatcher)} OnMessage - Service type not found {msgBase.TargetType}");
                     }
                     object? service = _serviceProvider.GetRequiredService(serviceType);
-                    var methodInfo = GetBestInstanceMethod(serviceType, msgBase.TargetName, argsLength);
-                    var returnType = methodInfo.ReturnType;
-                    var isAwaitable = returnType.IsAsync();
-                    var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
-                    var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-                    var finalReturnTypeAllowTransfer = true;
-                    var transferAttrMethod = finalReturnTypeIsVoid ? null : (WorkerTransferAttribute?)finalReturnType.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
-                    if (transferAttrMethod != null)
+                    if (service == null)
                     {
-                        finalReturnTypeAllowTransfer = transferAttrMethod.Transfer;
+                        err = $"Service type not found: {msgBase.TargetType}";
                     }
-                    var callArgs0 = PostDeserializeArgs(msgBase.RequestId, methodInfo, argsLength, args.Get);
-                    var hasReturnValue = !finalReturnTypeIsVoid;
-                    object? retValue = null;
-                    string? err = null;
-                    try
+                    else
                     {
-                        var retv = methodInfo.Invoke(service, callArgs0);
-                        if (retv is Task t)
+                        var methodInfo = GetBestInstanceMethod(serviceType, msgBase.TargetName, argsLength);
+                        if (methodInfo == null)
                         {
-                            await t;
-                            if (t.Exception != null)
+                            err = $"Method signature not found: {msgBase.TargetName}";
+                        }
+                        else
+                        {
+                            var returnType = methodInfo.ReturnType;
+                            var isAwaitable = returnType.IsAsync();
+                            finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
+                            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
+                            var transferAttrMethod = finalReturnTypeIsVoid ? null : (WorkerTransferAttribute?)finalReturnType.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
+                            if (transferAttrMethod != null)
                             {
-                                err = t.Exception.Message;
+                                finalReturnTypeAllowTransfer = transferAttrMethod.Transfer;
                             }
-                            else if (!finalReturnTypeIsVoid)
+                            callArgs0 = PostDeserializeArgs(msgBase.RequestId, methodInfo, argsLength, args.Get);
+                            hasReturnValue = !finalReturnTypeIsVoid;
+                            try
                             {
-                                retValue = returnType.GetProperty("Result").GetValue(retv, null);
+                                var retv = methodInfo.Invoke(service, callArgs0);
+                                if (retv is Task t)
+                                {
+                                    await t;
+                                    if (t.Exception != null)
+                                    {
+                                        err = t.Exception.Message;
+                                    }
+                                    else if (!finalReturnTypeIsVoid)
+                                    {
+                                        retValue = returnType.GetProperty("Result").GetValue(retv, null);
+                                    }
+                                }
+                                else if (retv is ValueTask vt)
+                                {
+                                    await vt;
+                                    if (vt.IsFaulted)
+                                    {
+                                        err = "Call failed";
+                                    }
+                                    else if (!finalReturnTypeIsVoid)
+                                    {
+                                        retValue = returnType.GetProperty("Result").GetValue(retv, null);
+                                    }
+                                }
+                                else if (!finalReturnTypeIsVoid)
+                                {
+                                    retValue = retv;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                err = ex.Message;
                             }
                         }
-                        else if (retv is ValueTask vt)
-                        {
-                            await vt;
-                            if (vt.IsFaulted)
-                            {
-                                err = "Call failed";
-                            }
-                            else if (!finalReturnTypeIsVoid)
-                            {
-                                retValue = returnType.GetProperty("Result").GetValue(retv, null);
-                            }
-                        }
-                        else if (!finalReturnTypeIsVoid)
-                        {
-                            retValue = retv;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        err = ex.Message;
                     }
 
                     //if (retValue == null) {
@@ -255,7 +275,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     //}
 
                     var autoDisposeArgs = true;
-                    if (autoDisposeArgs)
+                    if (autoDisposeArgs && callArgs0 != null)
                     {
                         foreach (var ca in callArgs0)
                         {
@@ -482,7 +502,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public void CallAsync(Type serviceType, MethodInfo methodInfo, object?[]? args, Action<Exception?, object?> callback)
         {
             var argsLength = args != null ? args.Length : 0;
-            var methodName = methodInfo.GetMethodSignature();
+            var methodName = methodInfo.SerializeMethodSignature();
             //var methodInfo = GetBestInstanceMethod(serviceType, methodInfo, argsLength);
             var returnType = methodInfo.ReturnType;
             var isAwaitable = returnType.IsAsync();
@@ -642,7 +662,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return genericAction;
         }
 
-        object?[]? PostDeserializeArgs(string requestId, MethodInfo methodInfo, int argsLength, Func<Type, int, object?> getArg)
+        object?[]? PostDeserializeArgs(string requestId, MethodInfo methodInfo, int argsLength, Func<Type, object, object?> getArg)
         {
             var methodsParamTypes = methodInfo.GetParameters();
             var ret = new object?[argsLength];
@@ -769,13 +789,25 @@ namespace SpawnDev.BlazorJS.WebWorkers
         private MethodInfo? GetBestInstanceMethod<T>(string identifier, int paramCount) => GetBestInstanceMethod(typeof(T), identifier, paramCount);
         private MethodInfo? GetBestInstanceMethod(Type classType, string identifier, int paramCount)
         {
-            if (identifier.Contains(" "))
+#if DEBUG
+            Console.WriteLine(identifier);
+#endif
+            if (identifier.StartsWith("{"))
             {
-                // full method signature
+                // full method signature (supprots generic types)
+                if (MethodInfoExtension.DeserializeMethodSignature(identifier, out var type, out var methodInfo))
+                {
+                    return methodInfo;
+                }
+            }
+            else if (identifier.Contains(" "))
+            {
+                // full method signature (except generics)
                 return classType.GetMethodFromSignature(identifier);
             }
             else
             {
+                // name only
                 var instanceMethods = classType
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(m => m.Name == identifier)
@@ -786,6 +818,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 var best = instanceMethods.FirstOrDefault();
                 return best;
             }
+            return null;
         }
 
         public bool IsDisposed { get; private set; } = false;

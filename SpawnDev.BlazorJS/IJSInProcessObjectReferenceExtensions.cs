@@ -1,12 +1,6 @@
-﻿using Microsoft.JSInterop.Implementation;
-using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop.Implementation;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS
 {
@@ -36,10 +30,10 @@ namespace SpawnDev.BlazorJS
         //public static void Set(this IJSInProcessObjectReference targetObject, long identifier, object? value) => JSInterop.Set(targetObject, identifier, value);
         //public static void Set(this IJSInProcessObjectReference targetObject, object identifier, object? value) => JSInterop.Set(targetObject, identifier, value);
         public static T Get<T>(this IJSInProcessObjectReference targetObject, object identifier) => JSInterop.Get<T>(targetObject, identifier);
-        public static T Get<T>(this IJSInProcessObjectReference targetObject, int identifier) => JSInterop.Get<T>(targetObject, identifier);
-        public static T Get<T>(this IJSInProcessObjectReference targetObject, long identifier) => JSInterop.Get<T>(targetObject, identifier);
+        //public static T Get<T>(this IJSInProcessObjectReference targetObject, int identifier) => JSInterop.Get<T>(targetObject, identifier);
+        //public static T Get<T>(this IJSInProcessObjectReference targetObject, long identifier) => JSInterop.Get<T>(targetObject, identifier);
         public static object? Get(this IJSInProcessObjectReference targetObject, Type returnType, object identifier) => JSInterop.Get(returnType, targetObject, identifier);
-        public static object? Get(this IJSInProcessObjectReference targetObject, Type returnType, int identifier) => JSInterop.Get(returnType, targetObject, identifier);
+        //public static object? Get(this IJSInProcessObjectReference targetObject, Type returnType, int identifier) => JSInterop.Get(returnType, targetObject, identifier);
 
         #region IJSInProcessObjectReference Get Async
         public static Task<T> GetAsync<T>(this IJSInProcessObjectReference targetObject, object identifier) => JSInterop.GetAsync<T>(targetObject, identifier);

@@ -49,6 +49,10 @@ namespace SpawnDev.BlazorJS {
             }
             return type.Name;
         }
+        public static string GetFullName(this Type type)
+        {
+            return string.IsNullOrEmpty(type.FullName) ? type.Name : type.FullName;
+        }
         public static string GetFormattedName(this MethodInfo mi)
         {
             try
