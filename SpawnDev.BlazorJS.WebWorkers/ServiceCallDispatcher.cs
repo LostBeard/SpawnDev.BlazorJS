@@ -4,6 +4,7 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using static SpawnDev.BlazorJS.MethodInfoExtension;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
@@ -502,8 +503,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public void CallAsync(Type serviceType, MethodInfo methodInfo, object?[]? args, Action<Exception?, object?> callback)
         {
             var argsLength = args != null ? args.Length : 0;
-            var methodName = methodInfo.SerializeMethodSignature();
-            //var methodInfo = GetBestInstanceMethod(serviceType, methodInfo, argsLength);
+            var methodName = methodInfo.GetSerializableMethodInfo().ToString();
             var returnType = methodInfo.ReturnType;
             var isAwaitable = returnType.IsAsync();
             var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
@@ -794,11 +794,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
 #endif
             if (identifier.StartsWith("{"))
             {
-                // full method signature (supprots generic types)
-                if (MethodInfoExtension.DeserializeMethodSignature(identifier, out var type, out var methodInfo))
-                {
-                    return methodInfo;
-                }
+                // full method signature (supports generic types)
+                var smi = SerializableMethodInfo.FromString(identifier);
+                return smi == null ? null : smi.Resolve();
             }
             else if (identifier.Contains(" "))
             {

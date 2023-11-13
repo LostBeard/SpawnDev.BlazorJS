@@ -53,7 +53,7 @@ builder.Services.AddSingleton<JSObjectAnalyzer>();
 
 //Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
 
-#if DEBUG && true
+#if DEBUG && false
 var host = builder.Build();
 
 var ms = host.Services.GetRequiredService<IMathsService>();
@@ -67,17 +67,16 @@ JS.Log("sym", sym);
 var methods = typeof(IMathsService).GetMethods();
 
 var tmethod = methods.FirstOrDefault(o => o.Name == "TestGenerics");
-Console.WriteLine(tmethod.SerializeMethodSignature());
+Console.WriteLine(tmethod.GetSerializableMethodInfo());
 var typedMethod = tmethod.MakeGenericMethod(typeof(string), typeof(int));
-Console.WriteLine(typedMethod.SerializeMethodSignature());
+Console.WriteLine(typedMethod.GetSerializableMethodInfo());
 
 
-var serializedGenericMethod = typedMethod.SerializeMethodSignature();
+var serializedGenericMethod = typedMethod.GetSerializableMethodInfo();
 
-if (MethodInfoExtension.DeserializeMethodSignature(serializedGenericMethod, out Type? tmm, out MethodInfo? mmm))
+if (serializedGenericMethod.Resolve(out Type? tmm, out MethodInfo? mmm))
 {
     var ggg = "";
-
     var rett = mmm.Invoke(ms, new object?[] { "hoora", 626 });
     var artisawesome = true;
 }
