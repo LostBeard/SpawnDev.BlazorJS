@@ -77,21 +77,6 @@ namespace SpawnDev.BlazorJS
             if (reflectedType == null) return false;
             var methodsWithName = reflectedType.GetMethods().Where(o => o.Name == methodInfoSerializable.MethodName);
             MethodInfo? mi = null;
-            Type[] genericArguments = new Type[0];
-            if (methodInfoSerializable.GenericArguments != null)
-            {
-                genericArguments = new Type[methodInfoSerializable.GenericArguments.Count];
-                for (var i = 0; i < genericArguments.Length; i++)
-                {
-                    var gTypeName = methodInfoSerializable.GenericArguments[i];
-                    var gType = GetType(gTypeName);
-                    if (gType == null)
-                    {
-                        throw new Exception("Generic parameter type not found.");
-                    }
-                    genericArguments[i] = gType;
-                }
-            }
             foreach (var method in methodsWithName)
             {
                 var msi = new SerializableMethodInfo(method, false);
@@ -105,7 +90,22 @@ namespace SpawnDev.BlazorJS
             }
             if (mi != null)
             {
-                if (mi.IsGenericMethod)
+                Type[] genericArguments = new Type[0];
+                if (methodInfoSerializable.GenericArguments != null)
+                {
+                    genericArguments = new Type[methodInfoSerializable.GenericArguments.Count];
+                    for (var i = 0; i < genericArguments.Length; i++)
+                    {
+                        var gTypeName = methodInfoSerializable.GenericArguments[i];
+                        var gType = GetType(gTypeName);
+                        if (gType == null)
+                        {
+                            throw new Exception("Generic parameter type not found.");
+                        }
+                        genericArguments[i] = gType;
+                    }
+                }
+                if (mi.IsGenericMethod && genericArguments.Length > 0)
                 {
                     mi = mi.MakeGenericMethod(genericArguments);
                 }
