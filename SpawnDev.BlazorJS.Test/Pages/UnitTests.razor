@@ -102,7 +102,7 @@
         var mathService = worker.GetService<IMathsService>();
         var value1 = "apples";
         var value2 = 42;
-        var value2ReadBack = await mathService.TestGenerics(value1, value2);
+        var value2ReadBack = await mathService.TestGenerics<string, int>(value1, value2);
         if (value2ReadBack != value2) throw new Exception("Unexpected result");
     }
 

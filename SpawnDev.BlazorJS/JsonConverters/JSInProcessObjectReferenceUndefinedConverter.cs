@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
         public override void Write(Utf8JsonWriter writer, JSInProcessObjectReferenceUndefined value, JsonSerializerOptions options)
         {
-            // below write the instance as json so teh reviver can pick it up
+            // below write the instance as json so the reviver can pick it up
             JsonSerializer.Serialize(writer, value);
         }
     }

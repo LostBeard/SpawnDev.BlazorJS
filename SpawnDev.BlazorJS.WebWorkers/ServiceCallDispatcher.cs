@@ -344,7 +344,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 RequestId = requestId,
                 TargetName = methodName,
-                TargetType = serviceType.FullName,
+                TargetType = serviceType.FullName ?? serviceType.Name,
                 Data = msgData,
             };
             var t = new TaskCompletionSource<object?>();
@@ -390,7 +390,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 RequestId = requestId,
                 TargetName = methodName,
-                TargetType = typeof(TService).FullName,
+                TargetType = serviceType.FullName ?? serviceType.Name,
                 Data = msgData,
             };
             var t = new TaskCompletionSource<TResult>();
@@ -456,7 +456,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 RequestId = requestId,
                 TargetName = methodName,
-                TargetType = serviceType.FullName,
+                TargetType = serviceType.FullName ?? serviceType.Name,
                 Data = msgData,
             };
             var workerTask = new WebWorkerCallMessageTask((args) =>
@@ -503,7 +503,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public void CallAsync(Type serviceType, MethodInfo methodInfo, object?[]? args, Action<Exception?, object?> callback)
         {
             var argsLength = args != null ? args.Length : 0;
-            var methodName = methodInfo.GetSerializableMethodInfo().ToString();
+            var methodName = SerializableMethodInfo.SerializeMethodInfo(methodInfo);
             var returnType = methodInfo.ReturnType;
             var isAwaitable = returnType.IsAsync();
             var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
@@ -514,7 +514,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 RequestId = requestId,
                 TargetName = methodName,
-                TargetType = serviceType.FullName,
+                TargetType = serviceType.FullName ?? serviceType.Name,
                 Data = msgData,
             };
             var workerTask = new WebWorkerCallMessageTask((args) =>
@@ -729,7 +729,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 RequestId = requestId,
                 TargetName = methodName,
-                TargetType = typeof(TService).FullName,
+                TargetType = serviceType.FullName ?? serviceType.Name,
                 Data = msgData,
             };
             var t = new TaskCompletionSource<int>();
@@ -784,28 +784,18 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return additionalCallArgs.Where(o => o.Name == p.Name && o.Type == p.ParameterType).FirstOrDefault();
         }
 
-        private static Type AsyncStateMachineAttributeType = typeof(AsyncStateMachineAttribute);
-        private static bool IsAsyncMethod(MethodInfo method) => method.GetCustomAttribute(AsyncStateMachineAttributeType) != null;
         private MethodInfo? GetBestInstanceMethod<T>(string identifier, int paramCount) => GetBestInstanceMethod(typeof(T), identifier, paramCount);
         private MethodInfo? GetBestInstanceMethod(Type classType, string identifier, int paramCount)
         {
-#if DEBUG
-            Console.WriteLine(identifier);
-#endif
             if (identifier.StartsWith("{"))
             {
-                // full method signature (supports generic types)
-                var smi = SerializableMethodInfo.FromString(identifier);
-                return smi == null ? null : smi.Resolve();
-            }
-            else if (identifier.Contains(" "))
-            {
-                // full method signature (except generics)
-                return classType.GetMethodFromSignature(identifier);
+                // serialized SerializableMethodInfo full method signature (supports generic types)
+                var best = SerializableMethodInfo.DeserializeMethodInfo(identifier);
+                return best;
             }
             else
             {
-                // name only
+                // name of Method only
                 var instanceMethods = classType
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(m => m.Name == identifier)
@@ -816,7 +806,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 var best = instanceMethods.FirstOrDefault();
                 return best;
             }
-            return null;
         }
 
         public bool IsDisposed { get; private set; } = false;

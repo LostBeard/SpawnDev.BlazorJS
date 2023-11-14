@@ -60,26 +60,19 @@ var ms = host.Services.GetRequiredService<IMathsService>();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
-var sym = new Symbol("desc_test");
+//var sym = new Symbol("desc_test");
 
-JS.Log("sym", sym);
+//JS.Log("sym", sym);
 
 var methods = typeof(IMathsService).GetMethods();
 
 var tmethod = methods.FirstOrDefault(o => o.Name == "TestGenerics");
-Console.WriteLine(tmethod.GetSerializableMethodInfo());
 var typedMethod = tmethod.MakeGenericMethod(typeof(string), typeof(int));
-Console.WriteLine(typedMethod.GetSerializableMethodInfo());
-
-
-var serializedGenericMethod = typedMethod.GetSerializableMethodInfo();
-
-if (serializedGenericMethod.Resolve(out Type? tmm, out MethodInfo? mmm))
-{
-    var ggg = "";
-    var rett = mmm.Invoke(ms, new object?[] { "hoora", 626 });
-    var artisawesome = true;
-}
+var h1 = typedMethod.GetMethodHash();
+var mmmm = SerializableMethodInfo.DeserializeMethodInfo(SerializableMethodInfo.SerializeMethodInfo(typedMethod));
+var h2 = mmmm.GetMethodHash();
+var rett3 = mmmm.Invoke(ms, new object?[] { "hoora", 626 });
+var artisawesome3 = true;
 
 var nmt5 = true;
 

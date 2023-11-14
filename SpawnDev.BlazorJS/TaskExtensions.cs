@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks.Sources;
-
-namespace SpawnDev.BlazorJS
+﻿namespace SpawnDev.BlazorJS
 {
     public static class TaskExtensions
     {
@@ -9,7 +7,9 @@ namespace SpawnDev.BlazorJS
             await _this;
             var typeofTask = _this.GetType();
             if (!typeofTask.IsGenericType) return null;
-            var retValue = _this.GetType().GetProperty("Result").GetValue(_this, null);
+            var resultProperty = typeofTask.GetProperty("Result");
+            if (resultProperty == null) return null;
+            var retValue = resultProperty.GetValue(_this, null);
             return retValue;
         }
     }

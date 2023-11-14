@@ -1,39 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS
 {
     public static class MethodInfoExtension
     {
-        static ulong CalculateHash(string read)
+        private static Type AsyncStateMachineAttributeType = typeof(AsyncStateMachineAttribute);
+        /// <summary>
+        /// Returns true if the method has an async operator.<br />
+        /// Checked by looking for AsyncStateMachineAttribute which indicates method has the async operator.
+        /// </summary>
+        /// <param name="method"></param>
+        /// <returns></returns>
+        public static bool IsAsyncMethod(this MethodInfo method) => method.GetCustomAttribute(AsyncStateMachineAttributeType) != null;
+
+        /// <summary>
+        /// Knuth hash<br />
+        /// https://stackoverflow.com/a/9545731/3786270
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>UInt64 hash value</returns>
+        static ulong CalculateHash(string? value)
         {
+            if (string.IsNullOrEmpty(value)) return 0;
             ulong hashedValue = 3074457345618258791ul;
-            for (int i = 0; i < read.Length; i++)
+            for (int i = 0; i < value.Length; i++)
             {
-                hashedValue += read[i];
+                hashedValue += value[i];
                 hashedValue *= 3074457345618258799ul;
             }
             return hashedValue;
         }
-        public static ulong GetMethodSignatureHash(this MethodInfo _this)
-        {
-            var sig = _this.GetMethodSignature();
-            var hash = CalculateHash(sig);
-            return hash;
-        }
 
-        public static SerializableMethodInfo GetSerializableMethodInfo(this MethodInfo _this, bool includeGenerics = true)
-        {
-            return new SerializableMethodInfo(_this, includeGenerics);
-        }
+        /// <summary>
+        /// Hash will not change if the signature does not change. (Unlike MethodInfo.GetHashCode() which can change between builds)<br />
+        /// Return value is UInt64 Knuth hash of MethodInfo.ToString().<br />
+        /// Result will be unique per Type but not among all Types.
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
+        public static ulong GetMethodHash(this MethodInfo _this) => CalculateHash(_this.ToString());
 
-        public static string GetMethodSignature(this MethodInfo _this, bool includeNames = false)
+        /// <summary>
+        /// Returns a string that represents the method in a format that matches the method's signature code as much as possible.<br />
+        /// Needs work. Do not expect 100% accurate representation from this method at this time.<br />
+        /// Implementation will likely change.
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="includeNames"></param>
+        /// <returns></returns>
+        public static string GetMethodSignature(this MethodInfo _this, bool includeNames = true)
         {
             string ret;
             var mi = _this;
@@ -72,49 +89,6 @@ namespace SpawnDev.BlazorJS
             Console.WriteLine($"GetMethodSignature: {ret}");
 #endif
             return ret;
-        }
-
-        public static MethodInfo? GetMethodFromSignature(this Type _this, string key, bool includeNames = false)
-        {
-            if (!key.Contains(" "))
-            {
-                // if key does not contain a space it is assumed that it is just the method name, and that it is public instance
-                var methods = _this.GetMethods(BindingFlags.Public | BindingFlags.Instance);
-                foreach (MethodInfo item in methods)
-                {
-                    var sig = item.GetMethodSignature(includeNames);
-                    if (sig == key)
-                    {
-                        return item;
-                    }
-                }
-            }
-            else
-            {
-                var methods = _this.GetMethods();
-                foreach (MethodInfo item in methods)
-                {
-                    var sig = item.GetMethodSignature();
-                    if (sig == key)
-                    {
-                        return item;
-                    }
-                }
-            }
-            return null;
-        }
-        public static MethodInfo? GetMethodFromSignature(this Type _this, UInt64 key)
-        {
-            var methods = _this.GetMethods();
-            foreach (MethodInfo item in methods)
-            {
-                var sig = item.GetMethodSignatureHash();
-                if (sig == key)
-                {
-                    return item;
-                }
-            }
-            return null;
         }
     }
 }

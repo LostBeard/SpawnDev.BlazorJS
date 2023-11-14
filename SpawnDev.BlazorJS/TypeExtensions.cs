@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 
-namespace SpawnDev.BlazorJS {
-    public static class TypeExtensions {
+namespace SpawnDev.BlazorJS
+{
+    public static class TypeExtensions
+    {
         public static bool IsAsync(this Type type) => type.IsTask() || type.IsValueTask();
         public static Type? AsyncReturnType(this Type type) => type.IsAsync() ? type.GetGenericArguments().FirstOrDefault() ?? typeof(void) : null;
         public static bool IsTask(this Type type) => typeof(Task).IsAssignableFrom(type);
