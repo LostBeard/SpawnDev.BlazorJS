@@ -278,7 +278,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
         public class PromiseCatchException<T> : Exception
         {
-            public T CatchValue { get; set; }
+            public T CatchValue { get; init; }
             public PromiseCatchException(T catchValue)
             {
                 CatchValue = catchValue;

@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
@@ -41,6 +36,14 @@ namespace SpawnDev.BlazorJS.WebWorkers
             _this.AddSingleton<ServiceWorkerEventHandler>(sp => sp.GetRequiredService<TService>(), GlobalScope.ServiceWorker);
             return _this;
         }
+        /// <summary>
+        /// RegisterServiceWorker a class that implements ServiceWorkerEventHandler to handle ServiceWorker events
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="_this"></param>
+        /// <param name="startScope"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public static IServiceCollection RegisterServiceWorker<TService>(this IServiceCollection _this, GlobalScope startScope, ServiceWorkerConfig? config = null) where TService : ServiceWorkerEventHandler
         {
             ServiceWorkerConfig = config ?? new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.Register };
@@ -52,7 +55,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return _this;
         }
         /// <summary>
-        /// If a ServiceWorker is no longer desired, it can be set unregister.
+        /// If a ServiceWorker is no longer desired, it can be set to unregister.
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
