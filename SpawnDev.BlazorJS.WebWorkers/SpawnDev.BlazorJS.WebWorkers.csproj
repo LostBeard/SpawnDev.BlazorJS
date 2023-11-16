@@ -7,6 +7,8 @@
 		<Version>2.2.36</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<EmbedAllSources>true</EmbedAllSources>
+		<DebugType>Embedded</DebugType>
 		<Title>SpawnDev.BlazorJS.WebWorkers</Title>
 		<Authors>LostBeard</Authors>
 		<Description>Easily call Services in separate threads with WebWorkers and SharedWebWorkers. Run Blazor WASM in the ServiceWorker.</Description>
