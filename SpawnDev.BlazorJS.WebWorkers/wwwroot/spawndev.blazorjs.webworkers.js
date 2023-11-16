@@ -5,7 +5,7 @@
 // SpawnDev.BlazorJS.WebWorkers
 // _content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js
 // this script loads a fake window and document environment
-// to enable loading the Blazor WASM app in a DedicatedWorkerGlobalScope, a SharedWorkerGlobalScope or a ServiceWorkerGlobalScope
+// to enable loading the Blazor WASM app in a DedicatedWorkerGlobalScope, SharedWorkerGlobalScope or ServiceWorkerGlobalScope
 
 var checkIfGlobalThis = function (it) {
     return it && it.Math == Math && it;
@@ -328,7 +328,7 @@ var initWebWorkerBlazor = async function () {
         }
         // init document
         document.initDocument();
-        // If using the Blazor Hybrid runtime we have to start the webassembly runtime manually (requires previous patching of the runtime done above)
+        // If using the Blazor United runtime we have to start the webassembly runtime manually (requires previous patching of the runtime; done above)
         if (blazorRuntimeType === 'united') {
             consoleLog('Starting Blazor United webassembly runtime');
             self.__blazorInternal.startWebAssemblyIfNotStarted();
