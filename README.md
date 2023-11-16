@@ -21,8 +21,10 @@
 Full Blazor WebAssembly and Javascript interop. Create, access properties, call methods, and add/remove event handlers of any Javascript objects the .Net way without writing Javascript.  
 
 ### Supports:
-- Blazor WebAssembly .Net 6, 7, and 8
-- Blazor United .Net 8 (in WebAssembly project only)
+- Blazor WebAssembly .Net 6, 7, and 8 
+- - Tested VS Template: Blazor WebAssembly Standalone App
+- Blazor United .Net 8 (in WebAssembly project only) 
+- - Tested VS Template: Blazor Web App
 
 For more information about Blazor types:  
 [Blazor: versions, benefits and when to use it
