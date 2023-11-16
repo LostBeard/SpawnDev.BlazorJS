@@ -198,7 +198,7 @@ var initWebWorkerBlazor = async function () {
     // can be:
     // '' - none or unknown
     // 'wasm' - Using Blazor WebAssembly standalone runtime
-    // 'hybrid' - Using Blazor Hybrid runtime
+    // 'united' - Using Blazor United runtime
     // do on the fly worker compatiblility patching if needed 
     // add webworker-enabled attribute to the runtime if it is not already there
     async function detectBlazorRuntime(scriptNodes) {
@@ -223,8 +223,8 @@ var initWebWorkerBlazor = async function () {
                 }
                 // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
                 let jsStr = await getText(src);
-                // hybrid runtime doesn't start web assembly when it laods by default
-                // it waits until a webassembly rendered component is loaded but that won't happen so we patch
+                // united runtime doesn't start web assembly when it loads by default
+                // it waits until a webassembly rendered component is loaded but that won't happen in a worker so we patch
                 // the runtime to allow access to the method that actually starts webassembly directly
                 // self.__blazorInternal.startLoadingWebAssemblyIfNotStarted()
                 jsStr = jsStr.replace(/(this\.initialComponents=\[\],)/, '$1self.__blazorInternal=this,');
@@ -233,7 +233,7 @@ var initWebWorkerBlazor = async function () {
                     jsStr = fixModuleScript(jsStr, src);
                 }
                 scriptNode.text = jsStr;
-                return 'hybrid';
+                return 'united';
             }
         }
         return '';
@@ -329,8 +329,8 @@ var initWebWorkerBlazor = async function () {
         // init document
         document.initDocument();
         // If using the Blazor Hybrid runtime we have to start the webassembly runtime manually (requires previous patching of the runtime done above)
-        if (blazorRuntimeType === 'hybrid') {
-            consoleLog('Starting Blazor Hybrids webassembly runtime');
+        if (blazorRuntimeType === 'united') {
+            consoleLog('Starting Blazor United webassembly runtime');
             self.__blazorInternal.startWebAssemblyIfNotStarted();
         }
     }
