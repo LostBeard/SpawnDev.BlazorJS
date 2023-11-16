@@ -7,9 +7,12 @@
 
 var undefinedGets = {};
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
-function createProxiedObject(obj) {
+function createProxiedObject(obj, useIfDefined) {
     var ret = new Proxy(obj, {
         get(target, key) {
+            if (useIfDefined && typeof useIfDefined[key] !== 'undefined') {
+                return useIfDefined[key];
+            }
             var ret = target[key];
             var typeofProp = typeof ret;
             var propIsUndefined = typeofProp === 'undefined';
@@ -17,7 +20,7 @@ function createProxiedObject(obj) {
             var keyIsSymbolIterator = key == Symbol.iterator;
             var keyIsSymbol = typeofKey === 'symbol';
             var keyStr = keyIsSymbol ? key.toString() : key;
-            //consoleLog('get', target.constructor.name, keyStr, typeofProp === 'object' && typeofProp.constructor ? typeofProp.constructor.name : typeofProp, typeofProp !== 'function' ? ret : '(){ ... }');
+            consoleLog('get', target.constructor.name, keyStr, ret && ret.constructor ? ret.constructor.name : typeofProp, typeofProp !== 'function' ? ret : '(){ ... }');
             if (propIsUndefined) {
                 var getKey = target.constructor.name + '.' + keyStr;
                 if (!undefinedGets[getKey]) {
@@ -28,7 +31,9 @@ function createProxiedObject(obj) {
             return ret;
         },
         set(target, key, value) {
-            //consoleLog('set', target.constructor.name, key);
+            if (typeof target[key] === 'undefined') {
+                consoleLog('set', target.constructor.name, key);
+            }
             target[key] = value;
             return true;
         },
@@ -42,7 +47,7 @@ function createProxiedObject(obj) {
         },
         ownKeys(target) {
             consoleLog('ownKeys', target.constructor.name);
-            return Object.keys(target);
+            return Reflect.ownKeys(target);
         },
         has(target, key) {
             consoleLog('has', target.constructor.name, key);
@@ -95,16 +100,56 @@ class WebStorage {
 
 class EventTargetFake {
     constructor() {
+        this.listeners = {};
         consoleLog(this.constructor.name, 'new');
     }
-    addEventListener(type, listener, options) {
+    addEventListener(type, callback, options) {
         consoleLog(this.constructor.name, 'addEventListener', type);
+        var callbacks = this.listeners[type];
+        if (typeof callbacks === 'undefined') {
+            callbacks = [];
+            this.listeners[type] = callbacks;
+        }
+        callbacks.push({
+            callback: callback,
+            options: options,
+        });
+        return true;
     }
-    removeEventListener(type, listener, options) {
+    removeEventListener(type, callback, options) {
         consoleLog(this.constructor.name, 'removeEventListener', type);
+        var callbacks = this.listeners[type];
+        if (typeof callbacks === 'undefined') {
+            return false;
+        }
+        if (callback) {
+            for (var i = 0; i < callbacks.length; i++) {
+                var listener = callbacks[i];
+                if (listener.callback === callback) {
+                    delete callbacks[i];
+                    return true;
+                }
+            }
+        } else {
+            delete this.listeners[type];
+            return true;
+        }
+        return false;
     }
     dispatchEvent(event) {
+        var type = event.type;
         consoleLog(this.constructor.name, 'dispatchEvent', event);
+        if (typeof type !== 'string') {
+            return false;
+        }
+        var listeners = this.listeners[type];
+        if (typeof listeners === 'undefined') {
+            return true;
+        }
+        for (var listener of listeners) {
+            listener.callback(event);
+        }
+        return true;
     }
 }
 
@@ -205,8 +250,7 @@ class Node extends EventTargetFake {
     }
 }
 
-// https://developer.mozilla.org/en-US/docs/Web/API/Document
-class HTMLDocument extends Node {
+class Document extends Node {
     constructor() {
         super();
         this._currentScript = null;
@@ -261,7 +305,7 @@ class HTMLDocument extends Node {
         this._readyState = state;
         consoleLog('document readystatechanged', state);
         // if events are enabled ...
-        // this.dispatchEvent('readystatechanged', state);
+        this.dispatchEvent(new Event('readystatechange'));
     }
     get documentElement() {
         return this._nodes.length == 0 ? null : this._nodes[0]
@@ -388,8 +432,9 @@ class HTMLDocument extends Node {
             }
         }
         this.activeElement = this.body;
-        consoleLog("document.dispatchEvent('DOMContentLoaded')");
-        this.setReadyState('interactive');
+        //document.dispatchEvent(new Event('DOMContentLoaded'));
+        //consoleLog("document.dispatchEvent('DOMContentLoaded')");
+        //this.setReadyState('interactive');
         if (this._importScriptsOnInit) {
             consoleLog("importing scripts from all script elements in document");
             var nodes = this.descendants();
@@ -399,9 +444,23 @@ class HTMLDocument extends Node {
                 }
             }
         }
+        this.setReadyState('interactive');
+
+        this.dispatchEvent(new Event('DOMContentLoaded'));
+        consoleLog("document.dispatchEvent('DOMContentLoaded')");
+
         consoleLog("window.dispatchEvent('load')");
+        window.dispatchEvent(new Event('load'));
         this.setReadyState('complete');
     }
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/API/Document
+class HTMLDocument extends Document {
+    constructor() {
+        super();
+    }
+
 }
 
 class CSSStyleDeclaration {
@@ -525,6 +584,7 @@ class HTMLAnchorElement extends HTMLElement {
     constructor() {
         super();
     }
+
 }
 class HTMLUnknownElement extends HTMLElement {
     constructor() {
@@ -628,6 +688,9 @@ class Comment extends HTMLElement {
         super();
         this.nodeType = Node.COMMENT_NODE;
     }
+    Symbol() {
+        return Symbol('comment_symbol');
+    }
 }
 
 class CharacterData extends Node {
@@ -644,6 +707,9 @@ class Text extends CharacterData {
     constructor(data) {
         super();
         this.nodeType = Node.TEXT_NODE;
+    }
+    Symbol() {
+        return Symbol('text_symbol');
     }
 }
 
@@ -665,6 +731,20 @@ class History {
     }
 }
 
+class WindowFake extends EventTargetFake {
+    constructor() {
+        super();
+
+    }
+}
+class NavigationFake extends EventTargetFake {
+    constructor() {
+        super();
+
+    }
+}
+
+
 (function () {
     if (typeof globalThisObj.document !== 'undefined') {
         return;
@@ -672,17 +752,8 @@ class History {
     var history = createProxiedObject(new History());
     var document = createProxiedObject(new HTMLDocument());
     // assign a proxied globaThis to window
-    globalThisObj.window = createProxiedObject(new Proxy(self, {
-        get(target, key) {
-            var ret = target[key];
-            if (key == 'addEventListener') {
-                ret = function (eventName) {
-                    consoleLog('window.addEventListener', eventName);
-                };
-            }
-            return ret;
-        },
-    }));
+    globalThisObj.window = createProxiedObject(self, new WindowFake());
+    globalThisObj.navigation = createProxiedObject(self, new NavigationFake());
     globalThisObj.window.parent = globalThisObj.window;
     globalThisObj.history = history;
     globalThisObj.document = document;
@@ -706,6 +777,16 @@ class History {
         pixelDepth: 24,
         width: 1920,
     };
+    globalThisObj.customElements = createProxiedObject({
+        elements: {},
+        define: function (name, constructor, options) {
+            consoleLog('customElements.define:', name);
+            this.elements[name] = {
+                constructor: constructor,
+                options: options,
+            };
+        }
+    });
     // document.baseURI (defaults to worker directory here, can be set later)
     var href = globalThisObj.location.href;
     var webWorkerContentDir = href.substring(0, href.lastIndexOf('/') + 1);

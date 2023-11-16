@@ -108,19 +108,14 @@ var documentBaseURI = (function () {
     return uri.toString();
 })();
 consoleLog('documentBaseURI', documentBaseURI);
-
 const webWorkersContent = new URL(`_content/SpawnDev.BlazorJS.WebWorkers/`, documentBaseURI).toString();
 consoleLog('spawndev.blazorjs.webworkers: loading fake window environment');
-// txml - xml parser
-// https://github.com/TobiasNickel/tXml
-importScripts(new URL('txml.min.js', webWorkersContent).toString());
 // faux DOM and document environment
 //importScripts('spawndev.blazorjs.webworkers.faux-env.js');
 importScripts(new URL('spawndev.blazorjs.webworkers.faux-env.js', webWorkersContent).toString());
 // faux dom and window environment has been created (currently empty)
 // set document.baseURI to the apps basePath (which is relative to this scripts path)
 document.baseURI = documentBaseURI;
-
 if (disableHotReload) {
     consoleLog('disabling hot reload on this thread');
     const scriptInjectedSentinel = '_dotnet_watch_ws_injected'
@@ -141,6 +136,7 @@ async function hasDynamicImport() {
 }
 
 var initWebWorkerBlazor = async function () {
+    var WebWorkerEnabledAttributeName = 'webworker-enabled';
     var dynamicImportSupported = await hasDynamicImport();
     // Firefox, and possibly some other browsers, do not support dynamic module import (import) in workers.
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
@@ -157,7 +153,7 @@ var initWebWorkerBlazor = async function () {
             consoleLog("webWorkersFetch", typeof resource, resource);
             if (typeof resource === 'string') {
                 // resource is a string
-                const newUrl = new URL(resource, document.baseURI);
+                let newUrl = new URL(resource, document.baseURI);
                 return fetchOrig(newUrl, options);
             } else {
                 // resource is a Request object
@@ -171,30 +167,78 @@ var initWebWorkerBlazor = async function () {
         var response = await fetch(new URL(href, document.baseURI));
         return await response.text();
     }
-    // Get index.html and parse it (for scripts, etc)
-    function parseHTML(html) {
-        var dom = txml.parse(html);
-        function addParentNode(children, parentNode) {
-            if (parentNode) parentNode.text = '';
-            for (let i = 0; i < children.length; i++) {
-                let child = children[i];
-                if (typeof child === 'string') {
-                    if (parentNode) parentNode.text = child;
-                    children.splice(i, 1);
-                    i--;
-                } else if (child) {
-                    child.parentNode = parentNode;
-                    if (child.children) {
-                        addParentNode(child.children, child);
-                    }
+    // Get index.html and parse it for scripts
+    function getScriptNodes(indexHtmlSrc) {
+        var scriptNodes = [];
+        var scriptPatt = /<script\s*(.*?)(?:\s*\/>|\s*>(.*?)<\/script>)/gms;
+        var attributesPatt = /([^\s=]+)(?:=(?:"([^"]*)"|'([^"]*)'|([^\s=]+)))?/gm;
+        var m = scriptPatt.exec(indexHtmlSrc);
+        while(m) {
+            let scriptNode = {
+                attributes: {},
+                text: m[2],
+            }
+            let scriptTagAttributes = m[1];
+            let attrMatch = attributesPatt.exec(scriptTagAttributes);
+            while (attrMatch) {
+                let attrName = attrMatch[1];
+                let attrValue = '';
+                if (attrMatch[2]) attrValue = attrMatch[2];
+                else if (attrMatch[3]) attrValue = attrMatch[3];
+                else if (attrMatch[4]) attrValue = attrMatch[4];
+                scriptNode.attributes[attrName] = attrValue;
+                attrMatch = attributesPatt.exec(scriptTagAttributes);
+            }
+            scriptNodes.push(scriptNode);
+            m = scriptPatt.exec(indexHtmlSrc);
+        }
+        return scriptNodes;
+    }
+    // detect the Blazor runtime type
+    // can be:
+    // '' - none or unknown
+    // 'wasm' - Using Blazor WebAssembly standalone runtime
+    // 'hybrid' - Using Blazor Hybrid runtime
+    // do on the fly worker compatiblility patching if needed 
+    // add webworker-enabled attribute to the runtime if it is not already there
+    async function detectBlazorRuntime(scriptNodes) {
+        for (var scriptNode of scriptNodes) {
+            let src = scriptNode.attributes.src;
+            if (!src) continue;
+            if (src.includes('_framework/blazor.webassembly.js')) {
+                if (typeof scriptNode.attributes[WebWorkerEnabledAttributeName] === 'undefined') {
+                    scriptNode.attributes[WebWorkerEnabledAttributeName] = '';
                 }
+                if (!dynamicImportSupported) {
+                    // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
+                    let jsStr = await getText(src);
+                    // fix dynamic imports
+                    scriptNode.text = fixModuleScript(jsStr, src);
+                }
+                return 'wasm';
+            }
+            if (src.includes('_framework/blazor.web.js')) {
+                if (typeof scriptNode.attributes[WebWorkerEnabledAttributeName] === 'undefined') {
+                    scriptNode.attributes[WebWorkerEnabledAttributeName] = '';
+                }
+                // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
+                let jsStr = await getText(src);
+                // hybrid runtime doesn't start web assembly when it laods by default
+                // it waits until a webassembly rendered component is loaded but that won't happen so we patch
+                // the runtime to allow access to the method that actually starts webassembly directly
+                // self.__blazorInternal.startLoadingWebAssemblyIfNotStarted()
+                jsStr = jsStr.replace(/(this\.initialComponents=\[\],)/, '$1self.__blazorInternal=this,');
+                if (!dynamicImportSupported) {
+                    // fix dynamic imports
+                    jsStr = fixModuleScript(jsStr, src);
+                }
+                scriptNode.text = jsStr;
+                return 'hybrid';
             }
         }
-        addParentNode(dom);
-        return dom;
+        return '';
     }
-    var dom = parseHTML(await getText('index.html'));
-    var indexHtmlScripts = txml.filter(dom, o => o.tagName && o.tagName.toLowerCase() === 'script');
+    //
     globalThisObj.importOverride = async function (src) {
         consoleLog('importOverride', src);
         var jsStr = await getText(src);
@@ -248,6 +292,12 @@ var initWebWorkerBlazor = async function () {
         return modulize;
     }
     async function initializeBlazor() {
+        // get index.html text for parsing
+        var indexHtmlSrc = await getText('./');
+        var scriptNodes = getScriptNodes(indexHtmlSrc);
+        // detect runtime type and do runtime patching if needed
+        var blazorRuntimeType = await detectBlazorRuntime(scriptNodes);
+        consoleLog(`BlazorRuntimeType: '${blazorRuntimeType}'`);
         // setup standard document
         var htmlEl = document.appendChild(document.createElement('html'));
         var headEl = htmlEl.appendChild(document.createElement('head'));
@@ -259,33 +309,30 @@ var initWebWorkerBlazor = async function () {
         // <div id="blazor-error-ui">
         var errorDiv = bodyEl.appendChild(document.createElement('div'));
         errorDiv.setAttribute('id', 'blazor-error-ui');
-        // <script src="_framework/blazor.webassembly.js"></script>
-        // load webworker-enabled scripts in order found in index.html (and _framework/blazor.webassembly.js)
-        for (var indexHtmlScript of indexHtmlScripts) {
-            let src = indexHtmlScript.attributes.src;
-            let isBlazorWebAssemblyJS = src && src.includes('_framework/blazor.webassembly.js');
-            let isWebWorkerEnabled = typeof indexHtmlScript.attributes['webworker-enabled'] !== 'undefined' && indexHtmlScript.attributes['webworker-enabled'] !== 'false';
-            if (!isBlazorWebAssemblyJS && !isWebWorkerEnabled) continue;
+        // load webworker-enabled scripts in order found in the root html file
+        for (var scriptNode of scriptNodes) {
+            let webWorkerEnabledValue = scriptNode.attributes[WebWorkerEnabledAttributeName];
+            let isWebWorkerEnabled = typeof webWorkerEnabledValue !== 'undefined' && webWorkerEnabledValue !== 'false';
+            if (!isWebWorkerEnabled) continue;
             let scriptEl = document.createElement('script');
-            if (indexHtmlScript.parentNode && indexHtmlScript.parentNode.tagName.toLowerCase() === 'head') {
+            if (scriptNode.parentNode && scriptNode.parentNode.tagName.toLowerCase() === 'head') {
                 headEl.appendChild(scriptEl);
             } else {
                 bodyEl.appendChild(scriptEl);
             }
-            for (var attr in indexHtmlScript.attributes) {
-                let attrValue = indexHtmlScript.attributes[attr];
+            for (var attr in scriptNode.attributes) {
+                let attrValue = scriptNode.attributes[attr];
                 scriptEl.setAttribute(attr, attrValue);
             }
-            if (indexHtmlScript.text) scriptEl.text = indexHtmlScript.text;
-            if (isBlazorWebAssemblyJS && !dynamicImportSupported) {
-                // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
-                let jsStr = await getText(src);
-                // fix dynamic imports
-                scriptEl.text = fixModuleScript(jsStr, src);
-            }
+            if (scriptNode.text) scriptEl.text = scriptNode.text;
         }
         // init document
         document.initDocument();
+        // If using the Blazor Hybrid runtime we have to start the webassembly runtime manually (requires previous patching of the runtime done above)
+        if (blazorRuntimeType === 'hybrid') {
+            consoleLog('Starting Blazor Hybrids webassembly runtime');
+            self.__blazorInternal.startWebAssemblyIfNotStarted();
+        }
     }
     await initializeBlazor();
 };
