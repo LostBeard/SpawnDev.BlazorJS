@@ -5,26 +5,25 @@
 </p>
 
 # NuGet
-
 | Package | Description |
 |---------|-------------|
 |**[SpawnDev.BlazorJS](#spawndevblazorjs)** <br /> [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS)| Enhanced Blazor WebAssembly Javascript interop | 
 |**[SpawnDev.BlazorJS.WebWorkers](#spawndevblazorjswebworkers)** <br /> [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.WebWorkers.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers)| Blazor WASM WebWorkers, SharedWebWorkers, and ServiceWorker |
 
 [Documentation](https://lostbeard.github.io/blazorjs-docs/)  
-[Help write the documentation](https://github.com/LostBeard/blazorjs-docs)  
-[Live Demo](https://blazorjs.spawndev.com/)
+[Edit Documentation](https://github.com/LostBeard/blazorjs-docs)  
+[Live Demo](https://blazorjs.spawndev.com/)  
  
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
 Full Blazor WebAssembly and Javascript interop. Create, access properties, call methods, and add/remove event handlers of any Javascript objects the .Net way without writing Javascript.  
 
-### Supports:
+### Supported .Net Versions
 - Blazor WebAssembly .Net 6, 7, and 8 
-- - Recommended VS Template: Blazor WebAssembly Standalone App
+- - Tested VS Template: Blazor WebAssembly Standalone App
 - Blazor United .Net 8 (in WebAssembly project only) 
-- - Recommended VS Template: Blazor Web App (Auto or WebAssembly interactive mode)
+- - Tested VS Template: Blazor Web App (Auto or WebAssembly interactive mode)
 
 For more information about Blazor types:  
 [Blazor: versions, benefits and when to use it
@@ -336,7 +335,11 @@ public void JSObjectClassTest() {
 }
 ```
 
-Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or use the growing library of over 100 of the most common Javascript objects, including ones for Window, HTMLDocument, WebStorage (localStorage and sessionStorage), WebGL, WebRTC, and more in SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that allow strongly typed use.
+Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or
+use the growing library of over 100 of the most common Javascript objects, including ones for 
+Window, Document, Storage (localStorage and sessionStorage), WebGL, WebRTC, and more in 
+SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that 
+allow strongly typed use.
 
 Below shows a section of the SpawnDev.BlazorJS.JSObjects.Window class. Window's base type, EventTarget, inherits from JSObject.
 ```cs
@@ -346,7 +349,7 @@ public class Window : EventTarget {
     // here is a property with both getter and setter
     public string? Name { get => JSRef.Get<string>("name"); set => JSRef.Set("name", value); }
     // here is a read only property that returns another JSObject type
-    public WebStorage LocalStorage => JSRef.Get<WebStorage>("localStorage");
+    public Storage LocalStorage => JSRef.Get<Storage>("localStorage");
     // here are methods
     public long SetTimeout(Callback callback, double delay) => JSRef.Call<long>("setTimeout", callback, delay);
     public void ClearTimeout(long requestId) => JSRef.CallVoid("clearTimeout", requestId);    

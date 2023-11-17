@@ -4,6 +4,9 @@ using System.Text;
 
 namespace SpawnDev.BlazorJS
 {
+    /// <summary>
+    /// Static class that contains MethodInfo extension methods
+    /// </summary>
     public static class MethodInfoExtension
     {
         private static Type AsyncStateMachineAttributeType = typeof(AsyncStateMachineAttribute);
@@ -89,6 +92,30 @@ namespace SpawnDev.BlazorJS
             Console.WriteLine($"GetMethodSignature: {ret}");
 #endif
             return ret;
+        }
+
+        /// <summary>
+        /// Returns a MethodInfo's Name with formatted generic arguments if any.
+        /// </summary>
+        /// <param name="mi"></param>
+        /// <returns></returns>
+        public static string GetFormattedName(this MethodInfo mi)
+        {
+            try
+            {
+                if (mi.IsGenericMethod)
+                {
+                    var name = mi.Name;
+                    var generics = mi.GetGenericArguments();
+                    string genericArguments = generics.Select(x => x.GetFormattedName()).Aggregate((x1, x2) => $"{x1}, {x2}");
+                    return $"{name}<{genericArguments}>";
+                }
+            }
+            catch (Exception ex)
+            {
+                var nmt = true;
+            }
+            return mi.Name;
         }
     }
 }
