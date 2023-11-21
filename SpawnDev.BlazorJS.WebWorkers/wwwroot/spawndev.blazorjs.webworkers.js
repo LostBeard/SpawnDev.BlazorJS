@@ -201,7 +201,7 @@ var initWebWorkerBlazor = async function () {
     // 'united' - Using Blazor United runtime
     // do on the fly worker compatiblility patching if needed 
     // add webworker-enabled attribute to the runtime if it is not already there
-    async function detectBlazorRuntime(scriptNodes, overrideUnitedRuntime = true) {
+    async function detectBlazorRuntime(scriptNodes, overrideUnitedRuntime) {
         for (var scriptNode of scriptNodes) {
             let src = scriptNode.attributes.src;
             if (!src) continue;
@@ -222,13 +222,21 @@ var initWebWorkerBlazor = async function () {
                     // it waits until a webassembly rendered component is loaded but that won't happen in a worker so we patch
                     // the runtime to allow access to the method that actually starts webassembly directly
                     // self.__blazorInternal.startLoadingWebAssemblyIfNotStarted()
-                    jsStr = jsStr.replace(/(this\.initialComponents=\[\],)/, '$1self.__blazorInternal=this,');
-                    if (!dynamicImportSupported) {
-                        // fix dynamic imports
-                        jsStr = fixModuleScript(jsStr, src);
+                    var placeHolderPatt = /(this\.initialComponents\s*=\s*\[\s*\],\s*)/;
+                    var m = placeHolderPatt.exec(jsStr);
+                    if (m) {
+                        jsStr = jsStr.replace(placeHolderPatt, '$1setTimeout(()=>this.startWebAssemblyIfNotStarted(),0),');
+                        if (!dynamicImportSupported) {
+                            // fix dynamic imports
+                            jsStr = fixModuleScript(jsStr, src);
+                        }
+                        scriptNode.text = jsStr;
+                        return 'united';
+                    } else {
+                        console.warn(`Failed to find Blazor United runtime 'placeHolderPatt' in '${src}' for on the fly patching. Will try Blazor WASM runtime '_framework/blazor.webassembly.js' as fallback.`);
+                        src = src.replace('_framework/blazor.web.js', '_framework/blazor.webassembly.js');
+                        scriptNode.attributes.src = src;
                     }
-                    scriptNode.text = jsStr;
-                    return 'united';
                 }
             }
             if (src.includes('_framework/blazor.webassembly.js')) {
@@ -337,11 +345,6 @@ var initWebWorkerBlazor = async function () {
         }
         // init document
         document.initDocument();
-        // If using the Blazor United runtime we have to start the webassembly runtime manually (requires previous patching of the runtime; done above)
-        if (blazorRuntimeType === 'united') {
-            consoleLog('Starting Blazor United webassembly runtime');
-            self.__blazorInternal.startWebAssemblyIfNotStarted();
-        }
     }
     await initializeBlazor();
 };
