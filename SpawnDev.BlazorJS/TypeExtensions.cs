@@ -32,6 +32,20 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static bool IsValueTask(this Type type) => typeof(ValueTask).IsAssignableFrom(type) || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ValueTask<>));
         /// <summary>
+        /// Returns true if the type is a generic typed version of ValueTask&lt;&gt;<br />
+        /// Ex. ValueTask&lt;string&gt; would return true
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsValueTaskTyped(this Type type) => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ValueTask<>);
+        /// <summary>
+        /// Returns true if the type is a generic typed version of Task&lt;&gt;<br />
+        /// Ex. Task&lt;string&gt; would return true
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsTaskTyped(this Type type) => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>);
+        /// <summary>
         /// Returns the type name formatted to better resemble the type as it would be written in C# code.<br />
         /// Formatting may not be accurate.<br />
         /// Implementation may change.
@@ -61,15 +75,17 @@ namespace SpawnDev.BlazorJS
             {
                 case "String": return "string";
                 case "Object": return "object";
-                case "Int32": return "int";
-                case "UInt32": return "uint";
+                case "Byte": return "byte";
                 case "Int16": return "short";
                 case "UInt16": return "ushort";
+                case "Int32": return "int";
+                case "UInt32": return "uint";
                 case "Int64": return "long";
                 case "UInt64": return "ulong";
                 case "Void": return "void";
                 case "Single": return "float";
                 case "Double": return "double";
+                case "Boolean": return "bool";
             }
             return type.Name;
         }

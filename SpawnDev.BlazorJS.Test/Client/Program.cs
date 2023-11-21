@@ -64,17 +64,17 @@ var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
 //JS.Log("sym", sym);
 
-var methods = typeof(IMathsService).GetMethods();
+//var methods = typeof(IMathsService).GetMethods();
 
-var tmethod = methods.FirstOrDefault(o => o.Name == "TestGenerics");
-var typedMethod = tmethod.MakeGenericMethod(typeof(string), typeof(int));
-var h1 = typedMethod.GetMethodHash();
-var mmmm = SerializableMethodInfo.DeserializeMethodInfo(SerializableMethodInfo.SerializeMethodInfo(typedMethod));
-var h2 = mmmm.GetMethodHash();
-var rett3 = mmmm.Invoke(ms, new object?[] { "hoora", 626 });
-var artisawesome3 = true;
+//var tmethod = methods.FirstOrDefault(o => o.Name == "TestGenerics");
+//var typedMethod = tmethod.MakeGenericMethod(typeof(string), typeof(int));
+//var h1 = typedMethod.GetMethodHash();
+//var mmmm = SerializableMethodInfo.DeserializeMethodInfo(SerializableMethodInfo.SerializeMethodInfo(typedMethod));
+//var h2 = mmmm.GetMethodHash();
+//var rett3 = mmmm.Invoke(ms, new object?[] { "hoora", 626 });
+//var artisawesome3 = true;
 
-var nmt5 = true;
+//var nmt5 = true;
 
 //foreach (MethodInfo item in methods)
 //{

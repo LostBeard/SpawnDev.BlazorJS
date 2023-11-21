@@ -10,9 +10,9 @@
 	<ItemGroup>
 		<PackageReference Include="Markdig" Version="0.33.0" />
 		<PackageReference Include="Markdown.ColorCode" Version="2.0.0" />
+		<PackageReference Include="Radzen.Blazor" Version="4.20.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
-		<PackageReference Include="Radzen.Blazor" Version="4.20.1" />
 	</ItemGroup>
 
 	<ItemGroup>

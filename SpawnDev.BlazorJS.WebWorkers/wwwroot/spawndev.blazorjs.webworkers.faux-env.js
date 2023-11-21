@@ -20,7 +20,7 @@ function createProxiedObject(obj, useIfDefined) {
             var keyIsSymbolIterator = key == Symbol.iterator;
             var keyIsSymbol = typeofKey === 'symbol';
             var keyStr = keyIsSymbol ? key.toString() : key;
-            consoleLog('get', target.constructor.name, keyStr, ret && ret.constructor ? ret.constructor.name : typeofProp, typeofProp !== 'function' ? ret : '(){ ... }');
+            //consoleLog('get', target.constructor.name, keyStr, ret && ret.constructor ? ret.constructor.name : typeofProp, typeofProp !== 'function' ? ret : '(){ ... }');
             if (propIsUndefined) {
                 var getKey = target.constructor.name + '.' + keyStr;
                 if (!undefinedGets[getKey]) {
@@ -371,6 +371,7 @@ class Document extends Node {
         return null;
     }
     querySelectorAll(selector) {
+        // this method is not expeceted to work 100% as it is needed to just fake a document not truly implememnt one perfectly
         var ret = [];
         consoleLog(this.constructor.name, 'querySelectorAll', selector);
         var nodes = this.descendants();
@@ -396,6 +397,10 @@ class Document extends Node {
     addGlobalListener() {
         consoleLog(this.constructor.name, 'addGlobalListener');
 
+    }
+    get scripts() {
+        var nodes = this.descendants().filter(o => o.constructor.name === 'HTMLScriptElement');
+        return nodes;
     }
     get currentScript() {
         consoleLog(this.constructor.name, 'currentScript');

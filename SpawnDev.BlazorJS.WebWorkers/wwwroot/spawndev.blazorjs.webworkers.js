@@ -201,11 +201,38 @@ var initWebWorkerBlazor = async function () {
     // 'united' - Using Blazor United runtime
     // do on the fly worker compatiblility patching if needed 
     // add webworker-enabled attribute to the runtime if it is not already there
-    async function detectBlazorRuntime(scriptNodes) {
+    async function detectBlazorRuntime(scriptNodes, overrideUnitedRuntime = true) {
         for (var scriptNode of scriptNodes) {
             let src = scriptNode.attributes.src;
             if (!src) continue;
+            if (src.includes('_framework/blazor.web.js')) {
+                if (overrideUnitedRuntime) {
+                    // blazor united comes with the wasm runtiem also
+                    // if overrideUnitedRuntime == true, we will use the wasm runtime instead of the united runtime
+                    src = src.replace('_framework/blazor.web.js', '_framework/blazor.webassembly.js');
+                    scriptNode.attributes.src = src;
+                } else {
+                    // modify the united runtime as needed for compatibility with WebWorkers
+                    if (typeof scriptNode.attributes[WebWorkerEnabledAttributeName] === 'undefined') {
+                        scriptNode.attributes[WebWorkerEnabledAttributeName] = '';
+                    }
+                    // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
+                    let jsStr = await getText(src);
+                    // united runtime doesn't start web assembly when it loads by default
+                    // it waits until a webassembly rendered component is loaded but that won't happen in a worker so we patch
+                    // the runtime to allow access to the method that actually starts webassembly directly
+                    // self.__blazorInternal.startLoadingWebAssemblyIfNotStarted()
+                    jsStr = jsStr.replace(/(this\.initialComponents=\[\],)/, '$1self.__blazorInternal=this,');
+                    if (!dynamicImportSupported) {
+                        // fix dynamic imports
+                        jsStr = fixModuleScript(jsStr, src);
+                    }
+                    scriptNode.text = jsStr;
+                    return 'united';
+                }
+            }
             if (src.includes('_framework/blazor.webassembly.js')) {
+                // modify the wasm runtime as needed for compatibility with WebWorkers
                 if (typeof scriptNode.attributes[WebWorkerEnabledAttributeName] === 'undefined') {
                     scriptNode.attributes[WebWorkerEnabledAttributeName] = '';
                 }
@@ -216,24 +243,6 @@ var initWebWorkerBlazor = async function () {
                     scriptNode.text = fixModuleScript(jsStr, src);
                 }
                 return 'wasm';
-            }
-            if (src.includes('_framework/blazor.web.js')) {
-                if (typeof scriptNode.attributes[WebWorkerEnabledAttributeName] === 'undefined') {
-                    scriptNode.attributes[WebWorkerEnabledAttributeName] = '';
-                }
-                // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
-                let jsStr = await getText(src);
-                // united runtime doesn't start web assembly when it loads by default
-                // it waits until a webassembly rendered component is loaded but that won't happen in a worker so we patch
-                // the runtime to allow access to the method that actually starts webassembly directly
-                // self.__blazorInternal.startLoadingWebAssemblyIfNotStarted()
-                jsStr = jsStr.replace(/(this\.initialComponents=\[\],)/, '$1self.__blazorInternal=this,');
-                if (!dynamicImportSupported) {
-                    // fix dynamic imports
-                    jsStr = fixModuleScript(jsStr, src);
-                }
-                scriptNode.text = jsStr;
-                return 'united';
             }
         }
         return '';

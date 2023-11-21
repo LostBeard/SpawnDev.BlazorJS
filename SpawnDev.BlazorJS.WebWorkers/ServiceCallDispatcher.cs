@@ -3,8 +3,6 @@ using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using static SpawnDev.BlazorJS.MethodInfoExtension;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
@@ -51,7 +49,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             _port = port;
             _port.OnMessage += _worker_OnMessage;
             _port.OnMessageError += _port_OnError;
-            additionalCallArgs.Add(new CallSideParamter("caller", () => this, typeof(ServiceCallDispatcher)));
+            additionalCallArgs.Add(new CallSideParameter("caller", () => this, typeof(ServiceCallDispatcher)));
         }
         protected static BlazorJSRuntime JS = BlazorJSRuntime.JS;
         private void _port_OnError()
@@ -764,14 +762,14 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return t.Task;
         }
 
-        List<CallSideParamter> additionalCallArgs { get; } = new List<CallSideParamter>();
+        List<CallSideParameter> additionalCallArgs { get; } = new List<CallSideParameter>();
 
-        class CallSideParamter
+        class CallSideParameter
         {
             public string Name { get; }
             public Type Type { get; }
             public Func<object?> GetValue;
-            public CallSideParamter(string name, Func<object?> getter, Type type)
+            public CallSideParameter(string name, Func<object?> getter, Type type)
             {
                 Name = name;
                 GetValue = getter;
@@ -779,7 +777,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
 
-        CallSideParamter? GetCallSideParameter(ParameterInfo p)
+        CallSideParameter? GetCallSideParameter(ParameterInfo p)
         {
             return additionalCallArgs.Where(o => o.Name == p.Name && o.Type == p.ParameterType).FirstOrDefault();
         }
