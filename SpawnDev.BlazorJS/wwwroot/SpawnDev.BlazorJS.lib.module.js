@@ -216,9 +216,10 @@ var initFunc = function () {
                 return value === null ? null : DotNet.createJSObjectReference(value);
             case DotNet.JSCallResultType.JSStreamReference:
                 {
+                    // TODO test and fix if needed
                     const n = DotNet.createJSStreamReference(value);
                     const r = JSON.stringify(n);
-                    return ct.js_string_to_mono_string(r)
+                    return BINDING.js_string_to_mono_string(r)
                 }
             case DotNet.JSCallResultType.JSVoidResult:
                 return null;

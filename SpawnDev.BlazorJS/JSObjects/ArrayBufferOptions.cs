@@ -3,12 +3,12 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Can be used when creating a SharedArrayBuffer
+    /// Options used when creating an ArrayBuffer
     /// </summary>
-    public class SharedArrayBufferOptions
+    public class ArrayBufferOptions
     {
         /// <summary>
-        /// The maximum size, in bytes, that the shared array buffer can be resized to.
+        /// The maximum size, in bytes, that the array buffer can be resized to.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public long? MaxByteLength { get; set; }

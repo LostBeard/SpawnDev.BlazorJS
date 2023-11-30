@@ -71,7 +71,7 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
-        public static SerializableMethodInfo? FromString(string json) => JsonSerializer.Deserialize<SerializableMethodInfo>(json, DefaultJsonSerializerOptions);
+        public static SerializableMethodInfo? FromString(string json) => string.IsNullOrEmpty(json) || !json.StartsWith("{") ? null : JsonSerializer.Deserialize<SerializableMethodInfo>(json, DefaultJsonSerializerOptions);
         /// <summary>
         /// Serializes SerializableMethodInfo to a string using System.Text.Json
         /// </summary>
@@ -79,41 +79,19 @@ namespace SpawnDev.BlazorJS
         public override string ToString() => JsonSerializer.Serialize(this);
 
         internal static JsonSerializerOptions DefaultJsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        internal static Dictionary<string, Type?> typeCache { get; } = new Dictionary<string, Type>();
+        
         static string GetTypeName(Type type)
         {
             return string.IsNullOrEmpty(type.FullName) ? type.Name : type.FullName;
         }
-        /// <summary>
-        /// For whatever reason Type.GetType was failing when trying to find a Type in the same assembly as this class... no idea why. Below code worked when it failed
-        /// </summary>
-        /// <param name="typeName"></param>
-        /// <returns></returns>
-        internal static Type? GetType(string typeName)
-        {
-            if (string.IsNullOrEmpty(typeName)) return null;
-            Type? t = null;
-            lock (typeCache)
-            {
-                if (!typeCache.TryGetValue(typeName, out t))
-                {
-                    foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
-                    {
-                        t = a.GetType(typeName);
-                        if (t != null) break;
-                    }
-                    typeCache[typeName] = t;
-                }
-            }
-            return t;
-        }
+        
         void Resolve()
         {
             MethodInfo? methodInfo = null;
             if (Resolved) return;
             Resolved = true;
             methodInfo = null;
-            var reflectedType = GetType(ReflectedTypeName);
+            var reflectedType = TypeExtensions.GetType(ReflectedTypeName);
             if (reflectedType == null)
             {
                 // Reflected type not found
@@ -151,7 +129,7 @@ namespace SpawnDev.BlazorJS
                 for (var i = 0; i < genericTypes.Length; i++)
                 {
                     var gTypeName = GenericArguments[i];
-                    var gType = GetType(gTypeName);
+                    var gType = TypeExtensions.GetType(gTypeName);
                     if (gType == null)
                     {
                         // One of the generic types needed to make the generic method was not found

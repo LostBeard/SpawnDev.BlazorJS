@@ -67,32 +67,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         //public delegate void OnMessageDelegate(ServiceCallDispatcher sender, WebWorkerMessageIn msg);
         public event Action<ServiceCallDispatcher, WebWorkerMessageIn> OnMessage;
-
-        static Dictionary<string, Type?> typeCache { get; } = new Dictionary<string, Type>();
-
-        /// <summary>
-        /// For whatever reason Type.GetType was failing when trying to find a Type in the same assembly as this class... no idea why. Below code worked when it failed
-        /// </summary>
-        /// <param name="typeName"></param>
-        /// <returns></returns>
-        public static Type? GetType(string typeName)
-        {
-            Type? t = null;
-            lock (typeCache)
-            {
-                if (!typeCache.TryGetValue(typeName, out t))
-                {
-                    foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
-                    {
-                        t = a.GetType(typeName);
-                        if (t != null) break;
-                    }
-                    typeCache[typeName] = t;
-                }
-            }
-            return t;
-        }
-
         public delegate void BusyStateChangedDelegate(ServiceCallDispatcher sender, bool busy);
         public event BusyStateChangedDelegate OnBusyStateChanged;
         private bool _busy = false;
@@ -186,7 +160,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 else if (!string.IsNullOrEmpty(msgBase.TargetType) && !string.IsNullOrEmpty(msgBase.TargetName))
                 {
                     // TODO - handle exceptions better.
-                    // Currently some caused by bad calls throw exceptions here which leaves the caller in the other cotnext waiting with no reason
+                    // Currently some caused by bad calls throw exceptions here which leaves the caller in the other context waiting with no reason
                     // Also, try to implementing code to allow calling generic methods
                     object? retValue = null;
                     string? err = null;
@@ -200,7 +174,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     }
                     catch { }
                     var argsLength = args != null ? args.Get<int>("length") : 0;
-                    var serviceType = GetType(msgBase.TargetType);
+                    var serviceType = TypeExtensions.GetType(msgBase.TargetType);
                     if (serviceType == null)
                     {
                         throw new Exception($"ERROR: {nameof(ServiceCallDispatcher)} OnMessage - Service type not found {msgBase.TargetType}");
@@ -557,15 +531,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
             CheckBusyStateChanged();
         }
 
+        public static object? GetDefault(Type type) => type.IsValueType ? Activator.CreateInstance(type) : null;
 
-        public static object GetDefault(Type type)
-        {
-            if (type.IsValueType)
-            {
-                return Activator.CreateInstance(type);
-            }
-            return null;
-        }
 
         Dictionary<string, CallbackAction> _actionHandles = new Dictionary<string, CallbackAction>();
 
@@ -598,7 +565,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         var transferAttr = (WorkerTransferAttribute?)methodParam.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
                         if (transferAttr != null && !transferAttr.Transfer)
                         {
-                            // this property has been marked as non-stransferable
+                            // this property has been marked as non-transferable
                             allowTransferable = false;
                         }
                     }

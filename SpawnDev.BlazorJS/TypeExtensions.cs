@@ -7,6 +7,17 @@ namespace SpawnDev.BlazorJS
     /// </summary>
     public static class TypeExtensions
     {
+        //public static Type FinalReturnType(this Type type) => type.IsAsync() ? type.AsyncReturnType() ?? typeof(void) : type;
+        static Dictionary<Type, object?> TypeDefaultsCache { get; } = new Dictionary<Type, object?>();
+        static object? GetDefault<T>() => default(T);
+        public static object? GetDefaultValue(this Type t)
+        {
+            if (TypeDefaultsCache.TryGetValue(t, out var value)) return value;
+            var f = GetDefault<object>;
+            var ret = f.Method.GetGenericMethodDefinition().MakeGenericMethod(t).Invoke(null, null);
+            TypeDefaultsCache[t] = ret;
+            return ret;
+        }
         /// <summary>
         /// Returns true if the Type is a Task or ValueTask
         /// </summary>
@@ -99,6 +110,16 @@ namespace SpawnDev.BlazorJS
             return string.IsNullOrEmpty(type.FullName) ? type.Name : type.FullName;
         }
         /// <summary>
+        /// Returns the most descriptive name for this Type fallign back to less descriptive if needed.<br />
+        /// AssemblyQualifiedName, FullName, then Name
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetBestName(this Type type)
+        {
+            return !string.IsNullOrEmpty(type.AssemblyQualifiedName) ? type.AssemblyQualifiedName : (!string.IsNullOrEmpty(type.FullName) ? type.FullName : type.Name);
+        }
+        /// <summary>
         /// Returns a List of type's inherited types.
         /// </summary>
         /// <param name="type"></param>
@@ -114,5 +135,33 @@ namespace SpawnDev.BlazorJS
             }
             return ret;
         }
+
+        /// <summary>
+        /// Looks for the type by name in current domain assemblies.<br />
+        /// can be called with the Type.QualifiedTypeName or Type.FullName
+        /// </summary>
+        /// <param name="typeName">The QualifiedTypeName or FullName of the Type</param>
+        /// <param name="useCache">Return the cached result if found</param>
+        /// <returns></returns>
+        public static Type? GetType(string? typeName, bool useCache = true)
+        {
+            if (string.IsNullOrEmpty(typeName)) return null;
+            Type? t;
+            if (!useCache || !typeCache.TryGetValue(typeName, out t))
+            {
+                t = Type.GetType(typeName);
+                if (t == null)
+                {
+                    foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+                    {
+                        t = a.GetType(typeName);
+                        if (t != null) break;
+                    }
+                }
+                typeCache[typeName] = t;
+            }
+            return t;
+        }
+        static Dictionary<string, Type?> typeCache { get; } = new Dictionary<string, Type?>();
     }
 }

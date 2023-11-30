@@ -117,5 +117,17 @@ namespace SpawnDev.BlazorJS
             }
             return mi.Name;
         }
+
+        /// <summary>
+        /// If the return type is a Task&lt;&gt; or ValueTask&lt;&gt; the Result Type is returned<br />
+        /// If the return type is a Task or ValueTask typeof(void) is returned<br />
+        /// otherwise MethodInfo.ReturnType is returned
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
+        public static Type GetFinalReturnType(this MethodInfo _this)
+        {
+            return _this.ReturnType.AsyncReturnType() ?? _this.ReturnType;
+        }
     }
 }
