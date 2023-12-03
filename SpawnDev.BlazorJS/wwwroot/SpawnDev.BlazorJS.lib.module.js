@@ -297,50 +297,45 @@ var initFunc = function () {
         if (callbacks[callbackerID]) delete callbacks[callbackerID];
     };
     DotNet.attachReviver(function (key, value) {
-        if (value && typeof value === 'object' && typeof value.__undefinedref__ !== 'undefined') {
-            return;
-        }
-        else if (value && typeof value === 'object' && typeof value.__wrappedFunction === 'function') {
-            return value.__wrappedFunction;
-        }
-        else if (value && typeof value === 'object' && typeof value.__wrappedSymbol === 'symbol') {
-            return value.__wrappedSymbol;
-        }
-        else if (value && typeof value === 'object' && typeof value.__wrappedJSObject !== 'undefined') {
-            return value.__wrappedJSObject;
-        }
-        else if (value && typeof value === 'object' && typeof value._callbackId !== 'undefined') {
-            let callbackId = value._callbackId;
-            if (!callbacks[callbackId]) {
-                callbacks[callbackId] = function fn() {
-                    var ret = null;
-                    if (!callbacks[callbackId] || fn !== callbacks[callbackId]) return;
-                    var args = ["Invoke"];
-                    // When the Callback is created the argument types are enumerated so they can be passed back to .Net correctly when the callback is called
-                    var paramTypes = value._paramTypes;
-                    for (var i = 0; i < paramTypes.length; i++) {
-                        var v = i < arguments.length ? arguments[i] : null;
-                        let jsCallResultType = paramTypes[i];
-                        v = serializeToDotNet(v, jsCallResultType);
-                        args.push(v);
-                    }
-                    try {
-                        ret = value._callback.invokeMethod.apply(value._callback, args);// ('Callback.Invoke');
-                        if (!value._returnVoid) {
-                            return ret;
+        if (value && typeof value === 'object') {
+            if (typeof value._callbackId !== 'undefined') {
+                let callbackId = value._callbackId;
+                if (!callbacks[callbackId]) {
+                    callbacks[callbackId] = function fn() {
+                        var ret = null;
+                        if (!callbacks[callbackId] || fn !== callbacks[callbackId]) return;
+                        var args = ["Invoke"];
+                        // When the Callback is created the argument types are enumerated so they can be passed back to .Net correctly when the callback is called
+                        var paramTypes = value._paramTypes;
+                        for (var i = 0; i < paramTypes.length; i++) {
+                            var v = i < arguments.length ? arguments[i] : null;
+                            let jsCallResultType = paramTypes[i];
+                            v = serializeToDotNet(v, jsCallResultType);
+                            args.push(v);
                         }
-                    } catch (ex) {
-                        console.error('Callback invokeMethod error:', args, ret, ex);
-                        //console.log('disposing callback');
-                        //value.isDisposed = true;    //
-                        //DisposeCallbacker(callbackId);
-                    }
-                };
+                        try {
+                            ret = value._callback.invokeMethod.apply(value._callback, args);// ('Callback.Invoke');
+                            if (!value._returnVoid) {
+                                return ret;
+                            }
+                        } catch (ex) {
+                            console.error('Callback invokeMethod error:', args, ret, ex);
+                            //console.log('disposing callback');
+                            //value.isDisposed = true;    //
+                            //DisposeCallbacker(callbackId);
+                        }
+                    };
+                }
+                return callbacks[callbackId];
             }
-            return callbacks[callbackId];
-        } else {
-            return value;
+            else if (typeof value.__wrappedJSObject !== 'undefined') {
+                return value.__wrappedJSObject;
+            }
+            else if (typeof value.__undefinedref__ !== 'undefined') {
+                return;
+            }
         }
+        return value;
     });
 };
 initFunc();

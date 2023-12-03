@@ -1,4 +1,7 @@
 ﻿using Microsoft.JSInterop;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
