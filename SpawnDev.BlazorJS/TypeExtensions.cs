@@ -19,6 +19,12 @@ namespace SpawnDev.BlazorJS
             return ret;
         }
         /// <summary>
+        /// type == typeof(void)
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsVoid(this Type type) => type == typeof(void);
+        /// <summary>
         /// Returns true if the Type is a Task or ValueTask
         /// </summary>
         /// <param name="type"></param>

@@ -1,176 +1,136 @@
-﻿namespace SpawnDev.BlazorJS.WebWorkers {
-    public class WebWorkerPool : IDisposable {
-        WebWorkerService _webWorkerService = null;
-        List<WebWorker> _workers = new List<WebWorker>();
-        public int MaxWorkerCount => _webWorkerService.MaxWorkerCount;
+﻿namespace SpawnDev.BlazorJS.WebWorkers
+{
+    public class WebWorkerPool : IDisposable, IBackgroundService
+    {
+        internal WebWorkerService WebWorkerService { get; }
+        protected List<WebWorker> _workers = new List<WebWorker>();
+        public int MaxWorkerCount => WebWorkerService.MaxWorkerCount;
+        protected Queue<WebWorker> IdleWebWorkers { get; set; } = new Queue<WebWorker>();
+        public int WorkersIdle => IdleWebWorkers.Count;
+        public bool IsReady => IdleWebWorkers.Count > 0; // GetFreeWorker() != null;
 
-        public WebWorkerPool(WebWorkerService webWorkerService) {
-            _webWorkerService = webWorkerService;
+        public WebWorkerPool(WebWorkerService webWorkerService, int autoStartCount = 0)
+        {
+            WebWorkerService = webWorkerService;
+            WorkerCountRequest = autoStartCount;
         }
 
-        public WebWorker? GetFreeWorker() {
-            foreach (var w in _workers) {
-                if (!w.WaitingForResponse) return w;
+        public async Task<WebWorker?> GetFreeWorkerAsync() => await GetFreeWorkerAsync(CancellationToken.None);
+        
+        public async Task<WebWorker?> GetFreeWorkerAsync(CancellationToken cancellationToken)
+        {
+            if (!WebWorkerService.WebWorkerSupported) return null;
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (WorkerCountRequest == 0) return null;
+                if (IdleWebWorkers.TryDequeue(out var worker))
+                {
+                    //FireOnBusyStateChanged();
+                    return worker;
+                }
+                await Task.Delay(5);
             }
             return null;
         }
 
-        public bool IsReady => GetFreeWorker() != null;
-
-        public async Task WhenWorkerReady(CancellationToken cancellationToken) => await GetFreeWorkerAsync(cancellationToken);
-        public async Task WhenWorkerReady() => await GetFreeWorkerAsync(CancellationToken.None);
-
-        public async Task<WebWorker?> GetFreeWorkerAsync() => await GetFreeWorkerAsync(CancellationToken.None);
-        public async Task<WebWorker?> GetFreeWorkerAsync(CancellationToken cancellationToken) {
-            WebWorker? ret = null;
-            while (ret == null && !cancellationToken.IsCancellationRequested) {
-                ret = GetFreeWorker();
-                if (ret == null) await Task.Delay(5);
-            }
-            return ret;
-        }
-
-        public bool WorkerAvailable() {
-            foreach (var w in _workers) {
-                if (!w.WaitingForResponse) return true;
-            }
-            return false;
-        }
-
-        public bool AreWorkersRunning => WorkersRunning > 0;
-        public int WorkersRunning { get; private set; }
+        public bool AreWorkersRunning => _workers.Any();
+        public int WorkersRunning => _workers.Count;
         int _WorkerCountRequest;
-        public int WorkerCountRequest {
+        public int WorkerCountRequest
+        {
             get => _WorkerCountRequest;
-            set {
+            set
+            {
                 if (_WorkerCountRequest == value) return;
                 _WorkerCountRequest = value;
                 _ = SetWorkerCount(_WorkerCountRequest);
             }
         }
 
-        Queue<WebWorker> IdleWebWorkers { get; set; } = new Queue<WebWorker>();
-        public int WorkersIdle => IdleWebWorkers.Count;
+        public bool TryGetIdleWorker(out WebWorker? worker) => IdleWebWorkers.TryDequeue(out worker);
 
-        public bool TryGetIdleWorker(out WebWorker? worker) {
-            return IdleWebWorkers.TryDequeue(out worker);
+        async Task FireOnBusyStateChanged()
+        {
+            OnBusyStateChanged?.Invoke();
         }
 
-        public void ReleaseIdleWorker(WebWorker? worker) {
-            if (worker != null && !IdleWebWorkers.Contains(worker)) IdleWebWorkers.Enqueue(worker);
-        }
-
-        async Task<bool> TryStartWorker() {
-            var webWorker = await _webWorkerService.GetWebWorker();
-            if (webWorker == null) return false;
-            lock (_workers) {
-                webWorker.OnBusyStateChanged += WebWorker_OnBusyStateChanged;
-                _workers.Add(webWorker);
-                if (!IdleWebWorkers.Contains(webWorker)) IdleWebWorkers.Enqueue(webWorker);
-                WorkersRunning++;
+        public void ReleaseIdleWorker(WebWorker? worker)
+        {
+            if (worker != null && !IdleWebWorkers.Contains(worker) && !worker.IsDisposed)
+            {
+                IdleWebWorkers.Enqueue(worker);
+                _ = FireOnBusyStateChanged();
             }
-            return true;
         }
 
-        public delegate void BusyStateChangedDelegate(WebWorker sender, bool busy);
+        public delegate void BusyStateChangedDelegate();
         public event BusyStateChangedDelegate OnBusyStateChanged;
 
-        private void WebWorker_OnBusyStateChanged(ServiceCallDispatcher sender, bool busy) {
-            var webWorker = sender as WebWorker;
-            if (!busy & !IdleWebWorkers.Contains(webWorker)) {
-                IdleWebWorkers.Enqueue(sender as WebWorker);
-            }
-            else if (busy && !IdleWebWorkers.Contains(webWorker)) {
-                var checkThis = true;
-            }
-            OnBusyStateChanged?.Invoke(webWorker, busy);
-        }
-
         SemaphoreSlim _SetWorkerCountLock = new SemaphoreSlim(1);
-        public async Task<bool> SetWorkerCount(int count) {
-            _WorkerCountRequest = count;
+        public async Task<bool> SetWorkerCount(int count)
+        {
             if (!WebWorker.Supported) return false;
-            if (_webWorkerService == null) return false;
-            try {
+            count = Math.Max(0, count);
+            _WorkerCountRequest = count;
+            try
+            {
                 await _SetWorkerCountLock.WaitAsync();
-                var countToAdd = count - _workers.Count;
-                if (countToAdd > 0) {
-                    var tasks = new List<Task<bool>>();
-                    for (var i = 0; i < countToAdd; i++) {
-                        var task = TryStartWorker();
-                        tasks.Add(task);
+                var countToAdd = _WorkerCountRequest - _workers.Count;
+                if (countToAdd > 0)
+                {
+                    var tasks = new List<Task<WebWorker>>();
+                    for (var i = 0; i < countToAdd; i++)
+                    {
+                        tasks.Add(WebWorkerService.GetWebWorker()!);
                     }
-                    await Task.WhenAll(tasks);
+                    var workers = await Task.WhenAll(tasks);
+                    foreach(var webWorker in workers)
+                    {
+                        _workers.Add(webWorker);
+                        IdleWebWorkers.Enqueue(webWorker);
+                    }
+                    _ = FireOnBusyStateChanged();
                 }
-                WorkersRunning = count;
-                while (_workers.Count > WorkersRunning) {
+                while (_workers.Count > _WorkerCountRequest)
+                {
                     var w = await GetFreeWorkerAsync();
-                    if (w != null) {
+                    if (w != null)
+                    {
                         _workers.Remove(w);
                         w.Dispose();
                     }
                 }
             }
-            finally {
+            finally
+            {
                 _SetWorkerCountLock.Release();
             }
             return true;
         }
-        //public async Task<bool> SetWorkerCount(int count)
-        //{
-        //    _WorkerCountRequest = count;
-        //    if (!WebWorker.Supported) return false;
-        //    if (_webWorkerService == null) return false;
-        //    try
-        //    {
-        //        await _SetWorkerCountLock.WaitAsync();
-        //        while (_workers.Count < count)
-        //        {
-        //            var webWorker = await _webWorkerService.GetWebWorker();
-        //            if (webWorker == null) return false;
-        //            if (webWorker != null)
-        //            {
-        //                _workers.Add(webWorker);
-        //                WorkersRunning++;
-        //            }
-        //        }
-        //        WorkersRunning = count;
-        //        while (_workers.Count > WorkersRunning)
-        //        {
-        //            var w = await GetFreeWorkerAsync();
-        //            if (w != null)
-        //            {
-        //                _workers.Remove(w);
-        //                w.Dispose();
-        //            }
-        //        }
-        //    }
-        //    finally
-        //    {
-        //        _SetWorkerCountLock.Release();
-        //    }
-        //    return true;
-        //}
 
         public bool IsDisposed { get; private set; }
-        public void Dispose() {
+        public void Dispose()
+        {
             if (IsDisposed) return;
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        protected virtual void Dispose(bool disposing) {
+        protected virtual void Dispose(bool disposing)
+        {
             if (IsDisposed) return;
             IsDisposed = true;
-            if (disposing) {
-                WorkersRunning = 0;
+            if (disposing)
+            {
                 _SetWorkerCountLock.Dispose();
-                foreach (var w in _workers) {
+                foreach (var w in _workers)
+                {
                     w.Dispose();
                 }
                 _workers.Clear();
             }
         }
-        ~WebWorkerPool() {
+        ~WebWorkerPool()
+        {
             Dispose(false);
         }
     }

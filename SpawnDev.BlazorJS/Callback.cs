@@ -24,10 +24,6 @@ namespace SpawnDev.BlazorJS
         public Callback(bool once)
         {
             CallbackIdCounter = CallbackIdCounter == ulong.MaxValue ? 1 : CallbackIdCounter + 1;
-            if (CallbackIdCounter == ulong.MaxValue)
-            {
-                CallbackIdCounter = 0;
-            }
             _callbackId = $"{CallbackIdCounter}";
             CallbackType = this.GetType();
             _callback = DotNetObjectReference.Create(this);

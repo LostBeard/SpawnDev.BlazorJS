@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text.RegularExpressions;
 
 // https://devblogs.microsoft.com/dotnet/migrating-realproxy-usage-to-dispatchproxy/
 namespace SpawnDev.BlazorJS.WebWorkers {
@@ -19,36 +20,17 @@ namespace SpawnDev.BlazorJS.WebWorkers {
             return ret;
         }
 
-        internal Task<TReturnType> InvokeTask<TReturnType>(MethodInfo targetMethod, object?[]? args) {
-            var ttcs = new TaskCompletionSource<TReturnType>();
-            Worker.CallAsync<TServiceInterface>(targetMethod, args, (retExc, retVal) => {
-                if (retExc != null) {
-                    ttcs.TrySetException(retExc);
-                }
-                else {
-                    var retValT = default(TReturnType);
-                    if (retVal != null) retValT = (TReturnType)retVal;
-                    ttcs.TrySetResult(retValT);
-                }
-            });
-            return ttcs.Task;
+        internal async Task<TReturnType> InvokeTask<TReturnType>(MethodInfo targetMethod, object?[]? args) {
+            var ret = await Worker.CallAsync(targetMethod, args);
+            return (TReturnType)ret;
         }
 
         internal ValueTask<TReturnType> InvokeValueTask<TReturnType>(MethodInfo targetMethod, object?[]? args) {
             return new ValueTask<TReturnType>(InvokeTask<TReturnType>(targetMethod, args));
         }
 
-        internal Task InvokeTaskVoid(MethodInfo targetMethod, object?[]? args) {
-            var taskSource = new TaskCompletionSource();
-            Worker.CallAsync<TServiceInterface>(targetMethod, args, (retExc, retVal) => {
-                if (retExc != null) {
-                    taskSource.TrySetException(retExc);
-                }
-                else {
-                    taskSource.TrySetResult();
-                }
-            });
-            return taskSource.Task;
+        internal async Task InvokeTaskVoid(MethodInfo targetMethod, object?[]? args) {
+            await Worker.CallAsync(targetMethod, args);
         }
 
         internal ValueTask InvokeValueTaskVoid(MethodInfo targetMethod, object?[]? args) {

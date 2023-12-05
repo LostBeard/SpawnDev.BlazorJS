@@ -2,7 +2,7 @@
 
 <RadzenCard>
     <div>
-        <button onclick="@(() => _ = RefreshCameraList())">Refresh Camera List</button>
+        <button onclick="@(() => _ = RefreshCameraList(true))">Refresh Camera List</button>
     </div>
     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Camera</RadzenText>
     <RadzenDropDown @bind-Value=@_selectedDevice AllowClear="true" TValue="MediaDeviceInfo" Class="w-100" Data=@_devices Change=@(args => OnDeviceChange(args as MediaDeviceInfo))>
@@ -29,7 +29,7 @@
         Dropped: @_fpsDropped
     </div>
     <div>
-        Workers: @_faceAPIService.WorkersRunning
+        Workers: @_workerPool.WorkersRunning
     </div>
     <div style="padding: 4px;">
         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enable Processing</RadzenText>
@@ -41,8 +41,8 @@
     </div>
     <div>
         <RadzenCard>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @_faceAPIService.WorkersIdle / @_faceAPIService.WorkersRunning / @_faceAPIService.WorkerCountRequest / @_faceAPIService.MaxWorkerCount (Idle/Running/Requested/Max)</RadzenText>
-            <RadzenSlider @bind-Value=@_faceAPIService.WorkerCountRequest TValue="int" Min="0" Max=@_faceAPIService.MaxWorkerCount />
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @_workerPool.WorkersIdle / @_workerPool.WorkersRunning / @_workerPool.WorkerCountRequest / @_workerPool.MaxWorkerCount (Idle/Running/Requested/Max)</RadzenText>
+            <RadzenSlider @bind-Value=@_workerPool.WorkerCountRequest TValue="int" Min="0" Max=@_workerPool.MaxWorkerCount />
         </RadzenCard>
     </div>
     <div style="padding: 4px;">

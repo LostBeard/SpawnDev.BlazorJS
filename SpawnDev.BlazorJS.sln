@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS", "SpawnD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.WebWorkers", "SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj", "{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.FaceAPI", "SpawnDev.BlazorJS.FaceAPI\SpawnDev.BlazorJS.FaceAPI.csproj", "{6562BC03-CDEF-4331-9E40-747B34AAE78C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.Blazor.UnitTesting", "SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj", "{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6562BC03-CDEF-4331-9E40-747B34AAE78C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6562BC03-CDEF-4331-9E40-747B34AAE78C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6562BC03-CDEF-4331-9E40-747B34AAE78C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6562BC03-CDEF-4331-9E40-747B34AAE78C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}.Release|Any CPU.ActiveCfg = Release|Any CPU

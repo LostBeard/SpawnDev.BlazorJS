@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using Radzen;
 using SpawnDev.BlazorJS;
@@ -34,13 +35,15 @@ builder.Services.AddBlazorJSRuntime();
 // Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
 builder.Services.AddWebWorkerService();
 // WebWorkerPool service (WIP. optional. Not required for WebWorkerService)
-builder.Services.AddSingleton<WebWorkerPool>();
+// Belwo line adds teh WebWorkerPool and start up 3 WebWorkers immediately if running in a Window scope; 0 otherwise.
+builder.Services.AddSingleton(sp => new WebWorkerPool(sp.GetRequiredService<WebWorkerService>(), sp.GetRequiredService<BlazorJSRuntime>().IsWindow ? 4 : 0));
+//builder.Services.AddSingleton(sp => new SharedWebWorkerPool(sp.GetRequiredService<WebWorkerService>()), GlobalScope.Window);
 // More app specific services
 builder.Services.AddSingleton(builder.Configuration); // used to demo appsettings reading in workers
 builder.Services.AddSingleton<MediaDevices>();
 builder.Services.AddSingleton<MediaDevicesService>();
 // Add app services that will be called on the main thread and/or worker threads (Worker services must use interfaces)
-builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
+builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>(GlobalScope.DedicatedAndSharedWorkers);
 builder.Services.AddSingleton<IMathsService, MathsService>();
 
 // Radzen UI services

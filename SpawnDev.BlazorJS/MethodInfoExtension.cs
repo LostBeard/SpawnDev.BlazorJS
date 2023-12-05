@@ -129,5 +129,49 @@ namespace SpawnDev.BlazorJS
         {
             return _this.ReturnType.AsyncReturnType() ?? _this.ReturnType;
         }
+
+        public static Task<object?> InvokeAsync(this Delegate _this, object? instance, object[] args)
+        {
+            return InvokeAsync(_this.Method, instance, args);
+        }
+
+        public static object? Invoke(this Delegate _this, object? instance, object[] args)
+        {
+            return _this.Invoke(instance, args);
+        }
+
+        public static async Task<object?> InvokeAsync(this MethodInfo _this, object? instance, object[] args)
+        {
+            object? retValue = null;
+            var returnType = _this.ReturnType;
+            var isAwaitable = returnType.IsAsync();
+            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
+            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
+            var retv = _this.Invoke(instance, args);
+            if (retv is Task t)
+            {
+                await t;
+                var resultProt = returnType.GetProperty("Result");
+                if (resultProt != null)
+                    retValue = resultProt.GetValue(retv, null);
+            }
+            else if (retv is ValueTask vt)
+            {
+                await vt;
+            }
+            else if(returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(ValueTask<>))
+            {
+                dynamic vtt = retv;
+                await vtt;
+                var resultProt = returnType.GetProperty("Result");
+                if (resultProt != null)
+                    retValue = resultProt.GetValue(retv, null);
+            }
+            else if (!finalReturnTypeIsVoid)
+            {
+                retValue = retv;
+            }
+            return retValue;
+        }
     }
 }

@@ -26,6 +26,14 @@ const globalThisTypeName = globalThisObj.constructor.name;
 
 var disableHotReload = true;
 var verboseWebWorkers = location.search.indexOf('verbose=true') > -1;
+var debugMode = location.search.indexOf('debugMode=true') > -1;
+
+if (debugMode) {
+    console.log('WebWorker started in debug mode');
+    self.WebSocket = function () {
+
+    };
+}
 
 var consoleLog = function () {
     if (!verboseWebWorkers) return;

@@ -18,7 +18,7 @@ const globalObject =
     // eslint-disable-next-line no-new-func -- fallback
     (function () { return this; })() || Function('return this')();
 
-var initFunc = function () {
+(function () {
     if (globalObject.JSInterop) return;
     const JSInterop = {};
     globalObject.JSInterop = JSInterop;
@@ -69,7 +69,7 @@ var initFunc = function () {
 
     JSInterop.setPromiseThenCatch = function (promise, thenCallback, catchCallback) {
         promise.then(thenCallback).catch(function (ex) {
-            let err = "";
+            var err = "";
             if (ex) {
                 if (typeof ex == 'string') {
                     err = ex;
@@ -180,16 +180,11 @@ var initFunc = function () {
             typeOfValue = 'object';
             value = null;
         }
-        //else if (typeOfValue === 'function') {
-        //    value = wrapFunction(value);
-        //} else if (typeOfValue === 'symbol') {
-        //    value = wrapSymbol(value);
-        //}
         if (!returnType) {
             return value;
         }
-        let isOverridden = returnType >= 128;
-        let desiredType = isOverridden ? returnType - 128 : returnType;
+        var isOverridden = returnType >= 128;
+        var desiredType = isOverridden ? returnType - 128 : returnType;
         switch (desiredType) {
             case DotNet.JSCallResultType.Default:
                 break;
@@ -208,7 +203,7 @@ var initFunc = function () {
         if (!isOverridden) {
             return value;
         }
-        // overridden so we must serialize it here
+        // overridden so serialize it here
         switch (desiredType) {
             case DotNet.JSCallResultType.Default:
                 return value;
@@ -298,63 +293,43 @@ var initFunc = function () {
     };
     DotNet.attachReviver(function (key, value) {
         if (value && typeof value === 'object') {
-            if (typeof value._callbackId !== 'undefined') {
-                let callbackId = value._callbackId;
-                if (!callbacks[callbackId]) {
-                    callbacks[callbackId] = function fn() {
-                        var ret = null;
-                        if (!callbacks[callbackId] || fn !== callbacks[callbackId]) return;
-                        var args = ["Invoke"];
-                        // When the Callback is created the argument types are enumerated so they can be passed back to .Net correctly when the callback is called
-                        var paramTypes = value._paramTypes;
-                        for (var i = 0; i < paramTypes.length; i++) {
-                            var v = i < arguments.length ? arguments[i] : null;
-                            let jsCallResultType = paramTypes[i];
-                            v = serializeToDotNet(v, jsCallResultType);
-                            args.push(v);
-                        }
-                        try {
-                            ret = value._callback.invokeMethod.apply(value._callback, args);// ('Callback.Invoke');
-                            if (!value._returnVoid) {
-                                return ret;
-                            }
-                        } catch (ex) {
-                            console.error('Callback invokeMethod error:', args, ret, ex);
-                            //console.log('disposing callback');
-                            //value.isDisposed = true;    //
-                            //DisposeCallbacker(callbackId);
-                        }
-                    };
-                }
-                return callbacks[callbackId];
+            if ('_callbackId' in value) {
+                var callbackId = value._callbackId;
+                var callback = callbacks[callbackId];
+                if (callback) return callback;
+                callback = function fn() {
+                    if (callback !== callbacks[callbackId]) {
+                        console.warn('Disposed callback called.');
+                        return;
+                    }
+                    var ret = null;
+                    var args = ["Invoke"];
+                    var paramTypes = value._paramTypes;
+                    for (var i = 0; i < paramTypes.length; i++) {
+                        var v = i < arguments.length ? arguments[i] : null;
+                        var jsCallResultType = paramTypes[i];
+                        v = serializeToDotNet(v, jsCallResultType);
+                        args.push(v);
+                    }
+                    try {
+                        ret = value._callback.invokeMethod.apply(value._callback, args);
+                        if (!value._returnVoid) return ret;
+                    } catch (ex) {
+                        console.error('Callback invokeMethod error:', args, ret, ex);
+                        //value.isDisposed = true;
+                        //DisposeCallbacker(callbackId);
+                    }
+                };
+                callbacks[callbackId] = callback;
+                return callback; 
             }
-            else if (typeof value.__wrappedJSObject !== 'undefined') {
+            else if ('__wrappedJSObject' in value) {
                 return value.__wrappedJSObject;
             }
-            else if (typeof value.__undefinedref__ !== 'undefined') {
+            else if ('__undefinedref__' in value) {
                 return;
             }
         }
         return value;
     });
-};
-initFunc();
-
-
-//export function beforeStart(options, extensions) {
-//    console.log("blazorjs beforeStart");
-//}
-
-//export function afterStarted(blazor) {
-
-//    Object.defineProperty(Blazor, 'DotNet', {
-//        value: globalThis.DotNet,
-//        writable: false,
-//    });
-//    ////console.log("blazorjs afterStarted");
-//    //if (typeof JSInterop._afterStarted === 'function') {
-//    //    let callback = JSInterop._afterStarted;
-//    //    delete JSInterop._afterStarted;
-//    //    callback();
-//    //}
-//}
+})();

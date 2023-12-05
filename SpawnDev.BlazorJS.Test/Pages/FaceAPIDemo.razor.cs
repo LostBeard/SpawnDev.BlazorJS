@@ -11,15 +11,16 @@ using Timer = System.Timers.Timer;
 
 namespace SpawnDev.BlazorJS.Test.Pages
 {
-    public partial class FaceAPIDemo : IDisposable {
-        [Inject]
-        IFaceAPIService? _faceAPIService { get; set; }
-
+    public partial class FaceAPIDemo : IDisposable
+    {
         [Inject]
         MediaDevicesService? _mediaDevicesService { get; set; }
 
         [Inject]
         WebWorkerPool? _workerPool { get; set; }
+
+        [Inject]
+        WebWorkerService WebWorkerService { get; set; }
 
         CallbackGroup _callbackGroup = new CallbackGroup();
         ElementReference _cameraCanvasProcessedElRef;
@@ -45,29 +46,31 @@ namespace SpawnDev.BlazorJS.Test.Pages
         bool _withLandmarks = true;
         Timer _timer = new Timer(500);
 
-        protected override async Task OnAfterRenderAsync(bool firstRender) {
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
             await base.OnAfterRenderAsync(firstRender);
-            if (firstRender) {
-                if (!_beenInit) {
+            if (firstRender)
+            {
+                if (!_beenInit)
+                {
                     _beenInit = true;
                     _videoCapture = new VideoCapture();
                     _mediaDevicesService.OnDeviceInfosChanged += MediaDevicesService_OnDeviceInfosChanged;
                     _cameraCanvasProcessedEl = new HTMLCanvasElement(_cameraCanvasProcessedElRef);
                     _cameraCanvasProcessedElCtx = _cameraCanvasProcessedEl.Get2DContext(new ContextAttributes2D { WillReadFrequently = true });
-                    //StartProcessLoop();
                     _ = RefreshCameraList();
                     _videoCapture.NewFrame += _videoCapture_NewFrame;
-                    _workerPool.OnBusyStateChanged += _workerPool_OnBusyStateChanged;
                     _timer.Elapsed += _timer_Elapsed;
                     _timer.Enabled = true;
                 }
-                BlazorJSRuntime.JS.CallVoid("PR.prettyPrint");
             }
         }
 
-        private void _timer_Elapsed(object? sender, ElapsedEventArgs e) {
+        private void _timer_Elapsed(object? sender, ElapsedEventArgs e)
+        {
             if (!_swUIUpdate.IsRunning) _swUIUpdate.Restart();
-            if (_swUIUpdate.Elapsed.TotalSeconds >= 1d) {
+            if (_swUIUpdate.Elapsed.TotalSeconds >= 1d)
+            {
                 _fps = Math.Round(_processedFrames / _swUIUpdate.Elapsed.TotalSeconds, 1);
                 _fpsDropped = Math.Round(_droppedFrames / _swUIUpdate.Elapsed.TotalSeconds, 1);
                 _processedFrames = 0;
@@ -77,172 +80,194 @@ namespace SpawnDev.BlazorJS.Test.Pages
             }
         }
 
-        Queue<ImageData> _images = new Queue<ImageData>();
-        int maxQueueSize = 4;
-
-        private void _workerPool_OnBusyStateChanged(WebWorker sender, bool busy) {
-            if (!busy) {
-                TryProcessFrame();
-            }
-        }
-
-        //bool _allThreadsBusy => _mainThreadProcessing && (_workerPool == null || !_workerPool.AreWorkersRunning) || (_workerPool != null && _workerPool.AreWorkersRunning && _workerPool.WorkersIdle == 0);
         bool _mainThreadProcessing = false;
-        ImageData image;
+
         Size frameSize;
-        void TryProcessFrame() {
-            if (_images.Count == 0) return;
-            //if (_allThreadsBusy) return;
-            if (!_enableProcessing) {
-                if (!_images.TryDequeue(out image)) {
-                    return;
-                }
+        bool TryProcessFrame(ImageData image)
+        {
+            if (!_enableProcessing)
+            {
                 frameSize = new Size(image.Width, image.Height);
-                if (_videoFrameSize != frameSize) {
+                if (_videoFrameSize != frameSize)
+                {
                     _videoFrameSize = frameSize;
                     OnInputFrameResized();
                 }
-                if (_cameraCanvasProcessedElCtx != null && _cameraCanvasProcessedEl != null) {
+                if (_cameraCanvasProcessedElCtx != null && _cameraCanvasProcessedEl != null)
+                {
                     _cameraCanvasProcessedEl.Width = frameSize.Width;
                     _cameraCanvasProcessedEl.Height = frameSize.Height;
                     _cameraCanvasProcessedElCtx.PutImageData(image, 0, 0);
                 }
                 image.Dispose();
-                _processedFrames++;
-                return;
+                return true;
             }
-            bool isMainThead;
+            WebWorker? worker = null;
             IFaceAPIService faceAPIService;
-            if (_workerPool == null || !_workerPool.AreWorkersRunning) {
-                if (_mainThreadProcessing) {
-                    return;
+            if (_workerPool == null || !_workerPool.AreWorkersRunning)
+            {
+                if (_mainThreadProcessing)
+                {
+                    // main thread is busy
+                    image.Dispose();
+                    return false;
                 }
-                if (!_images.TryDequeue(out image)) {
-                    return;
-                }
-                isMainThead = true;
-                faceAPIService = _faceAPIService;
+                faceAPIService = WebWorkerService.ServiceProvider.GetRequiredService<IFaceAPIService>();
                 _mainThreadProcessing = true;
             }
-            else if (_workerPool.TryGetIdleWorker(out var worker)) {
-                if (!_images.TryDequeue(out image)) {
-                    _workerPool.ReleaseIdleWorker(worker);
-                    return;
-                }
-                isMainThead = false;
+            else if (_workerPool.TryGetIdleWorker(out worker))
+            {
                 faceAPIService = worker.GetService<IFaceAPIService>();
             }
-            else {
-                return;
+            else
+            {
+                // no workers 
+                image.Dispose();
+                return false;
             }
             frameSize = new Size(image.Width, image.Height);
             using var data = image.Data;
             image.Dispose();
             var arrayBuffer = data.Buffer;
             var frameIndex = _frameIndex++;
-            _ = faceAPIService.FaceDetection(arrayBuffer, frameSize.Width, frameSize.Height, _withLandmarks).ContinueWith((t) => {
-                if (isMainThead) _mainThreadProcessing = false;
-                try {
+            _ = faceAPIService.FaceDetection(arrayBuffer, frameSize.Width, frameSize.Height, _withLandmarks).ContinueWith((t) =>
+            {
+                if (worker != null)
+                {
+                    _workerPool.ReleaseIdleWorker(worker);
+                }
+                else
+                {
+                    _mainThreadProcessing = false;
+                }
+                try
+                {
                     using var result = t.Result;
-                    if (t.IsFaulted || t.IsCanceled || result == null || frameIndex < _frameIndexReported) {
+                    if (t.IsFaulted || t.IsCanceled || result == null || frameIndex < _frameIndexReported)
+                    {
                         return;
                     }
-                    _processedFrames++;
                     _frameIndexReported = frameIndex;
-                    if (_videoFrameSize != frameSize) {
+                    if (_videoFrameSize != frameSize)
+                    {
                         _videoFrameSize = frameSize;
                         OnInputFrameResized();
                     }
                     var resultArrayBuffer = result.ArrayBuffer;
-                    if (resultArrayBuffer != null && !resultArrayBuffer.IsWrapperDisposed && resultArrayBuffer.ByteLength > 0) {
+                    if (resultArrayBuffer != null && !resultArrayBuffer.IsWrapperDisposed && resultArrayBuffer.ByteLength > 0)
+                    {
                         using var uint8 = new Uint8Array(resultArrayBuffer);
                         using var imgData = ImageData.FromUint8Array(uint8, frameSize.Width, frameSize.Height);
-                        if (_cameraCanvasProcessedElCtx != null && _cameraCanvasProcessedEl != null) {
+                        if (_cameraCanvasProcessedElCtx != null && _cameraCanvasProcessedEl != null)
+                        {
                             _cameraCanvasProcessedEl.Width = frameSize.Width;
                             _cameraCanvasProcessedEl.Height = frameSize.Height;
                             _cameraCanvasProcessedElCtx.PutImageData(imgData, 0, 0);
                         }
                     }
-                    if (_facesFnd != result.FacesFound) {
+                    if (_facesFnd != result.FacesFound)
+                    {
                         _facesFnd = result.FacesFound;
                         StateHasChanged();
                     }
                 }
-                finally {
+                finally
+                {
                     arrayBuffer.Dispose();
                 }
             });
-            if (_images.Count > 0) {
-                TryProcessFrame();
-            }
+            return true;
         }
 
-        private void _videoCapture_NewFrame() {
-            if (_images.Count < maxQueueSize) {
-                var imageData = _videoCapture.ReadImageData();
-                if (imageData != null) {
-                    _images.Enqueue(imageData);
+        private void _videoCapture_NewFrame()
+        {
+            var imageData = _videoCapture.ReadImageData();
+            if (imageData != null)
+            {
+                //while (_images.Count >= maxQueueSize)
+                //{
+                //    var image = _images.Dequeue();
+                //    image.Dispose();
+                //    _droppedFrames++;
+                //}
+                //_images.Enqueue(imageData);
+                if (TryProcessFrame(imageData))
+                {
+                    _processedFrames++;
+                }
+                else
+                {
+                    _droppedFrames++;
                 }
             }
-            else {
-                _droppedFrames++;
-            }
-            TryProcessFrame();
         }
 
-        private void MediaDevicesService_OnDeviceInfosChanged() {
+        private void MediaDevicesService_OnDeviceInfosChanged()
+        {
             _ = RefreshCameraList();
         }
 
-        void CloseMediaStream() {
+        void CloseMediaStream()
+        {
             if (_mediaStream == null) return;
             _mediaStream.StopAllTracks();
             _mediaStream.Dispose();
             _mediaStream = null;
         }
 
-        async void OnDeviceChange(MediaDeviceInfo? selected) {
+        async void OnDeviceChange(MediaDeviceInfo? selected)
+        {
             CloseMediaStream();
-            if (_videoCapture != null) {
+            if (_videoCapture != null)
+            {
                 _videoCapture.Video.Pause();
                 _videoCapture.Video.SrcObject = null;
             }
-            if (selected != null && _mediaDevicesService != null && _videoCapture != null) {
+            if (selected != null && _mediaDevicesService != null && _videoCapture != null)
+            {
                 _mediaStream = await _mediaDevicesService.MediaDevices.GetMediaDeviceStream(selected.DeviceId, null);
                 _videoCapture.Video.SrcObject = _mediaStream;
-                try {
+                try
+                {
                     await _videoCapture.Video.Play();
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Console.WriteLine("Play error");
                 }
             }
         }
 
-        async Task RefreshCameraList() {
-            await _mediaDevicesService.UpdateDeviceList();
+        async Task RefreshCameraList(bool allowAsk = false)
+        {
+            await _mediaDevicesService.UpdateDeviceList(allowAsk);
             _devices = _mediaDevicesService.DeviceInfos.Where(o => o.Kind == "videoinput").ToList();
             StateHasChanged();
         }
-        void OnInputFrameResized() {
+        void OnInputFrameResized()
+        {
             Console.WriteLine($"Camera input resized: {_videoFrameSize.Width}x{_videoFrameSize.Height}");
-            if (_cameraCanvasProcessedEl != null) {
+            if (_cameraCanvasProcessedEl != null)
+            {
                 _cameraCanvasProcessedEl.Width = _videoFrameSize.Width;
                 _cameraCanvasProcessedEl.Height = _videoFrameSize.Height;
             }
         }
 
-        public void Dispose() {
-            _images.Clear();
+        public void Dispose()
+        {
+            //_images.Clear();
             CloseMediaStream();
-            _videoCapture.NewFrame -= _videoCapture_NewFrame;
-            _workerPool.OnBusyStateChanged -= _workerPool_OnBusyStateChanged;
-
+            if (_videoCapture != null)
+            {
+                _videoCapture.NewFrame -= _videoCapture_NewFrame;
+                _videoCapture.Dispose();
+                _videoCapture = null;
+            }
             _cameraCanvasProcessedElCtx?.Dispose();
             _cameraCanvasProcessedEl?.Dispose();
-            _callbackGroup.Dispose();
             _mediaStream?.Dispose();
-            _videoCapture?.Dispose();
+            _callbackGroup.Dispose();
         }
     }
 }

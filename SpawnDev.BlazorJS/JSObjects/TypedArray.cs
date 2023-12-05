@@ -18,5 +18,11 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var uint8Array = new Uint8Array(buffer);
             return uint8Array.ReadBytes();
         }
+        public void Set(byte[] typedArray) => JSRef.CallVoid("set", typedArray);
+        public void Set(byte[] typedArray, long targetOffset) => JSRef.CallVoid("set", typedArray, targetOffset);
+        public void Set(TypedArray typedArray) => JSRef.CallVoid("set", typedArray);
+        public void Set(TypedArray typedArray, long targetOffset) => JSRef.CallVoid("set", typedArray, targetOffset);
+        public void Set(Array typedArray) => JSRef.CallVoid("set", typedArray);
+        public void Set(Array typedArray, long targetOffset) => JSRef.CallVoid("set", typedArray, targetOffset);
     }
 }

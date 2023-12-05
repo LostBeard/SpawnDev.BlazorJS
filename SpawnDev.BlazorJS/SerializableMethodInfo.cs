@@ -65,13 +65,34 @@ namespace SpawnDev.BlazorJS
             _MethodInfo = methodInfo;
             Resolved = true;
         }
+        public SerializableMethodInfo(Delegate methodDelegate)
+        {
+            var methodInfo = methodDelegate.Method;
+            var mi = methodInfo;
+            if (methodInfo.ReflectedType == null) throw new Exception("Cannot serialize MethodInfo without ReflectedType");
+            if (methodInfo.IsConstructedGenericMethod)
+            {
+                GenericArguments = methodInfo.GetGenericArguments().Select(o => GetTypeName(o)).ToList();
+                mi = methodInfo.GetGenericMethodDefinition();
+            }
+            MethodName = mi.Name;
+            ReflectedTypeName = GetTypeName(methodInfo.ReflectedType);
+            ReturnType = GetTypeName(mi.ReturnType);
+            ParameterTypes = mi.GetParameters().Select(o => GetTypeName(o.ParameterType)).ToList();
+            _MethodInfo = methodInfo;
+            Resolved = true;
+        }
         /// <summary>
         /// Deserializes SerializableMethodInfo instance from string using System.Text.Json<br />
         /// PropertyNameCaseInsensitive = true is used in deserialization
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
-        public static SerializableMethodInfo? FromString(string json) => string.IsNullOrEmpty(json) || !json.StartsWith("{") ? null : JsonSerializer.Deserialize<SerializableMethodInfo>(json, DefaultJsonSerializerOptions);
+        public static SerializableMethodInfo? FromString(string json)
+        {
+            var ret = string.IsNullOrEmpty(json) || !json.StartsWith("{") ? null : JsonSerializer.Deserialize<SerializableMethodInfo>(json, DefaultJsonSerializerOptions);
+            return ret;
+        }
         /// <summary>
         /// Serializes SerializableMethodInfo to a string using System.Text.Json
         /// </summary>
@@ -79,14 +100,14 @@ namespace SpawnDev.BlazorJS
         public override string ToString() => JsonSerializer.Serialize(this);
 
         internal static JsonSerializerOptions DefaultJsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        
+
         static string GetTypeName(Type type)
         {
-            return string.IsNullOrEmpty(type.FullName) ? type.Name : type.FullName;
+            return !string.IsNullOrEmpty(type.AssemblyQualifiedName) ? type.AssemblyQualifiedName : (!string.IsNullOrEmpty(type.FullName) ? type.FullName : type.Name);
         }
-        
+
         void Resolve()
-        {
+        {;
             MethodInfo? methodInfo = null;
             if (Resolved) return;
             Resolved = true;
@@ -97,7 +118,7 @@ namespace SpawnDev.BlazorJS
                 // Reflected type not found
                 return;
             }
-            var methodsWithName = reflectedType.GetMethods().Where(o => o.Name == MethodName);
+            var methodsWithName = reflectedType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static).Where(o => o.Name == MethodName);
             if (!methodsWithName.Any())
             {
                 // No method found with this MethodName found in ReflectedType
@@ -151,6 +172,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="methodInfo"></param>
         /// <returns></returns>
         public static string SerializeMethodInfo(MethodInfo methodInfo) => new SerializableMethodInfo(methodInfo).ToString();
+        public static string SerializeMethodInfo(Delegate methodDeleate) => new SerializableMethodInfo(methodDeleate.Method).ToString();
         /// <summary>
         /// Converts a MethodInfo that has been serialized using SerializeMethodInfo into a MethodInfo if serialization is successful or a null otherwise.
         /// </summary>

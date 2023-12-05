@@ -2,6 +2,7 @@
 using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace SpawnDev.BlazorJS.WebWorkers
@@ -165,7 +166,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     object? retValue = null;
                     string? err = null;
                     object?[]? callArgs0 = null;
-                    var hasReturnValue = false;
                     var finalReturnTypeAllowTransfer = true;
                     var finalReturnType = typeof(void);
                     try
@@ -175,66 +175,29 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     catch { }
                     var argsLength = args != null ? args.Get<int>("length") : 0;
                     var serviceType = TypeExtensions.GetType(msgBase.TargetType);
-                    if (serviceType == null)
+                    var methodInfo = GetBestInstanceMethod(serviceType, msgBase.TargetName, argsLength);
+                    if (methodInfo == null)
                     {
-                        throw new Exception($"ERROR: {nameof(ServiceCallDispatcher)} OnMessage - Service type not found {msgBase.TargetType}");
-                    }
-                    object? service = _serviceProvider.GetRequiredService(serviceType);
-                    if (service == null)
-                    {
-                        err = $"Service type not found: {msgBase.TargetType}";
+                        err = $"Method signature not found: {msgBase.TargetName}";
                     }
                     else
                     {
-                        var methodInfo = GetBestInstanceMethod(serviceType, msgBase.TargetName, argsLength);
-                        if (methodInfo == null)
+                        object? service = null;
+                        if (!methodInfo.IsStatic)
                         {
-                            err = $"Method signature not found: {msgBase.TargetName}";
-                        }
-                        else
-                        {
-                            var returnType = methodInfo.ReturnType;
-                            var isAwaitable = returnType.IsAsync();
-                            finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
-                            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-                            var transferAttrMethod = finalReturnTypeIsVoid ? null : (WorkerTransferAttribute?)finalReturnType.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
-                            if (transferAttrMethod != null)
+                            // non-static methods calls msut point at a registered service
+                            service = _serviceProvider.GetService(serviceType);
+                            if (service == null)
                             {
-                                finalReturnTypeAllowTransfer = transferAttrMethod.Transfer;
+                                err = $"Service type not found: {msgBase.TargetType}";
                             }
+                        }
+                        if (string.IsNullOrEmpty(err))
+                        {
                             callArgs0 = PostDeserializeArgs(msgBase.RequestId, methodInfo, argsLength, args.Get);
-                            hasReturnValue = !finalReturnTypeIsVoid;
                             try
                             {
-                                var retv = methodInfo.Invoke(service, callArgs0);
-                                if (retv is Task t)
-                                {
-                                    await t;
-                                    if (t.Exception != null)
-                                    {
-                                        err = t.Exception.Message;
-                                    }
-                                    else if (!finalReturnTypeIsVoid)
-                                    {
-                                        retValue = returnType.GetProperty("Result").GetValue(retv, null);
-                                    }
-                                }
-                                else if (retv is ValueTask vt)
-                                {
-                                    await vt;
-                                    if (vt.IsFaulted)
-                                    {
-                                        err = "Call failed";
-                                    }
-                                    else if (!finalReturnTypeIsVoid)
-                                    {
-                                        retValue = returnType.GetProperty("Result").GetValue(retv, null);
-                                    }
-                                }
-                                else if (!finalReturnTypeIsVoid)
-                                {
-                                    retValue = retv;
-                                }
+                                retValue = await methodInfo.InvokeAsync(service, callArgs0);
                             }
                             catch (Exception ex)
                             {
@@ -242,17 +205,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
                             }
                         }
                     }
-
-                    //if (retValue == null) {
-                    //    Console.WriteLine("retValue == null");
-                    //}
-
                     var autoDisposeArgs = true;
                     if (autoDisposeArgs && callArgs0 != null)
                     {
                         foreach (var ca in callArgs0)
                         {
-                            if (ca is IDisposable disposable)
+                            if (ca != null && ca is IDisposable disposable)
                             {
                                 disposable.Dispose();
                             }
@@ -260,17 +218,26 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     }
                     if (!string.IsNullOrEmpty(msgBase.RequestId))
                     {
-                        // send notification of completeion is there is a requestid
+                        // send notification of completion is there is a requestid
                         var callbackMsg = new WebWorkerMessageOut { TargetType = "__callback", RequestId = msgBase.RequestId };
                         object[] transfer = new object?[0];
-                        if (hasReturnValue && retValue != null)
+                        if (retValue != null)
                         {
                             if (finalReturnTypeAllowTransfer)
                             {
-                                var conversionInfo = TypeConversionInfo.GetTypeConversionInfo(finalReturnType);
-                                transfer = conversionInfo.GetTransferablePropertyValues(retValue);
+                                if (retValue is byte[] bytes)
+                                {
+                                    // same as when sending a byte[] as an arg... change it to a Uint8Array reference so it is not serialized using Base64 and we can transfer its array buffer
+                                    var uint8Array = new Uint8Array(bytes);
+                                    retValue = uint8Array;
+                                    transfer = new object[] { uint8Array.Buffer };
+                                }
+                                else
+                                {
+                                    var conversionInfo = TypeConversionInfo.GetTypeConversionInfo(finalReturnType);
+                                    transfer = conversionInfo.GetTransferablePropertyValues(retValue);
+                                }
                             }
-                            //if (transfer.Length > 0) Console.WriteLine($"transfering: {transfer.Length} {transfer[0].GetType().Name}");
                         }
                         callbackMsg.Data = new object?[] { err, retValue };
                         _port.PostMessage(callbackMsg, transfer);
@@ -302,13 +269,26 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         //
         public Task<object?> InvokeAsync(Type serviceType, string methodName, params object?[]? args) => CallAsync(serviceType, methodName, args ?? new object[0]);
-        public Task<object?> CallAsync(Type serviceType, string methodName, object?[]? args = null)
+
+        public Task<object?> CallAsync(Delegate methodDelegate, object?[]? args = null) => CallAsync(methodDelegate.Method, args);
+
+        /// <summary>
+        /// Calls the MethodInfo on remote context
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public Task<object?> CallAsync(MethodInfo methodInfo, object?[]? args = null)
         {
+            var serviceType = methodInfo.ReflectedType;
+            if (serviceType == null)
+            {
+                throw new Exception("ServiceCallDispatcher.CallAsync: method foes not have a reflected type.");
+            }
+            var methodName = SerializableMethodInfo.SerializeMethodInfo(methodInfo);
             var argsLength = args != null ? args.Length : 0;
-            var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
-            var returnType = methodInfo.ReturnType;
-            var isAwaitable = returnType.IsAsync();
-            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
+            Type returnType = methodInfo.ReturnType;
+            var finalReturnType = returnType.AsyncReturnType() ?? returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
             var requestId = Guid.NewGuid().ToString();
             var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
@@ -316,7 +296,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 RequestId = requestId,
                 TargetName = methodName,
-                TargetType = serviceType.FullName ?? serviceType.Name,
+                TargetType = serviceType.GetBestName(),
                 Data = msgData,
             };
             var t = new TaskCompletionSource<object?>();
@@ -332,7 +312,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 if (argsLength > 0)
                 {
                     err = args.Get<string?>(0);
-                    if (string.IsNullOrEmpty(err)) retVal = (object?)args.Get(finalReturnType, 1);
+                    if (string.IsNullOrEmpty(err) && !finalReturnTypeIsVoid)
+                    {
+                        retVal = args.Get(finalReturnType, 1);
+                    }
                 }
                 if (!string.IsNullOrEmpty(err))
                     t.TrySetException(new Exception(err));
@@ -346,190 +329,205 @@ namespace SpawnDev.BlazorJS.WebWorkers
             CheckBusyStateChanged();
             return t.Task;
         }
+        public Task<object?> CallAsync(Type serviceType, string methodName, object?[]? args = null)
+        {
+            var argsLength = args != null ? args.Length : 0;
+            var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
+            return CallAsync(methodInfo, args);
+        }
         public Task<TResult> InvokeAsync<TService, TResult>(string methodName, params object?[]? args) => CallAsync<TService, TResult>(methodName, args ?? new object[0]);
-        public Task<TResult> CallAsync<TService, TResult>(string methodName, object?[]? args = null)
+        public async Task<TResult> CallAsync<TService, TResult>(string methodName, object?[]? args = null)
         {
             var argsLength = args != null ? args.Length : 0;
             var serviceType = typeof(TService);
             var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
-            var returnType = methodInfo.ReturnType;
-            var isAwaitable = returnType.IsAsync();
-            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
-            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-            var requestId = Guid.NewGuid().ToString();
-            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
-            var workerMsg = new WebWorkerMessageOut
-            {
-                RequestId = requestId,
-                TargetName = methodName,
-                TargetType = serviceType.FullName ?? serviceType.Name,
-                Data = msgData,
-            };
-            var t = new TaskCompletionSource<TResult>();
-            if (typeof(TResult) != finalReturnType)
-            {
-#if DEBUG
-                Console.WriteLine($"WARNING: Worker service {serviceType.Name} method {methodName} has a different return type {finalReturnType.Name} then the callee requested type {finalReturnType.Name}");
-#endif
-            }
-            var workerTask = new WebWorkerCallMessageTask((args) =>
-            {
-                // remove any callbacks
-                var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
-                foreach (var key in keysToRemove) _actionHandles.Remove(key);
-                //var finalReturnTypeName = finalReturnType.Name;
-                var argsLength = args == null ? 0 : args.Get<int>("length");
-                if (args == null || argsLength != 2)
-                {
-                    Console.WriteLine($"ServiceCallDispatcher Invalid return args for workerTask");
-                    t.TrySetException(new Exception("Invalid return args for workerTask"));
-                    return;
-                }
-                var err = args.Get<string?>(0);
-                if (!string.IsNullOrEmpty(err))
-                {
-                    t.TrySetException(new Exception(err));
-                    return;
-                }
-                try
-                {
-                    var ret = args.Get<TResult>(1);
-                    t.TrySetResult(ret);
-                    return;
-                }
-                catch
-                {
-#if DEBUG && false
-                            Console.WriteLine($"ServiceCallDispatcher 'retVal = args.Get<TResult?>(1);'");
-#endif
-                    t.TrySetResult(default);
-                }
-            });
-            workerTask.ReturnValueType = finalReturnType;
-            workerTask.webWorkerCallMessageOutgoing = workerMsg;
-            _waiting.Add(workerTask.RequestId, workerTask);
-            _port.PostMessage(workerMsg, transferable);
-            CheckBusyStateChanged();
-            return t.Task;
+            return (TResult)await CallAsync(methodInfo, args);
+            //            var returnType = methodInfo.ReturnType;
+            //            var isAwaitable = returnType.IsAsync();
+            //            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
+            //            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
+            //            var requestId = Guid.NewGuid().ToString();
+            //            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
+            //            var workerMsg = new WebWorkerMessageOut
+            //            {
+            //                RequestId = requestId,
+            //                TargetName = methodName,
+            //                TargetType = serviceType.FullName ?? serviceType.Name,
+            //                Data = msgData,
+            //            };
+            //            var t = new TaskCompletionSource<TResult>();
+            //            if (typeof(TResult) != finalReturnType)
+            //            {
+            //#if DEBUG
+            //                Console.WriteLine($"WARNING: Worker service {serviceType.Name} method {methodName} has a different return type {finalReturnType.Name} then the callee requested type {finalReturnType.Name}");
+            //#endif
+            //            }
+            //            var workerTask = new WebWorkerCallMessageTask((args) =>
+            //            {
+            //                // remove any callbacks
+            //                var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
+            //                foreach (var key in keysToRemove) _actionHandles.Remove(key);
+            //                //var finalReturnTypeName = finalReturnType.Name;
+            //                var argsLength = args == null ? 0 : args.Get<int>("length");
+            //                if (args == null || argsLength != 2)
+            //                {
+            //                    Console.WriteLine($"ServiceCallDispatcher Invalid return args for workerTask");
+            //                    t.TrySetException(new Exception("Invalid return args for workerTask"));
+            //                    return;
+            //                }
+            //                var err = args.Get<string?>(0);
+            //                if (!string.IsNullOrEmpty(err))
+            //                {
+            //                    t.TrySetException(new Exception(err));
+            //                    return;
+            //                }
+            //                try
+            //                {
+            //                    var ret = args.Get<TResult>(1);
+            //                    t.TrySetResult(ret);
+            //                    return;
+            //                }
+            //                catch
+            //                {
+            //#if DEBUG && false
+            //                            Console.WriteLine($"ServiceCallDispatcher 'retVal = args.Get<TResult?>(1);'");
+            //#endif
+            //                    t.TrySetResult(default);
+            //                }
+            //            });
+            //            workerTask.ReturnValueType = finalReturnType;
+            //            workerTask.webWorkerCallMessageOutgoing = workerMsg;
+            //            _waiting.Add(workerTask.RequestId, workerTask);
+            //            _port.PostMessage(workerMsg, transferable);
+            //            CheckBusyStateChanged();
+            //            return t.Task;
         }
-        public void CallAsync<TService>(MethodInfo methodInfo, object?[]? args, Action<Exception?, object?> callback) where TService : class => CallAsync(typeof(TService), methodInfo, args, callback);
-        public void CallAsync<TService>(string methodName, object?[]? args, Action<Exception?, object?> callback) where TService : class => CallAsync(typeof(TService), methodName, args, callback);
-        public void CallAsync(Type serviceType, string methodName, object?[]? args, Action<Exception?, object?> callback)
-        {
-            var argsLength = args != null ? args.Length : 0;
-            var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
-            var returnType = methodInfo.ReturnType;
-            var isAwaitable = returnType.IsAsync();
-            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
-            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-            var requestId = Guid.NewGuid().ToString();
-            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
-            var workerMsg = new WebWorkerMessageOut
-            {
-                RequestId = requestId,
-                TargetName = methodName,
-                TargetType = serviceType.FullName ?? serviceType.Name,
-                Data = msgData,
-            };
-            var workerTask = new WebWorkerCallMessageTask((args) =>
-            {
-                Exception? retExc = null;
-                object? retVal = null;
-                // remove any callbacks
-                var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
-                foreach (var key in keysToRemove) _actionHandles.Remove(key);
-                //var finalReturnTypeName = finalReturnType.Name;
-                var argsLength = args == null ? 0 : args.Get<int>("length");
-                if (args == null || argsLength != 2)
-                {
-                    Console.WriteLine($"ServiceCallDispatcher Invalid return args for workerTask");
-                    retExc = new Exception("Invalid return args for workerTask");
-                }
-                else
-                {
-                    var err = args.Get<string?>(0);
-                    if (!string.IsNullOrEmpty(err))
-                    {
-                        retExc = new Exception(err);
-                    }
-                    else if (!finalReturnTypeIsVoid)
-                    {
-                        try
-                        {
-                            retVal = args.Get(finalReturnType, 1);
-                        }
-                        catch (Exception ex)
-                        {
-                            retExc = ex;
-                        }
-                    }
-                }
-                callback?.Invoke(retExc, retVal);
-            });
-            workerTask.ReturnValueType = finalReturnType;
-            workerTask.webWorkerCallMessageOutgoing = workerMsg;
-            _waiting.Add(workerTask.RequestId, workerTask);
-            _port.PostMessage(workerMsg, transferable);
-            CheckBusyStateChanged();
-        }
-        public void CallAsync(Type serviceType, MethodInfo methodInfo, object?[]? args, Action<Exception?, object?> callback)
-        {
-            var argsLength = args != null ? args.Length : 0;
-            var methodName = SerializableMethodInfo.SerializeMethodInfo(methodInfo);
-            var returnType = methodInfo.ReturnType;
-            var isAwaitable = returnType.IsAsync();
-            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
-            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-            var requestId = Guid.NewGuid().ToString();
-            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
-            var workerMsg = new WebWorkerMessageOut
-            {
-                RequestId = requestId,
-                TargetName = methodName,
-                TargetType = serviceType.FullName ?? serviceType.Name,
-                Data = msgData,
-            };
-            var workerTask = new WebWorkerCallMessageTask((args) =>
-            {
-                Exception? retExc = null;
-                object? retVal = null;
-                // remove any callbacks
-                var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
-                foreach (var key in keysToRemove) _actionHandles.Remove(key);
-                //var finalReturnTypeName = finalReturnType.Name;
-                var argsLength = args == null ? 0 : args.Get<int>("length");
-                if (args == null || argsLength != 2)
-                {
-                    Console.WriteLine($"ServiceCallDispatcher Invalid return args for workerTask");
-                    retExc = new Exception("Invalid return args for workerTask");
-                }
-                else
-                {
-                    var err = args.Get<string?>(0);
-                    if (!string.IsNullOrEmpty(err))
-                    {
-                        retExc = new Exception(err);
-                    }
-                    else if (!finalReturnTypeIsVoid)
-                    {
-                        try
-                        {
-                            retVal = args.Get(finalReturnType, 1);
-                        }
-                        catch (Exception ex)
-                        {
-                            retExc = ex;
-                        }
-                    }
-                }
-                callback?.Invoke(retExc, retVal);
-            });
-            workerTask.ReturnValueType = finalReturnType;
-            workerTask.webWorkerCallMessageOutgoing = workerMsg;
-            _waiting.Add(workerTask.RequestId, workerTask);
-            _port.PostMessage(workerMsg, transferable);
-            CheckBusyStateChanged();
-        }
+
+        //public void Call<TService>(string methodName, object?[]? args, Action<Exception?, object?> callback) where TService : class => Call(typeof(TService), methodName, args, callback);
+        //public void Call(Type serviceType, string methodName, object?[]? args, Action<Exception?, object?> callback)
+        //{
+        //    var argsLength = args != null ? args.Length : 0;
+        //    var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
+        //    Call(methodInfo, args, callback);
+        //    //var returnType = methodInfo.ReturnType;
+        //    //var isAwaitable = returnType.IsAsync();
+        //    //var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
+        //    //var finalReturnTypeIsVoid = finalReturnType == typeof(void);
+        //    //var requestId = Guid.NewGuid().ToString();
+        //    //var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
+        //    //var workerMsg = new WebWorkerMessageOut
+        //    //{
+        //    //    RequestId = requestId,
+        //    //    TargetName = methodName,
+        //    //    TargetType = serviceType.FullName ?? serviceType.Name,
+        //    //    Data = msgData,
+        //    //};
+        //    //var workerTask = new WebWorkerCallMessageTask((args) =>
+        //    //{
+        //    //    Exception? retExc = null;
+        //    //    object? retVal = null;
+        //    //    // remove any callbacks
+        //    //    var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
+        //    //    foreach (var key in keysToRemove) _actionHandles.Remove(key);
+        //    //    //var finalReturnTypeName = finalReturnType.Name;
+        //    //    var argsLength = args == null ? 0 : args.Get<int>("length");
+        //    //    if (args == null || argsLength != 2)
+        //    //    {
+        //    //        Console.WriteLine($"ServiceCallDispatcher Invalid return args for workerTask");
+        //    //        retExc = new Exception("Invalid return args for workerTask");
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        var err = args.Get<string?>(0);
+        //    //        if (!string.IsNullOrEmpty(err))
+        //    //        {
+        //    //            retExc = new Exception(err);
+        //    //        }
+        //    //        else if (!finalReturnTypeIsVoid)
+        //    //        {
+        //    //            try
+        //    //            {
+        //    //                retVal = args.Get(finalReturnType, 1);
+        //    //            }
+        //    //            catch (Exception ex)
+        //    //            {
+        //    //                retExc = ex;
+        //    //            }
+        //    //        }
+        //    //    }
+        //    //    callback?.Invoke(retExc, retVal);
+        //    //});
+        //    //workerTask.ReturnValueType = finalReturnType;
+        //    //workerTask.webWorkerCallMessageOutgoing = workerMsg;
+        //    //_waiting.Add(workerTask.RequestId, workerTask);
+        //    //_port.PostMessage(workerMsg, transferable);
+        //    //CheckBusyStateChanged();
+        //}
+        //public void Call(Delegate methodDelegate, object?[]? args, Action<Exception?, object?> callback) => Call(methodDelegate.Method, args, callback);
+        //public void Call(MethodInfo methodInfo, object?[]? args, Action<Exception?, object?> callback)
+        //{
+
+        //    _ = CallAsync(methodInfo, args).ContinueWith(t => callback(t.Exception, t.Result));
+        //    return;
+
+
+        //    var serviceType = methodInfo.ReflectedType;
+        //    var argsLength = args != null ? args.Length : 0;
+        //    var methodName = SerializableMethodInfo.SerializeMethodInfo(methodInfo);
+        //    var returnType = methodInfo.ReturnType;
+        //    var isAwaitable = returnType.IsAsync();
+        //    var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
+        //    var finalReturnTypeIsVoid = finalReturnType == typeof(void);
+        //    var requestId = Guid.NewGuid().ToString();
+        //    var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
+        //    var workerMsg = new WebWorkerMessageOut
+        //    {
+        //        RequestId = requestId,
+        //        TargetName = methodName,
+        //        TargetType = serviceType.FullName ?? serviceType.Name,
+        //        Data = msgData,
+        //    };
+        //    var workerTask = new WebWorkerCallMessageTask((args) =>
+        //    {
+        //        Exception? retExc = null;
+        //        object? retVal = null;
+        //        // remove any callbacks
+        //        var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
+        //        foreach (var key in keysToRemove) _actionHandles.Remove(key);
+        //        //var finalReturnTypeName = finalReturnType.Name;
+        //        var argsLength = args == null ? 0 : args.Get<int>("length");
+        //        if (args == null || argsLength != 2)
+        //        {
+        //            Console.WriteLine($"ServiceCallDispatcher Invalid return args for workerTask");
+        //            retExc = new Exception("Invalid return args for workerTask");
+        //        }
+        //        else
+        //        {
+        //            var err = args.Get<string?>(0);
+        //            if (!string.IsNullOrEmpty(err))
+        //            {
+        //                retExc = new Exception(err);
+        //            }
+        //            else if (!finalReturnTypeIsVoid)
+        //            {
+        //                try
+        //                {
+        //                    retVal = args.Get(finalReturnType, 1);
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    retExc = ex;
+        //                }
+        //            }
+        //        }
+        //        callback?.Invoke(retExc, retVal);
+        //    });
+        //    workerTask.ReturnValueType = finalReturnType;
+        //    workerTask.webWorkerCallMessageOutgoing = workerMsg;
+        //    _waiting.Add(workerTask.RequestId, workerTask);
+        //    _port.PostMessage(workerMsg, transferable);
+        //    CheckBusyStateChanged();
+        //}
 
         public static object? GetDefault(Type type) => type.IsValueType ? Activator.CreateInstance(type) : null;
 
@@ -553,9 +551,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (args != null)
             {
                 ret = new object?[args.Length];
-                var argI = 0;
                 for (var i = 0; i < methodsParamTypes.Length; i++)
                 {
+                    var value = args[i];
+                    if (value == null) continue;
                     var methodParam = methodsParamTypes[i];
                     var methodParamType = methodParam.ParameterType;
                     var methodParamTypeIsTransferable = IsTransferable(methodParamType);
@@ -577,56 +576,44 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     {
                         // skip... it will be handles on the other side
                     }
-                    else if (typeof(Delegate).IsAssignableFrom(methodParamType))
+                    else if (value is Delegate valueDelegate)
                     {
-                        var argVal = (Delegate)args[argI];
-                        argI++;
                         var cb = new CallbackAction
                         {
                             Method = methodInfo,
                             RequestId = requestId,
                             ParameterTypes = genericTypes,
-                            Target = argVal,
+                            Target = valueDelegate,
                         };
                         _actionHandles[cb.Id] = cb;
                         ret[i] = cb.Id;
                     }
-                    else if (argI < args.Length)
+                    else if (value is byte[] bytes)
                     {
-                        var argVal = args[argI];
+                        // to try and good performance sending byte arrays we convert it to a Uint8Array reference first, and add its array buffer to the transferables list.
+                        // it will still be read in on the other side as a byte array
+                        var uint8Array = new Uint8Array(bytes);
+                        if (allowTransferable)
+                        {
+                            trasnferableList.Add(uint8Array.Buffer);
+                        }
+                        ret[i] = uint8Array;
+                    }
+                    else 
+                    {
                         if (allowTransferable)
                         {
                             var covnersionInfo = TypeConversionInfo.GetTypeConversionInfo(methodParamType);
-                            var propTransferable = covnersionInfo.GetTransferablePropertyValues(argVal);
+                            var propTransferable = covnersionInfo.GetTransferablePropertyValues(value);
                             trasnferableList.AddRange(propTransferable);
                         }
-                        ret[i] = argVal;
-                        argI++;
-                    }
-                    else
-                    {
-                        // should not get here
+                        ret[i] = value;
                     }
                 }
             }
             transferable = trasnferableList.ToArray();
             return ret;
         }
-
-        public static Action<T0> CreateTypedActionT1<T0>(Action<object?[]> arg) => new Action<T0>((t0) => arg(new object[] { t0 }));
-        public static Action<T0, T1> CreateTypedActionT2<T0, T1>(Action<object?[]> arg) => new Action<T0, T1>((t0, t1) => arg(new object[] { t0, t1 }));
-        public static Action<T0, T1, T2> CreateTypedActionT3<T0, T1, T2>(Action<object?[]> arg) => new Action<T0, T1, T2>((t0, t1, t2) => arg(new object[] { t0, t1 }));
-        public static Action<T0, T1, T2, T3> CreateTypedActionT4<T0, T1, T2, T3>(Action<object?[]> arg) => new Action<T0, T1, T2, T3>((t0, t1, t2, t3) => arg(new object[] { t0, t1, t2, t3 }));
-        public static Action<T0, T1, T2, T3, T4> CreateTypedActionT4<T0, T1, T2, T3, T4>(Action<object?[]> arg) => new Action<T0, T1, T2, T3, T4>((t0, t1, t2, t3, t4) => arg(new object[] { t0, t1, t2, t3, t4 }));
-
-        public object CreateTypedAction(Type[] typ1, Action<object?[]> arg)
-        {
-            var meth = typeof(ServiceCallDispatcher).GetMethod($"CreateTypedActionT{typ1.Length}", BindingFlags.Public | BindingFlags.Static);
-            var gmeth = meth.MakeGenericMethod(typ1);
-            var genericAction = gmeth.Invoke(null, new object[] { arg });
-            return genericAction;
-        }
-
         object?[]? PostDeserializeArgs(string requestId, MethodInfo methodInfo, int argsLength, Func<Type, object, object?> getArg)
         {
             var methodsParamTypes = methodInfo.GetParameters();
@@ -678,55 +665,71 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
             return ret;
         }
-        public Task InvokeVoidAsync<TService>(string methodName, params object?[]? args) => CallVoidAsync<TService>(methodName, args ?? new object[0]);
-        public Task CallVoidAsync<TService>(string methodName, object?[]? args = null)
+
+        public static Action<T0> CreateTypedActionT1<T0>(Action<object?[]> arg) => new Action<T0>((t0) => arg(new object[] { t0 }));
+        public static Action<T0, T1> CreateTypedActionT2<T0, T1>(Action<object?[]> arg) => new Action<T0, T1>((t0, t1) => arg(new object[] { t0, t1 }));
+        public static Action<T0, T1, T2> CreateTypedActionT3<T0, T1, T2>(Action<object?[]> arg) => new Action<T0, T1, T2>((t0, t1, t2) => arg(new object[] { t0, t1 }));
+        public static Action<T0, T1, T2, T3> CreateTypedActionT4<T0, T1, T2, T3>(Action<object?[]> arg) => new Action<T0, T1, T2, T3>((t0, t1, t2, t3) => arg(new object[] { t0, t1, t2, t3 }));
+        public static Action<T0, T1, T2, T3, T4> CreateTypedActionT4<T0, T1, T2, T3, T4>(Action<object?[]> arg) => new Action<T0, T1, T2, T3, T4>((t0, t1, t2, t3, t4) => arg(new object[] { t0, t1, t2, t3, t4 }));
+
+        public object CreateTypedAction(Type[] typ1, Action<object?[]> arg)
         {
-            var argsLength = args != null ? args.Length : 0;
-            var serviceType = typeof(TService);
-            var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
-            var returnType = methodInfo.ReturnType;
-            var isAwaitable = returnType.IsAsync();
-            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
-            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-            var requestId = Guid.NewGuid().ToString();
-            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
-            var workerMsg = new WebWorkerMessageOut
-            {
-                RequestId = requestId,
-                TargetName = methodName,
-                TargetType = serviceType.FullName ?? serviceType.Name,
-                Data = msgData,
-            };
-            var t = new TaskCompletionSource<int>();
-            if (typeof(void) != finalReturnType)
-            {
-#if DEBUG
-                Console.WriteLine($"WARNING: Worker service {serviceType.Name} method {methodName} has a different return type {typeof(void).Name} then the callee requested type {finalReturnType.Name}");
-#endif
-            }
-            var workerTask = new WebWorkerCallMessageTask((args) =>
-            {
-                // remove any callbacks
-                var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
-                foreach (var key in keysToRemove) _actionHandles.Remove(key);
-                //
-                var argsLength = args != null ? args.Get<int>("length") : 0;
-                string? err = null;
-                if (argsLength > 0)
-                {
-                    err = args.Get<string?>(0);
-                }
-                if (!string.IsNullOrEmpty(err))
-                    t.TrySetException(new Exception(err));
-                else
-                    t.TrySetResult(0);
-            });
-            workerTask.ReturnValueType = finalReturnType;
-            workerTask.webWorkerCallMessageOutgoing = workerMsg;
-            _waiting.Add(workerTask.RequestId, workerTask);
-            _port.PostMessage(workerMsg, transferable);
-            CheckBusyStateChanged();
-            return t.Task;
+            var meth = typeof(ServiceCallDispatcher).GetMethod($"CreateTypedActionT{typ1.Length}", BindingFlags.Public | BindingFlags.Static);
+            var gmeth = meth.MakeGenericMethod(typ1);
+            var genericAction = gmeth.Invoke(null, new object[] { arg });
+            return genericAction;
+        }
+        public Task InvokeVoidAsync<TService>(string methodName, params object?[]? args) => CallVoidAsync<TService>(methodName, args ?? new object[0]);
+        public async Task CallVoidAsync<TService>(string methodName, object?[]? args = null)
+        {
+            await CallAsync(typeof(TService), methodName, args);
+            return;
+//            var argsLength = args != null ? args.Length : 0;
+//            var serviceType = typeof(TService);
+//            var methodInfo = GetBestInstanceMethod(serviceType, methodName, argsLength);
+//            var returnType = methodInfo.ReturnType;
+//            var isAwaitable = returnType.IsAsync();
+//            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
+//            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
+//            var requestId = Guid.NewGuid().ToString();
+//            var msgData = PreSerializeArgs(requestId, methodInfo, args, out var transferable);
+//            var workerMsg = new WebWorkerMessageOut
+//            {
+//                RequestId = requestId,
+//                TargetName = methodName,
+//                TargetType = serviceType.FullName ?? serviceType.Name,
+//                Data = msgData,
+//            };
+//            var t = new TaskCompletionSource<int>();
+//            if (typeof(void) != finalReturnType)
+//            {
+//#if DEBUG
+//                Console.WriteLine($"WARNING: Worker service {serviceType.Name} method {methodName} has a different return type {typeof(void).Name} then the callee requested type {finalReturnType.Name}");
+//#endif
+//            }
+//            var workerTask = new WebWorkerCallMessageTask((args) =>
+//            {
+//                // remove any callbacks
+//                var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
+//                foreach (var key in keysToRemove) _actionHandles.Remove(key);
+//                //
+//                var argsLength = args != null ? args.Get<int>("length") : 0;
+//                string? err = null;
+//                if (argsLength > 0)
+//                {
+//                    err = args.Get<string?>(0);
+//                }
+//                if (!string.IsNullOrEmpty(err))
+//                    t.TrySetException(new Exception(err));
+//                else
+//                    t.TrySetResult(0);
+//            });
+//            workerTask.ReturnValueType = finalReturnType;
+//            workerTask.webWorkerCallMessageOutgoing = workerMsg;
+//            _waiting.Add(workerTask.RequestId, workerTask);
+//            _port.PostMessage(workerMsg, transferable);
+//            CheckBusyStateChanged();
+//            return t.Task;
         }
 
         List<CallSideParameter> additionalCallArgs { get; } = new List<CallSideParameter>();
@@ -762,11 +765,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 // name of Method only
                 var instanceMethods = classType
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static)
                 .Where(m => m.Name == identifier)
                 .Where(m => !m.IsGenericMethod)
-                // don't count parameters that will be added at call time
-                .Where(m => m.GetParameters().Where(o => GetCallSideParameter(o) == null).Count() == paramCount)
+                .Where(m => m.GetParameters().Count() == paramCount)
                 .ToList();
                 var best = instanceMethods.FirstOrDefault();
                 return best;

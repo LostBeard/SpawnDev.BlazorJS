@@ -47,7 +47,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 ServiceWorkerConfig = IServiceCollectionExtensions.ServiceWorkerConfig;
             }
+            Instance = this;
         }
+
+        public static WebWorkerService Instance { get; private set; }
 
         class WebWorkerServiceEventMsgBase
         {
@@ -285,6 +288,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (!WebWorkerSupported) return null;
             var queryArgs = new NameValueCollection();
             queryArgs.Add("verbose", verboseMode ? "true" : "false");
+#if DEBUG
+            queryArgs.Add("debugMode", "true");
+#endif
             var worker = new Worker($"{WebWorkerJSScript}?{ToQueryString(queryArgs)}");
             var webWorker = new WebWorker(worker, ServiceProvider);
             Workers.Add(webWorker);

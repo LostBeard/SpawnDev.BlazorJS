@@ -40,27 +40,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public Dictionary<string, PropertyInfo> returnTypeProperties { get; private set; } = new Dictionary<string, PropertyInfo>();
         public bool IsTransferable { get; private set; }
 
-        //bool HasIJSInProcessObjectReferenceConstructor()
-        //{
-        //    ConstructorInfo[] constructors;
-        //    try
-        //    {
-        //        constructors = ReturnType.GetConstructors();
-        //    }
-        //    catch
-        //    {
-        //        return false;
-        //    }
-        //    foreach (var c in constructors)
-        //    {
-        //        if (c.IsPrivate) continue;
-        //        var args = c.GetParameters();
-        //        if (args.Length != 1) continue;
-        //        if (args[0].ParameterType == typeof(IJSInProcessObjectReference)) return true;
-        //    }
-        //    return false;
-        //}
-
         static List<Type> IgnoreInterfaces = new List<Type> {
                 typeof(IJSInProcessObjectReference),
                 typeof(IJSObjectReference),
@@ -466,7 +445,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         static Dictionary<Type, TypeConversionInfo> _conversionInfo = new Dictionary<Type, TypeConversionInfo>();
         public static TypeConversionInfo GetTypeConversionInfo(Type type)
         {
-            if (_conversionInfo.TryGetValue(type, out TypeConversionInfo conversionInfo))
+            if (_conversionInfo.TryGetValue(type, out var conversionInfo))
             {
                 return conversionInfo;
             }
@@ -476,7 +455,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
             catch (Exception ex)
             {
-                var nmt = true;
+                Console.WriteLine("TypeConversionInfo error: " + ex.ToString());
             }
             _conversionInfo[type] = conversionInfo;
             return conversionInfo;
