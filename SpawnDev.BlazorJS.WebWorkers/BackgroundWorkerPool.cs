@@ -134,7 +134,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
 
         // AsyncFunc
-        public static async Task WindowInvoke<TResult>(Func<Task> methodDelegate)
+        public static async Task WindowInvoke(Func<Task> methodDelegate)
             => await WindowRun(methodDelegate, null);
         public static async Task<TResult> WindowInvoke<TResult>(Func<Task<TResult>> methodDelegate)
             => (TResult)await WindowRun(methodDelegate, null);
@@ -160,6 +160,36 @@ namespace SpawnDev.BlazorJS.WebWorkers
             => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
         public static async Task<TResult> WindowInvoke<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Func<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Task<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
             => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
+
+
+        // ValueTask
+        public static async ValueTask WindowInvoke(Func<ValueTask> methodDelegate)
+            => await WindowRun(methodDelegate, null);
+        public static async ValueTask<TResult> WindowInvoke<TResult>(Func<ValueTask<TResult>> methodDelegate)
+            => (TResult)await WindowRun(methodDelegate, null);
+        public static async ValueTask<TResult> WindowInvoke<T0, TResult>(Func<T0, ValueTask<TResult>> methodDelegate, T0 arg0)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, TResult>(Func<T0, T1, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, T2, TResult>(Func<T0, T1, T2, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, T2, T3, TResult>(Func<T0, T1, T2, T3, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, T2, T3, T4, TResult>(Func<T0, T1, T2, T3, T4, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, T2, T3, T4, T5, TResult>(Func<T0, T1, T2, T3, T4, T5, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, T2, T3, T4, T5, T6, TResult>(Func<T0, T1, T2, T3, T4, T5, T6, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T0, T1, T2, T3, T4, T5, T6, T7, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Func<T0, T1, T2, T3, T4, T5, T6, T7, T8, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Func<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        public static async ValueTask<TResult> WindowInvoke<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Func<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, ValueTask<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
+            => (TResult)await WindowRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
+
 
         // Worker
         // Action
@@ -215,7 +245,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             => (TResult)await WorkerRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
 
         // AsyncFunc
-        public static async Task WorkerInvoke<TResult>(Func<Task> methodDelegate)
+        public static async Task WorkerInvoke(Func<Task> methodDelegate)
             => await WorkerRun(methodDelegate, null);
         public static async Task<TResult> WorkerInvoke<TResult>(Func<Task<TResult>> methodDelegate)
             => (TResult)await WorkerRun(methodDelegate, null);
@@ -242,8 +272,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public static async Task<TResult> WorkerInvoke<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Func<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Task<TResult>> methodDelegate, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
             => (TResult)await WorkerRun(methodDelegate, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
 
-        // AsyncFunc
-        public static async ValueTask WorkerInvoke<TResult>(Func<ValueTask> methodDelegate)
+        // ValueTask
+        public static async ValueTask WorkerInvoke(Func<ValueTask> methodDelegate)
             => await WorkerRun(methodDelegate, null);
         public static async ValueTask<TResult> WorkerInvoke<TResult>(Func<ValueTask<TResult>> methodDelegate)
             => (TResult)await WorkerRun(methodDelegate, null);
