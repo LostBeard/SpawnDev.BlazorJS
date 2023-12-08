@@ -1,18 +1,14 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
 using Radzen;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Diagnostics;
 using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.Reflection;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
-using System.Diagnostics;
-using System.Reflection;
-using System.Text.Json;
 
 #if DEBUG
 JSObject.UndisposedHandleVerboseMode = false;
@@ -24,7 +20,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // Modify JSRuntime.JsonSerializerOptions (WARNING: Modifying this can cause unexpected results. Test thoroughly.)
 builder.Services.AddJSRuntimeJsonOptions(jsRuntimeJsonOptions =>
 {
-#if DEBUG
+#if DEBUG && false
     Console.WriteLine($"JSRuntime JsonConverters count: {jsRuntimeJsonOptions.Converters.Count}");
 #endif
 });
@@ -34,10 +30,8 @@ builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builde
 builder.Services.AddBlazorJSRuntime();
 // Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
 builder.Services.AddWebWorkerService();
-// WebWorkerPool service (WIP. optional. Not required for WebWorkerService)
-// Belwo line adds teh WebWorkerPool and start up 3 WebWorkers immediately if running in a Window scope; 0 otherwise.
-builder.Services.AddSingleton(sp => new WebWorkerPool(sp.GetRequiredService<WebWorkerService>(), sp.GetRequiredService<BlazorJSRuntime>().IsWindow ? 4 : 0));
-//builder.Services.AddSingleton(sp => new SharedWebWorkerPool(sp.GetRequiredService<WebWorkerService>()), GlobalScope.Window);
+// The below service is used to test CallDispatcher used with WebWorkers (Used in UnitTests)
+builder.Services.AddSingleton<CallDispatcherBaseTestClass>();
 // More app specific services
 builder.Services.AddSingleton(builder.Configuration); // used to demo appsettings reading in workers
 builder.Services.AddSingleton<MediaDevices>();

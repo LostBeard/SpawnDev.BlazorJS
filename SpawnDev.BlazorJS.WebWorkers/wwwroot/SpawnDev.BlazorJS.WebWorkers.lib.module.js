@@ -5,17 +5,6 @@
 //    return it && it.Math === Math && it;
 //}
 
-//const globalObject =
-//    // eslint-disable-next-line es/no-global-this -- safe
-//    checkIfGlobalThis(typeof globalThis == 'object' && globalThis) ||
-//    checkIfGlobalThis(typeof window == 'object' && window) ||
-//    // eslint-disable-next-line no-restricted-globals -- safe
-//    checkIfGlobalThis(typeof self == 'object' && self) ||
-//    checkIfGlobalThis(typeof global == 'object' && global) ||
-//    // eslint-disable-next-line no-new-func -- fallback
-//    (function () { return this; })() || Function('return this')();
-//// https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/?view=aspnetcore-7.0#inject-a-script-after-blazor-starts
-
 //// currently SpawnDev.BlazorJS.WebWorkers does not need javascript code to be loaded by Blazor
 //// probably removing this file soon if not needed
 

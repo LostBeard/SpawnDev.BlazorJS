@@ -67,11 +67,9 @@ namespace SpawnDev.BlazorJS.Toolbox
         // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
         public async Task<bool> UpdateDeviceList(bool allowAsk = false)
         {
-            Console.WriteLine("UpdateDeviceList");
             if (!Supported) return false;
             AreDevicesHidden = await MediaDevices.AreDevicesHidden();
             await _UpdateDeviceList();
-            Console.WriteLine($"UpdateDeviceList: {AreDevicesHidden} {DeviceInfos.Count}");
             if (!AreDevicesHidden || !allowAsk) return !AreDevicesHidden;
             dynamic constraints = new ExpandoObject();
             constraints.audio = true;
@@ -91,7 +89,6 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
             await _UpdateDeviceList();
             AreDevicesHidden = await MediaDevices.AreDevicesHidden();
-            Console.WriteLine($"UpdateDeviceList: {AreDevicesHidden} {DeviceInfos.Count}");
             return !AreDevicesHidden;
         }
 

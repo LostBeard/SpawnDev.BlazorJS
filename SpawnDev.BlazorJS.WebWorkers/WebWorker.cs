@@ -1,4 +1,5 @@
-﻿using SpawnDev.BlazorJS.JSObjects;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
@@ -10,7 +11,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             Supported = !JS.IsUndefined("Worker");
         }
         Worker _worker;
-        public WebWorker(Worker worker, IServiceProvider serviceProvider) : base(serviceProvider, worker)
+        public WebWorker(Worker worker, IServiceProvider serviceProvider, IServiceCollection serviceDescriptors) : base(serviceProvider, serviceDescriptors, worker)
         {
             _worker = worker;
         }

@@ -16,8 +16,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
         [Inject]
         MediaDevicesService? _mediaDevicesService { get; set; }
 
-        [Inject]
-        WebWorkerPool? _workerPool { get; set; }
+        WebWorkerPool? _workerPool => WebWorkerService.WorkerTask;
 
         [Inject]
         WebWorkerService WebWorkerService { get; set; }
@@ -115,7 +114,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
                 faceAPIService = WebWorkerService.ServiceProvider.GetRequiredService<IFaceAPIService>();
                 _mainThreadProcessing = true;
             }
-            else if (_workerPool.TryGetIdleWorker(out worker))
+            else if (_workerPool.TryGetWorker(out worker))
             {
                 faceAPIService = worker.GetService<IFaceAPIService>();
             }
@@ -134,7 +133,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
             {
                 if (worker != null)
                 {
-                    _workerPool.ReleaseIdleWorker(worker);
+                    worker.ReleaseLock();
                 }
                 else
                 {

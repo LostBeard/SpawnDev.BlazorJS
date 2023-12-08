@@ -1,12 +1,17 @@
 ﻿using Microsoft.JSInterop;
-using System.Data.Common;
-using System.Net.Security;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The ServiceWorkerGlobalScope interface of the Service Worker API represents the global execution context of a service worker.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope
+    /// </summary>
     public class ServiceWorkerGlobalScope : WorkerGlobalScope
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public ServiceWorkerGlobalScope(IJSInProcessObjectReference _ref) : base(_ref) { }
         #region properties
         /// <summary>

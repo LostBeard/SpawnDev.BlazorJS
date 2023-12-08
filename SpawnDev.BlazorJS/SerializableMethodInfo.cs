@@ -25,6 +25,10 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         public string ReflectedTypeName { get; init; } = "";
         /// <summary>
+        /// MethodInfo.DeclaringType type name
+        /// </summary>
+        public string DeclaringTypeName { get; init; } = "";
+        /// <summary>
         /// MethodInfo.Name
         /// </summary>
         public string MethodName { get; init; } = "";
@@ -60,6 +64,7 @@ namespace SpawnDev.BlazorJS
             }
             MethodName = mi.Name;
             ReflectedTypeName = GetTypeName(methodInfo.ReflectedType);
+            DeclaringTypeName = GetTypeName(methodInfo.DeclaringType);
             ReturnType = GetTypeName(mi.ReturnType);
             ParameterTypes = mi.GetParameters().Select(o => GetTypeName(o.ParameterType)).ToList();
             _MethodInfo = methodInfo;
@@ -77,6 +82,7 @@ namespace SpawnDev.BlazorJS
             }
             MethodName = mi.Name;
             ReflectedTypeName = GetTypeName(methodInfo.ReflectedType);
+            DeclaringTypeName = GetTypeName(methodInfo.DeclaringType);
             ReturnType = GetTypeName(mi.ReturnType);
             ParameterTypes = mi.GetParameters().Select(o => GetTypeName(o.ParameterType)).ToList();
             _MethodInfo = methodInfo;
@@ -101,8 +107,9 @@ namespace SpawnDev.BlazorJS
 
         internal static JsonSerializerOptions DefaultJsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-        static string GetTypeName(Type type)
+        static string GetTypeName(Type? type)
         {
+            if (type == null) return "";
             return !string.IsNullOrEmpty(type.AssemblyQualifiedName) ? type.AssemblyQualifiedName : (!string.IsNullOrEmpty(type.FullName) ? type.FullName : type.Name);
         }
 

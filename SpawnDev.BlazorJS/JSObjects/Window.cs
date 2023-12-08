@@ -1,17 +1,24 @@
 ﻿using Microsoft.JSInterop;
-using System.Security.Cryptography;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The Window interface represents a window containing a DOM document; the document property points to the DOM document loaded in that window.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Window
+    /// </summary>
     public class Window : EventTarget
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Window(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Gets the global Window instance
         /// </summary>
         public Window() : base(JS.Get<IJSInProcessObjectReference>("window")) { }
-        // Properties
+
+        #region Properties
         /// <summary>
         /// The Window.closed read-only property indicates whether the referenced window is closed or not.
         /// </summary>
@@ -133,7 +140,41 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a reference to the topmost window in the window hierarchy.
         /// </summary>
         public Element Top => JSRef.Get<Element>("top");
-        // Methods
+        /// <summary>
+        /// Returns a boolean value that indicates whether the website is in a cross-origin isolation state.
+        /// </summary>
+        public bool CrossOriginIsolated => JSRef.Get<bool>("crossOriginIsolated");
+        /// <summary>
+        /// Returns the browser crypto object.
+        /// </summary>
+        public Crypto Crypto => JSRef.Get<Crypto>("crypto");
+        /// <summary>
+        /// Returns a boolean that indicates whether the current document was loaded inside a credentialless <iframe>. See IFrame credentialless for more details.
+        /// </summary>
+        public bool Credentialless => JSRef.Get<bool>("credentialless");
+        /// <summary>
+        /// Returns a reference to the document Picture-in-Picture window for the current document context.
+        /// </summary>
+        public DocumentPictureInPicture DocumentPictureInPicture => JSRef.Get<DocumentPictureInPicture>("documentPictureInPicture");
+        /// <summary>
+        /// Returns a boolean indicating whether the current context is secure (true) or not (false).
+        /// </summary>
+        public bool IsSecureContext => JSRef.Get<bool>("isSecureContext");
+        /// <summary>
+        /// Returns the global object's origin, serialized as a string.
+        /// </summary>
+        public string Origin => JSRef.Get<string>("origin");
+        /// <summary>
+        /// Returns a VisualViewport object which represents the visual viewport for a given window.
+        /// </summary>
+        public VisualViewport VisualViewport => JSRef.Get<VisualViewport>("visualViewport");
+        /// <summary>
+        /// The global performance property returns a Performance object, which can be used to gather performance information about the context it is called in (window or worker).
+        /// </summary>
+        public Performance Performance => JSRef.Get<Performance>("performance");
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Displays an alert dialog.
         /// </summary>
@@ -173,7 +214,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="mode"></param>
         /// <returns></returns>
         public MediaQueryList MatchMedia(string mode) => JSRef.Call<MediaQueryList>("matchMedia", mode);
-        // Events
+        #endregion
+        #region Events
         /// <summary>
         /// The afterprint event is fired after the associated document has started printing or the print preview has been closed.
         /// </summary>
@@ -303,6 +345,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Warning: Developers should avoid using this event.
         /// </summary>
         public JSEventCallback OnUnload { get => new JSEventCallback(o => AddEventListener("unload", o), o => RemoveEventListener("unload", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        #endregion
 
         // non-standard .Net implementation that allows += to start catching requestAnimationFrame repeatedly until and an equal number of -= are called.
         public delegate void AnimationFrameDelegate(double timestamp);

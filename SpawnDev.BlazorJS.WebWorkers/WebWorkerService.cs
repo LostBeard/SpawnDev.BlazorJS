@@ -1,40 +1,54 @@
-﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using SpawnDev.BlazorJS.JSObjects;
-using System.Collections.Specialized;
-using System.Web;
+using SpawnDev.BlazorJS.Reflection;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
     // chrome://inspect/#workers
     public class WebWorkerService : IDisposable, IAsyncBackgroundService
     {
+        public ServiceCallDispatcher? DedicatedWorkerParent { get; private set; } = null;
+        public List<ServiceCallDispatcher> SharedWorkerIncomingConnections { get; private set; } = new List<ServiceCallDispatcher>();
         public bool SharedWebWorkerSupported { get; private set; }
         public bool WebWorkerSupported { get; private set; }
         public bool ServiceWorkerSupported { get; private set; }
-        public List<WebWorker> Workers { get; } = new List<WebWorker>();
-        public List<SharedWebWorker> SharedWorkers { get; } = new List<SharedWebWorker>();
+        public ServiceCallDispatcher Local { get; }
         public IServiceProvider ServiceProvider { get; }
+        public IServiceCollection ServiceDescriptors { get; }
         public string AppBaseUri { get; }
         public bool BeenInit { get; private set; }
         DateTime StartTime = DateTime.Now;
         public int MaxWorkerCount { get; private set; } = 0;
         public string ThisSharedWorkerName { get; private set; } = "";
-        //BroadcastChannel _eventChannel = new BroadcastChannel(nameof(WebWorkerService));
-        //CallbackGroup _callbackGroup = new CallbackGroup();
         Callback? OnSharedWorkerConnectCallback = null;
-        string InstanceId { get; } = Guid.NewGuid().ToString();
-        static string WebWorkerJSScript = "_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js";
-        BlazorJSRuntime JS;
-        public WebWorkerService(IServiceProvider serviceProvider, IWebAssemblyHostEnvironment hostEnvironment, BlazorJSRuntime js)
+        public string InstanceId { get; }
+        public string WebWorkerJSScript { get; } = "_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js";
+        public BlazorJSRuntime JS { get; }
+        /// <summary>
+        /// If WebWorkers are supported it dispatches on a free WebWorker in the WebWorkerPool<br />
+        /// If WebWorkers are not supported it dispatches on the local scope
+        /// </summary>
+        public WebWorkerPool WorkerTask { get; }
+        /// <summary>
+        /// If this scope is a Window it dispatches on this scope<br />
+        /// If this scope is a WebWorker and its parent is a Window it will dispatch on the parent's scope<br />
+        /// Only available in a Window context, or in a WebWorker created by a Window
+        /// </summary>
+        public CallDispatcher? WindowTask { get; private set; }
+        public ServiceWorkerConfig ServiceWorkerConfig { get; private set; } = new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.None };
+        public WebWorkerService(NavigationManager navigationManager, IServiceProvider serviceProvider, IServiceCollection serviceDescriptors, IWebAssemblyHostEnvironment hostEnvironment, BlazorJSRuntime js)
         {
             JS = js;
+            InstanceId = JS.InstanceId;
             WebWorkerSupported = !JS.IsUndefined("Worker");
             SharedWebWorkerSupported = !JS.IsUndefined("SharedWorker");
             ServiceWorkerSupported = !JS.IsUndefined("ServiceWorkerRegistration");
             ServiceProvider = serviceProvider;
+            ServiceDescriptors = serviceDescriptors;
             AppBaseUri = JS.Get<string>("document.baseURI");
-            var appBaseUriObj = new Uri(AppBaseUri);
-            var workerScriptUri = new Uri(appBaseUriObj, WebWorkerJSScript);
+            var workerScriptUri = new Uri(new Uri(AppBaseUri), WebWorkerJSScript);
             WebWorkerJSScript = workerScriptUri.ToString();
 #if DEBUG && false
             Console.WriteLine("hostEnvironment.BaseAddress: " + hostEnvironment.BaseAddress);
@@ -46,42 +60,20 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (IServiceCollectionExtensions.ServiceWorkerConfig != null)
             {
                 ServiceWorkerConfig = IServiceCollectionExtensions.ServiceWorkerConfig;
-            }
-            Instance = this;
+            };
+            Local = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors);
+            WorkerTask = new WebWorkerPool(this, 0, 1, true);
         }
-
-        public static WebWorkerService Instance { get; private set; }
 
         class WebWorkerServiceEventMsgBase
         {
             public string SrcId { get; set; } = "";
             public string Event { get; set; } = "";
         }
-        class WebWorkerServiceEventMsgOutoing : WebWorkerServiceEventMsgBase
+        class WebWorkerServiceEventMsgOutgoing : WebWorkerServiceEventMsgBase
         {
             public object? Data { get; set; } = null;
         }
-        public class RunningInstance
-        {
-            public string SharedWorkerName { get; set; } = "";
-            public string GlobalThisTypeName { get; set; } = "";
-            public string SrcId { get; set; } = "";
-            public string AppBaseURI { get; set; } = "";
-            public DateTime StartTime { get; set; }
-            public DateTime LastSeen { get; set; } = DateTime.Now;
-        }
-
-        RunningInstance ThisInstance() => new RunningInstance
-        {
-            AppBaseURI = AppBaseUri,
-            GlobalThisTypeName = JS.GlobalThisTypeName,
-            SharedWorkerName = ThisSharedWorkerName,
-            SrcId = InstanceId,
-            StartTime = StartTime,
-            LastSeen = DateTime.Now,
-        };
-
-        public ServiceCallDispatcher? DedicatedWorkerParent { get; private set; } = null;
 
         public void SendEventToParents(string eventName, object? data = null)
         {
@@ -99,16 +91,31 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (BeenInit) return;
             BeenInit = true;
-            //_eventChannel.OnMessage += _eventChannel_OnMessage;
-            await Task.Delay(1);
-            if (JS.IsDedicatedWorkerGlobalScope)
+            if (JS.GlobalThis is Window window)
             {
-                var incomingPort = JS.Get<MessagePort>("self");
-                DedicatedWorkerParent = new ServiceCallDispatcher(ServiceProvider, incomingPort);
-                //_sharedWorkerIncomingConnections.Add(incomingHandler);
-                DedicatedWorkerParent.SendReadyFlag();
+                WindowTask = Local;
+                switch (ServiceWorkerConfig.Register)
+                {
+                    case ServiceWorkerStartupRegistration.Register:
+                        await RegisterServiceWorker();
+                        break;
+                    case ServiceWorkerStartupRegistration.Unregister:
+                        await UnregisterServiceWorker();
+                        break;
+                }
             }
-            else if (JS.IsSharedWorkerGlobalScope)
+            else if (JS.GlobalThis is DedicatedWorkerGlobalScope workerGlobalScope)
+            {
+                DedicatedWorkerParent = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors, workerGlobalScope);
+                DedicatedWorkerParent.SendReadyFlag();
+                await DedicatedWorkerParent.WhenReady;
+                var isParentAWindow = DedicatedWorkerParent.RemoteInfo!.GlobalThisTypeName == "Window";
+                if (isParentAWindow)
+                {
+                    WindowTask = DedicatedWorkerParent;
+                }
+            }
+            else if (JS.GlobalThis is SharedWorkerGlobalScope sharedWorkerGlobalScope)
             {
                 var missedConnections = JS.Call<MessagePort[]>("takeOverOnConnectEvent", OnSharedWorkerConnectCallback = Callback.Create<MessageEvent>(OnSharedWorkerConnect));
                 if (missedConnections != null)
@@ -118,39 +125,26 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         AddIncomingPort(m);
                     }
                 }
-                try
+                var tmpName = sharedWorkerGlobalScope.Name;
+                if (!string.IsNullOrEmpty(tmpName))
                 {
-                    var tmpName = JS.Get<string?>("name");
-                    if (!string.IsNullOrEmpty(tmpName))
-                    {
-                        ThisSharedWorkerName = tmpName;
-                    }
+                    ThisSharedWorkerName = tmpName;
                 }
-                catch { }
-                JS.Log($"SharedWorker {ThisSharedWorkerName} listening for connections: took {SharedWorkerIncomingConnections.Count} missed connections");
             }
-            else if (JS.IsServiceWorkerGlobalScope)
+            else if (JS.GlobalThis is ServiceWorkerGlobalScope serviceWorkerGlobalScope)
             {
+                Console.WriteLine($"WebWorkerService: ServiceWorkerGlobalScope");
+                // 
+            }
+            else
+            {
+                Console.WriteLine($"WebWorkerService: UNKNOWN");
 
             }
-            else if (JS.IsWindow)
-            {
-                if (ServiceWorkerConfig.Register == ServiceWorkerStartupRegistration.Register)
-                {
-                    await RegisterServiceWorker();
-                }
-                else if (ServiceWorkerConfig.Register == ServiceWorkerStartupRegistration.Unregister)
-                {
-                    await UnregisterServiceWorker();
-                }
-            }
-            //BroadcastPing();
         }
 
-        public ServiceWorkerConfig ServiceWorkerConfig { get; private set; } = new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.None };
-
         /// <summary>
-        /// registers the default 'service-worker.js' in the app's base path.<br />
+        /// Registers the default 'service-worker.js' in the app's base path.<br />
         /// 'service-worker.js' must import the web worker script like the example below<br />
         /// importScripts('_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js');
         /// </summary>
@@ -165,6 +159,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
 
+        /// <summary>
+        /// Registers the default 'service-worker.js' in the app's base path.<br />
+        /// </summary>
+        /// <param name="scriptURL"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public Task RegisterServiceWorker(string scriptURL, ServiceWorkerRegistrationOptions? options = null)
         {
             ServiceWorkerConfig.ScriptURL = scriptURL;
@@ -172,6 +172,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return RegisterServiceWorker();
         }
 
+        /// <summary>
+        /// Unregisters a registered service worker
+        /// </summary>
+        /// <returns></returns>
         public async Task<bool> UnregisterServiceWorker()
         {
             if (JS.WindowThis != null)
@@ -187,114 +191,16 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return false;
         }
 
-        int pingWaitTime = 1000;
-        async Task<List<RunningInstance>> BroadcastPing()
-        {
-            BroadcastEvent("ping", ThisInstance());
-            await Task.Delay(pingWaitTime);
-            var now = DateTime.Now;
-            var active = KnownRunning.Values.Where(o => now - o.LastSeen < TimeSpan.FromMilliseconds(pingWaitTime)).ToList();
-            var inactive = KnownRunning.Values.Where(o => now - o.LastSeen > TimeSpan.FromMilliseconds(pingWaitTime)).ToList();
-            KnownRunning = active.ToDictionary(o => o.SrcId, o => o);
-            return active;
-        }
-
-        void BroadcastPong()
-        {
-            BroadcastEvent("pong", ThisInstance());
-        }
-
-        void BroadcastEvent(string eventName, object? data = null)
-        {
-            var m = new WebWorkerServiceEventMsgOutoing
-            {
-                SrcId = InstanceId,
-                Event = eventName,
-                Data = data
-            };
-            //_eventChannel.PostMessaage(m);
-        }
-
-        Dictionary<string, RunningInstance> KnownRunning = new Dictionary<string, RunningInstance>();
-
-        void InstanceSeen(RunningInstance pongData)
-        {
-            var isNew = false;
-            RunningInstance? entry = null;
-            if (!KnownRunning.TryGetValue(pongData.SrcId, out entry))
-            {
-                JS.Log("Instance first seen:", pongData);
-                isNew = true;
-            }
-            KnownRunning[pongData.SrcId] = pongData;
-        }
-
-        private void _eventChannel_OnMessage(MessageEvent msg)
-        {
-            try
-            {
-                var m = msg.GetData<WebWorkerServiceEventMsgBase>();
-                switch (m.Event)
-                {
-                    case "ping":
-                        var pingData = msg.JSRef.Get<RunningInstance>("data.data");
-                        JS.Log($"ping", pingData);
-                        InstanceSeen(pingData);
-                        BroadcastPong();
-                        break;
-                    case "pong":
-                        var pongData = msg.JSRef.Get<RunningInstance>("data.data");
-                        JS.Log($"pong", pongData);
-                        InstanceSeen(pongData);
-                        break;
-                    default:
-                        JS.Log("UNHANDLED msg: WebWorkerServiceEventMsg", m);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                JS.Log("ERROR: _eventChannel_OnMessage");
-            }
-        }
-
-        public List<ServiceCallDispatcher> SharedWorkerIncomingConnections { get; private set; } = new List<ServiceCallDispatcher>();
-
-        void OnSharedWorkerConnect(MessageEvent e)
-        {
-            JS.Log("OnSharedWorkerConnect");
-            using var ports = e.JSRef.Get<JSObject>("ports");
-            var incomingPort = ports.JSRef.Get<MessagePort>(0);
-            AddIncomingPort(incomingPort);
-            e.Dispose();
-        }
-
-        void AddIncomingPort(MessagePort incomingPort)
-        {
-            var incomingHandler = new ServiceCallDispatcher(ServiceProvider, incomingPort);
-            SharedWorkerIncomingConnections.Add(incomingHandler);
-            incomingPort.Start();
-            JS.Log("AddIncomingPort", SharedWorkerIncomingConnections.Count);
-            incomingHandler.SendReadyFlag();
-        }
-
-        string ToQueryString(NameValueCollection source)
-        {
-            return string.Join("&", source.AllKeys.SelectMany(source.GetValues, (k, v) => $"{HttpUtility.UrlEncode(k)}={HttpUtility.UrlEncode(v)}"));
-        }
-
-        public async Task<WebWorker?> GetWebWorker(bool verboseMode = false, bool awaitWhenReady = true)
+        /// <summary>
+        /// Returns a WebWorker
+        /// </summary>
+        /// <returns></returns>
+        public async Task<WebWorker?> GetWebWorker()
         {
             if (!WebWorkerSupported) return null;
-            var queryArgs = new NameValueCollection();
-            queryArgs.Add("verbose", verboseMode ? "true" : "false");
-#if DEBUG
-            queryArgs.Add("debugMode", "true");
-#endif
-            var worker = new Worker($"{WebWorkerJSScript}?{ToQueryString(queryArgs)}");
-            var webWorker = new WebWorker(worker, ServiceProvider);
-            Workers.Add(webWorker);
-            if (awaitWhenReady) await webWorker.WhenReady;
+            var worker = new Worker(WebWorkerJSScript);
+            var webWorker = new WebWorker(worker, ServiceProvider, ServiceDescriptors);
+            await webWorker.WhenReady;
             return webWorker;
         }
 
@@ -302,23 +208,35 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// Returns a SharedWebWorker
         /// </summary>
         /// <param name="sharedWorkerName">SharedWebWorkers are identified by name. 1 shared worker will be created per name.</param>
-        /// <param name="verboseMode"></param>
-        /// <param name="awaitWhenReady"></param>
         /// <returns></returns>
-        public async Task<SharedWebWorker?> GetSharedWebWorker(string sharedWorkerName = "", bool verboseMode = false, bool awaitWhenReady = true)
+        public async Task<SharedWebWorker?> GetSharedWebWorker(string sharedWorkerName = "")
         {
             if (!SharedWebWorkerSupported) return null;
-            var queryArgs = new NameValueCollection();
-            queryArgs.Add("verbose", verboseMode ? "true" : "false");
-            var worker = new SharedWorker($"{WebWorkerJSScript}?{ToQueryString(queryArgs)}", sharedWorkerName);
-            var webWorker = new SharedWebWorker(sharedWorkerName, worker, ServiceProvider);
-            if (awaitWhenReady) await webWorker.WhenReady;
-            return webWorker;
+            var sharedWorker = new SharedWorker(WebWorkerJSScript, sharedWorkerName);
+            var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, ServiceProvider, ServiceDescriptors);
+            await sharedWebWorker.WhenReady;
+            return sharedWebWorker;
         }
-
+        
+        /// <summary>
+        /// Disposes all disposable resources used by this object
+        /// </summary>
         public void Dispose()
         {
             OnSharedWorkerConnectCallback?.Dispose();
+        }
+
+        void OnSharedWorkerConnect(MessageEvent e)
+        {
+            e.Ports.ToList().ForEach(AddIncomingPort);
+        }
+
+        void AddIncomingPort(MessagePort incomingPort)
+        {
+            var incomingHandler = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors, incomingPort);
+            incomingPort.Start();
+            SharedWorkerIncomingConnections.Add(incomingHandler);
+            incomingHandler.SendReadyFlag();
         }
     }
 }

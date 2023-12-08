@@ -1,20 +1,28 @@
 ﻿@page "/"
 
 <div style="padding: 1rem 1rem 1rem 1rem;">
-    <h2>App Build Versions</h2>
-
-    <h4>SpawnDev.BlazorJS</h4>
+    <h2>SpawnDev.BlazorJS</h2>
     <ul>
-        <li>@BlazorJSRuntime.JS.InformationalVersion</li>
-    </ul>
-
-    <h4>.Net</h4>
-    <ul>
-        <li>@BlazorJSRuntime.JS.FrameworkVersion</li>
+        <li>.Net: @JS.FrameworkVersion</li>
+        <li>SpawnDev.BlazorJS: @JS.InformationalVersion</li>
+        <li>SharedArrayBuffer: @(!JS.IsUndefined(nameof(SharedArrayBuffer)) ? "supported" : "not supported")</li>
+        <li>CrossOriginIsolated: @JS.CrossOriginIsolated</li>
+        <li>SIMD: @(SIMDSupported ? "supported" : "not supported")</li>
+        <li>Startup: @(TimeSpan.FromMilliseconds(JS.StartUpTime))</li>
     </ul>
 </div>
 
 <MarkdownBlock URL="https://raw.githubusercontent.com/LostBeard/SpawnDev.BlazorJS/main/README.md" />
 @code {
 
+    [Inject]
+    BlazorJSRuntime JS { get; set; }
+
+    bool SIMDSupported = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        SIMDSupported = await JS.CallAsync<bool>("wasmFeatureDetect.simd");
+        await base.OnInitializedAsync();
+    }
 }

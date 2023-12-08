@@ -7,23 +7,7 @@
 // this script loads a fake window and document environment
 // to enable loading the Blazor WASM app in a DedicatedWorkerGlobalScope, SharedWorkerGlobalScope or ServiceWorkerGlobalScope
 
-var checkIfGlobalThis = function (it) {
-    return it && it.Math == Math && it;
-};
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis
-const globalThisObj =
-    // eslint-disable-next-line es/no-global-this -- safe
-    checkIfGlobalThis(typeof globalThis == 'object' && globalThis) ||
-    checkIfGlobalThis(typeof window == 'object' && window) ||
-    // eslint-disable-next-line no-restricted-globals -- safe
-    checkIfGlobalThis(typeof self == 'object' && self) ||
-    checkIfGlobalThis(typeof global == 'object' && global) ||
-    // eslint-disable-next-line no-new-func -- fallback
-    (function () { return this; })() || Function('return this')();
-
-const globalThisTypeName = globalThisObj.constructor.name;
-
+var globalThisTypeName = self.constructor.name;
 var disableHotReload = true;
 var verboseWebWorkers = location.search.indexOf('verbose=true') > -1;
 var debugMode = location.search.indexOf('debugMode=true') > -1;
@@ -44,13 +28,13 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
     // important for SharedWorker
     // catch any incoming connetions that happen while .Net is loading
     let _missedConnections = [];
-    globalThisObj.takeOverOnConnectEvent = function (newConnectFunction) {
+    self.takeOverOnConnectEvent = function (newConnectFunction) {
         var tmp = _missedConnections;
         _missedConnections = [];
-        globalThisObj.onconnect = newConnectFunction;
+        self.onconnect = newConnectFunction;
         return tmp;
     }
-    globalThisObj.onconnect = function (e) {
+    self.onconnect = function (e) {
         _missedConnections.push(e.ports[0]);
     };
 } else if (globalThisTypeName == 'ServiceWorkerGlobalScope') {
@@ -84,7 +68,7 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
     self.addEventListener('push', handleMissedEvent);
     self.addEventListener('pushsubscriptionchange', handleMissedEvent);
     self.addEventListener('sync', handleMissedEvent);
-    globalThisObj.GetMissedServiceWorkerEvents = function () {
+    self.GetMissedServiceWorkerEvents = function () {
         holdEvents = false;
         var ret = missedServiceWorkerEventts;
         missedServiceWorkerEventts = [];
@@ -120,11 +104,11 @@ document.baseURI = documentBaseURI;
 if (disableHotReload) {
     consoleLog('disabling hot reload on this thread');
     const scriptInjectedSentinel = '_dotnet_watch_ws_injected'
-    globalThisObj[scriptInjectedSentinel] = true
+    self[scriptInjectedSentinel] = true
 }
 
 async function hasDynamicImport() {
-    // ServiceWorkers have issues with dynamic imports even if detection says it is supported 
+    // ServiceWorkers have issues with dynamic imports even if detection says it is detected as supported; may jsut not have been loaded usign 'module' keyword
     if (globalThisTypeName == 'ServiceWorkerGlobalScope') {
         return false;
     }
@@ -147,10 +131,10 @@ var initWebWorkerBlazor = async function () {
     } else {
         consoleLog('import is supported.');
     }
-    // patch globalThisObj.fetch to use document.baseURI for the relative path base path
+    // patch self.fetch to use document.baseURI for the relative path base path
     if (documentBaseURIIsModified) {
-        let fetchOrig = globalThisObj.fetch;
-        globalThisObj.fetch = function (resource, options) {
+        let fetchOrig = self.fetch;
+        self.fetch = function (resource, options) {
             consoleLog("webWorkersFetch", typeof resource, resource);
             if (typeof resource === 'string') {
                 // resource is a string
@@ -257,12 +241,12 @@ var initWebWorkerBlazor = async function () {
         return '';
     }
     //
-    globalThisObj.importOverride = async function (src) {
+    self.importOverride = async function (src) {
         consoleLog('importOverride', src);
         var jsStr = await getText(src);
         jsStr = fixModuleScript(jsStr, src);
         let fn = new Function(jsStr);
-        var ret = fn.apply(createProxiedObject(globalThisObj), []);
+        var ret = fn.apply(createProxiedObject(self), []);
         if (!ret) ret = createProxiedObject({});
         return ret;
     }

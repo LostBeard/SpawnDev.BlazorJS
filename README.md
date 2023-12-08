@@ -547,7 +547,7 @@ Tested working in the following browsers (tested with .Net 8.) Chrome Android do
 
 Firefox WebWorkers note:  
 Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
-The web worker script now tries to detect this and changes the blazor wasm scripts before they are loaded to workaround this limitation. It is possible some other browsers may have this issue but may not be detected properly.
+The web worker script now tries to detect this and changes the Blazor WASM scripts before they are loaded to workaround this limitation. It is possible some other browsers may have this issue but may not be detected properly.
 
 Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
 
@@ -566,12 +566,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazorJSRuntime();
 // Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
 builder.Services.AddWebWorkerService();
-// Add WebWorkerPool service (WIP. optional not used by WebWorkerService)
-builder.Services.AddSingleton<WebWorkerPool>();
-// Add app services that will be called on the main thread and/or worker threads (Worker services must use interfaces)
+// Add services
 builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>();
 builder.Services.AddSingleton<IMathsService, MathsService>();
-// More app services
 builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 // ...
 

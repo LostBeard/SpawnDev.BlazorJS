@@ -1,4 +1,5 @@
-﻿using SpawnDev.BlazorJS.JSObjects;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
@@ -10,8 +11,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
             Supported = !JS.IsUndefined("SharedWorker");
         }
         SharedWorker _shareWorker { get; set; }
-        public SharedWebWorker(string name, SharedWorker sharedWorker, IServiceProvider serviceProvider) : base(serviceProvider, sharedWorker.Port)
+        public string Name { get; }
+        public SharedWebWorker(string name, SharedWorker sharedWorker, IServiceProvider serviceProvider, IServiceCollection serviceDescriptors) : base(serviceProvider, serviceDescriptors, sharedWorker.Port)
         {
+            Name = name;
             _shareWorker = sharedWorker;
             if (_port is MessagePort port) port.Start();
         }

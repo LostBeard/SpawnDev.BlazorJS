@@ -19,6 +19,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             return _this.AddSingleton<WebWorkerService>();
         }
+        public static IServiceCollection AddTaskRunnerService(this IServiceCollection _this)
+        {
+            return _this.AddSingleton<WebWorkerService>();
+        }
         /// <summary>
         /// RegisterServiceWorker a class that implements ServiceWorkerEventHandler to handle ServiceWorker events
         /// </summary>
