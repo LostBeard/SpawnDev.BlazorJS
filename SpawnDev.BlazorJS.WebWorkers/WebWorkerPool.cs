@@ -34,19 +34,20 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// The number of workers that are running
         /// </summary>
         public int WorkersRunning => _workers.Count;
-        int _WorkerCountRequest;
+        int _PoolSize;
         /// <summary>
         /// The number of desired Workers in the pool
         /// </summary>
         public int PoolSize
         {
-            get => _WorkerCountRequest;
+            get => _PoolSize;
             set
             {
-                var tmp = Math.Max(0, Math.Min(value, MaxPoolSize));
-                if (_WorkerCountRequest == tmp) return;
-                _WorkerCountRequest = tmp;
-                _ = SetWorkerCount(_WorkerCountRequest);
+                if (MaxPoolSize < value) MaxPoolSize = value;
+                var tmp = Math.Max(0, value);
+                if (_PoolSize == tmp) return;
+                _PoolSize = tmp;
+                _ = SetWorkerCount(_PoolSize);
             }
         }
         /// <summary>
@@ -137,7 +138,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (!IdleWebWorkers.Contains(worker) && _workers.Contains(worker))
             {
-                if (_workers.Count > _WorkerCountRequest)
+                if (_workers.Count > _PoolSize)
                 {
                     _workers.Remove(worker);
                     worker.OnLocked -= Worker_OnLocked;
@@ -277,12 +278,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public async Task<bool> SetWorkerCount(int count)
         {
             if (!WebWorker.Supported) return false;
-            _WorkerCountRequest = Math.Max(0, Math.Min(count, MaxPoolSize));
+            if (MaxPoolSize < count) MaxPoolSize = count;
+            _PoolSize = Math.Max(0, count);
             try
             {
-                if (_WorkerCountRequest == _workers.Count) return true;
+                if (_PoolSize == _workers.Count) return true;
                 await _SetWorkerCountLock.WaitAsync();
-                var countToAdd = _WorkerCountRequest - _workers.Count;
+                var countToAdd = _PoolSize - _workers.Count;
                 if (countToAdd > 0)
                 {
                     var tasks = new List<Task>();
@@ -292,7 +294,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     }
                     await Task.WhenAll(tasks);
                 }
-                while (_workers.Count > _WorkerCountRequest)
+                while (_workers.Count > _PoolSize)
                 {
                     var w = GetWorker();
                     if (w == null) break;
