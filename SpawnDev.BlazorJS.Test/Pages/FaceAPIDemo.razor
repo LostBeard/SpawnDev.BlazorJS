@@ -29,7 +29,7 @@
         Dropped: @_fpsDropped
     </div>
     <div>
-        Workers: @_workerPool.WorkersRunning
+        Workers: @WebWorkerService.WorkerTask.WorkersRunning
     </div>
     <div style="padding: 4px;">
         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enable Processing</RadzenText>
@@ -41,8 +41,8 @@
     </div>
     <div>
         <RadzenCard>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @_workerPool.WorkersIdle / @_workerPool.WorkersRunning / @_workerPool.WorkerCountRequest / @_workerPool.MaxWorkerCount (Idle/Running/Requested/Max)</RadzenText>
-            <RadzenSlider @bind-Value=@_workerPool.WorkerCountRequest TValue="int" Min="0" Max=@_workerPool.MaxWorkerCount />
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @WebWorkerService.WorkerTask.WorkersIdle / @WebWorkerService.WorkerTask.WorkersRunning / @WebWorkerService.WorkerTask.PoolSize / @_workerPool.MaxPoolSize (Idle/Running/Requested/Max)</RadzenText>
+            <RadzenSlider @bind-Value=@WebWorkerService.WorkerTask.PoolSize TValue="int" Min="0" Max=@WebWorkerService.WorkerTask.MaxPoolSize />
         </RadzenCard>
     </div>
     <div style="padding: 4px;">

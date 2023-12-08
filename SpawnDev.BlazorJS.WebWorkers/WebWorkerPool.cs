@@ -10,25 +10,65 @@ namespace SpawnDev.BlazorJS.WebWorkers
     {
         public WebWorkerService WebWorkerService { get; }
         protected List<WebWorker> _workers = new List<WebWorker>();
-        private int _MaxWorkerCount = 0;
-        public int MaxWorkerCount
+        private int _MaxPoolSize = 0;
+        /// <summary>
+        /// Maximum number of workers that can be started
+        /// </summary>
+        public int MaxPoolSize
         {
             get
             {
-                return _MaxWorkerCount;
+                return _MaxPoolSize;
             }
             set
             {
                 var tmp = value < 0 ? WebWorkerService.MaxWorkerCount : value;
-                _MaxWorkerCount = Math.Max(0, Math.Min(WebWorkerService.MaxWorkerCount, tmp));
+                _MaxPoolSize = Math.Max(0, Math.Min(WebWorkerService.MaxWorkerCount, tmp));
+                if (PoolSize > _MaxPoolSize)
+                {
+                    PoolSize = _MaxPoolSize;
+                }
             }
         }
+        /// <summary>
+        /// The number of workers that are running
+        /// </summary>
+        public int WorkersRunning => _workers.Count;
+        int _WorkerCountRequest;
+        /// <summary>
+        /// The number of desired Workers in the pool
+        /// </summary>
+        public int PoolSize
+        {
+            get => _WorkerCountRequest;
+            set
+            {
+                var tmp = Math.Max(0, Math.Min(value, MaxPoolSize));
+                if (_WorkerCountRequest == tmp) return;
+                _WorkerCountRequest = tmp;
+                _ = SetWorkerCount(_WorkerCountRequest);
+            }
+        }
+        /// <summary>
+        /// True if WebWorkers are supported
+        /// </summary>
         public bool Supported { get; } = false;
         protected Queue<WebWorker> IdleWebWorkers { get; } = new Queue<WebWorker>();
+        /// <summary>
+        /// The number of WebWorkers that are currently idle
+        /// </summary>
         public int WorkersIdle => IdleWebWorkers.Count;
-        public bool IsReady => IdleWebWorkers.Count > 0;
+        /// <summary>
+        /// Fires when a new worker is created and added to the pool
+        /// </summary>
         public event Action<WebWorker> OnWorkerCreated;
+        /// <summary>
+        /// Whether CalDispatcher class methods will fallback to using the local scope when GetWorkerAsync would fail
+        /// </summary>
         public bool FallbackToLocalScope { get; set; } = true;
+        /// <summary>
+        /// Whether the pool will grow when a WenWorker is requested and PoolSize &lt; MaxPoolSize
+        /// </summary>
         public bool AutoGrow { get; set; } = true;
 
         /// <summary>
@@ -36,21 +76,28 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// </summary>
         /// <param name="webWorkerService"></param>
         /// <param name="autoStartCount">-1 - Start all, 0 - Start none</param>
-        /// <param name="maxWorkerCount">-1 - MaxConcurrency, 0 - Do not allow adding</param>
+        /// <param name="poolSize">-1 - MaxConcurrency, 0 - Do not allow adding</param>
         /// <param name="autoGrow">Allow the number of running workers to grow automatically as long as belwo the max allowed</param>
         /// <param name="fallbackToLocalScope">If WebWorkers are not supported and fallbackToLocalScope == true, run on the local scope (default)</param>
-        public WebWorkerPool(WebWorkerService webWorkerService, int autoStartCount = 0, int maxWorkerCount = -1, bool autoGrow = true, bool fallbackToLocalScope = true)
+        public WebWorkerPool(WebWorkerService webWorkerService, int autoStartCount = 0, int poolSize = -1, bool autoGrow = true, bool fallbackToLocalScope = true)
         {
             AutoGrow = autoGrow;
             WebWorkerService = webWorkerService;
             Supported = WebWorkerService.WebWorkerSupported;
             if (!Supported) return;
-            MaxWorkerCount = maxWorkerCount;
+            MaxPoolSize = poolSize;
             FallbackToLocalScope = fallbackToLocalScope;
-            if (autoStartCount < 0) autoStartCount = MaxWorkerCount;
-            WorkerCountRequest = Math.Max(Math.Min(MaxWorkerCount, autoStartCount), 0);
+            if (autoStartCount < 0) autoStartCount = MaxPoolSize;
+            PoolSize = Math.Max(Math.Min(MaxPoolSize, autoStartCount), 0);
         }
 
+        /// <summary>
+        /// override to handle CallDispatcher calls
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         protected override async Task<object?> DispatchCall(MethodInfo methodInfo, object?[]? args = null)
         {
             ServiceCallDispatcher? dispatcher = null;
@@ -114,29 +161,62 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
 
+        /// <summary>
+        /// Returns true If a worker is available right now
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <returns></returns>
         public bool TryGetWorker(out WebWorker? worker)
         {
-            var ret = IdleWebWorkers.TryDequeue(out worker);
-            if (ret)
-            {
-                worker!.AcquireLock();
-            }
-            //else if (WorkerCountRequest == 0 && MaxWorkerCount > 0 && AutoGrow)
-            //{
-            //    WorkerCountRequest += 1;
-            //}
-            return ret;
+            if (!IdleWebWorkers.TryDequeue(out worker)) return false;
+            worker.AcquireLock();
+            return true;
         }
+
+        /// <summary>
+        /// Returns a WebWorker if one is available
+        /// </summary>
+        /// <returns></returns>
         public WebWorker? GetWorker() => TryGetWorker(out var worker) ? worker : null;
+
+        /// <summary>
+        /// Waits until a WebWorker is available and returns it<br />
+        /// If one is not available right now, and the number of WebWorkers running is less than the max, another worker is started<br />
+        /// An exception will be thrown if a WebWorker cannot be returned for any reason including:<br />
+        /// cancellationToken is triggered<br />
+        /// not supported<br />
+        /// PoolSize == 0 and AutoGrow == false<br />
+        /// </summary>
+        /// <param name="msTimeout"></param>
+        /// <returns></returns>
         public async Task<WebWorker> GetWorkerAsync(int msTimeout)
         {
             using var s_cts = new CancellationTokenSource(msTimeout);
             return await GetWorkerAsync(s_cts.Token);
         }
+        /// <summary>
+        /// Waits until a WebWorker is available and returns it<br />
+        /// If one is not available right now, and the number of WebWorkers running is less than the max, another worker is started<br />
+        /// An exception will be thrown if a WebWorker cannot be returned for any reason including:<br />
+        /// cancellationToken is triggered<br />
+        /// not supported<br />
+        /// PoolSize == 0 and AutoGrow == false<br />
+        /// </summary>
+        /// <returns></returns>
         public Task<WebWorker> GetWorkerAsync() => GetWorkerAsync(CancellationToken.None);
 
         Queue<TaskCompletionSource<WebWorker>> JobQueue { get; } = new Queue<TaskCompletionSource<WebWorker>>();
-        
+        /// <summary>
+        /// Waits until a WebWorker is available and returns it<br />
+        /// If one is not available right now, and the number of WebWorkers running is less than the max, another worker is started<br />
+        /// An exception will be thrown if a WebWorker cannot be returned for any reason including:<br />
+        /// not supported<br />
+        /// cancellationToken is triggered<br />
+        /// PoolSize == 0 and (AutoGrow == false or MaxPoolSize == 0)<br />
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<WebWorker> GetWorkerAsync(CancellationToken cancellationToken)
         {
             if (!WebWorkerService.WebWorkerSupported) throw new Exception("WebWorkers not supported");
@@ -145,33 +225,18 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 worker!.AcquireLock();
                 return worker;
             }
-            if (!AutoGrow && WorkerCountRequest == 0)
+            if (!AutoGrow && PoolSize == 0)
             {
                 throw new Exception("No workers running and AutoAdd disabled");
             }
             var tcs = new TaskCompletionSource<WebWorker>(cancellationToken);
             JobQueue.Enqueue(tcs);
-            if (AutoGrow && WorkerCountRequest < MaxWorkerCount)
+            if (AutoGrow && PoolSize < MaxPoolSize)
             {
-                WorkerCountRequest += 1;
+                PoolSize += 1;
             }
             worker = await tcs.Task.WaitAsync(cancellationToken);
             return worker;
-        }
-
-        public bool AreWorkersRunning => _workers.Any();
-        public int WorkersRunning => _workers.Count;
-        int _WorkerCountRequest;
-        public int WorkerCountRequest
-        {
-            get => _WorkerCountRequest;
-            set
-            {
-                var tmp = Math.Max(0, Math.Min(value, MaxWorkerCount));
-                if (_WorkerCountRequest == tmp) return;
-                _WorkerCountRequest = tmp;
-                _ = SetWorkerCount(_WorkerCountRequest);
-            }
         }
 
         void FireOnBusyStateChanged()
@@ -212,7 +277,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public async Task<bool> SetWorkerCount(int count)
         {
             if (!WebWorker.Supported) return false;
-            _WorkerCountRequest = Math.Max(0, Math.Min(count, MaxWorkerCount));
+            _WorkerCountRequest = Math.Max(0, Math.Min(count, MaxPoolSize));
             try
             {
                 if (_WorkerCountRequest == _workers.Count) return true;
@@ -243,8 +308,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
             return true;
         }
-
+        /// <summary>
+        /// True if this object has been disposed
+        /// </summary>
         public bool IsDisposed { get; private set; }
+        /// <summary>
+        ///  Disposes this object
+        /// </summary>
         public void Dispose()
         {
             if (IsDisposed) return;
