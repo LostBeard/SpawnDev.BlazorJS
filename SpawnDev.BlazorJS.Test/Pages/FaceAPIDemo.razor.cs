@@ -17,9 +17,6 @@ namespace SpawnDev.BlazorJS.Test.Pages
         MediaDevicesService? _mediaDevicesService { get; set; }
 
         [Inject]
-        FaceAPIService? _faceAPIService { get; set; }
-
-        [Inject]
         WebWorkerService WebWorkerService { get; set; }
 
         CallbackGroup _callbackGroup = new CallbackGroup();
