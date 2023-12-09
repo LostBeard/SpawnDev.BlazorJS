@@ -428,7 +428,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return ret;
         }
         /// <summary>
-        /// Imports method call arguments from Javascript and finishes deserializing them
+        /// Imports method call arguments from Javascript and finishes deserializing them<br />
+        /// Returns teh exact number of arguments the methodInfo uses, including default values if there was not enough passed in arguments<br />
+        /// CallSide arguments will also be resolved if any.
         /// </summary>
         /// <param name="requestId"></param>
         /// <param name="methodInfo"></param>
