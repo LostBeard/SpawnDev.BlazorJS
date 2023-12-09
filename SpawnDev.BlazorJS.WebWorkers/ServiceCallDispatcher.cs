@@ -295,55 +295,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 e?.Dispose();
             }
         }
-        protected override Task<object?> DispatchCall(Delegate methodDelegate, object?[]? args = null)
-        {
-            return DispatchCall(methodDelegate.Method, args);
-        }
-        protected override Task<object?> DispatchCall(MethodInfo methodInfo, object?[]? args = null)
-        {
-            return CallAsync(methodInfo, args);
-        }
+
         public void SendEvent(string eventName, object? data = null)
         {
             _port.PostMessage(new WebWorkerMessageOut { TargetType = "event", TargetName = eventName, Data = data });
         }
-        //
-        //public Task<object?> InvokeAsync(Type serviceType, string methodName, params object?[]? args) => CallAsync(serviceType, methodName, args ?? new object[0]);
-
-        //public Task<object?> CallAsync(Delegate methodDelegate, object?[]? args = null) => CallAsync(methodDelegate.Method, args);
-
-        //async Task<object?> ResolveInstanceType(Type? type)
-        //{
-        //    if (type == null) return null;
-        //    var service = await _serviceProvider.GetServiceAsync(type);
-        //    if (service == null)
-        //    {
-        //        //Console.WriteLine($"serviceType not found: {type.Name}");
-        //        foreach (var serviceDescriptor in ServiceDescriptors)
-        //        {
-        //            var serviceType = serviceDescriptor.ServiceType;
-        //            var implementationType = serviceDescriptor.ImplementationType != null ? serviceDescriptor.ImplementationType :
-        //                (serviceDescriptor.ImplementationInstance != null ? serviceDescriptor.ImplementationInstance.GetType() : null);
-        //            //var implementationTypeName = implementationType == null ? "[UNNAMED]" : implementationType.Name;
-        //            var matchesImplementationType = type == implementationType;
-        //            //Console.WriteLine($">>> {serviceType.Name} {implementationTypeName}");
-        //            if (matchesImplementationType)
-        //            {
-        //                //Console.WriteLine($"+++ serviceType found using implementation: {serviceType.Name} {implementationTypeName}");
-        //                service = await _serviceProvider.GetServiceAsync(serviceType);
-        //                break;
-        //            }
-        //            else if (serviceType.IsAssignableFrom(type))
-        //            {
-        //                //Console.WriteLine($"+++ serviceType found using implementation: {serviceType.Name} {implementationTypeName}");
-        //                service = await _serviceProvider.GetServiceAsync(serviceType);
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    return service;
-        //}
-        async Task<object?> LocalCallAsync(MethodInfo methodInfo, object?[]? args = null)
+        private async Task<object?> LocalCallAsync(MethodInfo methodInfo, object?[]? args = null)
         {
             if (methodInfo == null)
             {
@@ -367,7 +324,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <param name="methodInfo"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public Task<object?> CallAsync(MethodInfo methodInfo, object?[]? args = null)
+        public Task<object?> DispatchCall(MethodInfo methodInfo, object?[]? args = null)
         {
             if (LocalInvoker)
             {
@@ -874,15 +831,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             Dispose(false);
             GC.SuppressFinalize(this);
-        }
-        Dictionary<Type, object> ServiceInterfaces = new Dictionary<Type, object>();
-        public TServiceInterface GetService<TServiceInterface>() where TServiceInterface : class
-        {
-            var typeofT = typeof(TServiceInterface);
-            if (ServiceInterfaces.TryGetValue(typeofT, out var serviceWorker)) return (TServiceInterface)serviceWorker;
-            var ret = WebWorkerServiceProxy<TServiceInterface>.GetWorkerService(this);
-            ServiceInterfaces[typeofT] = ret;
-            return ret;
         }
     }
 }

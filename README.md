@@ -545,10 +545,6 @@ Tested working in the following browsers (tested with .Net 8.) Chrome Android do
 | MS Edge Android | ✔ | ❌ (SharedWorker not supported by browser) |
 | Firefox Android | ✔ | ✔ | 
 
-Firefox WebWorkers note:  
-Firefox does not support dynamic modules in workers, which originally made BlazorJS.WebWorkers fail in that browser.
-The web worker script now tries to detect this and changes the Blazor WASM scripts before they are loaded to workaround this limitation. It is possible some other browsers may have this issue but may not be detected properly.
-
 Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
 
 Example WebWorkerService setup and usage. 

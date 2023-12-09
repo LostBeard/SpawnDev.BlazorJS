@@ -99,7 +99,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <param name="args"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        protected override async Task<object?> DispatchCall(MethodInfo methodInfo, object?[]? args = null)
+        public override async Task<object?> DispatchCall(MethodInfo methodInfo, object?[]? args = null)
         {
             ServiceCallDispatcher? dispatcher = null;
             bool shouldRelease = false;
@@ -119,7 +119,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 {
                     throw new Exception($"Failed to run task.");
                 }
-                return await dispatcher.CallAsync(methodInfo, args);
+                return await dispatcher.DispatchCall(methodInfo, args);
             }
             finally
             {
@@ -226,7 +226,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 worker!.AcquireLock();
                 return worker;
             }
-            if (!AutoGrow && PoolSize == 0)
+            if ((!AutoGrow && PoolSize == 0) || MaxPoolSize == 0)
             {
                 throw new Exception("No workers running and AutoAdd disabled");
             }

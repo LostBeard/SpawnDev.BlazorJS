@@ -3,9 +3,19 @@ using System.Reflection;
 
 namespace SpawnDev.BlazorJS.Reflection
 {
-    public partial class CallDispatcher
+    public interface ICallDispatcher
     {
-        protected virtual Task<object?> DispatchCall(MethodInfo methodInfo, object?[]? args = null)
+        Task<object?> DispatchCall(MethodInfo methodInfo, object?[]? args = null);
+    }
+    public partial class CallDispatcher : ICallDispatcher
+    {
+        /// <summary>
+        /// A debug version of DispatchCall that should be overridden
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public virtual Task<object?> DispatchCall(MethodInfo methodInfo, object?[]? args = null)
         {
             var serializedMethodInfo = SerializableMethodInfo.SerializeMethodInfo(methodInfo);
             var argsCount = args == null ? 0 : args.Length;
@@ -14,9 +24,32 @@ namespace SpawnDev.BlazorJS.Reflection
             Console.WriteLine($"SendCall: {(mi == null ? "method NOT FOUND" : "method found")}");
             return Task.FromResult((object)"");
         }
+
+        #region DispatchProxy
+        Dictionary<Type, object> ServiceInterfaces = new Dictionary<Type, object>();
+
+        public TServiceInterface GetService<TServiceInterface>() where TServiceInterface : class
+        {
+            var typeofT = typeof(TServiceInterface);
+            if (ServiceInterfaces.TryGetValue(typeofT, out var serviceWorker)) return (TServiceInterface)serviceWorker;
+            var ret = InterfaceCallDispatcher<TServiceInterface>.CreateInterfaceDispatcher(this);
+            ServiceInterfaces[typeofT] = ret;
+            return ret;
+        }
+        #endregion
+
+
         #region Expressions
 
-        protected virtual Task<object?> DispatchCall(Expression expr, object?[]? argsExt = null)
+        /// <summary>
+        /// Converts an Expression into a MethodInfo and a call arguments array<br />
+        /// Then calls DispatchCall with them
+        /// </summary>
+        /// <param name="expr"></param>
+        /// <param name="argsExt"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        protected Task<object?> DispatchCall(Expression expr, object?[]? argsExt = null)
         {
             if (expr is MethodCallExpression methodCallExpression)
             {
@@ -56,38 +89,38 @@ namespace SpawnDev.BlazorJS.Reflection
         }
 
         // Static
-        // Property set
-        public async Task Set<TProperty>(Expression<Func<TProperty>> expr, TProperty value) => await DispatchCall(expr.Body, new object[] { value });
         // Method Calls and Property Getters
         // Action
         public async Task Run(Expression<Action> expr) => await DispatchCall(expr.Body);
+        // Func<Task>
+        public async Task Run(Expression<Func<Task>> expr) => await DispatchCall(expr.Body);
+        // Func<ValueTask>
+        public async Task Run(Expression<Func<ValueTask>> expr) => await DispatchCall(expr.Body);
         // Func<...,TResult>
         public async Task<TResult> Run<TResult>(Expression<Func<TResult>> expr) => (TResult)await DispatchCall(expr.Body);
         // Func<...,Task<TResult>>
         public async Task<TResult> Run<TResult>(Expression<Func<Task<TResult>>> expr) => (TResult)await DispatchCall(expr.Body);
         // Func<...,ValueTask<TResult>>
         public async Task<TResult> Run<TResult>(Expression<Func<ValueTask<TResult>>> expr) => (TResult)await DispatchCall(expr.Body);
-        // Func<Task>
-        public async Task Run(Expression<Func<Task>> expr) => await DispatchCall(expr.Body);
-        // Func<ValueTask>
-        public async Task Run(Expression<Func<ValueTask>> expr) => await DispatchCall(expr.Body);
+        // Property set
+        public async Task Set<TProperty>(Expression<Func<TProperty>> expr, TProperty value) => await DispatchCall(expr.Body, new object[] { value });
 
         // Instance
-        // Property set
-        public async Task Set<TInstance, TProperty>(Expression<Func<TInstance, TProperty>> expr, TProperty value) => await DispatchCall(expr.Body, new object[] { value });
         // Method Calls and Property Getters
         // Action
         public async Task Run<TInstance>(Expression<Action<TInstance>> expr) => await DispatchCall(expr.Body);
+        // Func<Task>
+        public async Task Run<TInstance>(Expression<Func<TInstance, Task>> expr) => await DispatchCall(expr.Body);
+        // Func<ValueTask>
+        public async Task Run<TInstance>(Expression<Func<TInstance, ValueTask>> expr) => await DispatchCall(expr.Body);
         // Func<...,TResult>
         public async Task<TResult> Run<TInstance, TResult>(Expression<Func<TInstance, TResult>> expr) => (TResult)await DispatchCall(expr.Body);
         // Func<...,Task<TResult>>
         public async Task<TResult> Run<TInstance, TResult>(Expression<Func<TInstance, Task<TResult>>> expr) => (TResult)await DispatchCall(expr.Body);
         // Func<...,ValueTask<TResult>>
         public async Task<TResult> Run<TInstance, TResult>(Expression<Func<TInstance, ValueTask<TResult>>> expr) => (TResult)await DispatchCall(expr.Body);
-        // Func<Task>
-        public async Task Run<TInstance>(Expression<Func<TInstance, Task>> expr) => await DispatchCall(expr.Body);
-        // Func<ValueTask>
-        public async Task Run<TInstance>(Expression<Func<TInstance, ValueTask>> expr) => await DispatchCall(expr.Body);
+        // Property set
+        public async Task Set<TInstance, TProperty>(Expression<Func<TInstance, TProperty>> expr, TProperty value) => await DispatchCall(expr.Body, new object[] { value });
         #endregion
 
         #region Lock
