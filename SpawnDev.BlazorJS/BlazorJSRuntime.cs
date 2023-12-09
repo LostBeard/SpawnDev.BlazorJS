@@ -28,6 +28,7 @@ namespace SpawnDev.BlazorJS
         public bool IsServiceWorkerGlobalScope => GlobalThis is ServiceWorkerGlobalScope;
         public GlobalScope GlobalScope { get; private set; } = GlobalScope.None;
         public string InstanceId { get; }
+        Performance Performance { get; }
         /// <summary>
         /// The crossOriginIsolated read-only property returns a boolean value that indicates whether the website is in a cross-origin isolation state. A website is in a cross-origin isolated state, when the response header Cross-Origin-Opener-Policy has the value same-origin and the Cross-Origin-Embedder-Policy header has the value require-corp or credentialless
         /// </summary>
@@ -80,25 +81,29 @@ namespace SpawnDev.BlazorJS
                     WindowThis = Get<Window>("globalThis");
                     GlobalThis = WindowThis;
                     GlobalScope = GlobalScope.Window;
-                    StartUpTime = WindowThis.Performance.Now();
+                    Performance = WindowThis.Performance;
+                    StartUpTime = Performance.Now();
                     break;
                 case nameof(DedicatedWorkerGlobalScope):
                     DedicateWorkerThis = Get<DedicatedWorkerGlobalScope>("globalThis");
                     GlobalThis = DedicateWorkerThis;
                     GlobalScope = GlobalScope.DedicatedWorker;
-                    StartUpTime = DedicateWorkerThis.Performance.Now();
+                    Performance = DedicateWorkerThis.Performance;
+                    StartUpTime = Performance.Now();
                     break;
                 case nameof(SharedWorkerGlobalScope):
                     SharedWorkerThis = Get<SharedWorkerGlobalScope>("globalThis");
                     GlobalThis = SharedWorkerThis;
                     GlobalScope = GlobalScope.SharedWorker;
-                    StartUpTime = SharedWorkerThis.Performance.Now();
+                    Performance = SharedWorkerThis.Performance;
+                    StartUpTime = Performance.Now();
                     break;
                 case nameof(ServiceWorkerGlobalScope):
                     ServiceWorkerThis = Get<ServiceWorkerGlobalScope>("globalThis");
                     GlobalThis = ServiceWorkerThis;
                     GlobalScope = GlobalScope.ServiceWorker;
-                    StartUpTime = ServiceWorkerThis.Performance.Now();
+                    Performance = ServiceWorkerThis.Performance;
+                    StartUpTime = Performance.Now();
                     break;
                 default:
                     GlobalThis = Get<JSObject>("globalThis");
@@ -116,6 +121,11 @@ namespace SpawnDev.BlazorJS
         }
 
         public double StartUpTime { get; private set; }
+        public double ReadyTime { get; internal set; }
+        internal void SetReady()
+        {
+            ReadyTime = Performance.Now();
+        }
         public bool IsDisplayModeStandalone()
         {
             if (WindowThis != null)

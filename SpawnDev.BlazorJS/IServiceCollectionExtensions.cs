@@ -112,7 +112,6 @@ namespace SpawnDev.BlazorJS
                 var autoStartedService = new AutoStartedService
                 {
                     ServiceDescriptor = o,
-                    //Service = null,
                     GlobalScope = serviceAutoStartScope,
                     ImplementsIAsyncBackgroundService = isIAsyncBackgroundService,
                     ImplementsIBackgroundService = isIBackgroundService,
@@ -122,13 +121,6 @@ namespace SpawnDev.BlazorJS
                 //Console.WriteLine($"{o.ServiceType.Name} shouldStart: {shouldStart} {autoStartedService.DependencyTypes.Count}");
                 AutoStartedServices.Add(o.ServiceType, autoStartedService);
             });
-            ////// start in order of registration. dependencies will be started first.
-            ////foreach (var autoStartedService in AutoStartedServices)
-            ////{
-            ////    InitService(autoStartedService.ServiceDescriptor.ServiceType, null);
-            ////}
-            // call InitAsync on each IAsyncBackgroundService in order of creation
-            //var startedServicesOrdered = AutoStartedServices.Where(o => o.DependencyOrder >= 0).OrderBy(o => o.DependencyOrder).ToList();
             foreach (var serviceInfo in AutoStartedServices.Values)
             {
                 await InitServiceAsync(_this.Services, serviceInfo, null, false);
@@ -148,53 +140,6 @@ namespace SpawnDev.BlazorJS
             return (T?)await _this.GetServiceAsync(typeof(T));
         }
 
-        //internal static void InitServiceNow(Type type)
-        //{
-        //    var serviceInfo = AutoStartedServices.Find(o => o.ServiceDescriptor.ServiceType == type);
-        //    if (serviceInfo.ServiceDescriptor.ImplementationInstance)
-        //    InitService(serviceInfo, null);
-        //}
-        //internal static void InitService(Type type, bool isRequired)
-        //{
-        //    var serviceInfo = AutoStartedServices.Find(o => o.ServiceDescriptor.ServiceType == type);
-        //    InitService(serviceInfo, dependencyOfType);
-        //}
-        //        internal static object? InitService(AutoStartedService? serviceInfo, Type? dependencyOfType = null)
-        //        {
-        //            if (serviceInfo == null)
-        //            {
-        //                return null;
-        //            }
-        //            if (serviceInfo.StartupState == StartupState.None && dependencyOfType != null)
-        //            {
-        //                serviceInfo.StartupState = StartupState.ShouldStart;
-        //                //serviceInfo.DependencyOfType = dependencyOfType;
-        //            }
-        //            if (serviceInfo.StartupState != StartupState.ShouldStart)
-        //            {
-        //                return null;
-        //            }
-        //            serviceInfo.StartupState = StartupState.Starting;
-        //            foreach (var dependencyType in serviceInfo.DependencyTypes)
-        //            {
-        //                InitService(dependencyType, serviceInfo.ServiceDescriptor.ServiceType);
-        //            }
-        //            // this actual creates the instance
-        //            var service = Services.GetRequiredService(serviceInfo.ServiceDescriptor.ServiceType);
-        //            serviceInfo.DependencyOrder = AutoStartedServices.Where(o => o.StartupState == StartupState.Started).Count();
-        //            serviceInfo.StartupState = StartupState.Started;
-        //#if DEBUG && false
-        //            if (serviceInfo.DependencyOfType != null)
-        //            {
-        //                Console.WriteLine($"Started background service: {serviceInfo.ServiceDescriptor.ServiceType.Name} dependency of {serviceInfo.DependencyOfType.Name}");
-        //            }
-        //            else
-        //            {
-        //                Console.WriteLine($"Started background service: {serviceInfo.ServiceDescriptor.ServiceType.Name}");
-        //            }
-        //#endif
-        //            return service;
-        //        }
         internal static async Task InitServiceAsync(this IServiceProvider _this, AutoStartedService? serviceInfo, Type? dependencyOfType, bool isRequired = false)
         {
             if (serviceInfo == null)
@@ -213,7 +158,10 @@ namespace SpawnDev.BlazorJS
             serviceInfo.StartupState = StartupState.Starting;
             foreach (var dependencyType in serviceInfo.DependencyTypes)
             {
-                await InitServiceAsync(_this, serviceInfo, serviceInfo.ServiceDescriptor.ServiceType);
+                if (AutoStartedServices.TryGetValue(dependencyType, out var dependencyTypeServiceInfo))
+                {
+                    await InitServiceAsync(_this, dependencyTypeServiceInfo, serviceInfo.ServiceDescriptor.ServiceType);
+                }
             }
             var instanceExists = serviceInfo.ServiceDescriptor.ImplementationInstance != null;            
             // this actual creates the instance
@@ -222,35 +170,33 @@ namespace SpawnDev.BlazorJS
             serviceInfo.StartupState = StartupState.Started;
             if (!instanceExists)
             {
-#if DEBUG && false
+#if DEBUG && true
                 if (serviceInfo.DependencyOfType != null)
                 {
-                    Console.WriteLine($"Started background service: {serviceInfo.ServiceDescriptor.ServiceType.Name} dependency of {serviceInfo.DependencyOfType.Name}");
+                    Console.WriteLine($"Started background service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name} dependency of {serviceInfo.DependencyOfType.Name}");
                 }
                 else
                 {
-                    Console.WriteLine($"Started background service: {serviceInfo.ServiceDescriptor.ServiceType.Name}");
+                    Console.WriteLine($"Started background service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name}");
                 }
 #endif
             }
             if (!serviceInfo.InitAsyncCalled && service is IAsyncBackgroundService asyncBG)
             {
-#if DEBUG && false
+#if DEBUG && true
                 if (serviceInfo.DependencyOfType != null)
                 {
-                    Console.WriteLine($"InitAsync background service: {serviceInfo.ServiceDescriptor.ServiceType.Name} dependency of {serviceInfo.DependencyOfType.Name}");
+                    Console.WriteLine($"InitAsync background service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name} dependency of {serviceInfo.DependencyOfType.Name}");
                 }
                 else
                 {
-                    Console.WriteLine($"InitAsync background service: {serviceInfo.ServiceDescriptor.ServiceType.Name}");
+                    Console.WriteLine($"InitAsync background service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name}");
                 }
 #endif
                 serviceInfo.InitAsyncCalled = true;
                 await asyncBG.InitAsync();
             }
         }
-
-
 
         public static async Task<object?> FindServiceAsync( this IServiceProvider _this, Type? type)
         {
@@ -265,9 +211,8 @@ namespace SpawnDev.BlazorJS
                     var implementationType = serviceDescriptor.ImplementationType != null ? serviceDescriptor.ImplementationType :
                         (serviceDescriptor.ImplementationInstance != null ? serviceDescriptor.ImplementationInstance.GetType() : null);
                     //var implementationTypeName = implementationType == null ? "[UNNAMED]" : implementationType.Name;
-                    var matchesImplementationType = type == implementationType;
                     //Console.WriteLine($">>> {serviceType.Name} {implementationTypeName}");
-                    if (matchesImplementationType)
+                    if (type == implementationType)
                     {
                         //Console.WriteLine($"+++ serviceType found using implementation: {serviceType.Name} {implementationTypeName}");
                         service = await _this.GetServiceAsync(serviceType);
@@ -295,6 +240,7 @@ namespace SpawnDev.BlazorJS
         public static async Task BlazorJSRunAsync(this WebAssemblyHost _this)
         {
             await _this.StartBackgroundServices();
+            BlazorJSRuntime.JS.SetReady();
             if (BlazorJSRuntime.JS.IsWindow)
             {
 #if DEBUG && false
@@ -318,7 +264,6 @@ namespace SpawnDev.BlazorJS
         {
             return AutoStartModes.TryGetValue(type, out var mode) ? mode : null;
         }
-
 
         // AddSingleton overloads that also take GlobalScope
         private static Dictionary<Type, GlobalScope> AutoStartModes = new Dictionary<Type, GlobalScope>();
