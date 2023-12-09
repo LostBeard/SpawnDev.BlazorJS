@@ -403,8 +403,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     }
                     else if (value is byte[] bytes)
                     {
-                        // to try and good performance sending byte arrays we convert it to a Uint8Array reference first, and add its array buffer to the transferables list.
-                        // it will still be read in on the other side as a byte array
+                        // to try and get good performance sending byte arrays we convert it to a Uint8Array reference first, and add its array buffer to the transferables list.
+                        // it will still be read in on the other side as a byte array. this prevents 1 copying stage.
                         var uint8Array = new Uint8Array(bytes);
                         if (allowTransferable)
                         {
@@ -416,8 +416,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     {
                         if (allowTransferable)
                         {
-                            var covnersionInfo = TypeConversionInfo.GetTypeConversionInfo(methodParamType);
-                            var propTransferable = covnersionInfo.GetTransferablePropertyValues(value);
+                            var conversionInfo = TypeConversionInfo.GetTypeConversionInfo(methodParamType);
+                            var propTransferable = conversionInfo.GetTransferablePropertyValues(value);
                             transferableList.AddRange(propTransferable);
                         }
                         ret[i] = value;
