@@ -56,7 +56,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
                     _cameraCanvasProcessedEl = new HTMLCanvasElement(_cameraCanvasProcessedElRef);
                     _cameraCanvasProcessedElCtx = _cameraCanvasProcessedEl.Get2DContext(new ContextAttributes2D { WillReadFrequently = true });
                     _ = RefreshCameraList();
-                    _videoCapture.NewFrame += _videoCapture_NewFrame;
+                    _videoCapture.OnNewFrameAsync = _videoCapture_NewFrame;
                     _timer.Elapsed += _timer_Elapsed;
                     _timer.Enabled = true;
                 }
@@ -170,7 +170,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
             return true;
         }
 
-        private void _videoCapture_NewFrame()
+        private async Task _videoCapture_NewFrame()
         {
             var imageData = _videoCapture.ReadImageData();
             if (imageData != null)
@@ -251,7 +251,6 @@ namespace SpawnDev.BlazorJS.Test.Pages
             CloseMediaStream();
             if (_videoCapture != null)
             {
-                _videoCapture.NewFrame -= _videoCapture_NewFrame;
                 _videoCapture.Dispose();
                 _videoCapture = null;
             }

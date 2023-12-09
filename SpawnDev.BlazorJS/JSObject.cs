@@ -20,18 +20,22 @@ namespace SpawnDev.BlazorJS
 
     public class JSObject : IDisposable
     {
+        /// <summary>
+        /// This event is for diagnostics purposes and will liekly be removed in future releases
+        /// </summary>
+        public static Action<JSObject>? OnJSObjectCreated { get; set; }
+        public static bool UndisposedHandleVerboseMode { get; set; } = false;
+        protected static BlazorJSRuntime JS => BlazorJSRuntime.JS;
         public static IJSInProcessObjectReference? NullRef { get; } = null;
         public static JSInProcessObjectReferenceUndefined? UndefinedRef { get; } = new JSInProcessObjectReferenceUndefined();
+        [JsonIgnore]
+        public bool IsJSRefUndefined { get; private set; } = false;
         [JsonIgnore]
         public IJSInProcessObjectReference? JSRef { get; private set; }
         [JsonIgnore]
         public bool IsWrapperDisposed { get; private set; } = false;
         public JSObject(IJSInProcessObjectReference _ref) => FromReference(_ref);
-        public Function? Constructor => JSRef.Get<Function?>("constructor");
-        [JsonIgnore]
-        public bool IsJSRefUndefined { get; private set; } = false;
-
-        // some constructors of types that inherit from JSObjet will pass NullRef to the base constructor and then create the JSRef instance in their constructor and then set it with FromReference
+        // some constructors of types that inherit from JSObject will pass NullRef to the base constructor and then create the JSRef instance in their constructor and then set it with FromReference
         /// <summary>
         /// This virtual method is called when JSRef is going to be set. base.FromReference(_ref) must be called. 
         /// This can be used to allow custom post deserialization initialization such as attaching to events.
@@ -46,71 +50,35 @@ namespace SpawnDev.BlazorJS
             JSRef = _ref;
             if (JSRef != null) OnJSObjectCreated?.Invoke(this);
         }
-
-        public static Action<JSObject>? OnJSObjectCreated { get; set; }
-
-        //protected virtual void LosingReference()
-        //{
-        //    // deprecated... just need to rework Promise to not use it.
-        //}
-
-        //protected void ReplaceReference(IJSInProcessObjectReference _ref)
-        //{
-        //    if (IsWrapperDisposed) throw new Exception("IJSObject.FromReference error: IJSObject object already disposed.");
-        //    if (JSRef != null) LosingReference();
-        //    JSRef?.Dispose();
-        //    JSRef = null;
-        //    IsJSRefUndefined = false;
-        //    FromReference(_ref);
-        //}
-
         public T JSRefMove<T>() where T : JSObject
         {
             if (JSRef == null) throw new Exception("JSRefMove failed. Reference not set.");
             var _ref = JSRef;
             JSRef = null;
-            //DisposeExceptRef();
             return (T)Activator.CreateInstance(typeof(T), _ref)!;
         }
         public IJSInProcessObjectReference? JSRefMove()
         {
             var _ref = JSRef;
             JSRef = null;
-            //DisposeExceptRef();
             return _ref;
         }
         public T JSRefCopy<T>() where T : JSObject => JSInterop.ReturnMe<T>(this);
         public IJSInProcessObjectReference JSRefCopy() => JSInterop.ReturnMe<IJSInProcessObjectReference>(this);
-
-        protected static BlazorJSRuntime JS => BlazorJSRuntime.JS;
-
-        //public void DisposeExceptRef()
-        //{
-        //    if (JSRef != null) LosingReference();
-        //    JSRef = null;
-        //    IsJSRefUndefined = false;
-        //    Dispose();
-        //}
         protected virtual void Dispose(bool disposing)
         {
             if (IsWrapperDisposed) return;
             IsWrapperDisposed = true;
-            //if (disposing)
-            //{
-            //    // managed assets
-            //    if (JSRef != null) LosingReference();
-            //}
             JSRef?.Dispose();
             JSRef = null;
             IsJSRefUndefined = false;
-        }
+        }   
         public void Dispose()
         {
             if (IsWrapperDisposed) return;
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        public static bool UndisposedHandleVerboseMode { get; set; } = false;
         ~JSObject()
         {
             if (UndisposedHandleVerboseMode)

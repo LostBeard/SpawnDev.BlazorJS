@@ -51,6 +51,9 @@ namespace SpawnDev.BlazorJS.Test.Shared
             Video = source;
             _cameraCanvasEl = new HTMLCanvasElement();
             _cameraCanvasElCtx = _cameraCanvasEl.Get2DContext(new ContextAttributes2D { WillReadFrequently = true });
+            OnAnimationFrameCallback = new ActionCallback<double>(Window_OnAnimationFrame);
+            window = BlazorJSRuntime.JS.WindowThis!;
+            window.RequestAnimationFrame(OnAnimationFrameCallback);
         }
 
         public VideoCapture()
@@ -58,36 +61,40 @@ namespace SpawnDev.BlazorJS.Test.Shared
             Video = new HTMLVideoElement();
             _cameraCanvasEl = new HTMLCanvasElement();
             _cameraCanvasElCtx = _cameraCanvasEl.Get2DContext(new ContextAttributes2D { WillReadFrequently = true });
-            if (BlazorJSRuntime.JS.WindowThis != null) BlazorJSRuntime.JS.WindowThis.OnAnimationFrame += WindowThis_OnAnimationFrame;
+            OnAnimationFrameCallback = new ActionCallback<double>(Window_OnAnimationFrame);
+            window = BlazorJSRuntime.JS.WindowThis!;
+            window.RequestAnimationFrame(OnAnimationFrameCallback);
         }
+
+        Window window;
 
         public double CurrentFPS { get; private set; } = 0;
         int _frames = 0;
-        int _unreportedCount = 0;
-        Stopwatch sw = new Stopwatch();
+        Stopwatch sw = Stopwatch.StartNew();
         public double LastFromTime = -1;
+        ActionCallback<double> OnAnimationFrameCallback;
 
-        public event Action NewFrame;
+        public Func<Task>? OnNewFrameAsync { get; set; } = null;
 
-        private void WindowThis_OnAnimationFrame(double timestamp) {
-            if (!sw.IsRunning) sw.Start();
+        private async void Window_OnAnimationFrame(double timestamp) {
+            if (IsDisposed || window.IsWrapperDisposed) return;
             var currentTime = CurrentTime;
             if (LastFromTime != currentTime) {
                 _frames++;
                 LastFromTime = currentTime;
-                NewFrame?.Invoke();
-            }
-            var elapsed = sw.Elapsed.TotalSeconds;
-            if (elapsed > 1d) {
-                sw.Restart();
-                CurrentFPS = _frames / elapsed;
-                _frames = 0;
-                //
-                _unreportedCount++;
-                if (_unreportedCount == 5) {
-                    _unreportedCount = 0;
+                if (OnNewFrameAsync != null)
+                {
+                    await OnNewFrameAsync();
+                }
+                var elapsed = sw.Elapsed.TotalSeconds;
+                if (elapsed >= 1d)
+                {
+                    sw.Restart();
+                    CurrentFPS = _frames / elapsed;
+                    _frames = 0;
                 }
             }
+            window.RequestAnimationFrame(OnAnimationFrameCallback);
         }
 
         public double CurrentTime => Video.CurrentTime;
@@ -151,9 +158,11 @@ namespace SpawnDev.BlazorJS.Test.Shared
             return ret;
         }
 
+        public bool IsDisposed { get; protected set; } = false;
         public void Dispose()
         {
-            if (BlazorJSRuntime.JS.WindowThis != null) BlazorJSRuntime.JS.WindowThis.OnAnimationFrame -= WindowThis_OnAnimationFrame;
+            if (IsDisposed) return;
+            IsDisposed = true;
             try {
                 Video.Pause();
             }
@@ -161,6 +170,7 @@ namespace SpawnDev.BlazorJS.Test.Shared
             _cameraCanvasElCtx.Dispose();
             _cameraCanvasEl.Dispose();
             Video.Dispose();
+            OnAnimationFrameCallback.Dispose();
         }
     }
 }

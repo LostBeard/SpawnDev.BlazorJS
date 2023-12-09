@@ -347,46 +347,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback OnUnload { get => new JSEventCallback(o => AddEventListener("unload", o), o => RemoveEventListener("unload", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         #endregion
 
-        // non-standard .Net implementation that allows += to start catching requestAnimationFrame repeatedly until and an equal number of -= are called.
-        public delegate void AnimationFrameDelegate(double timestamp);
-        private ActionCallback<double> _OnAnimationFrameCallback;
-        private long _OnAnimationFrameCallbackHandle = 0;
-        private int _OnAnimationFrameInvocationCount = 0;
-        private event AnimationFrameDelegate _OnAnimationFrame;
-        public event AnimationFrameDelegate OnAnimationFrame
-        {
-            add
-            {
-                _OnAnimationFrame += value;
-                _OnAnimationFrameInvocationCount = _OnAnimationFrame == null ? 0 : _OnAnimationFrame.GetInvocationList().Length;
-                if (_OnAnimationFrameInvocationCount == 1)
-                {
-                    if (_OnAnimationFrameCallback == null) _OnAnimationFrameCallback = new ActionCallback<double>(Window_AnimationFrame);
-                    _OnAnimationFrameCallbackHandle = RequestAnimationFrame(_OnAnimationFrameCallback);
-                }
-            }
-            remove
-            {
-                _OnAnimationFrame -= value;
-                _OnAnimationFrameInvocationCount = _OnAnimationFrame == null ? 0 : _OnAnimationFrame.GetInvocationList().Length;
-                if (_OnAnimationFrameInvocationCount == 0)
-                {
-                    if (_OnAnimationFrameCallbackHandle != 0)
-                    {
-                        CancelAnimationFrame(_OnAnimationFrameCallbackHandle);
-                        _OnAnimationFrameCallbackHandle = 0;
-                    }
-                }
-            }
-        }
-
-        void Window_AnimationFrame(double timestamp)
-        {
-            if (_OnAnimationFrameInvocationCount > 0)
-                _OnAnimationFrameCallbackHandle = RequestAnimationFrame(_OnAnimationFrameCallback);
-            _OnAnimationFrame?.Invoke(timestamp);
-        }
-
         public bool ShowDirectoryPickerSupported() => !JS.IsUndefined("showDirectoryPicker");
 
         public Task<FileSystemDirectoryHandle> ShowDirectoryPicker(ShowDirectoryPickerOptions? options = null) => options == null ?
