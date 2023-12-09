@@ -1,23 +1,22 @@
 ﻿namespace SpawnDev.BlazorJS.Reflection
 {
-    public interface ICallDispatcherBaseTestClass
+    public interface IAsyncCallDispatcherTest
     {
         string IITestProp1 { get; set; }
         Task<string> IITestProp2 { get; set; }
         ValueTask<string> IITestProp3 { get; set; }
         Task IITestProp4 { get; set; }
         ValueTask IITestProp5 { get; set; }
-
         void IITest1();
         string IITest2(string data);
         Task<string> IITest3();
         ValueTask<string> IITest4();
         Task IITest5();
         ValueTask IITest6();
-        Task Test(CallDispatcher? caller = null);
+        Task Test(AsyncCallDispatcher? caller = null);
     }
 
-    public class CallDispatcherBaseTestClass : ICallDispatcherBaseTestClass
+    public class AsyncCallDispatcherTest : IAsyncCallDispatcherTest
     {
         public static string Context => BlazorJSRuntime.JS.GlobalThisTypeName;
         public static string TestProp1 { get; set; } = $"TestProp1 here {Context}";
@@ -86,10 +85,10 @@
             Console.WriteLine($"IITest6 {Context}");
         }
 
-        public async Task Test(CallDispatcher? caller = null)
+        public async Task Test(AsyncCallDispatcher? caller = null)
         {
             var JS = BlazorJSRuntime.JS;
-            caller = caller ?? new CallDispatcher();
+            caller = caller ?? new AsyncCallDispatcher();
             // Expressions
             // static property get
             Console.WriteLine("Expression static properties get");
@@ -113,22 +112,22 @@
             await caller.Run(() => Test6());
             // instance property get
             Console.WriteLine("Expression instance properties get");
-            JS.Log($"{Context} " + await caller.Run<CallDispatcherBaseTestClass, string>(s => s.IITestProp1));
-            JS.Log($"{Context} " + await caller.Run<CallDispatcherBaseTestClass, string>(s => s.IITestProp2));
-            JS.Log($"{Context} " + await caller.Run<CallDispatcherBaseTestClass, string>(s => s.IITestProp3));
-            await caller.Run<CallDispatcherBaseTestClass>(s => s.IITestProp4);
-            await caller.Run<CallDispatcherBaseTestClass>(s => s.IITestProp5);
+            JS.Log($"{Context} " + await caller.Run<AsyncCallDispatcherTest, string>(s => s.IITestProp1));
+            JS.Log($"{Context} " + await caller.Run<AsyncCallDispatcherTest, string>(s => s.IITestProp2));
+            JS.Log($"{Context} " + await caller.Run<AsyncCallDispatcherTest, string>(s => s.IITestProp3));
+            await caller.Run<AsyncCallDispatcherTest>(s => s.IITestProp4);
+            await caller.Run<AsyncCallDispatcherTest>(s => s.IITestProp5);
             // instance property set
             Console.WriteLine("Expression instance properties set");
-            await caller.Set<CallDispatcherBaseTestClass, string>(s => s.IITestProp1, "Yay!");
+            await caller.Set<AsyncCallDispatcherTest, string>(s => s.IITestProp1, "Yay!");
             // instance methods
             Console.WriteLine("Expression instance methods");
-            await caller.Run<CallDispatcherBaseTestClass>(s => s.IITest1());
-            JS.Log($"{Context} " + await caller.Run<CallDispatcherBaseTestClass, string>(s => s.IITest2("Hello!!")));
-            JS.Log($"{Context} " + await caller.Run<CallDispatcherBaseTestClass, string>(s => s.IITest3()));
-            JS.Log($"{Context} " + await caller.Run<CallDispatcherBaseTestClass, string>(s => s.IITest4()));
-            await caller.Run<CallDispatcherBaseTestClass>(s => s.IITest5());
-            await caller.Run<CallDispatcherBaseTestClass>(s => s.IITest6());
+            await caller.Run<AsyncCallDispatcherTest>(s => s.IITest1());
+            JS.Log($"{Context} " + await caller.Run<AsyncCallDispatcherTest, string>(s => s.IITest2("Hello!!")));
+            JS.Log($"{Context} " + await caller.Run<AsyncCallDispatcherTest, string>(s => s.IITest3()));
+            JS.Log($"{Context} " + await caller.Run<AsyncCallDispatcherTest, string>(s => s.IITest4()));
+            await caller.Run<AsyncCallDispatcherTest>(s => s.IITest5());
+            await caller.Run<AsyncCallDispatcherTest>(s => s.IITest6());
 
             // Delegates
             // static methods

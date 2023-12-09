@@ -31,7 +31,7 @@ builder.Services.AddBlazorJSRuntime();
 // Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
 builder.Services.AddWebWorkerService();
 // The below service is used to test CallDispatcher used with WebWorkers (Used in UnitTests)
-builder.Services.AddSingleton<CallDispatcherBaseTestClass>();
+builder.Services.AddSingleton<AsyncCallDispatcherTest>();
 // More app specific services
 builder.Services.AddSingleton(builder.Configuration); // used to demo appsettings reading in workers
 builder.Services.AddSingleton<MediaDevices>();

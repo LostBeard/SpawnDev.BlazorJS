@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace SpawnDev.BlazorJS.Reflection
 {
     /// <summary>
-    /// This Proxy presents itself as the interface it is created as but calls are converted to MethodInfos with arguments and passed onto the ICallDispatcher given at creation
+    /// This Proxy presents itself as the interface it is created with but calls are converted to MethodInfos with arguments and passed onto the ICallDispatcher given at creation
     /// </summary>
     /// <typeparam name="TServiceInterface"></typeparam>
     public class InterfaceCallDispatcher<TServiceInterface> : DispatchProxy where TServiceInterface : class
     {
-        internal ICallDispatcher CallDispatcher { get; private set; }
+        internal IAsyncCallDispatcher CallDispatcher { get; private set; }
         internal MethodInfo _InvokeTaskInfo;
         internal MethodInfo _InvokeValueTaskInfo;
         public InterfaceCallDispatcher() : base()
@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.Reflection
             _InvokeValueTaskInfo = typeof(InterfaceCallDispatcher<TServiceInterface>).GetMethod(nameof(InvokeValueTask), BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception($"WorkerServiceProxy static constructor error");
         }
 
-        public static TServiceInterface CreateInterfaceDispatcher(ICallDispatcher worker)
+        public static TServiceInterface CreateInterfaceDispatcher(IAsyncCallDispatcher worker)
         {
             var proxy = Create<TServiceInterface, InterfaceCallDispatcher<TServiceInterface>>() as InterfaceCallDispatcher<TServiceInterface>;
             proxy.CallDispatcher = worker;
@@ -33,7 +33,7 @@ namespace SpawnDev.BlazorJS.Reflection
 
         internal async Task<TReturnType> InvokeTask<TReturnType>(MethodInfo targetMethod, object?[]? args)
         {
-            var ret = await CallDispatcher.DispatchCall(targetMethod, args);
+            var ret = await CallDispatcher.Call(targetMethod, args);
             return (TReturnType)ret;
         }
 
@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS.Reflection
 
         internal async Task InvokeTaskVoid(MethodInfo targetMethod, object?[]? args)
         {
-            await CallDispatcher.DispatchCall(targetMethod, args);
+            await CallDispatcher.Call(targetMethod, args);
         }
 
         internal ValueTask InvokeValueTaskVoid(MethodInfo targetMethod, object?[]? args)

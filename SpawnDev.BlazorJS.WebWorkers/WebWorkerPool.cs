@@ -6,7 +6,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
     /// <summary>
     /// Manages a pool of web workers that can be acquired and released as needed
     /// </summary>
-    public partial class WebWorkerPool : CallDispatcher, IDisposable
+    public partial class WebWorkerPool : AsyncCallDispatcher, IDisposable
     {
         public WebWorkerService WebWorkerService { get; }
         protected List<WebWorker> _workers = new List<WebWorker>();
@@ -99,7 +99,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <param name="args"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public override async Task<object?> DispatchCall(MethodInfo methodInfo, object?[]? args = null)
+        public override async Task<object?> Call(MethodInfo methodInfo, object?[]? args = null)
         {
             ServiceCallDispatcher? dispatcher = null;
             bool shouldRelease = false;
@@ -119,7 +119,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 {
                     throw new Exception($"Failed to run task.");
                 }
-                return await dispatcher.DispatchCall(methodInfo, args);
+                return await dispatcher.Call(methodInfo, args);
             }
             finally
             {
@@ -264,12 +264,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
 
-        private void Worker_OnUnlocked(Reflection.CallDispatcher obj)
+        private void Worker_OnUnlocked(Reflection.AsyncCallDispatcher obj)
         {
             ReleaseWorker((WebWorker)obj);
         }
 
-        private void Worker_OnLocked(Reflection.CallDispatcher obj)
+        private void Worker_OnLocked(Reflection.AsyncCallDispatcher obj)
         {
             //throw new NotImplementedException();
         }

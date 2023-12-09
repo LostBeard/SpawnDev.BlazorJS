@@ -36,7 +36,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// If this scope is a WebWorker and its parent is a Window it will dispatch on the parent's scope<br />
         /// Only available in a Window context, or in a WebWorker created by a Window
         /// </summary>
-        public CallDispatcher? WindowTask { get; private set; }
+        public AsyncCallDispatcher? WindowTask { get; private set; }
         public ServiceWorkerConfig ServiceWorkerConfig { get; private set; } = new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.None };
         public WebWorkerService(NavigationManager navigationManager, IServiceProvider serviceProvider, IServiceCollection serviceDescriptors, IWebAssemblyHostEnvironment hostEnvironment, BlazorJSRuntime js)
         {

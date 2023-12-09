@@ -15,9 +15,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void Push(object? value) => JSRef.CallVoid("push", value);
         public void Unshift(object? value) => JSRef.CallVoid("unshift", value);
         public T At<T>(int index) => JSRef.Call<T>("at", index);
+        public object? At(Type type, int index) => JSRef.Call(type, "at", index);
         public T Pop<T>() => JSRef.Call<T>("pop");
+        public object? Pop(Type type) => JSRef.Call(type, "pop");
         public T Shift<T>() => JSRef.Call<T>("shift");
-        public void SetItem<T>(int index, object? value) => JSRef.Set(index, value);
+        public object? Shift(Type type) => JSRef.Call(type, "shift");
+        public void SetItem(int index, object? value) => JSRef.Set(index, value);
         public T GetItem<T>(int index) => JSRef.Get<T>(index);
         public object? GetItem(Type type, int index) => JSRef.Get(type, index);
         public Array Concat(Array array) => JSRef.Call<Array>("concat", array);

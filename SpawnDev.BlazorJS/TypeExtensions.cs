@@ -169,5 +169,48 @@ namespace SpawnDev.BlazorJS
             return t;
         }
         static Dictionary<string, Type?> typeCache { get; } = new Dictionary<string, Type?>();
+
+        /// <summary>
+        /// Returns methods that match the given parameters<br />
+        /// Default binding flags:<br />
+        /// BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static
+        /// </summary>
+        /// <param name="classType"></param>
+        /// <param name="methodName"></param>
+        /// <param name="parameterCount"></param>
+        /// <param name="bindingFlags"></param>
+        /// <param name="allowGeneric"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static List<MethodInfo> FindAllMethods(this Type classType, string methodName, int parameterCount, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static, bool allowGeneric = false)
+        {
+            return classType
+            .FindAllMethods(methodName, bindingFlags, allowGeneric).Where(m =>
+            {
+                var methodParams = m.GetParameters();
+                var maxParamCount = methodParams.Count();
+                var minParamCount = methodParams.Where(o => !o.HasDefaultValue).Count();
+                return parameterCount <= maxParamCount && parameterCount >= minParamCount;
+            })
+            .ToList();
+        }
+        /// <summary>
+        /// Returns methods that match the given parameters<br />
+        /// Default binding flags:<br />
+        /// BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static
+        /// </summary>
+        /// <param name="classType"></param>
+        /// <param name="methodName"></param>
+        /// <param name="bindingFlags"></param>
+        /// <param name="allowGeneric"></param>
+        /// <returns></returns>
+        public static List<MethodInfo> FindAllMethods(this Type classType, string methodName, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static, bool allowGeneric = false)
+        {
+            return classType
+            .GetMethods(bindingFlags)
+            .Where(m => m.Name == methodName)
+            .Where(m => allowGeneric || !m.IsGenericMethod)
+            .ToList();
+        }
     }
 }

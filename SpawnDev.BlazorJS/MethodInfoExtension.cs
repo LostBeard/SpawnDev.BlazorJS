@@ -140,6 +140,13 @@ namespace SpawnDev.BlazorJS
             return _this.Invoke(instance, args);
         }
 
+        /// <summary>
+        /// Invokes a method asynchronously and returns the result if any
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="instance"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static async Task<object?> InvokeAsync(this MethodInfo _this, object? instance, object[] args)
         {
             object? retValue = null;
@@ -173,5 +180,6 @@ namespace SpawnDev.BlazorJS
             }
             return retValue;
         }
+
     }
 }
