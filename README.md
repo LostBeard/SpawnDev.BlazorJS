@@ -583,36 +583,8 @@ builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builde
 await builder.Build().BlazorJSRunAsync();
 ```
 
-## WebWorkerService.WindowTask
-Sometimes WebWorkers may need to call back into the Window thread that owns them. This can easily be achieved using WebWorkerService.WindowTask. 
-```cs
-public class MyService
-{
-    WebWorkerService WebWorkerService;
-    public MyService(WebWorkerService webWorkerService)
-    {
-        WebWorkerService = webWorkerService;
-    }
-    string WorkerMethod(string input)
-    {
-        return $"Hello {input} from {WebWorkerService.InstanceId}";
-    }
-    public async Task CallWorkerMethod()
-    {
-        // Call the private method WorkerMethod on this scope (normal)
-        Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
-            
-        // Call the private method WorkerMethod on the Window thread using an Expression
-        Console.WriteLine(await WebWorkerService.WindowTask.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
-
-        // Call the private method WorkerMethod on the Window thread using a Delegate
-        Console.WriteLine(await WebWorkerService.WindowTask.Invoke(WorkerMethod, WebWorkerService.InstanceId));
-    }
-}
-```
-
 ## WebWorkerService.TaskPool
-WebWorkerService.TaskPool is an easy to use way to call any registered service in a background thread. If WebWorkers are not supported, calls on the TaskPool will run on thw Window scope. The TaskPool settings can be configured using the AddWebWorkerService configureCallback option. By default, no worker tasks are started automatically at startup and the max pool size is set to 1.
+WebWorkerService.TaskPool is ready to call any registered service in a background thread. If WebWorkers are not supported, calls on the TaskPool will run on thw Window scope. The TaskPool settings can be configured using the AddWebWorkerService configureCallback option. By default, no worker tasks are started automatically at startup and the max pool size is set to 1.
 
 ### Supported Calling Conventions
 This applies to any class that inherits from AsyncCallDispatcher such as the instances TaskPool, and WindowTask or the classes WebWorker, SharedWebWorker, and WebWorkerPool.  
@@ -653,6 +625,34 @@ public class MyService
 
         // Call the private method WorkerMethod in a WebWorker thread using a Delegate
         Console.WriteLine(await WebWorkerService.TaskPool.Invoke(WorkerMethod, WebWorkerService.InstanceId));
+    }
+}
+```
+
+## WebWorkerService.WindowTask
+Sometimes WebWorkers may need to call back into the Window thread that owns them. This can easily be achieved using WebWorkerService.WindowTask. 
+```cs
+public class MyService
+{
+    WebWorkerService WebWorkerService;
+    public MyService(WebWorkerService webWorkerService)
+    {
+        WebWorkerService = webWorkerService;
+    }
+    string WorkerMethod(string input)
+    {
+        return $"Hello {input} from {WebWorkerService.InstanceId}";
+    }
+    public async Task CallWorkerMethod()
+    {
+        // Call the private method WorkerMethod on this scope (normal)
+        Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
+            
+        // Call the private method WorkerMethod on the Window thread using an Expression
+        Console.WriteLine(await WebWorkerService.WindowTask.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
+
+        // Call the private method WorkerMethod on the Window thread using a Delegate
+        Console.WriteLine(await WebWorkerService.WindowTask.Invoke(WorkerMethod, WebWorkerService.InstanceId));
     }
 }
 ```
