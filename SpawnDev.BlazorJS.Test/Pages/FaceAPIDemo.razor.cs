@@ -101,7 +101,7 @@ namespace SpawnDev.BlazorJS.Test.Pages
             }
             WebWorker? worker = null;
             IFaceAPIService faceAPIService;
-            if (WebWorkerService.WorkerTask.PoolSize > 0 && WebWorkerService.WorkerTask.TryGetWorker(out worker))
+            if (WebWorkerService.TaskPool.PoolSize > 0 && WebWorkerService.TaskPool.TryGetWorker(out worker))
             {
                 faceAPIService = worker.GetService<IFaceAPIService>();
             }

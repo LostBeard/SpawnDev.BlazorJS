@@ -54,7 +54,7 @@
         {
             throw new Exception("Worker not supported by browser. Expected failure.");
         }
-        await CallDispatcherBaseTestClass.Test(WebWorkerService.WorkerTask);
+        await CallDispatcherBaseTestClass.Test(WebWorkerService.TaskPool);
     }
 
     [TestMethod]
@@ -64,11 +64,10 @@
         {
             throw new Exception("Worker not supported by browser. Expected failure.");
         }
-
         // static methods of any class can be called
         // private static methods must be called from inside the class
-        // public static methods can be called from outside the calss
-        var remoteInstanceId = await WebWorkerService.WorkerTask.Run(() => ThisMethodWillGetCalledInAWorker(JS.GlobalThisTypeName, JS.InstanceId));
+        // public static methods can be called from outside the class
+        var remoteInstanceId = await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(JS.GlobalThisTypeName, JS.InstanceId));
         Console.WriteLine($"{BlazorJSRuntime.JS.GlobalThisTypeName} {BlazorJSRuntime.JS.InstanceId} {remoteInstanceId}");
     }
 
