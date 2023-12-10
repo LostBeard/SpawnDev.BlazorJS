@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using SpawnDev.BlazorJS.Reflection;

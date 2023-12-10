@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-    public partial class BlazorJSRuntime : IBlazorJSRuntime
+    public partial class BlazorJSRuntime
     {
         internal static readonly IJSInProcessRuntime _js;
         public static BlazorJSRuntime JS { get; internal set; }

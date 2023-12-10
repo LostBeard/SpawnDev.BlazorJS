@@ -147,20 +147,28 @@ namespace SpawnDev.BlazorJS
         /// <param name="instance"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static async Task<object?> InvokeAsync(this MethodInfo _this, object? instance, object[] args)
+        public static async Task<object?> InvokeAsync(this MethodInfo _this, object? instance, object?[]? args)
         {
             object? retValue = null;
             var returnType = _this.ReturnType;
             var isAwaitable = returnType.IsAsync();
             var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
             var finalReturnTypeIsVoid = finalReturnType == typeof(void);
+
+            var reflectedTypeName = _this.ReflectedType == null ? "" : _this.ReflectedType.Name;
+            var instanceType = instance == null ? "NONE" : instance.GetType().Name;
+            Console.WriteLine($"instanceType: {instanceType} reflectedTypeName: {reflectedTypeName}");
+
             var retv = _this.Invoke(instance, args);
             if (retv is Task t)
             {
                 await t;
-                var resultProt = returnType.GetProperty("Result");
-                if (resultProt != null)
-                    retValue = resultProt.GetValue(retv, null);
+                if (!finalReturnTypeIsVoid)
+                {
+                    var resultProp = returnType.GetProperty("Result");
+                    if (resultProp != null)
+                        retValue = resultProp.GetValue(retv, null);
+                }
             }
             else if (retv is ValueTask vt)
             {
@@ -170,9 +178,12 @@ namespace SpawnDev.BlazorJS
             {
                 dynamic vtt = retv;
                 await vtt;
-                var resultProt = returnType.GetProperty("Result");
-                if (resultProt != null)
-                    retValue = resultProt.GetValue(retv, null);
+                if (!finalReturnTypeIsVoid)
+                {
+                    var resultProp = returnType.GetProperty("Result");
+                    if (resultProp != null)
+                        retValue = resultProp.GetValue(retv, null);
+                }   
             }
             else if (!finalReturnTypeIsVoid)
             {
@@ -180,6 +191,5 @@ namespace SpawnDev.BlazorJS
             }
             return retValue;
         }
-
     }
 }
