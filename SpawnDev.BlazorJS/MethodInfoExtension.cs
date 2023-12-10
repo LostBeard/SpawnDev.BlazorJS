@@ -143,7 +143,7 @@ namespace SpawnDev.BlazorJS
 
         /// <summary>
         /// Invokes a method asynchronously and returns the result if any<br />
-        /// Task, Task&lt;&gt;, ValueTask&lt;&gt;, and ValueTask are resolved their Result values or null.
+        /// Task, Task&lt;&gt;, ValueTask&lt;&gt;, and ValueTask are awaited and their results are returned, if any.
         /// </summary>
         /// <param name="_this"></param>
         /// <param name="instance"></param>
