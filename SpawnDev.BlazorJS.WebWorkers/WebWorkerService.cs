@@ -26,11 +26,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public string InstanceId { get; }
         public string WebWorkerJSScript { get; } = "_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js";
         public BlazorJSRuntime JS { get; }
+        public GlobalScope GlobalScope { get; }
         /// <summary>
         /// If WebWorkers are supported it dispatches on a free WebWorker in the WebWorkerPool<br />
         /// If WebWorkers are not supported it dispatches on the local scope
         /// </summary>
-        public WebWorkerPool WorkerTask { get; }
+        public WebWorkerPool TaskPool { get; }
         /// <summary>
         /// If this scope is a Window it dispatches on this scope<br />
         /// If this scope is a WebWorker and its parent is a Window it will dispatch on the parent's scope<br />
@@ -41,6 +42,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public WebWorkerService(NavigationManager navigationManager, IServiceProvider serviceProvider, IServiceCollection serviceDescriptors, IWebAssemblyHostEnvironment hostEnvironment, BlazorJSRuntime js)
         {
             JS = js;
+            GlobalScope = JS.GlobalScope;
             InstanceId = JS.InstanceId;
             WebWorkerSupported = !JS.IsUndefined("Worker");
             SharedWebWorkerSupported = !JS.IsUndefined("SharedWorker");
@@ -62,7 +64,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 ServiceWorkerConfig = IServiceCollectionExtensions.ServiceWorkerConfig;
             };
             Local = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors);
-            WorkerTask = new WebWorkerPool(this, 0, 1, true);
+            TaskPool = new WebWorkerPool(this, 0, 1, true);
         }
 
         class WebWorkerServiceEventMsgBase

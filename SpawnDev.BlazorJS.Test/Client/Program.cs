@@ -29,7 +29,18 @@ builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builde
 // Add SpawnDev.BlazorJS.BlazorJSRuntime
 builder.Services.AddBlazorJSRuntime();
 // Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
-builder.Services.AddWebWorkerService();
+builder.Services.AddWebWorkerService(webWorkerService =>
+{
+    // Optionally configure the WebWorkerService service before it is used
+    // Default WebWorkerService.TaskPool settings: PoolSize = 0, MaxPoolSize = 1, AutoGrow = true
+    // Below sets TaskPool max size to 2. By default the TaskPool size will grow as needed up to the max pool size.
+    // Setting max pool size to -1 will set it to the value of navigator.hardwareConcurrency
+    webWorkerService.TaskPool.MaxPoolSize = 2;
+    // Below is telling the WebWorkerService TaskPool to set the initial size to 2 if running in a Window scope and 0 otherwise
+    // This starts up 2 WebWorkers to handle TaskPool tasks as needed
+    // Setting this to -1 will set the initial pool size to max pool size
+    webWorkerService.TaskPool.PoolSize = webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
+});
 // The below service is used to test CallDispatcher used with WebWorkers (Used in UnitTests)
 builder.Services.AddSingleton<AsyncCallDispatcherTest>();
 // More app specific services

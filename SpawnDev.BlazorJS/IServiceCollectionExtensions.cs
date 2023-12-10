@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using SpawnDev.BlazorJS.JSObjects;
-using SpawnDev.BlazorJS.JsonConverters;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using static SpawnDev.BlazorJS.IServiceCollectionExtensions;
 
@@ -21,6 +16,29 @@ namespace SpawnDev.BlazorJS
     }
     public static class IServiceCollectionExtensions
     {
+
+        public static T CreateInstanceWithServices<T>(this IServiceProvider _this) where T : class => (T)_this.CreateInstanceWithServices(typeof(T));
+        public static object CreateInstanceWithServices(this IServiceProvider _this, Type type)
+        {
+            var constructor = type.GetConstructors().Single();
+            var parameters = constructor.GetParameters();
+            var args = new object?[parameters.Length];
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                var parameter = parameters[i];
+                var parameterType = parameter.ParameterType;
+                var paramService = _this.GetService(parameterType);
+                if (paramService != null)
+                {
+                    args[i] = paramService;
+                }
+                else if (parameter.HasDefaultValue)
+                {
+                    args[i] = parameter.DefaultValue;
+                }
+            }
+            return Activator.CreateInstance(type, args)!;
+        }
         /// <summary>
         /// WARNING: Modifying the JSRuntime.JsonSerializerOptions can have unexpected results.
         /// </summary>

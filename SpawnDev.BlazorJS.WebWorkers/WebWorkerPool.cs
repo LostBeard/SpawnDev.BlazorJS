@@ -3,6 +3,29 @@ using System.Reflection;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
+    public class MyService
+    {
+        WebWorkerService WebWorkerService;
+        public MyService(WebWorkerService webWorkerService)
+        {
+            WebWorkerService = webWorkerService;
+        }
+        string WorkerMethod(string input)
+        {
+            return $"Hello {input} from {WebWorkerService.InstanceId}";
+        }
+        public async Task CallWorkerMethod()
+        {
+            // Call the private method WorkerMethod on this scope (normal)
+            Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
+            
+            // Call the private method WorkerMethod in a WebWorker thread using an Expression
+            Console.WriteLine(await WebWorkerService.TaskPool.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
+
+            // Call the private method WorkerMethod in a WebWorker thread using a Delegate
+            Console.WriteLine(await WebWorkerService.TaskPool.Invoke(WorkerMethod, WebWorkerService.InstanceId));
+        }
+    }
     /// <summary>
     /// Manages a pool of web workers that can be acquired and released as needed
     /// </summary>
@@ -93,7 +116,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         }
 
         /// <summary>
-        /// override to handle CallDispatcher calls
+        /// override to handle CallDispatcher calls. Calls the MethodInfo on an available WebWorker or on this scope if none can be created
         /// </summary>
         /// <param name="methodInfo"></param>
         /// <param name="args"></param>
@@ -211,24 +234,45 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// Waits until a WebWorker is available and returns it<br />
         /// If one is not available right now, and the number of WebWorkers running is less than the max, another worker is started<br />
         /// An exception will be thrown if a WebWorker cannot be returned for any reason including:<br />
-        /// not supported<br />
-        /// cancellationToken is triggered<br />
-        /// PoolSize == 0 and (AutoGrow == false or MaxPoolSize == 0)<br />
+        /// - Not supported<br />
+        /// - CancellationToken is triggered<br />
+        /// - PoolSize == 0 and AutoGrow == false<br />
+        /// - MaxPoolSize == 0<br />
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public async Task<WebWorker> GetWorkerAsync(CancellationToken cancellationToken)
         {
-            if (!WebWorkerService.WebWorkerSupported) throw new Exception("WebWorkers not supported");
+            if (!WebWorkerService.WebWorkerSupported)
+            {
+                // Fallbacks are not used when directly requesting a WebWorker from the pool
+                if (FallbackToLocalScope)
+                {
+                    throw new Exception("WebWorkers not supported. FallbackToLocalScope not supported when directly requesting a WebWorker.");
+                }
+                throw new Exception("WebWorkers not supported");
+            }
             if (IdleWebWorkers.TryDequeue(out var worker))
             {
                 worker!.AcquireLock();
                 return worker;
             }
-            if ((!AutoGrow && PoolSize == 0) || MaxPoolSize == 0)
+            if ((!AutoGrow && PoolSize == 0))
             {
-                throw new Exception("No workers running and AutoAdd disabled");
+                if (FallbackToLocalScope)
+                {
+                    throw new Exception("No workers running and AutoGrow disabled. FallbackToLocalScope not supported when directly requesting a WebWorker.");
+                }
+                throw new Exception("No workers running and AutoGrow disabled");
+            }
+            if (MaxPoolSize == 0)
+            {
+                if (FallbackToLocalScope)
+                {
+                    throw new Exception("Max pool size is 0. FallbackToLocalScope not supported when directly requesting a WebWorker.");
+                }
+                throw new Exception("Max pool size is 0");
             }
             var tcs = new TaskCompletionSource<WebWorker>(cancellationToken);
             JobQueue.Enqueue(tcs);

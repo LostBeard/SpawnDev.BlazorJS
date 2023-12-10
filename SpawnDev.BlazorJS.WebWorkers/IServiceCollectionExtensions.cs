@@ -15,14 +15,17 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
-        public static IServiceCollection AddWebWorkerService(this IServiceCollection _this)
+        public static IServiceCollection AddWebWorkerService(this IServiceCollection _this, Action<WebWorkerService>? configureCallback = null)
         {
-            return _this.AddSingleton<WebWorkerService>();
+            return _this.AddSingleton(sp =>
+            {
+                // create the service and pass it to the configureCallback to allow configuration at startup
+                var service = sp.CreateInstanceWithServices<WebWorkerService>();
+                configureCallback?.Invoke(service);
+                return service;
+            });
         }
-        public static IServiceCollection AddTaskRunnerService(this IServiceCollection _this)
-        {
-            return _this.AddSingleton<WebWorkerService>();
-        }
+
         /// <summary>
         /// RegisterServiceWorker a class that implements ServiceWorkerEventHandler to handle ServiceWorker events
         /// </summary>

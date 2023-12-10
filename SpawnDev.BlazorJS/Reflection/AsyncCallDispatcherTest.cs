@@ -15,7 +15,6 @@
         ValueTask IITest6();
         Task Test(AsyncCallDispatcher? caller = null);
     }
-
     public class AsyncCallDispatcherTest : IAsyncCallDispatcherTest
     {
         public static string Context => BlazorJSRuntime.JS.GlobalThisTypeName;
