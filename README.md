@@ -619,10 +619,8 @@ public class MyService
     {
         // Call the private method WorkerMethod on this scope (normal)
         Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
-            
         // Call the private method WorkerMethod in a WebWorker thread using an Expression
         Console.WriteLine(await WebWorkerService.TaskPool.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
-
         // Call the private method WorkerMethod in a WebWorker thread using a Delegate
         Console.WriteLine(await WebWorkerService.TaskPool.Invoke(WorkerMethod, WebWorkerService.InstanceId));
     }
@@ -639,20 +637,20 @@ public class MyService
     {
         WebWorkerService = webWorkerService;
     }
-    string WorkerMethod(string input)
+    string CalledOnWindow(string input)
     {
         return $"Hello {input} from {WebWorkerService.InstanceId}";
     }
-    public async Task CallWorkerMethod()
-    {
-        // Call the private method WorkerMethod on this scope (normal)
-        Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
-            
-        // Call the private method WorkerMethod on the Window thread using an Expression
-        Console.WriteLine(await WebWorkerService.WindowTask.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
-
-        // Call the private method WorkerMethod on the Window thread using a Delegate
-        Console.WriteLine(await WebWorkerService.WindowTask.Invoke(WorkerMethod, WebWorkerService.InstanceId));
+    public async Task StartedInWorker()
+    {   
+        // Do some work ...         
+        // report back to Window (Expression example)
+        // Call the private method CalledOnWindow on the Window thread using an Expression
+        Console.WriteLine(await WebWorkerService.WindowTask.Run(() => CalledOnWindow(WebWorkerService.InstanceId)));
+        // Do some more work ...         
+        // report back to Window again (Delegate example)
+        // Call the private method CalledOnWindow on the Window thread using a Delegate
+        Console.WriteLine(await WebWorkerService.WindowTask.Invoke(CalledOnWindow, WebWorkerService.InstanceId));
     }
 }
 ```
