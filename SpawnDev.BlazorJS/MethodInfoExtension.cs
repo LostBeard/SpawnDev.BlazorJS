@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Net.Http.Headers;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -141,7 +142,8 @@ namespace SpawnDev.BlazorJS
         }
 
         /// <summary>
-        /// Invokes a method asynchronously and returns the result if any
+        /// Invokes a method asynchronously and returns the result if any<br />
+        /// Task, Task&lt;&gt;, ValueTask&lt;&gt;, and ValueTask are resolved their Result values or null.
         /// </summary>
         /// <param name="_this"></param>
         /// <param name="instance"></param>
@@ -149,47 +151,35 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static async Task<object?> InvokeAsync(this MethodInfo _this, object? instance, object?[]? args)
         {
-            object? retValue = null;
-            var returnType = _this.ReturnType;
-            var isAwaitable = returnType.IsAsync();
-            var finalReturnType = isAwaitable ? returnType.AsyncReturnType() : returnType;
-            var finalReturnTypeIsVoid = finalReturnType == typeof(void);
-
-            var reflectedTypeName = _this.ReflectedType == null ? "" : _this.ReflectedType.Name;
-            var instanceType = instance == null ? "NONE" : instance.GetType().Name;
-            Console.WriteLine($"instanceType: {instanceType} reflectedTypeName: {reflectedTypeName}");
-
-            var retv = _this.Invoke(instance, args);
-            if (retv is Task t)
+            object? returnValue = null;
+            object? tmpValue = _this.Invoke(instance, args);
+            if (tmpValue != null)
             {
-                await t;
-                if (!finalReturnTypeIsVoid)
+                var returnType = _this.ReturnType;
+                if (returnType.IsTaskTyped())
                 {
-                    var resultProp = returnType.GetProperty("Result");
-                    if (resultProp != null)
-                        retValue = resultProp.GetValue(retv, null);
+                    await (dynamic)tmpValue;
+                    returnValue = returnType.GetProperty("Result")!.GetValue(tmpValue, null);
+                }
+                else if (tmpValue is Task task)
+                {
+                    await task;
+                }
+                else if (returnType.IsValueTaskTyped())
+                {
+                    await (dynamic)tmpValue;
+                    returnValue = returnType.GetProperty("Result")!.GetValue(tmpValue, null);
+                }
+                else if (tmpValue is ValueTask valueTask)
+                {
+                    await valueTask;
+                }
+                else
+                {
+                    returnValue = tmpValue;
                 }
             }
-            else if (retv is ValueTask vt)
-            {
-                await vt;
-            }
-            else if(returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(ValueTask<>))
-            {
-                dynamic vtt = retv;
-                await vtt;
-                if (!finalReturnTypeIsVoid)
-                {
-                    var resultProp = returnType.GetProperty("Result");
-                    if (resultProp != null)
-                        retValue = resultProp.GetValue(retv, null);
-                }   
-            }
-            else if (!finalReturnTypeIsVoid)
-            {
-                retValue = retv;
-            }
-            return retValue;
+            return returnValue;
         }
     }
 }

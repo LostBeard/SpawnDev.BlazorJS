@@ -35,7 +35,7 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static bool IsAsync(this Type type) => type.IsTask() || type.IsValueTask();
         /// <summary>
-        /// If the Type is a Task or ValueTask the with a result type, if one, is returned. Else null is returned;
+        /// If the Type is a Task or ValueTask the with a result type, it is returned. Otherwise null is returned;
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>

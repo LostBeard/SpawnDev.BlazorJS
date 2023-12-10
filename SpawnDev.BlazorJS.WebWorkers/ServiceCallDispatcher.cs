@@ -316,28 +316,38 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 TargetType = serviceType.GetBestName(),
                 Data = msgData,
             };
+#if DEBUG
+            Console.WriteLine($"methodInfo: {methodInfo.Name} {returnType.Name} {finalReturnType.Name}");
+#endif
             var t = new TaskCompletionSource<object?>();
             var workerTask = new WebWorkerCallMessageTask((args) =>
             {
-                // remove any callbacks
-                var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
-                foreach (var key in keysToRemove) _actionHandles.Remove(key);
-                // get result or exception and fire results handlers
-                var argsLength = args.Length;
-                object? retVal = null;
-                string? err = null;
-                if (argsLength > 0)
+                try
                 {
-                    err = args.GetItem<string?>(0);
-                    if (string.IsNullOrEmpty(err) && !finalReturnTypeIsVoid)
+                    // remove any callbacks
+                    var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
+                    foreach (var key in keysToRemove) _actionHandles.Remove(key);
+                    // get result or exception and fire results handlers
+                    var argsLength = args.Length;
+                    object? retVal = null;
+                    string? err = null;
+                    if (argsLength > 0)
                     {
-                        retVal = args.GetItem(finalReturnType, 1);
+                        err = args.GetItem<string?>(0);
+                        if (string.IsNullOrEmpty(err) && !finalReturnTypeIsVoid)
+                        {
+                            retVal = args.GetItem(finalReturnType, 1);
+                        }
                     }
+                    if (!string.IsNullOrEmpty(err))
+                        t.TrySetException(new Exception(err));
+                    else
+                        t.TrySetResult(retVal);
                 }
-                if (!string.IsNullOrEmpty(err))
-                    t.TrySetException(new Exception(err));
-                else
-                    t.TrySetResult(retVal);
+                catch (Exception ex)
+                {
+                    t.TrySetException(ex);
+                }
             });
             workerTask.webWorkerCallMessageOutgoing = workerMsg;
             _waiting.Add(workerTask.RequestId, workerTask);
@@ -550,7 +560,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 value = callSideParam.GetValue();
                 return (true, value);
             }
-            return (false ,value);
+            return (false, value);
         }
         CallSideParameter? GetCallSideParameter(ParameterInfo p)
         {
