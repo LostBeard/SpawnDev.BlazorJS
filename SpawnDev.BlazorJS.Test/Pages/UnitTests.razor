@@ -48,7 +48,7 @@
 
 
     [TestMethod]
-    public async Task CallDispatcherFullTest()
+    public async Task TaskPoolFullTest()
     {
         if (!WebWorkerService.WebWorkerSupported)
         {
@@ -58,7 +58,7 @@
     }
 
     [TestMethod]
-    public async Task CallDispatcherExpressionTest()
+    public async Task TaskPoolExpressionTest()
     {
         if (!WebWorkerService.WebWorkerSupported)
         {
@@ -67,14 +67,14 @@
         // static methods of any class can be called
         // private static methods must be called from inside the class
         // public static methods can be called from outside the class
-        var remoteInstanceId = await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(JS.GlobalThisTypeName, JS.InstanceId));
+        var remoteInstanceId = await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(null!, JS.GlobalThisTypeName, JS.InstanceId));
         Console.WriteLine($"{BlazorJSRuntime.JS.GlobalThisTypeName} {BlazorJSRuntime.JS.InstanceId} {remoteInstanceId}");
     }
 
-    private static string ThisMethodWillGetCalledInAWorker(string callingScope, string instanceId)
+    private static string ThisMethodWillGetCalledInAWorker([FromServices] BlazorJSRuntime JS, string callingScope, string instanceId)
     {
-        Console.WriteLine($"{BlazorJSRuntime.JS.GlobalThisTypeName} {BlazorJSRuntime.JS.InstanceId} {callingScope} {instanceId}");
-        return BlazorJSRuntime.JS.InstanceId;
+        Console.WriteLine($"{JS.GlobalThisTypeName} {JS.InstanceId} {callingScope} {instanceId}");
+        return JS.InstanceId;
     }
 
     [TestMethod]

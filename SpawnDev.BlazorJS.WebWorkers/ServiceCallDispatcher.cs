@@ -8,6 +8,11 @@ using Array = SpawnDev.BlazorJS.JSObjects.Array;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
+    [AttributeUsage(AttributeTargets.Parameter)]
+    public class FromServicesAttribute : Attribute
+    {
+
+    }
     internal class WebWorkerCallMessageTask
     {
         public string RequestId => webWorkerCallMessageOutgoing.RequestId;
@@ -204,7 +209,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         if (string.IsNullOrEmpty(err))
                         {
                             using var args = msgBase.GetData<Array>();
-                            callArgs0 = PostDeserializeArgs(msgBase.RequestId, methodInfo, args);
+                            callArgs0 = await PostDeserializeArgs(msgBase.RequestId, methodInfo, args);
                             try
                             {
                                 retValue = await methodInfo.InvokeAsync(service, callArgs0!);
@@ -289,11 +294,15 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 return LocalCall(methodInfo, args);
             }
             var serviceType = methodInfo.ReflectedType;
+            if (_port == null)
+            {
+                throw new Exception("ServiceCallDispatcher.Call: port is null.");
+            }
             if (serviceType == null)
             {
                 throw new Exception("ServiceCallDispatcher.Call: method does not have a reflected type.");
             }
-            var methodName = SerializableMethodInfo.SerializeMethodInfo(methodInfo);
+            var targetMethod = SerializableMethodInfo.SerializeMethodInfo(methodInfo);
             var argsLength = args != null ? args.Length : 0;
             Type returnType = methodInfo.ReturnType;
             var finalReturnType = returnType.AsyncReturnType() ?? returnType;
@@ -303,7 +312,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var workerMsg = new WebWorkerMessageOut
             {
                 RequestId = requestId,
-                TargetName = methodName,
+                TargetName = targetMethod,
                 TargetType = serviceType.GetBestName(),
                 Data = msgData,
             };
@@ -347,80 +356,75 @@ namespace SpawnDev.BlazorJS.WebWorkers
             public Type[] ParameterTypes { get; set; }
         }
         /// <summary>
-        /// Pre-serialization that prepares call arguments before they are send to the remote endpoint via a postMessage call<br />
-        /// Any transferables objects are found in this stage as well and returned in an out param "transferable"
+        /// Pre-serialization that prepares call arguments before they are sent to the remote endpoint via a postMessage call<br />
+        /// Any transferable objects are found in this stage as well and returned in an out param "transferable"
         /// </summary>
         /// <param name="requestId"></param>
         /// <param name="methodInfo"></param>
         /// <param name="args"></param>
         /// <param name="transferable"></param>
         /// <returns></returns>
-        private object?[]? PreSerializeArgs(string requestId, MethodInfo methodInfo, object?[]? args, out object[] transferable)
+        private object?[] PreSerializeArgs(string requestId, MethodInfo methodInfo, object?[]? args, out object[] transferable)
         {
             var transferableList = new List<object>();
             var methodsParamTypes = methodInfo.GetParameters();
-            object?[]? ret = null;
-            if (args != null)
+            var argsLength = args == null ? 0 : args.Length;
+            object?[]? ret = new object?[argsLength];
+            for (var i = 0; i < argsLength; i++)
             {
-                ret = new object?[args.Length];
-                for (var i = 0; i < methodsParamTypes.Length; i++)
+                var value = args![i];
+                if (value == null) continue;
+                var methodParam = methodsParamTypes[i];
+                var methodParamType = methodParam.ParameterType;
+                var methodParamTypeIsTransferable = IsTransferable(methodParamType);
+                var allowTransferable = methodParamType.IsClass;
+                if (allowTransferable)
                 {
-                    var value = args[i];
-                    if (value == null) continue;
-                    var methodParam = methodsParamTypes[i];
-                    var methodParamType = methodParam.ParameterType;
-                    var methodParamTypeIsTransferable = IsTransferable(methodParamType);
-                    var allowTransferable = methodParamType.IsClass;
+                    var transferAttr = (WorkerTransferAttribute?)methodParam.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
+                    if (transferAttr != null && !transferAttr.Transfer)
+                    {
+                        // this property has been marked as non-transferable
+                        allowTransferable = false;
+                    }
+                }
+                var methodParamTypeName = methodParam.ParameterType.Name;
+                var genericTypes = methodParamType.GenericTypeArguments;
+                if (IsCallSideParameter(methodParam))
+                {
+                    // resolved on the other side
+                }
+                else if (value is Delegate valueDelegate)
+                {
+                    var cb = new CallbackAction
+                    {
+                        Method = methodInfo,
+                        RequestId = requestId,
+                        ParameterTypes = genericTypes,
+                        Target = valueDelegate,
+                    };
+                    _actionHandles[cb.Id] = cb;
+                    ret[i] = cb.Id;
+                }
+                else if (value is byte[] bytes)
+                {
+                    // to try and get good performance sending byte arrays we convert it to a Uint8Array reference first, and add its array buffer to the transferables list.
+                    // it will still be read in on the other side as a byte array. this prevents 1 copying stage.
+                    var uint8Array = new Uint8Array(bytes);
                     if (allowTransferable)
                     {
-                        var transferAttr = (WorkerTransferAttribute?)methodParam.GetCustomAttribute(typeof(WorkerTransferAttribute), false);
-                        if (transferAttr != null && !transferAttr.Transfer)
-                        {
-                            // this property has been marked as non-transferable
-                            allowTransferable = false;
-                        }
+                        transferableList.Add(uint8Array.Buffer);
                     }
-                    var methodParamTypeName = methodParam.ParameterType.Name;
-                    var genericTypes = methodParamType.GenericTypeArguments;
-                    var genericTypeNames = methodParamType.GenericTypeArguments.Select(o => o.Name).ToArray();
-                    var callSideArg = GetCallSideParameter(methodParam);
-                    if (callSideArg != null)
+                    ret[i] = uint8Array;
+                }
+                else
+                {
+                    if (allowTransferable)
                     {
-                        // skip... it will be handles on the other side
+                        var conversionInfo = TypeConversionInfo.GetTypeConversionInfo(methodParamType);
+                        var propTransferable = conversionInfo.GetTransferablePropertyValues(value);
+                        transferableList.AddRange(propTransferable);
                     }
-                    else if (value is Delegate valueDelegate)
-                    {
-                        var cb = new CallbackAction
-                        {
-                            Method = methodInfo,
-                            RequestId = requestId,
-                            ParameterTypes = genericTypes,
-                            Target = valueDelegate,
-                        };
-                        _actionHandles[cb.Id] = cb;
-                        ret[i] = cb.Id;
-                    }
-                    else if (value is byte[] bytes)
-                    {
-                        // to try and get good performance sending byte arrays we convert it to a Uint8Array reference first, and add its array buffer to the transferables list.
-                        // it will still be read in on the other side as a byte array. this prevents 1 copying stage.
-                        var uint8Array = new Uint8Array(bytes);
-                        if (allowTransferable)
-                        {
-                            transferableList.Add(uint8Array.Buffer);
-                        }
-                        ret[i] = uint8Array;
-                    }
-                    else
-                    {
-                        if (allowTransferable)
-                        {
-                            var conversionInfo = TypeConversionInfo.GetTypeConversionInfo(methodParamType);
-                            var propTransferable = conversionInfo.GetTransferablePropertyValues(value);
-                            transferableList.AddRange(propTransferable);
-                        }
-                        ret[i] = value;
-                    }
+                    ret[i] = value;
                 }
             }
             transferable = transferableList.ToArray();
@@ -436,7 +440,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <param name="callArgs"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private object?[]? PostDeserializeArgs(string requestId, MethodInfo methodInfo, Array callArgs)
+        private async Task<object?[]?> PostDeserializeArgs(string requestId, MethodInfo methodInfo, Array callArgs)
         {
             if (callArgs == null) return null;
             var callArgsLength = callArgs == null ? 0 : callArgs.Length;
@@ -453,10 +457,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 var methodParamTypeName = methodParam.ParameterType.Name;
                 var genericTypes = methodParamType.GenericTypeArguments;
                 var genericTypeNames = methodParamType.GenericTypeArguments.Select(o => o.Name).ToArray();
-                var callSideArg = GetCallSideParameter(methodParam);
-                if (callSideArg != null)
+                var (resolved, value) = await TryResolveCallSideParamValue(methodParam);
+                if (resolved)
                 {
-                    ret[i] = callSideArg.GetValue();
+                    ret[i] = value;
                 }
                 else if (typeof(Delegate).IsAssignableFrom(methodParamType))
                 {
@@ -522,8 +526,35 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 Type = type;
             }
         }
+        bool IsCallSideParameter(ParameterInfo methodParam)
+        {
+            var fromServiceAttr = methodParam.GetCustomAttribute<FromServicesAttribute>();
+            if (fromServiceAttr != null) return true;
+            if (GetCallSideParameter(methodParam) != null) return true;
+            return false;
+        }
+        async Task<(bool, object?)> TryResolveCallSideParamValue(ParameterInfo methodParam)
+        {
+            object? value = null;
+            // service
+            var fromServiceAttr = methodParam.GetCustomAttribute<FromServicesAttribute>();
+            if (fromServiceAttr != null)
+            {
+                value = await _serviceProvider.GetServiceAsync(methodParam.ParameterType);
+                return (true, value);
+            }
+            // call side
+            var callSideParam = GetCallSideParameter(methodParam);
+            if (callSideParam != null)
+            {
+                value = callSideParam.GetValue();
+                return (true, value);
+            }
+            return (false ,value);
+        }
         CallSideParameter? GetCallSideParameter(ParameterInfo p)
         {
+
             return additionalCallArgs.Where(o => o.Name == p.Name && o.Type == p.ParameterType).FirstOrDefault();
         }
         public bool IsDisposed { get; private set; } = false;

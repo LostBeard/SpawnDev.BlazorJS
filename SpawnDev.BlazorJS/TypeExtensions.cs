@@ -12,6 +12,10 @@ namespace SpawnDev.BlazorJS
         static object? GetDefault<T>() => default(T);
         public static object? GetDefaultValue(this Type t)
         {
+            return t.IsValueType ? Activator.CreateInstance(t) : null;
+        }
+        public static object? GetDefaultValueAlt(this Type t)
+        {
             if (TypeDefaultsCache.TryGetValue(t, out var value)) return value;
             var f = GetDefault<object>;
             var ret = f.Method.GetGenericMethodDefinition().MakeGenericMethod(t).Invoke(null, null);
