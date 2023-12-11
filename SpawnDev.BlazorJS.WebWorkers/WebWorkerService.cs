@@ -67,17 +67,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             TaskPool = new WebWorkerPool(this, 0, 1, true);
         }
 
-        class WebWorkerServiceEventMsgBase
-        {
-            public string SrcId { get; set; } = "";
-            public string Event { get; set; } = "";
-        }
-        class WebWorkerServiceEventMsgOutgoing : WebWorkerServiceEventMsgBase
-        {
-            public object? Data { get; set; } = null;
-        }
-
-        public void SendEventToParents(string eventName, object? data = null)
+        public void SendEventToParents(string eventName, params object?[]? data)
         {
             if (DedicatedWorkerParent != null)
             {
