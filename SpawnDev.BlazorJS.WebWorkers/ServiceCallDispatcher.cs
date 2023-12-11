@@ -25,7 +25,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
         class CallbackAction
         {
             public Delegate Target { get; set; }
-            public MethodInfo Method { get; set; }
             public string Id { get; set; } = Guid.NewGuid().ToString();
             public string RequestId { get; set; } = "";
             public Type[] ParameterTypes { get; set; }
@@ -88,7 +87,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (_port == null) return;
             ReadyFlagSent = true;
-            _port.PostMessage(new object?[] {  "__init", LocalInfo });
+            _port.PostMessage(new object?[] {  "init", LocalInfo });
         }
         public event Action<ServiceCallDispatcher, Array> OnMessage;
         public delegate void BusyStateChangedDelegate(ServiceCallDispatcher sender, bool busy);
@@ -121,16 +120,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 var msgType = args.Shift<string>(); // 0
                 switch (msgType)
                 {
-                    case "__init":
+                    case "init":
                         {
                             if (RemoteInfo == null)
                             {
                                 RemoteInfo = args.Shift<ServiceCallDispatcherInfo>(); // 1
                                 if (RemoteInfo != null)
                                 {
-#if DEBUG
-                                    Console.WriteLine($"ReceivedInit {ReadyFlagSent} {LocalInfo.GlobalThisTypeName}: {RemoteInfo.GlobalThisTypeName}");
-#endif
                                     if (!ReadyFlagSent)
                                     {
                                         SendReadyFlag();
@@ -141,7 +137,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                             }
                         }
                         break;
-                    case "__action":
+                    case "action":
                         {
                             var requestId = args.Shift<string>(); // 1
                             if (_waiting.TryGetValue(requestId, out var req))
@@ -157,12 +153,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
                                         {
                                             throw new Exception("Invalid argument count on Action callback");
                                         }
-                                        if (args != null)
+                                        for (var n = 0; n < actionArgs.Length; n++)
                                         {
-                                            for (var n = 0; n < actionArgs.Length; n++)
-                                            {
-                                                actionArgs[n] = args.GetItem(actionHandle.ParameterTypes[n], n);
-                                            }
+                                            actionArgs[n] = args.GetItem(actionHandle.ParameterTypes[n], n);
                                         }
                                     }
                                     actionHandle.Target.DynamicInvoke(actionArgs);
@@ -175,7 +168,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                             OnMessage?.Invoke(this, args);
                         }
                         break;
-                    case "__callback":
+                    case "callback":
                         {
                             var requestId = args.Shift<string>(); // 1
                             if (_waiting.TryGetValue(requestId, out var req))
@@ -245,8 +238,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 if (!string.IsNullOrEmpty(requestId))
                 {
                     // Send notification of completion because there is a requestId
-                    //var callbackMsg = new WebWorkerMessageOut { TargetType = "__callback", RequestId = requestId };
-                    var callbackMsg = new List<object?> { "__callback", requestId, };
+                    //var callbackMsg = new WebWorkerMessageOut { TargetType = "callback", RequestId = requestId };
+                    var callbackMsg = new List<object?> { "callback", requestId, };
                     object[] transfer = System.Array.Empty<object>();
                     if (retValue != null)
                     {
@@ -367,8 +360,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
             object?[]? ret = new object?[argsLength];
             for (var i = 0; i < argsLength; i++)
             {
-                var value = args![i];
-                if (value == null) continue;
+                var arg = args![i];
+                if (arg == null) continue;
                 var methodParam = methodsParamTypes[i];
                 var methodParamType = methodParam.ParameterType;
                 var methodParamTypeIsTransferable = IsTransferable(methodParamType);
@@ -388,21 +381,20 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 {
                     // resolved on the other side
                 }
-                else if (value is Delegate valueDelegate)
+                else if (arg is Delegate argDelegate)
                 {
                     var cb = new CallbackAction
                     {
-                        Method = methodInfo,
                         RequestId = requestId,
                         ParameterTypes = genericTypes,
-                        Target = valueDelegate,
+                        Target = argDelegate,
                     };
                     _actionHandles[cb.Id] = cb;
                     ret[i] = cb.Id;
                 }
-                else if (value is byte[] bytes)
+                else if (arg is byte[] bytes)
                 {
-                    // to try and get good performance sending byte arrays we convert it to a Uint8Array reference first, and add its array buffer to the transferables list.
+                    // to get better performance when sending byte arrays we convert it to a Uint8Array reference first, and add its array buffer to the transferables list.
                     // it will still be read in on the other side as a byte array. this prevents 1 copying stage.
                     var uint8Array = new Uint8Array(bytes);
                     if (allowTransferable)
@@ -416,10 +408,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     if (allowTransferable)
                     {
                         var conversionInfo = TypeConversionInfo.GetTypeConversionInfo(methodParamType);
-                        var propTransferable = conversionInfo.GetTransferablePropertyValues(value);
+                        var propTransferable = conversionInfo.GetTransferablePropertyValues(arg);
                         transferableList.AddRange(propTransferable);
                     }
-                    ret[i] = value;
+                    ret[i] = arg;
                 }
             }
             transferable = transferableList.ToArray();
@@ -464,7 +456,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         ret[i] = new Action(() =>
                         {
                             //JS.Log($"Action called: {actionId}");
-                            var callbackMsg = new List<object?> { "__action", requestId, actionId };
+                            var callbackMsg = new List<object?> { "action", requestId, actionId };
                             _port?.PostMessage(callbackMsg);
                         });
                     }
@@ -473,7 +465,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         ret[i] = CreateTypedAction(genericTypes, new Action<object?[]>((args) =>
                         {
                             //JS.Log($"Action called: {actionId} {o}");
-                            var callbackMsg = new List<object?> { "__action", requestId, actionId };
+                            var callbackMsg = new List<object?> { "action", requestId, actionId };
                             callbackMsg.AddRange(args);
                             _port?.PostMessage(callbackMsg);
                         }));
