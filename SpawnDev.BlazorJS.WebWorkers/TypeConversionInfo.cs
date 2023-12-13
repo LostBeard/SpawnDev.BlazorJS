@@ -4,7 +4,6 @@ using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System.Collections;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Array = System.Array;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
