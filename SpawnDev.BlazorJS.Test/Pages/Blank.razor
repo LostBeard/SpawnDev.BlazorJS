@@ -5,10 +5,13 @@
     <ul>
         <li>.Net: @JS.FrameworkVersion</li>
         <li>SpawnDev.BlazorJS: @JS.InformationalVersion</li>
-        <li>SharedArrayBuffer: @(!JS.IsUndefined(nameof(SharedArrayBuffer)) ? "supported" : "not supported")</li>
-        <li>CrossOriginIsolated: @JS.CrossOriginIsolated</li>
+        <li>Startup Time: @(TimeSpan.FromMilliseconds(JS.ReadyTime).TotalSeconds) seconds</li>
+        <li>CrossOriginIsolated: @(JS.CrossOriginIsolated ? "yes" : "no")</li>
+        <li>Concurrency: @(JS.Get<Navigator>("navigator").HardwareConcurrency)</li>
         <li>SIMD: @(SIMDSupported ? "supported" : "not supported")</li>
-        <li>Startup: @(TimeSpan.FromMilliseconds(JS.StartUpTime))</li>
+        <li>Worker: @(!JS.IsUndefined(nameof(Worker)) ? "supported" : "not supported")</li>
+        <li>SharedWorker: @(!JS.IsUndefined(nameof(SharedWorker)) ? "supported" : "not supported")</li>
+        <li>SharedArrayBuffer: @(!JS.IsUndefined(nameof(SharedArrayBuffer)) ? "supported" : "not supported")</li>
     </ul>
 </div>
 

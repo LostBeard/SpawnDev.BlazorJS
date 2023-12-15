@@ -3,14 +3,14 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.45</Version>
+		<Version>2.2.46</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Markdig" Version="0.33.0" />
+		<PackageReference Include="Markdig" Version="0.34.0" />
 		<PackageReference Include="Markdown.ColorCode" Version="2.1.0" />
-		<PackageReference Include="Radzen.Blazor" Version="4.22.1" />
+		<PackageReference Include="Radzen.Blazor" Version="4.23.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
 	</ItemGroup>
