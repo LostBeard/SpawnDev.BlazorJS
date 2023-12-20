@@ -48,8 +48,9 @@ builder.Services.AddWebWorkerService(webWorkerService =>
 });
 
 // Test startup when KeyedServices are used (supported in .Net 8 and up)
-builder.Services.AddKeyedSingleton(typeof(string), "apples", (sp, key) => DateTime.Now.ToString() + (string)key!);
-builder.Services.AddKeyedSingleton(typeof(string), "grapes", (sp, key) => DateTime.Now.ToString() + (string)key!);
+// This is to test a bug in SpawnDev.BlazorJS (issue #24) that has been fixed
+builder.Services.AddKeyedSingleton(typeof(string), "apples", (_, _) => DateTime.Now.ToString());
+builder.Services.AddKeyedSingleton(typeof(string), "grapes", (_, _) => DateTime.Now.ToString());
 
 
 // The below service is used to test CallDispatcher used with WebWorkers (Used in UnitTests)
