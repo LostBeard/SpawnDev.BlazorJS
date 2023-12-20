@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Radzen;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Diagnostics;
@@ -39,8 +40,18 @@ builder.Services.AddWebWorkerService(webWorkerService =>
     // Below is telling the WebWorkerService TaskPool to set the initial size to 2 if running in a Window scope and 0 otherwise
     // This starts up 2 WebWorkers to handle TaskPool tasks as needed
     // Setting this to -1 will set the initial pool size to max pool size
+#if DEBUG
+    webWorkerService.TaskPool.PoolSize = 0;  // once web workers startup the VS debugger does not work properly
+#else
     webWorkerService.TaskPool.PoolSize = webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
+#endif
 });
+
+// Test startup when KeyedServices are used (supported in .Net 8 and up)
+builder.Services.AddKeyedSingleton(typeof(string), "apples", (sp, key) => DateTime.Now.ToString() + (string)key!);
+builder.Services.AddKeyedSingleton(typeof(string), "grapes", (sp, key) => DateTime.Now.ToString() + (string)key!);
+
+
 // The below service is used to test CallDispatcher used with WebWorkers (Used in UnitTests)
 builder.Services.AddSingleton<AsyncCallDispatcherTest>();
 // More app specific services

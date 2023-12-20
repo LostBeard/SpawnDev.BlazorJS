@@ -20,9 +20,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return _this.AddSingleton(sp =>
             {
                 // create the service and pass it to the configureCallback to allow configuration at startup
-                var service = sp.CreateInstanceWithServices<WebWorkerService>();
-                configureCallback?.Invoke(service);
-                return service;
+                var webWorkerService = ActivatorUtilities.CreateInstance<WebWorkerService>(sp);
+                //var webWorkerService = sp.CreateInstanceWithServices<WebWorkerService>();
+                configureCallback?.Invoke(webWorkerService);
+                return webWorkerService;
             });
         }
 
