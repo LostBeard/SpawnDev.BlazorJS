@@ -47,10 +47,10 @@ builder.Services.AddWebWorkerService(webWorkerService =>
 #endif
 });
 
-// Test startup when KeyedServices are used (supported in .Net 8 and up)
-// This is to test a bug in SpawnDev.BlazorJS (issue #24) that has been fixed
-builder.Services.AddKeyedSingleton(typeof(string), "apples", (_, _) => DateTime.Now.ToString());
-builder.Services.AddKeyedSingleton(typeof(string), "grapes", (_, _) => DateTime.Now.ToString());
+// Test startup when KeyedServices are used (new in Blazor .Net 8)
+// This is to test a bug in SpawnDev.BlazorJS (issue #24) that has been fixed as of 2.2.47
+builder.Services.AddKeyedSingleton(typeof(string), "apples", (_, key) => DateTime.Now.ToString() + $" {key}");
+builder.Services.AddKeyedSingleton(typeof(string), "grapes", (_, key) => DateTime.Now.ToString() + $" {key}");
 
 
 // The below service is used to test CallDispatcher used with WebWorkers (Used in UnitTests)
@@ -75,6 +75,8 @@ builder.Services.AddSingleton<JSObjectAnalyzer>();
 
 #if DEBUG && false
 var host = builder.Build();
+
+var ms1= host.Services.GetKeyedService<string>("apples");
 
 var ms = host.Services.GetRequiredService<IMathsService>();
 
@@ -163,18 +165,18 @@ var jsobjectAnalyzer = host.Services.GetRequiredService<JSObjectAnalyzer>();
 //JS.Log("_localStorageInfo", localStorageInfo);
 //JS.Set("_localStorageInfo", localStorageInfo);
 
-JS.Set("_testWorker", new ActionCallback<bool>(async (verbose) =>
+JS.Set("_testWorker", new ActionCallback(async () =>
 {
     var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
-    var worker = await webWorkerService.GetWebWorker(verbose);
+    var worker = await webWorkerService.GetWebWorker();
     var math = worker.GetService<IMathsService>();
     var ret = await math.EstimatePI(100);
     Console.WriteLine(ret);
 }));
-JS.Set("_testWorkerAndDispose", new ActionCallback<bool>(async (verbose) =>
+JS.Set("_testWorkerAndDispose", new ActionCallback(async () =>
 {
     var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
-    using var worker = await webWorkerService.GetWebWorker(verbose);
+    using var worker = await webWorkerService.GetWebWorker();
     var math = worker.GetService<IMathsService>();
     var ret = await math.EstimatePI(100);
     Console.WriteLine(ret);
