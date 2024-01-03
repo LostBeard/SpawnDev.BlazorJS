@@ -21,5 +21,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void SetAttribute(string name, string value) => JSRef.CallVoid("setAttribute", name, value);
         public void After(params Node[] nodes) => JSRef.CallApplyVoid("after", nodes);
         public void Remove() => JSRef.CallVoid("remove");
+
+
+        public float ScrollHeight => JSRef.Get<float>("scrollHeight");
+        public float ScrollWidth => JSRef.Get<float>("scrollWidth");
+        public float ScrollTop { get => JSRef.Get<float>("scrollTop"); set => JSRef.Set("scrollTop", value); }
+
+        public float ClientHeight => JSRef.Get<float>("clientHeight");
+
+
+
+
+        public JSEventCallback<Event> OnScroll { get => new JSEventCallback<Event>(o => AddEventListener("scroll", o), o => RemoveEventListener("scroll", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnScrollEnd { get => new JSEventCallback<Event>(o => AddEventListener("scrollend", o), o => RemoveEventListener("scrollend", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
     }
 }

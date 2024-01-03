@@ -5,7 +5,8 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
     // TODO - finish
-    public class HTMLElement : Element {
+    public class HTMLElement : Element
+    {
         public HTMLElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         public HTMLElement(ElementReference elRef) : base(JS.ReturnMe<IJSInProcessObjectReference>(elRef)) { }
         public int OffsetWidth => JSRef.Get<int>("offsetWidth");
