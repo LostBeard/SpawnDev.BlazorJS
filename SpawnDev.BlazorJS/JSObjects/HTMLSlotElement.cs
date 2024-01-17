@@ -10,11 +10,13 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class HTMLSlotElement : HTMLElement
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public HTMLSlotElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
         public string Name { get => JSRef.Get<string>("name"); set => JSRef.Set("name", value); }
-
-
     }
 }

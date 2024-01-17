@@ -1,15 +1,14 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
     public class HTMLScriptElement : HTMLElement
     {
         public string Src { get => JSRef.Get<string>("src"); set => JSRef.Set("src", value); }
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public HTMLScriptElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         public HTMLScriptElement() : base(JS.DocumentCreateElement("script")) { }
         public Task OnLoadAsync()

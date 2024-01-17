@@ -10,11 +10,31 @@ namespace SpawnDev.BlazorJS.JSObjects {
         /// </summary>
         /// <param name="elementReference"></param>
         public HTMLVideoElement(ElementReference elementReference) : base(elementReference) { }
+        /// <summary>
+        /// Create a new instance of HTMLVideoElement
+        /// </summary>
         public HTMLVideoElement() : base(JS.DocumentCreateElement("video")) { }
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public HTMLVideoElement(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Returns an unsigned integer value indicating the intrinsic height of the resource in CSS pixels, or 0 if no media is available yet.
+        /// </summary>
         public int VideoWidth => JSRef.Get<int>("videoWidth");
+        /// <summary>
+        /// Returns an unsigned integer value indicating the intrinsic width of the resource in CSS pixels, or 0 if no media is available yet.
+        /// </summary>
         public int VideoHeight => JSRef.Get<int>("videoHeight");
+        /// <summary>
+        /// Returns true if RequestVideoFrameCallback is defined
+        /// </summary>
         public bool SupportsRequestVideoFrameCallback => !JSRef.PropertyIsUndefined("requestVideoFrameCallback");
+        /// <summary>
+        /// The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources.
+        /// </summary>
+        /// <param name="callback"></param>
         public void RequestVideoFrameCallback(Callback callback) => JSRef.CallVoid("requestVideoFrameCallback", callback);
         /// <summary>
         /// This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience regarding what content is loaded before the video is played. It may have one of the following values:<br />

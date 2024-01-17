@@ -6,6 +6,11 @@ namespace SpawnDev.BlazorJS.JSObjects
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
     public class HTMLMediaElement : HTMLElement
     {
+
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public HTMLMediaElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         public HTMLMediaElement(ElementReference elementReference) : base(elementReference) { }
         // MediaStream, MediaSource, Blob, or File
