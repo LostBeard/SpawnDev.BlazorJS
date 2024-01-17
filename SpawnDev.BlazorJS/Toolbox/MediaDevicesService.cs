@@ -71,12 +71,9 @@ namespace SpawnDev.BlazorJS.Toolbox
             AreDevicesHidden = await MediaDevices.AreDevicesHidden();
             await _UpdateDeviceList();
             if (!AreDevicesHidden || !allowAsk) return !AreDevicesHidden;
-            dynamic constraints = new ExpandoObject();
-            constraints.audio = true;
-            constraints.video = true;
             try
             {
-                using var stream = await MediaDevices.GetUserMedia(constraints);
+                using var stream = await MediaDevices.GetUserMedia(true, true);
                 if (stream != null)
                 {
                     stream.RemoveAllTracks();

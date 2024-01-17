@@ -29,20 +29,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback OnAddTrack { get => new JSEventCallback(o => AddEventListener("addtrack", o), o => RemoveEventListener("addtrack", o)); set { } }
         public JSEventCallback OnRemoveTrack { get => new JSEventCallback(o => AddEventListener("removetrack", o), o => RemoveEventListener("removetrack", o)); set { } }
 
-        // Not sure why I had these here... According to MDN they do not exist.
-        //public JSEventCallback OnActive { get => new JSEventCallback(o => AddEventListener("active", o), o => RemoveEventListener("active", o)); set { } }
-        //public JSEventCallback OnInactive { get => new JSEventCallback(o => AddEventListener("inactive", o), o => RemoveEventListener("inactive", o)); set { } }
-        //public JSEventCallback OnEnded { get => new JSEventCallback(o => AddEventListener("ended", o), o => RemoveEventListener("ended", o)); set { } }
-
         public void RemoveTrack(MediaStreamTrack track) => JSRef.CallVoid("removeTrack", track);
         public void AddTrack(MediaStreamTrack track) => JSRef.CallVoid("addTrack", track);
         public MediaStream Clone() => JSRef.Call<MediaStream>("clone");
         public MediaStreamTrack GetTrackById(string id) => JSRef.Call<MediaStreamTrack>("getTrackById", id);
         public int GetTracksLength()
         {
-            using var tmp = JSRef.Get<IJSInProcessObjectReference>("getTracks");
-            return tmp.Get<int>("length");
+            using var tmp = JSRef.Get<Array>("getTracks");
+            return tmp.Length;
         }
+
         public MediaStreamTrack[] GetTracks() => JSRef.Call<MediaStreamTrack[]>("getTracks");
         public MediaStreamTrack[] GetVideoTracks() => JSRef.Call<MediaStreamTrack[]>("getVideoTracks");
         public MediaStreamTrack[] GetAudioTracks() => JSRef.Call<MediaStreamTrack[]>("getAudioTracks");

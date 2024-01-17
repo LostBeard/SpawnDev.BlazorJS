@@ -2,7 +2,10 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class MediaStreamTrack : JSObject
+    /// <summary>
+    /// The MediaStreamTrack interface of the Media Capture and Streams API represents a single media track within a stream; typically, these are audio or video tracks, but other track types may exist as well.
+    /// </summary>
+    public class MediaStreamTrack : EventTarget
     {
         /// <summary>
         /// A Boolean whose value of true if the track is enabled, that is allowed to render the media source stream; or false if it is disabled, that is not rendering the media source stream but silence and blackness. If the track has been disconnected, this value can be changed but has no more effect.<br />
@@ -55,5 +58,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns>A new MediaStreamTrack instance which is identical to the one clone() was called, except for its new unique id.</returns>
         public MediaStreamTrack Clone() => JSRef.Call<MediaStreamTrack>("clone");
+        /// <summary>
+        /// The applyConstraints() method of the MediaStreamTrack interface applies a set of constraints to the track; these constraints let the website or app establish ideal values and acceptable ranges of values for the constrainable properties of the track, such as frame rate, dimensions, echo cancellation, and so forth.
+        /// </summary>
+        /// <param name="constraints"></param>
+        /// <returns></returns>
+        public Task ApplyConstraints(object constraints) => JSRef.CallVoidAsync("applyConstraints", constraints);
+        /// <summary>
+        /// The applyConstraints() method of the MediaStreamTrack interface applies a set of constraints to the track; these constraints let the website or app establish ideal values and acceptable ranges of values for the constrainable properties of the track, such as frame rate, dimensions, echo cancellation, and so forth.
+        /// </summary>
+        /// <returns></returns>
+        public Task ApplyConstraints() => JSRef.CallVoidAsync("applyConstraints");
     }
 }

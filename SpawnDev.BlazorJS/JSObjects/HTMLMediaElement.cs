@@ -17,9 +17,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
             get => JSRef.Get<double>("currentTime");
             set => JSRef.Set("currentTime", value);
         }
-        public double Duration
+        public double? Duration
         {
-            get => JSRef.Get<double>("duration");
+            get => JSRef.Get<double?>("duration");
         }
 
         public float Volume
@@ -27,6 +27,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
             get => JSRef.Get<float>("volume");
             set => JSRef.Set("volume", value);
         }
+        /// <summary>
+        /// A boolean value that reflects the autoplay HTML attribute, indicating whether playback should automatically begin as soon as enough media is available to do so without interruption.
+        /// </summary>
         public bool AutoPlay
         {
             get => JSRef.Get<bool>("autoplay");

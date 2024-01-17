@@ -20,6 +20,12 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Uint8Array(SharedArrayBuffer sharedArrayBuffer, long byteOffset, long length) : base(JS.New(nameof(Uint8Array), sharedArrayBuffer, byteOffset, length)) { }
         public Uint8Array(byte[] sourceBytes) : base(JS.ReturnMe<IJSInProcessObjectReference>(sourceBytes)) { }
         public override byte[] ReadBytes() => JS.ReturnMe<byte[]>(JSRef);
+        public Uint8Array Slice() => JSRef.Call<Uint8Array>("slice");
+        public Uint8Array Slice(long start) => JSRef.Call<Uint8Array>("slice", start);
+        public Uint8Array Slice(long start, long end) => JSRef.Call<Uint8Array>("slice", start, end);
+        public byte[] SliceBytes() => JSRef.Call<byte[]>("slice");
+        public byte[] SliceBytes(long start) => JSRef.Call<byte[]>("slice", start);
+        public byte[] SliceBytes(long start, long end) => JSRef.Call<byte[]>("slice", start, end);
         /// <summary>
         /// Returns a number value of the element size. 1 in the case of Uint8Array.
         /// </summary>
