@@ -5,7 +5,11 @@ namespace SpawnDev.BlazorJS.JSObjects {
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
     public class HTMLVideoElement : HTMLMediaElement
     {
-        public HTMLVideoElement(ElementReference elRef) : base(JS.ToJSRef(elRef)) { }
+        /// <summary>
+        /// Get an instance from an ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public HTMLVideoElement(ElementReference elementReference) : base(elementReference) { }
         public HTMLVideoElement() : base(JS.DocumentCreateElement("video")) { }
         public HTMLVideoElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         public int VideoWidth => JSRef.Get<int>("videoWidth");

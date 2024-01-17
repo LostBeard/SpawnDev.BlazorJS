@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -13,6 +14,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public HTMLAnchorElement(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Get an instance from an ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public HTMLAnchorElement(ElementReference elementReference) : base(elementReference) { }
         #endregion
 
         #region Properties

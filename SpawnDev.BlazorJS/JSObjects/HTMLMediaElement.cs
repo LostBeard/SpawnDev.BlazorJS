@@ -1,19 +1,26 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
+namespace SpawnDev.BlazorJS.JSObjects
+{
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
-    public class HTMLMediaElement : HTMLElement {
+    public class HTMLMediaElement : HTMLElement
+    {
         public HTMLMediaElement(IJSInProcessObjectReference _ref) : base(_ref) { }
+        public HTMLMediaElement(ElementReference elementReference) : base(elementReference) { }
         // MediaStream, MediaSource, Blob, or File
-        public JSObject? SrcObject {
+        public JSObject? SrcObject
+        {
             get => JSRef.Get<JSObject>("srcObject");
             set => JSRef.Set("srcObject", value);
         }
-        public string? Src {
+        public string? Src
+        {
             get => JSRef.Get<string>("src");
             set => JSRef.Set("src", value);
         }
-        public double CurrentTime {
+        public double CurrentTime
+        {
             get => JSRef.Get<double>("currentTime");
             set => JSRef.Set("currentTime", value);
         }
@@ -50,7 +57,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
             get => JSRef.Get<bool>("loop");
             set => JSRef.Set("loop", value);
         }
-        public string? CurrentSrc {
+        public string? CurrentSrc
+        {
             get => JSRef.Get<string?>("currentSrc");
         }
         public string? CrossOrigin
