@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -9,6 +10,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Get an instance from an ElementReference
         /// </summary>
         /// <param name="elementReference"></param>
-        public HTMLBodyElement(ElementReference elementReference) : base(elementReference) { }
+        public HTMLDocument(ElementReference elementReference) : base(JS.ToJSRef(elementReference)) { }
     }
 }
