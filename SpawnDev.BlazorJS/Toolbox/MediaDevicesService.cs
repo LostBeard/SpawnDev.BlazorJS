@@ -24,7 +24,82 @@ namespace SpawnDev.BlazorJS.Toolbox
             if (!Supported) return;
             MediaDevices = JS.Get<MediaDevices>("navigator.mediaDevices");
             MediaDevices.OnDeviceChange += MediaDevices_OnDeviceChange;
+#if DEBUG
+            DebugCodecCheck();
+#endif
         }
+
+        public static List<string> VideoTypes = new List<string> { "webm", "mp4", "x-matroska", "ogg" };
+        public static List<string> VideoCodecs = new List<string> { "vp9", "vp9.0", "vp8", "vp8.0", "avc1", "av1", "h265", "h.265", "h264", "h.264", "mpeg", "theora" };
+        public static List<string> AudioTypes = new List<string> { "webm", "mp3", "mp4", "x-matroska", "ogg", "wav" };
+        public static List<string> AudioCodecs = new List<string> { "opus", "vorbis", "aac", "mpeg", "mp4a", "pcm" };
+
+        void DebugCodecCheck()
+        {
+            MediaRecorderAudioVideoFormats.ForEach(Console.WriteLine);
+            MediaRecorderAudioFormats.ForEach(Console.WriteLine);
+            MediaRecorderVideoFormats.ForEach(Console.WriteLine);
+        }
+
+        public Lazy<List<string>> _MediaRecorderVideoFormats = new Lazy<List<string>>(() =>
+        {
+            var supportVideoFormats = new List<string>();
+            foreach (var videoType in VideoTypes)
+            {
+                foreach (var videoCodec in VideoCodecs)
+                {
+                    var type = $"video/{videoType};codecs={videoCodec}";
+                    var supported = MediaRecorder.IsTypeSupported(type);
+                    if (supported)
+                    {
+                        supportVideoFormats.Add(type);
+                    }
+                }
+            }
+            return supportVideoFormats;
+        });
+        public List<string> MediaRecorderVideoFormats => _MediaRecorderVideoFormats.Value;
+
+        public Lazy<List<string>> _MediaRecorderAudioFormats = new Lazy<List<string>>(() =>
+        {
+            var supportAudioFormats = new List<string>();
+            foreach (var audioType in AudioTypes)
+            {
+                foreach (var audioCodec in AudioCodecs)
+                {
+                    var type = $"audio/{audioType};codecs={audioCodec}";
+                    var supported = MediaRecorder.IsTypeSupported(type);
+                    if (supported)
+                    {
+                        supportAudioFormats.Add(type);
+                    }
+                }
+            }
+            return supportAudioFormats;
+        });
+        public List<string> MediaRecorderAudioFormats => _MediaRecorderAudioFormats.Value;
+
+        public Lazy<List<string>> _MediaRecorderAudioVideoFormats = new Lazy<List<string>>(() =>
+        {
+            var supportAudioVideoFormats = new List<string>();
+            foreach (var videoType in VideoTypes)
+            {
+                foreach (var videoCodec in VideoCodecs)
+                {
+                    foreach (var audioCodec in AudioCodecs)
+                    {
+                        var type = $"video/{videoType};codecs={videoCodec},{audioCodec}";
+                        var supported = MediaRecorder.IsTypeSupported(type);
+                        if (supported)
+                        {
+                            supportAudioVideoFormats.Add(type);
+                        }
+                    }
+                }
+            }
+            return supportAudioVideoFormats;
+        });
+        public List<string> MediaRecorderAudioVideoFormats => _MediaRecorderAudioVideoFormats.Value;
 
         public async Task InitAsync()
         {
@@ -65,15 +140,15 @@ namespace SpawnDev.BlazorJS.Toolbox
         }
 
         // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-        public async Task<bool> UpdateDeviceList(bool allowAsk = false)
+        public async Task<bool> UpdateDeviceList(bool allowAsk = false, bool video = true, bool audio = true)
         {
-            if (!Supported) return false;
+            if (!MediaShareSupported) return false;
             AreDevicesHidden = await MediaDevices.AreDevicesHidden();
             await _UpdateDeviceList();
             if (!AreDevicesHidden || !allowAsk) return !AreDevicesHidden;
             try
             {
-                using var stream = await MediaDevices.GetUserMedia(true, true);
+                using var stream = await MediaDevices.GetUserMedia(video, audio);
                 if (stream != null)
                 {
                     stream.RemoveAllTracks();

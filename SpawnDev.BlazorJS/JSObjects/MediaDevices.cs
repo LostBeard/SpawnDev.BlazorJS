@@ -29,7 +29,6 @@ namespace SpawnDev.BlazorJS.JSObjects
             return await GetMediaDeviceStream(deviceIdVideo, deviceIdAudio);
         }
 
-
         public async Task<MediaStream?> GetMediaDeviceStream(string? deviceIdVideo, string? deviceIdAudio)
         {
             dynamic constraints = new ExpandoObject();
@@ -75,7 +74,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia
         public Task<MediaStream?> GetDisplayMedia(object constraints) => JSRef.CallAsync<MediaStream?>("getDisplayMedia", constraints);
         public Task<MediaStream?> GetDisplayMedia() => JSRef.CallAsync<MediaStream?>("getDisplayMedia");
-
 
         public async Task<bool> AreDevicesHidden()
         {
