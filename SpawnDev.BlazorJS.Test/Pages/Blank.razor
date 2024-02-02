@@ -1,20 +1,32 @@
 ﻿@page "/"
 
 <div style="padding: 1rem 1rem 1rem 1rem;">
-    <h2>SpawnDev.BlazorJS</h2>
-    <ul>
-        <li>.Net: @JS.FrameworkVersion</li>
-        <li>SpawnDev.BlazorJS: @JS.InformationalVersion</li>
-        <li>Startup Time: @(TimeSpan.FromMilliseconds(JS.ReadyTime).TotalSeconds) seconds</li>
-        <li>CrossOriginIsolated: @(JS.CrossOriginIsolated ? "yes" : "no")</li>
-        <li>Concurrency: @(JS.Get<Navigator>("navigator").HardwareConcurrency)</li>
-        <li>SIMD: @(SIMDSupported ? "supported" : "not supported")</li>
-        <li>Vector.IsHardwareAccelerated: @(System.Numerics.Vector.IsHardwareAccelerated ? "yes" : "no")</li>
-        <li>Vector&lt;float&gt;.Count: @(System.Numerics.Vector<float>.Count)</li>
-        <li>Worker: @(!JS.IsUndefined(nameof(Worker)) ? "supported" : "not supported")</li>
-        <li>SharedWorker: @(!JS.IsUndefined(nameof(SharedWorker)) ? "supported" : "not supported")</li>
-        <li>SharedArrayBuffer: @(!JS.IsUndefined(nameof(SharedArrayBuffer)) ? "supported" : "not supported")</li>
-    </ul>
+    <style>
+        .environment-table td:nth-child(1) {
+            text-align: right;
+        }
+        td {
+            padding: 0.2rem;
+        }
+    </style>
+    <table class="environment-table" style="display: none;">
+        <tbody>
+            <tr title=".Net version"><td>@JS.FrameworkVersion</td><td>.Net</td></tr>
+            <tr title="SpawnDev.BlazorJS version"><td>@JS.InformationalVersion</td><td>SpawnDev.BlazorJS</td></tr>
+            <tr title="Startup time in seconds"><td>@(Math.Round(TimeSpan.FromMilliseconds(JS.ReadyTime).TotalSeconds, 1))s</td><td>Startup time</td></tr>
+            <tr title="navigator.hardwareConcurrency"><td>@(JS.Get<Navigator>("navigator").HardwareConcurrency)</td><td>HardwareConcurrency</td></tr>
+            <tr title="crossOriginIsolated"><td>@(JS.CrossOriginIsolated ? "✔" : "❌")</td><td>CrossOriginIsolated</td></tr>
+            <tr title="SIMD supported by browser and device"><td>@(SIMDSupported ? "✔" : "❌")</td><td>SIMD</td></tr>
+            <tr title="System.Runtime.Intrinsics.Wasm.PackedSimd.IsSupported"><td>@(System.Runtime.Intrinsics.Wasm.PackedSimd.IsSupported ? "✔" : "❌")</td><td>PackedSimd</td></tr>
+            <tr title="System.Runtime.Intrinsics.Vector64.IsHardwareAccelerated"><td>@(System.Runtime.Intrinsics.Vector64.IsHardwareAccelerated ? "✔" : "❌")</td><td>Vector64</td></tr>
+            <tr title="System.Runtime.Intrinsics.Vector128.IsHardwareAccelerated"><td>@(System.Runtime.Intrinsics.Vector128.IsHardwareAccelerated ? "✔" : "❌")</td><td>Vector128</td></tr>
+            <tr title="System.Runtime.Intrinsics.Vector256.IsHardwareAccelerated"><td>@(System.Runtime.Intrinsics.Vector256.IsHardwareAccelerated ? "✔" : "❌")</td><td>Vector256</td></tr>
+            <tr title="System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated"><td>@(System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated ? "✔" : "❌")</td><td>Vector512</td></tr>
+            <tr title="Worker supported"><td>@(!JS.IsUndefined(nameof(Worker)) ? "✔" : "❌")</td><td>Worker</td></tr>
+            <tr title="SharedWorker supported"><td>@(!JS.IsUndefined(nameof(SharedWorker)) ? "✔" : "❌")</td><td>SharedWorker</td></tr>
+            <tr title="SharedArrayBuffer supported"><td>@(!JS.IsUndefined(nameof(SharedArrayBuffer)) ? "✔" : "❌")</td><td>SharedArrayBuffer</td></tr>
+        </tbody>
+    </table>
 </div>
 
 <MarkdownBlock URL="https://raw.githubusercontent.com/LostBeard/SpawnDev.BlazorJS/main/README.md" />
