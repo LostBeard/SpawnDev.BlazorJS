@@ -9,6 +9,8 @@
         <li>CrossOriginIsolated: @(JS.CrossOriginIsolated ? "yes" : "no")</li>
         <li>Concurrency: @(JS.Get<Navigator>("navigator").HardwareConcurrency)</li>
         <li>SIMD: @(SIMDSupported ? "supported" : "not supported")</li>
+        <li>Vector.IsHardwareAccelerated: @(System.Numerics.Vector.IsHardwareAccelerated ? "yes" : "no")</li>
+        <li>Vector&lt;float&gt;.Count: @(System.Numerics.Vector<float>.Count)</li>
         <li>Worker: @(!JS.IsUndefined(nameof(Worker)) ? "supported" : "not supported")</li>
         <li>SharedWorker: @(!JS.IsUndefined(nameof(SharedWorker)) ? "supported" : "not supported")</li>
         <li>SharedArrayBuffer: @(!JS.IsUndefined(nameof(SharedArrayBuffer)) ? "supported" : "not supported")</li>
