@@ -1,43 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class ContextAttributes2D
-    {
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Alpha { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Desynchronized { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? WillReadFrequently { get; set; } = null;
-    }
-
-    public class WebGLContextAttributes
-    {
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Alpha { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Desynchronized { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Antialias { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Depth { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? FailIfMajorPerformanceCaveat { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string PowerPreference { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? PremultipliedAlpha { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? PreserveDrawingBuffer { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Stencil { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? XrCompatible { get; set; } = null;
-    }
-
     /// <summary>
     /// The HTMLCanvasElement interface provides properties and methods for manipulating the layout and presentation of &lt;canvas&gt; elements. The HTMLCanvasElement interface also inherits the properties and methods of the HTMLElement interface.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement
@@ -82,41 +47,46 @@ namespace SpawnDev.BlazorJS.JSObjects
         public int Height { get => JSRef.Get<int?>("height") ?? 0; set => JSRef.Set("height", value); }
         #endregion
 
-        
+        /// <summary>
+        /// Calls canvas.getContext("2d"), leading to the creation of a CanvasRenderingContext2D object representing a two-dimensional rendering context.
+        /// </summary>
+        /// <param name="contextAttributes"></param>
+        /// <returns></returns>
         public CanvasRenderingContext2D Get2DContext(ContextAttributes2D? contextAttributes = null)
         {
             if (contextAttributes == null) return JSRef.Call<CanvasRenderingContext2D>("getContext", "2d");
             return JSRef.Call<CanvasRenderingContext2D>("getContext", "2d", contextAttributes);
         }
-
+        /// <summary>
+        /// Calls canvas.getContext("webgl") which will create a WebGLRenderingContext object representing a three-dimensional rendering context. This context is only available on browsers that implement WebGL version 1 (OpenGL ES 2.0).
+        /// </summary>
+        /// <param name="contextAttributes"></param>
+        /// <returns></returns>
         public WebGLRenderingContext GetWebGLContext(WebGLContextAttributes? contextAttributes = null)
         {
             if (contextAttributes == null) return JSRef.Call<WebGLRenderingContext>("getContext", "webgl");
             return JSRef.Call<WebGLRenderingContext>("getContext", "webgl", contextAttributes);
         }
-
+        /// <summary>
+        /// Calls canvas.getContext("webgl2") which will create a WebGL2RenderingContext object representing a three-dimensional rendering context. This context is only available on browsers that implement WebGL version 2 (OpenGL ES 3.0). 
+        /// </summary>
+        /// <param name="contextAttributes"></param>
+        /// <returns></returns>
         public WebGL2RenderingContext GetWebGL2Context(WebGLContextAttributes? contextAttributes = null)
         {
             if (contextAttributes == null) return JSRef.Call<WebGL2RenderingContext>("getContext", "webgl2");
             return JSRef.Call<WebGL2RenderingContext>("getContext", "webgl2", contextAttributes);
         }
-
-
-        public GPUCanvasContext GetWebGPUContext(WebGPUContextAttributes? contextAttributes = null)
-        {
-            if (contextAttributes == null) return JSRef.Call<GPUCanvasContext>("getContext", "webgpu");
-            return JSRef.Call<GPUCanvasContext>("getContext", "webgpu", contextAttributes);
-        }
-
-        public ImageBitmapRenderingContext GetImageBitmapRenderingContext(ImageBitmapRenderingContextAttributes? contextAttributes = null)
-        {
-            if (contextAttributes == null) return JSRef.Call<ImageBitmapRenderingContext>("getContext", "bitmaprenderer");
-            return JSRef.Call<ImageBitmapRenderingContext>("getContext", "bitmaprenderer", contextAttributes);
-        }
-
-
-
-
+        /// <summary>
+        /// Calls canvas.getContext("webgpu") which will create a GPUCanvasContext object representing a three-dimensional rendering context for WebGPU render pipelines. This context is only available on browsers that implement The WebGPU API.
+        /// </summary>
+        /// <returns></returns>
+        public GPUCanvasContext GetWebGPUContext() => JSRef.Call<GPUCanvasContext>("getContext", "webgpu");
+        /// <summary>
+        /// Calls canvas.getContext("bitmaprenderer") which will create an ImageBitmapRenderingContext which only provides functionality to replace the content of the canvas with a given ImageBitmap.
+        /// </summary>
+        /// <returns></returns>
+        public ImageBitmapRenderingContext GetImageBitmapRenderingContext() => JSRef.Call<ImageBitmapRenderingContext>("getContext", "bitmaprenderer");
         /// <summary>
         /// Returns a data-URL containing a representation of the image in the format specified by the type parameter (defaults to png). The returned image is in a resolution of 96dpi.
         /// </summary>
