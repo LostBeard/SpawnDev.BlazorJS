@@ -2,17 +2,15 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+    /// <summary>
+    /// The CanvasRenderingContext2D interface, part of the Canvas API, provides the 2D rendering context for the drawing surface of a &lt;canvas&gt; element. It is used for drawing shapes, text, images, and other objects.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+    /// </summary>
     public class CanvasRenderingContext2D : JSObject
     {
-        public bool ImageSmoothingEnabled
-        {
-            get => JSRef.Get<bool>("imageSmoothingEnabled");
-            set => JSRef.Set("imageSmoothingEnabled", value);
-        }
+        public bool ImageSmoothingEnabled { get => JSRef.Get<bool>("imageSmoothingEnabled"); set => JSRef.Set("imageSmoothingEnabled", value); }
         public CanvasRenderingContext2D(IJSInProcessObjectReference _ref) : base(_ref) { }
         public HTMLCanvasElement Canvas => JSRef.Get<HTMLCanvasElement>("canvas");
-        //public ImageData GetImageData() => _ref.Call<ImageData>("getImageData");
         public ImageData? GetImageData()
         {
             using var canvas = Canvas;
@@ -81,5 +79,36 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void StrokeRect(int x, int y, int width, int height) => JSRef.CallVoid("strokeRect", x, y, width, height);
 
         public string FillStyle { get => JSRef.Get<string>("fillStyle"); set => JSRef.Set("fillStyle", value); }
+
+        /// <summary>
+        /// Fills a given text at the given (x,y) position. Optionally with a maximum width to draw.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void FillText(string text, int x, int y) => JSRef.CallVoid("fillText", text, x, y);
+        /// <summary>
+        /// Fills a given text at the given (x,y) position. Optionally with a maximum width to draw.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="maxWidth"></param>
+        public void FillText(string text, int x, int y, int maxWidth) => JSRef.CallVoid("fillText", text, x, y, maxWidth);
+        /// <summary>
+        /// Draws (strokes) a given text at the given (x, y) position.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void StrokeText(string text, int x, int y) => JSRef.CallVoid("strokeText", text, x, y);
+        /// <summary>
+        /// Draws (strokes) a given text at the given (x, y) position.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="maxWidth"></param>
+        public void StrokeText(string text, int x, int y, int maxWidth) => JSRef.CallVoid("strokeText", text, x, y, maxWidth);
     }
 }

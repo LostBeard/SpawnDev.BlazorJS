@@ -222,9 +222,25 @@ namespace SpawnDev.BlazorJS
         public T GetDocumentBody<T>() where T : JSObject => Get<T>("document.body");
         public void DocumentHeadAppendChild(IJSInProcessObjectReference element) => CallVoid("document.head.appendChild", element);
         public void DocumentBodyAppendChild(IJSInProcessObjectReference element) => CallVoid("document.body.appendChild", element);
-        // document.CreateElement
+        /// <summary>
+        /// document.createElement shortcut method
+        /// </summary>
+        /// <param name="elementType"></param>
+        /// <returns></returns>
         public IJSInProcessObjectReference DocumentCreateElement(string elementType) => Call<IJSInProcessObjectReference>("document.createElement", elementType);
+        /// <summary>
+        /// document.createElement shortcut method
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="elementType"></param>
+        /// <returns></returns>
         public T DocumentCreateElement<T>(string elementType) where T : JSObject => Call<T>("document.createElement", elementType);
+        /// <summary>
+        /// Passes both values to Javascript and tests for equality there
+        /// </summary>
+        /// <param name="obj1"></param>
+        /// <param name="obj2"></param>
+        /// <returns></returns>
         public static bool JSEquals(object obj1, object obj2) => JSInterop.IsEqual(obj1, obj2);
         public T ReturnMe<T>(object obj) => JSInterop.ReturnMe<T>(obj);
         public T ReturnMe<T>(T obj) => JSInterop.ReturnMe<T>(obj);
