@@ -1,30 +1,30 @@
 ﻿using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
+    /// The MediaRecorder interface of the MediaStream Recording API provides functionality to easily record media. It is created using the MediaRecorder() constructor.
     /// https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder
     /// </summary>
     public partial class MediaRecorder : EventTarget
     {
-        public static List<string> CommonMimeTypes = new List<string> {
-          "video/webm",
-          "audio/webm",
-          "video/webm;codecs=vp8",
-          "video/webm;codecs=daala",
-          "video/webm;codecs=h264",
-          "audio/webm;codecs=opus",
-          "video/mpeg",
-          "video/mp4",
-        };
         public MediaRecorder(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// 
+        /// Creates a new MediaRecorder object, given a MediaStream to record. Options are available to do things like set the container's MIME type (such as "video/webm" or "video/mp4") and the bit rates of the audio and video tracks or a single overall bit rate.
         /// </summary>
         /// <param name="stream">The MediaStream that will be recorded. This source media can come from a stream created using navigator.MediaDevices.getUserMedia() or from an <audio>, <video> or <canvas> element.</param>
         public MediaRecorder(MediaStream stream) : base(JS.New(nameof(MediaRecorder), stream)) { }
+        /// <summary>
+        /// Creates a new MediaRecorder object, given a MediaStream to record. Options are available to do things like set the container's MIME type (such as "video/webm" or "video/mp4") and the bit rates of the audio and video tracks or a single overall bit rate.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="options"></param>
         public MediaRecorder(MediaStream stream, MediaRecorderOptions options) : base(JS.New(nameof(MediaRecorder), stream, options)) { }
+        /// <summary>
+        /// A static method which returns a true or false value indicating if the given MIME media type is supported by the current user agent.
+        /// </summary>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
         public static bool IsTypeSupported(string mimeType) => JS.Call<bool>("MediaRecorder.isTypeSupported", mimeType);
         /// <summary>
         /// Returns the MIME type that was selected as the recording container for the MediaRecorder object when it was created.

@@ -25,6 +25,9 @@
                 <tr title="System.Runtime.Intrinsics.Vector128.IsHardwareAccelerated"><td>@(System.Runtime.Intrinsics.Vector128.IsHardwareAccelerated ? "✔" : "❌")</td><td>Vector128</td></tr>
                 <tr title="System.Runtime.Intrinsics.Vector256.IsHardwareAccelerated"><td>@(System.Runtime.Intrinsics.Vector256.IsHardwareAccelerated ? "✔" : "❌")</td><td>Vector256</td></tr>
                 <tr title="System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated"><td>@(System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated ? "✔" : "❌")</td><td>Vector512</td></tr>
+                <tr title="System.Runtime.Intrinsics.X86.Sse2.IsSupported"><td>@(System.Runtime.Intrinsics.X86.Sse2.IsSupported ? "✔" : "❌")</td><td>X86.Sse2</td></tr>
+                <tr title="System.Runtime.Intrinsics.X86.Sse3.IsSupported"><td>@(System.Runtime.Intrinsics.X86.Sse3.IsSupported ? "✔" : "❌")</td><td>X86.Sse3</td></tr>
+                <tr title="System.Runtime.Intrinsics.X86.Avx.IsSupported"><td>@(System.Runtime.Intrinsics.X86.Avx.IsSupported ? "✔" : "❌")</td><td>X86.Avx</td></tr>
                 <tr title="Worker supported"><td>@(!JS.IsUndefined(nameof(Worker)) ? "✔" : "❌")</td><td>Worker</td></tr>
                 <tr title="SharedWorker supported"><td>@(!JS.IsUndefined(nameof(SharedWorker)) ? "✔" : "❌")</td><td>SharedWorker</td></tr>
                 <tr title="SharedArrayBuffer supported"><td>@(!JS.IsUndefined(nameof(SharedArrayBuffer)) ? "✔" : "❌")</td><td>SharedArrayBuffer</td></tr>

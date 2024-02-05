@@ -47,6 +47,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public int Height { get => JSRef.Get<int?>("height") ?? 0; set => JSRef.Set("height", value); }
         #endregion
 
+        #region Methods
         /// <summary>
         /// Calls canvas.getContext("2d"), leading to the creation of a CanvasRenderingContext2D object representing a two-dimensional rendering context.
         /// </summary>
@@ -101,7 +102,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public string ToDataURL(string type, float encoderOptions) => JSRef.Call<string>("toDataURL", type, encoderOptions);
 
+        /// <summary>
+        /// The HTMLCanvasElement.transferControlToOffscreen() method transfers control to an OffscreenCanvas object, either on the main thread or on a worker.
+        /// </summary>
+        /// <returns></returns>
+        public OffscreenCanvas TransferControlToOffscreen() => JSRef.Call<OffscreenCanvas>("transferControlToOffscreen");
 
+        // Non-standard methods
         // NOTE - may not work on some browsers if not added to DOM first (even if temporary)
         public void DownloadAsImage(string fileName, bool appendToBody = false)
         {
@@ -121,5 +128,6 @@ namespace SpawnDev.BlazorJS.JSObjects
             var hex = "#" + BitConverter.ToString(new byte[] { r, g, b, a }).Replace("-", "");
             return hex;
         }
+        #endregion
     }
 }

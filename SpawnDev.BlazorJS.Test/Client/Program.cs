@@ -15,6 +15,8 @@ using SpawnDev.BlazorJS.WebWorkers;
 JSObject.UndisposedHandleVerboseMode = false;
 #endif
 
+SpawnDev.BlazorJS.Toolbox.Vector.Test();
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
