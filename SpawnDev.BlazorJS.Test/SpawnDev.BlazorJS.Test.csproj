@@ -6,7 +6,7 @@
 		<Version>2.2.49</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
 		<PackageReference Include="Markdig" Version="0.34.0" />
 		<PackageReference Include="Markdown.ColorCode" Version="2.1.0" />

@@ -1,32 +1,12 @@
-'use strict';
-// https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/?view=aspnetcore-7.0#inject-a-script-after-blazor-starts
-
-// get the globalThis instance
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis
-function checkIfGlobalThis(it) {
-    // Math is known to exist as a global in every environment.
-    return it && it.Math === Math && it;
-}
-
-const globalObject =
-    // eslint-disable-next-line es/no-global-this -- safe
-    checkIfGlobalThis(typeof globalThis == 'object' && globalThis) ||
-    checkIfGlobalThis(typeof window == 'object' && window) ||
-    // eslint-disable-next-line no-restricted-globals -- safe
-    checkIfGlobalThis(typeof self == 'object' && self) ||
-    checkIfGlobalThis(typeof global == 'object' && global) ||
-    // eslint-disable-next-line no-new-func -- fallback
-    (function () { return this; })() || Function('return this')();
-
-(function () {
-    if (globalObject.JSInterop) return;
+(() => {
+    if (globalThis.JSInterop) return;
     const JSInterop = {};
-    globalObject.JSInterop = JSInterop;
-    JSInterop.globalObject = globalObject;
+    globalThis.JSInterop = JSInterop;
+    JSInterop.globalThis = globalThis;
     JSInterop.debugLevel = 0;
     JSInterop.pathObjectInfo = function (rootObject, path) {
         if (rootObject === null || rootObject === void 0) {
-            // callers must call with the globalObject if they wish to use it as the rootObject.
+            // callers must call with the globalThis if they wish to use it as the rootObject.
             throw new DOMException('JSInterop.pathObjectInfo error: rootObject cannot be null');
         }
         var parent = rootObject;
@@ -93,7 +73,7 @@ const globalObject =
     };
 
     JSInterop._returnNew = function (obj, className, args, returnType) {
-        if (obj === null) obj = globalObject;
+        if (obj === null) obj = globalThis;
         var { target, parent, targetType } = JSInterop.pathObjectInfo(obj, className);
         var ret = !args ? new target() : new target(...args);
         return serializeToDotNet(ret, returnType);
@@ -264,27 +244,27 @@ const globalObject =
 
     //Global
     JSInterop._instanceofGlobal = function (identifier) {
-        return JSInterop._instanceof(globalObject, identifier);
+        return JSInterop._instanceof(globalThis, identifier);
     };
 
     JSInterop._typeofGlobal = function (identifier) {
-        return JSInterop._typeof(globalObject, identifier);
+        return JSInterop._typeof(globalThis, identifier);
     };
 
     JSInterop._setGlobal = function (identifier, value) {
-        JSInterop._set(globalObject, identifier, value);
+        JSInterop._set(globalThis, identifier, value);
     };
 
     JSInterop._deleteGlobal = function (identifier) {
-        JSInterop._delete(globalObject, identifier);
+        JSInterop._delete(globalThis, identifier);
     };
 
     JSInterop._getGlobal = function (identifier, returnType) {
-        return JSInterop._get(globalObject, identifier, returnType);
+        return JSInterop._get(globalThis, identifier, returnType);
     };
 
     JSInterop._callGlobal = function (identifier, args, returnType) {
-        return JSInterop._call(globalObject, identifier, args, returnType);
+        return JSInterop._call(globalThis, identifier, args, returnType);
     };
 
     const callbacks = {};

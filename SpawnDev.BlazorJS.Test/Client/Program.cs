@@ -15,8 +15,6 @@ using SpawnDev.BlazorJS.WebWorkers;
 JSObject.UndisposedHandleVerboseMode = false;
 #endif
 
-SpawnDev.BlazorJS.Toolbox.Vector.Test();
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -75,12 +73,12 @@ builder.Services.AddSingleton<JSObjectAnalyzer>();
 
 //Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
 
-#if DEBUG && false
+#if DEBUG && true
 var host = builder.Build();
 
-var ms1= host.Services.GetKeyedService<string>("apples");
+//var ms1= host.Services.GetKeyedService<string>("apples");
 
-var ms = host.Services.GetRequiredService<IMathsService>();
+//var ms = host.Services.GetRequiredService<IMathsService>();
 
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
@@ -134,7 +132,7 @@ var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 ////object? tmpp = null;
 ////var oh = JsonSerializer.Serialize(tmpp);
 
-var jsobjectAnalyzer = host.Services.GetRequiredService<JSObjectAnalyzer>();
+//var jsobjectAnalyzer = host.Services.GetRequiredService<JSObjectAnalyzer>();
 
 //var javascriptDescriptorReader = new JavascriptObjectReflection(JS);
 
@@ -184,10 +182,10 @@ JS.Set("_testWorkerAndDispose", new ActionCallback(async () =>
     Console.WriteLine(ret);
 }));
 
-JS.Set("_analyze", new ActionCallback<JSObject>(async (obj) =>
-{
-    jsobjectAnalyzer.Analyze(obj);
-}));
+//JS.Set("_analyze", new ActionCallback<JSObject>(async (obj) =>
+//{
+//    jsobjectAnalyzer.Analyze(obj);
+//}));
 
 JS.Set("_log", new ActionCallback<JSObject>((obj) =>
 {

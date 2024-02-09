@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             if (!Supported) return;
             MediaDevices = JS.Get<MediaDevices>("navigator.mediaDevices");
             MediaDevices.OnDeviceChange += MediaDevices_OnDeviceChange;
-#if DEBUG
+#if DEBUG && false
             DebugCodecCheck();
 #endif
         }

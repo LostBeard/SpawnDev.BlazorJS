@@ -9,8 +9,29 @@
 
 var globalThisTypeName = self.constructor.name;
 var disableHotReload = true;
-var verboseWebWorkers = location.search.indexOf('verbose=true') > -1;
-var debugMode = location.search.indexOf('debugMode=true') > -1;
+
+function getParameterByName(name, url = location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+const queryParams = new Proxy({}, {
+    get: (searchParams, prop) => getParameterByName(prop),
+});
+
+// a query param can be used to set the index.html file url
+var indexHtml = queryParams.indexHtml ?? './';
+if (typeof indexHtml === 'string' && ['true','1'].indexOf(indexHtml.toLowerCase()) !== -1) indexHtml = 'index.html';
+// below switches the indexHtml path to index.html if running in a browser extension
+var browserExtension = (self.browser && self.browser.runtime && self.browser.runtime.id) || (self.chrome && self.chrome.runtime && self.chrome.runtime.id) || location.href.indexOf('chrome-extension') === 0;
+if (browserExtension) indexHtml = 'index.html';
+
+var verboseWebWorkers = !!queryParams.verbose;
+var debugMode = !!queryParams.debugMode;
+var isServiceWorkerScope = globalThisTypeName == 'ServiceWorkerGlobalScope';
 
 var consoleLog = function () {
     if (!verboseWebWorkers) return;
@@ -93,11 +114,18 @@ var documentBaseURI = (function () {
     return uri.toString();
 })();
 consoleLog('documentBaseURI', documentBaseURI);
-const webWorkersContent = new URL(`_content/SpawnDev.BlazorJS.WebWorkers/`, documentBaseURI).toString();
+
+function getAppURL(relativePath) {
+    return new URL(relativePath, documentBaseURI).toString();
+}
+const webWorkersContent = getAppURL('_content/SpawnDev.BlazorJS.WebWorkers/');
+function getBWWURL(relativePath) {
+    return new URL(relativePath, webWorkersContent).toString();
+}
 consoleLog('spawndev.blazorjs.webworkers: loading fake window environment');
 // faux DOM and document environment
 //importScripts('spawndev.blazorjs.webworkers.faux-env.js');
-importScripts(new URL('spawndev.blazorjs.webworkers.faux-env.js', webWorkersContent).toString());
+importScripts(getBWWURL('spawndev.blazorjs.webworkers.faux-env.js'));
 // faux dom and window environment has been created (currently empty)
 // set document.baseURI to the apps basePath (which is relative to this scripts path)
 document.baseURI = documentBaseURI;
@@ -107,13 +135,14 @@ if (disableHotReload) {
     self[scriptInjectedSentinel] = true
 }
 
+// dynamic import support tested using an empty script
 async function hasDynamicImport() {
-    // ServiceWorkers have issues with dynamic imports even if detection says it is detected as supported; may jsut not have been loaded usign 'module' keyword
+    // import() is disallowed on ServiceWorkerGlobalScope by the HTML specification.See https://github.com/w3c/ServiceWorker/issues/1356.
     if (globalThisTypeName == 'ServiceWorkerGlobalScope') {
         return false;
     }
     try {
-        await import('data:text/javascript;base64,Cg==');
+        await import(getBWWURL('empty.js'));
         return true;
     } catch (e) {
         return false;
@@ -123,11 +152,18 @@ async function hasDynamicImport() {
 var initWebWorkerBlazor = async function () {
     var WebWorkerEnabledAttributeName = 'webworker-enabled';
     var dynamicImportSupported = await hasDynamicImport();
-    // Firefox, and possibly some other browsers, do not support dynamic module import (import) in workers.
+    self.dynamicImportSupported = dynamicImportSupported;
+    var patchImportUnsafeEval = !dynamicImportSupported && !browserExtension;
+    // Firefox, and possibly some other browsers, do not support dynamic import in workers.
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
     // Some scripts will have to be patched on the fly if import is not supported.
     if (!dynamicImportSupported) {
-        consoleLog("import is not supported. A workaround will be used.");
+        if (patchImportUnsafeEval) {
+            consoleLog("import is not supported. The scripts will be patched on the fly. CSP rule script-src 'unsafe-eval' value may affect prevent this");
+        } else {
+            // this is the method required to run Blazor in a browser extension service worker
+            consoleLog("import is not supported. The framework that is about to be loaded must be pre-patched or it will fail to load");
+        }
     } else {
         consoleLog('import is supported.');
     }
@@ -138,7 +174,7 @@ var initWebWorkerBlazor = async function () {
             consoleLog("webWorkersFetch", typeof resource, resource);
             if (typeof resource === 'string') {
                 // resource is a string
-                let newUrl = new URL(resource, document.baseURI);
+                let newUrl = getAppURL(resource);
                 return fetchOrig(newUrl, options);
             } else {
                 // resource is a Request object
@@ -149,7 +185,7 @@ var initWebWorkerBlazor = async function () {
     }
     // fetch getText method
     async function getText(href) {
-        var response = await fetch(new URL(href, document.baseURI));
+        var response = await fetch(getAppURL(href));
         return await response.text();
     }
     // Get index.html and parse it for scripts
@@ -158,7 +194,7 @@ var initWebWorkerBlazor = async function () {
         var scriptPatt = /<script\s*(.*?)(?:\s*\/>|\s*>(.*?)<\/script>)/gms;
         var attributesPatt = /([^\s=]+)(?:=(?:"([^"]*)"|'([^"]*)'|([^\s=]+)))?/gm;
         var m = scriptPatt.exec(indexHtmlSrc);
-        while(m) {
+        while (m) {
             let scriptNode = {
                 attributes: {},
                 text: m[2],
@@ -211,7 +247,7 @@ var initWebWorkerBlazor = async function () {
                     var m = placeHolderPatt.exec(jsStr);
                     if (m) {
                         jsStr = jsStr.replace(placeHolderPatt, '$1setTimeout(()=>this.startWebAssemblyIfNotStarted(),0),');
-                        if (!dynamicImportSupported) {
+                        if (patchImportUnsafeEval) {
                             // fix dynamic imports
                             jsStr = fixModuleScript(jsStr, src);
                         }
@@ -229,7 +265,7 @@ var initWebWorkerBlazor = async function () {
                 if (typeof scriptNode.attributes[WebWorkerEnabledAttributeName] === 'undefined') {
                     scriptNode.attributes[WebWorkerEnabledAttributeName] = '';
                 }
-                if (!dynamicImportSupported) {
+                if (patchImportUnsafeEval) {
                     // load script text so we can do some on-the-fly patching to fix compatibility with WebWorkers
                     let jsStr = await getText(src);
                     // fix dynamic imports
@@ -240,29 +276,32 @@ var initWebWorkerBlazor = async function () {
         }
         return '';
     }
-    //
-    self.importOverride = async function (src) {
-        consoleLog('importOverride', src);
-        var jsStr = await getText(src);
-        jsStr = fixModuleScript(jsStr, src);
-        let fn = new Function(jsStr);
-        var ret = fn.apply(createProxiedObject(self), []);
-        if (!ret) ret = createProxiedObject({});
-        return ret;
+    // if a strict content-security-policy prohibits 'unsafe-eval' the below method will not work... sciprts will need to be pre-processed (during publish/build step)
+    if (true || !self.importOverride) {
+        self.importOverride = async function (src) {
+            consoleLog('importOverride', src);
+            var jsStr = await getText(src);
+            jsStr = fixModuleScript(jsStr, src);
+            let fn = new Function(jsStr);
+            var ret = fn.apply(createProxiedObject(self), []);
+            if (!ret) ret = createProxiedObject({});
+            return ret;
+        }
     }
     // this method fixes 'dynamic import scripts' to work in an environment that does not support 'dynamic import scripts'
     // it is designed for and tested agaisnt the Blazor WASM runtime.
     // it may not work on other modules
     function fixModuleScript(jsStr, src) {
         // handle things that are automatically handled by import
-        src = new URL(src, document.baseURI).toString();
+        src = getAppURL(src);
         var scriptUrl = JSON.stringify(src);
         consoleLog('fixModuleScript.scriptUrl', src, scriptUrl);
         // fix import.meta.url - The full URL to the module
+        // import.meta.url -> SCRIPT_URL
         jsStr = jsStr.replace(/\bimport\.meta\.url\b/g, scriptUrl);
-        // import.meta
+        // import.meta -> { url: SCRIPT_URL }
         jsStr = jsStr.replace(/\bimport\.meta\b/g, `{ url: ${scriptUrl} }`);
-        // import
+        // import -> importOverride ... importOverride can decide at runtime if it needs to use 'importScripts' or 'await import'
         jsStr = jsStr.replace(/\bimport\(/g, 'importOverride(');
         // export
         // https://www.geeksforgeeks.org/what-is-export-default-in-javascript/
@@ -295,7 +334,7 @@ var initWebWorkerBlazor = async function () {
     }
     async function initializeBlazor() {
         // get index.html text for parsing
-        var indexHtmlSrc = await getText('./');
+        var indexHtmlSrc = await getText(indexHtml);
         var scriptNodes = getScriptNodes(indexHtmlSrc);
         // detect runtime type and do runtime patching if needed
         var blazorRuntimeType = await detectBlazorRuntime(scriptNodes);

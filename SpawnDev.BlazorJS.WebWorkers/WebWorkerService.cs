@@ -39,6 +39,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// </summary>
         public AsyncCallDispatcher? WindowTask { get; private set; }
         public ServiceWorkerConfig ServiceWorkerConfig { get; private set; } = new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.None };
+        // below is set to true if base address starts with chrome-extension
+        public string WorkerIndexHtml { get; private set; } = "";
         public WebWorkerService(NavigationManager navigationManager, IServiceProvider serviceProvider, IServiceCollection serviceDescriptors, IWebAssemblyHostEnvironment hostEnvironment, BlazorJSRuntime js)
         {
             JS = js;
@@ -190,7 +192,20 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public async Task<WebWorker?> GetWebWorker()
         {
             if (!WebWorkerSupported) return null;
-            var worker = new Worker(WebWorkerJSScript);
+            var queryParams = new Dictionary<string, string>();
+#if DEBUG
+            queryParams["forceCompatMode"] = "0";
+#endif
+            if (!string.IsNullOrEmpty(WorkerIndexHtml))
+            {
+                queryParams["indexHtml"] = WorkerIndexHtml;
+            }
+            var scriptUrl = WebWorkerJSScript;
+            if (queryParams.Count > 0)
+            {
+                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $""));
+            }
+            var worker = new Worker(scriptUrl);
             var webWorker = new WebWorker(worker, ServiceProvider, ServiceDescriptors);
             await webWorker.WhenReady;
             return webWorker;
@@ -204,12 +219,25 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public async Task<SharedWebWorker?> GetSharedWebWorker(string sharedWorkerName = "")
         {
             if (!SharedWebWorkerSupported) return null;
-            var sharedWorker = new SharedWorker(WebWorkerJSScript, sharedWorkerName);
+            var queryParams = new Dictionary<string, string>();
+#if DEBUG
+            queryParams["forceCompatMode"] = "0";
+#endif
+            if (!string.IsNullOrEmpty(WorkerIndexHtml))
+            {
+                queryParams["indexHtml"] = WorkerIndexHtml;
+            }
+            var scriptUrl = WebWorkerJSScript;
+            if (queryParams.Count > 0)
+            {
+                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $""));
+            }
+            var sharedWorker = new SharedWorker(scriptUrl, sharedWorkerName);
             var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, ServiceProvider, ServiceDescriptors);
             await sharedWebWorker.WhenReady;
             return sharedWebWorker;
         }
-        
+
         /// <summary>
         /// Disposes all disposable resources used by this object
         /// </summary>
