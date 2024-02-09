@@ -43,7 +43,7 @@ builder.Services.AddWebWorkerService(webWorkerService =>
 #if DEBUG
     webWorkerService.TaskPool.PoolSize = 0;  // once web workers startup the VS debugger does not work properly
 #else
-    webWorkerService.TaskPool.PoolSize = webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
+    webWorkerService.TaskPool.PoolSize = 0; //webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
 #endif
 });
 
@@ -73,7 +73,7 @@ builder.Services.AddSingleton<JSObjectAnalyzer>();
 
 //Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
 
-#if DEBUG && true
+#if DEBUG || true
 var host = builder.Build();
 
 //var ms1= host.Services.GetKeyedService<string>("apples");

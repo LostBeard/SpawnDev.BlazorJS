@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.Test.Services
         Task<ProcessFrameResult?> FaceDetection(ArrayBuffer? frameBuffer, int width, int height, bool withLandmarks);
     }
 
-    public class FaceAPIService : IDisposable, IFaceAPIService, IBackgroundService
+    public class FaceAPIService : IDisposable, IFaceAPIService //, IBackgroundService
     {
         string _appBaseUri;
         string _modelPath = "weights";
