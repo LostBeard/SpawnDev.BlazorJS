@@ -42,6 +42,7 @@
 			StaticWebAsset="@(StaticWebAsset)"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			OutputPath="$(OutputPath)"
+			PublishMode="false"
 			BasePath="$(StaticWebAssetBasePath)"
 			IntermediateOutputPath="$(IntermediateOutputPath)"
 			PackageContentDir="$(_WebWorkerBuildContentDirectory)"
@@ -55,6 +56,18 @@
 	</Target>
 	<Target Name="WebWorkerBuildAfterTargetsAfterPublish" AfterTargets="AfterPublish">
 		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets AfterPublish" />
+		<ImportShimBlazorWASM
+			PatchFramework="$(WebWorkerPatchFramework)"
+			StaticWebAsset="@(StaticWebAsset)"
+			ProjectDir="$(MSBuildProjectDirectory)"
+			OutputPath="$(PublishDir)"
+			PublishMode="true"
+			BasePath="$(StaticWebAssetBasePath)"
+			IntermediateOutputPath="$(IntermediateOutputPath)"
+			PackageContentDir="$(_WebWorkerBuildContentDirectory)"
+			DebugSpawnDevWebWorkersBuildTasks="$(_DebugSpawnDevWebWorkersBuildTasks)"
+			>
+		</ImportShimBlazorWASM>
 	</Target>
 
 	<Target Name="WebWorkerBuildAfterTargetsAfterClean" AfterTargets="AfterClean">

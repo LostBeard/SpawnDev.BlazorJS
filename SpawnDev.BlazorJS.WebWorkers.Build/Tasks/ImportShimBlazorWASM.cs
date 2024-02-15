@@ -36,6 +36,9 @@ namespace SpawnDev.BlazorJS.WebWorkers.Build.Tasks
         [Required]
         public bool DebugSpawnDevWebWorkersBuildTasks { get; set; }
 
+        [Required]
+        public bool PublishMode { get; set; }
+
         public string OutputWwwroot { get; set; }
 
         public override bool Execute()
