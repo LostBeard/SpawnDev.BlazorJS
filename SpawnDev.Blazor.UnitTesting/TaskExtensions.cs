@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpawnDev.Blazor.UnitTesting
+﻿namespace SpawnDev.Blazor.UnitTesting
 {
     public static class TaskExtensions
     {

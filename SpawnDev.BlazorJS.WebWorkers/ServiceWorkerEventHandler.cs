@@ -1,7 +1,12 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.Toolbox;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
+    public static class ObjectExtensions
+    {
+        public static void AsyncRun(this object _this, Func<Task> asyncFunc) => _ = asyncFunc();
+    }
     public class ServiceWorkerEventHandler : IAsyncBackgroundService, IDisposable
     {
         protected BlazorJSRuntime JS;
@@ -76,11 +81,16 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (e is MissedNotificationEvent missedEvent)
             {
-                _ = Task.Run(async () =>
+                Async.Run(async () =>
                 {
                     await ServiceWorker_OnNotificationCloseAsync(e);
                     missedEvent.WaitResolve();
                 });
+                ((Action)(async () =>
+                {
+                    await ServiceWorker_OnNotificationCloseAsync(e);
+                    missedEvent.WaitResolve();
+                }))();
             }
             else
             {
@@ -92,7 +102,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (e is MissedNotificationEvent missedEvent)
             {
-                _ = Task.Run(async () =>
+                Async.Run(async () =>
                 {
                     await ServiceWorker_OnNotificationClickAsync(e);
                     missedEvent.WaitResolve();
@@ -140,7 +150,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (e is MissedExtendableEvent missedEvent)
             {
-                _ = Task.Run(async () =>
+                Async.Run(async () =>
                 {
                     try
                     {
@@ -164,7 +174,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (e is MissedExtendableEvent missedEvent)
             {
-                _ = Task.Run(async () =>
+                Async.Run(async () =>
                 {
                     try
                     {
@@ -188,7 +198,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (e is MissedFetchEvent missedEvent)
             {
-                _ = Task.Run(async () =>
+                Async.Run(async () =>
                 {
                     try
                     {
@@ -212,7 +222,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (e is MissedExtendableMessageEvent missedEvent)
             {
-                _ = Task.Run(async () =>
+                Async.Run(async () =>
                 {
                     try
                     {
@@ -236,7 +246,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (e is MissedPushEvent missedEvent)
             {
-                _ = Task.Run(async () =>
+                Async.Run(async () =>
                 {
                     try
                     {
@@ -260,7 +270,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (e is MissedSyncEvent missedEvent)
             {
-                _ = Task.Run(async () =>
+                Async.Run(async () =>
                 {
                     try
                     {

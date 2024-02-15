@@ -428,7 +428,7 @@ namespace SpawnDev.BlazorJS
             BlazorJSRuntime.JS.SetReady();
             if (BlazorJSRuntime.JS.IsWindow)
             {
-#if DEBUG && false
+#if DEBUG && true
                 Console.WriteLine($"BlazorJSRunAsync mode: Default");
 #endif
                 // run as normal where Blazor has the window global context it expects
@@ -436,7 +436,7 @@ namespace SpawnDev.BlazorJS
             }
             else
             {
-#if DEBUG && false
+#if DEBUG && true
                 Console.WriteLine($"BlazorJSRunAsync mode: Worker");
 #endif
                 // This is a worker so we are going to use this to allow services in workers without the html renderer trying to load pages

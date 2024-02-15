@@ -4,16 +4,36 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.33103.201
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.Test", "SpawnDev.BlazorJS.Test\SpawnDev.BlazorJS.Test.csproj", "{CEC868CE-CF85-423F-A566-CE875EF8AEAD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{009C6655-B4D3-4D16-999F-858C1534BF39} = {009C6655-B4D3-4D16-999F-858C1534BF39}
+		{085BD3B9-2F11-4BD0-9072-217D2A3C9150} = {085BD3B9-2F11-4BD0-9072-217D2A3C9150}
+		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3} = {6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS", "SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj", "{085BD3B9-2F11-4BD0-9072-217D2A3C9150}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.WebWorkers", "SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj", "{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{009C6655-B4D3-4D16-999F-858C1534BF39} = {009C6655-B4D3-4D16-999F-858C1534BF39}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.Blazor.UnitTesting", "SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj", "{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.TestNet6", "SpawnDev.BlazorJS.TestNet6\SpawnDev.BlazorJS.TestNet6.csproj", "{945B0672-0BE5-4896-8AC3-AA555F949472}"
+	ProjectSection(ProjectDependencies) = postProject
+		{009C6655-B4D3-4D16-999F-858C1534BF39} = {009C6655-B4D3-4D16-999F-858C1534BF39}
+		{085BD3B9-2F11-4BD0-9072-217D2A3C9150} = {085BD3B9-2F11-4BD0-9072-217D2A3C9150}
+		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F} = {DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.TestNet7", "SpawnDev.BlazorJS.TestNet7\SpawnDev.BlazorJS.TestNet7.csproj", "{22080D27-878A-4BA7-8CF6-FC59D28386E5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{009C6655-B4D3-4D16-999F-858C1534BF39} = {009C6655-B4D3-4D16-999F-858C1534BF39}
+		{085BD3B9-2F11-4BD0-9072-217D2A3C9150} = {085BD3B9-2F11-4BD0-9072-217D2A3C9150}
+		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F} = {DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.WebWorkers.Build", "SpawnDev.BlazorJS.WebWorkers.Build\SpawnDev.BlazorJS.WebWorkers.Build.csproj", "{009C6655-B4D3-4D16-999F-858C1534BF39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +65,10 @@ Global
 		{22080D27-878A-4BA7-8CF6-FC59D28386E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22080D27-878A-4BA7-8CF6-FC59D28386E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22080D27-878A-4BA7-8CF6-FC59D28386E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{009C6655-B4D3-4D16-999F-858C1534BF39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{009C6655-B4D3-4D16-999F-858C1534BF39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{009C6655-B4D3-4D16-999F-858C1534BF39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{009C6655-B4D3-4D16-999F-858C1534BF39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -81,6 +81,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
 
+        public event Action OnDedicatedWorkerParentReady;
+
         public async Task InitAsync()
         {
             if (BeenInit) return;
@@ -102,12 +104,15 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 DedicatedWorkerParent = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors, workerGlobalScope);
                 DedicatedWorkerParent.SendReadyFlag();
-                await DedicatedWorkerParent.WhenReady;
-                var isParentAWindow = DedicatedWorkerParent.RemoteInfo!.GlobalThisTypeName == "Window";
-                if (isParentAWindow)
-                {
-                    WindowTask = DedicatedWorkerParent;
-                }
+                (new Action(async () => {
+                    await DedicatedWorkerParent.WhenReady;
+                    var isParentAWindow = DedicatedWorkerParent.RemoteInfo!.GlobalThisTypeName == "Window";
+                    if (isParentAWindow)
+                    {
+                        WindowTask = DedicatedWorkerParent;
+                    }
+                    OnDedicatedWorkerParentReady?.Invoke();
+                }))();
             }
             else if (JS.GlobalThis is SharedWorkerGlobalScope sharedWorkerGlobalScope)
             {

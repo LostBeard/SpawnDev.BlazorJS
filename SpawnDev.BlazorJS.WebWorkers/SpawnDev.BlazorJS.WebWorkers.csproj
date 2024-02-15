@@ -4,7 +4,7 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.49</Version>
+		<Version>2.2.51</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
@@ -19,12 +19,42 @@
 		<RepositoryUrl>https://github.com/LostBeard/SpawnDev.BlazorJS.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;BlazorWebAssembly;Multithreading;DotNet</PackageTags>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="build\**" />
+		<Content Remove="build\**" />
+		<EmbeddedResource Remove="build\**" />
+		<None Remove="build\**" />
+		
+		<Compile Remove="buildcontent\**" />
+		<Content Remove="buildcontent\**" />
+		<EmbeddedResource Remove="buildcontent\**" />
+		<None Remove="buildcontent\**" />
+
+		<Compile Remove="tasks\**" />
+		<Content Remove="tasks\**" />
+		<EmbeddedResource Remove="tasks\**" />
+		<None Remove="tasks\**" />
+		
+		<Content Include="build\**">
+			<Pack>true</Pack>
+			<PackagePath>build</PackagePath>
+		</Content>
+		<Content Include="buildcontent\**">
+			<Pack>true</Pack>
+			<PackagePath>buildcontent</PackagePath>
+		</Content>
+		<Content Include="tasks\**">
+			<Pack>true</Pack>
+			<PackagePath>tasks</PackagePath>
+		</Content>
 		<None Include="Images\icon-128.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<None Include="..\README.md">
 			<Pack>True</Pack>
@@ -52,5 +82,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
 	</ItemGroup>
+
 
 </Project>

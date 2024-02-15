@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.49</Version>
+		<Version>2.2.51</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 	
@@ -17,9 +18,22 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj" />
-		<ProjectReference Include="..\SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj" />
-		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
+
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.51" />
 	</ItemGroup>
+
+	<!-- SpawnDev.BlazorJS.WebWorkers config -->
+	<PropertyGroup>
+		<!-- 
+		WebWorkerPatchFramework
+		- To run Blazor WASM in non-window scopes (DedicatedWorker, SharedWorker, ServiceWorker) Blazor framework files need to be patched.
+		- Patching can be done at runtime in Javascript, or at build time. 
+		- Build time patching gives better performance and works with stricter ContentSecurityPolicy rules
+		- false - patch at runtime (current default)
+		- true  - patch during build
+		-->
+		<WebWorkerPatchFramework>true</WebWorkerPatchFramework>
+	</PropertyGroup>
 
 </Project>
 

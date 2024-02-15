@@ -285,7 +285,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         {
             var randValue = Guid.NewGuid().ToString();
             using var promise = new Promise<string>();
-            _ = Task.Run(async () =>
+            Async.Run(async () =>
             {
                 await Task.Delay(1);
                 promise.Resolve(randValue);
@@ -300,7 +300,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             var randValue = Guid.NewGuid().ToString();
             var tcs = new TaskCompletionSource<string>();
             using var promise = new Promise<string>(tcs.Task);
-            _ = Task.Run(async () =>
+            Async.Run(async () =>
             {
                 await Task.Delay(1);
                 tcs.TrySetResult(randValue);
@@ -328,7 +328,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         {
             var randValue = Guid.NewGuid().ToString();
             using var promise = new Promise();
-            _ = Task.Run(async () =>
+            Async.Run(async () =>
             {
                 await Task.Delay(1);
                 promise.Resolve(randValue);
@@ -341,7 +341,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         {
             var randValue = Guid.NewGuid().ToString();
             using var promise = new Promise();
-            _ = Task.Run(async () =>
+            Async.Run(async () =>
             {
                 await Task.Delay(1);
                 promise.Reject();
@@ -361,7 +361,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             var randValue = Guid.NewGuid().ToString();
             var tcs = new TaskCompletionSource();
             using var promise = new Promise(tcs.Task);
-            _ = Task.Run(async () =>
+            Async.Run(async () =>
             {
                 await Task.Delay(1);
                 tcs.TrySetResult();

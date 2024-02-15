@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- Required to have wwwroot added to the output and available via _content folder -->
+	<Import Project="Microsoft.AspNetCore.StaticWebAssets.props" Condition="Exists('$(MSBuildThisFileDirectory).\Microsoft.AspNetCore.StaticWebAssets.props')" />
+	
+	<PropertyGroup>
+		<WebWorkerPatchFramework Condition="'$(WebWorkerPatchFramework)' == ''">false</WebWorkerPatchFramework>
+		<WebWorkerBuildAssetsPath Condition="'$(WebWorkerBuildAssetsPath)' == ''">wwwroot</WebWorkerBuildAssetsPath>
+		<WebWorkerBuildOutputPath Condition="'$(WebWorkerBuildOutputPath)' == ''">$(Configuration)Extension</WebWorkerBuildOutputPath>
+		<!--  -->
+		<_DebugSpawnDevWebWorkersBuildTasks Condition="'$(_DebugSpawnDevWebWorkersBuildTasks)' == ''">false</_DebugSpawnDevWebWorkersBuildTasks>
+		<_WebWorkerBuildTasksAssembly Condition="'$(_WebWorkerBuildTasksAssembly)' == ''">$(MSBuildThisFileDirectory)..\tasks\netstandard2.0\SpawnDev.BlazorJS.WebWorkers.Build.dll</_WebWorkerBuildTasksAssembly>
+	</PropertyGroup>
+
+	<UsingTask TaskName="SpawnDev.BlazorJS.WebWorkers.Build.Tasks.ImportShimBlazorWASM" AssemblyFile="$(_WebWorkerBuildTasksAssembly)" />
+
+</Project>
