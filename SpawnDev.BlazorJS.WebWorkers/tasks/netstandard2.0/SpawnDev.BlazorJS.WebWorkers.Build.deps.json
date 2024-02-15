@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "SpawnDev.BlazorJS.WebWorkers.Build/1.0.0": {
+      "SpawnDev.BlazorJS.WebWorkers.Build/2.2.53": {
         "dependencies": {
           "Microsoft.Build.Utilities.Core": "17.8.3",
           "NETStandard.Library": "2.0.3",
@@ -235,7 +235,7 @@
     }
   },
   "libraries": {
-    "SpawnDev.BlazorJS.WebWorkers.Build/1.0.0": {
+    "SpawnDev.BlazorJS.WebWorkers.Build/2.2.53": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

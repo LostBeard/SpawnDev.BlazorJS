@@ -5,6 +5,7 @@
 		<LangVersion>10.0</LangVersion>
 		<OutDir>..\SpawnDev.BlazorJS.WebWorkers\tasks\netstandard2.0</OutDir>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<Version>2.2.53</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
