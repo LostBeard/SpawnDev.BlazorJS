@@ -59,9 +59,9 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
         _missedConnections.push(e.ports[0]);
     };
 } else if (globalThisTypeName == 'ServiceWorkerGlobalScope') {
-    // the install event handler keeps the install state alive long enough for Blazor to load using async methods
-    // without it importScripts would fail when used inside an awaited async function due to ServiceWorker constraints
-    // and Blazor would not load
+    // Starting Blazor requries using importScripts inside async functions
+    // e.waitUntil is used during the install event to allow importScripts inside async functions
+    // it is resolved after loading is complete
     let holdEvents = true;
     let missedServiceWorkerEventts = [];
     function handleMissedEvent(e) {
@@ -303,7 +303,7 @@ var initWebWorkerBlazor = async function () {
         if (!ret) ret = createProxiedObject({});
         return ret;
     }
-    // this method fixes 'dynamic import scripts' to work in an environment that does not support 'dynamic import scripts'
+    // this method patches 'dynamic import scripts' to work in an environment that does not support 'dynamic import scripts'
     // it is designed for and tested agaisnt the Blazor WASM runtime.
     // it may not work on other modules
     function fixModuleScript(jsStr, src) {

@@ -12,71 +12,89 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public HTMLMediaElement(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Constructor fro man ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
         public HTMLMediaElement(ElementReference elementReference) : base(elementReference) { }
-        // MediaStream, MediaSource, Blob, or File
-        public JSObject? SrcObject
-        {
-            get => JSRef.Get<JSObject>("srcObject");
-            set => JSRef.Set("srcObject", value);
-        }
-        public string? Src
-        {
-            get => JSRef.Get<string>("src");
-            set => JSRef.Set("src", value);
-        }
-        public double CurrentTime
-        {
-            get => JSRef.Get<double>("currentTime");
-            set => JSRef.Set("currentTime", value);
-        }
-        public double? Duration
-        {
-            get => JSRef.Get<double?>("duration");
-        }
 
-        public float Volume
-        {
-            get => JSRef.Get<float>("volume");
-            set => JSRef.Set("volume", value);
-        }
+        #region Properties
+        /// <summary>
+        /// A MediaStream representing the media to play or that has played in the current HTMLMediaElement, or null if not assigned.
+        /// </summary>
+        public JSObject? SrcObject { get => JSRef.Get<JSObject>("srcObject"); set => JSRef.Set("srcObject", value); }
+        public T? GetSrcObject<T>() => JSRef.Get<T>("srcObject");
+        /// <summary>
+        /// A string that reflects the src HTML attribute, which contains the URL of a media resource to use.
+        /// </summary>
+        public string? Src { get => JSRef.Get<string>("src"); set => JSRef.Set("src", value); }
+        /// <summary>
+        /// A double-precision floating-point value indicating the current playback time in seconds; if the media has not started to play and has not been seeked, this value is the media's initial playback time. Setting this value seeks the media to the new time. The time is specified relative to the media's timeline.
+        /// </summary>
+        public double CurrentTime { get => JSRef.Get<double>("currentTime"); set => JSRef.Set("currentTime", value); }
+        /// <summary>
+        /// A read-only double-precision floating-point value indicating the total duration of the media in seconds. If no media data is available, the returned value is NaN. If the media is of indefinite length (such as streamed live media, a WebRTC call's media, or similar), the value is +Infinity.
+        /// </summary>
+        public double? Duration => JSRef.Get<double?>("duration");
+        /// <summary>
+        /// A double indicating the audio volume, from 0.0 (silent) to 1.0 (loudest).
+        /// </summary>
+        public double Volume { get => JSRef.Get<double>("volume"); set => JSRef.Set("volume", value); }
         /// <summary>
         /// A boolean value that reflects the autoplay HTML attribute, indicating whether playback should automatically begin as soon as enough media is available to do so without interruption.
         /// </summary>
-        public bool AutoPlay
-        {
-            get => JSRef.Get<bool>("autoplay");
-            set => JSRef.Set("autoplay", value);
-        }
-        public bool Muted
-        {
-            get => JSRef.Get<bool>("muted");
-            set => JSRef.Set("muted", value);
-        }
-        public bool Paused
-        {
-            get => JSRef.Get<bool>("paused");
-            set => JSRef.Set("paused", value);
-        }
-        public bool Loop
-        {
-            get => JSRef.Get<bool>("loop");
-            set => JSRef.Set("loop", value);
-        }
-        public string? CurrentSrc
-        {
-            get => JSRef.Get<string?>("currentSrc");
-        }
-        public string? CrossOrigin
-        {
-            get => JSRef.Get<string?>("crossOrigin");
-            set => JSRef.Set("crossOrigin", value);
-        }
-        public T? GetSrcObject<T>() => JSRef.Get<T>("srcObject");
+        public bool AutoPlay { get => JSRef.Get<bool>("autoplay"); set => JSRef.Set("autoplay", value); }
+        /// <summary>
+        /// A boolean that determines whether audio is muted. true if the audio is muted and false otherwise.
+        /// </summary>
+        public bool Muted { get => JSRef.Get<bool>("muted"); set => JSRef.Set("muted", value); }
+        /// <summary>
+        /// Returns a boolean that indicates whether the media element is paused.
+        /// </summary>
+        public bool Paused => JSRef.Get<bool>("paused");
+        /// <summary>
+        /// A boolean that reflects the loop HTML attribute, which indicates whether the media element should start over when it reaches the end.
+        /// </summary>
+        public bool Loop { get => JSRef.Get<bool>("loop"); set => JSRef.Set("loop", value); }
+        /// <summary>
+        /// Returns a string with the absolute URL of the chosen media resource.
+        /// </summary>
+        public string? CurrentSrc => JSRef.Get<string?>("currentSrc");
+        /// <summary>
+        /// A string indicating the CORS setting for this media element.
+        /// </summary>
+        public string? CrossOrigin { get => JSRef.Get<string?>("crossOrigin"); set => JSRef.Set("crossOrigin", value); }
+
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Begins playback of the media.
+        /// </summary>
+        /// <returns></returns>
         public Task Play() => JSRef.CallVoidAsync("play");
+        /// <summary>
+        /// Pauses the media playback.
+        /// </summary>
         public void Pause() => JSRef.CallVoid("pause");
+        /// <summary>
+        /// Resets the media to the beginning and selects the best available source from the sources provided using the src attribute or the source element.
+        /// </summary>
         public void Load() => JSRef.CallVoid("load");
+        /// <summary>
+        /// Given a string specifying a MIME media type (potentially with the codecs parameter included), canPlayType() returns the string probably if the media should be playable, maybe if there's not enough information to determine whether the media will play or not, or an empty string if the media cannot be played.
+        /// </summary>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
         public string CanPlayType(string mimeType) => JSRef.Call<string>("canPlayType", mimeType);
+        /// <summary>
+        /// Returns MediaStream, captures a stream of the media content.
+        /// </summary>
+        /// <returns></returns>
         public MediaStream CaptureStream() => JSRef.Call<MediaStream>("capture");
+        #endregion
+
+        #region Events
 
         /// <summary>
         /// Fired when the resource was not fully loaded, but not as the result of an error.
@@ -98,15 +116,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fired when the media has become empty; for example, when the media has already been loaded (or partially loaded), and the HTMLMediaElement.load() method is called to reload it.
         /// </summary>
         public JSEventCallback OnEmptied { get => new JSEventCallback(JSRef, "emptied", "addEventListener", "removeEventListener"); set { } }
+        /// <summary>
+        /// Fired when the media encounters some initialization data indicating it is encrypted.
+        /// </summary>
         public JSEventCallback OnEncrypted { get => new JSEventCallback(JSRef, "encrypted", "addEventListener", "removeEventListener"); set { } }
         /// <summary>
         /// Fired when playback stops when end of the media (<audio> or <video>) is reached or because no further data is available.
         /// </summary>
         public JSEventCallback OnEnded { get => new JSEventCallback(JSRef, "ended", "addEventListener", "removeEventListener"); set { } }
-        /// <summary>
-        /// Fired when the resource could not be loaded due to an error.
-        /// </summary>
-        public JSEventCallback OnError { get => new JSEventCallback(JSRef, "error", "addEventListener", "removeEventListener"); set { } }
         /// <summary>
         /// Fired when the first frame of the media has finished loading.
         /// </summary>
@@ -171,6 +188,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fired when playback has stopped because of a temporary lack of data.
         /// </summary>
         public JSEventCallback OnWaiting { get => new JSEventCallback(JSRef, "waiting", "addEventListener", "removeEventListener"); set { } }
-
+        #endregion
     }
 }

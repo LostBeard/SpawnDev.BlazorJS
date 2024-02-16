@@ -2,7 +2,10 @@
 using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects {
-    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
+    /// <summary>
+    /// Implemented by the video element, the HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
+    /// </summary>
     public class HTMLVideoElement : HTMLMediaElement
     {
         /// <summary>
@@ -52,5 +55,17 @@ namespace SpawnDev.BlazorJS.JSObjects {
         /// A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
         /// </summary>
         public string Poster { get => JSRef.Get<string>("poster"); set => JSRef.Set("poster", value); }
+        /// <summary>
+        /// Indicates if the user agent should suggest the picture-in-picture to users, or not.
+        /// </summary>
+        public bool DisablePictureInPicture { get => JSRef.Get<bool>("disablePictureInPicture"); set => JSRef.Set("disablePictureInPicture", value); }
+        /// <summary>
+        /// A string that reflects the width HTML attribute, which specifies the width of the display area, in CSS pixels.
+        /// </summary>
+        public string? Width { get => JSRef.Get<string?>("width"); set => JSRef.Set("width", value); }
+        /// <summary>
+        /// A string that reflects the height HTML attribute, which specifies the height of the display area, in CSS pixels.
+        /// </summary>
+        public string? Height { get => JSRef.Get<string?>("height"); set => JSRef.Set("height", value); }
     }
 }

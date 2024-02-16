@@ -132,7 +132,7 @@ var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 ////object? tmpp = null;
 ////var oh = JsonSerializer.Serialize(tmpp);
 
-//var jsobjectAnalyzer = host.Services.GetRequiredService<JSObjectAnalyzer>();
+var jsobjectAnalyzer = host.Services.GetRequiredService<JSObjectAnalyzer>();
 
 //var javascriptDescriptorReader = new JavascriptObjectReflection(JS);
 
@@ -182,10 +182,10 @@ JS.Set("_testWorkerAndDispose", new ActionCallback(async () =>
     Console.WriteLine(ret);
 }));
 
-//JS.Set("_analyze", new ActionCallback<JSObject>(async (obj) =>
-//{
-//    jsobjectAnalyzer.Analyze(obj);
-//}));
+JS.Set("_analyze", new ActionCallback<JSObject>(async (obj) =>
+{
+    jsobjectAnalyzer.Analyze(obj);
+}));
 
 JS.Set("_log", new ActionCallback<JSObject>((obj) =>
 {

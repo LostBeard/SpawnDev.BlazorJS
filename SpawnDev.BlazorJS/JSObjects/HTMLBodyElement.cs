@@ -5,6 +5,9 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     public class HTMLBodyElement : HTMLElement
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
         public HTMLBodyElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Get an instance from an ElementReference

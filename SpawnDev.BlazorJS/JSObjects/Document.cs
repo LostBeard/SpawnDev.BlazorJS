@@ -56,6 +56,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>An Element object representing the first element in the document that matches the specified set of CSS selectors, or null is returned if there are no matches.</returns>
         public Element? QuerySelector(string selector) => JSRef.Call<Element?>("querySelector", selector);
         /// <summary>
+        /// The Document method querySelector() returns the first Element within the document that matches the specified selector, or group of selectors. If no matches are found, null is returned.
+        /// </summary>
+        /// <typeparam name="TElement"></typeparam>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public TElement? QuerySelector<TElement>(string selector) where TElement : Element => JSRef.Call<TElement?>("querySelector", selector);
+        /// <summary>
         /// The hasFocus() method of the Document interface returns a boolean value indicating whether the document or any element inside the document has focus. This method can be used to determine whether the active element in a document has focus.
         /// </summary>
         /// <returns></returns>

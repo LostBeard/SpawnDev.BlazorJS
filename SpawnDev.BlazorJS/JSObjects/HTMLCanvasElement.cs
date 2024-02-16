@@ -129,5 +129,16 @@ namespace SpawnDev.BlazorJS.JSObjects
             return hex;
         }
         #endregion
+
+        #region Events
+        /// <summary>
+        /// Fired if the user agent detects that the backing storage associated with a CanvasRenderingContext2D context is lost. 
+        /// </summary>
+        public JSEventCallback<Event> OnContextLost { get => new JSEventCallback<Event>(o => AddEventListener("contextlost", o), o => RemoveEventListener("contextlost", o)); set { /** required **/ } }
+        /// <summary>
+        /// Fired if the user agent restores the backing storage for a CanvasRenderingContext2D.
+        /// </summary>
+        public JSEventCallback<Event> OnContextRestored { get => new JSEventCallback<Event>(o => AddEventListener("contextrestored", o), o => RemoveEventListener("contextrestored", o)); set { /** required **/ } }
+        #endregion
     }
 }

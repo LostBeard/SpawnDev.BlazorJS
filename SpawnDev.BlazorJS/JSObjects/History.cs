@@ -4,6 +4,10 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     public class History : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public History(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns an Integer representing the number of elements in the session history, including the currently loaded page. For example, for a page loaded in a new tab this property returns 1
