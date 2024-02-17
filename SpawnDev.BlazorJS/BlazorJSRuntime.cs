@@ -17,7 +17,10 @@ namespace SpawnDev.BlazorJS
         public DedicatedWorkerGlobalScope? DedicateWorkerThis { get; private set; } = null;
         public SharedWorkerGlobalScope? SharedWorkerThis { get; private set; } = null;
         public ServiceWorkerGlobalScope? ServiceWorkerThis { get; private set; } = null;
-        public string GlobalThisTypeName { get; private set; }
+        /// <summary>
+        /// globalThis.constructor?.name ?? ""
+        /// </summary>
+        public string GlobalThisTypeName { get; private set; } = "";
         public JSObject GlobalThis { get; private set; }
         public bool IsWindow => GlobalThis is Window;
         public bool IsWorker => IsDedicatedWorkerGlobalScope || IsSharedWorkerGlobalScope || IsServiceWorkerGlobalScope;
@@ -25,8 +28,11 @@ namespace SpawnDev.BlazorJS
         public bool IsSharedWorkerGlobalScope => GlobalThis is SharedWorkerGlobalScope;
         public bool IsServiceWorkerGlobalScope => GlobalThis is ServiceWorkerGlobalScope;
         public GlobalScope GlobalScope { get; private set; } = GlobalScope.None;
+        /// <summary>
+        /// A new Guid instance id generated when the app starts
+        /// </summary>
         public string InstanceId { get; }
-        Performance Performance { get; }
+        Performance? Performance { get; }
         /// <summary>
         /// The crossOriginIsolated read-only property returns a boolean value that indicates whether the website is in a cross-origin isolation state. A website is in a cross-origin isolated state, when the response header Cross-Origin-Opener-Policy has the value same-origin and the Cross-Origin-Embedder-Policy header has the value require-corp or credentialless
         /// </summary>
@@ -71,13 +77,24 @@ namespace SpawnDev.BlazorJS
         internal BlazorJSRuntime()
         {
             InstanceId = Guid.NewGuid().ToString();
-            GlobalThisTypeName = Get<string>("globalThis.constructor.name");
+            if (IsUndefined("globalThis.constructor") && !IsUndefined("window"))
+            {
+                // this happens in Firefox context scripts. They are running in a Window global scope
+                // globalThis is not a Window but has a window object
+            }
+            else
+            {
+                GlobalThisTypeName = Get<string>("globalThis.constructor.name");
+            }
             GlobalScope = GlobalScope.None;
             switch (GlobalThisTypeName)
             {
                 case nameof(Window):
-                    WindowThis = Get<Window>("globalThis");
-                    GlobalThis = WindowThis;
+                    // In Firefox extension content mode window !== globalThis, but globalThis.constructor.name is patched to say 'Window' (instead of 'undefined')
+                    WindowThis = Get<Window>("window");
+                    GlobalThis = Get<Window>("globalThis");
+                    //WindowThis = Get<Window>("globalThis");
+                    //GlobalThis = WindowThis;
                     GlobalScope = GlobalScope.Window;
                     Performance = WindowThis.Performance;
                     StartUpTime = Performance.Now();
@@ -105,6 +122,8 @@ namespace SpawnDev.BlazorJS
                     break;
                 default:
                     GlobalThis = Get<JSObject>("globalThis");
+                    Performance = Get<Performance?>("performance");
+                    StartUpTime = Performance?.Now() ?? 0;
                     break;
             }
             
@@ -117,12 +136,17 @@ namespace SpawnDev.BlazorJS
             }
 #endif
         }
-
+        /// <summary>
+        /// Time elapsed until BlazorJSRuntime is initialized.
+        /// </summary>
         public double StartUpTime { get; private set; }
+        /// <summary>
+        /// Time elapsed until all background services have been started. Before page load.
+        /// </summary>
         public double ReadyTime { get; internal set; }
         internal void SetReady()
         {
-            ReadyTime = Performance.Now();
+            ReadyTime = Performance?.Now() ?? 0;
         }
         public bool IsDisplayModeStandalone()
         {

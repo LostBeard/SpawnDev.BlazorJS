@@ -3,10 +3,6 @@ using SpawnDev.BlazorJS.Toolbox;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
-    public static class ObjectExtensions
-    {
-        public static void AsyncRun(this object _this, Func<Task> asyncFunc) => _ = asyncFunc();
-    }
     public class ServiceWorkerEventHandler : IAsyncBackgroundService, IDisposable
     {
         protected BlazorJSRuntime JS;

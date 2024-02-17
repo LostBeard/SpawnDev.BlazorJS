@@ -4,10 +4,19 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using static SpawnDev.BlazorJS.IServiceCollectionExtensions;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace SpawnDev.BlazorJS
 {
+    public class BlazorJSRunOptions
+    {
+        /// <summary>
+        /// If ServiceOnlyMode is true, Blazor will not load any components when running in a Window global scope<br />
+        /// Singleton services that implement IBackgroundService or IAsyncBackgroundService will be started<br />
+        /// ServiceOnlyMode is automatically enabled when not running in a Window global scope<br />
+        /// This can be useful when running an extension background page (Ex. Firefox browser extension)
+        /// </summary>
+        public bool ServiceOnlyMode { get; set; }
+    }
     public interface IBackgroundService
     {
 
@@ -417,16 +426,18 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// BlazorJSRunAsync() is a scope aware replacement for RunAsync().<br />
         /// RunAsync() will be called internally but only when running in a Window global scope to prevent components from loading in Worker scopes.<br />
+        /// This also prevent Blazor from trying to change the current location<br />
         /// BlazorJSRunAsync() also automatically starts IBackgroundService services, IAsyncBackgroundService services<br />
         /// and singletons services registered with a GlobalScope enum value that is compatible the current GlobalScope.<br />
         /// </summary>
         /// <param name="_this"></param>
+        /// <param name="serviceOnlyMode">Disable component loading in a Window global scope.</param>
         /// <returns></returns>
-        public static async Task BlazorJSRunAsync(this WebAssemblyHost _this)
+        public static async Task BlazorJSRunAsync(this WebAssemblyHost _this, bool serviceOnlyMode = false)
         {
             await _this.StartBackgroundServices();
             BlazorJSRuntime.JS.SetReady();
-            if (BlazorJSRuntime.JS.IsWindow)
+            if (BlazorJSRuntime.JS.IsWindow && !serviceOnlyMode)
             {
 #if DEBUG && true
                 Console.WriteLine($"BlazorJSRunAsync mode: Default");

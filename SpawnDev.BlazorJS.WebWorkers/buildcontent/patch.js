@@ -35,6 +35,10 @@ if (!globalThis.blazorConfig.blazorBaseURI) {
         return uri.toString();
     })();
 }
+if (typeof globalThis.constructor.name === 'undefined' && globalThis.window) {
+    // Running in Firefox extension content mode
+    globalThis.constructor.name = 'Window';
+}
 // sets the document.baseURI to Blazor app's base url
 if (globalThis.constructor.name !== 'Window' && globalThis.document) {
     globalThis.document.baseURI = globalThis.blazorConfig.blazorBaseURI;
