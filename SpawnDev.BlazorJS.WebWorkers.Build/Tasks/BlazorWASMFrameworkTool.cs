@@ -34,14 +34,14 @@ namespace SpawnDev.BlazorJS.WebWorkers.Build.Tasks
             {
                 throw new Exception("_framework directory not found");
             }
-            Console.WriteLine($"frameworkPath: [{FrameworkDir}]");
+            //Console.WriteLine($"frameworkPath: [{FrameworkDir}]");
             var dotnetJSPublishPath = Path.Combine(FrameworkDir, "dotnet.js");
             IsPublishBuild = File.Exists(dotnetJSPublishPath);
             if (!IsPublishBuild && !File.Exists(dotnetJSPublishPath))
             {
                 throw new Exception("dotnet.js not found");
             }
-            Console.WriteLine($"IsPublishBuild: {IsPublishBuild}");
+            //Console.WriteLine($"IsPublishBuild: {IsPublishBuild}");
             if (!File.Exists(PatchJSPath))
             {
                 throw new Exception("patch.js not found");
@@ -72,7 +72,7 @@ namespace SpawnDev.BlazorJS.WebWorkers.Build.Tasks
             var patchedTag = "// FRAMEWORK-PATCHED";
             foreach (var jsFile in frameworkDirJSFiles)
             {
-                Console.WriteLine(jsFile);
+                //Console.WriteLine(jsFile);
                 var filename = Path.GetFileName(jsFile);
                 var js = File.ReadAllText(jsFile);
                 if (js.Contains(patchedTag))
@@ -170,7 +170,7 @@ namespace SpawnDev.BlazorJS.WebWorkers.Build.Tasks
                     js = patchedTag + newLine + js;
                     // save patched version
                     File.WriteAllText(jsFile, js);
-                    Console.WriteLine($"Patched js file: {filename}");
+                    //Console.WriteLine($"Patched js file: {filename}");
                 }
             }
         }

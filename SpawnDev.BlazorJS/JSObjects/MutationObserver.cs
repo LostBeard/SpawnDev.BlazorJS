@@ -9,7 +9,15 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class MutationObserver : JSObject
     {
         #region Constructors
-        public MutationObserver(ActionCallback<MutationRecord[], MutationObserver> callback) : base(JS.New(nameof(MutationObserver), callback)) { }
+        /// <summary>
+        /// Creates a new instance of MutationObserver
+        /// </summary>
+        /// <param name="callback"></param>
+        public MutationObserver(ActionCallback<Array<MutationRecord>, MutationObserver> callback) : base(JS.New(nameof(MutationObserver), callback)) { }
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MutationObserver(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 

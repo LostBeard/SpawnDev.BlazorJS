@@ -5,17 +5,17 @@
 	</PropertyGroup>
 
 	<Target Name="WebWorkerBuildBeforeTargetsBeforeBuild" BeforeTargets="BeforeBuild">
-		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers BeforeTargets BeforeBuild" />
+		<!-- <Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers BeforeTargets BeforeBuild" /> -->
 	</Target>
 	<Target Name="WebWorkerBuildAfterTargetsBeforeBuild" AfterTargets="BeforeBuild">
-		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets BeforeBuild" />
+		<!-- <Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets BeforeBuild" /> -->
 	</Target>
 	
 	<Target Name="WebWorkerBuildBeforeTargetsAfterBuild" BeforeTargets="AfterBuild">
-		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers BeforeTargets AfterBuild" />
+		<!-- <Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers BeforeTargets AfterBuild" /> -->
 	</Target>
 	<Target Name="WebWorkerBuildAfterTargetsAfterBuild" AfterTargets="AfterBuild">
-		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets AfterBuild" />
+		<!-- <Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets AfterBuild" /> -->
 		<PropertyGroup>
 			<_WebWorkerBuild_Project_Assets_Directory>$(ProjectDir)$(WebWorkerBuildAssetsPath)</_WebWorkerBuild_Project_Assets_Directory>
 			<_WebWorkerBuild_Project_Assets_ManifestJson_FilePath>$(_WebWorkerBuild_Project_Assets_Directory)\manifest.json</_WebWorkerBuild_Project_Assets_ManifestJson_FilePath>
@@ -33,10 +33,10 @@
 	</Target>
 
 	<Target Name="WebWorkerBuildBeforeTargetsBuild" BeforeTargets="Build">
-		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers BeforeTargets Build" />
+		<!-- <Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers BeforeTargets Build" /> -->
 	</Target>
 	<Target Name="WebWorkerBuildAfterTargetsBuild" AfterTargets="Build">
-		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets Build" />
+		<!-- <Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets Build" /> -->
 		<ImportShimBlazorWASM
 			PatchFramework="$(WebWorkerPatchFramework)"
 			StaticWebAsset="@(StaticWebAsset)"
@@ -52,10 +52,10 @@
 	</Target>
 
 	<Target Name="WebWorkerBuildBeforeTargetsAfterPublish" BeforeTargets="AfterPublish">
-		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers BeforeTargets AfterPublish" />
+		<!-- <Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers BeforeTargets AfterPublish" /> -->
 	</Target>
 	<Target Name="WebWorkerBuildAfterTargetsAfterPublish" AfterTargets="AfterPublish">
-		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets AfterPublish" />
+		<!-- <Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets AfterPublish" /> -->
 		<ImportShimBlazorWASM
 			PatchFramework="$(WebWorkerPatchFramework)"
 			StaticWebAsset="@(StaticWebAsset)"
@@ -71,6 +71,6 @@
 	</Target>
 
 	<Target Name="WebWorkerBuildAfterTargetsAfterClean" AfterTargets="AfterClean">
-		<Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets AfterClean" />
+		<!-- <Message Importance="high" Text="********************** SpawnDev.BlazorJS.WebWorkers AfterTargets AfterClean" /> -->
 	</Target>
 </Project>

@@ -43,7 +43,7 @@ namespace SpawnDev.BlazorJS.WebWorkers.Build.Tasks
 
         public override bool Execute()
         {
-            Log.LogWarning($"**********************************  ImportShimBlazorWASM.Execute  **********************************");
+            // Log.LogWarning($"**********************************  ImportShimBlazorWASM.Execute  **********************************");
             if (DebugSpawnDevWebWorkersBuildTasks)
             {
                 System.Diagnostics.Debugger.Launch();
