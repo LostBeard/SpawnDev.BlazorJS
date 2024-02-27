@@ -3,10 +3,12 @@ using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+    /// <summary>
+    /// The HTMLMediaElement interface adds to HTMLElement the properties and methods needed to support basic media-related capabilities that are common to audio and video.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+    /// </summary>
     public class HTMLMediaElement : HTMLElement
     {
-
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -41,6 +43,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public double Volume { get => JSRef.Get<double>("volume"); set => JSRef.Set("volume", value); }
         /// <summary>
+        /// A double indicating the default playback rate for the media.
+        /// </summary>
+        public double DefaultPlaybackRate { get => JSRef.Get<double>("defaultPlaybackRate"); set => JSRef.Set("defaultPlaybackRate", value); }
+        /// <summary>
+        /// A double that indicates the rate at which the media is being played back.
+        /// </summary>
+        public double PlaybackRate { get => JSRef.Get<double>("playbackRate"); set => JSRef.Set("playbackRate", value); }
+        /// <summary>
         /// A boolean value that reflects the autoplay HTML attribute, indicating whether playback should automatically begin as soon as enough media is available to do so without interruption.
         /// </summary>
         public bool AutoPlay { get => JSRef.Get<bool>("autoplay"); set => JSRef.Set("autoplay", value); }
@@ -49,9 +59,25 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public bool Muted { get => JSRef.Get<bool>("muted"); set => JSRef.Set("muted", value); }
         /// <summary>
+        /// A boolean that reflects the muted HTML attribute, which indicates whether the media element's audio output should be muted by default.
+        /// </summary>
+        public bool DefaultMuted { get => JSRef.Get<bool>("defaultMuted"); set => JSRef.Set("defaultMuted", value); }
+        /// <summary>
+        /// A boolean that sets or returns the remote playback state, indicating whether the media element is allowed to have a remote playback UI.
+        /// </summary>
+        public bool DisableRemotePlayback { get => JSRef.Get<bool>("disableRemotePlayback"); set => JSRef.Set("disableRemotePlayback", value); }
+        /// <summary>
+        /// A boolean that reflects the controls HTML attribute, indicating whether user interface items for controlling the resource should be displayed.
+        /// </summary>
+        public bool Controls { get => JSRef.Get<bool>("controls"); set => JSRef.Set("controls", value); }
+        /// <summary>
         /// Returns a boolean that indicates whether the media element is paused.
         /// </summary>
         public bool Paused => JSRef.Get<bool>("paused");
+        /// <summary>
+        /// Returns a boolean that indicates whether the media element has finished playing.
+        /// </summary>
+        public bool Ended => JSRef.Get<bool>("ended");
         /// <summary>
         /// A boolean that reflects the loop HTML attribute, which indicates whether the media element should start over when it reaches the end.
         /// </summary>
@@ -64,7 +90,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A string indicating the CORS setting for this media element.
         /// </summary>
         public string? CrossOrigin { get => JSRef.Get<string?>("crossOrigin"); set => JSRef.Set("crossOrigin", value); }
-
+        /// <summary>
+        /// Returns a MediaError object for the most recent error, or null if there has not been an error.
+        /// </summary>
+        public MediaError? Error => JSRef.Get<MediaError?>("error");
+        /// <summary>
+        /// Returns a unsigned short (enumeration) indicating the readiness state of the media.<br />
+        /// 0 HAVE_NOTHING - No information is available about the media resource.<br />
+        /// 1 HAVE_METADATA - Enough of the media resource has been retrieved that the metadata attributes are initialized. Seeking will no longer raise an exception.<br />
+        /// 2 HAVE_CURRENT_DATA	- Data is available for the current playback position, but not enough to actually play more than one frame.<br />
+        /// 3 HAVE_FUTURE_DATA - Data for the current playback position as well as for at least a little bit of time into the future is available (in other words, at least two frames of video, for example).<br />
+        /// 4 HAVE_ENOUGH_DATA - Enough data is available—and the download rate is high enough—that the media can be played through to the end without interruption.<br />
+        /// </summary>
+        public ushort ReadyState => JSRef.Get<ushort>("readyState");
         #endregion
 
         #region Methods

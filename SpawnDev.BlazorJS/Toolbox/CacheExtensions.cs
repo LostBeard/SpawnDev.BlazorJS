@@ -229,8 +229,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);
             if (response == null) return null;
-            using var headers = response.JSRef.Get<JSObject>("headers");
-            var contentLength = headers.JSRef.Get<string>("content-length");
+            using var headers = response.JSRef!.Get<JSObject>("headers");
+            var contentLength = headers.JSRef!.Get<string>("content-length");
             if (!string.IsNullOrEmpty(contentLength) && int.TryParse(contentLength, out var val))
             {
                 return val;

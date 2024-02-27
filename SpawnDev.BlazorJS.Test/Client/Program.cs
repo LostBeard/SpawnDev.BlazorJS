@@ -199,6 +199,10 @@ JS.Set("_return", new FuncCallback<JSObject, JSObject>((obj) =>
 }));
 
 
+JS.Set("__testt", new ActionCallback(() =>
+{
+    JS.Set("_fruit", new Dictionary<string, object> { { "apples_good", true } });
+}));
 
 JS.Set("_testIterator", new ActionCallback(async () =>
 {

@@ -1,8 +1,30 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// Element.checkVisibility options
+    /// </summary>
+    public class CheckVisibilityOptions
+    {
+        /// <summary>
+        /// true to check if the element content-visibility property has (or inherits) the value auto, and it is currently skipping its rendering. false by default.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? ContentVisibilityAuto { get; set; }
+        /// <summary>
+        /// true to check if the element opacity property has (or inherits) a value of 0. false by default.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? OpacityProperty { get; set; }
+        /// <summary>
+        /// true to check if the element is invisible due to the value of its visibility property. false by default.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? VisibilityProperty { get; set; }
+    }
     // TODO - finish
     /// <summary>
     /// Element is the most general base class from which all element objects (i.e. objects that represent elements) in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element.<br />
@@ -24,6 +46,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Methods
+        /// <summary>
+        /// The checkVisibility() method of the Element interface checks whether the element is visible.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public bool CheckVisibility(CheckVisibilityOptions? options = null) => options == null ? JSRef.Call<bool>("checkVisibility") : JSRef.Call<bool>("checkVisibility", options);
         /// <summary>
         /// Returns the size of an element and its position relative to the viewport.
         /// </summary>
