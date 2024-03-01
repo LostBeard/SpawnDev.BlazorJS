@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class HTMLElement : Element
     {
+        /// <summary>
+        /// Explicit conversion from ElementReference to HTMLElement
+        /// </summary>
+        /// <param name="elRef"></param>
         public static explicit operator HTMLElement(ElementReference elRef) => new HTMLElement(elRef);
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string? AccessKeyLabel => JSRef.Get<string?>("accessKeyLabel");
         /// <summary>
-        /// A boolean value reflecting the autofocus HTML global attribute, which indicates whether the control should be focused when the page loads, or when dialog or popover become shown if specified in an element inside <dialog> elements or elements whose popover attribute is set.
+        /// A boolean value reflecting the autofocus HTML global attribute, which indicates whether the control should be focused when the page loads, or when dialog or popover become shown if specified in an element inside dialog elements or elements whose popover attribute is set.
         /// </summary>
         public bool AutoFocus { get => JSRef.Get<bool>("autoFocus"); set => JSRef.Set("autoFocus", value); }
         /// <summary>
@@ -93,7 +97,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public double OffsetWidth => JSRef.Get<double>("offsetWidth");
         /// <summary>
-        /// Represents the rendered text content of a node and its descendants. As a getter, it is the same as HTMLElement.innerText (it represents the rendered text content of an element and its descendants). As a setter, it replaces the selected node and its contents with the given value, converting any line breaks into <br> elements.
+        /// Represents the rendered text content of a node and its descendants. As a getter, it is the same as HTMLElement.innerText (it represents the rendered text content of an element and its descendants). As a setter, it replaces the selected node and its contents with the given value, converting any line breaks into br elements.
         /// </summary>
         public string OuterText { get => JSRef.Get<string>("outerText"); set => JSRef.Set("outerText", value); }
         /// <summary>
