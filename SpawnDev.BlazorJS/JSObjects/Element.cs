@@ -4,27 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    /// <summary>
-    /// Element.checkVisibility options
-    /// </summary>
-    public class CheckVisibilityOptions
-    {
-        /// <summary>
-        /// true to check if the element content-visibility property has (or inherits) the value auto, and it is currently skipping its rendering. false by default.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? ContentVisibilityAuto { get; set; }
-        /// <summary>
-        /// true to check if the element opacity property has (or inherits) a value of 0. false by default.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? OpacityProperty { get; set; }
-        /// <summary>
-        /// true to check if the element is invisible due to the value of its visibility property. false by default.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? VisibilityProperty { get; set; }
-    }
     // TODO - finish
     /// <summary>
     /// Element is the most general base class from which all element objects (i.e. objects that represent elements) in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element.<br />
@@ -46,6 +25,25 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Methods
+        /// <summary>
+        /// The Element method querySelectorAll() returns a static (not live) NodeList representing a list of elements matching the specified group of selectors which are descendants of the element on which the method was called.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public NodeList QuerySelectorAll(string selector) => JSRef.Call<NodeList>("querySelectorAll", selector);
+        /// <summary>
+        /// The querySelector() method of the Element interface returns the first element that is a descendant of the element on which it is invoked that matches the specified group of selectors.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public Element? QuerySelector(string selector) => JSRef.Call<Element?>("querySelector", selector);
+        /// <summary>
+        /// The querySelector() method of the Element interface returns the first element that is a descendant of the element on which it is invoked that matches the specified group of selectors.
+        /// </summary>
+        /// <typeparam name="TElement"></typeparam>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public TElement? QuerySelector<TElement>(string selector) where TElement : Element => JSRef.Call<TElement?>("querySelector", selector);
         /// <summary>
         /// The checkVisibility() method of the Element interface checks whether the element is visible.
         /// </summary>
@@ -94,9 +92,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Removes the element from the children list of its parent.
         /// </summary>
         public void Remove() => JSRef.CallVoid("remove");
+        /// <summary>
+        /// The Element.attachShadow() method attaches a shadow DOM tree to the specified element and returns a reference to its ShadowRoot.<br />
+        /// Note that you can't attach a shadow root to every type of element. There are some that can't have a shadow DOM for security reasons (for example a element).
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public ShadowRoot AttachShadow(AttachShadowRootOptions options) => JSRef.Call<ShadowRoot>("attachShadow", options);
         #endregion
 
         #region Properties
+        /// <summary>
+        /// The Element.shadowRoot read-only property represents the shadow root hosted by the element.<br />
+        /// Use Element.attachShadow() to add a shadow root to an existing element.
+        /// </summary>
+        public ShadowRoot ShadowRoot => JSRef.Get<ShadowRoot>("shadowRoot");
         /// <summary>
         /// Returns a DOMTokenList containing the list of class attributes.
         /// </summary>
@@ -109,6 +119,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns ClassNames from ClassName split on spaces
         /// </summary>
         public string[] ClassNames => ClassName.Split(' ').ToArray();
+        /// <summary>
+        /// The id property of the Element interface represents the element's identifier, reflecting the id global attribute.
+        /// </summary>
+        public string Id { get => JSRef.Get<string>("id"); set => JSRef.Set("id", value); }
         /// <summary>
         /// Returns a number representing the scroll view height of an element.
         /// </summary>

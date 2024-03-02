@@ -5,6 +5,7 @@ using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+
     /// <summary>
     /// The Document interface represents any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/Document<br />
@@ -62,6 +63,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="selector"></param>
         /// <returns></returns>
         public TElement? QuerySelector<TElement>(string selector) where TElement : Element => JSRef.Call<TElement?>("querySelector", selector);
+        /// <summary>
+        /// Returns an object reference to the identified element.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Element? GetElementById(string id) => JSRef.Call<Element?>("getElementById", id);
+        /// <summary>
+        /// Returns an object reference to the identified element.
+        /// </summary>
+        /// <typeparam name="TElement"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public TElement? GetElementById<TElement>(string id) where TElement : Element => JSRef.Call<TElement?>("getElementById", id);
         /// <summary>
         /// The hasFocus() method of the Document interface returns a boolean value indicating whether the document or any element inside the document has focus. This method can be used to determine whether the active element in a document has focus.
         /// </summary>
