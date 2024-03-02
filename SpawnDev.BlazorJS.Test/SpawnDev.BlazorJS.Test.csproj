@@ -4,22 +4,22 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.57</Version>
+		<Version>2.2.58</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="Markdig" Version="0.34.0" />
 		<PackageReference Include="Markdown.ColorCode" Version="2.1.0" />
-		<PackageReference Include="Radzen.Blazor" Version="4.23.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all" />
+		<PackageReference Include="Radzen.Blazor" Version="4.25.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.2" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj" />
 
-		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.57" />
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.58" />
 	</ItemGroup>
 
 	<!-- SpawnDev.BlazorJS.WebWorkers config -->
