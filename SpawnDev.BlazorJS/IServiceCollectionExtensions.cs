@@ -489,6 +489,7 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
         /// <param name="serviceType">The type of the service to register and the implementation to use.</param>
+        /// <param name="autoStartMode">GlobalScope flags indicating in which scopes the service should be started automatically</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
         /// <seealso cref="ServiceLifetime.Singleton"/>
         public static IServiceCollection AddSingleton(

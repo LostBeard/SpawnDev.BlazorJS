@@ -14,7 +14,7 @@
         /// </summary>
         public Union<ArrayBuffer, TypedArray, DataView>? Counter { get; set; }
         /// <summary>
-        /// A Number — the number of bits in the counter block that are used for the actual counter. The counter must be big enough that it doesn't wrap: if the message is n blocks and the counter is m bits long, then the following must be true: n <= 2^m. The NIST SP800-38A standard, which defines CTR, suggests that the counter should occupy half of the counter block (see Appendix B.2), so for AES it would be 64.
+        /// A Number — the number of bits in the counter block that are used for the actual counter. The counter must be big enough that it doesn't wrap: if the message is n blocks and the counter is m bits long, then the following must be true: n &lt;= 2^m. The NIST SP800-38A standard, which defines CTR, suggests that the counter should occupy half of the counter block (see Appendix B.2), so for AES it would be 64.
         /// </summary>
         public int Length { get; set; }
     }

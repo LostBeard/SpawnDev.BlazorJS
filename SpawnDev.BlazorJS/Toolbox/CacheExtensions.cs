@@ -104,11 +104,6 @@ namespace SpawnDev.BlazorJS.Toolbox
             return CachePathType.NOT_FOUND;
         }
 
-        /// <summary>
-        /// Returns a list of absolute
-        /// </summary>
-        /// <param name="hostname"></param>
-        /// <returns></returns>
         public static async Task<List<string>> GetAllHostFiles(this Cache _this, string hostname, bool returnAbsolutePaths = false)
         {
             var ret = new List<string>();

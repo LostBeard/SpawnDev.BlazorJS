@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Deserialization constructor
         /// </summary>
-        /// <param name="_ref"></param
+        /// <param name="_ref"></param>
         public AudioNode(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         /// <summary>

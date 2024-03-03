@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The HTMLAnchorElement interface represents hyperlink elements and provides special properties and methods (beyond those of the regular HTMLElement object interface that they inherit from) for manipulating the layout and presentation of such elements. This interface corresponds to <a> element; not to be confused with <link>, which is represented by HTMLLinkElement)
+    /// The HTMLAnchorElement interface represents hyperlink elements and provides special properties and methods (beyond those of the regular HTMLElement object interface that they inherit from) for manipulating the layout and presentation of such elements. This interface corresponds to a element; not to be confused with link, which is represented by HTMLLinkElement)
     /// </summary>
     public class HTMLAnchorElement : HTMLElement
     {
@@ -51,7 +51,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Methods
-        public string ToString() => JSRef.Call<string>("toString");
+        public override string ToString() => JSRef.Call<string>("toString");
         #endregion
     }
 }

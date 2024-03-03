@@ -159,7 +159,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback OnEncrypted { get => new JSEventCallback(JSRef, "encrypted", "addEventListener", "removeEventListener"); set { } }
         /// <summary>
-        /// Fired when playback stops when end of the media (<audio> or <video>) is reached or because no further data is available.
+        /// Fired when playback stops when end of the media (audio or video) is reached or because no further data is available.
         /// </summary>
         public JSEventCallback OnEnded { get => new JSEventCallback(JSRef, "ended", "addEventListener", "removeEventListener"); set { } }
         /// <summary>

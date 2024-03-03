@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The HTMLSlotElement interface of the Shadow DOM API enables access to the name and assigned nodes of an HTML <slot> element.<br />
+    /// The HTMLSlotElement interface of the Shadow DOM API enables access to the name and assigned nodes of an HTML slot element.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLSlotElement<br />
     /// TODO - finish interface
     /// </summary>

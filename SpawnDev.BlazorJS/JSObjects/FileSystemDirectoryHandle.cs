@@ -80,7 +80,7 @@ namespace SpawnDev.BlazorJS.JSObjects {
             FileSystemDirectoryHandle tmp = JSRefCopy<FileSystemDirectoryHandle>();
             path = path.Trim('/');
             if (string.IsNullOrEmpty(path) || path == ".") return tmp;
-            FileSystemHandle ret = null;
+            FileSystemHandle? ret = null;
             var pparts = path.Split("/");
             for (var i = 0; i < pparts.Length; i++) {
                 var p = pparts[i];

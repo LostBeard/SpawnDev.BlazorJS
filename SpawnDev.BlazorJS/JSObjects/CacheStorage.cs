@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a Promise that resolves to true if a Cache object matching the cacheName exists.
         /// </summary>
-        /// <param name="url"></param>
+        /// <param name="cacheName"></param>
         /// <returns></returns>
         public Task<bool> Has(string cacheName) => JSRef.CallAsync<bool>("has", cacheName);
         /// <summary>

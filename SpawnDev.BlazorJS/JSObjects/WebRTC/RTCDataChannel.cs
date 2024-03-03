@@ -84,7 +84,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <summary>
         /// Uses BinaryType to determine the type of data to send. Chrome only does ArrayBuffer, Firefox prefers Blob (not sure if supports ArrayBuffer att)
         /// </summary>
-        /// <param name="arrayBuffer">Source data... will be converted to Blob if BinaryType == "blob"</param>
+        /// <param name="blob">Source data</param>
         public async Task SendAsBinaryType(Blob blob)
         {
             if (BinaryType == "blob")
@@ -150,7 +150,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public void Send(DataView data) => JSRef.CallVoid("send", data);
         /// <summary>
         /// A string specifying the type of object that should be used to represent binary data received on the RTCDataChannel. Values are the same as allowed on the WebSocket.binaryType property: blob if Blob objects are being used, or arraybuffer if ArrayBuffer objects are being used. The default is blob<br>
-        /// NOTE: Chrome, as of 2023-07-01, does not support sending blobs and will return "arraybuffer" for this value... which can be used to decide what value types to send<br></br>
+        /// NOTE: Chrome, as of 2023-07-01, does not support sending blobs and will return "arraybuffer" for this value... which can be used to decide what value types to send</br>
         /// CONT: An ArrayBuffer sent from Chrome will be received as a Blob in Firefox... Firefox returns "blob" for this property.
         /// </summary>
         public string BinaryType { get => JSRef.Get<string>("binaryType"); set => JSRef.Set("binaryType", value); }

@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Creates a new MediaRecorder object, given a MediaStream to record. Options are available to do things like set the container's MIME type (such as "video/webm" or "video/mp4") and the bit rates of the audio and video tracks or a single overall bit rate.
         /// </summary>
-        /// <param name="stream">The MediaStream that will be recorded. This source media can come from a stream created using navigator.MediaDevices.getUserMedia() or from an <audio>, <video> or <canvas> element.</param>
+        /// <param name="stream">The MediaStream that will be recorded. This source media can come from a stream created using navigator.MediaDevices.getUserMedia() or from an audio, video or canvas element.</param>
         public MediaRecorder(MediaStream stream) : base(JS.New(nameof(MediaRecorder), stream)) { }
         /// <summary>
         /// Creates a new MediaRecorder object, given a MediaStream to record. Options are available to do things like set the container's MIME type (such as "video/webm" or "video/mp4") and the bit rates of the audio and video tracks or a single overall bit rate.

@@ -49,27 +49,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Methods
-        public void AddRange() => JSRef.CallVoid("addRange");
-        public void Collapse() => JSRef.CallVoid("collapse");
-        public void CollapseToEnd() => JSRef.CallVoid("collapseToEnd");
-        public void CollapseToStart() => JSRef.CallVoid("collapseToStart");
-        public void ContainsNode() => JSRef.CallVoid("containsNode");
-        public void DeleteFromDocument() => JSRef.CallVoid("deleteFromDocument");
-        public void Empty() => JSRef.CallVoid("empty");
-        public void Extend() => JSRef.CallVoid("extend");
-        public void GetRangeAt() => JSRef.CallVoid("getRangeAt");
-        public void Modify() => JSRef.CallVoid("modify");
-        public void RemoveAllRanges() => JSRef.CallVoid("removeAllRanges");
-        public void RemoveRange() => JSRef.CallVoid("removeRange");
-        public void SelectAllChildren() => JSRef.CallVoid("selectAllChildren");
-        public void SetBaseAndExtent() => JSRef.CallVoid("setBaseAndExtent");
-        public void SetPosition() => JSRef.CallVoid("setPosition");
-        public void ToString() => JSRef.CallVoid("toString");
-        #endregion
-
-        #region Events
-        // Existing
-        // New
+        //public void AddRange() => JSRef.CallVoid("addRange");
+        //public void Collapse() => JSRef.CallVoid("collapse");
+        //public void CollapseToEnd() => JSRef.CallVoid("collapseToEnd");
+        //public void CollapseToStart() => JSRef.CallVoid("collapseToStart");
+        //public void ContainsNode() => JSRef.CallVoid("containsNode");
+        //public void DeleteFromDocument() => JSRef.CallVoid("deleteFromDocument");
+        //public void Empty() => JSRef.CallVoid("empty");
+        //public void Extend() => JSRef.CallVoid("extend");
+        //public void GetRangeAt() => JSRef.CallVoid("getRangeAt");
+        //public void Modify() => JSRef.CallVoid("modify");
+        //public void RemoveAllRanges() => JSRef.CallVoid("removeAllRanges");
+        //public void RemoveRange() => JSRef.CallVoid("removeRange");
+        //public void SelectAllChildren() => JSRef.CallVoid("selectAllChildren");
+        //public void SetBaseAndExtent() => JSRef.CallVoid("setBaseAndExtent");
+        //public void SetPosition() => JSRef.CallVoid("setPosition");
+        public override string ToString() => JSRef.Call<string>("toString");
         #endregion
     }
 }

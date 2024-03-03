@@ -36,7 +36,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Document Document => JSRef.Get<Document>("document");
         /// <summary>
-        /// The Window.frameElement property returns the element (such as <iframe> or <object>) in which the window is embedded.
+        /// The Window.frameElement property returns the element (such as iframe or object) in which the window is embedded.
         /// </summary>
         public Element? FrameElement => JSRef.Get<Element?>("frameElement");
         /// <summary>
@@ -60,7 +60,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public LaunchQueue LaunchQueue => JSRef.Get<LaunchQueue>("launchQueue");
         /// <summary>
-        /// Returns the number of frames (either <frame> or <iframe> elements) in the window.
+        /// Returns the number of frames (either frame or iframe elements) in the window.
         /// </summary>
         public int Length => JSRef.Get<int>("length");
         /// <summary>
@@ -149,7 +149,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Crypto Crypto => JSRef.Get<Crypto>("crypto");
         /// <summary>
-        /// Returns a boolean that indicates whether the current document was loaded inside a credentialless <iframe>. See IFrame credentialless for more details.
+        /// Returns a boolean that indicates whether the current document was loaded inside a credentialless iframe. See IFrame credentialless for more details.
         /// </summary>
         public bool Credentialless => JSRef.Get<bool>("credentialless");
         /// <summary>
@@ -261,7 +261,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<DeviceOrientationEvent> OnDeviceOrientationAbsolute { get => new JSEventCallback<DeviceOrientationEvent>(o => AddEventListener("deviceorientationabsolute", o), o => RemoveEventListener("deviceorientationabsolute", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
-        /// The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (<script defer src="…"> and <script type="module">) have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading.
+        /// The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (script defer src="…" and script type="module") have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading.
         /// </summary>
         public JSEventCallback OnDOMContentLoaded { get => new JSEventCallback(o => AddEventListener("DOMContentLoaded", o), o => RemoveEventListener("DOMContentLoaded", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>

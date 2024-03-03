@@ -15,7 +15,6 @@ namespace SpawnDev.BlazorJS.WebWorkers.Build.Tasks
         public string PatchDir { get; private set; }
         public string PatchJSPath { get; private set; }
         public bool UseMinifiedPatch { get; set; } = false;
-        string ExeDir;
         public BlazorWASMFrameworkTool(string wwwrootPath, string contentPath)
         {
             PatchDir = Path.GetFullPath(contentPath);

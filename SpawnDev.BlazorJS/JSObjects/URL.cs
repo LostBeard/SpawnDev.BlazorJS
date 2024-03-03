@@ -13,12 +13,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The URL() constructor returns a newly created URL object representing the URL defined by the parameters.
         /// </summary>
-        /// <param name="url">A string or any other object with a stringifier — including, for example, an <a> or <area> element — that represents an absolute or relative URL. If url is a relative URL, base is required, and will be used as the base URL. If url is an absolute URL, a given base will be ignored.</param>
+        /// <param name="url">A string or any other object with a stringifier — including, for example, an a or area element — that represents an absolute or relative URL. If url is a relative URL, base is required, and will be used as the base URL. If url is an absolute URL, a given base will be ignored.</param>
         public URL(string url) : base(JS.New(nameof(URL), url)) { }
         /// <summary>
         /// The URL() constructor returns a newly created URL object representing the URL defined by the parameters.
         /// </summary>
-        /// <param name="url">A string or any other object with a stringifier — including, for example, an <a> or <area> element — that represents an absolute or relative URL. If url is a relative URL, base is required, and will be used as the base URL. If url is an absolute URL, a given base will be ignored.</param>
+        /// <param name="url">A string or any other object with a stringifier — including, for example, an a or area element — that represents an absolute or relative URL. If url is a relative URL, base is required, and will be used as the base URL. If url is an absolute URL, a given base will be ignored.</param>
         /// <param name="baseHref">A string representing the base URL to use in cases where url is a relative URL. If not specified, it defaults to undefined</param>
         public URL(string url, string baseHref) : base(JS.New(nameof(URL), url , baseHref)) { }
         public URL(IJSInProcessObjectReference _ref) : base(_ref) { }

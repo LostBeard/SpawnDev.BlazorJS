@@ -35,7 +35,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The abort() method of the AbortController interface aborts a DOM request before it has completed. This is able to abort fetch requests, the consumption of any response bodies, or streams.
         /// </summary>
-        /// <param name="reason">The reason why the operation was aborted, which can be any JavaScript value. If not specified, the reason is set to "AbortError" DOMException.param>
+        /// <param name="reason">The reason why the operation was aborted, which can be any JavaScript value. If not specified, the reason is set to "AbortError" DOMException.</param>
         public void Abort(object reason) => JSRef.CallVoid("abort", reason);
         #endregion
     }

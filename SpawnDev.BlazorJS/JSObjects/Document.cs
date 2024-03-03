@@ -27,6 +27,12 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Methods
         /// <summary>
+        /// Creates a text node.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public Text CreateTextNode(string data) => JSRef.Call<Text>("createTextNode", data);
+        /// <summary>
         /// In an HTML document, the document.createElement() method creates the HTML element specified by tagName, or an HTMLUnknownElement if tagName isn't recognized.
         /// </summary>
         /// <typeparam name="T">Element type</typeparam>
@@ -112,11 +118,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Element? ActiveElement => JSRef.Get<Element?>("activeElement");
         /// <summary>
-        /// The head read-only property of the Document interface returns the <head> element of the current document.
+        /// The head read-only property of the Document interface returns the head element of the current document.
         /// </summary>
         public HTMLHeadElement? Head => JSRef.Get<HTMLHeadElement?>("head");
         /// <summary>
-        /// The Document.body property represents the <body> or <frameset> node of the current document, or null if no such element exists.
+        /// The Document.body property represents the body or frameset node of the current document, or null if no such element exists.
         /// </summary>
         public HTMLBodyElement? Body => JSRef.Get<HTMLBodyElement?>("body");
         /// <summary>
@@ -136,7 +142,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string? Doctype => JSRef.Get<string?>("doctype");
         /// <summary>
-        /// Document.documentElement returns the Element that is the root element of the document (for example, the <html> element for HTML documents).
+        /// Document.documentElement returns the Element that is the root element of the document (for example, the html element for HTML documents).
         /// </summary>
         public Element? DocumentElement => JSRef.Get<Element?>("documentElement");
         /// <summary>
@@ -192,7 +198,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string Referrer => JSRef.Get<string>("referrer");
         /// <summary>
-        /// The document.title property gets or sets the current title of the document. When present, it defaults to the value of the <title>.
+        /// The document.title property gets or sets the current title of the document. When present, it defaults to the value of the title.
         /// </summary>
         public string Title { get => JSRef.Get<string>("title"); set => JSRef.Set("title", value);  }
         /// <summary>
@@ -205,7 +211,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         // TODO - event callback types need to be checked/added
         public JSEventCallback OnFullscreenChange { get => new JSEventCallback(o => AddEventListener("fullscreenchange", o), o => RemoveEventListener("fullscreenchange", o)); set { } }
         public JSEventCallback OnAbort { get => new JSEventCallback(o => AddEventListener("abort", o), o => RemoveEventListener("abort", o)); set { /** required **/ } }
-        public JSEventCallback OnAnimationend { get => new JSEventCallback(o => AddEventListener("animationend", o), o => RemoveEventListener("animationend", o)); set { /** required **/ } }
+        public JSEventCallback OnAnimationEnd { get => new JSEventCallback(o => AddEventListener("animationend", o), o => RemoveEventListener("animationend", o)); set { /** required **/ } }
         public JSEventCallback OnAnimationIteration { get => new JSEventCallback(o => AddEventListener("animationiteration", o), o => RemoveEventListener("animationiteration", o)); set { /** required **/ } }
         public JSEventCallback OnAnimationStart { get => new JSEventCallback(o => AddEventListener("animationstart", o), o => RemoveEventListener("animationstart", o)); set { /** required **/ } }
         public JSEventCallback OnAuxClick { get => new JSEventCallback(o => AddEventListener("auxclick", o), o => RemoveEventListener("auxclick", o)); set { /** required **/ } }

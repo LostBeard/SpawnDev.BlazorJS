@@ -14,6 +14,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// Adds WebWorkerService as a singleton service
         /// </summary>
         /// <param name="_this"></param>
+        /// <param name="configureCallback"></param>
         /// <returns></returns>
         public static IServiceCollection AddWebWorkerService(this IServiceCollection _this, Action<WebWorkerService>? configureCallback = null)
         {

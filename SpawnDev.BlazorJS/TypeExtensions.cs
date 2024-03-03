@@ -79,7 +79,7 @@ namespace SpawnDev.BlazorJS
             {
                 if (type.IsGenericType)
                 {
-                    var name = type.Name.Contains("`") ? type.Name : type.DeclaringType.Name;
+                    var name = type.Name.Contains("`") ? type.Name : (type.DeclaringType?.Name ?? "");
                     if (name.Contains("`"))
                     {
                         var generics = type.GetGenericArguments();

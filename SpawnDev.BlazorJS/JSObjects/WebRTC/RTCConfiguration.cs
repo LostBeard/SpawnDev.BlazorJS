@@ -1,8 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JSObjects.WebRTC {
-    public class RTCConfiguration {
+namespace SpawnDev.BlazorJS.JSObjects.WebRTC
+{
+    public class RTCConfiguration
+    {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<RTCIceServer> IceServers { get; set; } = null;
+        public List<RTCIceServer>? IceServers { get; set; }
     }
 }
