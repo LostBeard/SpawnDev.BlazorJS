@@ -45,6 +45,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public TElement? QuerySelector<TElement>(string selector) where TElement : Element => JSRef.Call<TElement?>("querySelector", selector);
         /// <summary>
+        /// The closest() method of the Element interface traverses the element and its parents (heading toward the document root) until it finds a node that matches the specified CSS selector.
+        /// </summary>
+        /// <typeparam name="TElement"></typeparam>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public TElement? Closest<TElement>(string selector) where TElement : Element => JSRef.Call<TElement?>("closest", selector);
+        /// <summary>
         /// The checkVisibility() method of the Element interface checks whether the element is visible.
         /// </summary>
         /// <param name="options"></param>
@@ -87,7 +94,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Inserts a set of Node objects or strings in the children list of the Element's parent, just after the Element.
         /// </summary>
         /// <param name="nodes"></param>
-        public void After(params Node[] nodes) => JSRef.CallApplyVoid("after", nodes);
+        public void After(params Union<Node, string>[] nodes) => JSRef.CallApplyVoid("after", nodes);
+        /// <summary>
+        /// The Element.append() method inserts a set of Node objects or string objects after the last child of the Element. String objects are inserted as equivalent Text nodes.
+        /// </summary>
+        /// <param name="nodes"></param>
+        public void Append(params Union<Node, string>[] nodes) => JSRef.CallApplyVoid("append", nodes);
+        /// <summary>
+        /// The Element.before() method inserts a set of Node or string objects in the children list of this Element's parent, just before this Element. String objects are inserted as equivalent Text nodes.
+        /// </summary>
+        /// <param name="nodes"></param>
+        public void Before(params Union<Node, string>[] nodes) => JSRef.CallApplyVoid("before", nodes);
         /// <summary>
         /// Removes the element from the children list of its parent.
         /// </summary>
