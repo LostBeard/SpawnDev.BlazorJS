@@ -1,8 +1,11 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
 
-namespace SpawnDev.BlazorJS.JsonConverters {
-    public static class ActionExtensions {
-        internal class FNDisposables {
+namespace SpawnDev.BlazorJS.JsonConverters
+{
+    public static class ActionExtensions
+    {
+        internal class FNDisposables
+        {
             public Callback? Callback { get; set; }
             public Function? Function { get; set; }
         }
@@ -10,19 +13,24 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         static Dictionary<object, Callback> _callbacks = new Dictionary<object, Callback>();
         static Dictionary<object, Function> _functions = new Dictionary<object, Function>();
 
-        public static void DisposeJS(this Action _this) {
-            if (_callbacks.TryGetValue(_this, out var callback)) {
+        public static void DisposeJS(this Action _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
                 _callbacks.Remove(_this);
                 callback.Dispose();
             }
-            if (_functions.TryGetValue(_this, out var fn)) {
+            if (_functions.TryGetValue(_this, out var fn))
+            {
                 _functions.Remove(_this);
                 fn.Dispose();
             }
         }
-        public static Callback? CallbackGet(this Action _this, bool allowCreate = false) {
+        public static Callback? CallbackGet(this Action _this, bool allowCreate = false)
+        {
             var ret = _callbacks.TryGetValue(_this, out var callback) ? callback : null;
-            if (ret == null && allowCreate) {
+            if (ret == null && allowCreate)
+            {
                 ret = Callback.Create(_this);
                 _callbacks.Add(_this, ret);
             }
@@ -32,17 +40,21 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public static Function? FunctionGet(this Action _this) => _functions.TryGetValue(_this, out var fn) ? fn : null;
         public static void FunctionSet(this Action _this, Function fn) => _functions.Add(_this, fn);
 
-        public static void DisposeJS<T0>(this Action<T0> _this) {
-            if (_callbacks.TryGetValue(_this, out var callback)) {
+        public static void DisposeJS<T0>(this Action<T0> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
                 _callbacks.Remove(_this);
                 callback.Dispose();
             }
-            if (_functions.TryGetValue(_this, out var fn)) {
+            if (_functions.TryGetValue(_this, out var fn))
+            {
                 _functions.Remove(_this);
                 fn.Dispose();
             }
         }
-        public static Callback? CallbackGet<T0>(this Action<T0> _this, bool allowCreate = false) {
+        public static Callback? CallbackGet<T0>(this Action<T0> _this, bool allowCreate = false)
+        {
             if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
             if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
             return ret;
@@ -51,17 +63,21 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public static Function? FunctionGet<T0>(this Action<T0> _this) => _functions.TryGetValue(_this, out var fn) ? fn : null;
         public static void FunctionSet<T0>(this Action<T0> _this, Function fn) => _functions.Add(_this, fn);
 
-        public static void DisposeJS<T0, T1>(this Action<T0, T1> _this) {
-            if (_callbacks.TryGetValue(_this, out var callback)) {
+        public static void DisposeJS<T0, T1>(this Action<T0, T1> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
                 _callbacks.Remove(_this);
                 callback.Dispose();
             }
-            if (_functions.TryGetValue(_this, out var fn)) {
+            if (_functions.TryGetValue(_this, out var fn))
+            {
                 _functions.Remove(_this);
                 fn.Dispose();
             }
         }
-        public static Callback? CallbackGet<T0, T1>(this Action<T0, T1> _this, bool allowCreate = false) {
+        public static Callback? CallbackGet<T0, T1>(this Action<T0, T1> _this, bool allowCreate = false)
+        {
             if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
             if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
             return ret;
@@ -70,17 +86,21 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public static Function? FunctionGet<T0, T1>(this Action<T0, T1> _this) => _functions.TryGetValue(_this, out var fn) ? fn : null;
         public static void FunctionSet<T0, T1>(this Action<T0, T1> _this, Function fn) => _functions.Add(_this, fn);
 
-        public static void DisposeJS<T0, T1, T2>(this Action<T0, T1, T2> _this) {
-            if (_callbacks.TryGetValue(_this, out var callback)) {
+        public static void DisposeJS<T0, T1, T2>(this Action<T0, T1, T2> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
                 _callbacks.Remove(_this);
                 callback.Dispose();
             }
-            if (_functions.TryGetValue(_this, out var fn)) {
+            if (_functions.TryGetValue(_this, out var fn))
+            {
                 _functions.Remove(_this);
                 fn.Dispose();
             }
         }
-        public static Callback? CallbackGet<T0, T1, T2>(this Action<T0, T1, T2> _this, bool allowCreate = false) {
+        public static Callback? CallbackGet<T0, T1, T2>(this Action<T0, T1, T2> _this, bool allowCreate = false)
+        {
             if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
             if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
             return ret;
@@ -89,17 +109,21 @@ namespace SpawnDev.BlazorJS.JsonConverters {
         public static Function? FunctionGet<T0, T1, T2>(this Action<T0, T1, T2> _this) => _functions.TryGetValue(_this, out var fn) ? fn : null;
         public static void FunctionSet<T0, T1, T2>(this Action<T0, T1, T2> _this, Function fn) => _functions.Add(_this, fn);
 
-        public static void DisposeJS<T0, T1, T2, T3>(this Action<T0, T1, T2, T3> _this) {
-            if (_callbacks.TryGetValue(_this, out var callback)) {
+        public static void DisposeJS<T0, T1, T2, T3>(this Action<T0, T1, T2, T3> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
                 _callbacks.Remove(_this);
                 callback.Dispose();
             }
-            if (_functions.TryGetValue(_this, out var fn)) {
+            if (_functions.TryGetValue(_this, out var fn))
+            {
                 _functions.Remove(_this);
                 fn.Dispose();
             }
         }
-        public static Callback? CallbackGet<T0, T1, T2, T3>(this Action<T0, T1, T2, T3> _this, bool allowCreate = false) {
+        public static Callback? CallbackGet<T0, T1, T2, T3>(this Action<T0, T1, T2, T3> _this, bool allowCreate = false)
+        {
             if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
             if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
             return ret;

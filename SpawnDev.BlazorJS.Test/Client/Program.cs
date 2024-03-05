@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Radzen;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Diagnostics;
