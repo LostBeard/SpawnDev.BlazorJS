@@ -1,11 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using System.ComponentModel;
-using System.Reflection.Metadata;
-using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-
     /// <summary>
     /// The Document interface represents any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/Document<br />
@@ -209,7 +205,68 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Events
         // TODO - event callback types need to be checked/added
-        public JSEventCallback OnFullscreenChange { get => new JSEventCallback(o => AddEventListener("fullscreenchange", o), o => RemoveEventListener("fullscreenchange", o)); set { } }
+        /// <summary>
+        /// The copy event fires when the user initiates a copy action through the browser's user interface.
+        /// </summary>
+        public JSEventCallback<ClipboardEvent> OnCopy { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("copy", o), o => RemoveEventListener("copy", o)); set { /** required **/ } }
+        /// <summary>
+        /// The cut event fires when the user initiates a cut action through the browser's user interface.
+        /// </summary>
+        public JSEventCallback<ClipboardEvent> OnCut { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("cut", o), o => RemoveEventListener("cut", o)); set { /** required **/ } }
+        /// <summary>
+        /// The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (<script defer src="…"> and <script type="module">) have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading.
+        /// </summary>
+        public JSEventCallback<ClipboardEvent> OnDOMContentLoaded { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("DOMContentLoaded", o), o => RemoveEventListener("DOMContentLoaded", o)); set { /** required **/ } }
+        /// <summary>
+        /// The fullscreenchange event is fired immediately after the browser switches into or out of fullscreen mode.
+        /// </summary>
+        public JSEventCallback<Event> OnFullscreenChange { get => new JSEventCallback<Event>(o => AddEventListener("fullscreenchange", o), o => RemoveEventListener("fullscreenchange", o)); set { } }
+        /// <summary>
+        /// The fullscreenerror event is fired when the browser cannot switch to fullscreen mode.
+        /// </summary>
+        public JSEventCallback<Event> OnFullscreenError { get => new JSEventCallback<Event>(o => AddEventListener("fullscreenerror", o), o => RemoveEventListener("fullscreenerror", o)); set { /** required **/ } }
+        /// <summary>
+        /// The paste event fires when the user initiates a paste action through the browser's user interface.
+        /// </summary>
+        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("paste", o), o => RemoveEventListener("paste", o)); set { /** required **/ } }
+        /// <summary>
+        /// The pointerlockchange event is fired when the pointer is locked/unlocked.
+        /// </summary>
+        public JSEventCallback<Event> OnPointerLockChange { get => new JSEventCallback<Event>(o => AddEventListener("pointerlockchange", o), o => RemoveEventListener("pointerlockchange", o)); set { /** required **/ } }
+        /// <summary>
+        /// The pointerlockerror event is fired when locking the pointer failed (for technical reasons or because the permission was denied).
+        /// </summary>
+        public JSEventCallback<Event> OnPointerLockError { get => new JSEventCallback<Event>(o => AddEventListener("pointerlockerror", o), o => RemoveEventListener("pointerlockerror", o)); set { /** required **/ } }
+        /// <summary>
+        /// The prerenderingchange event is fired on a prerendered document when it is activated (i.e. the user views the page).
+        /// </summary>
+        public JSEventCallback<Event> OnPrerenderingChange { get => new JSEventCallback<Event>(o => AddEventListener("prerenderingchange", o), o => RemoveEventListener("prerenderingchange", o)); set { /** required **/ } }
+        /// <summary>
+        /// The readystatechange event is fired when the readyState attribute of a document has changed.
+        /// </summary>
+        public JSEventCallback<Event> OnReadyStateChange { get => new JSEventCallback<Event>(o => AddEventListener("readystatechange", o), o => RemoveEventListener("readystatechange", o)); set { /** required **/ } }
+        /// <summary>
+        /// The scroll event fires when the document view has been scrolled. To detect when scrolling has completed, see the Document: scrollend event. For element scrolling, see Element: scroll event.
+        /// </summary>
+        public JSEventCallback<Event> OnScroll { get => new JSEventCallback<Event>(o => AddEventListener("scroll", o), o => RemoveEventListener("scroll", o)); set { /** required **/ } }
+        /// <summary>
+        /// The scrollend event fires when the document view has completed scrolling. Scrolling is considered completed when the scroll position has no more pending updates and the user has completed their gesture.
+        /// </summary>
+        public JSEventCallback<Event> OnScrollEnd { get => new JSEventCallback<Event>(o => AddEventListener("scrollend", o), o => RemoveEventListener("scrollend", o)); set { /** required **/ } }
+        /// <summary>
+        /// The securitypolicyviolation event is fired when a Content Security Policy is violated.
+        /// </summary>
+        public JSEventCallback<SecurityPolicyViolationEvent> OnSecurityPolicyViolation { get => new JSEventCallback<SecurityPolicyViolationEvent>(o => AddEventListener("securitypolicyviolation", o), o => RemoveEventListener("securitypolicyviolation", o)); set { /** required **/ } }
+        /// <summary>
+        /// The selectionchange event of the Selection API is fired when the current Selection of a Document is changed.
+        /// </summary>
+        public JSEventCallback<Event> OnSelectionChange { get => new JSEventCallback<Event>(o => AddEventListener("selectionchange", o), o => RemoveEventListener("selectionchange", o)); set { /** required **/ } }
+        /// <summary>
+        /// The visibilitychange event is fired at the document when the contents of its tab have become visible or have been hidden.
+        /// </summary>
+        public JSEventCallback<Event> OnVisibilityChange { get => new JSEventCallback<Event>(o => AddEventListener("visibilitychange", o), o => RemoveEventListener("visibilitychange", o)); set { /** required **/ } }
+
+        // bubbleable events
         public JSEventCallback OnAbort { get => new JSEventCallback(o => AddEventListener("abort", o), o => RemoveEventListener("abort", o)); set { /** required **/ } }
         public JSEventCallback OnAnimationEnd { get => new JSEventCallback(o => AddEventListener("animationend", o), o => RemoveEventListener("animationend", o)); set { /** required **/ } }
         public JSEventCallback OnAnimationIteration { get => new JSEventCallback(o => AddEventListener("animationiteration", o), o => RemoveEventListener("animationiteration", o)); set { /** required **/ } }
@@ -233,9 +290,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback OnContextLost { get => new JSEventCallback(o => AddEventListener("contextlost", o), o => RemoveEventListener("contextlost", o)); set { /** required **/ } }
         public JSEventCallback OnContextMenu { get => new JSEventCallback(o => AddEventListener("contextmenu", o), o => RemoveEventListener("contextmenu", o)); set { /** required **/ } }
         public JSEventCallback OnContextRestored { get => new JSEventCallback(o => AddEventListener("contextrestored", o), o => RemoveEventListener("contextrestored", o)); set { /** required **/ } }
-        public JSEventCallback OnCopy { get => new JSEventCallback(o => AddEventListener("copy", o), o => RemoveEventListener("copy", o)); set { /** required **/ } }
         public JSEventCallback OnCueChange { get => new JSEventCallback(o => AddEventListener("cuechange", o), o => RemoveEventListener("cuechange", o)); set { /** required **/ } }
-        public JSEventCallback OnCut { get => new JSEventCallback(o => AddEventListener("cut", o), o => RemoveEventListener("cut", o)); set { /** required **/ } }
         public JSEventCallback OnDblClick { get => new JSEventCallback(o => AddEventListener("dblclick", o), o => RemoveEventListener("dblclick", o)); set { /** required **/ } }
         public JSEventCallback OnDrag { get => new JSEventCallback(o => AddEventListener("drag", o), o => RemoveEventListener("drag", o)); set { /** required **/ } }
         public JSEventCallback OnDragEnd { get => new JSEventCallback(o => AddEventListener("dragend", o), o => RemoveEventListener("dragend", o)); set { /** required **/ } }
@@ -251,7 +306,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback OnFocus { get => new JSEventCallback(o => AddEventListener("focus", o), o => RemoveEventListener("focus", o)); set { /** required **/ } }
         public JSEventCallback OnFormData { get => new JSEventCallback(o => AddEventListener("formdata", o), o => RemoveEventListener("formdata", o)); set { /** required **/ } }
         public JSEventCallback OnFreeze { get => new JSEventCallback(o => AddEventListener("freeze", o), o => RemoveEventListener("freeze", o)); set { /** required **/ } }
-        public JSEventCallback OnFullscreenError { get => new JSEventCallback(o => AddEventListener("fullscreenerror", o), o => RemoveEventListener("fullscreenerror", o)); set { /** required **/ } }
         public JSEventCallback OnGotPointerCapture { get => new JSEventCallback(o => AddEventListener("gotpointercapture", o), o => RemoveEventListener("gotpointercapture", o)); set { /** required **/ } }
         public JSEventCallback OnInput { get => new JSEventCallback(o => AddEventListener("input", o), o => RemoveEventListener("input", o)); set { /** required **/ } }
         public JSEventCallback OnInvalid { get => new JSEventCallback(o => AddEventListener("invalid", o), o => RemoveEventListener("invalid", o)); set { /** required **/ } }
@@ -271,7 +325,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback OnMouseOver { get => new JSEventCallback(o => AddEventListener("mouseover", o), o => RemoveEventListener("mouseover", o)); set { /** required **/ } }
         public JSEventCallback OnMouseUp { get => new JSEventCallback(o => AddEventListener("mouseup", o), o => RemoveEventListener("mouseup", o)); set { /** required **/ } }
         public JSEventCallback OnMouseWheel { get => new JSEventCallback(o => AddEventListener("mousewheel", o), o => RemoveEventListener("mousewheel", o)); set { /** required **/ } }
-        public JSEventCallback OnPaste { get => new JSEventCallback(o => AddEventListener("paste", o), o => RemoveEventListener("paste", o)); set { /** required **/ } }
         public JSEventCallback OnPause { get => new JSEventCallback(o => AddEventListener("pause", o), o => RemoveEventListener("pause", o)); set { /** required **/ } }
         public JSEventCallback OnPlay { get => new JSEventCallback(o => AddEventListener("play", o), o => RemoveEventListener("play", o)); set { /** required **/ } }
         public JSEventCallback OnPlaying { get => new JSEventCallback(o => AddEventListener("playing", o), o => RemoveEventListener("playing", o)); set { /** required **/ } }
@@ -279,28 +332,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback OnPointerDown { get => new JSEventCallback(o => AddEventListener("pointerdown", o), o => RemoveEventListener("pointerdown", o)); set { /** required **/ } }
         public JSEventCallback OnPointerEnter { get => new JSEventCallback(o => AddEventListener("pointerenter", o), o => RemoveEventListener("pointerenter", o)); set { /** required **/ } }
         public JSEventCallback OnPointerLeave { get => new JSEventCallback(o => AddEventListener("pointerleave", o), o => RemoveEventListener("pointerleave", o)); set { /** required **/ } }
-        public JSEventCallback OnPointerLockChange { get => new JSEventCallback(o => AddEventListener("pointerlockchange", o), o => RemoveEventListener("pointerlockchange", o)); set { /** required **/ } }
-        public JSEventCallback OnPointerLockError { get => new JSEventCallback(o => AddEventListener("pointerlockerror", o), o => RemoveEventListener("pointerlockerror", o)); set { /** required **/ } }
         public JSEventCallback OnPointerMove { get => new JSEventCallback(o => AddEventListener("pointermove", o), o => RemoveEventListener("pointermove", o)); set { /** required **/ } }
         public JSEventCallback OnPointerOut { get => new JSEventCallback(o => AddEventListener("pointerout", o), o => RemoveEventListener("pointerout", o)); set { /** required **/ } }
         public JSEventCallback OnPointerOver { get => new JSEventCallback(o => AddEventListener("pointerover", o), o => RemoveEventListener("pointerover", o)); set { /** required **/ } }
         public JSEventCallback OnPointerRawUpdate { get => new JSEventCallback(o => AddEventListener("pointerrawupdate", o), o => RemoveEventListener("pointerrawupdate", o)); set { /** required **/ } }
-        public JSEventCallback OnPointerUp { get => new JSEventCallback(o => AddEventListener("pointerup", o), o => RemoveEventListener("pointerup", o)); set { /** required **/ } }
-        public JSEventCallback OnPrerenderingChange { get => new JSEventCallback(o => AddEventListener("prerenderingchange", o), o => RemoveEventListener("prerenderingchange", o)); set { /** required **/ } }
+        public JSEventCallback OnPointerUp { get => new JSEventCallback(o => AddEventListener("pointerup", o), o => RemoveEventListener("pointerup", o)); set { /** required **/ } }        
         public JSEventCallback OnProgress { get => new JSEventCallback(o => AddEventListener("progress", o), o => RemoveEventListener("progress", o)); set { /** required **/ } }
-        public JSEventCallback OnRateChange { get => new JSEventCallback(o => AddEventListener("ratechange", o), o => RemoveEventListener("ratechange", o)); set { /** required **/ } }
-        public JSEventCallback OnReadyStateChange { get => new JSEventCallback(o => AddEventListener("readystatechange", o), o => RemoveEventListener("readystatechange", o)); set { /** required **/ } }
+        public JSEventCallback OnRateChange { get => new JSEventCallback(o => AddEventListener("ratechange", o), o => RemoveEventListener("ratechange", o)); set { /** required **/ } }        
         public JSEventCallback OnReset { get => new JSEventCallback(o => AddEventListener("reset", o), o => RemoveEventListener("reset", o)); set { /** required **/ } }
         public JSEventCallback OnResize { get => new JSEventCallback(o => AddEventListener("resize", o), o => RemoveEventListener("resize", o)); set { /** required **/ } }
-        public JSEventCallback OnResume { get => new JSEventCallback(o => AddEventListener("resume", o), o => RemoveEventListener("resume", o)); set { /** required **/ } }
-        public JSEventCallback OnScroll { get => new JSEventCallback(o => AddEventListener("scroll", o), o => RemoveEventListener("scroll", o)); set { /** required **/ } }
-        public JSEventCallback OnScrollEnd { get => new JSEventCallback(o => AddEventListener("scrollend", o), o => RemoveEventListener("scrollend", o)); set { /** required **/ } }
-        public JSEventCallback OnSearch { get => new JSEventCallback(o => AddEventListener("search", o), o => RemoveEventListener("search", o)); set { /** required **/ } }
-        public JSEventCallback OnSecurityPolicyViolation { get => new JSEventCallback(o => AddEventListener("securitypolicyviolation", o), o => RemoveEventListener("securitypolicyviolation", o)); set { /** required **/ } }
+        public JSEventCallback OnResume { get => new JSEventCallback(o => AddEventListener("resume", o), o => RemoveEventListener("resume", o)); set { /** required **/ } }                
+        public JSEventCallback OnSearch { get => new JSEventCallback(o => AddEventListener("search", o), o => RemoveEventListener("search", o)); set { /** required **/ } }        
         public JSEventCallback OnSeeked { get => new JSEventCallback(o => AddEventListener("seeked", o), o => RemoveEventListener("seeked", o)); set { /** required **/ } }
         public JSEventCallback OnSeeking { get => new JSEventCallback(o => AddEventListener("seeking", o), o => RemoveEventListener("seeking", o)); set { /** required **/ } }
-        public JSEventCallback OnSelect { get => new JSEventCallback(o => AddEventListener("select", o), o => RemoveEventListener("select", o)); set { /** required **/ } }
-        public JSEventCallback OnSelectionChange { get => new JSEventCallback(o => AddEventListener("selectionchange", o), o => RemoveEventListener("selectionchange", o)); set { /** required **/ } }
+        public JSEventCallback OnSelect { get => new JSEventCallback(o => AddEventListener("select", o), o => RemoveEventListener("select", o)); set { /** required **/ } }        
         public JSEventCallback OnSlotChange { get => new JSEventCallback(o => AddEventListener("slotchange", o), o => RemoveEventListener("slotchange", o)); set { /** required **/ } }
         public JSEventCallback OnStalled { get => new JSEventCallback(o => AddEventListener("stalled", o), o => RemoveEventListener("stalled", o)); set { /** required **/ } }
         public JSEventCallback OnSubmit { get => new JSEventCallback(o => AddEventListener("submit", o), o => RemoveEventListener("submit", o)); set { /** required **/ } }
@@ -310,8 +355,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback OnTransitionCancel { get => new JSEventCallback(o => AddEventListener("transitioncancel", o), o => RemoveEventListener("transitioncancel", o)); set { /** required **/ } }
         public JSEventCallback OnTransitionEnd { get => new JSEventCallback(o => AddEventListener("transitionend", o), o => RemoveEventListener("transitionend", o)); set { /** required **/ } }
         public JSEventCallback OnTransitionRun { get => new JSEventCallback(o => AddEventListener("transitionrun", o), o => RemoveEventListener("transitionrun", o)); set { /** required **/ } }
-        public JSEventCallback OnTransitionStart { get => new JSEventCallback(o => AddEventListener("transitionstart", o), o => RemoveEventListener("transitionstart", o)); set { /** required **/ } }
-        public JSEventCallback OnVisibilityChange { get => new JSEventCallback(o => AddEventListener("visibilitychange", o), o => RemoveEventListener("visibilitychange", o)); set { /** required **/ } }
+        public JSEventCallback OnTransitionStart { get => new JSEventCallback(o => AddEventListener("transitionstart", o), o => RemoveEventListener("transitionstart", o)); set { /** required **/ } }        
         public JSEventCallback OnVolumeChange { get => new JSEventCallback(o => AddEventListener("volumechange", o), o => RemoveEventListener("volumechange", o)); set { /** required **/ } }
         public JSEventCallback OnWaiting { get => new JSEventCallback(o => AddEventListener("waiting", o), o => RemoveEventListener("waiting", o)); set { /** required **/ } }
         public JSEventCallback OnWebkitAnimationEnd { get => new JSEventCallback(o => AddEventListener("webkitanimationend", o), o => RemoveEventListener("webkitanimationend", o)); set { /** required **/ } }

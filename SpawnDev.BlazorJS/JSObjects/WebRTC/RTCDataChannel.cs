@@ -1,15 +1,19 @@
 ﻿using Microsoft.JSInterop;
-using System.Threading.Channels;
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     // https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel
     // https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample
     /// <summary>
-    /// The RTCDataChannel interface represents a network channel which can be used for bidirectional peer-to-peer transfers of arbitrary data. Every data channel is associated with an RTCPeerConnection, and each peer connection can have up to a theoretical maximum of 65,534 data channels (the actual limit may vary from browser to browser).
+    /// The RTCDataChannel interface represents a network channel which can be used for bidirectional peer-to-peer transfers of arbitrary data. Every data channel is associated with an RTCPeerConnection, and each peer connection can have up to a theoretical maximum of 65,534 data channels (the actual limit may vary from browser to browser).<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel
     /// </summary>
     public class RTCDataChannel : EventTarget
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public RTCDataChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns an ID number (between 0 and 65,534) which uniquely identifies the RTCDataChannel.
@@ -55,31 +59,6 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// Closes the RTCDataChannel. Either peer is permitted to call this method to initiate closure of the channel.
         /// </summary>
         public void Close() => JSRef.CallVoid("close");
-
-        //long DefaultReadSize = 256 * 1024;
-        //long BufferedAmountLowThreshold = 256 * 1024;
-        //long SendChunkSize = 32 * 1024;
-
-        //async Task SendBlob(Blob blob)
-        //{
-        //    long pos = 0;
-        //    long bytesLeft = blob.Size;
-        //    var i = 0;
-        //    while (bytesLeft > 0)
-        //    {
-        //        var chunkSize = Math.Min(SendChunkSize, bytesLeft);
-        //        using var chunk = blob.Slice(pos, pos + chunkSize, blob.Type);
-        //        bytesLeft -= chunkSize;
-        //        pos += chunkSize;
-        //        await Channel.WaitForLowBuffer();
-        //        await SendBlobChunk(chunk);
-        //        //Console.WriteLine($"sending: {i} {chunkSize} sent: {pos}");
-        //        i++;
-        //    }
-        //    await Channel.WaitForLowBuffer();
-        //    Channel.Send("done");
-        //    //Console.WriteLine("done");
-        //}
 
         /// <summary>
         /// Uses BinaryType to determine the type of data to send. Chrome only does ArrayBuffer, Firefox prefers Blob (not sure if supports ArrayBuffer att)
@@ -155,21 +134,28 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         public string BinaryType { get => JSRef.Get<string>("binaryType"); set => JSRef.Set("binaryType", value); }
 
+
+
+        // TODO ... 
+        // unless there is a compatibility issue ...
+        // switch to JSEventCallback with AddEventListener instead of using property assigning which limits usage more... 
+        // however, a lot of these events should only be handled by a single event handler but that should be up to the consuming code
+
         /// <summary>
         /// Sent when the number of bytes of data in the outgoing data buffer falls below the value specified by bufferedAmountLowThreshold.
         /// </summary>
         //public ActionCallback OnBufferedAmountLow { set { JSRef.Set("onbufferedamountlow", value); } }
-        public JSEventCallback OnBufferedAmountLow { get => new JSEventCallback(JSRef, "onbufferedamountlow"); set { } }
+        public JSEventCallback<Event> OnBufferedAmountLow { get => new JSEventCallback<Event>(JSRef, "onbufferedamountlow"); set { } }
         /// <summary>
         /// Sent when the underlying data transport closes.
         /// </summary>
         //public ActionCallback OnClose { set { JSRef.Set("onclose", value); } }
-        public JSEventCallback OnClose { get => new JSEventCallback(JSRef, "onclose"); set { } }
+        public JSEventCallback<Event> OnClose { get => new JSEventCallback<Event>(JSRef, "onclose"); set { } }
         /// <summary>
         /// Sent when the underlying data transport is about to start closing.<br/>
         /// Note supported on Firefox as of 2023-07-01
         /// </summary>
-        public JSEventCallback OnClosing { get => new JSEventCallback(JSRef, "onclosing"); set { } }
+        public JSEventCallback<Event> OnClosing { get => new JSEventCallback<Event>(JSRef, "onclosing"); set { } }
         /// <summary>
         /// Sent when an error occurs on the data channel.
         /// </summary>
@@ -184,6 +170,6 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// Sent when the data channel is first opened, or when an existing data channel's underlying connection re-opens.
         /// </summary>
         //public ActionCallback OnOpen { set { JSRef.Set("onopen", value); } }
-        public JSEventCallback OnOpen { get => new JSEventCallback(JSRef, "onopen"); set { } }
+        public JSEventCallback<RTCDataChannelEvent> OnOpen { get => new JSEventCallback<RTCDataChannelEvent>(JSRef, "onopen"); set { } }
     }
 }

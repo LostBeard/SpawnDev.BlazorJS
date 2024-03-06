@@ -2,8 +2,16 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The PermissionStatus interface of the Permissions API provides the state of an object and an event handler for monitoring changes to said state.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/PermissionStatus
+    /// </summary>
     public class PermissionStatus : EventTarget
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public PermissionStatus(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         /// <summary>
@@ -21,6 +29,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The change event of the PermissionStatus interface fires whenever the PermissionStatus.state property changes.
         /// </summary>
-        public JSEventCallback OnChange { get => new JSEventCallback(o => AddEventListener("change", o), o => RemoveEventListener("change", o)); set { } }
+        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>(o => AddEventListener("change", o), o => RemoveEventListener("change", o)); set { } }
     }
 }

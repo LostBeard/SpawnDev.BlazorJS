@@ -212,6 +212,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public TNode ReplaceChild<TNode>(Node newChild, TNode oldChild) where TNode : Node => JSRef.Call<TNode>("replaceChild", newChild, oldChild);
         #endregion
 
-        public JSEventCallback OnSelectStart { get => new JSEventCallback(o => AddEventListener("selectstart", o), o => RemoveEventListener("selectstart", o)); set { /** required **/ } }
+        /// <summary>
+        /// The selectstart event of the Selection API is fired when a user starts a new selection.
+        /// </summary>
+        public JSEventCallback<Event> OnSelectStart { get => new JSEventCallback<Event>(o => AddEventListener("selectstart", o), o => RemoveEventListener("selectstart", o)); set { /** required **/ } }
     }
 }

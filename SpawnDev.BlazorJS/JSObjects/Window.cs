@@ -219,11 +219,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The afterprint event is fired after the associated document has started printing or the print preview has been closed.
         /// </summary>
-        public JSEventCallback OnAfterPrint { get => new JSEventCallback(o => AddEventListener("afterprint", o), o => RemoveEventListener("afterprint", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnAfterPrint { get => new JSEventCallback<Event>(o => AddEventListener("afterprint", o), o => RemoveEventListener("afterprint", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
         /// The appinstalled event of the Web Manifest API is fired when the browser has successfully installed a page as an application.
         /// </summary>
-        public JSEventCallback OnAppInstalled { get => new JSEventCallback(o => AddEventListener("appinstalled", o), o => RemoveEventListener("appinstalled", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnAppInstalled { get => new JSEventCallback<Event>(o => AddEventListener("appinstalled", o), o => RemoveEventListener("appinstalled", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
         /// The beforeinstallprompt event fires when the browser has detected that a website can be installed as a Progressive Web App.
         /// </summary>
@@ -231,7 +231,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The beforeprint event is fired when the associated document is about to be printed or previewed for printing.
         /// </summary>
-        public JSEventCallback OnBeforePrint { get => new JSEventCallback(o => AddEventListener("beforeprint", o), o => RemoveEventListener("beforeprint", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnBeforePrint { get => new JSEventCallback<Event>(o => AddEventListener("beforeprint", o), o => RemoveEventListener("beforeprint", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
         /// The beforeunload event is fired when the window, the document and its resources are about to be unloaded. The document is still visible and the event is still cancelable at this point.
         /// </summary>
@@ -261,10 +261,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<DeviceOrientationEvent> OnDeviceOrientationAbsolute { get => new JSEventCallback<DeviceOrientationEvent>(o => AddEventListener("deviceorientationabsolute", o), o => RemoveEventListener("deviceorientationabsolute", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
-        /// The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (script defer src="…" and script type="module") have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading.
-        /// </summary>
-        public JSEventCallback OnDOMContentLoaded { get => new JSEventCallback(o => AddEventListener("DOMContentLoaded", o), o => RemoveEventListener("DOMContentLoaded", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
-        /// <summary>
         /// The error event is fired on a Window object when a resource failed to load or couldn't be used — for example if a script has an execution error.
         /// </summary>
         public JSEventCallback<ErrorEvent> OnError { get => new JSEventCallback<ErrorEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
@@ -287,11 +283,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The languagechange event is fired at the global scope object when the user's preferred language changes.
         /// </summary>
-        public JSEventCallback OnLanguageChange { get => new JSEventCallback(o => AddEventListener("languagechange", o), o => RemoveEventListener("languagechange", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnLanguageChange { get => new JSEventCallback<Event>(o => AddEventListener("languagechange", o), o => RemoveEventListener("languagechange", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
         /// The load event is fired when the whole page has loaded, including all dependent resources such as stylesheets, scripts, iframes, and images. This is in contrast to DOMContentLoaded, which is fired as soon as the page DOM has been loaded, without waiting for resources to finish loading.
         /// </summary>
-        public JSEventCallback OnLoad { get => new JSEventCallback(o => AddEventListener("load", o), o => RemoveEventListener("load", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnLoad { get => new JSEventCallback<Event>(o => AddEventListener("load", o), o => RemoveEventListener("load", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
         /// The message event is fired on a Window object when the window receives a message, for example from a call to Window.postMessage() from another browsing context.
         /// </summary>
@@ -303,11 +299,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The offline event of the Window interface is fired when the browser has lost access to the network and the value of Navigator.onLine switches to false
         /// </summary>
-        public JSEventCallback OnOffline { get => new JSEventCallback(o => AddEventListener("offline", o), o => RemoveEventListener("offline", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnOffline { get => new JSEventCallback<Event>(o => AddEventListener("offline", o), o => RemoveEventListener("offline", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
         /// The online event of the Window interface is fired when the browser has gained access to the network and the value of Navigator.onLine switches to true
         /// </summary>
-        public JSEventCallback OnOnline { get => new JSEventCallback(o => AddEventListener("online", o), o => RemoveEventListener("online", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnOnline { get => new JSEventCallback<Event>(o => AddEventListener("online", o), o => RemoveEventListener("online", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         /// <summary>
         /// The pagehide event is sent to a Window when the browser hides the current page in the process of presenting a different page from the session's history
         /// </summary>
@@ -344,7 +340,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The unload event is fired when the document or a child resource is being unloaded.<br />
         /// Warning: Developers should avoid using this event.
         /// </summary>
-        public JSEventCallback OnUnload { get => new JSEventCallback(o => AddEventListener("unload", o), o => RemoveEventListener("unload", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnUnload { get => new JSEventCallback<Event>(o => AddEventListener("unload", o), o => RemoveEventListener("unload", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
         #endregion
 
         public bool ShowDirectoryPickerSupported() => !JS.IsUndefined("showDirectoryPicker");

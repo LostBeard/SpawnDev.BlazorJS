@@ -58,7 +58,7 @@ builder.Services.AddSingleton<AsyncCallDispatcherTest>();
 builder.Services.AddSingleton(builder.Configuration); // used to demo appsettings reading in workers
 builder.Services.AddSingleton<MediaDevices>();
 builder.Services.AddSingleton<MediaDevicesService>();
-// Add app services that will be called on the main thread and/or worker threads (Worker services must use interfaces)
+// Add app services that will be called on the main thread and/or worker threads
 builder.Services.AddSingleton<IFaceAPIService, FaceAPIService>(GlobalScope.DedicatedAndSharedWorkers);
 builder.Services.AddSingleton<IMathsService, MathsService>();
 

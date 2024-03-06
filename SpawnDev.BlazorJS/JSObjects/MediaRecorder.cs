@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public partial class MediaRecorder : EventTarget
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MediaRecorder(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Creates a new MediaRecorder object, given a MediaStream to record. Options are available to do things like set the container's MIME type (such as "video/webm" or "video/mp4") and the bit rates of the audio and video tracks or a single overall bit rate.
@@ -82,18 +86,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when media recording is paused.
         /// </summary>
-        public JSEventCallback OnPause { get => new JSEventCallback(o => AddEventListener("pause", o), o => RemoveEventListener("pause", o)); set { } }
+        public JSEventCallback<Event> OnPause { get => new JSEventCallback<Event>(o => AddEventListener("pause", o), o => RemoveEventListener("pause", o)); set { } }
         /// <summary>
         /// Fired when media recording resumes after being paused.
         /// </summary>
-        public JSEventCallback OnResume { get => new JSEventCallback(o => AddEventListener("resume", o), o => RemoveEventListener("resume", o)); set { } }
+        public JSEventCallback<Event> OnResume { get => new JSEventCallback<Event>(o => AddEventListener("resume", o), o => RemoveEventListener("resume", o)); set { } }
         /// <summary>
         /// Fired when media recording starts.
         /// </summary>
-        public JSEventCallback OnStart { get => new JSEventCallback(o => AddEventListener("start", o), o => RemoveEventListener("start", o)); set { } }
+        public JSEventCallback<Event> OnStart { get => new JSEventCallback<Event>(o => AddEventListener("start", o), o => RemoveEventListener("start", o)); set { } }
         /// <summary>
         /// Fired when media recording ends, either when the MediaStream ends, or after the MediaRecorder.stop() method is called.
         /// </summary>
-        public JSEventCallback OnStop { get => new JSEventCallback(o => AddEventListener("stop", o), o => RemoveEventListener("stop", o)); set { } }
+        public JSEventCallback<Event> OnStop { get => new JSEventCallback<Event>(o => AddEventListener("stop", o), o => RemoveEventListener("stop", o)); set { } }
     }
 }
