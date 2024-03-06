@@ -30,7 +30,7 @@ For more information about Blazor types:
 ](https://www.c-sharpcorner.com/article/blazor-versions-benefits-and-when-to-use-it/)
 
 ### Features:
-- 260+ strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, and Promises allow direct interaction with Javascript
+- Over 300 strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, and Promises allow direct interaction with Javascript
 - Use Javascript libraries in Blazor without writing any Javascript code
 - BlazorJSRuntime wraps the default JSRuntime adding additional functionality
 - Create new Javascript objects directly from Blazor
@@ -357,7 +357,7 @@ public void JSObjectClassTest() {
 ```
 
 Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or
-use the growing library of over 100 of the most common Javascript objects, including ones for 
+use the growing library of over 300 of the most common Javascript objects, including ones for 
 Window, Document, Storage (localStorage and sessionStorage), WebGL, WebRTC, and more in 
 SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that 
 allow strongly typed use.
