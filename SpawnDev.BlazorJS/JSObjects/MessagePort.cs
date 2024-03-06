@@ -4,16 +4,23 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     public interface IMessagePort
     {
-        JSEventCallback OnMessageError { get; set; }
+        JSEventCallback<MessageEvent> OnMessageError { get; set; }
         JSEventCallback<MessageEvent> OnMessage { get; set; }
         void Dispose();
         void PostMessage(object message);
         void PostMessage(object message, object[] transfer);
     }
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/MessagePort
+    /// <summary>
+    /// The MessagePort interface of the Channel Messaging API represents one of the two ports of a MessageChannel, allowing messages to be sent from one port and listening out for them arriving at the other.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/MessagePort
+    /// </summary>
     public class MessagePort : EventTarget, IMessagePort
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MessagePort(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         /// <summary>
@@ -21,7 +28,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Start() must be called to start receiving messages when using addEventListener instead of assigning onmessage.
         /// </summary>
         public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>(o => AddEventListener("message", o), o => RemoveEventListener("message", o)); set { } }
-        public JSEventCallback OnMessageError { get => new JSEventCallback(o => AddEventListener("messageerror", o), o => RemoveEventListener("messageerror", o)); set { } }
+        /// <summary>
+        /// Fired when a MessagePort object receives a message that can't be deserialized.
+        /// </summary>
+        public JSEventCallback<MessageEvent> OnMessageError { get => new JSEventCallback<MessageEvent>(o => AddEventListener("messageerror", o), o => RemoveEventListener("messageerror", o)); set { } }
         /// <summary>
         /// Starts the sending of messages queued on the port (only needed when using EventTarget.addEventListener; it is implied when using onmessage).
         /// </summary>

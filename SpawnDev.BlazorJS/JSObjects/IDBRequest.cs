@@ -2,10 +2,22 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The IDBRequest interface of the IndexedDB API provides access to results of asynchronous requests to databases and database objects using event handler attributes. Each reading and writing operation on a database is done using a request.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/IDBRequest
+    /// </summary>
+    /// <typeparam name="T">The type to use for the Result property</typeparam>
     public class IDBRequest<T> : IDBRequest
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public IDBRequest(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public T? Result => JSRef.Get<T>("result");
+        /// <summary>
+        /// Returns the result of the request. If the request is not completed, the result is not available and an InvalidStateError exception is thrown.
+        /// </summary>
+        public T Result => JSRef.Get<T>("result");
         public Task<T> WaitAsync()
         {
             var t = new TaskCompletionSource<T>();
@@ -72,6 +84,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             return t.Task;
         }
     }
+    /// <summary>
+    /// The IDBRequest interface of the IndexedDB API provides access to results of asynchronous requests to databases and database objects using event handler attributes. Each reading and writing operation on a database is done using a request.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/IDBRequest
+    /// </summary>
     public class IDBRequest : EventTarget
     {
         public IDBRequest(IJSInProcessObjectReference _ref) : base(_ref) { }
@@ -85,17 +101,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         public T? SourceAs<T>() => JSRef.Get<T>("source");
         public string ReadyState => JSRef.Get<string>("readyState");
         public IDBTransaction? Transaction => JSRef.Get<IDBTransaction?>("transaction");
-        public JSEventCallback OnError { get => new JSEventCallback(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { } }
-        public JSEventCallback OnSuccess { get => new JSEventCallback(o => AddEventListener("success", o), o => RemoveEventListener("success", o)); set { } }
+
+        #region Events
+        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { } }
+        public JSEventCallback<Event> OnSuccess { get => new JSEventCallback<Event>(o => AddEventListener("success", o), o => RemoveEventListener("success", o)); set { } }
+        #endregion 
+
         public static Task<T> ToAsync<T>(IDBRequest<T> request)
         {
             var t = new TaskCompletionSource<T>();
             Action<string?, T?>? onComplete = null;
-            var onError = new Action(() =>
+            var onError = new Action<Event>((e) =>
             {
                 onComplete?.Invoke(null, default(T));
             });
-            var onSucc = new Action(() =>
+            var onSucc = new Action<Event>((e) =>
             {
                 var result = request.ResultAs<T>();
                 onComplete?.Invoke(null, result);

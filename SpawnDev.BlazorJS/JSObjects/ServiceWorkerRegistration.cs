@@ -22,7 +22,9 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public Task<bool> Unregister() => JSRef.CallAsync<bool>("unregister");
         public Task<ServiceWorkerRegistration> Update() => JSRef.CallAsync<ServiceWorkerRegistration>("update");
-
-        public JSEventCallback OnUpdateFound { get => new JSEventCallback(o => AddEventListener("updatefound", o), o => RemoveEventListener("updatefound", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        /// <summary>
+        /// The updatefound event of the ServiceWorkerRegistration interface is fired any time the ServiceWorkerRegistration.installing property acquires a new service worker.
+        /// </summary>
+        public JSEventCallback<Event> OnUpdateFound { get => new JSEventCallback<Event>(o => AddEventListener("updatefound", o), o => RemoveEventListener("updatefound", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
     }
 }

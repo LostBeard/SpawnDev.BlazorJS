@@ -6,9 +6,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public IDBFactory(IJSInProcessObjectReference _ref) : base(_ref) { }
         public IDBFactory() : base(JS.Get<IJSInProcessObjectReference>("indexedDB")) { }
-        public IDBOpenRequest Open(string dbName, ulong dbVersion) => JSRef.Call<IDBOpenRequest>("open", dbName, dbVersion);
-        public IDBOpenRequest Open(string dbName) => JSRef.Call<IDBOpenRequest>("open", dbName);
-        public IDBOpenRequest DeleteDatabase(string dbName) => JSRef.Call<IDBOpenRequest>("deleteDatabase", dbName);
+        public IDBOpenDBRequest Open(string dbName, ulong dbVersion) => JSRef.Call<IDBOpenDBRequest>("open", dbName, dbVersion);
+        public IDBOpenDBRequest Open(string dbName) => JSRef.Call<IDBOpenDBRequest>("open", dbName);
+        public IDBOpenDBRequest DeleteDatabase(string dbName) => JSRef.Call<IDBOpenDBRequest>("deleteDatabase", dbName);
         public Task<IDBDatabase> OpenAsync(string dbName, Action<IDBVersionChangeEvent>? onUpgradeNeeded = null)
         {
             var openRequest = Open(dbName);

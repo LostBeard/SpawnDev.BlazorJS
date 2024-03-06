@@ -6,12 +6,12 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     public class IDBDatabase : EventTarget
     {
-        public static IDBOpenRequest Open(string dbName)
+        public static IDBOpenDBRequest Open(string dbName)
         {
             using var dbFactory = new IDBFactory();
             return dbFactory.Open(dbName);
         }
-        public static IDBOpenRequest Open(string dbName, ulong dbVersion)
+        public static IDBOpenDBRequest Open(string dbName, ulong dbVersion)
         {
             using var dbFactory = new IDBFactory();
             return dbFactory.Open(dbName, dbVersion);

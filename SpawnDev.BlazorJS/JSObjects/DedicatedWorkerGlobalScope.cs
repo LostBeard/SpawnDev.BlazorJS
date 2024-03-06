@@ -39,6 +39,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a worker receives a message that can't be deserialized.
         /// </summary>
-        public JSEventCallback OnMessageError { get => new JSEventCallback(o => AddEventListener("messageerror", o), o => RemoveEventListener("messageerror", o)); set { } }
+        public JSEventCallback<MessageEvent> OnMessageError { get => new JSEventCallback<MessageEvent>(o => AddEventListener("messageerror", o), o => RemoveEventListener("messageerror", o)); set { } }
     }
 }

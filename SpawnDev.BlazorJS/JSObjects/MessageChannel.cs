@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class MessageChannel : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MessageChannel(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// The MessageChannel() constructor of the MessageChannel interface returns a new MessageChannel object with two new MessagePort objects.

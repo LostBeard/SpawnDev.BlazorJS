@@ -3,11 +3,15 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The MessageEvent interface represents a message received by a target object.
+    /// The MessageEvent interface represents a message received by a target object.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent
     /// </summary>
     public class MessageEvent : Event
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MessageEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// The data sent by the message emitter. (data property with TValue typed get accessor)
@@ -84,6 +88,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <typeparam name="T">Type to get property as</typeparam>
         /// <returns></returns>
         public T GetSource<T>() => JSRef.Get<T>("source");
+        /// <summary>
+        /// An array of MessagePort objects representing the ports associated with the channel the message is being sent through (where appropriate, e.g. in channel messaging or when sending a message to a shared worker).
+        /// </summary>
         public Array<MessagePort> Ports => JSRef.Get<Array<MessagePort>>("ports");
     }
 }
