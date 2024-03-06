@@ -1,4 +1,6 @@
 ﻿using Microsoft.JSInterop;
+using System.Collections;
+using System.Diagnostics;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -166,8 +168,69 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public T[] ToArray<T>(int start, int count) => Enumerable.Range(start, count).Select(i => At<T>(i)).ToArray();
     }
-    public class Array<T> : JSObject
+    public class Array<T> : JSObject, IEnumerable<T>
     {
+        #region Enable IEnumerable
+        public IEnumerator GetEnumerator()
+        {
+            return new ArrayEnumerator<T>(this);
+        }
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return new ArrayEnumerator<T>(this);
+        }
+        private class ArrayEnumerator<TEnumerable> : IEnumerator<TEnumerable>
+        {
+            int position = -1;
+            Array<TEnumerable> array;
+            //constructor
+            public ArrayEnumerator(Array<TEnumerable> array)
+            {
+                this.array = array;
+            }
+            //IEnumerator
+            public bool MoveNext()
+            {
+                position++;
+                return (position < array.Length);
+            }
+            //IEnumerator
+            public void Reset()
+            {
+                position = -1;
+            }
+            public void Dispose() { }
+            //IEnumerator
+            public object Current
+            {
+                get
+                {
+                    try
+                    {
+                        return array[position];
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
+            }
+            TEnumerable IEnumerator<TEnumerable>.Current
+            {
+                get
+                {
+                    try
+                    {
+                        return array[position];
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
+            }
+        }  
+        #endregion
         public T this[int index]
         {
             get => GetItem(index);
@@ -209,5 +272,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public T[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToArray();
         public List<T> ToList() => Enumerable.Range(0, Length).Select(i => At(i)).ToList();
         public List<T> ToList(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToList();
+
     }
 }

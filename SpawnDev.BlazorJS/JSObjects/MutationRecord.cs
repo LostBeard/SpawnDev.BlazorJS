@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The nodes added by a mutation. Will be an empty NodeList if no nodes were added.
         /// </summary>
-        public NodeList AddedNodes => JSRef.Get<NodeList>("addNodes");
+        public NodeList AddedNodes => JSRef.Get<NodeList>("addedNodes");
         /// <summary>
         /// The name of the changed attribute as a string, or null.
         /// </summary>
