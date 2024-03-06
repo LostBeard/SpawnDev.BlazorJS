@@ -174,7 +174,6 @@ public JSEventCallback<StorageEvent> OnStorage { get => new JSEventCallback<Stor
 
 Example event attach detach
 ```cs
-
 void AttachEventHandlersExample()
 {
     using var window = JS.Get<Window>("window");
@@ -193,6 +192,28 @@ void DetachEventHandlersExample()
 void Window_OnStorage(StorageEvent storageEvent)
 {
     Console.WriteLine($"StorageEvent: {storageEvent.Key} has changed");
+}
+```
+
+### JSEventCallback arguments are optional
+Methods attached using JSEventCallbacks are strongly typed, and like Javascript, all arguments are optional. This will improve performance as unused variables will not be brought into Blazor during the event.
+
+Example event attach detach (from above) without using any callback arguments.
+```cs
+void AttachEventHandlersExample()
+{
+    using var window = JS.Get<Window>("window");
+    window.OnStorage += Window_OnStorage;
+}
+void DetachEventHandlersExample()
+{
+    using var window = JS.Get<Window>("window");
+    window.OnStorage -= Window_OnStorage;
+}
+// The method below is not using the optional StorageEvent argument
+void Window_OnStorage()
+{
+    Console.WriteLine($"StorageEvent");
 }
 ```
 
