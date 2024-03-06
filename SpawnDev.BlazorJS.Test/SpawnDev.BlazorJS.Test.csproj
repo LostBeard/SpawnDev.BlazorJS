@@ -19,7 +19,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj" />
 
-		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.58" />
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.60" />
 	</ItemGroup>
 
 	<!-- SpawnDev.BlazorJS.WebWorkers config -->
