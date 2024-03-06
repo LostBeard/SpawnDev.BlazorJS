@@ -24,8 +24,6 @@ builder.Services.AddJSRuntimeJsonOptions(jsRuntimeJsonOptions =>
     Console.WriteLine($"JSRuntime JsonConverters count: {jsRuntimeJsonOptions.Converters.Count}");
 #endif
 });
-// Add services
-builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 // Add SpawnDev.BlazorJS.BlazorJSRuntime
 builder.Services.AddBlazorJSRuntime();
 // Add SpawnDev.BlazorJS.WebWorkers.WebWorkerService
@@ -46,11 +44,13 @@ builder.Services.AddWebWorkerService(webWorkerService =>
 #endif
 });
 
+// Add services
+builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
 // Test startup when KeyedServices are used (new in Blazor .Net 8)
 // This is to test a bug in SpawnDev.BlazorJS (issue #24) that has been fixed as of 2.2.47
 builder.Services.AddKeyedSingleton(typeof(string), "apples", (_, key) => DateTime.Now.ToString() + $" {key}");
 builder.Services.AddKeyedSingleton(typeof(string), "grapes", (_, key) => DateTime.Now.ToString() + $" {key}");
-
 
 // The below service is used to test CallDispatcher used with WebWorkers (Used in UnitTests)
 builder.Services.AddSingleton<AsyncCallDispatcherTest>();
@@ -68,9 +68,8 @@ builder.Services.AddSingleton<NotificationService>();
 builder.Services.AddSingleton<TooltipService>();
 builder.Services.AddSingleton<ContextMenuService>();
 
+// App service
 builder.Services.AddSingleton<JSObjectAnalyzer>();
 
-//Console.WriteLine($"appsettings test in context {BlazorJSRuntime.JS.GlobalThisTypeName}: " + builder.Configuration["Message"]);
-
 // build and Init using BlazorJSRunAsync (instead of RunAsync)
-await builder.Build().BlazorJSRunAsync()
+await builder.Build().BlazorJSRunAsync();
