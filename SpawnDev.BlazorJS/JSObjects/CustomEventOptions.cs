@@ -22,6 +22,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An event-dependent value associated with the event. This value is then available to the handler using the CustomEvent.detail property. It defaults to null.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public TDetail Detail { get; set; }
+        public TDetail? Detail { get; set; }
     }
 }

@@ -1,19 +1,9 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class AddEventListenerOptions
-    {
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool Capture { get; set; } = false;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Once { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Passive { get; set; } = null;
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public AbortSignal? Signal { get; set; } = null;
-    }
 
     /// <summary>
     /// The EventTarget interface is implemented by objects that can receive events and may have listeners for them. In other words, any target of events implements the three methods associated with this interface.
@@ -38,16 +28,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Registers an event handler of a specific event type on the EventTarget.
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="listener"></param>
-        /// <param name="useCapture"></param>
+        /// <param name="type">A case-sensitive string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification (an object that implements the Event interface) when an event of the specified type occurs. This must be null, an object with a handleEvent() method, or a JavaScript function. See The event listener callback for details on the callback itself.</param>
+        /// <param name="useCapture">A boolean value indicating whether events of this type will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree. Events that are bubbling upward through the tree will not trigger a listener designated to use capture. Event bubbling and capturing are two ways of propagating events that occur in an element that is nested within another element, when both elements have registered a handle for that event. The event propagation mode determines the order in which elements receive the event. See DOM Level 3 Events and JavaScript Event order for a detailed explanation. If not specified, useCapture defaults to false.</param>
         public void AddEventListener(string type, Callback listener, bool useCapture = false) => JSRef.CallVoid("addEventListener", type, listener, useCapture);
         /// <summary>
         /// Registers an event handler of a specific event type on the EventTarget.
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="listener"></param>
-        /// <param name="options"></param>
+        /// <param name="type">A case-sensitive string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification (an object that implements the Event interface) when an event of the specified type occurs. This must be null, an object with a handleEvent() method, or a JavaScript function. See The event listener callback for details on the callback itself.</param>
+        /// <param name="options">An object that specifies characteristics about the event listener</param>
         public void AddEventListener(string type, Callback listener, AddEventListenerOptions options) => JSRef.CallVoid("addEventListener", type, listener, options);
         /// <summary>
         /// Removes an event listener from the EventTarget.
@@ -63,5 +53,503 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="listener"></param>
         /// <param name="options"></param>
         public void RemoveEventListener(string type, Callback listener, AddEventListenerOptions options) => JSRef.CallVoid("removeEventListener", type, listener, options);
+
+        // AddEventListener and RemoveEventListener that support using actions with auto reference handling
+        static Dictionary<object, CallBackInfo> CallBackInfos { get; } = new Dictionary<object, CallBackInfo>();
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void AddEventListener(string type, Action listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo { Callback = new ActionCallback(listener) };
+                CallBackInfos[listener] = info;
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, useCapture);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void RemoveEventListener(string type, Action listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, useCapture);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void AddEventListener<T1>(string type, Action<T1> listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo { Callback = new ActionCallback<T1>(listener) };
+                CallBackInfos[listener] = info;
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, useCapture);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void RemoveEventListener<T1>(string type, Action<T1> listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, useCapture);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void AddEventListener<T1, T2>(string type, Action<T1, T2> listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo { Callback = new ActionCallback<T1, T2>(listener) };
+                CallBackInfos[listener] = info;
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, useCapture);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void RemoveEventListener<T1, T2>(string type, Action<T1, T2> listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, useCapture);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void AddEventListener<T1, T2, T3>(string type, Action<T1, T2, T3> listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo { Callback = new ActionCallback<T1, T2, T3>(listener) };
+                CallBackInfos[listener] = info;
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, useCapture);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void RemoveEventListener<T1, T2, T3>(string type, Action<T1, T2, T3> listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, useCapture);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void AddEventListener<T1, T2, T3, T4>(string type, Action<T1, T2, T3, T4> listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo { Callback = new ActionCallback<T1, T2, T3, T4>(listener) };
+                CallBackInfos[listener] = info;
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, useCapture);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="useCapture"></param>
+        public void RemoveEventListener<T1, T2, T3, T4>(string type, Action<T1, T2, T3, T4> listener, bool useCapture = false)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, useCapture);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void AddEventListener(string type, Action listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo();
+                CallBackInfos[listener] = info;
+                if (options.Once.HasValue && options.Once.Value)
+                {
+                    info.Callback = new ActionCallback(() => {
+                        listener();
+                        info.RefCount--;
+                        if (info.RefCount <= 0)
+                        {
+                            CallBackInfos.Remove(listener);
+                            info.Callback.Dispose();
+                        }
+                    });
+                }
+                else
+                {
+                    info.Callback = new ActionCallback(listener);
+                }
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, options);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void RemoveEventListener(string type, Action listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, options);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void AddEventListener<T1>(string type, Action<T1> listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo();
+                CallBackInfos[listener] = info;
+                if (options.Once.HasValue && options.Once.Value)
+                {
+                    info.Callback = new ActionCallback<T1>((t1) => {
+                        listener(t1);
+                        info.RefCount--;
+                        if (info.RefCount <= 0)
+                        {
+                            CallBackInfos.Remove(listener);
+                            info.Callback.Dispose();
+                        }
+                    });
+                }
+                else
+                {
+                    info.Callback = new ActionCallback<T1>(listener);
+                }
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, options);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void RemoveEventListener<T1>(string type, Action<T1> listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, options);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void AddEventListener<T1, T2>(string type, Action<T1, T2> listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo();
+                CallBackInfos[listener] = info;
+                if (options.Once.HasValue && options.Once.Value)
+                {
+                    info.Callback = new ActionCallback<T1, T2>((t1, t2) => {
+                        listener(t1, t2);
+                        info.RefCount--;
+                        if (info.RefCount <= 0)
+                        {
+                            CallBackInfos.Remove(listener);
+                            info.Callback.Dispose();
+                        }
+                    });
+                }
+                else
+                {
+                    info.Callback = new ActionCallback<T1, T2>(listener);
+                }
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, options);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void RemoveEventListener<T1, T2>(string type, Action<T1, T2> listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, options);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void AddEventListener<T1, T2, T3>(string type, Action<T1, T2, T3> listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo();
+                CallBackInfos[listener] = info;
+                if (options.Once.HasValue && options.Once.Value)
+                {
+                    info.Callback = new ActionCallback<T1, T2, T3>((t1, t2, t3) => {
+                        listener(t1, t2, t3);
+                        info.RefCount--;
+                        if (info.RefCount <= 0)
+                        {
+                            CallBackInfos.Remove(listener);
+                            info.Callback.Dispose();
+                        }
+                    });
+                }
+                else
+                {
+                    info.Callback = new ActionCallback<T1, T2, T3>(listener);
+                }
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, options);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void RemoveEventListener<T1, T2, T3>(string type, Action<T1, T2, T3> listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, options);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Registers an event handler of a specific event type on the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void AddEventListener<T1, T2, T3, T4>(string type, Action<T1, T2, T3, T4> listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                info = new CallBackInfo();
+                CallBackInfos[listener] = info;
+                if (options.Once.HasValue && options.Once.Value)
+                {
+                    info.Callback = new ActionCallback<T1, T2, T3, T4>((t1, t2, t3, t4) => {
+                        listener(t1, t2, t3, t4);
+                        info.RefCount--;
+                        if (info.RefCount <= 0)
+                        {
+                            CallBackInfos.Remove(listener);
+                            info.Callback.Dispose();
+                        }
+                    });
+                }
+                else
+                {
+                    info.Callback = new ActionCallback<T1, T2, T3, T4>(listener);
+                }
+            }
+            info.RefCount++;
+            AddEventListener(type, info.Callback, options);
+        }
+        /// <summary>
+        /// Removes an event listener from the EventTarget.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="options"></param>
+        public void RemoveEventListener<T1, T2, T3, T4>(string type, Action<T1, T2, T3, T4> listener, AddEventListenerOptions options)
+        {
+            if (!CallBackInfos.TryGetValue(listener, out CallBackInfo? info))
+            {
+                return;
+            }
+            info.RefCount--;
+            RemoveEventListener(type, info.Callback, options);
+            if (info.RefCount <= 0)
+            {
+                CallBackInfos.Remove(listener);
+                info.Callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Used internally to track the number of calls 
+        /// </summary>
+        class CallBackInfo
+        {
+            /// <summary>
+            /// AddEventListener call count - RemoveEventListener call count<br />
+            /// Callback will be disposed when RefCount == 0
+            /// </summary>
+            public int RefCount { get; set; }
+            /// <summary>
+            /// Holds a reference to the callback fo disposing when done using
+            /// </summary>
+            public Callback Callback { get; set; }
+        }
     }
 }
