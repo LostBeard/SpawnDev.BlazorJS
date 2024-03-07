@@ -6,8 +6,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The IDBRequest interface of the IndexedDB API provides access to results of asynchronous requests to databases and database objects using event handler attributes. Each reading and writing operation on a database is done using a request.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/IDBRequest
     /// </summary>
-    /// <typeparam name="T">The type to use for the Result property</typeparam>
-    public class IDBRequest<T> : IDBRequest
+    /// <typeparam name="TResult">The type to use for the Result property</typeparam>
+    public class IDBRequest<TResult> : IDBRequest
     {
         /// <summary>
         /// Deserialization constructor
@@ -17,23 +17,23 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the result of the request. If the request is not completed, the result is not available and an InvalidStateError exception is thrown.
         /// </summary>
-        public T Result => JSRef.Get<T>("result");
-        public Task<T> WaitAsync()
+        public TResult Result => JSRef.Get<TResult>("result");
+        public Task<TResult> WaitAsync()
         {
-            var t = new TaskCompletionSource<T>();
-            Action<string?, T?>? onComplete = null;
+            var t = new TaskCompletionSource<TResult>();
+            Action<string?, TResult?>? onComplete = null;
             var onError = new Action(() =>
             {
-                onComplete?.Invoke(null, default(T));
+                onComplete?.Invoke(null, default(TResult));
             });
             var onSucc = new Action(() =>
             {
-                var result = ResultAs<T>();
+                var result = ResultAs<TResult>();
                 onComplete?.Invoke(null, result);
             });
             OnError += onError;
             OnSuccess += onSucc;
-            onComplete = new Action<string?, T?>((err, result) =>
+            onComplete = new Action<string?, TResult?>((err, result) =>
             {
                 onComplete = null;
                 if (result == null && string.IsNullOrEmpty(err)) err = "Failed";
@@ -50,13 +50,13 @@ namespace SpawnDev.BlazorJS.JSObjects
             });
             return t.Task;
         }
-        public static Task<T> ToAsync(IDBRequest<T> request)
+        public static Task<TResult> ToAsync(IDBRequest<TResult> request)
         {
-            var t = new TaskCompletionSource<T>();
-            Action<string?, T?>? onComplete = null;
+            var t = new TaskCompletionSource<TResult>();
+            Action<string?, TResult?>? onComplete = null;
             var onError = new Action(() =>
             {
-                onComplete?.Invoke(null, default(T));
+                onComplete?.Invoke(null, default(TResult));
             });
             var onSucc = new Action(() =>
             {
@@ -65,7 +65,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             });
             request.OnError += onError;
             request.OnSuccess += onSucc;
-            onComplete = new Action<string?, T?>((err, result) =>
+            onComplete = new Action<string?, TResult?>((err, result) =>
             {
                 onComplete = null;
                 if (result == null && string.IsNullOrEmpty(err)) err = "Failed";
