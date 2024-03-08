@@ -288,6 +288,9 @@ namespace SpawnDev.BlazorJS
         //public string TypeOf(JSObject obj, object? identifier = null) => JSInterop.TypeOf(obj, identifier);
         //public string TypeOf(JSObject obj, int identifier) => JSInterop.TypeOf(obj, identifier);
         public string TypeOf(string identifier) => JSInterop.GlobalTypeOf(identifier);
+
+        public string TypeOf(JSObject obj) => JSInterop.TypeOf(obj, null);
+
         public void Log(params object?[] args) => CallApplyVoid("console.log", args);
         //public string GetConstructorName(object identifier)
         //{

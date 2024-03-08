@@ -331,7 +331,7 @@ public void IJSObjectInterfaceTest() {
 
 # JSObject Base Class
 
-JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow strongly typed access to the underlying object. JSObjects take a bit more work to set up but offer more versatility.
+JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow strongly typed access to the underlying object.
 
 JSObject type wrapper example (same as the IJSObject interface example above but with JSObject)
 ```cs
