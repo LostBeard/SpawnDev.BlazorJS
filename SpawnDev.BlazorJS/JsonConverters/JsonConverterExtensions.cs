@@ -3,10 +3,13 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
+    /// <summary>
+    /// When implemented on a JsonConverter it indicates that the converter needs an IJSInProcessObjectReference whhich can be read with<br />
+    /// var _ref = JsonSerializer.Deserialize&lt;IJSInProcessObjectReference?&gt;(ref reader, options)
+    /// </summary>
     public interface IJSInProcessObjectReferenceConverter
     {
-        //JSCallResultType JSCallResultType { get; }
-        //bool OverrideResultType { get; }
+        // This is an indicator interface and has no defined body.
     }
     internal static class JsonConverterExtensions
     {

@@ -1,36 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-    public class DynamicJSObject : DynamicObject
-    {
-        BlazorJSRuntime JS;
-        public static implicit operator JSObject(DynamicJSObject obj) => obj.JSObjectRef;
-        public JSObject JSObjectRef { get; private set; }
-        public DynamicJSObject(BlazorJSRuntime js, JSObject obj)
-        {
-            JS = js;
-            JSObjectRef = obj;
-        }
-        public DynamicJSObject(BlazorJSRuntime js, IJSInProcessObjectReference _ref)
-        {
-            JS = js;
-            JSObjectRef = new JSObject(_ref);
-        }
-        public override IEnumerable<string> GetDynamicMemberNames()
-        {
-            var keys = JSObjectRef.JSRef!.GetPropertyNames();
-            return keys;
-        }
-        public override bool TryCreateInstance(CreateInstanceBinder binder, object?[]? args, [NotNullWhen(true)] out object? result)
-        {
-            Console.WriteLine("TryCreateInstance");
-            return base.TryCreateInstance(binder, args, out result);
-        }
-    }
     public class JSObject<T> : JSObject where T : JSObject
     {
         private static Lazy<T> _Undefined = new Lazy<T>(() => (T)Activator.CreateInstance(typeof(T), JSObject.UndefinedRef));

@@ -7,7 +7,14 @@ namespace SpawnDev.BlazorJS
     public static class IJSInProcessObjectReferenceExtensions
     {
         static PropertyInfo? JSObjectReferenceIdProp = null;
-
+        /// <summary>
+        /// Import the IJSInProcessObjectReference instance from Javascript as T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
+        public static T As<T>(this IJSInProcessObjectReference _ref) => JSInterop.ReturnMe<T>(_ref);
+        public static object As(this IJSInProcessObjectReference _ref, Type returnType) => JSInterop.ReturnMe(returnType, _ref)!;
         public static IJSInProcessObjectReference CreateCopy(this IJSInProcessObjectReference _ref) => JSInterop.ReturnMe<IJSInProcessObjectReference>(_ref);
         public static long GetJSRefId(this IJSInProcessObjectReference _ref)
         {
