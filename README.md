@@ -86,6 +86,11 @@ JS.CallVoid("addEventListener", "resize", Callback.Create(() => Console.WriteLin
 // Attach events
 using var window = JS.Get<Window>("window");
 window.OnOffline += Window_OnOffline;
+
+// AddEventListener and RemoveEventListener are supported on all EventTarget objects
+window.AddEventListener("resize", Window_OnResize, true);
+
+window.RemoveEventListener("resize", Window_OnResize, true);
 ```
 
 ## IMPORTANT NOTE - Async vs Sync Javascript calls
@@ -187,11 +192,6 @@ void DetachEventHandlersExample()
     // If this is the last reference of Window_OnStorage being removed then the .Net reference will automatically be disposed.
     // IMPORTANT - detaching is important for preventing resource leaks. .Net references are only released when the reference count reaches zero (same number of -= as += used)
     window.OnStorage -= Window_OnStorage;
-}
-
-void Window_OnStorage(StorageEvent storageEvent)
-{
-    Console.WriteLine($"StorageEvent: {storageEvent.Key} has changed");
 }
 ```
 
