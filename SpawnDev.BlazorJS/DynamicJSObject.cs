@@ -16,7 +16,6 @@ namespace SpawnDev.BlazorJS
     public class DynamicJSObject : DynamicObject
     {
         static BlazorJSRuntime JS => BlazorJSRuntime.JS;
-        public static implicit operator JSObject(DynamicJSObject obj) => obj.JSObjectRef;
         public static explicit operator DynamicJSObject(JSObject obj) => new DynamicJSObject(obj);
         public JSObject JSObjectRef { get; private set; }
         public DynamicJSObject(JSObject obj)
