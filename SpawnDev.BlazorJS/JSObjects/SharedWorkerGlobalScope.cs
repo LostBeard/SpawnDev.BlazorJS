@@ -24,6 +24,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired on shared workers when a new client connects.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnConnect { get => new JSEventCallback<MessageEvent>(o => AddEventListener("connect", o), o => RemoveEventListener("connect", o)); set { } }
+        public JSEventCallback<MessageEvent> OnConnect { get => new JSEventCallback<MessageEvent>("connect", AddEventListener, RemoveEventListener); set { } }
     }
 }

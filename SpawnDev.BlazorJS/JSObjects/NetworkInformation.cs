@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The NetworkInformation interface of the Network Information API provides information about the connection a device is using to communicate with the network and provides a means for scripts to be notified if the connection type changes. The NetworkInformation interface cannot be instantiated. It is instead accessed through the connection property of the Navigator interface.
+    /// The NetworkInformation interface of the Network Information API provides information about the connection a device is using to communicate with the network and provides a means for scripts to be notified if the connection type changes. The NetworkInformation interface cannot be instantiated. It is instead accessed through the connection property of the Navigator interface.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation
     /// </summary>
     public class NetworkInformation : EventTarget
     {
@@ -34,14 +35,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         public bool SaveData => JSRef.Get<bool>("saveData");
         #endregion
 
-        #region Methods
-        #endregion
-
         #region Events
         /// <summary>
         /// The change event fires when connection information changes, and the event is received by the NetworkInformation object.
         /// </summary>
-        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>(o => AddEventListener("change", o), o => RemoveEventListener("change", o)); set { /** required **/ } }
+        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>("change", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

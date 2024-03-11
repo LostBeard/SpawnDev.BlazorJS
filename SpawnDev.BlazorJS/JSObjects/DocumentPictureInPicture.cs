@@ -31,6 +31,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the Picture-in-Picture window is successfully opened.
         /// </summary>
-        public JSEventCallback<DocumentPictureInPictureEvent> Enter { get => new JSEventCallback<DocumentPictureInPictureEvent>(o => AddEventListener("enter", o), o => RemoveEventListener("enter", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DocumentPictureInPictureEvent> OnEnter { get => new JSEventCallback<DocumentPictureInPictureEvent>("enter", AddEventListener, RemoveEventListener); set { } }
     }
 }

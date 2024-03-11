@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class WindowControlsOverlay : EventTarget
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public WindowControlsOverlay(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
@@ -31,7 +35,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The geometrychange event is fired when the position, size, or visibility of a Progressive Web App's title bar area changes
         /// </summary>
-        public JSEventCallback<WindowControlsOverlayGeometryChangeEvent> OnGeometryChange { get => new JSEventCallback<WindowControlsOverlayGeometryChangeEvent>(o => AddEventListener("geometrychange", o), o => RemoveEventListener("geometrychange", o)); set { /** required **/ } }
+        public JSEventCallback<WindowControlsOverlayGeometryChangeEvent> OnGeometryChange { get => new JSEventCallback<WindowControlsOverlayGeometryChangeEvent>("geometrychange", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

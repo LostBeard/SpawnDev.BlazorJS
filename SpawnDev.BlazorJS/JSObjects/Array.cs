@@ -179,6 +179,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             get => GetItem(index);
             set => SetItem(index, value);
         }
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Array(IJSInProcessObjectReference _ref) : base(_ref) { }
         public Array() : base(JS.New(nameof(Array))) { }
         public Array(uint length) : base(JS.New(nameof(Array), length)) { }

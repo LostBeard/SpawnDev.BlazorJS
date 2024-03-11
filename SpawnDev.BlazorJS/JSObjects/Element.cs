@@ -166,39 +166,39 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fires when the value of an input, select, or textarea element has been changed as a direct result of a user action (such as typing in a textbox or checking a checkbox).
         /// </summary>
-        public JSEventCallback<InputEvent> OnInput { get => new JSEventCallback<InputEvent>(o => AddEventListener("input", o), o => RemoveEventListener("input", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<InputEvent> OnInput { get => new JSEventCallback<InputEvent>("input", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when the value of an input or textarea element is about to be modified.
         /// </summary>
-        public JSEventCallback<InputEvent> OnBeforeInput { get => new JSEventCallback<InputEvent>(o => AddEventListener("beforeinput", o), o => RemoveEventListener("beforeinput", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<InputEvent> OnBeforeInput { get => new JSEventCallback<InputEvent>("beforeinput", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the document view or an element has been scrolled.
         /// </summary>
-        public JSEventCallback<Event> OnScroll { get => new JSEventCallback<Event>(o => AddEventListener("scroll", o), o => RemoveEventListener("scroll", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnScroll { get => new JSEventCallback<Event>("scroll", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when the document view has completed scrolling.
         /// </summary>
-        public JSEventCallback<Event> OnScrollEnd { get => new JSEventCallback<Event>(o => AddEventListener("scrollend", o), o => RemoveEventListener("scrollend", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnScrollEnd { get => new JSEventCallback<Event>("scrollend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a non-primary pointing device button (e.g., any mouse button other than the left button) has been pressed and released on an element.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnAuxClick { get => new JSEventCallback<PointerEvent>(o => AddEventListener("auxclick", o), o => RemoveEventListener("auxclick", o)); set { /** required **/ } }
+        public JSEventCallback<PointerEvent> OnAuxClick { get => new JSEventCallback<PointerEvent>("auxclick", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device button (e.g., a mouse's primary button) is pressed and released on a single element.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnClick { get => new JSEventCallback<PointerEvent>(o => AddEventListener("click", o), o => RemoveEventListener("click", o)); set { /** required **/ } }
+        public JSEventCallback<PointerEvent> OnClick { get => new JSEventCallback<PointerEvent>("click", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user attempts to open a context menu.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnContextMenu { get => new JSEventCallback<PointerEvent>(o => AddEventListener("contextmenu", o), o => RemoveEventListener("contextmenu", o)); set { /** required **/ } }
+        public JSEventCallback<PointerEvent> OnContextMenu { get => new JSEventCallback<PointerEvent>("contextmenu", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device button (e.g., a mouse's primary button) is clicked twice on a single element.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnDblClick { get => new JSEventCallback<PointerEvent>(o => AddEventListener("dblclick", o), o => RemoveEventListener("dblclick", o)); set { /** required **/ } }
+        public JSEventCallback<PointerEvent> OnDblClick { get => new JSEventCallback<PointerEvent>("dblclick", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an element has lost focus.
         /// </summary>
-        public JSEventCallback<FocusEvent> OnBlur { get => new JSEventCallback<FocusEvent>(o => AddEventListener("blur", o), o => RemoveEventListener("blur", o)); set { /** required **/ } }
+        public JSEventCallback<FocusEvent> OnBlur { get => new JSEventCallback<FocusEvent>("blur", AddEventListener, RemoveEventListener); set { } }
 
         #endregion
     }

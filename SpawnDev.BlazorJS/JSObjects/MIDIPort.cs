@@ -3,10 +3,15 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The MIDIPort interface of the Web MIDI API represents a MIDI input or output port.
+    /// The MIDIPort interface of the Web MIDI API represents a MIDI input or output port.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/MIDIPort
     /// </summary>
     public class MIDIPort : EventTarget
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MIDIPort(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         #region Properties;
@@ -52,7 +57,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Events
-        public JSEventCallback<MIDIConnectionEvent> OnStateChange { get => new JSEventCallback<MIDIConnectionEvent>(o => AddEventListener("statechange", o), o => RemoveEventListener("statechange", o)); set { /** required **/ } }
+        /// <summary>
+        /// Called when an existing port changes its state or connection.
+        /// </summary>
+        public JSEventCallback<MIDIConnectionEvent> OnStateChange { get => new JSEventCallback<MIDIConnectionEvent>("statechange", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

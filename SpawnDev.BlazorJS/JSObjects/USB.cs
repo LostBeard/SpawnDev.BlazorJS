@@ -2,9 +2,17 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The USB interface of the WebUSB API provides attributes and methods for finding and connecting USB devices from a web page.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/USB
+    /// </summary>
     public class USB : EventTarget
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public USB(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
@@ -25,11 +33,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The connect event of the USB interface is fired whenever a paired device is connected.
         /// </summary>
-        public JSEventCallback<USBConnectionEvent> OnConnect { get => new JSEventCallback<USBConnectionEvent>(o => AddEventListener("connect", o), o => RemoveEventListener("connect", o)); set { /** required **/ } }
+        public JSEventCallback<USBConnectionEvent> OnConnect { get => new JSEventCallback<USBConnectionEvent>("connect", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The disconnect event of the USB interface is fired whenever a paired device is disconnected.
         /// </summary>
-        public JSEventCallback<USBConnectionEvent> OnDisconnect { get => new JSEventCallback<USBConnectionEvent>(o => AddEventListener("disconnect", o), o => RemoveEventListener("disconnect", o)); set { /** required **/ } }
+        public JSEventCallback<USBConnectionEvent> OnDisconnect { get => new JSEventCallback<USBConnectionEvent>("disconnect", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

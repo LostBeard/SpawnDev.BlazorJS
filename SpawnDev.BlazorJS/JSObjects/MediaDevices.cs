@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a media input or output device is attached to or removed from the user's computer.
         /// </summary>
-        public JSEventCallback<Event> OnDeviceChange { get => new JSEventCallback<Event>(o => AddEventListener("devicechange", o), o => RemoveEventListener("devicechange", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnDeviceChange { get => new JSEventCallback<Event>("devicechange", AddEventListener, RemoveEventListener); set { } }
 
         public async Task<MediaStream?> GetMediaDeviceStream(MediaDeviceInfo? deviceVideo, MediaDeviceInfo? deviceAudio)
         {
@@ -34,9 +34,9 @@ namespace SpawnDev.BlazorJS.JSObjects
             dynamic constraints = new ExpandoObject();
             if (!string.IsNullOrEmpty(deviceIdVideo))
             {
-                constraints.video = new 
-                { 
-                    deviceId = deviceIdVideo, 
+                constraints.video = new
+                {
+                    deviceId = deviceIdVideo,
                     width = new { ideal = 4096 },
                     height = new { ideal = 2160 },
                 };

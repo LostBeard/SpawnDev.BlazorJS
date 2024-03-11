@@ -25,6 +25,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// release event
         /// </summary>
-        public JSEventCallback<Event> OnRelease { get => new JSEventCallback<Event>((o) => AddEventListener("release", o), (o) => RemoveEventListener("release", o)); set { } }
+        public JSEventCallback<Event> OnRelease { get => new JSEventCallback<Event>("release", AddEventListener, RemoveEventListener); set { } }
     }
 }

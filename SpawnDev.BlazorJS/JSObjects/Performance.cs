@@ -2,9 +2,17 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The Performance interface provides access to performance-related information for the current page.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Performance
+    /// </summary>
     public class Performance : EventTarget
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Performance(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
@@ -38,7 +46,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The resourcetimingbufferfull event is fired when the browser's resource timing buffer is full.
         /// </summary>
-        public JSEventCallback<Event> OnResourceTimingBufferFull { get => new JSEventCallback<Event>(o => AddEventListener("resourcetimingbufferfull", o), o => RemoveEventListener("resourcetimingbufferfull", o)); set { /** required **/ } }
+        public JSEventCallback<Event> OnResourceTimingBufferFull { get => new JSEventCallback<Event>("resourcetimingbufferfull", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

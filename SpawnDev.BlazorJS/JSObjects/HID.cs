@@ -9,10 +9,11 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class HID : EventTarget
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public HID(IJSInProcessObjectReference _ref) : base(_ref) { }
-        #endregion
-
-        #region Properties
         #endregion
 
         #region Methods
@@ -31,11 +32,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when an HID device is connected.
         /// </summary>
-        public JSEventCallback<HIDConnectionEvent> OnConnect { get => new JSEventCallback<HIDConnectionEvent>(o => AddEventListener("connect", o), o => RemoveEventListener("connect", o)); set { /** required **/ } }
+        public JSEventCallback<HIDConnectionEvent> OnConnect { get => new JSEventCallback<HIDConnectionEvent>("connect", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an HID device is disconnected.
         /// </summary>
-        public JSEventCallback<HIDConnectionEvent> OnDisconnect { get => new JSEventCallback<HIDConnectionEvent>(o => AddEventListener("disconnect", o), o => RemoveEventListener("disconnect", o)); set { /** required **/ } }
+        public JSEventCallback<HIDConnectionEvent> OnDisconnect { get => new JSEventCallback<HIDConnectionEvent>("disconnect", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

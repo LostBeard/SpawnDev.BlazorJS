@@ -215,6 +215,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The selectstart event of the Selection API is fired when a user starts a new selection.
         /// </summary>
-        public JSEventCallback<Event> OnSelectStart { get => new JSEventCallback<Event>(o => AddEventListener("selectstart", o), o => RemoveEventListener("selectstart", o)); set { /** required **/ } }
+        public JSEventCallback<Event> OnSelectStart { get => new JSEventCallback<Event>("selectstart", AddEventListener, RemoveEventListener); set { } }
     }
 }

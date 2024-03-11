@@ -9,12 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class MIDIInput : MIDIPort
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MIDIInput(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
         /// <summary>
         /// Fired when the current port receives a MIDI message.
         /// </summary>
-        public JSEventCallback<MIDIMessageEvent> OnMIDIMessage { get => new JSEventCallback<MIDIMessageEvent>(o => AddEventListener("midimessage", o), o => RemoveEventListener("midimessage", o)); set { } }
+        public JSEventCallback<MIDIMessageEvent> OnMIDIMessage { get => new JSEventCallback<MIDIMessageEvent>("midimessage", AddEventListener, RemoveEventListener); set { } }
     }
 }

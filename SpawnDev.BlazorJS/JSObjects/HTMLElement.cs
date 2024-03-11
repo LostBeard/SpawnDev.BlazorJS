@@ -164,72 +164,72 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired for input and dialog elements when the user cancels the currently open dialog by closing it with the Esc key.
         /// </summary>
-        public JSEventCallback<Event> OnCancel { get => new JSEventCallback<Event>(o => AddEventListener("cancel", o), o => RemoveEventListener("cancel", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnCancel { get => new JSEventCallback<Event>("cancel", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired for input, select, and textarea elements when the user modifies the element's value. 
         /// </summary>
-        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>(o => AddEventListener("change", o), o => RemoveEventListener("change", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>("change", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired on an element when a resource failed to load, or can't be used. 
         /// </summary>
-        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires for elements containing a resource when the resource has successfully loaded.
         /// </summary>
-        public JSEventCallback<Event> OnLoad { get => new JSEventCallback<Event>(o => AddEventListener("load", o), o => RemoveEventListener("load", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnLoad { get => new JSEventCallback<Event>("load", AddEventListener, RemoveEventListener); set { } }
         #region Clipboard events
         /// <summary>
         /// Fires when the user initiates a copy action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCopy { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("copy", o), o => RemoveEventListener("copy", o)); set { /** required **/ } }
+        public JSEventCallback<ClipboardEvent> OnCopy { get => new JSEventCallback<ClipboardEvent>("copy", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user has initiated a "cut" action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCut { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("cut", o), o => RemoveEventListener("cut", o)); set { /** required **/ } }
+        public JSEventCallback<ClipboardEvent> OnCut { get => new JSEventCallback<ClipboardEvent>("cut", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when the user initiates a paste action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("paste", o), o => RemoveEventListener("paste", o)); set { /** required **/ } }
+        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>("paste", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #region Drag & drop events
         /// <summary>
         /// Fired every few hundred milliseconds as an element or text selection is being dragged by the user.
         /// </summary>
-        public JSEventCallback<DragEvent> OnDrag { get => new JSEventCallback<DragEvent>(o => AddEventListener("drag", o), o => RemoveEventListener("drag", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DragEvent> OnDrag { get => new JSEventCallback<DragEvent>("drag", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a drag operation ends (by releasing a mouse button or hitting the escape key).
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragEnd { get => new JSEventCallback<DragEvent>(o => AddEventListener("dragend", o), o => RemoveEventListener("dragend", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DragEvent> OnDragEnd { get => new JSEventCallback<DragEvent>("dragend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a dragged element or text selection enters a valid drop target. 
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragEnter { get => new JSEventCallback<DragEvent>(o => AddEventListener("dragenter", o), o => RemoveEventListener("dragenter", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DragEvent> OnDragEnter { get => new JSEventCallback<DragEvent>("dragenter", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a dragged element or text selection leaves a valid drop target.
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragLeave { get => new JSEventCallback<DragEvent>(o => AddEventListener("dragleave", o), o => RemoveEventListener("dragleave", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DragEvent> OnDragLeave { get => new JSEventCallback<DragEvent>("dragleave", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an element or text selection is being dragged over a valid drop target (every few hundred milliseconds).
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragOver { get => new JSEventCallback<DragEvent>(o => AddEventListener("dragover", o), o => RemoveEventListener("dragover", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DragEvent> OnDragOver { get => new JSEventCallback<DragEvent>("dragover", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user starts dragging an element or text selection.
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragStart { get => new JSEventCallback<DragEvent>(o => AddEventListener("dragstart", o), o => RemoveEventListener("dragstart", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DragEvent> OnDragStart { get => new JSEventCallback<DragEvent>("dragstart", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an element or text selection is dropped on a valid drop target. 
         /// </summary>
-        public JSEventCallback<DragEvent> OnDrop { get => new JSEventCallback<DragEvent>(o => AddEventListener("drop", o), o => RemoveEventListener("drop", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DragEvent> OnDrop { get => new JSEventCallback<DragEvent>("drop", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #region Popover events
         /// <summary>
         /// Fired when the element is a popover, before it is hidden or shown.
         /// </summary>
-        public JSEventCallback<ToggleEvent> OnBeforeToggle { get => new JSEventCallback<ToggleEvent>(o => AddEventListener("beforetoggle", o), o => RemoveEventListener("beforetoggle", o)); set { /** required **/ } }
+        public JSEventCallback<ToggleEvent> OnBeforeToggle { get => new JSEventCallback<ToggleEvent>("beforetoggle", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the element is a popover, just after it is hidden or shown.
         /// </summary>
-        public JSEventCallback<ToggleEvent> OnToggle { get => new JSEventCallback<ToggleEvent>(o => AddEventListener("toggle", o), o => RemoveEventListener("toggle", o)); set { /** required **/ } }
+        public JSEventCallback<ToggleEvent> OnToggle { get => new JSEventCallback<ToggleEvent>("toggle", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #endregion
     }

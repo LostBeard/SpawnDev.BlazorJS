@@ -45,15 +45,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fires when an error occurs in the worker.
         /// </summary>
-        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { } }
+        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when the worker's parent receives a message from that worker.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>(o => AddEventListener("message", o), o => RemoveEventListener("message", o)); set { } }
+        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when a Worker object receives a message that can't be deserialized.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessageError { get => new JSEventCallback<MessageEvent>(o => AddEventListener("messageerror", o), o => RemoveEventListener("messageerror", o)); set { } }
+        public JSEventCallback<MessageEvent> OnMessageError { get => new JSEventCallback<MessageEvent>("messageerror", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

@@ -25,7 +25,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Events
-        public JSEventCallback<Event> OnAbort { get => new JSEventCallback<Event>(o => AddEventListener("abort", o), o => RemoveEventListener("abort", o)); set { /** required **/ } }
+        /// <summary>
+        /// Invoked when the asynchronous operations the signal is communicating with is/are aborted. Also available via the onabort property.
+        /// </summary>
+        public JSEventCallback<Event> OnAbort { get => new JSEventCallback<Event>("abort", AddEventListener, RemoveEventListener); set { } }
         #endregion
 
         #region Static Methods

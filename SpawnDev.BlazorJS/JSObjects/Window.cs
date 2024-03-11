@@ -219,128 +219,128 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The afterprint event is fired after the associated document has started printing or the print preview has been closed.
         /// </summary>
-        public JSEventCallback<Event> OnAfterPrint { get => new JSEventCallback<Event>(o => AddEventListener("afterprint", o), o => RemoveEventListener("afterprint", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnAfterPrint { get => new JSEventCallback<Event>("afterprint", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The appinstalled event of the Web Manifest API is fired when the browser has successfully installed a page as an application.
         /// </summary>
-        public JSEventCallback<Event> OnAppInstalled { get => new JSEventCallback<Event>(o => AddEventListener("appinstalled", o), o => RemoveEventListener("appinstalled", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnAppInstalled { get => new JSEventCallback<Event>("appinstalled", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The beforeinstallprompt event fires when the browser has detected that a website can be installed as a Progressive Web App.
         /// </summary>
-        public JSEventCallback<BeforeInstallPromptEvent> OnBeforeInstallPrompt { get => new JSEventCallback<BeforeInstallPromptEvent>(o => AddEventListener("beforeinstallprompt", o), o => RemoveEventListener("beforeinstallprompt", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<BeforeInstallPromptEvent> OnBeforeInstallPrompt { get => new JSEventCallback<BeforeInstallPromptEvent>("beforeinstallprompt", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The beforeprint event is fired when the associated document is about to be printed or previewed for printing.
         /// </summary>
-        public JSEventCallback<Event> OnBeforePrint { get => new JSEventCallback<Event>(o => AddEventListener("beforeprint", o), o => RemoveEventListener("beforeprint", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnBeforePrint { get => new JSEventCallback<Event>("beforeprint", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The beforeunload event is fired when the window, the document and its resources are about to be unloaded. The document is still visible and the event is still cancelable at this point.
         /// </summary>
-        public JSEventCallback<BeforeUnloadEvent> OnBeforeUnload { get => new JSEventCallback<BeforeUnloadEvent>(o => AddEventListener("beforeunload", o), o => RemoveEventListener("beforeunload", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<BeforeUnloadEvent> OnBeforeUnload { get => new JSEventCallback<BeforeUnloadEvent>("beforeunload", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The blur event fires when an element has lost focus.
         /// </summary>
-        public JSEventCallback<FocusEvent> OnBlur { get => new JSEventCallback<FocusEvent>(o => AddEventListener("blur", o), o => RemoveEventListener("blur", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<FocusEvent> OnBlur { get => new JSEventCallback<FocusEvent>("blur", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The copy event fires when the user initiates a copy action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCopy { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("copy", o), o => RemoveEventListener("copy", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<ClipboardEvent> OnCopy { get => new JSEventCallback<ClipboardEvent>("copy", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The cut event is fired when the user has initiated a "cut" action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCut { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("cut", o), o => RemoveEventListener("cut", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<ClipboardEvent> OnCut { get => new JSEventCallback<ClipboardEvent>("cut", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The devicemotion event is fired at a regular interval and indicates the amount of physical force of acceleration the device is receiving at that time. It also provides information about the rate of rotation, if available.
         /// </summary>
-        public JSEventCallback<DeviceMotionEvent> OnDeviceMotion { get => new JSEventCallback<DeviceMotionEvent>(o => AddEventListener("devicemotion", o), o => RemoveEventListener("devicemotion", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DeviceMotionEvent> OnDeviceMotion { get => new JSEventCallback<DeviceMotionEvent>("devicemotion", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The deviceorientation event is fired when fresh data is available from an orientation sensor about the current orientation of the device as compared to the Earth coordinate frame. This data is gathered from a magnetometer inside the device.
         /// </summary>
-        public JSEventCallback<DeviceOrientationEvent> OnDeviceOrientation { get => new JSEventCallback<DeviceOrientationEvent>(o => AddEventListener("deviceorientation", o), o => RemoveEventListener("deviceorientation", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DeviceOrientationEvent> OnDeviceOrientation { get => new JSEventCallback<DeviceOrientationEvent>("deviceorientation", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The deviceorientationabsolute event is sent to the ondeviceorientationabsolute event handler on a Window event when absolute device orientation changes.
         /// </summary>
-        public JSEventCallback<DeviceOrientationEvent> OnDeviceOrientationAbsolute { get => new JSEventCallback<DeviceOrientationEvent>(o => AddEventListener("deviceorientationabsolute", o), o => RemoveEventListener("deviceorientationabsolute", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<DeviceOrientationEvent> OnDeviceOrientationAbsolute { get => new JSEventCallback<DeviceOrientationEvent>("deviceorientationabsolute", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The error event is fired on a Window object when a resource failed to load or couldn't be used — for example if a script has an execution error.
         /// </summary>
-        public JSEventCallback<ErrorEvent> OnError { get => new JSEventCallback<ErrorEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<ErrorEvent> OnError { get => new JSEventCallback<ErrorEvent>("error", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The focus event fires when an element has received focus.
         /// </summary>
-        public JSEventCallback<FocusEvent> OnFocus { get => new JSEventCallback<FocusEvent>(o => AddEventListener("focus", o), o => RemoveEventListener("focus", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<FocusEvent> OnFocus { get => new JSEventCallback<FocusEvent>("focus", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The gamepadconnected event is fired when the browser detects that a gamepad has been connected or the first time a button/axis of the gamepad is used.
         /// </summary>
-        public JSEventCallback<GamepadEvent> OnGamepadConnected { get => new JSEventCallback<GamepadEvent>(o => AddEventListener("gamepadconnected", o), o => RemoveEventListener("gamepadconnected", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<GamepadEvent> OnGamepadConnected { get => new JSEventCallback<GamepadEvent>("gamepadconnected", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The gamepaddisconnected event is fired when the browser detects that a gamepad has been disconnected.
         /// </summary>
-        public JSEventCallback<GamepadEvent> OnGamepadDisconnected { get => new JSEventCallback<GamepadEvent>(o => AddEventListener("gamepaddisconnected", o), o => RemoveEventListener("gamepaddisconnected", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<GamepadEvent> OnGamepadDisconnected { get => new JSEventCallback<GamepadEvent>("gamepaddisconnected", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The hashchange event is fired when the fragment identifier of the URL has changed (the part of the URL beginning with and following the # symbol).
         /// </summary>
-        public JSEventCallback<HashChangeEvent> OnHashChange { get => new JSEventCallback<HashChangeEvent>(o => AddEventListener("hashchange", o), o => RemoveEventListener("hashchange", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<HashChangeEvent> OnHashChange { get => new JSEventCallback<HashChangeEvent>("hashchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The languagechange event is fired at the global scope object when the user's preferred language changes.
         /// </summary>
-        public JSEventCallback<Event> OnLanguageChange { get => new JSEventCallback<Event>(o => AddEventListener("languagechange", o), o => RemoveEventListener("languagechange", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnLanguageChange { get => new JSEventCallback<Event>("languagechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The load event is fired when the whole page has loaded, including all dependent resources such as stylesheets, scripts, iframes, and images. This is in contrast to DOMContentLoaded, which is fired as soon as the page DOM has been loaded, without waiting for resources to finish loading.
         /// </summary>
-        public JSEventCallback<Event> OnLoad { get => new JSEventCallback<Event>(o => AddEventListener("load", o), o => RemoveEventListener("load", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnLoad { get => new JSEventCallback<Event>("load", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The message event is fired on a Window object when the window receives a message, for example from a call to Window.postMessage() from another browsing context.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>(o => AddEventListener("message", o), o => RemoveEventListener("message", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The messageerror event is fired on a Window object when it receives a message that can't be deserialized.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessageError { get => new JSEventCallback<MessageEvent>(o => AddEventListener("messageerror", o), o => RemoveEventListener("messageerror", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<MessageEvent> OnMessageError { get => new JSEventCallback<MessageEvent>("messageerror", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The offline event of the Window interface is fired when the browser has lost access to the network and the value of Navigator.onLine switches to false
         /// </summary>
-        public JSEventCallback<Event> OnOffline { get => new JSEventCallback<Event>(o => AddEventListener("offline", o), o => RemoveEventListener("offline", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnOffline { get => new JSEventCallback<Event>("offline", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The online event of the Window interface is fired when the browser has gained access to the network and the value of Navigator.onLine switches to true
         /// </summary>
-        public JSEventCallback<Event> OnOnline { get => new JSEventCallback<Event>(o => AddEventListener("online", o), o => RemoveEventListener("online", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnOnline { get => new JSEventCallback<Event>("online", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The pagehide event is sent to a Window when the browser hides the current page in the process of presenting a different page from the session's history
         /// </summary>
-        public JSEventCallback<PageTransitionEvent> OnPageHide { get => new JSEventCallback<PageTransitionEvent>(o => AddEventListener("pagehide", o), o => RemoveEventListener("pagehide", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<PageTransitionEvent> OnPageHide { get => new JSEventCallback<PageTransitionEvent>("pagehide", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The pageshow event is sent to a Window when the browser displays the window's document due to navigation.
         /// </summary>
-        public JSEventCallback<PageTransitionEvent> OnPageShow { get => new JSEventCallback<PageTransitionEvent>(o => AddEventListener("pageshow", o), o => RemoveEventListener("pageshow", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<PageTransitionEvent> OnPageShow { get => new JSEventCallback<PageTransitionEvent>("pageshow", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The paste event is fired when the user has initiated a "paste" action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>(o => AddEventListener("paste", o), o => RemoveEventListener("paste", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>("paste", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The popstate event of the Window interface is fired when the active history entry changes while the user navigates the session history. It changes the current history entry to that of the last page the user visited or, if history.pushState() has been used to add a history entry to the history stack, that history entry is used instead.
         /// </summary>
-        public JSEventCallback<PopStateEvent> OnPopState { get => new JSEventCallback<PopStateEvent>(o => AddEventListener("popstate", o), o => RemoveEventListener("popstate", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<PopStateEvent> OnPopState { get => new JSEventCallback<PopStateEvent>("popstate", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The rejectionhandled event is sent to the script's global scope (usually window but also Worker) whenever a rejected JavaScript Promise is handled late, i.e. when a handler is attached to the promise after its rejection had caused an unhandledrejection event.
         /// </summary>
-        public JSEventCallback<PromiseRejectionEvent> OnRejectionHandled { get => new JSEventCallback<PromiseRejectionEvent>(o => AddEventListener("rejectionhandled", o), o => RemoveEventListener("rejectionhandled", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<PromiseRejectionEvent> OnRejectionHandled { get => new JSEventCallback<PromiseRejectionEvent>("rejectionhandled", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The resize event fires when the document view (window) has been resized.
         /// </summary>
-        public JSEventCallback<UIEvent> OnResize { get => new JSEventCallback<UIEvent>(o => AddEventListener("resize", o), o => RemoveEventListener("resize", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<UIEvent> OnResize { get => new JSEventCallback<UIEvent>("resize", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The storage event of the Window interface fires when a storage area (localStorage) has been modified in the context of another document.
         /// </summary>
-        public JSEventCallback<StorageEvent> OnStorage { get => new JSEventCallback<StorageEvent>(o => AddEventListener("storage", o), o => RemoveEventListener("storage", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<StorageEvent> OnStorage { get => new JSEventCallback<StorageEvent>("storage", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The unhandledrejection event is sent to the global scope of a script when a JavaScript Promise that has no rejection handler is rejected; typically, this is the window, but may also be a Worker.
         /// </summary>
-        public JSEventCallback<PromiseRejectionEvent> OnUnhandledRejection { get => new JSEventCallback<PromiseRejectionEvent>(o => AddEventListener("unhandledrejection", o), o => RemoveEventListener("unhandledrejection", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<PromiseRejectionEvent> OnUnhandledRejection { get => new JSEventCallback<PromiseRejectionEvent>("unhandledrejection", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The unload event is fired when the document or a child resource is being unloaded.<br />
         /// Warning: Developers should avoid using this event.
         /// </summary>
-        public JSEventCallback<Event> OnUnload { get => new JSEventCallback<Event>(o => AddEventListener("unload", o), o => RemoveEventListener("unload", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        public JSEventCallback<Event> OnUnload { get => new JSEventCallback<Event>("unload", AddEventListener, RemoveEventListener); set { } }
         #endregion
 
         public bool ShowDirectoryPickerSupported() => !JS.IsUndefined("showDirectoryPicker");

@@ -25,7 +25,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fires when a TextTrack has changed the currently displaying cues. 
         /// </summary>
-        public JSEventCallback<Event> OnCueChange { get => new JSEventCallback<Event>(o => AddEventListener("cuechange", o), o => RemoveEventListener("cuechange", o)); set { /** required **/ } }
+        public JSEventCallback<Event> OnCueChange { get => new JSEventCallback<Event>("cuechange", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

@@ -90,8 +90,20 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class IDBRequest : EventTarget
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public IDBRequest(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Returns a DOMException in the event of an unsuccessful request, indicating what went wrong.
+        /// </summary>
         public DOMException Error => JSRef.Get<DOMException>("error");
+        /// <summary>
+        /// Returns the result of the request. If the request is not completed, the result is not available and an InvalidStateError exception is thrown.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T? ResultAs<T>() => JSRef.Get<T>("result");
         /// <summary>
         /// An object representing the source of the request, such as an IDBIndex, IDBObjectStore or IDBCursor.
@@ -99,12 +111,24 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T? SourceAs<T>() => JSRef.Get<T>("source");
+        /// <summary>
+        /// The state of the request. Every request starts in the pending state. The state changes to done when the request completes successfully or when an error occurs.
+        /// </summary>
         public string ReadyState => JSRef.Get<string>("readyState");
+        /// <summary>
+        /// The transaction for the request. This property can be null for certain requests, for example those returned from IDBFactory.open unless an upgrade is needed. (You're just connecting to a database, so there is no transaction to return).
+        /// </summary>
         public IDBTransaction? Transaction => JSRef.Get<IDBTransaction?>("transaction");
 
         #region Events
-        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { } }
-        public JSEventCallback<Event> OnSuccess { get => new JSEventCallback<Event>(o => AddEventListener("success", o), o => RemoveEventListener("success", o)); set { } }
+        /// <summary>
+        /// Fired when an error caused a request to fail.
+        /// </summary>
+        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when an IDBRequest succeeds.
+        /// </summary>
+        public JSEventCallback<Event> OnSuccess { get => new JSEventCallback<Event>("success", AddEventListener, RemoveEventListener); set { } }
         #endregion 
 
         public static Task<T> ToAsync<T>(IDBRequest<T> request)

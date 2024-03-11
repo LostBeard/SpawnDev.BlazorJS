@@ -1,12 +1,11 @@
 ﻿using Microsoft.JSInterop;
-using System.Dynamic;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class XMLHttpRequest<TResponse> : XMLHttpRequest
-    {
-        public TResponse Response => JSRef.Get<TResponse>("response");
-    }
+    /// <summary>
+    /// XMLHttpRequest (XHR) objects are used to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+    /// </summary>
     public class XMLHttpRequest : XMLHttpRequestEventTarget
     {
         #region Constructors
@@ -14,6 +13,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The XMLHttpRequest() constructor creates a new XMLHttpRequest
         /// </summary>
         public XMLHttpRequest() : base(JS.New("XMLHttpRequest")) { }
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public XMLHttpRequest(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
         #region Property get/set
@@ -155,14 +158,46 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void SetRequestHeader(string header, string value) => JSRef.CallVoid("setRequestHeader", header, value);
         #endregion
         #region Events
-        public JSEventCallback<ProgressEvent> OnAbort { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("abort", o), o => RemoveEventListener("abort", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
-        public JSEventCallback<ProgressEvent> OnError { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
-        public JSEventCallback<ProgressEvent> OnLoad { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("load", o), o => RemoveEventListener("load", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
-        public JSEventCallback<ProgressEvent> OnLoadEnd { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("loadend", o), o => RemoveEventListener("loadend", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
-        public JSEventCallback<ProgressEvent> OnLoadStart { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("loadstart", o), o => RemoveEventListener("loadstart", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
-        public JSEventCallback<ProgressEvent> OnProgress { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("progress", o), o => RemoveEventListener("progress", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
-        public JSEventCallback<Event> OnReadyStateChange { get => new JSEventCallback<Event>(o => AddEventListener("readystatechange", o), o => RemoveEventListener("readystatechange", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
-        public JSEventCallback<ProgressEvent> OnTimeout { get => new JSEventCallback<ProgressEvent>(o => AddEventListener("timeout", o), o => RemoveEventListener("timeout", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+        /// <summary>
+        /// Fired when a request has been aborted, for example because the program called XMLHttpRequest.abort(). Also available via the onabort event handler property.
+        /// </summary>
+        public JSEventCallback<ProgressEvent> OnAbort { get => new JSEventCallback<ProgressEvent>("abort", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the request encountered an error. Also available via the onerror event handler property.
+        /// </summary>
+        public JSEventCallback<ProgressEvent> OnError { get => new JSEventCallback<ProgressEvent>("error", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when an XMLHttpRequest transaction completes successfully. Also available via the onload event handler property.
+        /// </summary>
+        public JSEventCallback<ProgressEvent> OnLoad { get => new JSEventCallback<ProgressEvent>("load", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a request has completed, whether successfully (after load) or unsuccessfully (after abort or error). Also available via the onloadend event handler property.
+        /// </summary>
+        public JSEventCallback<ProgressEvent> OnLoadEnd { get => new JSEventCallback<ProgressEvent>("loadend", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a request has started to load data. Also available via the onloadstart event handler property.
+        /// </summary>
+        public JSEventCallback<ProgressEvent> OnLoadStart { get => new JSEventCallback<ProgressEvent>("loadstart", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired periodically when a request receives more data. Also available via the onprogress event handler property.
+        /// </summary>
+        public JSEventCallback<ProgressEvent> OnProgress { get => new JSEventCallback<ProgressEvent>("progress", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired whenever the readyState property changes. Also available via the onreadystatechange event handler property.
+        /// </summary>
+        public JSEventCallback<Event> OnReadyStateChange { get => new JSEventCallback<Event>("readystatechange", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when progress is terminated due to preset time expiring. Also available via the ontimeout event handler property.
+        /// </summary>
+        public JSEventCallback<ProgressEvent> OnTimeout { get => new JSEventCallback<ProgressEvent>("timeout", AddEventListener, RemoveEventListener); set { } }
         #endregion
+    }
+    /// <summary>
+    /// XMLHttpRequest (XHR) objects are used to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+    /// </summary>
+    public class XMLHttpRequest<TResponse> : XMLHttpRequest
+    {
+        public TResponse Response => JSRef.Get<TResponse>("response");
     }
 }

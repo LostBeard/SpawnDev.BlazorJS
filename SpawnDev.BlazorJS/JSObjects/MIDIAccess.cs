@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class MIDIAccess : EventTarget
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MIDIAccess(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
@@ -34,7 +38,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Called whenever a new MIDI port is added or an existing port changes state.
         /// </summary>
-        public JSEventCallback<MIDIConnectionEvent> OnStateChange { get => new JSEventCallback<MIDIConnectionEvent>(o => AddEventListener("statechange", o), o => RemoveEventListener("statechange", o)); set { /** required **/ } }
+        public JSEventCallback<MIDIConnectionEvent> OnStateChange { get => new JSEventCallback<MIDIConnectionEvent>("statechange", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }
