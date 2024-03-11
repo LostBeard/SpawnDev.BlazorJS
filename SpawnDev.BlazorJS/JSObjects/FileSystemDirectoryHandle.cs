@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects {
     // TODO - NEEDS TESTING SINCE JSINTEROP CHANGE!!!!
@@ -140,7 +141,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
 
         public class RemoveEntryOptions
         {
-            public bool Recursive { get; set; }
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public bool? Recursive { get; set; }
         }
         public Task RemoveEntry(string name, bool recursive = false) => JSRef.CallVoidAsync("removeEntry", name, new RemoveEntryOptions { Recursive = recursive });
 

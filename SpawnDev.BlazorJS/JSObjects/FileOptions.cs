@@ -2,6 +2,10 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// An options object containing optional attributes used when creating a new File
+    /// https://developer.mozilla.org/en-US/docs/Web/API/File/File
+    /// </summary>
     public class FileOptions
     {
         /// <summary>
@@ -14,5 +18,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public long? LastModified { get; set; }
+        /// <summary>
+        /// How to interpret newline characters (\n) within the contents, if the data is text. The default value, transparent, copies newline characters into the blob without changing them. To convert newlines to the host system's native convention, specify the value native.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Endings { get; set; }
     }
 }

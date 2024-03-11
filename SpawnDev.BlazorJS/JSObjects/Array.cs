@@ -171,65 +171,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Array<T> : JSObject, IEnumerable<T>
     {
         #region Enable IEnumerable
-        public IEnumerator GetEnumerator()
-        {
-            return new ArrayEnumerator<T>(this);
-        }
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            return new ArrayEnumerator<T>(this);
-        }
-        private class ArrayEnumerator<TEnumerable> : IEnumerator<TEnumerable>
-        {
-            int position = -1;
-            Array<TEnumerable> array;
-            //constructor
-            public ArrayEnumerator(Array<TEnumerable> array)
-            {
-                this.array = array;
-            }
-            //IEnumerator
-            public bool MoveNext()
-            {
-                position++;
-                return (position < array.Length);
-            }
-            //IEnumerator
-            public void Reset()
-            {
-                position = -1;
-            }
-            public void Dispose() { }
-            //IEnumerator
-            public object Current
-            {
-                get
-                {
-                    try
-                    {
-                        return array[position];
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        throw new InvalidOperationException();
-                    }
-                }
-            }
-            TEnumerable IEnumerator<TEnumerable>.Current
-            {
-                get
-                {
-                    try
-                    {
-                        return array[position];
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        throw new InvalidOperationException();
-                    }
-                }
-            }
-        }  
+        public IEnumerator GetEnumerator() => new SimpleEnumerator<T>(this.At, () => this.Length);
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => new SimpleEnumerator<T>(this.At, () => this.Length);
         #endregion
         public T this[int index]
         {
