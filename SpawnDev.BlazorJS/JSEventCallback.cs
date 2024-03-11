@@ -502,7 +502,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="off">remove callback method - that takes (eventName, callback)</param>
         public EventCallbackBase(string eventName, Action<string, Callback> on, Action<string, Callback>? off = null)
         {
-            On  = (o) => on(eventName, o),
+            On = (o) => on(eventName, o);
             Off = off == null ? null : (o) => off(eventName, o);
         }
         public EventCallbackBase(Action<Callback> on, Action<Callback>? off = null)
