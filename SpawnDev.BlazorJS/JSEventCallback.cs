@@ -40,9 +40,18 @@ namespace SpawnDev.BlazorJS
         }
         #endregion
         #region Constructors
-        public JSEventCallback(Action<Callback> on, Action<Callback>? off = null) : base(on, off){ }
+        /// <summary>
+        /// Maps:<br />
+        /// JSEventCallback += callback - to on(eventName, callback)<br />
+        /// JSEventCallback -= callback - to off(eventName, callback)<br />
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="on">add callback method - that takes (eventName, callback)</param>
+        /// <param name="off">remove callback method - that takes (eventName, callback)</param>
+        public JSEventCallback(string eventName, Action<string, Callback> on, Action<string, Callback>? off = null) : base(eventName, on, off) { }
+        public JSEventCallback(Action<Callback> on, Action<Callback>? off = null) : base(on, off) { }
         public JSEventCallback(IJSInProcessObjectReference jsRef, string propertyName) : base(jsRef, propertyName) { }
-        public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base(jsRef, name, onFn, offFn){ }
+        public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base(jsRef, name, onFn, offFn) { }
         #endregion
     }
     public class JSEventCallback<T1> : EventCallbackBase
@@ -100,6 +109,15 @@ namespace SpawnDev.BlazorJS
         }
         #endregion
         #region Constructors
+        /// <summary>
+        /// Maps:<br />
+        /// JSEventCallback += callback - to on(eventName, callback)<br />
+        /// JSEventCallback -= callback - to off(eventName, callback)<br />
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="on">add callback method - that takes (eventName, callback)</param>
+        /// <param name="off">remove callback method - that takes (eventName, callback)</param>
+        public JSEventCallback(string eventName, Action<string, Callback> on, Action<string, Callback>? off = null) : base(eventName, on, off) { }
         public JSEventCallback(Action<Callback> on, Action<Callback>? off = null) : base(on, off) { }
         public JSEventCallback(IJSInProcessObjectReference jsRef, string propertyName) : base(jsRef, propertyName) { }
         public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base(jsRef, name, onFn, offFn) { }
@@ -186,6 +204,15 @@ namespace SpawnDev.BlazorJS
         }
         #endregion
         #region Constructors
+        /// <summary>
+        /// Maps:<br />
+        /// JSEventCallback += callback - to on(eventName, callback)<br />
+        /// JSEventCallback -= callback - to off(eventName, callback)<br />
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="on">add callback method - that takes (eventName, callback)</param>
+        /// <param name="off">remove callback method - that takes (eventName, callback)</param>
+        public JSEventCallback(string eventName, Action<string, Callback> on, Action<string, Callback>? off = null) : base(eventName, on, off) { }
         public JSEventCallback(Action<Callback> on, Action<Callback>? off = null) : base(on, off) { }
         public JSEventCallback(IJSInProcessObjectReference jsRef, string propertyName) : base(jsRef, propertyName) { }
         public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base(jsRef, name, onFn, offFn) { }
@@ -298,6 +325,15 @@ namespace SpawnDev.BlazorJS
         }
         #endregion
         #region Constructors
+        /// <summary>
+        /// Maps:<br />
+        /// JSEventCallback += callback - to on(eventName, callback)<br />
+        /// JSEventCallback -= callback - to off(eventName, callback)<br />
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="on">add callback method - that takes (eventName, callback)</param>
+        /// <param name="off">remove callback method - that takes (eventName, callback)</param>
+        public JSEventCallback(string eventName, Action<string, Callback> on, Action<string, Callback>? off = null) : base(eventName, on, off) { }
         public JSEventCallback(Action<Callback> on, Action<Callback>? off = null) : base(on, off) { }
         public JSEventCallback(IJSInProcessObjectReference jsRef, string propertyName) : base(jsRef, propertyName) { }
         public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base(jsRef, name, onFn, offFn) { }
@@ -436,6 +472,15 @@ namespace SpawnDev.BlazorJS
         }
         #endregion
         #region Constructors
+        /// <summary>
+        /// Maps:<br />
+        /// JSEventCallback += callback - to on(eventName, callback)<br />
+        /// JSEventCallback -= callback - to off(eventName, callback)<br />
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="on">add callback method - that takes (eventName, callback)</param>
+        /// <param name="off">remove callback method - that takes (eventName, callback)</param>
+        public JSEventCallback(string eventName, Action<string, Callback> on, Action<string, Callback>? off = null) : base(eventName, on, off) { }
         public JSEventCallback(Action<Callback> on, Action<Callback>? off = null) : base(on, off) { }
         public JSEventCallback(IJSInProcessObjectReference jsRef, string propertyName) : base(jsRef, propertyName) { }
         public JSEventCallback(IJSInProcessObjectReference jsRef, string name, string onFn, string offFn = "") : base(jsRef, name, onFn, offFn) { }
@@ -447,7 +492,20 @@ namespace SpawnDev.BlazorJS
     {
         public Action<Callback> On { get; private set; }
         public Action<Callback>? Off { get; private set; }
-        public EventCallbackBase(Action<Callback> on, Action<Callback>? off = null) 
+        /// <summary>
+        /// Maps:<br />
+        /// JSEventCallback += callback - to on(eventName, callback)<br />
+        /// JSEventCallback -= callback - to off(eventName, callback)<br />
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="on">add callback method - that takes (eventName, callback)</param>
+        /// <param name="off">remove callback method - that takes (eventName, callback)</param>
+        public EventCallbackBase(string eventName, Action<string, Callback> on, Action<string, Callback>? off = null)
+        {
+            On  = (o) => on(eventName, o),
+            Off = off == null ? null : (o) => off(eventName, o);
+        }
+        public EventCallbackBase(Action<Callback> on, Action<Callback>? off = null)
         {
             On = on;
             Off = off;
