@@ -10,7 +10,7 @@
         Func<int, TEnumerable> ItemGetter;
         Func<int> LengthGetter;
         /// <summary>
-        /// 
+        /// Creates a SimpleEnumerator instance
         /// </summary>
         /// <param name="itemGetter">called when an indexed item is needed</param>
         /// <param name="lengthGetter">called when </param>
@@ -19,17 +19,33 @@
             ItemGetter = itemGetter;
             LengthGetter = lengthGetter;
         }
+        /// <summary>
+        /// Increments the position
+        /// </summary>
+        /// <returns></returns>
         public bool MoveNext()
         {
             position++;
-            return (position < LengthGetter());
+            return position < LengthGetter();
         }
+        /// <summary>
+        /// Resets the position
+        /// </summary>
         public void Reset()
         {
             position = -1;
         }
+        /// <summary>
+        /// Not used. Here to satisfy IEnumerator implementation requirement
+        /// </summary>
         public void Dispose() { }
-        public object Current => ItemGetter(position);
+        /// <summary>
+        /// Returns the enumerator's current value asn an object?
+        /// </summary>
+        public object? Current => ItemGetter(position);
+        /// <summary>
+        /// Returns the enumerator's current value as type TEnumerable
+        /// </summary>
         TEnumerable IEnumerator<TEnumerable>.Current => ItemGetter(position);
     }
 }
