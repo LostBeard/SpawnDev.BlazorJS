@@ -10,9 +10,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string? Type { get; set; } = null;
     }
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/Blob
+    /// <summary>
+    /// The Blob object represents a blob, which is a file-like object of immutable, raw data; they can be read as text or binary data, or converted into a ReadableStream so its methods can be used for processing the data.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Blob
+    /// </summary>
     public class Blob : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Blob(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         public Blob(ArrayBuffer[] buffers) : base(JS.New(nameof(Blob), buffers)) { }

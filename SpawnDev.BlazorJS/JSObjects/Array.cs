@@ -190,16 +190,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Array(IJSInProcessObjectReference _ref) : base(_ref) { }
         public Array() : base(JS.New(nameof(Array))) { }
         public Array(uint length) : base(JS.New(nameof(Array), length)) { }
-        public Array(params object[] values) : base(JS.NewApply(nameof(Array), values)) { }
+        public Array(params T[] values) : base(JS.NewApply(nameof(Array), values == null ? null : values.Select(o => (object?)o).ToArray())) { }
         public int Length => JSRef.Get<int>("length");
-        public void Push(object? value) => JSRef.CallVoid("push", value);
-        public void Unshift(object? value) => JSRef.CallVoid("unshift", value);
+        public void Push(T value) => JSRef.CallVoid("push", value);
+        public void Unshift(T value) => JSRef.CallVoid("unshift", value);
         public T At(int index) => JSRef.Call<T>("at", index);
         public T Pop() => JSRef.Call<T>("pop");
         public T Shift() => JSRef.Call<T>("shift");
-        public void SetItem(int index, object? value) => JSRef.Set(index, value);
+        public void SetItem(int index, T value) => JSRef.Set(index, value);
         public T GetItem(int index) => JSRef.Get<T>(index);
-        public object? GetItem(Type type, int index) => JSRef.Get(type, index);
+        public T GetItem(Type type, int index) => (T)JSRef.Get(type, index);
         public Array Concat(Array array) => JSRef.Call<Array>("concat", array);
         public string Join(string separator = "") => JSRef.Call<string>("join", separator);
         public Array<TResult> Map<TResult>(Function function) => JSRef.Call<Array<TResult>>("map", function);
@@ -218,11 +218,5 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var cb = Callback.Create(fn);
             JSRef.CallVoid("forEach", cb);
         }
-        //public T[] ToArray() => JS.ReturnMe<T[]>(JSRef);
-        public T[] ToArray() => Enumerable.Range(0, Length).Select(i => At(i)).ToArray();
-        public T[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToArray();
-        public List<T> ToList() => Enumerable.Range(0, Length).Select(i => At(i)).ToList();
-        public List<T> ToList(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToList();
-
     }
 }
