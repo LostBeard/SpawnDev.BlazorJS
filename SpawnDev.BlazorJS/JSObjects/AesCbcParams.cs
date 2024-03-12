@@ -1,7 +1,8 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The AesCbcParams dictionary of the Web Crypto API represents the object that should be passed as the algorithm parameter into SubtleCrypto.encrypt(), SubtleCrypto.decrypt(), SubtleCrypto.wrapKey(), or SubtleCrypto.unwrapKey(), when using the AES-CBC algorithm.
+    /// The AesCbcParams dictionary of the Web Crypto API represents the object that should be passed as the algorithm parameter into SubtleCrypto.encrypt(), SubtleCrypto.decrypt(), SubtleCrypto.wrapKey(), or SubtleCrypto.unwrapKey(), when using the AES-CBC algorithm.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/AesCbcParams
     /// </summary>
     public class AesCbcParams : EncryptParams
     {

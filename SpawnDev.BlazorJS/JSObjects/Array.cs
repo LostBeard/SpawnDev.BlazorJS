@@ -168,6 +168,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public T[] ToArray<T>(int start, int count) => Enumerable.Range(start, count).Select(i => At<T>(i)).ToArray();
     }
+    /// <summary>
+    /// The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+    /// </summary>
     public class Array<T> : JSObject, IEnumerable<T>
     {
         #region Enable IEnumerable

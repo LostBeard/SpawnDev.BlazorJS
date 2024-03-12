@@ -37,6 +37,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="imageBitmapSource">Receives an ImageBitmapSource as a parameter. This can be an element, a Blob of type image or an ImageData object.</param>
         /// <returns></returns>
-        public Task<Array<BarcodeDetectorResult>> Detect(Union<Blob, Element, ImageData> imageBitmapSource) => JSRef.CallAsync<Array<BarcodeDetectorResult>>("detect", imageBitmapSource);
+        public Task<Array<DetectedBarcode>> Detect(Union<Blob, Element, ImageData> imageBitmapSource) => JSRef.CallAsync<Array<DetectedBarcode>>("detect", imageBitmapSource);
     }
 }

@@ -35,9 +35,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public float Level => JSRef.Get<float>("level");
         #endregion
 
-        #region Methods
-        #endregion
-
         #region Events
         /// <summary>
         /// Fired when the battery charging state (the charging property) is updated.

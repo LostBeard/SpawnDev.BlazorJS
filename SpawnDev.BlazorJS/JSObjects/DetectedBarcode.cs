@@ -2,13 +2,17 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class BarcodeDetectorResult : JSObject
+    /// <summary>
+    /// Returned in array from BarcodeDetector.Detect()<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/BarcodeDetector/detect
+    /// </summary>
+    public class DetectedBarcode : JSObject
     {
         /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
-        public BarcodeDetectorResult(IJSInProcessObjectReference _ref) : base(_ref) { }
+        public DetectedBarcode(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// boundingBox: A DOMRectReadOnly, which returns the dimensions of a rectangle representing the extent of a detected barcode, aligned with the image
         /// </summary>

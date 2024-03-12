@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class BarProp : JSObject
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public BarProp(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
