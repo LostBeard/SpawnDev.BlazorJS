@@ -1,10 +1,19 @@
 ﻿using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
-    // https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.14.9
+namespace SpawnDev.BlazorJS.JSObjects
+{
+    /// <summary>
+    /// The WebGLRenderingContext interface provides an interface to the OpenGL ES 2.0 graphics rendering context for the drawing surface of an HTML canvas element.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext<br />
+    /// https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.14.9
+    /// </summary>
+    public partial class WebGLRenderingContext : JSObject
+    {
 
-    public partial class WebGLRenderingContext : JSObject {
-
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public WebGLRenderingContext(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         // properties
@@ -207,13 +216,15 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public void Viewport(int x, int y, int width, int height) => JSRef.CallVoid("viewport", x, y, width, height);
 
         // Helper functions (non-spec) 
-        public WebGLProgram CreateProgram(string vertexShader, string fragmentShader) {
+        public WebGLProgram CreateProgram(string vertexShader, string fragmentShader)
+        {
             //vertex shader
             using var vsShader = CreateShader(VERTEX_SHADER);
             ShaderSource(vsShader, vertexShader);
             CompileShader(vsShader);
             var vsShaderSucc = GetShaderParameter<bool>(vsShader, COMPILE_STATUS);
-            if (!vsShaderSucc) {
+            if (!vsShaderSucc)
+            {
                 var compilationLog = GetShaderInfoLog(vsShader);
                 DeleteShader(vsShader);
                 throw new Exception($"Error compile vertex shader for WebGLProgram. {compilationLog}");
@@ -223,7 +234,8 @@ namespace SpawnDev.BlazorJS.JSObjects {
             ShaderSource(psShader, fragmentShader);
             CompileShader(psShader);
             var psShaderSucc = GetShaderParameter<bool>(psShader, COMPILE_STATUS);
-            if (!psShaderSucc) {
+            if (!psShaderSucc)
+            {
                 var compilationLog = GetShaderInfoLog(psShader);
                 DeleteShader(vsShader);
                 DeleteShader(psShader);
