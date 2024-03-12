@@ -22,10 +22,20 @@ namespace SpawnDev.BlazorJS
         public static JSInProcessObjectReferenceUndefined? UndefinedRef { get; } = new JSInProcessObjectReferenceUndefined();
         [JsonIgnore]
         public bool IsJSRefUndefined { get; private set; } = false;
+        /// <summary>
+        /// JSRef is the underlying IJSInProcessObjectReference
+        /// </summary>
         [JsonIgnore]
         public IJSInProcessObjectReference? JSRef { get; private set; }
+        /// <summary>
+        /// Returns true if the underlying JSRef IJSInProcessObjectReference object has been disposed
+        /// </summary>
         [JsonIgnore]
         public bool IsWrapperDisposed { get; private set; } = false;
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public JSObject(IJSInProcessObjectReference _ref) => FromReference(_ref);
         // some constructors of types that inherit from JSObject will pass NullRef to the base constructor and then create the JSRef instance in their constructor and then set it with FromReference
         /// <summary>

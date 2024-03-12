@@ -43,6 +43,7 @@ For more information about Blazor types:
 - Run Blazor WASM in ServiceWorkers to handle ServiceWorker events in .Net
 - Supports Promises, Union method parameters, passing undefined to Javascript, and more
 
+
 # Issues and Feature requests
 I'm here to help. If you find a bug or missing properties, methods, or Javascript objects please submit an issue [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. I will help as soon as possible.
 
