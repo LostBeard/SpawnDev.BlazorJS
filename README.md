@@ -95,7 +95,7 @@ window.RemoveEventListener("resize", Window_OnResize, true);
 ```
 
 ## IMPORTANT NOTE - Async vs Sync Javascript calls
-The BlazorJSRuntime behaves differently than the default Blazor JSRuntime. BlazorJSRuntime is more of a 1 to 1 mapping to Javascript. 
+SpawnDev's BlazorJSRuntime behaves differently than Microsoft's Blazor JSRuntime. SpawnDev's BlazorJSRuntime is more of a 1 to 1 mapping to Javascript. 
 
 When calling Javascript methods that are not asynchronous and do not return a Promise you need to use the synchronous BlazorJSRuntime methods Call, CallVoid, or Get. 
 Unlike the default Blazor JSRuntime which would allow the use of InvokeAsync, you must use the synchronous BlazorJSRuntime methods.
