@@ -100,7 +100,7 @@ The BlazorJSRuntime behaves differently than the default Blazor JSRuntime. Blazo
 When calling Javascript methods that are not asynchronous and do not return a Promise you need to use the synchronous BlazorJSRuntime methods Call, CallVoid, or Get. 
 Unlike the default Blazor JSRuntime which would allow the use of InvokeAsync, you must use the synchronous BlazorJSRuntime methods.
 
-Use synchronous BlazorJSRuntime calls for synchronous Javascrtipt methods. 
+Use synchronous BlazorJSRuntime calls for synchronous Javascript methods. 
 BlazorJSRuntime CallAsync would throw an error if used on the below Javascript method.
 
 ```js
@@ -307,7 +307,7 @@ Recvd: Hello callback!
 ```
 
 # IJSObject Interface
-SpawnDev.BlazorJS can now wrap Javascript objects using interfaces. Just like objects derived from the JSObject class, IJSObject interfaces internally use IJSInProcessObjectReference to wrap a Javascript object for direct manipulation and can be passed to and from Javascript. The main difference is IJSObjects use DispatchProxy to implement the desired interface at runtime instead of requiring a type that inherits JSObject. Currently SpawnDev.BlazorJS does not provide any interfaces for Javascript objects or apis but interfaces are simple to set up.
+SpawnDev.BlazorJS can now wrap Javascript objects using interfaces. Just like objects derived from the JSObject class, IJSObject interfaces internally use IJSInProcessObjectReference to wrap a Javascript object for direct manipulation and can be passed to and from Javascript. The main difference is IJSObjects use DispatchProxy to implement the desired interface at runtime instead of requiring a type that inherits JSObject. Currently SpawnDev.BlazorJS does not provide any interfaces for Javascript objects or APIs but interfaces are simple to set up.
 
 IJSObject Example
 ```cs
@@ -641,8 +641,10 @@ public class MyService
     {
         // Call the private method WorkerMethod on this scope (normal)
         Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
+
         // Call the private method WorkerMethod in a WebWorker thread using an Expression
         Console.WriteLine(await WebWorkerService.TaskPool.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
+
         // Call the private method WorkerMethod in a WebWorker thread using a Delegate
         Console.WriteLine(await WebWorkerService.TaskPool.Invoke(WorkerMethod, WebWorkerService.InstanceId));
     }
@@ -669,6 +671,7 @@ public class MyService
         // report back to Window (Expression example)
         // Call the private method CalledOnWindow on the Window thread using an Expression
         Console.WriteLine(await WebWorkerService.WindowTask.Run(() => CalledOnWindow(WebWorkerService.InstanceId)));
+
         // Do some more work ...         
         // report back to Window again (Delegate example)
         // Call the private method CalledOnWindow on the Window thread using a Delegate
