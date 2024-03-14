@@ -1,12 +1,17 @@
 ﻿using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    // https://web.dev/cache-api-quick-guide/
-    // https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage
+    /// <summary>
+    /// The CacheStorage interface represents the storage for Cache objects.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage
+    /// </summary>
     public class CacheStorage : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public CacheStorage(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Non-standard constructor shortcut to just get an instance of the global caches object

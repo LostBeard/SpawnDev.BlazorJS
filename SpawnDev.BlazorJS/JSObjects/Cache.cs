@@ -1,12 +1,17 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JsonConverters;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    // https://web.dev/cache-api-quick-guide/
-    // https://developer.mozilla.org/en-US/docs/Web/API/Cache
+    /// <summary>
+    /// The Cache interface provides a persistent storage mechanism for Request / Response object pairs that are cached in long lived memory. How long a Cache object lives is browser dependent, but a single origin's scripts can typically rely on the presence of a previously populated Cache object. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Cache
+    /// </summary>
     public class Cache : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Cache(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Non-standard shortcut method to open a cache using the global caches object
