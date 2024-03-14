@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
+﻿using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -10,6 +8,46 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Node : EventTarget
     {
+        
+        #region NodeType
+        /// <summary>
+        /// An Element node like p or div.
+        /// </summary>
+        public const ushort ELEMENT_NODE = 1;
+        /// <summary>
+        /// An Attribute of an Element.
+        /// </summary>
+        public const ushort ATTRIBUTE_NODE = 2;
+        /// <summary>
+        /// The actual Text inside an Element or Attr.
+        /// </summary>
+        public const ushort TEXT_NODE = 3;
+        /// <summary>
+        /// A CDATASection
+        /// </summary>
+        public const ushort CDATA_SECTION_NODE = 4;
+        /// <summary>
+        /// A ProcessingInstruction of an XML document
+        /// </summary>
+        public const ushort PROCESSING_INSTRUCTION_NODE = 7;
+        /// <summary>
+        /// A Comment node
+        /// </summary>
+        public const ushort COMMENT_NODE = 8;
+        /// <summary>
+        /// A Document node.
+        /// </summary>
+        public const ushort DOCUMENT_NODE = 9;
+        /// <summary>
+        /// A DocumentType node
+        /// </summary>
+        public const ushort DOCUMENT_TYPE_NODE = 10;
+        /// <summary>
+        /// A DocumentFragment node.
+        /// </summary>
+        public const ushort DOCUMENT_FRAGMENT_NODE = 11;
+        #endregion
+
         /// <summary>
         /// Deserialization constructor
         /// </summary>
