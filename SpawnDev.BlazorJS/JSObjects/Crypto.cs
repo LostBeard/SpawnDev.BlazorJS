@@ -13,6 +13,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public static bool IsSupported => !JS.IsUndefined("crypto");
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Crypto(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Gets the global instance of Crypto

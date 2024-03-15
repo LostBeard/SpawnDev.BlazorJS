@@ -30,7 +30,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public NodeList QuerySelectorAll(string selector) => JSRef.Call<NodeList>("querySelectorAll", selector);
+        public NodeList<Element> QuerySelectorAll(string selector) => JSRef.Call<NodeList<Element>>("querySelectorAll", selector);
+        /// <summary>
+        /// The Element method querySelectorAll() returns a static (not live) NodeList representing a list of elements matching the specified group of selectors which are descendants of the element on which the method was called.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public NodeList<T> QuerySelectorAll<T>(string selector) where T : Element => JSRef.Call<NodeList<T>>("querySelectorAll", selector);
         /// <summary>
         /// The querySelector() method of the Element interface returns the first element that is a descendant of the element on which it is invoked that matches the specified group of selectors.
         /// </summary>
