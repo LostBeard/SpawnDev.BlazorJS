@@ -64,11 +64,25 @@ namespace SpawnDev.BlazorJS.JSObjects {
             }
             return await JSRef.CallAsync<string>("requestPermission", new FilePermissionsOptions(writePermission));
         }
-
+        /// <summary>
+        /// "granted"
+        /// </summary>
         public static string PERMISSION_GRANTED = "granted";
+        /// <summary>
+        /// "denied"
+        /// </summary>
         public static string PERMISSION_DENIED = "denied";
+        /// <summary>
+        /// "prompt"
+        /// </summary>
         public static string PERMISSION_PROMPT = "prompt";
+        /// <summary>
+        /// "read"
+        /// </summary>
         public static string MODE_READ = "read";
+        /// <summary>
+        /// "readwrite"
+        /// </summary>
         public static string MODE_READ_WRITE = "readwrite";
 
         public async Task<bool> VerifyPermission(bool readWrite = true, bool askIfNeeded = true) {

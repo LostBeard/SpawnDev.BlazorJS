@@ -135,11 +135,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             var t = new TaskCompletionSource<T>();
             Action<string?, T?>? onComplete = null;
-            var onError = new Action<Event>((e) =>
+            var onError = new Action(() =>
             {
                 onComplete?.Invoke(null, default(T));
             });
-            var onSucc = new Action<Event>((e) =>
+            var onSucc = new Action(() =>
             {
                 var result = request.ResultAs<T>();
                 onComplete?.Invoke(null, result);
