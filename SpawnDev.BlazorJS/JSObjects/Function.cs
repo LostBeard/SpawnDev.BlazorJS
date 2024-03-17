@@ -3,13 +3,26 @@ using SpawnDev.BlazorJS.JsonConverters;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-
+    /// <summary>
+    /// The Function object provides methods for functions. In JavaScript, every function is actually a Function object.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
+    /// </summary>
     public class Function : JSObject
     {
-        public string? Name => JSRef.Get<string?>("name");
-        public int Length => JSRef.Get<int>("length");
-
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Function(IJSInProcessObjectReference _ref) : base(_ref) { }
+
+        /// <summary>
+        /// The name of the function.
+        /// </summary>
+        public string? Name => JSRef.Get<string?>("name");
+        /// <summary>
+        /// Specifies the number of arguments expected by the function.
+        /// </summary>
+        public int Length => JSRef.Get<int>("length");
 
         public T NewApply<T>(object?[]? args = null) => JSInterop.ReturnNew<T>(JSRef, args);
         public T New<T>() => NewApply<T>();
@@ -40,14 +53,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public T Call<T>(object? thisObj = null, params object?[] args) => JSRef.Call<T>("apply", thisObj, args);
         public Task<T> CallAsync<T>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<T>("apply", thisObj, args);
         public void CallVoid(object? thisObj = null, params object?[] args) => JSRef.CallVoid("apply", thisObj, args);
-
-        //public TValue Apply<TValue>(object? thisObj = null, object?[]? args = null) => JSRef.Call<TValue>("applyFn", thisObj, args);
-        //public Task<TValue> ApplyAsync<TValue>(object? thisObj = null, object?[]? args = null) => JSRef.CallAsync<TValue>("applyFn", thisObj, args);
-        //public void ApplyVoid(object? thisObj = null, object?[]? args = null) => JSRef.CallVoid("applyFn", thisObj, args);
-
-        //public TValue Call<TValue>(object? thisObj = null, params object?[] args) => JSRef.Call<TValue>("applyFn", thisObj, args);
-        //public Task<TValue> CallAsync<TValue>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<TValue>("applyFn", thisObj, args);
-        //public void CallVoid(object? thisObj = null, params object?[] args) => JSRef.CallVoid("applyFn", thisObj, args);
 
         public Action ToAction()
         {
@@ -113,5 +118,4 @@ namespace SpawnDev.BlazorJS.JSObjects
             return ret;
         }
     }
-
 }
