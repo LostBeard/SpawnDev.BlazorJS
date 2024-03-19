@@ -163,15 +163,14 @@ namespace SpawnDev.BlazorJS.Toolbox
             var file = await fileHandle!.GetFile();
             return file;
         }
-        public static async Task<bool> FileExists(this FileSystemDirectoryHandle _this, string filename)
+        // not ideal using keys instead of GetFileHandle...
+        // the problem with GetFileHandle is that the exact error for the failure that indicates the file is not found is
+        // not available due to serialization and Task/Promise error treatment
+        public static async Task<bool> Exists(this FileSystemDirectoryHandle _this, string key)
         {
-            using var fileHandle = await _this!.GetFileHandle(filename, false);
-            return fileHandle != null;
-        }
-        public static async Task<bool> DirectoryExists(this FileSystemDirectoryHandle _this, string filename)
-        {
-            using var fileHandle = await _this!.GetDirectoryHandle(filename, false);
-            return fileHandle != null;
+            var keys = await _this.Keys();
+            var exists = keys.Contains(key);
+            return exists;
         }
     }
 }

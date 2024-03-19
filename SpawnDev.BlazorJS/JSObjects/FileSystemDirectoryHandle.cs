@@ -163,5 +163,12 @@ namespace SpawnDev.BlazorJS.JSObjects
             files.DisposeAll();
             return typed;
         }
+
+        public async Task<List<string>> Keys()
+        {
+            using var valuesIterator = JSRef.Call<AsyncIterator>("keys");
+            var keys = await valuesIterator.ToList<string>();
+            return keys;
+        }
     }
 }
