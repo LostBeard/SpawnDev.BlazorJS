@@ -6,6 +6,13 @@ namespace SpawnDev.BlazorJS.Toolbox
     public static class FileSystemDirectoryHandleExtensions
     {
         #region Write
+        /// <summary>
+        /// Write the data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Write(this FileSystemDirectoryHandle _this, string filename, ArrayBuffer data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -14,6 +21,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Write the data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Write(this FileSystemDirectoryHandle _this, string filename, Blob data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -22,6 +36,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Write the data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Write(this FileSystemDirectoryHandle _this, string filename, TypedArray data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -30,6 +51,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Write the data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Write(this FileSystemDirectoryHandle _this, string filename, byte[] data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -38,6 +66,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Write the data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Write(this FileSystemDirectoryHandle _this, string filename, DataView data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -46,6 +81,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Write the data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Write(this FileSystemDirectoryHandle _this, string filename, string data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -54,6 +96,14 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Write the data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <param name="jsonSerializerOptions"></param>
+        /// <returns></returns>
         public static async Task WriteJSON(this FileSystemDirectoryHandle _this, string filename, object data, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             var json = JsonSerializer.Serialize(data, jsonSerializerOptions);
@@ -63,6 +113,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(json);
             stream.Close();
         }
+        /// <summary>
+        /// Write the data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Write(this FileSystemDirectoryHandle _this, string filename, FileSystemWriteOptions data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -73,6 +130,13 @@ namespace SpawnDev.BlazorJS.Toolbox
         }
         #endregion
         #region Append
+        /// <summary>
+        /// Append data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Append(this FileSystemDirectoryHandle _this, string filename, ArrayBuffer data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -80,6 +144,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Append data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Append(this FileSystemDirectoryHandle _this, string filename, Blob data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -87,6 +158,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Append data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Append(this FileSystemDirectoryHandle _this, string filename, TypedArray data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -94,6 +172,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Append data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Append(this FileSystemDirectoryHandle _this, string filename, byte[] data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -101,6 +186,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Append data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Append(this FileSystemDirectoryHandle _this, string filename, DataView data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -108,6 +200,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Append data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Append(this FileSystemDirectoryHandle _this, string filename, string data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -115,6 +214,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
+        /// <summary>
+        /// Append data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Append(this FileSystemDirectoryHandle _this, string filename, FileSystemWriteOptions data)
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
@@ -123,6 +229,14 @@ namespace SpawnDev.BlazorJS.Toolbox
             stream.Close();
         }
         #endregion
+        /// <summary>
+        /// Read the data from the file as T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <param name="jsonSerializerOptions"></param>
+        /// <returns></returns>
         public static async Task<T> ReadJSON<T>(this FileSystemDirectoryHandle _this, string filename, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             using var fileHandle = await _this.GetFileHandle(filename, false);
@@ -131,6 +245,12 @@ namespace SpawnDev.BlazorJS.Toolbox
             var obj = JsonSerializer.Deserialize<T>(ret, jsonSerializerOptions);
             return obj;
         }
+        /// <summary>
+        /// Read the data from the file as a string
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static async Task<string> ReadText(this FileSystemDirectoryHandle _this, string filename)
         {
             using var fileHandle = await _this.GetFileHandle(filename, false);
@@ -138,6 +258,12 @@ namespace SpawnDev.BlazorJS.Toolbox
             var ret = await file.Text();
             return ret;
         }
+        /// <summary>
+        /// Read the data from the file as a byte array
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static async Task<byte[]> ReadBytes(this FileSystemDirectoryHandle _this, string filename)
         {
             using var fileHandle = await _this.GetFileHandle(filename, false);
@@ -145,6 +271,12 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var ret = await file.ArrayBuffer();
             return ret.ReadBytes();
         }
+        /// <summary>
+        /// Read the data from the file as an ArrayBuffer
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static async Task<ArrayBuffer> ReadArrayBuffer(this FileSystemDirectoryHandle _this, string filename)
         {
             using var fileHandle = await _this.GetFileHandle(filename, false);
@@ -153,7 +285,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             return ret;
         }
         /// <summary>
-        /// Read a FileSystemFileHandle as a File
+        /// Read the data from the file as File
         /// </summary>
         /// <param name="_this"></param>
         /// <param name="filename"></param>
@@ -165,9 +297,6 @@ namespace SpawnDev.BlazorJS.Toolbox
             var file = await fileHandle.GetFile();
             return file;
         }
-        // not ideal using keys instead of GetFileHandle...
-        // the problem with GetFileHandle is that the exact error for the failure that indicates the file is not found is
-        // not available due to serialization and Task/Promise error treatment
         /// <summary>
         /// Returns true if a file or directory exists with the given name
         /// </summary>
