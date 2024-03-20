@@ -3,6 +3,9 @@ using System.Text.Json;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
+    /// <summary>
+    /// Adds methods to FileSystemDirectoryHandle
+    /// </summary>
     public static class FileSystemDirectoryHandleExtensions
     {
         #region Write
@@ -17,7 +20,6 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
             using var stream = await fileHandle.CreateWritable();
-            await stream.Truncate(0);
             await stream.Write(data);
             stream.Close();
         }
@@ -32,7 +34,6 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
             using var stream = await fileHandle.CreateWritable();
-            await stream.Truncate(0);
             await stream.Write(data);
             stream.Close();
         }
@@ -47,7 +48,6 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
             using var stream = await fileHandle.CreateWritable();
-            await stream.Truncate(0);
             await stream.Write(data);
             stream.Close();
         }
@@ -62,7 +62,6 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
             using var stream = await fileHandle.CreateWritable();
-            await stream.Truncate(0);
             await stream.Write(data);
             stream.Close();
         }
@@ -77,7 +76,6 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
             using var stream = await fileHandle.CreateWritable();
-            await stream.Truncate(0);
             await stream.Write(data);
             stream.Close();
         }
@@ -92,7 +90,6 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
             using var stream = await fileHandle.CreateWritable();
-            await stream.Truncate(0);
             await stream.Write(data);
             stream.Close();
         }
@@ -109,7 +106,6 @@ namespace SpawnDev.BlazorJS.Toolbox
             var json = JsonSerializer.Serialize(data, jsonSerializerOptions);
             using var fileHandle = await _this.GetFileHandle(filename, true);
             using var stream = await fileHandle.CreateWritable();
-            await stream.Truncate(0);
             await stream.Write(json);
             stream.Close();
         }
@@ -124,7 +120,6 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetFileHandle(filename, true);
             using var stream = await fileHandle.CreateWritable();
-            await stream.Truncate(0);
             await stream.Write(data);
             stream.Close();
         }
