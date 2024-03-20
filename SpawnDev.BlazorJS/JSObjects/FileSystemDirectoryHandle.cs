@@ -131,14 +131,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="name"></param>
         /// <param name="create"></param>
         /// <returns></returns>
-        public Task<FileSystemFileHandle?> GetFileHandle(string name, bool create = false) => JSRef.CallAsync<FileSystemFileHandle?>("getFileHandle", name, new GetHandleOptions { Create = create });
+        public Task<FileSystemFileHandle> GetFileHandle(string name, bool create = false) => JSRef.CallAsync<FileSystemFileHandle>("getFileHandle", name, new GetHandleOptions { Create = create });
         /// <summary>
         /// Returns a Promise fulfilled with a FileSystemDirectoryHandle for a subdirectory with the specified name within the directory handle on which the method is called.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="create"></param>
         /// <returns></returns>
-        public Task<FileSystemDirectoryHandle?> GetDirectoryHandle(string name, bool create = false) => JSRef.CallAsync<FileSystemDirectoryHandle?>("getDirectoryHandle", name, new GetHandleOptions { Create = create });
+        public Task<FileSystemDirectoryHandle> GetDirectoryHandle(string name, bool create = false) => JSRef.CallAsync<FileSystemDirectoryHandle>("getDirectoryHandle", name, new GetHandleOptions { Create = create });
         /// <summary>
         /// Returns a new async iterator of a given object's own enumerable property [key, value] pairs.
         /// </summary>
