@@ -224,6 +224,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             stream.Close();
         }
         #endregion
+        #region Read
         /// <summary>
         /// Read the data from the file as T
         /// </summary>
@@ -292,6 +293,8 @@ namespace SpawnDev.BlazorJS.Toolbox
             var file = await fileHandle.GetFile();
             return file;
         }
+        #endregion
+        #region Exists
         /// <summary>
         /// Returns true if a file or directory exists with the given name
         /// </summary>
@@ -304,5 +307,6 @@ namespace SpawnDev.BlazorJS.Toolbox
             var exists = keys.Contains(name);
             return exists;
         }
+        #endregion
     }
 }
