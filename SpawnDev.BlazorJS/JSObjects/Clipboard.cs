@@ -1,15 +1,14 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // Inconsistent implementation between Chrome and Firefox
     public class ClipboardItem : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public ClipboardItem(IJSInProcessObjectReference _ref) : base(_ref) { }
 
     }
@@ -18,6 +17,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Clipboard : EventTarget
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Clipboard(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Requests arbitrary data (such as images) from the clipboard, returning a Promise that resolves with an array of ClipboardItem objects containing the clipboard's contents.
