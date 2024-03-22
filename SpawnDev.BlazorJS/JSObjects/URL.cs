@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The URL interface is used to parse, construct, normalize, and encode URLs. It works by providing properties which allow you to easily read and modify the components of a URL.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/URL
+    /// </summary>
     public class URL : JSObject
     {
         /// <summary>
