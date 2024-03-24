@@ -9,17 +9,63 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public abstract class TypedArray : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public TypedArray(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Returns the ArrayBuffer referenced by the typed array.
+        /// </summary>
         public ArrayBuffer Buffer => JSRef.Get<ArrayBuffer>("buffer");
+        /// <summary>
+        /// Returns the length (in bytes) of the typed array.
+        /// </summary>
         public long ByteLength => JSRef.Get<long>("byteLength");
+        /// <summary>
+        /// Returns the number of elements held in the typed array.
+        /// </summary>
         public long Length => JSRef.Get<long>("length");
+        /// <summary>
+        /// Returns the offset (in bytes) of the typed array from the start of its ArrayBuffer.
+        /// </summary>
         public long ByteOffset => JSRef.Get<long>("byteOffset");
+        /// <summary>
+        /// Returns true if the underlying ArrayBuffer is not the same size as the TypedArray
+        /// </summary>
         public bool IsPartialView => JSRef.Get<long>("buffer.byteLength") != JSRef.Get<long>("byteLength");
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
         public void Set(byte[] typedArray) => JSRef.CallVoid("set", typedArray);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
+        /// <param name="targetOffset"></param>
         public void Set(byte[] typedArray, long targetOffset) => JSRef.CallVoid("set", typedArray, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
         public void Set(TypedArray typedArray) => JSRef.CallVoid("set", typedArray);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
+        /// <param name="targetOffset"></param>
         public void Set(TypedArray typedArray, long targetOffset) => JSRef.CallVoid("set", typedArray, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
         public void Set(Array typedArray) => JSRef.CallVoid("set", typedArray);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
+        /// <param name="targetOffset"></param>
         public void Set(Array typedArray, long targetOffset) => JSRef.CallVoid("set", typedArray, targetOffset);
         /// <summary>
         /// Returns a copy of the TypedArray as a byte array
@@ -40,9 +86,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 return (T[])(object)bytes;
             }
             var size = Marshal.SizeOf(typeofT);
-            var pcmDataNet = System.Array.CreateInstance(typeofT, bytes.Length / size);
-            System.Buffer.BlockCopy(bytes, 0, pcmDataNet, 0, bytes.Length);
-            return (T[])pcmDataNet;
+            var array = (T[])System.Array.CreateInstance(typeofT, bytes.Length / size);
+            System.Buffer.BlockCopy(bytes, 0, array, 0, bytes.Length);
+            return array;
         }
     }
 }

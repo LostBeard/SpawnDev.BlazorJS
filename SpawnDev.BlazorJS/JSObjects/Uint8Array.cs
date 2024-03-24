@@ -7,16 +7,65 @@ namespace SpawnDev.BlazorJS.JSObjects {
     /// </summary>
     public class Uint8Array : TypedArray
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Uint8Array(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
         public Uint8Array() : base(JS.New(nameof(Uint8Array))) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
+        /// <param name="length"></param>
         public Uint8Array(long length) : base(JS.New(nameof(Uint8Array), length)) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
+        /// <param name="typedArray"></param>
         public Uint8Array(TypedArray typedArray) : base(JS.New(nameof(Uint8Array), typedArray)) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
+        /// <param name="arrayBuffer"></param>
         public Uint8Array(ArrayBuffer arrayBuffer) : base(JS.New(nameof(Uint8Array), arrayBuffer)) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
+        /// <param name="arrayBuffer"></param>
+        /// <param name="byteOffset"></param>
         public Uint8Array(ArrayBuffer arrayBuffer, long byteOffset) : base(JS.New(nameof(Uint8Array), arrayBuffer, byteOffset)) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
+        /// <param name="arrayBuffer"></param>
+        /// <param name="byteOffset"></param>
+        /// <param name="length"></param>
         public Uint8Array(ArrayBuffer arrayBuffer, long byteOffset, long length) : base(JS.New(nameof(Uint8Array), arrayBuffer, byteOffset, length)) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
+        /// <param name="sharedArrayBuffer"></param>
         public Uint8Array(SharedArrayBuffer sharedArrayBuffer) : base(JS.New(nameof(Uint8Array), sharedArrayBuffer)) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
+        /// <param name="sharedArrayBuffer"></param>
+        /// <param name="byteOffset"></param>
         public Uint8Array(SharedArrayBuffer sharedArrayBuffer, long byteOffset) : base(JS.New(nameof(Uint8Array), sharedArrayBuffer, byteOffset)) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
+        /// <param name="sharedArrayBuffer"></param>
+        /// <param name="byteOffset"></param>
+        /// <param name="length"></param>
         public Uint8Array(SharedArrayBuffer sharedArrayBuffer, long byteOffset, long length) : base(JS.New(nameof(Uint8Array), sharedArrayBuffer, byteOffset, length)) { }
+        /// <summary>
+        /// The Uint8Array() constructor creates Uint8Array objects. The contents are initialized to 0.
+        /// </summary>
+        /// <param name="sourceBytes"></param>
         public Uint8Array(byte[] sourceBytes) : base(JS.ReturnMe<IJSInProcessObjectReference>(sourceBytes)) { }
         /// <summary>
         /// Returns a copy of the Uint8Array as a byte array 
