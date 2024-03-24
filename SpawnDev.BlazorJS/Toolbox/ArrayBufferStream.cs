@@ -66,7 +66,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             var byteCount = (int)Math.Max(0, Math.Min(count, Source.Length - _Position));
             if (byteCount == 0) return 0;
             var end = _Position + byteCount;
-            var tmp = Source.SliceBytes(_Position, end);
+            var tmp = Source.ReadBytes(_Position, byteCount);
             System.Array.Copy(tmp, 0, buffer, offset, count);
             _Position = end;
             return byteCount;
