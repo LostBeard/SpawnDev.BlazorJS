@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -14,105 +13,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public FileSystemDirectoryHandle(IJSInProcessObjectReference _ref) : base(_ref) { }
-        static async Task<List<FileSystemHandle>> IterateDirectoryAsync(AsyncIterator iteratee, bool includeFiles, bool includeDirectories)
-        {
-            var ret = new List<FileSystemHandle>();
-            while (true)
-            {
-                JS.Set("_iteratee", iteratee);
-                using (var next = await iteratee.Next())
-                {
-                    if (next.Done) break;
-                    using (var f = next.GetValue<FileSystemHandle>())
-                    {
-                        FileSystemHandle? fid = null;
-                        switch (f.Kind)
-                        {
-                            case "directory":
-                                if (includeDirectories)
-                                {
-                                    fid = next.GetValue<FileSystemDirectoryHandle>();
-                                }
-                                break;
-                            case "file":
-                                if (includeFiles)
-                                {
-                                    fid = next.GetValue<FileSystemFileHandle>();
-                                }
-                                break;
-                        }
-                        if (fid != null) ret.Add(fid);
-                    }
-                }
-            }
-            return ret;
-        }
-        public async Task<FileSystemHandle?> GetEntryExt(string path)
-        {
-            var tmp = JSRefCopy<FileSystemDirectoryHandle>();
-            path = path.Trim('/');
-            if (string.IsNullOrEmpty(path) || path == ".") return tmp;
-            FileSystemHandle? ret = null;
-            var pparts = path.Split("/");
-            for (var i = 0; i < pparts.Length; i++)
-            {
-                var p = pparts[i];
-                var f = await tmp.GetEntry(p);
-                if (i > 0) tmp?.Dispose();
-                if (i == pparts.Length - 1)
-                {
-                    ret = f;
-                }
-                else if (f.Kind == "directory")
-                {
-                    tmp = f.JSRefMove<FileSystemDirectoryHandle>();
-                }
-                else
-                {
-                    break;
-                }
-            }
-            tmp?.Dispose();
-            return ret;
-        }
-        public async Task<FileSystemFileHandle?> GetFileExt(string path)
-        {
-            var ret = await GetEntryExt(path);
-            if (ret == null) return null;
-            if (ret.Kind == "directory")
-            {
-                ret.Dispose();
-                return null;
-            }
-            return ret == null ? null : ret.JSRefMove<FileSystemFileHandle>();
-        }
-        public async Task<FileSystemDirectoryHandle?> GetDirExt(string path)
-        {
-            var ret = await GetEntryExt(path);
-            if (ret == null) return null;
-            if (ret.Kind != "directory")
-            {
-                ret.Dispose();
-                return null;
-            }
-            return ret == null ? null : ret.JSRefMove<FileSystemDirectoryHandle>();
-        }
-        public async Task<FileSystemHandle?> GetEntry(string name, StringComparison stringComp = StringComparison.OrdinalIgnoreCase)
-        {
-            FileSystemHandle? ret = null;
-            var entries = await Values();
-            foreach (var d in entries)
-            {
-                if (d.Name.Equals(name, stringComp)) ret = d;
-                else d.Dispose();
-            }
-            return ret;
-        }
-        public class RemoveEntryOptions
-        {
-            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-            public bool? Recursive { get; set; }
-        }
         /// <summary>
         /// Attempts to asynchronously remove an entry if the directory handle contains a file or directory called the name specified.
         /// </summary>
@@ -120,11 +20,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="recursive"></param>
         /// <returns></returns>
         public Task RemoveEntry(string name, bool recursive = false) => JSRef.CallVoidAsync("removeEntry", name, new RemoveEntryOptions { Recursive = recursive });
-        public class GetHandleOptions
-        {
-            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-            public bool? Create { get; set; }
-        }
         /// <summary>
         /// Returns a Promise fulfilled with a FileSystemFileHandle for a file with the specified name, within the directory the method is called.
         /// </summary>
@@ -163,7 +58,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             files.DisposeAll();
             return typed;
         }
-
+        /// <summary>
+        /// Returns a new async iterator containing the keys for each item in FileSystemDirectoryHandle.
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<string>> Keys()
         {
             using var valuesIterator = JSRef.Call<AsyncIterator>("keys");
