@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Symbol is a built-in object whose constructor returns a symbol primitive — also called a Symbol value or just a Symbol — that's guaranteed to be unique. Symbols are often used to add unique property keys to an object that won't collide with keys any other code might add to the object, and which are hidden from any mechanisms other code will typically use to access the object. That enables a form of weak encapsulation, or a weak form of information hiding.
+    /// Symbol is a built-in object whose constructor returns a symbol primitive — also called a Symbol value or just a Symbol — that's guaranteed to be unique. Symbols are often used to add unique property keys to an object that won't collide with keys any other code might add to the object, and which are hidden from any mechanisms other code will typically use to access the object. That enables a form of weak encapsulation, or a weak form of information hiding.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol
     /// </summary>
     public class Symbol : JSObject
     {
@@ -17,7 +18,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// This is a non-standard implementation of the Symbol constructor which in Javascript will throw an exception. Calls Symbol()
         /// </summary>
         public Symbol() : base(JS.Call<IJSInProcessObjectReference>(nameof(Symbol))) { }
-
         /// <summary>
         /// Deserialization constructor
         /// </summary>
