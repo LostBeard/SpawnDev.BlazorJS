@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class CharacterData : Node
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public CharacterData(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 

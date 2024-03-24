@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Boolean : JSObject
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Boolean(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
         /// <summary>
@@ -21,6 +25,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public override string ToString() => JSRef.Call<string>("toString");
+        /// <summary>
+        /// Implicit conversion to a .Net bool
+        /// </summary>
+        /// <param name="booleanObj"></param>
         public static implicit operator bool(Boolean booleanObj) => booleanObj.ValueOf();
     }
 }

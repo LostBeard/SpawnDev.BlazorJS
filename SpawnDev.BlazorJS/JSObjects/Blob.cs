@@ -4,11 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class BlobOptions
-    {
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? Type { get; set; } = null;
-    }
 
     /// <summary>
     /// The Blob object represents a blob, which is a file-like object of immutable, raw data; they can be read as text or binary data, or converted into a ReadableStream so its methods can be used for processing the data.<br />
@@ -21,31 +16,100 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public Blob(IJSInProcessObjectReference _ref) : base(_ref) { }
-
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="buffers"></param>
         public Blob(ArrayBuffer[] buffers) : base(JS.New(nameof(Blob), buffers)) { }
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="buffers"></param>
+        /// <param name="options"></param>
         public Blob(ArrayBuffer[] buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
-
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="buffers"></param>
+        /// <param name="options"></param>
         public Blob(IEnumerable<string> buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="buffers"></param>
         public Blob(IEnumerable<string> buffers) : base(JS.New(nameof(Blob), buffers)) { }
-
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="blobs"></param>
         public Blob(Blob[] blobs) : base(JS.New(nameof(Blob), blobs)) { }
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="blobs"></param>
+        /// <param name="options"></param>
         public Blob(Blob[] blobs, BlobOptions options) : base(JS.New(nameof(Blob), blobs, options)) { }
-
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="blobs"></param>
         public Blob(byte[][] blobs) : base(JS.New(nameof(Blob), blobs)) { }
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="blobs"></param>
+        /// <param name="options"></param>
         public Blob(byte[][] blobs, BlobOptions options) : base(JS.New(nameof(Blob), blobs, options)) { }
-
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="typedArrays"></param>
         public Blob(TypedArray[] typedArrays) : base(JS.New(nameof(Blob), typedArrays)) { }
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="typedArrays"></param>
+        /// <param name="options"></param>
         public Blob(TypedArray[] typedArrays, BlobOptions options) : base(JS.New(nameof(Blob), typedArrays, options)) { }
-
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="dataViews"></param>
         public Blob(DataView[] dataViews) : base(JS.New(nameof(Blob), dataViews)) { }
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="dataViews"></param>
+        /// <param name="options"></param>
         public Blob(DataView[] dataViews, BlobOptions options) : base(JS.New(nameof(Blob), dataViews, options)) { }
-
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="dataViews"></param>
         public Blob(Union<ArrayBuffer, TypedArray, DataView, Blob, string>[] dataViews) : base(JS.New(nameof(Blob), dataViews)) { }
+        /// <summary>
+        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
+        /// </summary>
+        /// <param name="dataViews"></param>
+        /// <param name="options"></param>
         public Blob(Union<ArrayBuffer, TypedArray, DataView, Blob, string>[] dataViews, BlobOptions options) : base(JS.New(nameof(Blob), dataViews, options)) { }
-
+        /// <summary>
+        /// The size, in bytes, of the data contained in the Blob object.
+        /// </summary>
         public long Size => JSRef.Get<long>("size");
+        /// <summary>
+        /// A string indicating the MIME type of the data contained in the Blob. If the type is unknown, this string is empty.
+        /// </summary>
         public string Type => JSRef.Get<string>("type");
+        /// <summary>
+        /// Returns a promise that resolves with a string containing the entire contents of the Blob interpreted as UTF-8 text.
+        /// </summary>
+        /// <returns></returns>
         public Task<string> Text() => JSRef.CallAsync<string>("text");
+        /// <summary>
+        /// Returns a promise that resolves with an ArrayBuffer containing the entire contents of the Blob as binary data.
+        /// </summary>
+        /// <returns></returns>
         public Task<ArrayBuffer> ArrayBuffer() => JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
         /// <summary>
         /// The Blob interface's slice() method creates and returns a new Blob object which contains data from a subset of the blob on which it's called.
@@ -55,6 +119,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="contentType">The content type to assign to the new Blob; this will be the value of its type property. The default value is an empty string.</param>
         /// <returns></returns>
         public Blob Slice(long startPos, long endPos, string contentType) => JSRef.Call<Blob>("slice", startPos, endPos, contentType);
+        /// <summary>
+        /// Returns a ReadableStream that can be used to read the contents of the Blob.
+        /// </summary>
+        /// <returns></returns>
         public ReadableStream Stream() => JSRef.Call<ReadableStream>("stream");
         static string atob(string str)
         {
@@ -64,10 +132,15 @@ namespace SpawnDev.BlazorJS.JSObjects
             if (mod4 > 0) b64 += new string('=', 4 - mod4);
             return b64;
         }
+        /// <summary>
+        /// Creates a new Blob from a data url
+        /// </summary>
+        /// <param name="dataUrl"></param>
+        /// <returns></returns>
         public static Blob FromDataURL(string dataUrl)
         {
             var base64Data = dataUrl.Split(",")[1];
-            var byteString = atob(base64Data);// Invoke<string>("atob", base64Data);
+            var byteString = atob(base64Data);
             var mimeString = dataUrl.Split(",")[0].Split(":")[1].Split(";")[0];
             var bytes = Convert.FromBase64String(byteString);
             using var ia = new Uint8Array(bytes);
