@@ -1,9 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -14,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     }
     public class DOMTokenList : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public DOMTokenList(IJSInProcessObjectReference _ref) : base(_ref) { }
         public string Value => JSRef.Get<string>("value");
         public int Length => JSRef.Get<int>("length");

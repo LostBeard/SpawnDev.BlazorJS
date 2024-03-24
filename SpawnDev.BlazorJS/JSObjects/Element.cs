@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {

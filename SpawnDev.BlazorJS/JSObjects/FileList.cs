@@ -13,6 +13,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         public IEnumerator GetEnumerator() => new SimpleEnumerator<File>(this.Item, () => this.Length);
         IEnumerator<File> IEnumerable<File>.GetEnumerator() => new SimpleEnumerator<File>(this.Item, () => this.Length);
         #endregion
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public FileList(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// A read-only value indicating the number of files in the list.
