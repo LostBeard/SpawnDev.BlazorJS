@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class CryptoKey : CryptoKeyBase
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public CryptoKey(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// The type of key the object represents. It may take one of the following values: "secret", "private" or "public".

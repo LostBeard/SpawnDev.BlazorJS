@@ -2,16 +2,6 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    // Inconsistent implementation between Chrome and Firefox
-    public class ClipboardItem : JSObject
-    {
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
-        public ClipboardItem(IJSInProcessObjectReference _ref) : base(_ref) { }
-
-    }
     /// <summary>
     /// The Clipboard API provides the ability to respond to clipboard commands (cut, copy, and paste) as well as to asynchronously read from and write to the system clipboard.
     /// </summary>

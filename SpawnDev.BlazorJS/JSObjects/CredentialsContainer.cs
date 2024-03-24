@@ -1,21 +1,8 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class PublicKeyCredential<TResponse> : Credential where TResponse : AuthenticatorResponse
-    {
-        public PublicKeyCredential(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public ArrayBuffer RawId => JSRef.Get<ArrayBuffer>("rawId");
-        public string AuthenticatorAttachment => JSRef.Get<string>("authenticatorAttachment");
-        public TResponse Response => JSRef.Get<TResponse>("response");
-        public static Task<bool> IsUserVerifyingPlatformAuthenticatorAvailable() => JS.CallAsync<bool>("PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable");
-    }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create
     public class CredentialCreationPublicKeyOptions

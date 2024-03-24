@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class DeviceOrientationEvent : Event
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public DeviceOrientationEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// A boolean that indicates whether or not the device is providing orientation data absolutely.

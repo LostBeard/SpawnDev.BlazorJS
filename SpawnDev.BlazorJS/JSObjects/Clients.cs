@@ -2,9 +2,22 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The Clients interface provides access to Client objects. Access it via self.clients within a service worker.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Clients
+    /// </summary>
     public class Clients : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Clients(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Returns a Promise for a Client matching a given id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Task<Client> Get(string id) => JSRef.CallAsync<Client>("get", id);
         /// <summary>
         /// Returns a Promise for an array of Client objects. An options argument allows you to control the types of clients returned.

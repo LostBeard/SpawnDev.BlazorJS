@@ -17,9 +17,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Properties
+        /// <summary>
+        /// A string representing the textual data contained in this object.
+        /// </summary>
         public string Data => JSRef.Get<string>("data");
+        /// <summary>
+        /// Returns a number representing the size of the string contained in the object.
+        /// </summary>
         public int Length => JSRef.Get<int>("length");
+        /// <summary>
+        /// Returns the first Element that follows this node, and is a sibling.
+        /// </summary>
         public Element? NextElementSibling => JSRef.Get<Element?>("nextElementSibling");
+        /// <summary>
+        /// Returns the first Element that precedes this node, and is a sibling.
+        /// </summary>
         public Element? PreviousElementSibling => JSRef.Get<Element?>("previousElementSibling");
         #endregion
 

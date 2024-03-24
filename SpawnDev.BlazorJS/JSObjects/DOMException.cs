@@ -1,9 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -12,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class DOMException : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public DOMException(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a string representing a message or description associated with the given error name.

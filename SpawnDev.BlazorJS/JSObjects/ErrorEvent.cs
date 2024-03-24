@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class ErrorEvent : Event
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public ErrorEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// A string containing a human-readable error message describing the problem. Lacking a crossorigin setting reduces error logging.
