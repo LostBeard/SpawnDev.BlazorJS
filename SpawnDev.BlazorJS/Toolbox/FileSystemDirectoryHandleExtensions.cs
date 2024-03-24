@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="_this"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static async Task<bool> GetPathDirectoryExists(this FileSystemDirectoryHandle _this, string path)
+        public static async Task<bool> DirectoryHandleExists(this FileSystemDirectoryHandle _this, string path)
         {
             using var dir = await _this.GetPathDirectoryHandle(path, false);
             return dir != null;
@@ -25,7 +25,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="_this"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static async Task<bool> GetPathFileExists(this FileSystemDirectoryHandle _this, string path)
+        public static async Task<bool> FileHandleExists(this FileSystemDirectoryHandle _this, string path)
         {
             using var file = await _this.GetPathFileHandle(path, false);
             return file != null;

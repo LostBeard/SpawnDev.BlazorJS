@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class DeviceMotionEvent : Event
     {
+        /// <summary>
+        /// Default deserialize constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public DeviceMotionEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         public DeviceMotionXYZ Acceleration => JSRef.Get<DeviceMotionXYZ>("acceleration");
         public DeviceMotionXYZ AccelerationIncludingGravity => JSRef.Get<DeviceMotionXYZ>("accelerationIncludingGravity");

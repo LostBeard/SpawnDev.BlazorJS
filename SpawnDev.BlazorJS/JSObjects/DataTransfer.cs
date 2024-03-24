@@ -2,10 +2,21 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The DataTransfer object is used to hold the data that is being dragged during a drag and drop operation. It may hold one or more data items, each of one or more data types. For more information about drag and drop, see HTML Drag and Drop API.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer
+    /// </summary>
     public class DataTransfer : JSObject
     {
-        public DataTransferItemList Items => JSRef.Get<DataTransferItemList>("items");
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public DataTransfer(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Gives a DataTransferItemList object which is a list of all of the drag data.
+        /// </summary>
+        public DataTransferItemList Items => JSRef.Get<DataTransferItemList>("items");
         /// <summary>
         /// Contains a list of all the local files available on the data transfer. If the drag operation doesn't involve dragging files, this property is an empty list.
         /// </summary>
