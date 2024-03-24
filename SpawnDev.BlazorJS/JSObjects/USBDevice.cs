@@ -11,6 +11,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
 
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public USBDevice(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
     }

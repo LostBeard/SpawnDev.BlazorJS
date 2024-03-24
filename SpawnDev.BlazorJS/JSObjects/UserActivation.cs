@@ -10,6 +10,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class UserActivation : JSObject
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public UserActivation(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 

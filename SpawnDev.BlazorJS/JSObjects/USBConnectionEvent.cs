@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class USBConnectionEvent : Event
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public USBConnectionEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a USBDevice object representing the current device.

@@ -1,16 +1,17 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The UIEvent interface represents simple user interface events.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/UIEvent
+    /// </summary>
     public class UIEvent : Event
     {
-        public UIEvent(IJSInProcessObjectReference _ref) : base(_ref)
-        {
-        }
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
+        public UIEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
     }
 }

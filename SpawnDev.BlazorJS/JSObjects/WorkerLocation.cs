@@ -2,8 +2,16 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The WorkerLocation interface defines the absolute location of the script executed by the Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.location property obtained by calling self.location.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/WorkerLocation
+    /// </summary>
     public class WorkerLocation : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public WorkerLocation(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a string containing the serialized URL for the worker's location.

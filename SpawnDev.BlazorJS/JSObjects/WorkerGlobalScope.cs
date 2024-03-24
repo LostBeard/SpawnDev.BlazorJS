@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public abstract class WorkerGlobalScope : EventTarget
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public WorkerGlobalScope(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// 

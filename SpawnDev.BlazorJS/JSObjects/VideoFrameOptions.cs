@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// Used in constructing a new VideoFrame
+    /// </summary>
     public class VideoFrameOptions
     {
         /// <summary>

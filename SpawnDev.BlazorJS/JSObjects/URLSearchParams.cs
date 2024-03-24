@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class URLSearchParams : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public URLSearchParams(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a URLSearchParams object instance

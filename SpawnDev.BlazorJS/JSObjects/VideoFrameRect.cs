@@ -1,5 +1,8 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// Used in VideoFrameOptions
+    /// </summary>
     public class VideoFrameRect
     {
         /// <summary>

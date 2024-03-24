@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class WGSLLanguageFeatures : SetReadOnly<string>
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public WGSLLanguageFeatures(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
     }
