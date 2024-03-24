@@ -20,11 +20,41 @@ namespace SpawnDev.BlazorJS.JSObjects {
         public Uint8Array(SharedArrayBuffer sharedArrayBuffer, long byteOffset, long length) : base(JS.New(nameof(Uint8Array), sharedArrayBuffer, byteOffset, length)) { }
         public Uint8Array(byte[] sourceBytes) : base(JS.ReturnMe<IJSInProcessObjectReference>(sourceBytes)) { }
         public override byte[] ReadBytes() => JS.ReturnMe<byte[]>(JSRef);
+        /// <summary>
+        /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
+        /// </summary>
+        /// <returns></returns>
         public Uint8Array Slice() => JSRef.Call<Uint8Array>("slice");
+        /// <summary>
+        /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
+        /// </summary>
+        /// <param name="start"></param>
+        /// <returns></returns>
         public Uint8Array Slice(long start) => JSRef.Call<Uint8Array>("slice", start);
+        /// <summary>
+        /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         public Uint8Array Slice(long start, long end) => JSRef.Call<Uint8Array>("slice", start, end);
+        /// <summary>
+        /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
+        /// </summary>
+        /// <returns></returns>
         public byte[] SliceBytes() => JSRef.Call<byte[]>("slice");
+        /// <summary>
+        /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
+        /// </summary>
+        /// <param name="start"></param>
+        /// <returns></returns>
         public byte[] SliceBytes(long start) => JSRef.Call<byte[]>("slice", start);
+        /// <summary>
+        /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         public byte[] SliceBytes(long start, long end) => JSRef.Call<byte[]>("slice", start, end);
         /// <summary>
         /// Returns a number value of the element size. 1 in the case of Uint8Array.
