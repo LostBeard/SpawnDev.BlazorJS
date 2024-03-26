@@ -42,8 +42,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             using var valuesIterator = JSRef.Call<AsyncIterator>("values");
             var files = await valuesIterator.ToList<FileSystemHandle>();
-            var typed = files.Select(o => o.ResolveType()).ToList();
-            files.DisposeAll();
+            var typed = files.Select(o => o.ResolveType(true)).ToList();
             return typed.ToDictionary(o => o.Name, o => o);
         }
         /// <summary>
@@ -54,8 +53,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             using var valuesIterator = JSRef.Call<AsyncIterator>("values");
             var files = await valuesIterator.ToList<FileSystemHandle>();
-            var typed = files.Select(o => o.ResolveType()).ToList();
-            files.DisposeAll();
+            var typed = files.Select(o => o.ResolveType(true)).ToList();
             return typed;
         }
         /// <summary>
