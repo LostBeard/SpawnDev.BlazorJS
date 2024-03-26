@@ -6,5 +6,9 @@
         {
             foreach (var item in target) item?.Dispose();
         }
+        public static void DisposeAll(this List<IDisposable> target)
+        {
+            foreach (var item in target) item?.Dispose();
+        }
     }
 }
