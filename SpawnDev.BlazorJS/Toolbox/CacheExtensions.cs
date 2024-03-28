@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Options;
-using SpawnDev.BlazorJS.JSObjects;
-using System.Collections.Immutable;
+﻿using SpawnDev.BlazorJS.JSObjects;
 using System.Text;
 using System.Text.Json;
-using System.Web;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
+    /// <summary>
+    /// Adds extension methods to Cache
+    /// </summary>
     public static class CacheExtensions
     {
 
