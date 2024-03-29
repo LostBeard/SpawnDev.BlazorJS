@@ -14,12 +14,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public FileSystemDirectoryHandle(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// Attempts to asynchronously remove an entry if the directory handle contains a file or directory called the name specified.
+        /// Returns a Promise fulfilled with a FileSystemDirectoryHandle for a subdirectory with the specified name within the directory handle on which the method is called.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="recursive"></param>
+        /// <param name="create"></param>
         /// <returns></returns>
-        public Task RemoveEntry(string name, bool recursive = false) => JSRef.CallVoidAsync("removeEntry", name, new RemoveEntryOptions { Recursive = recursive });
+        public Task<FileSystemDirectoryHandle> GetDirectoryHandle(string name, bool create = false) => JSRef.CallAsync<FileSystemDirectoryHandle>("getDirectoryHandle", name, new GetHandleOptions { Create = create });
+        /// <summary>
+        /// Attempts to asynchronously remove an entry if the directory handle contains a file or directory called the name specified.
         /// <summary>
         /// Returns a Promise fulfilled with a FileSystemFileHandle for a file with the specified name, within the directory the method is called.
         /// </summary>
@@ -27,13 +29,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="create"></param>
         /// <returns></returns>
         public Task<FileSystemFileHandle> GetFileHandle(string name, bool create = false) => JSRef.CallAsync<FileSystemFileHandle>("getFileHandle", name, new GetHandleOptions { Create = create });
-        /// <summary>
-        /// Returns a Promise fulfilled with a FileSystemDirectoryHandle for a subdirectory with the specified name within the directory handle on which the method is called.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="create"></param>
+        /// <param name="recursive"></param>
         /// <returns></returns>
-        public Task<FileSystemDirectoryHandle> GetDirectoryHandle(string name, bool create = false) => JSRef.CallAsync<FileSystemDirectoryHandle>("getDirectoryHandle", name, new GetHandleOptions { Create = create });
+        public Task RemoveEntry(string name, bool recursive = false) => JSRef.CallVoidAsync("removeEntry", name, new RemoveEntryOptions { Recursive = recursive });
+        /// <summary>
+        /// The resolve() method of the FileSystemDirectoryHandle interface returns an Array of directory names from the parent handle to the specified child entry, with the name of the child entry as the last array item.
+        /// </summary>
+        /// <param name="possibleDescendant">The FileSystemHandle from which to return the relative path.</param>
+        /// <returns>A Promise which resolves with an Array of strings, or null if possibleDescendant is not a descendant of this FileSystemDirectoryHandle.</returns>
+        public Task<List<string>?> Resolve(FileSystemHandle possibleDescendant) => JSRef.CallAsync<List<string>?>("resolve", possibleDescendant);
         /// <summary>
         /// Returns a new async iterator of a given object's own enumerable property [key, value] pairs.
         /// </summary>
