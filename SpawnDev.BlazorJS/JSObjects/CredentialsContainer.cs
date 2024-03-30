@@ -116,12 +116,25 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <returns></returns>
         public Task<PublicKeyCredential<AuthenticatorAttestationResponse>> Create(CredentialCreationPublicKeyOptions options) => JSRef.CallAsync<PublicKeyCredential<AuthenticatorAttestationResponse>>("create", options);
+        /// <summary>
+        /// Returns a Promise that resolves with a new Credential instance based on the provided options, or null if no Credential object can be created. In exceptional circumstances, the Promise may reject.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task<T> Create<T>(CredentialCreationPublicKeyOptions options) where T : Credential => JSRef.CallAsync<T>("create", options);
         //public Task<PasswordCredential> Create(CredentialCreationPasswordOptions options) => JSRef.CallAsync<PasswordCredential>("create", options);
         /// <summary>
         /// Returns a Promise that resolves with the Credential instance that matches the provided parameters.
         /// </summary>
         /// <returns></returns>
         public Task<Credential?> Get() => JSRef.CallAsync<Credential?>("get");
+        /// <summary>
+        /// Returns a Promise that resolves with the Credential instance that matches the provided parameters.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Task<T> Get<T>() where T : Credential => JSRef.CallAsync<T>("get");
         /// <summary>
         /// Returns a Promise that resolves with the Credential instance that matches the provided parameters.
         /// </summary>
