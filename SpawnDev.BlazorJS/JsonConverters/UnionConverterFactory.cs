@@ -14,22 +14,23 @@ namespace SpawnDev.BlazorJS.JsonConverters
     {
         public static List<Type> StringParsers = new List<Type>
         {
-             typeof(string),
-             typeof(DateTime),
+            typeof(string),
+            typeof(DateTime),
         };
         public static List<Type> NumberTypes = new List<Type>
-        { typeof(byte),
-             typeof(byte),
+        {
+            typeof(byte),
+            typeof(byte),
             typeof(sbyte),
-             typeof(short),
-             typeof(ushort),
-             typeof(int),
-             typeof(uint),
-             typeof(long),
-             typeof(ulong),
-             typeof(float),
-             typeof(double),
-             typeof(decimal),
+            typeof(short),
+            typeof(ushort),
+            typeof(int),
+            typeof(uint),
+            typeof(long),
+            typeof(ulong),
+            typeof(float),
+            typeof(double),
+            typeof(decimal),
         };
         public delegate bool TryParse(ref Utf8JsonReader reader, out object? result);
         public static object? ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options, Type[] types)
@@ -54,25 +55,27 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 case "string":
                     foreach (var type in types)
                     {
-                        if (UnionConverter.StringParsers.Contains(type))
+                        if (StringParsers.Contains(type))
                         {
                             var ret = jsObject.JSRef!.As(type);
                             jsObject.Dispose();
                             return ret;
                         }
                     }
-                    break;
+                    jsObject.Dispose();
+                    throw new Exception($"String type not found in union: {typeOf} - {instanceOf} Union<{string.Join(", ", types.Select(o => o.Name))}>");
                 case "number":
                     foreach (var type in types)
                     {
-                        if (UnionConverter.NumberTypes.Contains(type))
+                        if (NumberTypes.Contains(type))
                         {
                             var ret = jsObject.JSRef!.As(type);
                             jsObject.Dispose();
                             return ret;
                         }
                     }
-                    break;
+                    jsObject.Dispose();
+                    throw new Exception($"Number type not found in union: {typeOf} - {instanceOf} Union<{string.Join(", ", types.Select(o => o.Name))}>");
                 case "array":
                     var enumerableTypes = types.Where(o => typeof(IEnumerable).IsAssignableFrom(o) && o != typeof(string)).ToList();
                     if (enumerableTypes.Count == 1)
@@ -81,7 +84,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
                         jsObject.Dispose();
                         return ret;
                     }
-                    break;
+                    else if (enumerableTypes.Count > 1)
+                    {
+                        jsObject.Dispose();
+                        throw new Exception($"Array/IEnumerable type has too many matching types in: {typeOf} - {instanceOf} Union<{string.Join(", ", types.Select(o => o.Name))}>");
+                    }
+                    jsObject.Dispose();
+                    throw new Exception($"Array/IEnumerable type not found in union: {typeOf} - {instanceOf} Union<{string.Join(", ", types.Select(o => o.Name))}>");
                 case "function":
                 case "object":
                     var objectTypes = types.Where(o => o.IsClass && o != typeof(string)).ToList();
@@ -91,9 +100,15 @@ namespace SpawnDev.BlazorJS.JsonConverters
                         jsObject.Dispose();
                         return ret;
                     }
-                    break;
+                    else if (objectTypes.Count > 1)
+                    {
+                        jsObject.Dispose();
+                        throw new Exception($"Object type has too many matching types in: {typeOf} - {instanceOf} Union<{string.Join(", ", types.Select(o => o.Name))}>");
+                    }
+                    jsObject.Dispose();
+                    throw new Exception($"Object type not found in union: {typeOf} - {instanceOf} Union<{string.Join(", ", types.Select(o => o.Name))}>");
             }
-            return jsObject;
+            throw new Exception($"Union type not found in union: {typeOf} - {instanceOf} Union<{string.Join(", ", types.Select(o => o.Name))}>");
         }
     }
     public class UnionConverterFactory : JsonConverterFactory
