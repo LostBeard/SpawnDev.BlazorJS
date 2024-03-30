@@ -90,11 +90,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string Id => JSRef.Get<string>("id");
         public string Type => JSRef.Get<string>("type");
     }
-    // https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer
+    /// <summary>
+    /// The CredentialsContainer interface of the Credential Management API exposes methods to request credentials and notify the user agent when events such as successful sign in or sign out happen. This interface is accessible from Navigator.credentials.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer
+    /// </summary>
     public class CredentialsContainer : JSObject
     {
-        public static CredentialsContainer GetDefaultCredentialsContainer() => JS.Get<CredentialsContainer>("navigator.credentials");
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public CredentialsContainer(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Returns navigator.credentials
+        /// </summary>
+        /// <returns></returns>
+        public static CredentialsContainer GetDefaultCredentialsContainer() => JS.Get<CredentialsContainer>("navigator.credentials");
         /// <summary>
         /// Returns a Promise that resolves with a new Credential instance based on the provided options, or null if no Credential object can be created. In exceptional circumstances, the Promise may reject.
         /// </summary>
@@ -106,34 +117,50 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<PublicKeyCredential<AuthenticatorAttestationResponse>> Create(CredentialCreationPublicKeyOptions options) => JSRef.CallAsync<PublicKeyCredential<AuthenticatorAttestationResponse>>("create", options);
         //public Task<PasswordCredential> Create(CredentialCreationPasswordOptions options) => JSRef.CallAsync<PasswordCredential>("create", options);
+        /// <summary>
+        /// Returns a Promise that resolves with the Credential instance that matches the provided parameters.
+        /// </summary>
+        /// <returns></returns>
         public Task<Credential?> Get() => JSRef.CallAsync<Credential?>("get");
+        /// <summary>
+        /// Returns a Promise that resolves with the Credential instance that matches the provided parameters.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public Task<PublicKeyCredential<AuthenticatorAssertionResponse>?> Get(CredentialGetPublicKeyOptions options) => JSRef.CallAsync<PublicKeyCredential<AuthenticatorAssertionResponse>?>("get", options);
 
     }
+    /// <summary>
+    /// Options used for CredentialsContainer.Get()
+    /// https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#options
+    /// </summary>
     public class CredentialGetPublicKeyOptions
     {
-        public CredentialGetPublicKey PublicKey { get; set; }
-    }
-    public class CredentialGetPublicKey
-    {
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public uint? Timeout { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? UserVerification { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? RpId { get; set; }
-        public List<CredentialGetPublicKeyAllowedCredential> AllowCredentials { get; set; } = new List<CredentialGetPublicKeyAllowedCredential>();
         /// <summary>
-        /// 16 byte challenge. Must be randomly generated on the server.
+        /// An object containing requirements for a requested credential from a federated identify provider. Bear in mind that the Federated Credential Management API (the identity credential type) supersedes this credential type. See the Credential Management API section below for more details.
         /// </summary>
-        public ArrayBuffer Challenge { get; set; }
-    }
-    public class CredentialGetPublicKeyAllowedCredential
-    {
-        public ArrayBuffer Id { get; set; }// = "";
-        public string Type { get; set; } = "public-key";
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> Transports { get; set; } = new List<string> { "ble","internal","nfc","usb" };
+        public object? Federated { get; set; }
+        /// <summary>
+        /// A boolean value indicating that a password credential is being requested. See the Credential Management API section below for more details.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public object? Password { get; set; }
+        /// <summary>
+        /// An object containing details of federated identity providers (IdPs) that a relying party (RP) website can use for purposes such as signing in or signing up on a website. It causes the get() call to initiate a request for a user to sign in to an RP with an IdP. See the Federated Credential Management API section below for more details.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public object? Identity { get; set; }
+        /// <summary>
+        /// An object containing transport type hints. Causes the get() call to initiate a request for the retrieval of an OTP. See the WebOTP API section below for more details.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public object? Otp { get; set; }
+        /// <summary>
+        /// An object containing requirements for returned public key credentials. Causes the get() call to use an existing set of public key credentials to authenticate to a relying party. See the Web Authentication API section below for more details.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public CredentialGetPublicKey? PublicKey { get; set; }
     }
 
 }
