@@ -3,37 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class PublicKeyCredentialParameters
-    {
-        public string Type { get; set; } = "public-key";
-        public int Alg { get; set; }
-        public PublicKeyCredentialParameters() { }
-        public PublicKeyCredentialParameters(int alg) => (Alg) = (alg);
-        public PublicKeyCredentialParameters(int alg, string type) => (Alg, Type) = (alg, type);
-        public static implicit operator PublicKeyCredentialParameters(int alg) => new PublicKeyCredentialParameters(alg);
-        public static implicit operator int(PublicKeyCredentialParameters obj) => obj.Alg;
-    }
-    public class RelyingParty
-    {
-        public string Name { get; set; } = "";
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? Id { get; set; }
-    }
-    public class CredentialUser
-    {
-        /// <summary>
-        /// A user handle (ex: john34)
-        /// </summary>
-        public string Name { get; set; } = "";
-        /// <summary>
-        /// A unique user id of type BufferSource. This value cannot exceed 64 bytes.
-        /// </summary>
-        public byte[] Id { get; set; }
-        /// <summary>
-        /// A human-friendly user display name (example: John Doe).
-        /// </summary>
-        public string DisplayName { get; set; } = "";
-    }
     /// <summary>
     /// The CredentialsContainer interface of the Credential Management API exposes methods to request credentials and notify the user agent when events such as successful sign in or sign out happen. This interface is accessible from Navigator.credentials.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer

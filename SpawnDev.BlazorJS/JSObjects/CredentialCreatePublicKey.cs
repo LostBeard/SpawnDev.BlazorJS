@@ -30,42 +30,47 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public AuthenticatorSelection? AuthenticatorSelection { get; set; }
-
         /// <summary>
+        /// An ArrayBuffer, TypedArray, or DataView provided by the relying party's server and used as a cryptographic challenge. This value will be signed by the authenticator and the signature will be sent back as part of AuthenticatorAttestationResponse.attestationObject.<br />
         /// 32 byte challenge. Must be randomly generated on the server.
         /// </summary>
-        public byte[] Challenge { get; set; }
-        public RelyingParty Rp { get; set; }
+        public Union<ArrayBuffer, Uint8Array, DataView, byte[]> Challenge { get; set; }
         /// <summary>
-        /// An object describing the user account for which the credential is generated
+        /// An Array of objects describing existing credentials that are already mapped to this user account (as identified by user.id). This is provided by the relying party, and checked by the user agent to avoid creating a new public key credential on an authenticator that already has a credential mapped to the specified user account. for an existing user who already has some. 
         /// </summary>
-        public CredentialUser User { get; set; }
-        public List<PublicKeyCredentialParameters> PubKeyCredParams { get; set; } = new List<PublicKeyCredentialParameters>();
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public IEnumerable<CredentialCreatePublicKeyExclude>? ExcludeCredentials { get; set; }
+        /// <summary>
+        /// An object containing properties representing the input values for any requested extensions. These extensions are used to specific additional processing by the client or authenticator during the credential creation process. Examples include specifying whether a returned credential is discoverable, or whether the relying party will be able to store large blob data associated with a credential.
+        /// Extensions are optional and different browsers may recognize different extensions.Processing extensions is always optional for the client: if a browser does not recognize a given extension, it will just ignore it.For information on using extensions, and which ones are supported by which browsers, see Web Authentication extensions.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public object? Extensions { get; set; }
+        /// <summary>
+        /// An Array of objects which specify the key types and signature algorithms the Relying Party supports, ordered from most preferred to least preferred. The client and authenticator will make a best-effort to create a credential of the most preferred type possible. 
+        /// </summary>
+        public List<PublicKeyCredentialParameter> PubKeyCredParams { get; set; } = new List<PublicKeyCredentialParameter>();
+        /// <summary>
+        /// An object describing the relying party that requested the credential creation. It can contain the following properties:
+        /// </summary>
+        public RelyingParty Rp { get; set; }
         /// <summary>
         /// A numerical hint, in milliseconds, which indicates the time the caller is willing to wait for the creation operation to complete. This hint may be overridden by the browser.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? Timeout { get; set; }
-
-
-        // TODO - finish adding below 3 properties (part of Fido2 Asp.Net
-        ///// <summary>
-        ///// This member is intended for use by Relying Parties that wish to select the appropriate authenticators to participate in the create() operation.
-        ///// </summary>
-        //[JsonPropertyName("authenticatorSelection")]
-        //public AuthenticatorSelection AuthenticatorSelection { get; set; }
-
-        ///// <summary>
-        ///// This member is intended for use by Relying Parties that wish to limit the creation of multiple credentials for the same account on a single authenticator.The client is requested to return an error if the new credential would be created on an authenticator that also contains one of the credentials enumerated in this parameter.
-        ///// </summary>
-        //[JsonPropertyName("excludeCredentials")]
-        //public List<PublicKeyCredentialDescriptor> ExcludeCredentials { get; set; }
-
-        ///// <summary>
-        ///// This OPTIONAL member contains additional parameters requesting additional processing by the client and authenticator. For example, if transaction confirmation is sought from the user, then the prompt string might be included as an extension.
-        ///// </summary>
-        //[JsonPropertyName("extensions")]
-        //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        //public AuthenticationExtensionsClientInputs Extensions { get; set; }
+        /// <summary>
+        /// An object describing the user account for which the credential is generated
+        /// </summary>
+        public CredentialUser User { get; set; }
+        /// <summary>
+        /// An array of strings providing hints as to what authentication UI the user-agent should provide for the user.<br />
+        /// The values can be any of the following:<br />
+        /// "security-key" - Authentication requires a separate dedicated physical device to provide the key.<br />
+        /// "client-device" - The user authenticates using their own device, such as a phone.<br />
+        /// "hybrid" - Authentication relies on a combination of authorization/authentication methods, potentially relying on both user and server-based mechanisms.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string>? Hints { get; set; }
     }
 }

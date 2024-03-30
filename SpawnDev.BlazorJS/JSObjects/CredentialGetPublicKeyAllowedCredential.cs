@@ -24,5 +24,4 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string Type { get; set; } = "public-key";
     }
-
 }
