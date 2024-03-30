@@ -11,6 +11,12 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Array : JSObject
     {
         /// <summary>
+        /// Returns true if the argument is an array, or false otherwise.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static bool IsArray(JSObject obj) => JS.Call<bool>("Array.isArray", obj);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

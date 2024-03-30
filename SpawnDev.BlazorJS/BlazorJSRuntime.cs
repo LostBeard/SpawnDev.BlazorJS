@@ -269,6 +269,7 @@ namespace SpawnDev.BlazorJS
         public static bool JSEquals(object obj1, object obj2) => JSInterop.IsEqual(obj1, obj2);
         public T ReturnMe<T>(object obj) => JSInterop.ReturnMe<T>(obj);
         public T ReturnMe<T>(T obj) => JSInterop.ReturnMe<T>(obj);
+        public object? ReturnMe(Type type, object obj) => JSInterop.ReturnMe(type, obj);
         public JSObject FromElementReference(ElementReference elementRef) => ReturnMe<JSObject>(elementRef);
         public IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);
         public T FromElementReference<T>(ElementReference elementRef) where T : JSObject => (T)Activator.CreateInstance(typeof(T), ReturnMe<IJSInProcessObjectReference>(elementRef));
