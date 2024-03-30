@@ -127,40 +127,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task<PublicKeyCredential<AuthenticatorAssertionResponse>?> Get(CredentialGetPublicKeyOptions options) => JSRef.CallAsync<PublicKeyCredential<AuthenticatorAssertionResponse>?>("get", options);
+        public Task<PublicKeyCredential<AuthenticatorAssertionResponse>?> Get(CredentialsContainerGetOptions options) => JSRef.CallAsync<PublicKeyCredential<AuthenticatorAssertionResponse>?>("get", options);
+        /// <summary>
+        /// Returns a Promise that resolves with the Credential instance that matches the provided parameters.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task<T> Get<T>(CredentialsContainerGetOptions options) where T : Credential => JSRef.CallAsync<T>("get", options);
 
     }
-    /// <summary>
-    /// Options used for CredentialsContainer.Get()
-    /// https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#options
-    /// </summary>
-    public class CredentialGetPublicKeyOptions
-    {
-        /// <summary>
-        /// An object containing requirements for a requested credential from a federated identify provider. Bear in mind that the Federated Credential Management API (the identity credential type) supersedes this credential type. See the Credential Management API section below for more details.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public object? Federated { get; set; }
-        /// <summary>
-        /// A boolean value indicating that a password credential is being requested. See the Credential Management API section below for more details.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public object? Password { get; set; }
-        /// <summary>
-        /// An object containing details of federated identity providers (IdPs) that a relying party (RP) website can use for purposes such as signing in or signing up on a website. It causes the get() call to initiate a request for a user to sign in to an RP with an IdP. See the Federated Credential Management API section below for more details.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public object? Identity { get; set; }
-        /// <summary>
-        /// An object containing transport type hints. Causes the get() call to initiate a request for the retrieval of an OTP. See the WebOTP API section below for more details.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public object? Otp { get; set; }
-        /// <summary>
-        /// An object containing requirements for returned public key credentials. Causes the get() call to use an existing set of public key credentials to authenticate to a relying party. See the Web Authentication API section below for more details.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public CredentialGetPublicKey? PublicKey { get; set; }
-    }
-
 }

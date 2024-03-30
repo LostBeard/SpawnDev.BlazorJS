@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Options used for CredentialsContainer.Get()
+    /// Options for CredentialsContainer.Get()<br />
+    /// CredentialsContainer.Get() will return a Promise that resolves with an PublicKeyCredential instance matching the provided parameters. If a single credential cannot be unambiguously obtained, the Promise will resolve to null.
     /// https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#publickey_object_structure
     /// </summary>
     public class CredentialGetPublicKey
