@@ -18,6 +18,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public Task<IteratorResult> Next() => JSRef.CallAsync<IteratorResult>("next");
+        /// <summary>
+        /// Returns an IAsyncEnumerable
+        /// </summary>
+        /// <typeparam name="TValue"></typeparam>
+        /// <returns></returns>
         public async IAsyncEnumerable<TValue> ToAsyncEnumerable<TValue>()
         {
             while (true)
@@ -29,6 +34,11 @@ namespace SpawnDev.BlazorJS.JSObjects
                 }
             }
         }
+        /// <summary>
+        /// Iterates all values and returns them as a List
+        /// </summary>
+        /// <typeparam name="TValue"></typeparam>
+        /// <returns></returns>
         public async Task<List<TValue>> ToList<TValue>()
         {
             var ret = new List<TValue>();
@@ -59,6 +69,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public Task<IteratorResult<TValue>> Next() => JSRef.CallAsync<IteratorResult<TValue>>("next");
+        /// <summary>
+        /// Returns an IAsyncEnumerable
+        /// </summary>
+        /// <returns></returns>
         public async IAsyncEnumerable<TValue> ToAsyncEnumerable()
         {
             while (true)
@@ -70,6 +84,10 @@ namespace SpawnDev.BlazorJS.JSObjects
                 }
             }
         }
+        /// <summary>
+        /// Iterates all values and returns them as a List
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<TValue>> ToList()
         {
             var ret = new List<TValue>();
