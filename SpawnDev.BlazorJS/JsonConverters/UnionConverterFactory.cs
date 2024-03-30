@@ -38,6 +38,17 @@ namespace SpawnDev.BlazorJS.JsonConverters
             if (jsObject == null) return null;
             var isArray = Array.IsArray(jsObject);
             var typeOf = isArray ? "array" : jsObject.JSRef!.PropertyType();
+            var instanceOf = jsObject.JSRef!.PropertyIsUndefined("constructor") ? "" : jsObject.JSRef!.GetConstructorName()!;
+            if (!string.IsNullOrEmpty(instanceOf))
+            {
+                var matchType = types.Where(o => o.Name.Equals(instanceOf, StringComparison.OrdinalIgnoreCase)).ToList();
+                if (matchType.Count == 1)
+                {
+                    var ret = jsObject.JSRef!.As(matchType[0]);
+                    jsObject.Dispose();
+                    return ret;
+                }
+            }
             switch (typeOf)
             {
                 case "string":
