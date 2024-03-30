@@ -92,10 +92,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="keyUsages">An Array indicating what can be done with the key. Possible array values are: encrypt, decrypt, sign, verify, deriveKey, deriveBits, wrapKey, or unwrapKey.</param>
         /// <returns></returns>
         public Task<CryptoKey> ImportKey(string format, Union<ArrayBuffer, TypedArray, DataView, byte[]> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) => JSRef.CallAsync<CryptoKey>("importKey", format, keyData, algorithm, extractable, keyUsages);
-
-        public void ImportKeyTest(string format, Union<ArrayBuffer, TypedArray, DataView, byte[]> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) => JS.Log("importKey", format, keyData, algorithm, extractable, keyUsages);
-
-
         /// <summary>
         /// The sign() method of the SubtleCrypto interface generates a digital signature.<br />
         /// It takes as its arguments a key to sign with, some algorithm-specific parameters, and the data to sign. It returns a Promise which will be fulfilled with the signature.

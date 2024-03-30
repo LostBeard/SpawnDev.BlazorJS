@@ -16,12 +16,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a boolean indicating whether the WakeLockSentinel has been released.
         /// </summary>
-        public bool Released => JSRef.Get<bool>("released");
+        public bool Released => JSRef!.Get<bool>("released");
         /// <summary>
         /// Returns a string representation of the currently acquired WakeLockSentinel type. Return values are:<br />
         /// screen: A screen wake lock. Prevents devices from dimming or locking the screen.
         /// </summary>
-        public string Type => JSRef.Get<string>("type");
+        public string Type => JSRef!.Get<string>("type");
+        /// <summary>
+        /// The release() method of the WakeLockSentinel interface releases the WakeLockSentinel, returning a Promise that is resolved once the sentinel has been successfully released.
+        /// </summary>
+        /// <returns></returns>
+        public Task Release() => JSRef!.CallVoidAsync("release");
         /// <summary>
         /// release event
         /// </summary>
