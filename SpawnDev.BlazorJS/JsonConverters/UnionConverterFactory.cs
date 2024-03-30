@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
 {
     static class UnionConverter
     {
-        public static List<Type> StringParsers = new List<Type>
+        public static List<Type> StringTypes = new List<Type>
         {
             typeof(string),
             typeof(DateTime),
@@ -55,7 +55,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 case "string":
                     foreach (var type in types)
                     {
-                        if (StringParsers.Contains(type))
+                        if (StringTypes.Contains(type))
                         {
                             var ret = jsObject.JSRef!.As(type);
                             jsObject.Dispose();
