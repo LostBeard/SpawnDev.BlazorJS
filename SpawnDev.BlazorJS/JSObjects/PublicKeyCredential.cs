@@ -37,5 +37,4 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public static Task<bool> IsConditionalMediationAvailable() => JS.CallAsync<bool>("PublicKeyCredential.isConditionalMediationAvailable");
     }
-
 }

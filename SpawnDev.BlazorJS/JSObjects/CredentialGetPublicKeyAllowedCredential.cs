@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Note: This value is mirrored by the return value of the PublicKeyCredential.response.getTransports() method of the PublicKeyCredential object returned by the create() call that originally created the credential. At that point, it should be stored by the app for later use.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string>? Transports { get; set; } = new List<string> { "ble", "internal", "nfc", "usb" };
+        public List<string>? Transports { get; set; } = new List<string> { "ble", "hybrid", "internal", "nfc", "usb" };
         /// <summary>
         /// A string defining the type of the public key credential to retrieve. This can currently take a single value, "public-key", but more values may be added in the future. This value is mirrored by the type property of the PublicKeyCredential object returned by a successful get() call.
         /// </summary>
