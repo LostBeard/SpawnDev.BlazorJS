@@ -101,8 +101,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
         };
         public static object? ImportFromJson(ref Utf8JsonReader reader, JsonSerializerOptions options, Type[] types)
         {
-            object? ret = null;
-            var tokenType = reader.TokenType;
             switch (reader.TokenType)
             {
                 case JsonTokenType.String:
@@ -149,7 +147,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
                         return ret1;
                     }
                     break;
-                //return Read(ref reader, null!, options);
                 case JsonTokenType.StartArray:
                     var enumerableTypes = types.Where(o => typeof(IEnumerable).IsAssignableFrom(o) && o != typeof(string)).ToList();
                     if (enumerableTypes.Count == 1)
@@ -159,18 +156,8 @@ namespace SpawnDev.BlazorJS.JsonConverters
                         return ret1;
                     }
                     break;
-                //var list = new List<object?>();
-                //while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                //{
-                //    list.Add(ExtractValue(ref reader, options));
-                //}
-                //return list;
-                default:
-                    //throw new JsonException($"'{reader.TokenType}' is not supported");
-                    break;
             }
-
-            return ret;
+            throw new Exception($"(Json) Union type not found in union: Union<{string.Join(", ", types.Select(o => o.Name))}>");
         }
         public static object? ImportFromIJSInprocessObjectReference(ref Utf8JsonReader reader, JsonSerializerOptions options, Type[] types)
         {
