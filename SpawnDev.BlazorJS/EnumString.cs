@@ -26,45 +26,62 @@ namespace SpawnDev.BlazorJS
     [JsonConverter(typeof(EnumStringConverter))]
     public class EnumString<T> : EnumString where T : struct, Enum
     {
-        public T Value
+        public T? Value
         {
-            get => IsDefined ? _Value : throw new Exception("Invalid enum value. Check EnumString.IsDefined property before using EnumString.Value");
+            get => _Value;
             set
             {
-                IsDefined = Enum.IsDefined(typeof(T), value);
+                IsDefined = value != null && Enum.IsDefined(typeof(T), value.Value);
                 if (IsDefined)
                 {
                     _Value = value;
-                    _Text = value.ToString();
+                    _Text = value!.Value.ToString();
+                    _Int = (int)Convert.ChangeType(value!.Value, value!.Value.GetTypeCode());
                 }
                 else
                 {
                     _Text = null;
+                    _Value = null;
+                    _Int = null;
                 }
             }
         }
-        public int Int
+        public int? Int
         {
-            get => (int)Convert.ChangeType(Value, Value.GetTypeCode());
-            set => Value = (T)Enum.ToObject(typeof(T), value);
+            get => _Int;
+            set
+            {
+                if (value == null)
+                {
+                    Value = null;
+                }
+                else
+                {
+                    Value = (T)Enum.ToObject(typeof(T), value.Value);
+                }
+            }
         }
         public bool IsDefined { get; private set; }
         private string? _Text = null;
-        private T _Value { get; set; }
+        private T? _Value { get; set; }
+        private int? _Int { get; set; }
         public override string? Text
         {
             get => _Text;
             set
             {
                 _Text = value;
-                if (string.IsNullOrEmpty(value) && Enum.TryParse(typeof(T), value, out var e))
+                if (!string.IsNullOrEmpty(value) && Enum.TryParse(typeof(T), value, out var e))
                 {
-                    _Value = (T)e!;
                     IsDefined = true;
+                    _Value = (T)e!;
+                    _Int = (int)Convert.ChangeType(_Value!.Value, _Value!.Value.GetTypeCode());
                 }
                 else
                 {
                     IsDefined = false;
+                    _Value = null;
+                    _Int = null;
                 }
             }
         }
@@ -74,13 +91,13 @@ namespace SpawnDev.BlazorJS
         public EnumString(string value) { Text = value; }
         // int
         public static implicit operator EnumString<T>(int value) => new EnumString<T>(value);
-        public static implicit operator int(EnumString<T> value) => value.Int;   // will throw if !Valid
+        public static implicit operator int(EnumString<T> value) => value.Int!.Value;   // will throw if !Valid
         // int?
         public static implicit operator EnumString<T>?(int? value) => value == null ? null : new EnumString<T>(value.Value);
         public static implicit operator int?(EnumString<T>? value) => value == null || !value.IsDefined ? null : value.Int;
         // T
         public static implicit operator EnumString<T>(T value) => new EnumString<T>(value);
-        public static implicit operator T(EnumString<T> value) => value.Value;
+        public static implicit operator T(EnumString<T> value) => value.Value!.Value;
         // T?
         public static implicit operator EnumString<T>?(T? value) => value == null ? null : new EnumString<T>(value.Value);
         public static implicit operator T?(EnumString<T> value) => value == null || !value.IsDefined ? null : value.Value;
