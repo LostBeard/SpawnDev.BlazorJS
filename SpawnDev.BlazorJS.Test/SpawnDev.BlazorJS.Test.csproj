@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.69</Version>
+		<Version>2.2.70</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 	
@@ -14,7 +14,7 @@
 		<PackageReference Include="Radzen.Blazor" Version="4.25.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.3" PrivateAssets="all" />
-		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.69" />
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.70" />
 	</ItemGroup>
 
 	<ItemGroup>
