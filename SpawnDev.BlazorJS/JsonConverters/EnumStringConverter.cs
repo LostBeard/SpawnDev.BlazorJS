@@ -18,12 +18,12 @@ namespace SpawnDev.BlazorJS.JsonConverters
             var v = JsonSerializer.Deserialize<string?>(ref reader);
             if (string.IsNullOrEmpty(v)) return null;
             var ret = (EnumString)Activator.CreateInstance(typeToConvert)!;
-            ret.Text = v;
+            ret.String = v;
             return ret;
         }
         public override void Write(Utf8JsonWriter writer, EnumString? value, JsonSerializerOptions options)
         {
-            JsonSerializer.Serialize(writer, value == null ? null : value.Text);
+            JsonSerializer.Serialize(writer, value == null ? null : value.String);
         }
     }
 }
