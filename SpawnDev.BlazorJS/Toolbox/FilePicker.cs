@@ -3,7 +3,7 @@ using File = SpawnDev.BlazorJS.JSObjects.File;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
-    public class FilePicker
+    public static class FilePicker
     {
         static BlazorJSRuntime JS => BlazorJSRuntime.JS;
         /// <summary>
@@ -13,7 +13,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="accept"></param>
         /// <param name="multiple"></param>
         /// <returns></returns>
-        public async Task<File[]?> ShowOpenFilePicker(string? accept = null, bool? multiple = null)
+        public static async Task<File[]?> ShowOpenFilePicker(string? accept = null, bool? multiple = null)
         {
             File[]? ret = null;
             using var document = JS.Get<Document>("document");
@@ -45,7 +45,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         /// <param name="inputConfig"></param>
         /// <returns></returns>
-        public async Task<File[]?> ShowOpenFilePicker(Action<HTMLInputElement> inputConfig)
+        public static async Task<File[]?> ShowOpenFilePicker(Action<HTMLInputElement> inputConfig)
         {
             File[]? ret = null;
             using var document = JS.Get<Document>("document");
