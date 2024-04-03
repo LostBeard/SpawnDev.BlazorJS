@@ -38,5 +38,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the path the URL of the File is relative to.
         /// </summary>
         public string? WebkitRelativePath => JSRef.Get<string?>("webkitRelativePath");
+        /// <summary>
+        /// Start downloading the File using the File.Name
+        /// </summary>
+        /// <returns></returns>
+        public Task StartDownload() => StartDownload(Name);
     }
 }

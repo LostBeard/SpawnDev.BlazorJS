@@ -11,7 +11,6 @@ namespace SpawnDev.BlazorJS.Toolbox
 {
     public static class Vector
     {
-
         public static void Test()
         {
             var testData = Enumerable.Range(0, 20000000).Select(i => (float)i).ToArray();

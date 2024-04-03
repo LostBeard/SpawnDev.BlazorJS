@@ -147,13 +147,19 @@ namespace SpawnDev.BlazorJS.JSObjects
             var blob = new Blob(new ArrayBuffer[] { ia.Buffer }, new BlobOptions { Type = mimeString });
             return blob;
         }
-
+        /// <summary>
+        /// Returns an ObjectURL created using URL.CreateObjectURL
+        /// </summary>
+        /// <returns></returns>
         public string ToObjectURL()
         {
             return URL.CreateObjectURL(this);
         }
-
-        public Task<string?> ToDataURLAsync()
+        /// <summary>
+        /// Returns the blob as a data url string
+        /// </summary>
+        /// <returns></returns>
+        public Task<string> ToDataURLAsync()
         {
             var fr = new FileReader();
             var tcs = new TaskCompletionSource<string?>();
@@ -178,6 +184,26 @@ namespace SpawnDev.BlazorJS.JSObjects
             fr.OnLoadEnd += load;
             fr.ReadAsDataURL(this);
             return tcs.Task;
+        }
+        /// <summary>
+        /// Start download of the blob
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public async Task StartDownload(string fileName)
+        {
+            var url = URL.CreateObjectURL(this);
+            using var document = JS.Get<Document>("document");
+            using var body = document.Body!;
+            var a = document.CreateElement<HTMLAnchorElement>("a");
+            a.Href = url;
+            a.Download = fileName;
+            body.AppendChild(a);
+            using var style = a.Style;
+            style.SetProperty("display", "none");
+            a.Click();
+            a.Remove();
+            URL.RevokeObjectURL(url);
         }
     }
 }
