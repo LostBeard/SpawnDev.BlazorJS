@@ -4,6 +4,88 @@ namespace SpawnDev.BlazorJS
 {
     public static class IEnumerableExtensions
     {
+        #region IDisposable
+        /// <summary>
+        /// Use the IDisposable before it is disposed
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        public static void Using<T>(this T target, Action<T> use) where T : class, IDisposable
+        {
+            try
+            {
+                use(target);
+            }
+            finally
+            {
+                target?.Dispose();
+            }
+        }
+        /// <summary>
+        /// Use the IDisposable before it is disposed returning TResult
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static TResult Using<T, TResult>(this T target, Func<T, TResult> use) where T : class, IDisposable
+        {
+            try
+            {
+                return use(target);
+            }
+            finally
+            {
+                target?.Dispose();
+            }
+        }
+        /// <summary>
+        /// Use the IDisposable before it is disposed returning Task&lt;TResult&gt;
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static async Task UsingAsync<T, TResult>(this T target, Func<T, Task> use) where T : class, IDisposable
+        {
+            try
+            {
+                await use(target);
+            }
+            finally
+            {
+                target?.Dispose();
+            }
+        }
+        /// <summary>
+        /// Use the IDisposable before it is disposed returning Task
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static async Task<TResult> UsingAsync<T, TResult>(this T target, Func<T, Task<TResult>> use) where T : class, IDisposable
+        {
+            try
+            {
+                return await use(target);
+            }
+            finally
+            {
+                target?.Dispose();
+            }
+        }
+        /// <summary>
+        /// Use the IDisposable before it is disposed
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        #endregion
         #region Array
         /// <summary>
         /// Dispose all of the IDisposable object in the array
@@ -17,7 +99,7 @@ namespace SpawnDev.BlazorJS
         /// Dispose all of the IDisposable object in the array
         /// </summary>
         /// <param name="target"></param>
-        public static void Using<T>(this T[] target) where T : IDisposable
+        public static void Using<T>(this T[] target) where T : class, IDisposable
         {
             foreach (var item in target) item?.Dispose();
         }
@@ -27,7 +109,7 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static void UsingEach<T>(this T[] target, Action<T> use) where T : IDisposable
+        public static void UsingEach<T>(this T[] target, Action<T> use) where T : class, IDisposable
         {
             try
             {
@@ -44,7 +126,7 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static async Task  UsingEachAsync<T>(this T[] target, Func<T, Task> use) where T : IDisposable
+        public static async Task UsingEachAsync<T>(this T[] target, Func<T, Task> use) where T : class, IDisposable
         {
             try
             {
@@ -61,7 +143,7 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static List<T> UsingWhere<T>(this T[] target, Func<T, bool> use) where T : IDisposable
+        public static List<T> UsingWhere<T>(this T[] target, Func<T, bool> use) where T : class, IDisposable
         {
             var ret = new List<T>();
             try
@@ -87,7 +169,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="target"></param>
         /// <param name="use"></param>
         /// <returns></returns>
-        public static async Task<List<T>> UsingWhereAsync<T>(this T[] target, Func<T, Task<bool>> use) where T : IDisposable
+        public static async Task<List<T>> UsingWhereAsync<T>(this T[] target, Func<T, Task<bool>> use) where T : class, IDisposable
         {
             var ret = new List<T>();
             try
@@ -107,12 +189,142 @@ namespace SpawnDev.BlazorJS
             }
         }
         /// <summary>
+        /// Returns the first T that satisfies the predicate, disposing all others
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static async Task<T?> UsingFirstOrDefaultAsync<T>(this T[] target, Func<T, Task<bool>> use) where T : class, IDisposable
+        {
+            var n = -1;
+            try
+            {
+                for (var i = 0; i < target.Length; i++)
+                {
+                    var item = target[i];
+                    if (await use(item))
+                    {
+                        n = i;
+                        return item;
+                    }
+                }
+                return null;
+            }
+            finally
+            {
+                for (var i = 0; i < target.Length; i++)
+                {
+                    if (i == n) continue;
+                    target[i]?.Dispose();
+                }
+            }
+        }
+        /// <summary>
+        /// Returns the first T that satisfies the predicate, disposing all others. Throws on not satisfied.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static async Task<T?> UsingFirstAsync<T>(this T[] target, Func<T, Task<bool>> use) where T : class, IDisposable
+        {
+            var n = -1;
+            try
+            {
+                for (var i = 0; i < target.Length; i++)
+                {
+                    var item = target[i];
+                    if (await use(item))
+                    {
+                        n = i;
+                        return item;
+                    }
+                }
+                throw new Exception("UsingFirstAsync failed");
+            }
+            finally
+            {
+                for (var i = 0; i < target.Length; i++)
+                {
+                    if (i == n) continue;
+                    target[i]?.Dispose();
+                }
+            }
+        }
+        /// <summary>
+        /// Returns the first T that satisfies the predicate, disposing all others
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static T? UsingFirstOrDefault<T>(this T[] target, Func<T, bool> use) where T : class, IDisposable
+        {
+            var n = -1;
+            try
+            {
+                for (var i = 0; i < target.Length; i++)
+                {
+                    var item = target[i];
+                    if (use(item))
+                    {
+                        n = i;
+                        return item;
+                    }
+                }
+                return null;
+            }
+            finally
+            {
+                for (var i = 0; i < target.Length; i++)
+                {
+                    if (i == n) continue;
+                    target[i]?.Dispose();
+                }
+            }
+        }
+        /// <summary>
+        /// Returns the first T that satisfies the predicate, disposing all others. Throws on not satisfied.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static T? UsingFirst<T>(this T[] target, Func<T, bool> use) where T : class, IDisposable
+        {
+            var n = -1;
+            try
+            {
+                for (var i = 0; i < target.Length; i++)
+                {
+                    var item = target[i];
+                    if (use(item))
+                    {
+                        n = i;
+                        return item;
+                    }
+                }
+                throw new Exception("UsingFirst failed");
+            }
+            finally
+            {
+                for (var i = 0; i < target.Length; i++)
+                {
+                    if (i == n) continue;
+                    target[i]?.Dispose();
+                }
+            }
+        }
+        /// <summary>
         /// Use an array of IDisposable that will be disposed when done
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static void Using<T>(this T[] target, Action<T[]> use) where T : IDisposable
+        public static void Using<T>(this T[] target, Action<T[]> use) where T : class, IDisposable
         {
             try
             {
@@ -130,7 +342,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="target"></param>
         /// <param name="use"></param>
         /// <returns></returns>
-        public static async Task UsingAsync<T>(this T[] target, Func<T[], Task> use) where T : IDisposable
+        public static async Task UsingAsync<T>(this T[] target, Func<T[], Task> use) where T : class, IDisposable
         {
             try
             {
@@ -147,7 +359,7 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static TResult Using<T, TResult>(this T[] target, Func<T[], TResult> use) where T : IDisposable
+        public static TResult Using<T, TResult>(this T[] target, Func<T[], TResult> use) where T : class, IDisposable
         {
             try
             {
@@ -166,7 +378,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="target"></param>
         /// <param name="use"></param>
         /// <returns></returns>
-        public static async Task<TResult> UsingAsync<T, TResult>(this T[] target, Func<T[], Task<TResult>> use) where T : IDisposable
+        public static async Task<TResult> UsingAsync<T, TResult>(this T[] target, Func<T[], Task<TResult>> use) where T : class, IDisposable
         {
             try
             {
@@ -191,7 +403,7 @@ namespace SpawnDev.BlazorJS
         /// Dispose all of the IDisposable object in the List
         /// </summary>
         /// <param name="target"></param>
-        public static void Using<T>(this List<T> target) where T : IDisposable
+        public static void Using<T>(this List<T> target) where T : class, IDisposable
         {
             foreach (var item in target) item?.Dispose();
         }
@@ -201,7 +413,7 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static void UsingEach<T>(this List<T> target, Action<T> use) where T : IDisposable
+        public static void UsingEach<T>(this List<T> target, Action<T> use) where T : class, IDisposable
         {
             try
             {
@@ -225,7 +437,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="target"></param>
         /// <param name="use"></param>
         /// <returns></returns>
-        public static async Task UsingEachAsync<T>(this List<T> target, Func<T, Task> use) where T : IDisposable
+        public static async Task UsingEachAsync<T>(this List<T> target, Func<T, Task> use) where T : class, IDisposable
         {
             try
             {
@@ -248,7 +460,7 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static List<T> UsingWhere<T>(this List<T> target, Func<T, bool> use) where T : IDisposable
+        public static List<T> UsingWhere<T>(this List<T> target, Func<T, bool> use) where T : class, IDisposable
         {
             var ret = new List<T>();
             try
@@ -274,7 +486,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="target"></param>
         /// <param name="use"></param>
         /// <returns></returns>
-        public static async Task<List<T>> UsingWhereAsync<T>(this List<T> target, Func<T, Task<bool>> use) where T : IDisposable
+        public static async Task<List<T>> UsingWhereAsync<T>(this List<T> target, Func<T, Task<bool>> use) where T : class, IDisposable
         {
             var ret = new List<T>();
             try
@@ -294,12 +506,141 @@ namespace SpawnDev.BlazorJS
             }
         }
         /// <summary>
+        /// Returns the first T that satisfies the predicate, disposing all others
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static async Task<T?> UsingFirstOrDefaultAsync<T>(this List<T> target, Func<T, Task<bool>> use) where T : class, IDisposable
+        {
+            var n = -1;
+            try
+            {
+                for (var i = 0; i < target.Count; i++)
+                {
+                    var item = target[i];
+                    if (await use(item))
+                    {
+                        n = i;
+                        return item;
+                    }
+                }
+                return null;
+            }
+            finally
+            {
+                for (var i = 0; i < target.Count; i++)
+                {
+                    if (i == n) continue;
+                    target[i]?.Dispose();
+                }
+            }
+        }
+        /// <summary>
+        /// Returns the first T that satisfies the predicate, disposing all others. Throws on not satisfied.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static async Task<T?> UsingFirstAsync<T>(this List<T> target, Func<T, Task<bool>> use) where T : class, IDisposable
+        {
+            var n = -1;
+            try
+            {
+                for (var i = 0; i < target.Count; i++)
+                {
+                    var item = target[i];
+                    if (await use(item))
+                    {
+                        n = i;
+                        return item;
+                    }
+                }
+                throw new Exception("UsingFirstAsync failed");
+            }
+            finally
+            {
+                for (var i = 0; i < target.Count; i++)
+                {
+                    if (i == n) continue;
+                    target[i]?.Dispose();
+                }
+            }
+        }
+        /// <summary>
+        /// Returns the first T that satisfies the predicate, disposing all others
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static T? UsingFirstOrDefault<T>(this List<T> target, Func<T, bool> use) where T : class, IDisposable
+        {
+            var n = -1;
+            try
+            {
+                for(var i =0; i < target.Count; i++)
+                {
+                    var item = target[i];
+                    if (use(item))
+                    {
+                        n = i;
+                        return item;
+                    }
+                }
+                return null;
+            }
+            finally
+            {
+                for (var i = 0; i < target.Count; i++)
+                {
+                    if (i == n) continue;
+                    target[i]?.Dispose();
+                }
+            }
+        }
+        /// <summary>
+        /// Returns the first T that satisfies the predicate, disposing all others. Throws on not satisfied.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static T? UsingFirst<T>(this List<T> target, Func<T, bool> use) where T : class, IDisposable
+        {
+            var n = -1;
+            try
+            {
+                for (var i = 0; i < target.Count; i++)
+                {
+                    var item = target[i];
+                    if (use(item))
+                    {
+                        n = i;
+                        return item;
+                    }
+                }
+                throw new Exception("UsingFirst failed");
+            }
+            finally
+            {
+                for (var i = 0; i < target.Count; i++)
+                {
+                    if (i == n) continue;
+                    target[i]?.Dispose();
+                }
+            }
+        }
+        /// <summary>
         /// Use an array of IDisposable that will be disposed when done
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static void Using<T>(this List<T> target, Action<List<T>> use) where T : IDisposable
+        public static void Using<T>(this List<T> target, Action<List<T>> use) where T : class, IDisposable
         {
             try
             {
@@ -317,7 +658,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="target"></param>
         /// <param name="use"></param>
         /// <returns></returns>
-        public static async Task UsingAsync<T>(this List<T> target, Func<List<T>, Task> use) where T : IDisposable
+        public static async Task UsingAsync<T>(this List<T> target, Func<List<T>, Task> use) where T : class, IDisposable
         {
             try
             {
@@ -334,7 +675,7 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static TResult Using<T, TResult>(this List<T> target, Func<List<T>, TResult> use) where T : IDisposable
+        public static TResult Using<T, TResult>(this List<T> target, Func<List<T>, TResult> use) where T : class, IDisposable
         {
             try
             {
@@ -353,7 +694,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="target"></param>
         /// <param name="use"></param>
         /// <returns></returns>
-        public static async Task<TResult> UsingAsync<T, TResult>(this List<T> target, Func<List<T>, Task<TResult>> use) where T : IDisposable
+        public static async Task<TResult> UsingAsync<T, TResult>(this List<T> target, Func<List<T>, Task<TResult>> use) where T : class, IDisposable
         {
             try
             {
