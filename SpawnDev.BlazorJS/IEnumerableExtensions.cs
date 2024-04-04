@@ -61,7 +61,7 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static List<T> UsingFilter<T>(this T[] target, Func<T, bool> use) where T : IDisposable
+        public static List<T> UsingWhere<T>(this T[] target, Func<T, bool> use) where T : IDisposable
         {
             var ret = new List<T>();
             try
@@ -87,7 +87,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="target"></param>
         /// <param name="use"></param>
         /// <returns></returns>
-        public static async Task<List<T>> UsingFilterAsync<T>(this T[] target, Func<T, Task<bool>> use) where T : IDisposable
+        public static async Task<List<T>> UsingWhereAsync<T>(this T[] target, Func<T, Task<bool>> use) where T : IDisposable
         {
             var ret = new List<T>();
             try
@@ -248,7 +248,7 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="use"></param>
-        public static List<T> UsingFilter<T>(this List<T> target, Func<T, bool> use) where T : IDisposable
+        public static List<T> UsingWhere<T>(this List<T> target, Func<T, bool> use) where T : IDisposable
         {
             var ret = new List<T>();
             try
@@ -274,7 +274,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="target"></param>
         /// <param name="use"></param>
         /// <returns></returns>
-        public static async Task<List<T>> UsingFilterAsync<T>(this List<T> target, Func<T, Task<bool>> use) where T : IDisposable
+        public static async Task<List<T>> UsingWhereAsync<T>(this List<T> target, Func<T, Task<bool>> use) where T : IDisposable
         {
             var ret = new List<T>();
             try

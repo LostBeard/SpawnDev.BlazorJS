@@ -179,6 +179,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="count"></param>
         /// <returns></returns>
         public T[] ToArray<T>(int start, int count) => Enumerable.Range(start, count).Select(i => At<T>(i)).ToArray();
+        /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<T> ToList<T>(int start, int count) => Enumerable.Range(start, count).Select(i => At<T>(i)).ToList();
     }
     /// <summary>
     /// The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations.<br />
@@ -198,6 +206,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public T? LastOrDefault() => Length > 0 ? GetItem(Length - 1) : default(T?);
         /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <returns></returns>
+        public List<T> ToList() => ToArray().ToList();
+        /// <summary>
         /// Returns the array as a .Net Array
         /// </summary>
         /// <returns></returns>
@@ -209,6 +222,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="count"></param>
         /// <returns></returns>
         public T[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToArray();
+        /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<T> ToList(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToList();
         #endregion
         //#region Enable IEnumerable
         //public T[] ToArray() => JSRef!.As<T[]>();
