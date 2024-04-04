@@ -164,7 +164,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T[] ToArray<T>() => Enumerable.Range(0, Length).Select(i => At<T>(i)).ToArray();
+        public T[] ToArray<T>() => JSRef!.As<T[]>();
+        /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public List<T> ToList<T>() => JSRef!.As<List<T>>();
         /// <summary>
         /// Returns a .Net array of type T
         /// </summary>
@@ -178,12 +184,37 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
     /// </summary>
-    public class Array<T> : JSObject, IEnumerable<T>
+    public class Array<T> : JSObject//, IEnumerable<T>
     {
-        #region Enable IEnumerable
-        public IEnumerator GetEnumerator() => new SimpleEnumerator<T>(this.At, () => this.Length);
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() => new SimpleEnumerator<T>(this.At, () => this.Length);
+        #region Enumerable like
+        /// <summary>
+        /// Returns first or default
+        /// </summary>
+        /// <returns></returns>
+        public T? FirstOrDefault() => Length > 0 ? GetItem(0) : default(T?);
+        /// <summary>
+        /// Returns last or default
+        /// </summary>
+        /// <returns></returns>
+        public T? LastOrDefault() => Length > 0 ? GetItem(Length - 1) : default(T?);
+        /// <summary>
+        /// Returns the array as a .Net Array
+        /// </summary>
+        /// <returns></returns>
+        public T[] ToArray() => JSRef!.As<T[]>();
+        /// <summary>
+        /// Returns the array as a .Net Array
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public T[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToArray();
         #endregion
+        //#region Enable IEnumerable
+        //public T[] ToArray() => JSRef!.As<T[]>();
+        //public IEnumerator GetEnumerator() => new SimpleEnumerator<T>(this.At, () => this.Length);
+        //IEnumerator<T> IEnumerable<T>.GetEnumerator() => new SimpleEnumerator<T>(this.At, () => this.Length);
+        //#endregion
         public T this[int index]
         {
             get => GetItem(index);

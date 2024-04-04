@@ -7,11 +7,11 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The FileList interface represents an object of this type returned by the files property of the HTML input element; this lets you access the list of files selected with the input type="file" element. It's also used for a list of files dropped into web content when using the drag and drop API; see the DataTransfer object for details on this usage.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileList
     /// </summary>
-    public class FileList : JSObject, IEnumerable<File>
+    public class FileList : JSObject//, IEnumerable<File>
     {
         #region Enable IEnumerable
-        public IEnumerator GetEnumerator() => new SimpleEnumerator<File>(this.Item, () => this.Length);
-        IEnumerator<File> IEnumerable<File>.GetEnumerator() => new SimpleEnumerator<File>(this.Item, () => this.Length);
+        //public IEnumerator GetEnumerator() => new SimpleEnumerator<File>(this.Item, () => this.Length);
+        //IEnumerator<File> IEnumerable<File>.GetEnumerator() => new SimpleEnumerator<File>(this.Item, () => this.Length);
         #endregion
         /// <summary>
         /// Deserialization constructor
@@ -28,5 +28,29 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="index"></param>
         /// <returns></returns>
         public File Item(int index) => JSRef.Call<File>("item", index);
+        #region Enumerable like
+        /// <summary>
+        /// Returns first or default
+        /// </summary>
+        /// <returns></returns>
+        public File? FirstOrDefault() => Length > 0 ? Item(0) : null;
+        /// <summary>
+        /// Returns last or default
+        /// </summary>
+        /// <returns></returns>
+        public File? LastOrDefault() => Length > 0 ? Item(Length - 1) : null;
+        /// <summary>
+        /// Returns the array as a .Net Array
+        /// </summary>
+        /// <returns></returns>
+        public File[] ToArray() => Enumerable.Range(0, Length).Select(i => Item(i)).ToArray();
+        /// <summary>
+        /// Returns the array as a .Net Array
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public File[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => Item(i)).ToArray();
+        #endregion
     }
 }

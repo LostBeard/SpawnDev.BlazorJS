@@ -109,7 +109,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public MediaStreamVideoTrackSettings? GetFirstVideoTrackSettings()
         {
             using var track = GetFirstVideoTrack();
-            return track == null ? null : track.GetSettings<MediaStreamVideoTrackSettings>();
+            return track?.GetSettings<MediaStreamVideoTrackSettings>();
         }
         /// <summary>
         /// Returns the first audio track settings
@@ -118,7 +118,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public MediaStreamAudioTrackSettings? GetFirstAudioTrackSettings()
         {
             using var track = GetFirstAudioTrack();
-            return track == null ? null : track.GetSettings<MediaStreamAudioTrackSettings>();
+            return track?.GetSettings<MediaStreamAudioTrackSettings>();
         }
         /// <summary>
         /// Returns the first audio track or null
@@ -126,51 +126,44 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public MediaStreamTrack? GetFirstAudioTrack()
         {
-            var tracks = GetAudioTracks();
+            using var tracks = GetAudioTracks();
             return tracks.FirstOrDefault();
         }
 
         public void StopAllTracks()
         {
-            var tracks = GetTracks();
-            foreach (MediaStreamTrack t in tracks)
-            {
-                t.Stop();
-                t.Dispose();
-            }
+            using var tracks = GetTracks();
+            tracks.ToArray().UsingEach(o => o.Stop());
         }
 
         public void RemoveAllTracks(bool stopTracks = true)
         {
             using var tracks = GetTracks();
-            foreach (MediaStreamTrack t in tracks)
+            tracks.ToArray().UsingEach(o =>
             {
-                if (stopTracks) t.Stop();
-                RemoveTrack(t);
-                t.Dispose();
-            }
+                if (stopTracks) o.Stop();
+                RemoveTrack(o);
+            });
         }
 
         public void RemoveAllVideoTracks(bool stopTracks = true)
         {
             using var tracks = GetVideoTracks();
-            foreach (MediaStreamTrack t in tracks)
+            tracks.ToArray().UsingEach(o =>
             {
-                if (stopTracks) t.Stop();
-                RemoveTrack(t);
-                t.Dispose();
-            }
+                if (stopTracks) o.Stop();
+                RemoveTrack(o);
+            });
         }
 
         public void RemoveAllAudioTracks(bool stopTracks = true)
         {
             using var tracks = GetAudioTracks();
-            foreach (MediaStreamTrack t in tracks)
+            tracks.ToArray().UsingEach(o =>
             {
-                if (stopTracks) t.Stop();
-                RemoveTrack(t);
-                t.Dispose();
-            }
+                if (stopTracks) o.Stop();
+                RemoveTrack(o);
+            });
         }
     }
 }
