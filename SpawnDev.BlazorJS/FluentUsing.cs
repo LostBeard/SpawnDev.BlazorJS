@@ -2,7 +2,11 @@
 
 namespace SpawnDev.BlazorJS
 {
-    public static class IEnumerableExtensions
+    /// <summary>
+    /// Adds extension methods to the IDisposable interface, IDisposable[], and List&lt;IDisposable&gt;<br />
+    /// That allows Linq style using of IDisposable where the IDisposable objects are usually disposed after the Using call
+    /// </summary>
+    public static class FluentUsing
     {
         #region IDisposable
         /// <summary>
