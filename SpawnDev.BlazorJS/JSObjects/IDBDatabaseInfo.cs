@@ -1,7 +1,7 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Returned as elements in an array from the Promise returned byIDBFactory.databases() 
+    /// Returned as elements in an array from the Promise returned by IDBFactory.databases() 
     /// </summary>
     public class IDBDatabaseInfo
     {

@@ -6,12 +6,31 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// JavaScript Date objects represent a single moment in time in a platform-independent format. Date objects encapsulate an integral number that represents milliseconds since the midnight at the beginning of January 1, 1970, UTC (the epoch).<br />
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
     /// </summary>
-    internal class Date : JSObject
+    public class Date : JSObject
     {
+        /// <summary>
+        /// Create a new instance of Date from a .Net DateTime
+        /// </summary>
+        /// <param name="dateTime"></param>
+        public static implicit operator Date(DateTime dateTime)=>new Date(dateTime);
+        /// <summary>
+        /// Returns the Date.ateTime property
+        /// </summary>
+        /// <param name="dateTime"></param>
+        public static implicit operator DateTime(Date dateTime) => dateTime.DateTime;
         /// <summary>
         /// Creates a new Date object.
         /// </summary>
         public Date() : base(JS.New(nameof(Date))) { }
+        /// <summary>
+        /// Returns a .Net DateTime
+        /// </summary>
+        public DateTime DateTime => GetTime().EpochTimeToDateTime();
+        /// <summary>
+        /// Create a new instance of Date from .Net DateTime
+        /// </summary>
+        /// <param name="dateTime"></param>
+        public Date(DateTime dateTime) : base(JS.New(nameof(Date), dateTime.GetEpochTime())) { }
         /// <summary>
         /// Deserialization constructor
         /// </summary>

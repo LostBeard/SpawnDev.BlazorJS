@@ -3,7 +3,6 @@ using System.Diagnostics.Tracing;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-
     public class Number : JSObject
     {
         public Number(IJSInProcessObjectReference _ref) : base(_ref){ }

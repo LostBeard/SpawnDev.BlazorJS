@@ -1,17 +1,21 @@
 ﻿using Microsoft.JSInterop;
-using System.Dynamic;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The IDBDatabase interface of the IndexedDB API provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database.<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase<br />
+    /// W3C spec:<br />
+    /// https://w3c.github.io/IndexedDB/#introduction
+    /// </summary>
     public class IDBDatabase : EventTarget
     {
+        #region Static helper methods (non-spec)
         private static Lazy<bool> _IsSupported = new Lazy<bool>(() => !JS.IsUndefined("indexedDB"));
         /// <summary>
         /// True is indexedDB global object is found
         /// </summary>
         public static bool IsSupported => _IsSupported.Value;
-
         public static IDBOpenDBRequest Open(string dbName)
         {
             using var dbFactory = new IDBFactory();
@@ -22,41 +26,89 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var dbFactory = new IDBFactory();
             return dbFactory.Open(dbName, dbVersion);
         }
-
         public static Task<IDBDatabase> OpenAsync(string dbName, Action<IDBVersionChangeEvent>? onUpgradeNeeded = null)
         {
             using var dbFactory = new IDBFactory();
             return dbFactory.OpenAsync(dbName, onUpgradeNeeded);
         }
-
         public static Task<IDBDatabase> OpenAsync(string dbName, long dbVersion, Action<IDBVersionChangeEvent>? onUpgradeNeeded = null)
         {
             using var dbFactory = new IDBFactory();
             return dbFactory.OpenAsync(dbName, dbVersion, onUpgradeNeeded);
         }
-
+        #endregion
         /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
         public IDBDatabase(IJSInProcessObjectReference _ref) : base(_ref) { }
-
+        /// <summary>
+        /// A string that contains the name of the connected database.
+        /// </summary>
+        public string Name => JSRef!.Get<string>("name");
+        /// <summary>
+        /// A 64-bit integer that contains the version of the connected database. When a database is first created, this attribute is an empty string.
+        /// </summary>
+        public long Version => JSRef!.Get<long>("version");
+        /// <summary>
+        /// A DOMStringList that contains a list of the names of the object stores currently in the connected database.
+        /// </summary>
         public DOMStringList ObjectStoreNames => JSRef.Get<DOMStringList>("objectStoreNames");
-
+        /// <summary>
+        /// Returns immediately and closes the connection to a database in a separate thread.
+        /// </summary>
         public void Close() => JSRef.CallVoid("close");
-
-        public IDBObjectStore CreateObjectStore(string storeName, IDBObjectStoreCreateOptions? options = null) => options == null ?
-            JSRef.Call<IDBObjectStore>("createObjectStore", storeName) :
-            JSRef.Call<IDBObjectStore>("createObjectStore", storeName, options);
-
-        public IDBObjectStore<TKey, TValue> CreateObjectStore<TKey, TValue>(string storeName, IDBObjectStoreCreateOptions? options = null) => options == null ?
-            JSRef.Call<IDBObjectStore<TKey, TValue>>("createObjectStore", storeName) :
-            JSRef.Call<IDBObjectStore<TKey, TValue>>("createObjectStore", storeName, options);
-
+        ///// <summary>
+        ///// Creates and returns a new object store or index.
+        ///// </summary>
+        ///// <param name="storeName">The name of the new object store to be created. Note that it is possible to create an object store with an empty name.</param>
+        ///// <param name="options">An options object whose attributes are optional parameters to the method</param>
+        ///// <returns>A new IDBObjectStore.</returns>
+        //public IDBObjectStore CreateObjectStore(string storeName, IDBObjectStoreCreateOptions? options = null) => options == null ?
+        //    JSRef.Call<IDBObjectStore>("createObjectStore", storeName) :
+        //    JSRef.Call<IDBObjectStore>("createObjectStore", storeName, options);
+        /// <summary>
+        /// Creates and returns a new object store or index.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the value found at TValue[options.KeyPath]</typeparam>
+        /// <typeparam name="TValue">The value of the type that is stored</typeparam>
+        /// <param name="storeName">The name of the new object store to be created. Note that it is possible to create an object store with an empty name.</param>
+        /// <param name="options">An options object whose attributes are optional parameters to the method</param>
+        /// <returns>A new IDBObjectStore.</returns>
+        public IDBObjectStore<TKey, TValue> CreateObjectStore<TKey, TValue>(string storeName, IDBObjectStoreCreateOptions options) => JSRef.Call<IDBObjectStore<TKey, TValue>>("createObjectStore", storeName, options);
+        /// <summary>
+        /// Creates and returns a new object store or index.
+        /// </summary>
+        /// <typeparam name="TValue">The value of the type that is stored</typeparam>
+        /// <param name="storeName">The name of the new object store to be created. Note that it is possible to create an object store with an empty name.</param>
+        /// <param name="options">An options object whose attributes are optional parameters to the method</param>
+        /// <returns></returns>
+        public IDBObjectStore<TValue> CreateObjectStore<TValue>(string storeName, IDBObjectStoreCreateOptions? options = null) => options == null ? JSRef.Call<IDBObjectStore<TValue>>("createObjectStore", storeName) : JSRef.Call<IDBObjectStore<TValue>>("createObjectStore", storeName, options);
+        /// <summary>
+        /// Destroys the object store with the given name in the connected database, along with any indexes that reference it.
+        /// </summary>
+        /// <param name="storeName">The name of the object store you want to delete. Names are case sensitive.</param>
         public void DeleteObjectStore(string storeName) => JSRef.CallVoid("deleteObjectStore", storeName);
-
-        public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, bool readWrite = true) => JSRef.Call<IDBTransaction>("transaction", storeNames, readWrite ? "readwrite" : "readonly");
-
-        public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, string mode) => JSRef.Call<IDBTransaction>("transaction", storeNames, mode);
+        /// <summary>
+        /// Immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store. Runs in a separate thread.
+        /// </summary>
+        /// <param name="storeNames"></param>
+        /// <returns></returns>
+        public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames) => JSRef.Call<IDBTransaction>("transaction", storeNames);
+        /// <summary>
+        /// Immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store. Runs in a separate thread.
+        /// </summary>
+        /// <param name="storeNames"></param>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, EnumString<IDBTransactionMode> mode) => JSRef.Call<IDBTransaction>("transaction", storeNames, mode);
+        /// <summary>
+        /// Immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store. Runs in a separate thread.
+        /// </summary>
+        /// <param name="storeNames"></param>
+        /// <param name="mode"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, EnumString<IDBTransactionMode> mode, IDBDatabaseTransactionOptions options) => JSRef.Call<IDBTransaction>("transaction", storeNames, mode, options);
     }
 }

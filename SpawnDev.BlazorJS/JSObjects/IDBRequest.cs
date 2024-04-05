@@ -18,68 +18,29 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the result of the request. If the request is not completed, the result is not available and an InvalidStateError exception is thrown.
         /// </summary>
         public TResult Result => JSRef.Get<TResult>("result");
-        public Task<TResult> WaitAsync()
+        public Task<TResult> WaitAsync(bool disposeRequest = true)
         {
+            if (ReadyState == "done") return Task.FromResult(ResultAs<TResult>());
             var t = new TaskCompletionSource<TResult>();
-            Action<string?, TResult?>? onComplete = null;
+            Action? onComplete = null;
             var onError = new Action(() =>
             {
-                onComplete?.Invoke(null, default(TResult));
+                t.TrySetException(new Exception("Failed"));
+                onComplete?.Invoke();
             });
             var onSucc = new Action(() =>
             {
-                var result = ResultAs<TResult>();
-                onComplete?.Invoke(null, result);
+                t.TrySetResult(ResultAs<TResult>());
+                onComplete?.Invoke();
             });
             OnError += onError;
             OnSuccess += onSucc;
-            onComplete = new Action<string?, TResult?>((err, result) =>
+            onComplete = new Action(() =>
             {
                 onComplete = null;
-                if (result == null && string.IsNullOrEmpty(err)) err = "Failed";
                 OnError -= onError;
                 OnSuccess -= onSucc;
-                if (!string.IsNullOrEmpty(err))
-                {
-                    t.TrySetException(new Exception(err));
-                }
-                else
-                {
-                    t.TrySetResult(result);
-                }
-            });
-            return t.Task;
-        }
-        public static Task<TResult> ToAsync(IDBRequest<TResult> request)
-        {
-            var t = new TaskCompletionSource<TResult>();
-            Action<string?, TResult?>? onComplete = null;
-            var onError = new Action(() =>
-            {
-                onComplete?.Invoke(null, default(TResult));
-            });
-            var onSucc = new Action(() =>
-            {
-                var result = request.Result;
-                onComplete?.Invoke(null, result);
-            });
-            request.OnError += onError;
-            request.OnSuccess += onSucc;
-            onComplete = new Action<string?, TResult?>((err, result) =>
-            {
-                onComplete = null;
-                if (result == null && string.IsNullOrEmpty(err)) err = "Failed";
-                request.OnError -= onError;
-                request.OnSuccess -= onSucc;
-                request.Dispose();
-                if (!string.IsNullOrEmpty(err))
-                {
-                    t.TrySetException(new Exception(err));
-                }
-                else
-                {
-                    t.TrySetResult(result);
-                }
+                if (disposeRequest) Dispose();
             });
             return t.Task;
         }
@@ -119,7 +80,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The transaction for the request. This property can be null for certain requests, for example those returned from IDBFactory.open unless an upgrade is needed. (You're just connecting to a database, so there is no transaction to return).
         /// </summary>
         public IDBTransaction? Transaction => JSRef.Get<IDBTransaction?>("transaction");
-
         #region Events
         /// <summary>
         /// Fired when an error caused a request to fail.
@@ -129,131 +89,56 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fired when an IDBRequest succeeds.
         /// </summary>
         public JSEventCallback<Event> OnSuccess { get => new JSEventCallback<Event>("success", AddEventListener, RemoveEventListener); set { } }
-        #endregion 
-
-        public static Task<T> ToAsync<T>(IDBRequest<T> request)
+        #endregion
+        public Task WaitAsync(bool disposeRequest = true)
         {
-            var t = new TaskCompletionSource<T>();
-            Action<string?, T?>? onComplete = null;
-            var onError = new Action(() =>
-            {
-                onComplete?.Invoke(null, default(T));
-            });
-            var onSucc = new Action(() =>
-            {
-                var result = request.ResultAs<T>();
-                onComplete?.Invoke(null, result);
-            });
-            request.OnError += onError;
-            request.OnSuccess += onSucc;
-            onComplete = new Action<string?, T?>((err, result) =>
-            {
-                onComplete = null;
-                if (result == null && string.IsNullOrEmpty(err)) err = "Failed";
-                request.OnError -= onError;
-                request.OnSuccess -= onSucc;
-                request.Dispose();
-                if (!string.IsNullOrEmpty(err))
-                {
-                    t.TrySetException(new Exception(err));
-                }
-                else
-                {
-                    t.TrySetResult(result);
-                }
-            });
-            return t.Task;
-        }
-        public static Task ToVoidAsync(IDBRequest request)
-        {
+            if (ReadyState == "done") return Task.CompletedTask;
             var t = new TaskCompletionSource();
-            Action<string?>? onComplete = null;
+            Action? onComplete = null;
             var onError = new Action(() =>
             {
-                onComplete?.Invoke("Failed");
+                t.TrySetException(new Exception("Failed"));
+                onComplete?.Invoke();
             });
             var onSucc = new Action(() =>
             {
-                onComplete?.Invoke(null);
-            });
-            request.OnError += onError;
-            request.OnSuccess += onSucc;
-            onComplete = new Action<string?>((err) =>
-            {
-                onComplete = null;
-                request.OnError -= onError;
-                request.OnSuccess -= onSucc;
-                request.Dispose();
-                if (!string.IsNullOrEmpty(err))
-                {
-                    t.TrySetException(new Exception(err));
-                }
-                else
-                {
-                    t.TrySetResult();
-                }
-            });
-            return t.Task;
-        }
-        //public Task<TValue> WaitAsync<TValue>()
-        //{
-        //    var t = new TaskCompletionSource<TValue>();
-        //    Action<string?, TValue?>? onComplete = null;
-        //    var onError = new Action(() =>
-        //    {
-        //        onComplete?.Invoke(null, default(TValue));
-        //    });
-        //    var onSucc = new Action(() =>
-        //    {
-        //        var result = ResultAs<TValue>();
-        //        onComplete?.Invoke(null, result);
-        //    });
-        //    OnError += onError;
-        //    OnSuccess += onSucc;
-        //    onComplete = new Action<string?, TValue?>((err, result) =>
-        //    {
-        //        onComplete = null;
-        //        if (result == null && string.IsNullOrEmpty(err)) err = "Failed";
-        //        OnError -= onError;
-        //        OnSuccess -= onSucc;
-        //        if (!string.IsNullOrEmpty(err))
-        //        {
-        //            t.TrySetException(new Exception(err));
-        //        }
-        //        else
-        //        {
-        //            t.TrySetResult(result);
-        //        }
-        //    });
-        //    return t.Task;
-        //}
-        public Task WaitVoidAsync()
-        {
-            var t = new TaskCompletionSource();
-            Action<string?>? onComplete = null;
-            var onError = new Action(() =>
-            {
-                onComplete?.Invoke("Failed");
-            });
-            var onSucc = new Action(() =>
-            {
-                onComplete?.Invoke(null);
+                t.TrySetResult();
+                onComplete?.Invoke();
             });
             OnError += onError;
             OnSuccess += onSucc;
-            onComplete = new Action<string?>((err) =>
+            onComplete = new Action(() =>
             {
                 onComplete = null;
                 OnError -= onError;
                 OnSuccess -= onSucc;
-                if (!string.IsNullOrEmpty(err))
-                {
-                    t.TrySetException(new Exception(err));
-                }
-                else
-                {
-                    t.TrySetResult();
-                }
+                if (disposeRequest) Dispose();
+            });
+            return t.Task;
+        }
+        public Task<TResult> WaitAsync<TResult>(bool disposeRequest = true)
+        {
+            if (ReadyState == "done") return Task.FromResult(ResultAs<TResult>());
+            var t = new TaskCompletionSource<TResult>();
+            Action? onComplete = null;
+            var onError = new Action(() =>
+            {
+                t.TrySetException(new Exception("Failed"));
+                onComplete?.Invoke();
+            });
+            var onSucc = new Action(() =>
+            {
+                t.TrySetResult(ResultAs<TResult>());
+                onComplete?.Invoke();
+            });
+            OnError += onError;
+            OnSuccess += onSucc;
+            onComplete = new Action(() =>
+            {
+                onComplete = null;
+                OnError -= onError;
+                OnSuccess -= onSucc;
+                if (disposeRequest) Dispose();
             });
             return t.Task;
         }

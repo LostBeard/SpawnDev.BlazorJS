@@ -196,6 +196,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
                     }
                 }
                 // look for exact match
+                var typeNames = types.Select(o =>o.Name).ToArray();
                 var matchType = types.Where(o => o.Name.Equals(instanceOf, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (matchType.Count == 1)
                 {
