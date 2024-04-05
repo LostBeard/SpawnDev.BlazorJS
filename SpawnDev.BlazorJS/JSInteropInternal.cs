@@ -159,11 +159,13 @@ namespace SpawnDev.BlazorJS {
 
         internal static T[]? ReturnArrayJSObjects<T>(IJSInProcessObjectReference? targetObject) where T : JSObject
         {
+            if (targetObject == null) return null;
             return CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject } )?.Select(id => _js.CreateJSObject<T>(id)).ToArray();
         }
 
         internal static IJSInProcessObjectReference[]? ReturnArrayJSObjectReferences(IJSInProcessObjectReference? targetObject)
         {
+            if (targetObject == null) return null;
             return CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject })?.Select(id => _js.CreateIJSInProcessObjectReference(id)).ToArray();
         }
 

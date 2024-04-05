@@ -204,6 +204,7 @@
     }
 
     JSInterop._returnArrayJSObjectReferenceIds = function (obj) {
+        if (obj === null || obj === void 0) return null;
         var ret = [];
         for (var o of obj) ret.push(o === null || o === void 0 ? null : DotNet.createJSObjectReference(o).__jsObjectId);
         return ret;

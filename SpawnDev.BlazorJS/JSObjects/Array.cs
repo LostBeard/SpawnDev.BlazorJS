@@ -199,12 +199,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns first or default
         /// </summary>
         /// <returns></returns>
-        public T? FirstOrDefault() => Length > 0 ? GetItem(0) : default(T?);
+        public T? FirstOrDefault() => Length > 0 ? GetItem(0) : default(T);
         /// <summary>
         /// Returns last or default
         /// </summary>
         /// <returns></returns>
-        public T? LastOrDefault() => Length > 0 ? GetItem(Length - 1) : default(T?);
+        public T? LastOrDefault() => Length > 0 ? GetItem(Length - 1) : default(T);
         /// <summary>
         /// Returns the array as a .Net List
         /// </summary>

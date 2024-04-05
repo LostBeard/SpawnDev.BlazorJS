@@ -83,12 +83,6 @@ namespace SpawnDev.BlazorJS
                 target?.Dispose();
             }
         }
-        /// <summary>
-        /// Use the IDisposable before it is disposed
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="target"></param>
-        /// <param name="use"></param>
         #endregion
         #region Array
         /// <summary>
@@ -339,6 +333,7 @@ namespace SpawnDev.BlazorJS
                 foreach (var item in target) item?.Dispose();
             }
         }
+
         /// <summary>
         /// Use an array of IDisposable that will be disposed when done
         /// </summary>
@@ -387,6 +382,30 @@ namespace SpawnDev.BlazorJS
             try
             {
                 return await use(target);
+            }
+            finally
+            {
+                foreach (var item in target) item?.Dispose();
+            }
+        }
+        /// <summary>
+        /// Use an array of IDisposable, returning the number of predicates that returned true before the array items are disposed
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static long UsingCount<T, TResult>(this T[] target, Func<T, bool> use) where T : class, IDisposable
+        {
+            long ret = 0;
+            try
+            {
+                foreach (var item in target)
+                {
+                    if (use(item)) ret++;
+                }
+                return ret;
             }
             finally
             {
@@ -703,6 +722,30 @@ namespace SpawnDev.BlazorJS
             try
             {
                 return await use(target);
+            }
+            finally
+            {
+                foreach (var item in target) item?.Dispose();
+            }
+        }
+        /// <summary>
+        /// Use an array of IDisposable, returning the number of predicates that returned true before the array items are disposed
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="use"></param>
+        /// <returns></returns>
+        public static long UsingCount<T, TResult>(this List<T> target, Func<T, bool> use) where T : class, IDisposable
+        {
+            long ret = 0;
+            try
+            {
+                foreach (var item in target)
+                {
+                    if (use(item)) ret++;
+                }
+                return ret;
             }
             finally
             {
