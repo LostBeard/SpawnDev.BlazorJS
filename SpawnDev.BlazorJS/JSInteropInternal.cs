@@ -157,6 +157,16 @@ namespace SpawnDev.BlazorJS {
         //    return _js.Invoke(returnType, "JSInterop._get", targetObject, identifier, jsCallResultType);
         //}
 
+        internal static T[]? ReturnArrayJSObjects<T>(IJSInProcessObjectReference? targetObject) where T : JSObject
+        {
+            return CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject } )?.Select(id => _js.CreateJSObject<T>(id)).ToArray();
+        }
+
+        internal static IJSInProcessObjectReference[]? ReturnArrayJSObjectReferences(IJSInProcessObjectReference? targetObject)
+        {
+            return CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject })?.Select(id => _js.CreateIJSInProcessObjectReference(id)).ToArray();
+        }
+
         internal static T ReturnMe<T>(object? obj1) {
             var jsCallResultType = JSCallResultTypeHelperOverride.FromGeneric<T>();
             return _js.Invoke<T>("JSInterop._returnMe", obj1, jsCallResultType);

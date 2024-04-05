@@ -1,8 +1,20 @@
 ﻿using Microsoft.JSInterop;
 using System.Reflection;
 
-namespace SpawnDev.BlazorJS {
-    public static class IJSInProcessRuntimeExtensions {
+namespace SpawnDev.BlazorJS
+{
+    public static class IJSInProcessRuntimeExtensions
+    {
+        static Type WebAssemblyJSObjectReferenceType = typeof(Microsoft.JSInterop.WebAssembly.WebAssemblyJSRuntime).Assembly.GetType("Microsoft.JSInterop.WebAssembly.WebAssemblyJSObjectReference")!;
+        public static IJSInProcessObjectReference CreateIJSInProcessObjectReference(this IJSInProcessRuntime _js, long id)
+        {
+            return (IJSInProcessObjectReference)Activator.CreateInstance(WebAssemblyJSObjectReferenceType, _js, id)!;
+        }
+        public static T CreateJSObject<T>(this IJSInProcessRuntime _js, long id) where T : JSObject
+        {
+            var _ref = (IJSInProcessObjectReference)Activator.CreateInstance(WebAssemblyJSObjectReferenceType, _js, id)!;
+            return (T)Activator.CreateInstance(typeof(T), _ref)!;
+        }
         public static void Set(this IJSInProcessRuntime _js, string identifier, object? value) => JSInterop.SetGlobal(identifier, value);
         public static T? Get<T>(this IJSInProcessRuntime _js, string identifier) => JSInterop.GetGlobal<T>(identifier);
         public static object? Get(this IJSInProcessRuntime _js, Type returnType, string identifier) => JSInterop.GetGlobal(returnType, identifier);

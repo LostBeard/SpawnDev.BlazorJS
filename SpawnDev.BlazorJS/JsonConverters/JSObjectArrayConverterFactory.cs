@@ -29,12 +29,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             using var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
             if (_ref == null) return null;
-            var length = _ref.Get<int>("length");
-            var tmpRet = (T[])Array.CreateInstance(typeof(T), length);
-            for (var i = 0; i < length; i++)
-            {
-                tmpRet[i] = _ref.Get<T>(i);
-            }
+            var tmpRet = _ref.AsArray<T>();
             return tmpRet;
         }
         public override void Write(Utf8JsonWriter writer, T[] value, JsonSerializerOptions options)

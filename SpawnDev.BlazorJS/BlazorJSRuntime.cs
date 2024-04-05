@@ -68,7 +68,27 @@ namespace SpawnDev.BlazorJS
             method.Invoke();
             return true;
         }
-
+        static Type WebAssemblyJSObjectReferenceType = typeof(Microsoft.JSInterop.WebAssembly.WebAssemblyJSRuntime).Assembly.GetType("Microsoft.JSInterop.WebAssembly.WebAssemblyJSObjectReference")!;
+        /// <summary>
+        /// Create an IJSInProcessObjectReference instance from an jsObjectId acquired from DotNet.createObjectReference(obj).__jsObjectId in Javascript.
+        /// </summary>
+        /// <param name="jsObjectId"></param>
+        /// <returns></returns>
+        public IJSInProcessObjectReference CreateIJSInProcessObjectReference(long jsObjectId)
+        {
+            return (IJSInProcessObjectReference)Activator.CreateInstance(WebAssemblyJSObjectReferenceType, _js, jsObjectId)!;
+        }
+        /// <summary>
+        /// Create a JSObject instance from an jsObjectId acquired from DotNet.createObjectReference(obj).__jsObjectId in Javascript.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="jsObjectId"></param>
+        /// <returns></returns>
+        public T CreateJSObject<T>(long jsObjectId) where T : JSObject
+        {
+            var _ref = (IJSInProcessObjectReference)Activator.CreateInstance(WebAssemblyJSObjectReferenceType, _js, jsObjectId)!;
+            return (T)Activator.CreateInstance(typeof(T), _ref)!;
+        }
         public async Task<bool> IfScopeAsync(GlobalScope scope, Func<Task> method)
         {
             if ((GlobalScope & scope) == 0) return false;

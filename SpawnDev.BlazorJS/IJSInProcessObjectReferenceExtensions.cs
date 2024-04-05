@@ -7,6 +7,8 @@ namespace SpawnDev.BlazorJS
     public static class IJSInProcessObjectReferenceExtensions
     {
         static PropertyInfo? JSObjectReferenceIdProp = null;
+        public static T[]? AsArray<T>(this IJSInProcessObjectReference _ref) where T : JSObject => JSInterop.ReturnArrayJSObjects<T>(_ref);
+        public static IJSInProcessObjectReference[]? AsArray(this IJSInProcessObjectReference _ref) => JSInterop.ReturnArrayJSObjectReferences(_ref);
         /// <summary>
         /// Import the IJSInProcessObjectReference instance from Javascript as T
         /// </summary>
