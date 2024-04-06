@@ -176,13 +176,13 @@ namespace SpawnDev.BlazorJS
         internal static T?[]? ReturnArrayJSObjects<T>(IJSInProcessObjectReference? targetObject) where T : JSObject
         {
             if (targetObject == null) return null;
-            var ids = CallGlobal<long?[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject });
+            var ids = CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject });
             if (ids == null) return null;
             var ret = new T?[ids.Length];
-            for(var i = 0; i < ret.Length; i++)
+            for (var i = 0; i < ret.Length; i++)
             {
                 var id = ids[i];
-                ret[i] = id == null ? null : _js.CreateJSObject<T>(id.Value);
+                ret[i] = id < 0 ? null : _js.CreateJSObject<T>(id);
             }
             return ret;
         }
@@ -190,13 +190,13 @@ namespace SpawnDev.BlazorJS
         internal static IJSInProcessObjectReference?[]? ReturnArrayJSObjectReferences(IJSInProcessObjectReference? targetObject)
         {
             if (targetObject == null) return null;
-            var ids = CallGlobal<long?[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject });
+            var ids = CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject });
             if (ids == null) return null;
             var ret = new IJSInProcessObjectReference?[ids.Length];
             for (var i = 0; i < ret.Length; i++)
             {
                 var id = ids[i];
-                ret[i] = id == null ? null : _js.CreateIJSInProcessObjectReference(id.Value);
+                ret[i] = id < 0 ? null : _js.CreateIJSInProcessObjectReference(id);
             }
             return ret;
         }
