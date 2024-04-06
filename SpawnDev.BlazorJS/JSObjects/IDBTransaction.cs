@@ -13,6 +13,33 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public IDBTransaction(IJSInProcessObjectReference _ref) : base(_ref) { }
+        #region Properties
+        /// <summary>
+        /// The database connection with which this transaction is associated.
+        /// </summary>
+        public IDBDatabase Db => JSRef.Get<IDBDatabase>("db");
+        /// <summary>
+        /// Returns the durability hint the transaction was created with.<br />
+        /// Any of the following literal strings:<br />
+        /// "strict"<br />
+        /// "relaxed"<br />
+        /// "default"<br />
+        /// </summary>
+        public string Durability => JSRef.Get<string>("durability");
+        /// <summary>
+        /// Returns a DOMException indicating the type of error that occurred when there is an unsuccessful transaction. This property is null if the transaction is not finished, is finished and successfully committed, or was aborted with the IDBTransaction.abort() function.
+        /// </summary>
+        public DOMException? Error => JSRef.Get<DOMException?>("error");
+        /// <summary>
+        /// The mode for isolating access to data in the object stores that are in the scope of the transaction. The default value is readonly.
+        /// </summary>
+        public string Mode => JSRef.Get<string>("mode");
+        /// <summary>
+        /// Returns a string[] of the names of IDBObjectStore objects associated with the transaction.
+        /// </summary>
+        public string[] ObjectStoreNames => JSRef.Get<DOMStringList>("objectStoreNames").ToArray();
+        #endregion
+        #region Methods
         /// <summary>
         /// Returns an IDBObjectStore object representing an object store that is part of the scope of this transaction.
         /// </summary>
@@ -36,6 +63,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// For an active transaction, commits the transaction. Note that this doesn't normally have to be called — a transaction will automatically commit when all outstanding requests have been satisfied and no new requests have been made. commit() can be used to start the commit process without waiting for events from outstanding requests to be dispatched.
         /// </summary>
         public void Commit() => JSRef.CallVoid("commit");
+        #endregion
+        #region Events
         /// <summary>
         /// An event fired when the IndexedDB transaction is aborted. Also available via the onabort property; this event bubbles to IDBDatabase.
         /// </summary>
@@ -48,5 +77,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An event fired when a request returns an error and the event bubbles up to the connection object (IDBDatabase). Also available via the onerror property.
         /// </summary>
         public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
+        #endregion
     }
 }
