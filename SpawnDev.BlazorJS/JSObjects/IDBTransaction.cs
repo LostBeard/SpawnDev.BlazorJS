@@ -31,13 +31,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public DOMException? Error => JSRef.Get<DOMException?>("error");
         /// <summary>
-        /// The mode for isolating access to data in the object stores that are in the scope of the transaction. The default value is readonly.
+        /// An string defining the mode for isolating access to data in the current object stores: A string defining the mode for isolating access to data in the current object stores.<br />
+        /// The following values are available:<br />
+        /// "readonly" - Allows data to be read but not changed.<br />
+        /// "readwrite" - Allows reading and writing of data in existing data stores to be changed.<br />
+        /// "versionchange" - Allows any operation, including ones that delete and create object stores and indexes. This mode is for updating the version number of transactions if the need is detected when calling IDBFactory.open(). Transactions of this mode cannot run concurrently with other transactions. Transactions in this mode are known as upgrade transactions.<br />
         /// </summary>
         public string Mode => JSRef.Get<string>("mode");
         /// <summary>
         /// Returns a string[] of the names of IDBObjectStore objects associated with the transaction.
         /// </summary>
-        public string[] ObjectStoreNames => JSRef.Get<DOMStringList>("objectStoreNames").ToArray();
+        public string[] ObjectStoreNames => JSRef.Get<DOMStringList>("objectStoreNames")!;
         #endregion
         #region Methods
         /// <summary>

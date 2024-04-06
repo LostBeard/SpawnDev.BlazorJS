@@ -8,6 +8,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class DOMStringList : JSObject
     {
+        /// <summary>
+        /// Implicit conversion to string[]
+        /// </summary>
+        /// <param name="domStringList"></param>
+        public static implicit operator string[]?(DOMStringList? domStringList) => domStringList?.ToArray();
+        /// <summary>
+        /// Implicit conversion to a string List 
+        /// </summary>
+        /// <param name="domStringList"></param>
+        public static implicit operator List<string>?(DOMStringList? domStringList) => domStringList?.ToList();
         public string this[int i] => JSRef!.Call<string>("item", i);
         /// <summary>
         /// Deserialization constructor
@@ -29,5 +39,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public string[] ToArray() => Enumerable.Range(0, Length).Select(i => JSRef!.Call<string>("item", i)).ToArray();
+        /// <summary>
+        /// Returns the string list as a .Net string List
+        /// </summary>
+        /// <returns></returns>
+        public List<string> ToList() => Enumerable.Range(0, Length).Select(i => JSRef!.Call<string>("item", i)).ToList();
     }
 }

@@ -173,16 +173,32 @@ namespace SpawnDev.BlazorJS
         //    return _js.Invoke(returnType, "JSInterop._get", targetObject, identifier, jsCallResultType);
         //}
 
-        internal static T[]? ReturnArrayJSObjects<T>(IJSInProcessObjectReference? targetObject) where T : JSObject
+        internal static T?[]? ReturnArrayJSObjects<T>(IJSInProcessObjectReference? targetObject) where T : JSObject
         {
             if (targetObject == null) return null;
-            return CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject })?.Select(id => _js.CreateJSObject<T>(id)).ToArray();
+            var ids = CallGlobal<long?[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject });
+            if (ids == null) return null;
+            var ret = new T?[ids.Length];
+            for(var i = 0; i < ret.Length; i++)
+            {
+                var id = ids[i];
+                ret[i] = id == null ? null : _js.CreateJSObject<T>(id.Value);
+            }
+            return ret;
         }
 
-        internal static IJSInProcessObjectReference[]? ReturnArrayJSObjectReferences(IJSInProcessObjectReference? targetObject)
+        internal static IJSInProcessObjectReference?[]? ReturnArrayJSObjectReferences(IJSInProcessObjectReference? targetObject)
         {
             if (targetObject == null) return null;
-            return CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject })?.Select(id => _js.CreateIJSInProcessObjectReference(id)).ToArray();
+            var ids = CallGlobal<long?[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject });
+            if (ids == null) return null;
+            var ret = new IJSInProcessObjectReference?[ids.Length];
+            for (var i = 0; i < ret.Length; i++)
+            {
+                var id = ids[i];
+                ret[i] = id == null ? null : _js.CreateIJSInProcessObjectReference(id.Value);
+            }
+            return ret;
         }
 
         internal static T ReturnMe<T>(object? obj1)

@@ -32,13 +32,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The key path of this index. If null, this index is not auto-populated.
         /// </summary>
-        public string? KeyPath => JSRef!.Get<string?>("keyPath");
-        /// <summary>
-        /// The key path of this index. If null, this index is not auto-populated.
-        /// </summary>
-        /// <typeparam name="T">The type of the keyPath</typeparam>
-        /// <returns></returns>
-        public T KeyPathAs<T>() => JSRef!.Get<T>("keyPath");
+        public Union<string, string[]>? KeyPath => JSRef!.Get<Union<string, string[]>?>("keyPath");
         /// <summary>
         /// Affects how the index behaves when the result of evaluating the index's key path yields an array. If true, there is one record in the index for each item in an array of keys. If false, then there is one record for each key that is an array.
         /// </summary>
@@ -164,28 +158,52 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range.
         /// </summary>
         /// <param name="range">A key or IDBKeyRange to use as the cursor's range. If nothing is passed, this will default to a key range that selects all the records in this object store.</param>
-        /// <param name="direction">The cursor's direction. See IDBCursor Constants for possible values.</param>
+        /// <param name="direction">
+        /// A string telling the cursor which direction to travel. The default is next. Valid values are:<br />
+        /// "next" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the increasing order of keys.<br />
+        /// "nextunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the increasing order of keys.<br />
+        /// "prev" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the decreasing order of keys.<br />
+        /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br />
+        /// </param>
         /// <returns></returns>
         public IDBRequest<IDBCursorWithValue<TKey, TValue>> OpenCursor(Union<IDBKeyRange<TKey>, TKey>? range, string direction) => JSRef!.Call<IDBRequest<IDBCursorWithValue<TKey, TValue>>>("openCursor", range, direction);
         /// <summary>
         /// Creates a cursor over the specified key range.
         /// </summary>
-        /// <param name="range"></param>
-        /// <param name="direction"></param>
+        /// <param name="range">A key or IDBKeyRange to use as the cursor's range. If nothing is passed, this will default to a key range that selects all the records in this object store.</param>
+        /// <param name="direction">
+        /// A string telling the cursor which direction to travel. The default is next. Valid values are:<br />
+        /// "next" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the increasing order of keys.<br />
+        /// "nextunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the increasing order of keys.<br />
+        /// "prev" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the decreasing order of keys.<br />
+        /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br />
+        /// </param>
         /// <returns></returns>
         public Task<IDBCursorWithValue<TKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TKey>, TKey>? range, string direction) => JSRef!.Call<IDBRequest<IDBCursorWithValue<TKey, TValue>>>("openCursor", range, direction).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
         /// <param name="range">A key or IDBKeyRange to use as the cursor's range. If nothing is passed, this will default to a key range that selects all the records in this object store.</param>
-        /// <param name="direction">The cursor's direction. See IDBCursor Constants for possible values.</param>
+        /// <param name="direction">
+        /// A string telling the cursor which direction to travel. The default is next. Valid values are:<br />
+        /// "next" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the increasing order of keys.<br />
+        /// "nextunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the increasing order of keys.<br />
+        /// "prev" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the decreasing order of keys.<br />
+        /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br />
+        /// </param>
         /// <returns></returns>
         public IDBRequest<IDBCursor<TKey, TValue>> OpenKeyCursor(Union<IDBKeyRange<TKey>, TKey>? range, string direction) => JSRef!.Call<IDBRequest<IDBCursor<TKey, TValue>>>("openKeyCursor", range, direction);
         /// <summary>
-        /// Creates a cursor over the specified key range, as arranged by this index.
+        /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
-        /// <param name="range"></param>
-        /// <param name="direction"></param>
+        /// <param name="range">A key or IDBKeyRange to use as the cursor's range. If nothing is passed, this will default to a key range that selects all the records in this object store.</param>
+        /// <param name="direction">
+        /// A string telling the cursor which direction to travel. The default is next. Valid values are:<br />
+        /// "next" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the increasing order of keys.<br />
+        /// "nextunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the increasing order of keys.<br />
+        /// "prev" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the decreasing order of keys.<br />
+        /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br />
+        /// </param>
         /// <returns></returns>
         public Task<IDBCursor<TKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TKey>, TKey>? range, string direction) => JSRef!.Call<IDBRequest<IDBCursor<TKey, TValue>>>("openKeyCursor", range, direction).WaitAsync();
         /// <summary>
@@ -195,18 +213,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public IDBRequest<IDBCursor<TKey, TValue>> OpenKeyCursor(Union<IDBKeyRange<TKey>, TKey>? range) => JSRef!.Call<IDBRequest<IDBCursor<TKey, TValue>>>("openKeyCursor", range);
         /// <summary>
-        /// Creates a cursor over the specified key range, as arranged by this index.
+        /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
-        /// <param name="range"></param>
+        /// <param name="range">A key or IDBKeyRange to use as the cursor's range. If nothing is passed, this will default to a key range that selects all the records in this object store.</param>
         /// <returns></returns>
         public Task<IDBCursor<TKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TKey>, TKey>? range) => JSRef!.Call<IDBRequest<IDBCursor<TKey, TValue>>>("openKeyCursor", range).WaitAsync();
         /// <summary>
-        /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
+        /// A key or IDBKeyRange to use as the cursor's range. If nothing is passed, this will default to a key range that selects all the records in this object store.
         /// </summary>
         /// <returns></returns>
         public IDBRequest<IDBCursor<TKey, TValue>> OpenKeyCursor() => JSRef!.Call<IDBRequest<IDBCursor<TKey, TValue>>>("openKeyCursor");
         /// <summary>
-        /// Creates a cursor over the specified key range, as arranged by this index.
+        /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
         /// <returns></returns>
         public Task<IDBCursor<TKey, TValue>> OpenKeyCursorAsync() => JSRef!.Call<IDBRequest<IDBCursor<TKey, TValue>>>("openKeyCursor").WaitAsync();

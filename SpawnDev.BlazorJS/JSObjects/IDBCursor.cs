@@ -32,9 +32,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public TKey PrimaryKey => JSRef!.Get<TKey>("primaryKey");
         /// <summary>
-        /// Returns true if done. (non-spec)
+        /// Returns a Task the returns true if (and when) the cursor can continue (Request != null and Request has a result). (non-spec)
         /// </summary>
-        public Task<bool> IsDone() => Request.UsingAsync(async r => r == null || await r.WaitAsync() == null);
+        public Task<bool> CanContinue() => Request?.UsingAsync(async r => r != null && (await r.WaitAsync()).Using(c => c != null)) ?? Task.FromResult(false);
         /// <summary>
         /// Returns the IDBRequest that was used to obtain the cursor.
         /// </summary>

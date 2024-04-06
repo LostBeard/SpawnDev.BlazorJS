@@ -137,6 +137,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///  0 - 1st key is equal to the 2nd key<br />
         ///  1 - 1st key is greater than the 2nd key
         /// </returns>
-        public int Cmp(object first, object second) => JSRef.Call<int>("cmp", first, second);
+        public int Cmp<TKey>(TKey first, TKey second) => JSRef.Call<int>("cmp", first, second);
     }
 }

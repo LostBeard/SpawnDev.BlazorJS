@@ -17,20 +17,36 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the result of the request. If the request is not completed, the result is not available and an InvalidStateError exception is thrown.
         /// </summary>
-        public TResult Result => JSRef.Get<TResult>("result");
-        public Task<TResult> WaitAsync(bool disposeRequest = true)
+        public TResult Result => JSRef!.Get<TResult>("result");
+        /// <summary>
+        /// if (ReadyState == "done" AND Error == null) returns Result as TResult<br />
+        /// if (ReadyState == "done" AND Error != null) throws Exception<br />
+        /// else<br />
+        /// On onsuccess returns Result as TResult<br />
+        /// On onerror throws Exception<br />
+        /// </summary>
+        /// <param name="disposeRequest">If true, this IDBRequest will be disposed after when the call completes</param>
+        /// <returns>Task&lt;TResult&gt;</returns>
+        public override Task<TResult> WaitAsync(bool disposeRequest = true)
         {
-            if (ReadyState == "done") return Task.FromResult(ResultAs<TResult>());
+            if (ReadyState == "done")
+            {
+                using var error = Error;
+                var ret = error != null ? Task.FromException<TResult>(error.ToException()) : Task.FromResult<TResult>(Result);
+                if (disposeRequest) Dispose();
+                return ret;
+            }
             var t = new TaskCompletionSource<TResult>();
             Action? onComplete = null;
             var onError = new Action(() =>
             {
-                t.TrySetException(new Exception("Failed"));
+                using var error = Error;
+                t.TrySetException(error?.ToException() ?? new Exception("IDBRequest - unknown error"));
                 onComplete?.Invoke();
             });
             var onSucc = new Action(() =>
             {
-                t.TrySetResult(ResultAs<TResult>());
+                t.TrySetResult(Result);
                 onComplete?.Invoke();
             });
             OnError += onError;
@@ -59,27 +75,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a DOMException in the event of an unsuccessful request, indicating what went wrong.
         /// </summary>
-        public DOMException Error => JSRef.Get<DOMException>("error");
+        public DOMException Error => JSRef!.Get<DOMException>("error");
         /// <summary>
         /// Returns the result of the request. If the request is not completed, the result is not available and an InvalidStateError exception is thrown.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T? ResultAs<T>() => JSRef.Get<T>("result");
+        public T ResultAs<T>() => JSRef!.Get<T>("result");
         /// <summary>
         /// An object representing the source of the request, such as an IDBIndex, IDBObjectStore or IDBCursor.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T? SourceAs<T>() => JSRef.Get<T>("source");
+        public T SourceAs<T>() => JSRef!.Get<T>("source");
         /// <summary>
         /// The state of the request. Every request starts in the pending state. The state changes to done when the request completes successfully or when an error occurs.
         /// </summary>
-        public string ReadyState => JSRef.Get<string>("readyState");
+        public string ReadyState => JSRef!.Get<string>("readyState");
         /// <summary>
         /// The transaction for the request. This property can be null for certain requests, for example those returned from IDBFactory.open unless an upgrade is needed. (You're just connecting to a database, so there is no transaction to return).
         /// </summary>
-        public IDBTransaction? Transaction => JSRef.Get<IDBTransaction?>("transaction");
+        public IDBTransaction? Transaction => JSRef!.Get<IDBTransaction?>("transaction");
         #region Events
         /// <summary>
         /// Fired when an error caused a request to fail.
@@ -90,45 +106,35 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<Event> OnSuccess { get => new JSEventCallback<Event>("success", AddEventListener, RemoveEventListener); set { } }
         #endregion
-        public Task WaitAsync(bool disposeRequest = true)
+        /// <summary>
+        /// if (ReadyState == "done" AND Error == null) returns CompletedTask<br />
+        /// if (ReadyState == "done" AND Error != null) throws Exception<br />
+        /// else<br />
+        /// On onsuccess returns CompletedTask<br />
+        /// On onerror throws Exception<br />
+        /// </summary>
+        /// <param name="disposeRequest">If true, this IDBRequest will be disposed after when the call completes</param>
+        /// <returns>Task</returns>
+        public virtual Task WaitAsync(bool disposeRequest = true)
         {
-            if (ReadyState == "done") return Task.CompletedTask;
+            if (ReadyState == "done")
+            {
+                using var error = Error;
+                var ret = error != null ? Task.FromException(error.ToException()) : Task.CompletedTask;
+                if (disposeRequest) Dispose();
+                return ret;
+            }
             var t = new TaskCompletionSource();
             Action? onComplete = null;
             var onError = new Action(() =>
             {
-                t.TrySetException(new Exception("Failed"));
+                using var error = Error;
+                t.TrySetException(error?.ToException() ?? new Exception("IDBRequest - unknown error"));
                 onComplete?.Invoke();
             });
             var onSucc = new Action(() =>
             {
                 t.TrySetResult();
-                onComplete?.Invoke();
-            });
-            OnError += onError;
-            OnSuccess += onSucc;
-            onComplete = new Action(() =>
-            {
-                onComplete = null;
-                OnError -= onError;
-                OnSuccess -= onSucc;
-                if (disposeRequest) Dispose();
-            });
-            return t.Task;
-        }
-        public Task<TResult> WaitAsync<TResult>(bool disposeRequest = true)
-        {
-            if (ReadyState == "done") return Task.FromResult(ResultAs<TResult>());
-            var t = new TaskCompletionSource<TResult>();
-            Action? onComplete = null;
-            var onError = new Action(() =>
-            {
-                t.TrySetException(new Exception("Failed"));
-                onComplete?.Invoke();
-            });
-            var onSucc = new Action(() =>
-            {
-                t.TrySetResult(ResultAs<TResult>());
                 onComplete?.Invoke();
             });
             OnError += onError;

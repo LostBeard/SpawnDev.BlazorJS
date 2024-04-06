@@ -23,13 +23,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A number that is a 64-bit integer or null if the database is being deleted.
         /// </summary>
         public long? NewVersion => JSRef.Get<long?>("newVersion");
-        ///// <summary>
-        ///// Returns the event.target as IDBOpenDBRequest
-        ///// </summary>
-        //public IDBOpenDBRequest TargetRequest => TargetAs<IDBOpenDBRequest>();
-        ///// <summary>
-        ///// Returns the event.target as IDBDatabase
-        ///// </summary>
-        //public IDBDatabase Database => JSRef.Get<IDBDatabase>("target.result");
     }
 }

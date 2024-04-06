@@ -8,6 +8,11 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class DOMException : JSObject
     {
         /// <summary>
+        /// Creates a new .Net exception to represent the DOMException
+        /// </summary>
+        /// <returns></returns>
+        public JSDOMException ToException() => new JSDOMException(this);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
@@ -20,5 +25,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a string that contains one of the strings associated with an error name.
         /// </summary>
         public string Name => JSRef.Get<string>("name");
+    }
+    /// <summary>
+    /// A .Net exception that represents a DOMException
+    /// </summary>
+    public class JSDOMException : Exception
+    {
+        /// <summary>
+        /// DOMException.Name
+        /// </summary>
+        public string DOMExceptionName { get; private set; }
+        public string DOMExceptionMessage { get; private set; }
+        public JSDOMException(DOMException domException) : base($"{domException.Name ?? "unknown"} - {domException.Message ?? "unknown"}")
+        {
+            DOMExceptionName = domException.Name ?? "unknown";
+            DOMExceptionMessage = domException.Message ?? "unknown";
+        }
     }
 }
