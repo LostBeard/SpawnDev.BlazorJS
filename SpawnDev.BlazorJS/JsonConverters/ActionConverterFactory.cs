@@ -4,7 +4,8 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JsonConverters {
+namespace SpawnDev.BlazorJS.JsonConverters
+{
     public class ActionConverterFactory : JsonConverterFactory {
         static Dictionary<Type, Type> SupportedGenericTypes = new Dictionary<Type, Type> {
             { typeof(Action), typeof(ActionConverter) },

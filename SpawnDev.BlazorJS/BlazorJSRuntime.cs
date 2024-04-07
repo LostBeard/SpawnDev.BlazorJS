@@ -41,6 +41,8 @@ namespace SpawnDev.BlazorJS
         {
             _js = (IJSInProcessRuntime)typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime")!.GetField("Instance", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
             RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(_js, null)!;
+            RuntimeJsonSerializerOptions.Converters.Add(new TupleConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new ValueTupleConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());

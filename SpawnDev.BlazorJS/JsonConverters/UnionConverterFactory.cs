@@ -323,7 +323,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
     }
     public class UnionConverter<T1, T2> : JsonConverter<Union<T1, T2>>, IJSInProcessObjectReferenceConverter
     {
-        List<Type> types = new List<Type> { typeof(T1), typeof(T2) };
         public override Union<T1, T2>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = UnionConverter.ImportFromIJSInprocessObjectReference(ref reader, options, typeToConvert.GenericTypeArguments);
