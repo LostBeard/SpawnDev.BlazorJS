@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
@@ -26,9 +26,8 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
-            var genericTypes1 = typeToConvert.GenericTypeArguments;
             var genericType = typeToConvert.GetGenericTypeDefinition();
-            var genericTypes = typeToConvert.GetGenericArguments();
+            var genericTypes = typeToConvert.GenericTypeArguments;
             SupportedGenericTypes.TryGetValue(genericType, out var converterGenericType);
             var converterType = converterGenericType!.MakeGenericType(genericTypes);
             var converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
@@ -41,13 +40,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             if (reader.TokenType == JsonTokenType.Null)
             {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from null");
+                return null;
             }
             else if (reader.TokenType != JsonTokenType.StartArray)
             {
                 throw new Exception("Non-nullable Tuple cannot be deserialized from non-array types");
             }
-            var genericTypes = typeToConvert.GetGenericArguments();
+            var genericTypes = typeToConvert.GenericTypeArguments;
             var genericIndex = 0;
             var list = new object?[genericTypes.Length];
             while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
@@ -75,7 +74,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             if (reader.TokenType == JsonTokenType.Null)
             {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from null");
+                return null;
             }
             else if (reader.TokenType != JsonTokenType.StartArray)
             {
@@ -110,7 +109,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             if (reader.TokenType == JsonTokenType.Null)
             {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from null");
+                return null;
             }
             else if (reader.TokenType != JsonTokenType.StartArray)
             {
@@ -146,7 +145,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             if (reader.TokenType == JsonTokenType.Null)
             {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from null");
+                return null;
             }
             else if (reader.TokenType != JsonTokenType.StartArray)
             {
@@ -183,7 +182,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             if (reader.TokenType == JsonTokenType.Null)
             {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from null");
+                return null;
             }
             else if (reader.TokenType != JsonTokenType.StartArray)
             {
@@ -221,7 +220,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             if (reader.TokenType == JsonTokenType.Null)
             {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from null");
+                return null;
             }
             else if (reader.TokenType != JsonTokenType.StartArray)
             {
@@ -260,7 +259,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             if (reader.TokenType == JsonTokenType.Null)
             {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from null");
+                return null;
             }
             else if (reader.TokenType != JsonTokenType.StartArray)
             {
