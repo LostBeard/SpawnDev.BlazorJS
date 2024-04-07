@@ -47,13 +47,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an IDBObjectStore object representing an object store that is part of the scope of this transaction.
         /// </summary>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="storeName">The name of the requested object store.</param>
-        /// <returns>An IDBObjectStore object for accessing an object store.</returns>
-        public IDBObjectStore<TValue> ObjectStore<TValue>(string storeName) => JSRef.Call<IDBObjectStore<TValue>>("objectStore", storeName);
-        /// <summary>
-        /// Returns an IDBObjectStore object representing an object store that is part of the scope of this transaction.
-        /// </summary>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
         /// <param name="storeName">The name of the requested object store.</param>

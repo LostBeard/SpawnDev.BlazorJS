@@ -58,15 +58,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns immediately and closes the connection to a database in a separate thread.
         /// </summary>
         public void Close() => JSRef.CallVoid("close");
-        ///// <summary>
-        ///// Creates and returns a new object store or index.
-        ///// </summary>
-        ///// <param name="storeName">The name of the new object store to be created. Note that it is possible to create an object store with an empty name.</param>
-        ///// <param name="options">An options object whose attributes are optional parameters to the method</param>
-        ///// <returns>A new IDBObjectStore.</returns>
-        //public IDBObjectStore CreateObjectStore(string storeName, IDBObjectStoreCreateOptions? options = null) => options == null ?
-        //    JSRef.Call<IDBObjectStore>("createObjectStore", storeName) :
-        //    JSRef.Call<IDBObjectStore>("createObjectStore", storeName, options);
         /// <summary>
         /// Creates and returns a new object store or index.
         /// </summary>
@@ -75,15 +66,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="storeName">The name of the new object store to be created. Note that it is possible to create an object store with an empty name.</param>
         /// <param name="options">An options object whose attributes are optional parameters to the method</param>
         /// <returns>A new IDBObjectStore.</returns>
-        public IDBObjectStore<TKey, TValue> CreateObjectStore<TKey, TValue>(string storeName, IDBObjectStoreCreateOptions options) => JSRef.Call<IDBObjectStore<TKey, TValue>>("createObjectStore", storeName, options);
-        /// <summary>
-        /// Creates and returns a new object store or index.
-        /// </summary>
-        /// <typeparam name="TValue">The value of the type that is stored</typeparam>
-        /// <param name="storeName">The name of the new object store to be created. Note that it is possible to create an object store with an empty name.</param>
-        /// <param name="options">An options object whose attributes are optional parameters to the method</param>
-        /// <returns></returns>
-        public IDBObjectStore<TValue> CreateObjectStore<TValue>(string storeName, IDBObjectStoreCreateOptions? options = null) => options == null ? JSRef.Call<IDBObjectStore<TValue>>("createObjectStore", storeName) : JSRef.Call<IDBObjectStore<TValue>>("createObjectStore", storeName, options);
+        public IDBObjectStore<TKey, TValue> CreateObjectStore<TKey, TValue>(string storeName, IDBObjectStoreCreateOptions? options = null) => JSRef.Call<IDBObjectStore<TKey, TValue>>("createObjectStore", storeName, options);
         /// <summary>
         /// Destroys the object store with the given name in the connected database, along with any indexes that reference it.
         /// </summary>
