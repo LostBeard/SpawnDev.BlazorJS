@@ -31,12 +31,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public IDBOpenDBRequest Open(string dbName) => JSRef.Call<IDBOpenDBRequest>("open", dbName);
         /// <summary>
-        /// A method to request the deletion of a database.
-        /// </summary>
-        /// <param name="dbName"></param>
-        /// <returns></returns>
-        public IDBOpenDBRequest DeleteDatabase(string dbName) => JSRef.Call<IDBOpenDBRequest>("deleteDatabase", dbName);
-        /// <summary>
         /// The current async method to request opening a connection to a database.
         /// </summary>
         /// <param name="dbName"></param>
@@ -121,6 +115,18 @@ namespace SpawnDev.BlazorJS.JSObjects
             });
             return tcs.Task;
         }
+        /// <summary>
+        /// A method to request the deletion of a database.
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <returns></returns>
+        public IDBOpenDBRequest DeleteDatabase(string dbName) => JSRef.Call<IDBOpenDBRequest>("deleteDatabase", dbName);
+        /// <summary>
+        /// A method to request the deletion of a database.
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <returns></returns>
+        public Task DeleteDatabaseAsync(string dbName) => JSRef.Call<IDBOpenDBRequest>("deleteDatabase", dbName).WaitAsync();
         /// <summary>
         /// A method that returns a list of all available databases, including their names and versions.
         /// </summary>
