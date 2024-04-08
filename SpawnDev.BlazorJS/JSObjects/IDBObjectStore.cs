@@ -183,22 +183,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns an IDBRequest object retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<TValue[]> GetAll() => JSRef.Call<IDBRequest<TValue[]>>("getAll");
+        public IDBRequest<Array<TValue>> GetAll() => JSRef.Call<IDBRequest<Array<TValue>>>("getAll");
         /// <summary>
         /// Returns an IDBRequest object retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<TValueAlt[]> GetAll<TValueAlt>() => JSRef.Call<IDBRequest<TValueAlt[]>>("getAll");
+        public IDBRequest<Array<TValueAlt>> GetAll<TValueAlt>() => JSRef.Call<IDBRequest<Array<TValueAlt>>>("getAll");
         /// <summary>
         /// Retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public Task<TValue[]> GetAllAsync() => GetAll().WaitAsync();
+        public Task<Array<TValue>> GetAllAsync() => GetAll().WaitAsync();
         /// <summary>
         /// Retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public Task<TValueAlt[]> GetAllAsync<TValueAlt>() => GetAll<TValueAlt>().WaitAsync();
+        public Task<Array<TValueAlt>> GetAllAsync<TValueAlt>() => GetAll<TValueAlt>().WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread retrieves and returns the record key for the object in the object stored matching the specified parameter.
         /// </summary>
@@ -227,22 +227,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns an IDBRequest object retrieves record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<TPrimaryKey[]> GetAllKeys() => JSRef.Call<IDBRequest<TPrimaryKey[]>>("getAllKeys");
+        public IDBRequest<Array<TPrimaryKey>> GetAllKeys() => JSRef.Call<IDBRequest<Array<TPrimaryKey>>>("getAllKeys");
         /// <summary>
         /// Returns an IDBRequest object retrieves record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<TPrimaryKeyAlt[]> GetAllKeys<TPrimaryKeyAlt>() => JSRef.Call<IDBRequest<TPrimaryKeyAlt[]>>("getAllKeys");
+        public IDBRequest<Array<TPrimaryKeyAlt>> GetAllKeys<TPrimaryKeyAlt>() => JSRef.Call<IDBRequest<Array<TPrimaryKeyAlt>>>("getAllKeys");
         /// <summary>
         /// Returns record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public Task<TPrimaryKey[]> GetAllKeysAsync() => GetAllKeys().WaitAsync();
+        public Task<Array<TPrimaryKey>> GetAllKeysAsync() => GetAllKeys().WaitAsync();
         /// <summary>
         /// Returns record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public Task<TPrimaryKeyAlt[]> GetAllKeysAsync<TPrimaryKeyAlt>() => GetAllKeys<TPrimaryKeyAlt>().WaitAsync();
+        public Task<Array<TPrimaryKeyAlt>> GetAllKeysAsync<TPrimaryKeyAlt>() => GetAllKeys<TPrimaryKeyAlt>().WaitAsync();
         /// <summary>
         /// Destroys the specified index in the connected database, used during a version upgrade.
         /// </summary>

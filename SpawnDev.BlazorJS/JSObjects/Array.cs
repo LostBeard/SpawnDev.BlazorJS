@@ -1,6 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Collections;
-using System.Diagnostics;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -10,12 +8,48 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Array : JSObject
     {
+        #region Enumerable like
+        /// <summary>
+        /// Returns first or default
+        /// </summary>
+        /// <returns></returns>
+        public T? FirstOrDefault<T>() => Length > 0 ? GetItem<T>(0) : default(T);
+        /// <summary>
+        /// Returns last or default
+        /// </summary>
+        /// <returns></returns>
+        public T? LastOrDefault<T>() => Length > 0 ? GetItem<T>(Length - 1) : default(T);
+        /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <returns></returns>
+        public List<T> ToList<T>() => ToArray<T>().ToList();
+        /// <summary>
+        /// Returns the array as a .Net Array
+        /// </summary>
+        /// <returns></returns>
+        public T[] ToArray<T>() => JSRef!.As<T[]>();
+        /// <summary>
+        /// Returns the array as a .Net Array
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public T[] ToArray<T>(int start, int count) => Enumerable.Range(start, count).Select(i => At<T>(i)).ToArray();
+        /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<T> ToList<T>(int start, int count) => Enumerable.Range(start, count).Select(i => At<T>(i)).ToList();
+        #endregion
         /// <summary>
         /// Returns true if the argument is an array, or false otherwise.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static bool IsArray(JSObject obj) => JS.Call<bool>("Array.isArray", obj);
+        public static bool IsArray(object? obj) => JS.Call<bool>("Array.isArray", obj);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -94,14 +128,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="value"></param>
         public void SetItem(int index, object? value) => JSRef.Set(index, value);
         /// <summary>
-        /// Returns the array item at the given index. Accepts negative integers, which count back from the last item.
+        /// Returns the array item at the given index. Returns default TArrayItem for negative numbers (unlike at())
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="index"></param>
         /// <returns></returns>
         public T GetItem<T>(int index) => JSRef.Get<T>(index);
         /// <summary>
-        /// Returns the array item at the given index. Accepts negative integers, which count back from the last item.
+        /// Returns the array item at the given index. Returns default TArrayItem for negative numbers (unlike at())
         /// </summary>
         /// <param name="type"></param>
         /// <param name="index"></param>
@@ -113,6 +147,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="array"></param>
         /// <returns></returns>
         public Array Concat(Array array) => JSRef.Call<Array>("concat", array);
+        /// <summary>
+        /// Returns a new array that is the calling array joined with other array(s) and/or value(s).
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public Array<T> Concat<T>(Array array) => JSRef.Call<Array<T>>("concat", array);
         /// <summary>
         /// Joins all elements of an array into a string.
         /// </summary>
@@ -150,6 +191,120 @@ namespace SpawnDev.BlazorJS.JSObjects
             return JSRef.Call<Array<T>>("filter", cb);
         }
         /// <summary>
+        /// Extracts a section of the calling array and returns a new array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start">
+        /// Zero-based index at which to start extraction, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// - If start &gt;= array.length, nothing is extracted.
+        /// </param>
+        /// <param name="end">
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
+        /// - If end &lt; -array.length, 0 is used.<br />
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// </param>
+        /// <returns>A new array containing the extracted elements.</returns>
+        public Array<T> Slice<T>() => JSRef.Call<Array<T>>("slice");
+        /// <summary>
+        /// Extracts a section of the calling array and returns a new array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start">
+        /// Zero-based index at which to start extraction, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// - If start &gt;= array.length, nothing is extracted.
+        /// </param>
+        /// <param name="end">
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
+        /// - If end &lt; -array.length, 0 is used.<br />
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// </param>
+        /// <returns>A new array containing the extracted elements.</returns>
+        public Array<T> Slice<T>(int start) => JSRef.Call<Array<T>>("slice", start);
+        /// <summary>
+        /// Extracts a section of the calling array and returns a new array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start">
+        /// Zero-based index at which to start extraction, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// - If start &gt;= array.length, nothing is extracted.
+        /// </param>
+        /// <param name="end">
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
+        /// - If end &lt; -array.length, 0 is used.<br />
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// </param>
+        /// <returns>A new array containing the extracted elements.</returns>
+        public Array<T> Slice<T>(int start, int end) => JSRef.Call<Array<T>>("slice", start, end);
+        /// <summary>
+        /// Extracts a section of the calling array and returns a new array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start">
+        /// Zero-based index at which to start extraction, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// - If start &gt;= array.length, nothing is extracted.
+        /// </param>
+        /// <param name="end">
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
+        /// - If end &lt; -array.length, 0 is used.<br />
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// </param>
+        /// <returns>A new array containing the extracted elements.</returns>
+        public virtual Array Slice() => JSRef.Call<Array>("slice");
+        /// <summary>
+        /// Extracts a section of the calling array and returns a new array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start">
+        /// Zero-based index at which to start extraction, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// - If start &gt;= array.length, nothing is extracted.
+        /// </param>
+        /// <param name="end">
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
+        /// - If end &lt; -array.length, 0 is used.<br />
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// </param>
+        /// <returns>A new array containing the extracted elements.</returns>
+        public virtual Array Slice(int start) => JSRef.Call<Array>("slice", start);
+        /// <summary>
+        /// Extracts a section of the calling array and returns a new array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start">
+        /// Zero-based index at which to start extraction, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// - If start &gt;= array.length, nothing is extracted.
+        /// </param>
+        /// <param name="end">
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
+        /// - If end &lt; -array.length, 0 is used.<br />
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// </param>
+        /// <returns>A new array containing the extracted elements.</returns>
+        public virtual Array Slice(int start, int end) => JSRef.Call<Array>("slice", start, end);
+        /// <summary>
         /// Calls a function for each element in the calling array.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -160,82 +315,162 @@ namespace SpawnDev.BlazorJS.JSObjects
             JSRef.CallVoid("forEach", cb);
         }
         /// <summary>
-        /// Returns a .Net array of type T
+        /// Return a new reference to this array with an item type of T
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="disposeThis">If true, this Array JSObject will be disposed after the new cast</param>
         /// <returns></returns>
-        public T[] ToArray<T>() => JSRef!.As<T[]>();
+        public Array<T> Cast<T>(bool disposeThis = false) => disposeThis ? JSRefMove<Array<T>>() : JSRefCopy<Array<T>>();
         /// <summary>
-        /// Returns the array as a .Net List
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// Return a new generic reference to this array
+        /// </summary>        
+        /// <param name="disposeThis">If true, this Array JSObject will be disposed after the new cast</param>
         /// <returns></returns>
-        public List<T> ToList<T>() => JSRef!.As<List<T>>();
+        public Array Cast(bool disposeThis = false) => disposeThis ? JSRefMove<Array>() : JSRefCopy<Array>();
         /// <summary>
-        /// Returns a .Net array of type T
+        /// Adds and/or removes elements from an array.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="start"></param>
-        /// <param name="count"></param>
+        /// <param name="start">
+        /// Zero-based index at which to start changing the array, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length, 0 is used.<br />
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// </param>
         /// <returns></returns>
-        public T[] ToArray<T>(int start, int count) => Enumerable.Range(start, count).Select(i => At<T>(i)).ToArray();
+        public virtual Array Splice(int start) => JSRef.Call<Array>("splice", start);
         /// <summary>
-        /// Returns the array as a .Net List
+        /// Adds and/or removes elements from an array.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="start"></param>
-        /// <param name="count"></param>
+        /// <param name="start">
+        /// Zero-based index at which to start changing the array, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length, 0 is used.<br />
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// </param>
+        /// <param name="deleteCount">
+        /// An integer indicating the number of elements in the array to remove from start.<rb />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
+        /// </param>
+        /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
         /// <returns></returns>
-        public List<T> ToList<T>(int start, int count) => Enumerable.Range(start, count).Select(i => At<T>(i)).ToList();
+        public virtual Array Splice(int start, int deleteCount) => JSRef.Call<Array>("splice", start, deleteCount);
+        /// <summary>
+        /// Adds and/or removes elements from an array.
+        /// </summary>
+        /// <param name="start">
+        /// Zero-based index at which to start changing the array, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length, 0 is used.<br />
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// </param>
+        /// <param name="deleteCount">
+        /// An integer indicating the number of elements in the array to remove from start.<rb />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
+        /// </param>
+        /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
+        /// <returns></returns>
+        public Array Splice(int start, int deleteCount, object?[] addItems) => JSRef.CallApply<Array>("splice", new object[] { start, deleteCount }.Concat(addItems.Select(o => (object?)o)).ToArray());
+        /// <summary>
+        /// Adds and/or removes elements from an array.
+        /// </summary>
+        /// <param name="start">
+        /// Zero-based index at which to start changing the array, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length, 0 is used.<br />
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// </param>
+        /// <returns></returns>
+        public Array<T> Splice<T>(int start) => JSRef.Call<Array<T>>("splice", start);
+        /// <summary>
+        /// Adds and/or removes elements from an array.
+        /// </summary>
+        /// <param name="start">
+        /// Zero-based index at which to start changing the array, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length, 0 is used.<br />
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// </param>
+        /// <param name="deleteCount">
+        /// An integer indicating the number of elements in the array to remove from start.<rb />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
+        /// </param>
+        /// <returns></returns>
+        public Array<T> Splice<T>(int start, int deleteCount) => JSRef.Call<Array<T>>("splice", start, deleteCount);
+        /// <summary>
+        /// Adds and/or removes elements from an array.
+        /// </summary>
+        /// <param name="start">
+        /// Zero-based index at which to start changing the array, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length, 0 is used.<br />
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// </param>
+        /// <param name="deleteCount">
+        /// An integer indicating the number of elements in the array to remove from start.<rb />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
+        /// </param>
+        /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
+        /// <returns></returns>
+        public Array<T> Splice<T>(int start, int deleteCount, T[] addItems) => JSRef.CallApply<Array<T>>("splice", new object[] { start, deleteCount }.Concat(addItems.Select(o => (object?)o)).ToArray());
     }
     /// <summary>
     /// The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
     /// </summary>
-    public class Array<T> : JSObject//, IEnumerable<T>
+    public class Array<TArrayItem> : Array
     {
         #region Enumerable like
         /// <summary>
         /// Returns first or default
         /// </summary>
         /// <returns></returns>
-        public T? FirstOrDefault() => Length > 0 ? GetItem(0) : default(T);
+        public TArrayItem? FirstOrDefault() => Length > 0 ? At(0) : default(TArrayItem);
         /// <summary>
         /// Returns last or default
         /// </summary>
         /// <returns></returns>
-        public T? LastOrDefault() => Length > 0 ? GetItem(Length - 1) : default(T);
+        public TArrayItem? LastOrDefault() => Length > 0 ? At(Length - 1) : default(TArrayItem);
         /// <summary>
         /// Returns the array as a .Net List
         /// </summary>
         /// <returns></returns>
-        public List<T> ToList() => ToArray().ToList();
+        public List<TArrayItem> ToList() => ToArray().ToList();
         /// <summary>
         /// Returns the array as a .Net Array
         /// </summary>
         /// <returns></returns>
-        public T[] ToArray() => JSRef!.As<T[]>();
+        public TArrayItem[] ToArray() => JSRef!.As<TArrayItem[]>();
         /// <summary>
         /// Returns the array as a .Net Array
         /// </summary>
         /// <param name="start"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public T[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToArray();
+        public TArrayItem[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToArray();
         /// <summary>
         /// Returns the array as a .Net List
         /// </summary>
         /// <param name="start"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public List<T> ToList(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToList();
+        public List<TArrayItem> ToList(int start, int count) => Enumerable.Range(start, count).Select(i => At(i)).ToList();
         #endregion
-        //#region Enable IEnumerable
-        //public T[] ToArray() => JSRef!.As<T[]>();
-        //public IEnumerator GetEnumerator() => new SimpleEnumerator<T>(this.At, () => this.Length);
-        //IEnumerator<T> IEnumerable<T>.GetEnumerator() => new SimpleEnumerator<T>(this.At, () => this.Length);
-        //#endregion
-        public T this[int index]
+        /// <summary>
+        /// Returns the array item at the given index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns>TArrayItem</returns>
+        public TArrayItem this[int index]
         {
             get => GetItem(index);
             set => SetItem(index, value);
@@ -245,32 +480,194 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public Array(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// The Array() constructor creates Array objects.
+        /// </summary>
         public Array() : base(JS.New(nameof(Array))) { }
+        /// <summary>
+        /// The Array() constructor creates Array objects.
+        /// </summary>
+        /// <param name="length">If the only argument passed to the Array constructor is an integer between 0 and 232 - 1 (inclusive), this returns a new JavaScript array with its length property set to that number (Note: this implies an array of arrayLength empty slots, not slots with actual undefined values — see sparse arrays).</param>
         public Array(uint length) : base(JS.New(nameof(Array), length)) { }
-        public Array(params T[] values) : base(JS.NewApply(nameof(Array), values == null ? null : values.Select(o => (object?)o).ToArray())) { }
-        public int Length => JSRef.Get<int>("length");
-        public void Push(T value) => JSRef.CallVoid("push", value);
-        public void Unshift(T value) => JSRef.CallVoid("unshift", value);
-        public T At(int index) => JSRef.Call<T>("at", index);
-        public T Pop() => JSRef.Call<T>("pop");
-        public T Shift() => JSRef.Call<T>("shift");
-        public void SetItem(int index, T value) => JSRef.Set(index, value);
-        public T GetItem(int index) => JSRef.Get<T>(index);
-        public T GetItem(Type type, int index) => (T)JSRef.Get(type, index);
-        public Array Concat(Array array) => JSRef.Call<Array>("concat", array);
-        public string Join(string separator = "") => JSRef.Call<string>("join", separator);
-        public Array<TResult> Map<TResult>(Function function) => JSRef.Call<Array<TResult>>("map", function);
-        public Array<TResult> Map<TResult>(Func<T, TResult> mapTo)
+        /// <summary>
+        /// The Array() constructor creates Array objects.
+        /// </summary>
+        /// <param name="values">A JavaScript array is initialized with the given elements, except in the case where a single argument is passed to the Array constructor and that argument is a number (see the arrayLength parameter below). Note that this special case only applies to JavaScript arrays created with the Array constructor, not array literals created with the square bracket syntax.</param>
+        public Array(params TArrayItem[] values) : base(JS.NewApply(nameof(Array), values == null ? null : values.Select(o => (object?)o).ToArray())) { }
+        /// <summary>
+        /// Adds one or more elements to the end of an array, and returns the new length of the array.
+        /// </summary>
+        /// <param name="value"></param>
+        public void Push(TArrayItem value) => JSRef.CallVoid("push", value);
+        /// <summary>
+        /// Adds one or more elements to the front of an array, and returns the new length of the array.
+        /// </summary>
+        /// <param name="value"></param>
+        public void Unshift(TArrayItem value) => JSRef.CallVoid("unshift", value);
+        /// <summary>
+        /// Returns the array item at the given index. Accepts negative integers, which count back from the last item.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public TArrayItem At(int index) => JSRef.Call<TArrayItem>("at", index);
+        /// <summary>
+        /// Removes the last element from an array and returns that element.
+        /// </summary>
+        /// <returns></returns>
+        public TArrayItem Pop() => JSRef.Call<TArrayItem>("pop");
+        /// <summary>
+        /// Removes the first element from an array and returns that element.
+        /// </summary>
+        /// <returns></returns>
+        public TArrayItem Shift() => JSRef.Call<TArrayItem>("shift");
+        /// <summary>
+        /// Set the value at the given index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
+        public void SetItem(int index, TArrayItem value) => JSRef.Set(index, value);
+        /// <summary>
+        /// Returns the array item at the given index. Returns default TArrayItem for negative numbers (unlike at())
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public TArrayItem GetItem(int index) => JSRef.Get<TArrayItem>(index);
+        /// <summary>
+        /// Returns a new array that is the calling array joined with other array(s) and/or value(s).
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public Array<TArrayItem> Concat(Array<TArrayItem> array) => JSRef.Call<Array<TArrayItem>>("concat", array);
+        /// <summary>
+        /// Returns a new array containing the results of invoking a function on every element in the calling array.
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="mapTo"></param>
+        /// <returns></returns>
+        public Array<TResult> Map<TResult>(Func<TArrayItem, TResult> mapTo)
         {
             using var cb = Callback.Create(mapTo);
             return JSRef.Call<Array<TResult>>("map", cb);
         }
-        public Array<T> Filter(Func<T, bool> filter)
+        /// <summary>
+        /// Returns a new array containing all elements of the calling array for which the provided filtering function returns true.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public Array<TArrayItem> Filter(Func<TArrayItem, bool> filter)
         {
             using var cb = Callback.Create(filter);
-            return JSRef.Call<Array<T>>("filter", cb);
+            return JSRef.Call<Array<TArrayItem>>("filter", cb);
         }
-        public void ForEach(Action<T> fn)
+        /// <summary>
+        /// Extracts a section of the calling array and returns a new array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start">
+        /// Zero-based index at which to start extraction, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// - If start &gt;= array.length, nothing is extracted.
+        /// </param>
+        /// <param name="end">
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
+        /// - If end &lt; -array.length, 0 is used.<br />
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// </param>
+        /// <returns>A new array containing the extracted elements.</returns>
+        public override Array<TArrayItem> Slice() => JSRef.Call<Array<TArrayItem>>("slice");
+        /// <summary>
+        /// Extracts a section of the calling array and returns a new array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start">
+        /// Zero-based index at which to start extraction, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// - If start &gt;= array.length, nothing is extracted.
+        /// </param>
+        /// <param name="end">
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
+        /// - If end &lt; -array.length, 0 is used.<br />
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// </param>
+        /// <returns>A new array containing the extracted elements.</returns>
+        public override Array<TArrayItem> Slice(int start) => JSRef.Call<Array<TArrayItem>>("slice", start);
+        /// <summary>
+        /// Extracts a section of the calling array and returns a new array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start">
+        /// Zero-based index at which to start extraction, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// - If start &gt;= array.length, nothing is extracted.
+        /// </param>
+        /// <param name="end">
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
+        /// - If end &lt; -array.length, 0 is used.<br />
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// </param>
+        /// <returns>A new array containing the extracted elements.</returns>
+        public override Array<TArrayItem> Slice(int start, int end) => JSRef.Call<Array<TArrayItem>>("slice", start, end);
+        /// <summary>
+        /// Adds and/or removes elements from an array.
+        /// </summary>
+        /// <param name="start">
+        /// Zero-based index at which to start changing the array, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length, 0 is used.<br />
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// </param>
+        /// <returns></returns>
+        public override Array<TArrayItem> Splice(int start) => JSRef.Call<Array<TArrayItem>>("splice", start);
+        /// <summary>
+        /// Adds and/or removes elements from an array.
+        /// </summary>
+        /// <param name="start">
+        /// Zero-based index at which to start changing the array, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length, 0 is used.<br />
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// </param>
+        /// <param name="deleteCount">
+        /// An integer indicating the number of elements in the array to remove from start.<rb />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
+        /// </param>
+        /// <returns></returns>
+        public override Array<TArrayItem> Splice(int start, int deleteCount) => JSRef.Call<Array<TArrayItem>>("splice", start, deleteCount);
+        /// <summary>
+        /// Adds and/or removes elements from an array.
+        /// </summary>
+        /// <param name="start">
+        /// Zero-based index at which to start changing the array, converted to an integer.<br />
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
+        /// - If start &lt; -array.length, 0 is used.<br />
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// </param>
+        /// <param name="deleteCount">
+        /// An integer indicating the number of elements in the array to remove from start.<rb />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
+        /// </param>
+        /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
+        /// <returns></returns>
+        public Array<TArrayItem> Splice(int start, int deleteCount, TArrayItem[] addItems) => JSRef.CallApply<Array<TArrayItem>>("splice", new object[] { start, deleteCount }.Concat(addItems.Select(o => (object?)o)).ToArray());
+        /// <summary>
+        /// Calls a function for each element in the calling array.
+        /// </summary>
+        /// <param name="fn"></param>
+        public void ForEach(Action<TArrayItem> fn)
         {
             using var cb = Callback.Create(fn);
             JSRef.CallVoid("forEach", cb);

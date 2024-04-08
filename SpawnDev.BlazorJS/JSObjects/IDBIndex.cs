@@ -161,52 +161,52 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="query">A key or an IDBKeyRange identifying the keys to retrieve. If this value is null or missing, the browser will use an unbound key range.</param>
         /// <param name="count">The number records to return. If this value exceeds the number of records in the query, the browser will only retrieve the first item. If it is lower than 0 or greater than 2^32 - 1 a TypeError exception will be thrown.</param>
         /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
-        public IDBRequest<TIndexKey[]> GetAllKeys(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<TIndexKey[]>>("getAllKeys", query, count);
+        public IDBRequest<Array<TIndexKey>> GetAllKeys(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<Array<TIndexKey>>>("getAllKeys", query, count);
         /// <summary>
         /// Returns an IDBRequest object, in a separate thread, finds all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query">A key or an IDBKeyRange identifying the keys to retrieve. If this value is null or missing, the browser will use an unbound key range.</param>
         /// <param name="count">The number records to return. If this value exceeds the number of records in the query, the browser will only retrieve the first item. If it is lower than 0 or greater than 2^32 - 1 a TypeError exception will be thrown.</param>
         /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
-        public IDBRequest<TIndexKeyAlt[]> GetAllKeys<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<TIndexKeyAlt[]>>("getAllKeys", query, count);
+        public IDBRequest<Array<TIndexKeyAlt>> GetAllKeys<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<Array<TIndexKeyAlt>>>("getAllKeys", query, count);
         /// <summary>
         /// Returns all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public Task<TIndexKey[]> GetAllKeysAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => GetAllKeys(query, count).WaitAsync();
+        public Task<Array<TIndexKey>> GetAllKeysAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => GetAllKeys(query, count).WaitAsync();
         /// <summary>
         /// Returns all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public Task<TIndexKeyAlt[]> GetAllKeysAsync<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => GetAllKeys<TIndexKeyAlt>(query, count).WaitAsync();
+        public Task<Array<TIndexKeyAlt>> GetAllKeysAsync<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => GetAllKeys<TIndexKeyAlt>(query, count).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, in a separate thread, finds all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query">A key or an IDBKeyRange identifying the keys to retrieve. If this value is null or missing, the browser will use an unbound key range.</param>
         /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
-        public IDBRequest<TIndexKey[]> GetAllKeys(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<TIndexKey[]>>("getAllKeys", query);
+        public IDBRequest<Array<TIndexKey>> GetAllKeys(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<Array<TIndexKey>>>("getAllKeys", query);
         /// <summary>
         /// Returns an IDBRequest object, in a separate thread, finds all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query">A key or an IDBKeyRange identifying the keys to retrieve. If this value is null or missing, the browser will use an unbound key range.</param>
         /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
-        public IDBRequest<TIndexKeyAlt[]> GetAllKeys<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<TIndexKeyAlt[]>>("getAllKeys", query);
+        public IDBRequest<Array<TIndexKeyAlt>> GetAllKeys<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<Array<TIndexKeyAlt>>>("getAllKeys", query);
         /// <summary>
         /// Returns all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public Task<TIndexKey[]> GetAllKeysAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => GetAllKeys(query).WaitAsync();
+        public Task<Array<TIndexKey>> GetAllKeysAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => GetAllKeys(query).WaitAsync();
         /// <summary>
         /// Returns all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public Task<TIndexKeyAlt[]> GetAllKeysAsync<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => GetAllKeys<TIndexKeyAlt>(query).WaitAsync();
+        public Task<Array<TIndexKeyAlt>> GetAllKeysAsync<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => GetAllKeys<TIndexKeyAlt>(query).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range.
         /// </summary>
