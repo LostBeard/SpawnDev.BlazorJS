@@ -17,5 +17,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the value of the current cursor.
         /// </summary>
         public TValue Value => JSRef!.Get<TValue>("value");
+        /// <summary>
+        /// Returns the value of the current cursor.
+        /// </summary>
+        public TValueAlt ValueAs<TValueAlt>() => JSRef!.Get<TValueAlt>("value");
     }
 }

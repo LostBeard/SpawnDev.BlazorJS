@@ -28,9 +28,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public TKey? Key => JSRef!.Get<TKey?>("key");
         /// <summary>
+        /// Returns the key for the record at the cursor's position. If the cursor is outside its range, this is set to undefined. The cursor's key can be any data type.
+        /// </summary>
+        public TKeyAlt KeyAs<TKeyAlt>() => JSRef!.Get<TKeyAlt>("key");
+        /// <summary>
         /// Returns the cursor's current effective primary key. If the cursor is currently being iterated or has iterated outside its range, this is set to undefined. The cursor's primary key can be any data type.
         /// </summary>
         public TPrimaryKey? PrimaryKey => JSRef!.Get<TPrimaryKey?>("primaryKey");
+        /// <summary>
+        /// Returns the cursor's current effective primary key. If the cursor is currently being iterated or has iterated outside its range, this is set to undefined. The cursor's primary key can be any data type.
+        /// </summary>
+        public TPrimaryKeyAlt PrimaryKeyAs<TPrimaryKeyAlt>() => JSRef!.Get<TPrimaryKeyAlt>("primaryKey");
         /// <summary>
         /// Returns a Task the returns true if (and when) the cursor can continue (Request != null and Request has a result). (non-spec)
         /// </summary>

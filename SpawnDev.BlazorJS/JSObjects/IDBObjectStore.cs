@@ -60,27 +60,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public IDBIndex<TIndexKey, TPrimaryKey, TValue>  CreateIndex<TIndexKey>(string indexName, string keyPath, IDBObjectStoreCreateIndexOptions options) => JSRef.Call<IDBIndex<TIndexKey, TPrimaryKey, TValue>>("createIndex", indexName, keyPath, options);
         /// <summary>
-        /// Returns an IDBRequest object, and, in a separate thread, returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
+        /// Returns an IDBRequest object, and, in a separate thread, deletes the store object selected by the specified key. This is for deleting individual records out of an object store.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IDBRequest<int> Count(TPrimaryKey key) => JSRef.Call<IDBRequest<int>>("count", key);
+        public IDBRequest Delete(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef.Call<IDBRequest>("delete", key);
         /// <summary>
-        /// Returns a Task that returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
+        /// Deletes the store object selected by the specified key. This is for deleting individual records out of an object store.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Task<int> CountAsync(TPrimaryKey key) => Count(key).WaitAsync();
+        public Task DeleteAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => Delete(key).WaitAsync();
         /// <summary>
-        /// Returns an IDBRequest object, and, in a separate thread, returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
+        /// Creates and immediately returns an IDBRequest object, and clears this object store in a separate thread. This is for deleting all current records out of an object store.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<int> Count() => JSRef.Call<IDBRequest<int>>("count");
+        public IDBRequest Clear() => JSRef.Call<IDBRequest>("clear");
         /// <summary>
-        /// Returns a Task that returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
+        /// This is for deleting all current records out of an object store.
         /// </summary>
         /// <returns></returns>
-        public Task<int> CountAsync() => Count().WaitAsync();
+        public Task ClearAsync() => Clear().WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a structured clone of the value, and stores the cloned value in the object store. This is for adding new records to an object store.
         /// </summary>
@@ -134,59 +134,115 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task PutAsync(TValue value) => Put(value).WaitAsync();
         /// <summary>
+        /// Returns an IDBRequest object, and, in a separate thread, returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public IDBRequest<int> Count(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef.Call<IDBRequest<int>>("count", key);
+        /// <summary>
+        /// Returns a Task that returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Task<int> CountAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => Count(key).WaitAsync();
+        /// <summary>
+        /// Returns an IDBRequest object, and, in a separate thread, returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
+        /// </summary>
+        /// <returns></returns>
+        public IDBRequest<int> Count() => JSRef.Call<IDBRequest<int>>("count");
+        /// <summary>
+        /// Returns a Task that returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
+        /// </summary>
+        /// <returns></returns>
+        public Task<int> CountAsync() => Count().WaitAsync();
+        /// <summary>
+        /// Returns an IDBRequest object, and, in a separate thread, returns the store object store selected by the specified key. This is for retrieving specific records from an object store.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public IDBRequest<TValue> Get(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef.Call<IDBRequest<TValue>>("get", key);
+        /// <summary>
+        /// Returns an IDBRequest object, and, in a separate thread, returns the store object store selected by the specified key. This is for retrieving specific records from an object store.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public IDBRequest<TValueAlt> Get<TValueAlt>(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef.Call<IDBRequest<TValueAlt>>("get", key);
+        /// <summary>
+        /// Returns the store object store selected by the specified key. This is for retrieving specific records from an object store.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Task<TValue> GetAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => Get(key).WaitAsync();
+        /// <summary>
+        /// Returns the store object store selected by the specified key. This is for retrieving specific records from an object store.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Task<TValueAlt> GetAsync<TValueAlt>(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => Get<TValueAlt>(key).WaitAsync();
+        /// <summary>
         /// Returns an IDBRequest object retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
         public IDBRequest<TValue[]> GetAll() => JSRef.Call<IDBRequest<TValue[]>>("getAll");
+        /// <summary>
+        /// Returns an IDBRequest object retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
+        /// </summary>
+        /// <returns></returns>
+        public IDBRequest<TValueAlt[]> GetAll<TValueAlt>() => JSRef.Call<IDBRequest<TValueAlt[]>>("getAll");
         /// <summary>
         /// Retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
         public Task<TValue[]> GetAllAsync() => GetAll().WaitAsync();
         /// <summary>
-        /// Returns an IDBRequest object, and, in a separate thread, returns the store object store selected by the specified key. This is for retrieving specific records from an object store.
+        /// Retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
+        /// </summary>
+        /// <returns></returns>
+        public Task<TValueAlt[]> GetAllAsync<TValueAlt>() => GetAll<TValueAlt>().WaitAsync();
+        /// <summary>
+        /// Returns an IDBRequest object, and, in a separate thread retrieves and returns the record key for the object in the object stored matching the specified parameter.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IDBRequest<TValue> Get(TPrimaryKey key) => JSRef.Call<IDBRequest<TValue>>("get", key);
+        public IDBRequest<TPrimaryKey> GetKey(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef!.Call<IDBRequest<TPrimaryKey>>("getKey", key);
         /// <summary>
-        /// Returns the store object store selected by the specified key. This is for retrieving specific records from an object store.
+        /// Returns an IDBRequest object, and, in a separate thread retrieves and returns the record key for the object in the object stored matching the specified parameter.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Task<TValue> GetAsync(TPrimaryKey key) => Get(key).WaitAsync();
+        public IDBRequest<TPrimaryKeyAlt> GetKey<TPrimaryKeyAlt>(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef!.Call<IDBRequest<TPrimaryKeyAlt>>("getKey", key);
         /// <summary>
-        /// Returns an IDBRequest object, and, in a separate thread, deletes the store object selected by the specified key. This is for deleting individual records out of an object store.
+        /// Retrieves and returns the record key for the object in the object stored matching the specified parameter.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IDBRequest Delete(TPrimaryKey key) => JSRef.Call<IDBRequest>("delete", key);
+        public Task<TPrimaryKey> GetKeyAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => GetKey(key).WaitAsync();
         /// <summary>
-        /// Deletes the store object selected by the specified key. This is for deleting individual records out of an object store.
+        /// Retrieves and returns the record key for the object in the object stored matching the specified parameter.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Task DeleteAsync(TPrimaryKey key) => Delete(key).WaitAsync();
-        /// <summary>
-        /// Creates and immediately returns an IDBRequest object, and clears this object store in a separate thread. This is for deleting all current records out of an object store.
-        /// </summary>
-        /// <returns></returns>
-        public IDBRequest Clear() => JSRef.Call<IDBRequest>("clear");
-        /// <summary>
-        /// This is for deleting all current records out of an object store.
-        /// </summary>
-        /// <returns></returns>
-        public Task ClearAsync() => Clear().WaitAsync();
+        public Task<TPrimaryKeyAlt> GetKeyAsync<TPrimaryKeyAlt>(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => GetKey<TPrimaryKeyAlt>(key).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object retrieves record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
         public IDBRequest<TPrimaryKey[]> GetAllKeys() => JSRef.Call<IDBRequest<TPrimaryKey[]>>("getAllKeys");
         /// <summary>
+        /// Returns an IDBRequest object retrieves record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
+        /// </summary>
+        /// <returns></returns>
+        public IDBRequest<TPrimaryKeyAlt[]> GetAllKeys<TPrimaryKeyAlt>() => JSRef.Call<IDBRequest<TPrimaryKeyAlt[]>>("getAllKeys");
+        /// <summary>
         /// Returns record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
         public Task<TPrimaryKey[]> GetAllKeysAsync() => GetAllKeys().WaitAsync();
+        /// <summary>
+        /// Returns record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
+        /// </summary>
+        /// <returns></returns>
+        public Task<TPrimaryKeyAlt[]> GetAllKeysAsync<TPrimaryKeyAlt>() => GetAllKeys<TPrimaryKeyAlt>().WaitAsync();
         /// <summary>
         /// Destroys the specified index in the connected database, used during a version upgrade.
         /// </summary>
@@ -201,7 +257,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a new IDBCursorWithValue object. Used for iterating through an object store by primary key with a cursor.
         /// </summary>
         /// <returns></returns>
-        public Task<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>> OpenCursorAsync() => JSRef!.Call<IDBRequest<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>>>("openCursor").WaitAsync();
+        public Task<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>> OpenCursorAsync() => OpenCursor().WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, returns a new IDBCursorWithValue object. Used for iterating through an object store by primary key with a cursor.
         /// </summary>
@@ -213,7 +269,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public Task<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? query) => JSRef!.Call<IDBRequest<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>>>("openCursor", query).WaitAsync();
+        public Task<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? query) => OpenCursor(query).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, returns a new IDBCursorWithValue object. Used for iterating through an object store by primary key with a cursor.
         /// </summary>
@@ -239,7 +295,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br />
         /// </param>
         /// <returns>Task&lt;IDBCursorWithValue&gt;</returns>
-        public Task<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? query, string direction) => JSRef!.Call<IDBRequest<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>>>("openCursor", query, direction).WaitAsync();
+        public Task<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? query, string direction) => OpenCursor(query, direction).WaitAsync();
 
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
@@ -254,7 +310,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="range"></param>
         /// <param name="direction"></param>
         /// <returns></returns>
-        public Task<IDBCursor<TPrimaryKey, TPrimaryKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? range, string direction) => JSRef!.Call<IDBRequest<IDBCursor<TPrimaryKey, TPrimaryKey, TValue>>>("openKeyCursor", range, direction).WaitAsync();
+        public Task<IDBCursor<TPrimaryKey, TPrimaryKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? range, string direction) => OpenKeyCursor(range, direction).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
@@ -266,7 +322,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        public Task<IDBCursor<TPrimaryKey, TPrimaryKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? range) => JSRef!.Call<IDBRequest<IDBCursor<TPrimaryKey, TPrimaryKey, TValue>>>("openKeyCursor", range).WaitAsync();
+        public Task<IDBCursor<TPrimaryKey, TPrimaryKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? range) => OpenKeyCursor(range).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
@@ -276,7 +332,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
         /// <returns></returns>
-        public Task<IDBCursor<TPrimaryKey, TPrimaryKey, TValue>> OpenKeyCursorAsync() => JSRef!.Call<IDBRequest<IDBCursor<TPrimaryKey, TPrimaryKey, TValue>>>("openKeyCursor").WaitAsync();
+        public Task<IDBCursor<TPrimaryKey, TPrimaryKey, TValue>> OpenKeyCursorAsync() => OpenKeyCursor().WaitAsync();
         #endregion
     }
 }

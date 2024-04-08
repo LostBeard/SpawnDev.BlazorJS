@@ -52,32 +52,33 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Task<int> CountAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? key = null) => JSRef!.Call<IDBRequest<int>>("count", key).WaitAsync();
+        public Task<int> CountAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? key = null) => Count(key).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, finds either the value in the referenced object store that corresponds to the given key or the first corresponding value, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="key">A key or IDBKeyRange that identifies the record to be retrieved. If this value is null or missing, the browser will use an unbound key range.</param>
         /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
-        public IDBRequest Get(Union<IDBKeyRange<TIndexKey>, TIndexKey> key) => JSRef!.Call<IDBRequest>("get", key);
+        public IDBRequest<TValue> Get(Union<IDBKeyRange<TIndexKey>, TIndexKey> key) => JSRef!.Call<IDBRequest<TValue>>("get", key);
+        /// <summary>
+        /// Returns an IDBRequest object, and, in a separate thread, finds either the value in the referenced object store that corresponds to the given key or the first corresponding value, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="key">A key or IDBKeyRange that identifies the record to be retrieved. If this value is null or missing, the browser will use an unbound key range.</param>
+        /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
+        public IDBRequest<TValueAlt> Get<TValueAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey> key) => JSRef!.Call<IDBRequest<TValueAlt>>("get", key);
         /// <summary>
         /// Returns the IDBRequest result of the get request<br />
         /// throws an exception if not found
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Task<TValue> GetAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey> key) => JSRef!.Call<IDBRequest<TValue>>("get", key).WaitAsync();
+        public Task<TValue> GetAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey> key) => Get(key).WaitAsync();
         /// <summary>
-        /// Returns an IDBRequest object, and, in a separate thread, finds either the given key or the primary key, if key is an IDBKeyRange.
-        /// </summary>
-        /// <param name="key">A key or IDBKeyRange that identifies a record to be retrieved. If this value is null or missing, the browser will use an unbound key range.</param>
-        /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
-        public IDBRequest<TIndexKey> GetKey(Union<IDBKeyRange<TIndexKey>, TIndexKey>? key = null) => JSRef!.Call<IDBRequest<TIndexKey>>("getKey", key);
-        /// <summary>
-        /// Returns either the given key or the primary key, if key is an IDBKeyRange.
+        /// Returns the IDBRequest result of the get request<br />
+        /// throws an exception if not found
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Task<TIndexKey> GetKeyAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? key = null) => JSRef!.Call<IDBRequest<TIndexKey>>("getKey", key).WaitAsync();
+        public Task<TValueAlt> GetAsync<TValueAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey> key) => Get<TValueAlt>(key).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, in a separate thread, finds all matching values in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
@@ -86,12 +87,26 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
         public IDBRequest<Array<TValue>> GetAll(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<Array<TValue>>>("getAll", query, count);
         /// <summary>
+        /// Returns an IDBRequest object, in a separate thread, finds all matching values in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="query">A key or an IDBKeyRange identifying the records to retrieve. If this value is null or missing, the browser will use an unbound key range.</param>
+        /// <param name="count">The number of records to return. If this value exceeds the number of records in the query, the browser will only retrieve the queried records. If it is lower than 0 or greater than 2^32 - 1 a TypeError exception will be thrown.</param>
+        /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
+        public IDBRequest<Array<TValueAlt>> GetAll<TValueAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<Array<TValueAlt>>>("getAll", query, count);
+        /// <summary>
         /// Returns all matching values in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public Task<Array<TValue>> GetAllAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<Array<TValue>>>("getAll", query, count).WaitAsync();
+        public Task<Array<TValue>> GetAllAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => GetAll(query, count).WaitAsync();
+        /// <summary>
+        /// Returns all matching values in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public Task<Array<TValueAlt>> GetAllAsync<TValueAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => GetAll<TValueAlt>(query, count).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, in a separate thread, finds all matching values in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
@@ -99,11 +114,47 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public IDBRequest<Array<TValue>> GetAll(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<Array<TValue>>>("getAll", query);
         /// <summary>
+        /// Returns an IDBRequest object, in a separate thread, finds all matching values in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="query">A key or an IDBKeyRange identifying the records to retrieve. If this value is null or missing, the browser will use an unbound key range.</param>
+        /// <returns></returns>
+        public IDBRequest<Array<TValueAlt>> GetAll<TValueAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<Array<TValueAlt>>>("getAll", query);
+        /// <summary>
         /// Returns all matching values in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public Task<Array<TValue>> GetAllAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<Array<TValue>>>("getAll", query).WaitAsync();
+        public Task<Array<TValue>> GetAllAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => GetAll(query).WaitAsync();
+        /// <summary>
+        /// Returns all matching values in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public Task<Array<TValueAlt>> GetAllAsync<TValueAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => GetAll<TValueAlt>(query).WaitAsync();
+        /// <summary>
+        /// Returns an IDBRequest object, and, in a separate thread, finds either the given key or the primary key, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="key">A key or IDBKeyRange that identifies a record to be retrieved. If this value is null or missing, the browser will use an unbound key range.</param>
+        /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
+        public IDBRequest<TIndexKey> GetKey(Union<IDBKeyRange<TIndexKey>, TIndexKey>? key = null) => JSRef!.Call<IDBRequest<TIndexKey>>("getKey", key);
+        /// <summary>
+        /// Returns an IDBRequest object, and, in a separate thread, finds either the given key or the primary key, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="key">A key or IDBKeyRange that identifies a record to be retrieved. If this value is null or missing, the browser will use an unbound key range.</param>
+        /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
+        public IDBRequest<TIndexKeyAlt> GetKey<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? key = null) => JSRef!.Call<IDBRequest<TIndexKeyAlt>>("getKey", key);
+        /// <summary>
+        /// Returns either the given key or the primary key, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Task<TIndexKey> GetKeyAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? key = null) => GetKey(key).WaitAsync();
+        /// <summary>
+        /// Returns either the given key or the primary key, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Task<TIndexKeyAlt> GetKeyAsync<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? key = null) => GetKey<TIndexKeyAlt>(key).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, in a separate thread, finds all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
@@ -112,12 +163,26 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
         public IDBRequest<TIndexKey[]> GetAllKeys(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<TIndexKey[]>>("getAllKeys", query, count);
         /// <summary>
+        /// Returns an IDBRequest object, in a separate thread, finds all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="query">A key or an IDBKeyRange identifying the keys to retrieve. If this value is null or missing, the browser will use an unbound key range.</param>
+        /// <param name="count">The number records to return. If this value exceeds the number of records in the query, the browser will only retrieve the first item. If it is lower than 0 or greater than 2^32 - 1 a TypeError exception will be thrown.</param>
+        /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
+        public IDBRequest<TIndexKeyAlt[]> GetAllKeys<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<TIndexKeyAlt[]>>("getAllKeys", query, count);
+        /// <summary>
         /// Returns all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public Task<TIndexKey[]> GetAllKeysAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => JSRef!.Call<IDBRequest<TIndexKey[]>>("getAllKeys", query, count).WaitAsync();
+        public Task<TIndexKey[]> GetAllKeysAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => GetAllKeys(query, count).WaitAsync();
+        /// <summary>
+        /// Returns all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public Task<TIndexKeyAlt[]> GetAllKeysAsync<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query, int count) => GetAllKeys<TIndexKeyAlt>(query, count).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, in a separate thread, finds all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
@@ -125,11 +190,23 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
         public IDBRequest<TIndexKey[]> GetAllKeys(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<TIndexKey[]>>("getAllKeys", query);
         /// <summary>
+        /// Returns an IDBRequest object, in a separate thread, finds all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="query">A key or an IDBKeyRange identifying the keys to retrieve. If this value is null or missing, the browser will use an unbound key range.</param>
+        /// <returns>An IDBRequest object on which subsequent events related to this operation are fired.</returns>
+        public IDBRequest<TIndexKeyAlt[]> GetAllKeys<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<TIndexKeyAlt[]>>("getAllKeys", query);
+        /// <summary>
         /// Returns all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public Task<TIndexKey[]> GetAllKeysAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => JSRef!.Call<IDBRequest<TIndexKey[]>>("getAllKeys", query).WaitAsync();
+        public Task<TIndexKey[]> GetAllKeysAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => GetAllKeys(query).WaitAsync();
+        /// <summary>
+        /// Returns all matching keys in the referenced object store that correspond to the given key or are in range, if key is an IDBKeyRange.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public Task<TIndexKeyAlt[]> GetAllKeysAsync<TIndexKeyAlt>(Union<IDBKeyRange<TIndexKey>, TIndexKey>? query = null) => GetAllKeys<TIndexKeyAlt>(query).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range.
         /// </summary>
@@ -139,7 +216,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Creates a cursor over the specified key range.
         /// </summary>
         /// <returns></returns>
-        public Task<IDBCursorWithValue<TIndexKey, TPrimaryKey, TValue>> OpenCursorAsync() => JSRef!.Call<IDBRequest<IDBCursorWithValue<TIndexKey, TPrimaryKey, TValue>>>("openCursor").WaitAsync();
+        public Task<IDBCursorWithValue<TIndexKey, TPrimaryKey, TValue>> OpenCursorAsync() => OpenCursor().WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range.
         /// </summary>
@@ -151,7 +228,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        public Task<IDBCursorWithValue<TIndexKey, TPrimaryKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? range) => JSRef!.Call<IDBRequest<IDBCursorWithValue<TIndexKey, TPrimaryKey, TValue>>>("openCursor", range).WaitAsync();
+        public Task<IDBCursorWithValue<TIndexKey, TPrimaryKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? range) => OpenCursor(range).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range.
         /// </summary>
@@ -177,7 +254,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br />
         /// </param>
         /// <returns></returns>
-        public Task<IDBCursorWithValue<TIndexKey, TPrimaryKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? range, string direction) => JSRef!.Call<IDBRequest<IDBCursorWithValue<TIndexKey, TPrimaryKey, TValue>>>("openCursor", range, direction).WaitAsync();
+        public Task<IDBCursorWithValue<TIndexKey, TPrimaryKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? range, string direction) => OpenCursor(range, direction).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
@@ -203,7 +280,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br />
         /// </param>
         /// <returns></returns>
-        public Task<IDBCursor<TIndexKey, TPrimaryKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? range, string direction) => JSRef!.Call<IDBRequest<IDBCursor<TIndexKey, TPrimaryKey, TValue>>>("openKeyCursor", range, direction).WaitAsync();
+        public Task<IDBCursor<TIndexKey, TPrimaryKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? range, string direction) => OpenKeyCursor(range, direction).WaitAsync();
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
@@ -215,7 +292,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="range">A key or IDBKeyRange to use as the cursor's range. If nothing is passed, this will default to a key range that selects all the records in this object store.</param>
         /// <returns></returns>
-        public Task<IDBCursor<TIndexKey, TPrimaryKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? range) => JSRef!.Call<IDBRequest<IDBCursor<TIndexKey, TPrimaryKey, TValue>>>("openKeyCursor", range).WaitAsync();
+        public Task<IDBCursor<TIndexKey, TPrimaryKey, TValue>> OpenKeyCursorAsync(Union<IDBKeyRange<TIndexKey>, TIndexKey>? range) => OpenKeyCursor(range).WaitAsync();
         /// <summary>
         /// A key or IDBKeyRange to use as the cursor's range. If nothing is passed, this will default to a key range that selects all the records in this object store.
         /// </summary>
@@ -225,7 +302,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         /// </summary>
         /// <returns></returns>
-        public Task<IDBCursor<TIndexKey, TPrimaryKey, TValue>> OpenKeyCursorAsync() => JSRef!.Call<IDBRequest<IDBCursor<TIndexKey, TPrimaryKey, TValue>>>("openKeyCursor").WaitAsync();
+        public Task<IDBCursor<TIndexKey, TPrimaryKey, TValue>> OpenKeyCursorAsync() => OpenKeyCursor().WaitAsync();
         #endregion
     }
 }
