@@ -13,12 +13,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns first or default
         /// </summary>
         /// <returns></returns>
-        public T? FirstOrDefault<T>() => Length > 0 ? GetItem<T>(0) : default(T);
+        public T FirstOrDefault<T>() => Length > 0 ? GetItem<T>(0) : default(T);
         /// <summary>
         /// Returns last or default
         /// </summary>
         /// <returns></returns>
-        public T? LastOrDefault<T>() => Length > 0 ? GetItem<T>(Length - 1) : default(T);
+        public T LastOrDefault<T>() => Length > 0 ? GetItem<T>(Length - 1) : default(T);
         /// <summary>
         /// Returns the array as a .Net List
         /// </summary>
@@ -69,6 +69,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         public Array(params object[] values) : base(JS.NewApply(nameof(Array), values)) { }
+        /// <summary>
+        /// The Array.of() static method creates a new Array instance from a variable number of arguments, regardless of number or type of the arguments.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static Array Of(params object[] values) => new Array(values);
         /// <summary>
         /// Reflects the number of elements in an array.
         /// </summary>
@@ -421,7 +427,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
         /// <returns></returns>
-        public Array<T> Splice<T>(int start, int deleteCount, T[] addItems) => JSRef.CallApply<Array<T>>("splice", new object[] { start, deleteCount }.Concat(addItems.Select(o => (object?)o)).ToArray());
+        public Array<T> Splice<T>(int start, int deleteCount, T[] addItems) => JSRef.CallApply<Array<T>>("splice", new object[] { start, deleteCount }.Concat(addItems.Select(o => (object?)o)).ToArray()); /// <summary>
+        /// Sorts the elements of an array in place and returns the reference to the same array, now sorted. The default sort order is ascending, built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values.
+        /// </summary>
+        /// <param name="compareFn">
+        /// A function that determines the order of the elements. The function is called with the following arguments:<br />
+        /// a - The first element for comparison.<br />
+        /// b - The second element for comparison.<br />
+        /// It should return a number where:<br />
+        /// - A negative value indicates that a should come before b.<br />
+        /// - A positive value indicates that a should come after b.<br />
+        /// - Zero or NaN indicates that a and b are considered equal.<br />
+        /// To memorize this, remember that (a, b) => a - b sorts numbers in ascending order.<br />
+        /// If omitted, the array elements are converted to strings, then sorted according to each character's Unicode code point value.
+        /// </param>
+        /// <returns>This Array instance</returns>
+        public Array Sort<T>(Func<T, T, int> compareFn)
+        {
+            using var cb = Callback.Create(compareFn);
+            JSRef!.CallVoid("sort", cb);
+            return this;
+        }
     }
     /// <summary>
     /// The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations.<br />
@@ -434,12 +460,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns first or default
         /// </summary>
         /// <returns></returns>
-        public TArrayItem? FirstOrDefault() => Length > 0 ? At(0) : default(TArrayItem);
+        public TArrayItem FirstOrDefault() => Length > 0 ? At(0) : default(TArrayItem);
         /// <summary>
         /// Returns last or default
         /// </summary>
         /// <returns></returns>
-        public TArrayItem? LastOrDefault() => Length > 0 ? At(Length - 1) : default(TArrayItem);
+        public TArrayItem LastOrDefault() => Length > 0 ? At(Length - 1) : default(TArrayItem);
         /// <summary>
         /// Returns the array as a .Net List
         /// </summary>
@@ -494,6 +520,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values">A JavaScript array is initialized with the given elements, except in the case where a single argument is passed to the Array constructor and that argument is a number (see the arrayLength parameter below). Note that this special case only applies to JavaScript arrays created with the Array constructor, not array literals created with the square bracket syntax.</param>
         public Array(params TArrayItem[] values) : base(JS.NewApply(nameof(Array), values == null ? null : values.Select(o => (object?)o).ToArray())) { }
+        /// <summary>
+        /// The Array.of() static method creates a new Array instance from a variable number of arguments, regardless of number or type of the arguments.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static Array Of(params TArrayItem[] values) => new Array(values);
         /// <summary>
         /// Adds one or more elements to the end of an array, and returns the new length of the array.
         /// </summary>
@@ -671,6 +703,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             using var cb = Callback.Create(fn);
             JSRef.CallVoid("forEach", cb);
+        }
+        /// <summary>
+        /// Sorts the elements of an array in place and returns the reference to the same array, now sorted. The default sort order is ascending, built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values.
+        /// </summary>
+        /// <param name="compareFn">
+        /// A function that determines the order of the elements. The function is called with the following arguments:<br />
+        /// a - The first element for comparison.<br />
+        /// b - The second element for comparison.<br />
+        /// It should return a number where:<br />
+        /// - A negative value indicates that a should come before b.<br />
+        /// - A positive value indicates that a should come after b.<br />
+        /// - Zero or NaN indicates that a and b are considered equal.<br />
+        /// To memorize this, remember that (a, b) => a - b sorts numbers in ascending order.<br />
+        /// If omitted, the array elements are converted to strings, then sorted according to each character's Unicode code point value.
+        /// </param>
+        /// <returns>This Array instance</returns>
+        public Array<TArrayItem> Sort(Func<TArrayItem, TArrayItem, int> compareFn)
+        {
+            using var cb = Callback.Create(compareFn);
+            JSRef!.CallVoid("sort", cb);
+            return this;
         }
     }
 }
