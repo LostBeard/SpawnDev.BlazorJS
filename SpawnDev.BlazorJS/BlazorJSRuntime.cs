@@ -288,7 +288,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="obj1"></param>
         /// <param name="obj2"></param>
         /// <returns></returns>
-        public static bool JSEquals(object obj1, object obj2) => JSInterop.IsEqual(obj1, obj2);
+        public bool JSEquals(object? obj1, object? obj2) => JSInterop.IsEqual(obj1, obj2);
         public T ReturnMe<T>(object obj) => JSInterop.ReturnMe<T>(obj);
         public T ReturnMe<T>(T obj) => JSInterop.ReturnMe<T>(obj);
         public object? ReturnMe(Type type, object obj) => JSInterop.ReturnMe(type, obj);
