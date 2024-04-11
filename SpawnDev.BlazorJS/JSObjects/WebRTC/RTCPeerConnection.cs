@@ -74,7 +74,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Task<T> CreateAnswer<T>() where T : IRTCSessionDescription => JSRef.CallAsync<T>("createAnswer");
+        public Task<RTCSessionDescription> CreateAnswer() => JSRef.CallAsync<RTCSessionDescription>("createAnswer");
         /// <summary>
         /// The createDataChannel() method on the RTCPeerConnection interface creates a new channel linked with the remote peer, over which any kind of data may be transmitted. This can be useful for back-channel content, such as images, file transfer, text chat, game update packets, and so forth.
         /// </summary>
@@ -85,15 +85,14 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <summary>
         /// The createOffer() method of the RTCPeerConnection interface initiates the creation of an SDP offer for the purpose of starting a new WebRTC connection to a remote peer. The SDP offer includes information about any MediaStreamTrack objects already attached to the WebRTC session, codec, and options supported by the browser, and any candidates already gathered by the ICE agent, for the purpose of being sent over the signaling channel to a potential peer to request a connection or to update the configuration of an existing connection.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Task<T> CreateOffer<T>() where T : IRTCSessionDescription => JSRef.CallAsync<T>("createOffer");
+        public Task<RTCSessionDescription> CreateOffer()  => JSRef.CallAsync<RTCSessionDescription>("createOffer");
         /// <summary>
         /// The RTCPeerConnection method setLocalDescription() changes the local description associated with the connection. This description specifies the properties of the local end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
         /// </summary>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public Task SetLocalDescription(IRTCSessionDescription desc) => JSRef.CallVoidAsync("setLocalDescription", desc);
+        public Task SetLocalDescription(RTCSessionDescription desc) => JSRef.CallVoidAsync("setLocalDescription", desc);
         /// <summary>
         /// The RTCPeerConnection method setLocalDescription() changes the local description associated with the connection. This description specifies the properties of the local end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
         /// </summary>
@@ -104,13 +103,13 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public Task SetRemoteDescription(IRTCSessionDescription desc) => JSRef.CallVoidAsync("setRemoteDescription", desc);
+        public Task SetRemoteDescription(RTCSessionDescription desc) => JSRef.CallVoidAsync("setRemoteDescription", desc);
         /// <summary>
         /// The RTCPeerConnection method setRemoteDescription() sets the specified session description as the remote peer's current offer or answer. The description specifies the properties of the remote end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
         /// </summary>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public Promise SetRemoteDescriptionPromise(IRTCSessionDescription desc) => JSRef.Call<Promise>("setRemoteDescription", desc);
+        public Promise SetRemoteDescriptionPromise(RTCSessionDescription desc) => JSRef.Call<Promise>("setRemoteDescription", desc);
         /// <summary>
         /// The WebRTC API's RTCPeerConnection interface offers the restartIce() method to allow a web application to easily request that ICE candidate gathering be redone on both ends of the connection. This simplifies the process by allowing the same method to be used by either the caller or the receiver to trigger an ICE restart.
         /// </summary>

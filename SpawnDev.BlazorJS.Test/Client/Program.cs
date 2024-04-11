@@ -9,6 +9,7 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
+using System.Text.Json;
 
 #if DEBUG
 JSObject.UndisposedHandleVerboseMode = false;
