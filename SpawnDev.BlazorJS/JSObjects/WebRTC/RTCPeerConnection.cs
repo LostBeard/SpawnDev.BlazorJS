@@ -1,9 +1,9 @@
 ﻿using Microsoft.JSInterop;
-
+using System.Text.Json.Serialization;
+using System.Text;
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
-    // https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection
     /// <summary>
     /// The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It provides methods to connect to a remote peer, maintain and monitor the connection, and close the connection once it's no longer needed.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection
@@ -11,17 +11,43 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
     public class RTCPeerConnection : EventTarget
     {
         /// <summary>
+        /// Creates an X.509 certificate and its corresponding private key, returning a Promise that resolves with the new RTCCertificate once it is generated.
+        /// </summary>
+        /// <param name="keygenAlgorithm"></param>
+        /// <returns></returns>
+        public static RTCCertificate GenerateCertificate(RsaHashedKeyGenParams keygenAlgorithm) => JS.Call<RTCCertificate>("generateCertificate", keygenAlgorithm);
+        /// <summary>
+        /// Creates an X.509 certificate and its corresponding private key, returning a Promise that resolves with the new RTCCertificate once it is generated.
+        /// </summary>
+        /// <param name="keygenAlgorithm"></param>
+        /// <returns></returns>
+        public static RTCCertificate GenerateCertificate(string keygenAlgorithm) => JS.Call<RTCCertificate>("generateCertificate", keygenAlgorithm);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
         public RTCPeerConnection(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// The RTCPeerConnection() constructor returns a newly-created RTCPeerConnection, which represents a connection between the local device and a remote peer.
+        /// </summary>
         public RTCPeerConnection() : base(JS.New(nameof(RTCPeerConnection))) { }
+        /// <summary>
+        /// The RTCPeerConnection() constructor returns a newly-created RTCPeerConnection, which represents a connection between the local device and a remote peer.
+        /// </summary>
+        /// <param name="configuration"></param>
         public RTCPeerConnection(RTCConfiguration configuration) : base(JS.New(nameof(RTCPeerConnection), configuration)) { }
-
+        /// <summary>
+        /// Returns a Promise that resolves to an RTCIdentityAssertion which contains a string identifying the remote peer. Once this promise resolves successfully, the resulting identity is the target peer identity and will not change for the duration of the connection.
+        /// </summary>
+        public Task<RTCIdentityAssertion> PeerIdentity => JSRef.GetAsync<RTCIdentityAssertion>("peerIdentity");
         /// <summary>
         /// The read-only property RTCPeerConnection.iceConnectionState returns a string which state of the ICE agent associated with the RTCPeerConnection: new, checking, connected, completed, failed, disconnected, and closed.
         /// </summary>
         public string IceConnectionState => JSRef.Get<string>("iceConnectionState");
+        /// <summary>
+        /// Returns a string that describes connection's ICE gathering state. This lets you detect, for example, when collection of ICE candidates has finished. Possible values are: new, gathering, or complete.
+        /// </summary>
+        public string IceGatheringState => JSRef.Get<string>("iceGatheringState");
         /// <summary>
         /// The read-only RTCPeerConnection property canTrickleIceCandidates returns a boolean value which indicates whether or not the remote peer can accept trickled ICE candidates.
         /// </summary>
@@ -35,17 +61,33 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         public string SignalingState => JSRef.Get<string>("signalingState");
         /// <summary>
+        /// Returns an RTCSctpTransport object describing the SCTP transport layer over which SCTP data is being sent and received. If SCTP hasn't been negotiated, this value is null.
+        /// </summary>
+        public RTCSctpTransport? Sctp => JSRef.Get<RTCSctpTransport>("sctp");
+        /// <summary>
         /// The read-only property RTCPeerConnection.localDescription returns an RTCSessionDescription describing the session for the local end of the connection. If it has not yet been set, this is null.
         /// </summary>
-        public RTCSessionDescription LocalDescription => JSRef.Get<RTCSessionDescription>("localDescription");
+        public RTCSessionDescription? LocalDescription => JSRef.Get<RTCSessionDescription?>("localDescription");
+        /// <summary>
+        /// Returns an RTCSessionDescription object describing a pending configuration change for the local end of the connection. This does not describe the connection as it currently stands, but as it may exist in the near future.
+        /// </summary>
+        public RTCSessionDescription? PendingLocalDescription => JSRef.Get<RTCSessionDescription?>("pendingLocalDescription");
+        /// <summary>
+        /// Returns an RTCSessionDescription object describing a pending configuration change for the remote end of the connection. This does not describe the connection as it currently stands, but as it may exist in the near future.
+        /// </summary>
+        public RTCSessionDescription? PendingRemoteDescription => JSRef.Get<RTCSessionDescription?>("pendingRemoteDescription");
+        /// <summary>
+        /// Returns an RTCSessionDescription object describing the session, including configuration and media information, for the remote end of the connection. If this hasn't been set yet, this returns null.
+        /// </summary>
+        public RTCSessionDescription? RemoteDescription => JSRef.Get<RTCSessionDescription?>("remoteDescription");
         /// <summary>
         /// The read-only property RTCPeerConnection.currentLocalDescription returns an RTCSessionDescription object describing the local end of the connection as it was most recently successfully negotiated since the last time the RTCPeerConnection finished negotiating and connecting to a remote peer. Also included is a list of any ICE candidates that may already have been generated by the ICE agent since the offer or answer represented by the description was first instantiated.
         /// </summary>
-        public RTCSessionDescription CurrentLocalDescription => JSRef.Get<RTCSessionDescription>("currentLocalDescription");
+        public RTCSessionDescription? CurrentLocalDescription => JSRef.Get<RTCSessionDescription?>("currentLocalDescription");
         /// <summary>
         /// The read-only property RTCPeerConnection.currentRemoteDescription returns an RTCSessionDescription object describing the remote end of the connection as it was most recently successfully negotiated since the last time the RTCPeerConnection finished negotiating and connecting to a remote peer. Also included is a list of any ICE candidates that may already have been generated by the ICE agent since the offer or answer represented by the description was first instantiated.
         /// </summary>
-        public RTCSessionDescription CurrentRemoteDescription => JSRef.Get<RTCSessionDescription>("currentRemoteDescription");
+        public RTCSessionDescription? CurrentRemoteDescription => JSRef.Get<RTCSessionDescription?>("currentRemoteDescription");
 
         /// <summary>
         /// When a website or app using RTCPeerConnection receives a new ICE candidate from the remote peer over its signaling channel, it delivers the newly-received candidate to the browser's ICE agent by calling RTCPeerConnection.addIceCandidate(). This adds this new remote candidate to the RTCPeerConnection's remote description, which describes the state of the remote end of the connection.
@@ -120,6 +162,14 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <param name="track">A MediaStreamTrack object representing the media track to add to the peer connection.</param>
         /// <returns>The RTCRtpSender object which will be used to transmit the media data.</returns>
         public RTCRtpSender AddTrack(MediaStreamTrack track) => JSRef.Call<RTCRtpSender>("addTrack", track);
+
+        public RTCRtpTransceiver AddTransceiver(string trackOrKind) => JSRef.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+
+        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind) => JSRef.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+
+        public RTCRtpTransceiver AddTransceiver(string trackOrKind, TransceiverRequestInit init) => JSRef.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+
+        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind, TransceiverRequestInit init) => JSRef.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
         /// <summary>
         /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
         /// </summary>
