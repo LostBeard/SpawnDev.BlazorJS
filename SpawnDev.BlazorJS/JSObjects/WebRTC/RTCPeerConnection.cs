@@ -198,6 +198,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <returns></returns>
         public RTCRtpReceiver[] GetReceivers() => JSRef.Call<RTCRtpReceiver[]>("getReceivers");
 
+        public Task<RTCStatsReport> GetStats() => JSRef.CallAsync<RTCStatsReport>();
 
         // TODO ... 
         // unless there is a compatibility issue ...
