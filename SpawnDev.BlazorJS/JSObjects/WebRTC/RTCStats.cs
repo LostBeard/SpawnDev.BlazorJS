@@ -25,5 +25,25 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// A DOMHighResTimeStamp object indicating the time at which the sample was taken for this statistics object.
         /// </summary>
         public double Timestamp => JSRef.Get<double>("timestamp");
+        public RTCStats Typed()
+        {
+            switch (Type)
+            {
+                case "candidate-pair": return JSRef.As<RTCIceCandidatePairStats>();
+                case "remote-candidate": return JSRef.As<RTCIceCandidateStats>();
+                case "local-candidate": return JSRef.As<RTCIceCandidateStats>();
+                case "transport": return JSRef.As<RTCTransportStats>();
+                case "certificate": return this;
+                case "codec": return this;
+                case "data-channel": return this;
+                case "inbound-rtp": return this;
+                case "media-source": return this;
+                case "outbound-rtp": return this;
+                case "peer-connection": return this;
+                case "remote-inbound-rtp": return this;
+                case "remote-outbound-rtp": return this;
+            }
+            return this;
+        }
     }
 }

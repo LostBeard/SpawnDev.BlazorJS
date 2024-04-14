@@ -197,9 +197,12 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         /// <returns></returns>
         public RTCRtpReceiver[] GetReceivers() => JSRef.Call<RTCRtpReceiver[]>("getReceivers");
-
-        public Task<RTCStatsReport> GetStats() => JSRef.CallAsync<RTCStatsReport>();
-
+        /// <summary>
+        /// Returns a Promise which resolves with data providing statistics about either the overall connection or about the specified MediaStreamTrack.
+        /// </summary>
+        /// <param name="selector">A MediaStreamTrack for which to gather statistics. If this is null (the default value), statistics will be gathered for the entire RTCPeerConnection.</param>
+        /// <returns></returns>
+        public Task<RTCStatsReport> GetStats(MediaStreamTrack? selector = null) => JSRef.CallAsync<RTCStatsReport>("getStats", selector);
         // TODO ... 
         // unless there is a compatibility issue ...
         // switch to JSEventCallback with AddEventListener instead of using property assigning which limits usage more... 
