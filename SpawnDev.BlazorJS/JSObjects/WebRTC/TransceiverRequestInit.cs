@@ -32,11 +32,11 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         [JsonPropertyName("direction")]
         public string? Direction { get; set; }
         /// <summary>
-        /// 
+        /// An array of encodings to allow when sending RTP media from the RTCRtpSender. This is the same as the parameter.encodings array passed to RTCRtpSender.setParameters().
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("sendEncodings")]
-        public Encoding[]? SendEncodings { get; set; }
+        public RTCMediaEncoding[]? SendEncodings { get; set; }
         /// <summary>
         /// A list of MediaStream objects to add to the transceiver's RTCRtpReceiver; when the remote peer's RTCPeerConnection's track event occurs, these are the streams that will be specified by that event.
         /// </summary>
