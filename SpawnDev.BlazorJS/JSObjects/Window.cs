@@ -281,6 +281,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<HashChangeEvent> OnHashChange { get => new JSEventCallback<HashChangeEvent>("hashchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
+        /// The keydown event is fired when a key is pressed.
+        /// </summary>
+        public JSEventCallback<KeyboardEvent> OnKeyDown { get => new JSEventCallback<KeyboardEvent>("keydown", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// The keyup event is fired when a key is released.
+        /// </summary>
+        public JSEventCallback<KeyboardEvent> OnKeyUp { get => new JSEventCallback<KeyboardEvent>("keyup", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
         /// The languagechange event is fired at the global scope object when the user's preferred language changes.
         /// </summary>
         public JSEventCallback<Event> OnLanguageChange { get => new JSEventCallback<Event>("languagechange", AddEventListener, RemoveEventListener); set { } }
