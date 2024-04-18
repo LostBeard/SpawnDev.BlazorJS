@@ -29,7 +29,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A reference to the currently registered target for the event. This is the object to which the event is currently slated to be sent. It's possible this has been changed along the way through retargeting.
         /// </summary>
-        public virtual EventTarget CurrentTarget => JSRef.Get<EventTarget>("currentTarget");
+        public virtual EventTarget? CurrentTarget => JSRef.Get<EventTarget?>("currentTarget");
         /// <summary>
         /// A reference to the currently registered target for the event. This is the object to which the event is currently slated to be sent. It's possible this has been changed along the way through retargeting.
         /// </summary>

@@ -1,18 +1,12 @@
 ﻿using Microsoft.JSInterop;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// KeyboardEvent objects describe a user interaction with the keyboard<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
     /// </summary>
-    public class KeyboardEvent : Event
+    public class KeyboardEvent : UIEvent
     {
         /// <summary>
         /// Deserialization constructor
