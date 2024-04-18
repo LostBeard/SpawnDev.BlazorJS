@@ -205,7 +205,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fired when an element has lost focus.
         /// </summary>
         public JSEventCallback<FocusEvent> OnBlur { get => new JSEventCallback<FocusEvent>("blur", AddEventListener, RemoveEventListener); set { } }
-
+        /// <summary>
+        /// The keydown event is fired when a key is pressed.
+        /// </summary>
+        public JSEventCallback<KeyboardEvent> OnKeyDown { get => new JSEventCallback<KeyboardEvent>("keydown", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// The keyup event is fired when a key is released.
+        /// </summary>
+        public JSEventCallback<KeyboardEvent> OnKeyUp { get => new JSEventCallback<KeyboardEvent>("keyup", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }
