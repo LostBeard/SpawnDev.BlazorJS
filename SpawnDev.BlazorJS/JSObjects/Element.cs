@@ -185,6 +185,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fires when the document view has completed scrolling.
         /// </summary>
         public JSEventCallback<Event> OnScrollEnd { get => new JSEventCallback<Event>("scrollend", AddEventListener, RemoveEventListener); set { } }
+        #region Mouse events
         /// <summary>
         /// Fired when a non-primary pointing device button (e.g., any mouse button other than the left button) has been pressed and released on an element.
         /// </summary>
@@ -200,11 +201,55 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a pointing device button (e.g., a mouse's primary button) is clicked twice on a single element.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnDblClick { get => new JSEventCallback<PointerEvent>("dblclick", AddEventListener, RemoveEventListener); set { } }
+        public JSEventCallback<MouseEvent> OnDblClick { get => new JSEventCallback<MouseEvent>("dblclick", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device button is pressed on an element.
+        /// </summary>
+        public JSEventCallback<MouseEvent> OnMouseDown { get => new JSEventCallback<MouseEvent>("mousedown", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device (usually a mouse) is moved over the element that has the listener attached.
+        /// </summary>
+        public JSEventCallback<MouseEvent> OnMouseEnter { get => new JSEventCallback<MouseEvent>("mouseenter", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the pointer of a pointing device (usually a mouse) is moved out of an element that has the listener attached to it.
+        /// </summary>
+        public JSEventCallback<MouseEvent> OnMouseLeave { get => new JSEventCallback<MouseEvent>("mouseleave", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device (usually a mouse) is moved while over an element.
+        /// </summary>
+        public JSEventCallback<MouseEvent> OnMouseMove { get => new JSEventCallback<MouseEvent>("mousemove", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device (usually a mouse) is moved off the element to which the listener is attached or off one of its children.
+        /// </summary>
+        public JSEventCallback<MouseEvent> OnMouseOut { get => new JSEventCallback<MouseEvent>("mouseout", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device is moved onto the element to which the listener is attached or onto one of its children.
+        /// </summary>
+        public JSEventCallback<MouseEvent> OnMouseOver { get => new JSEventCallback<MouseEvent>("mouseover", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device button is released on an element.
+        /// </summary>
+        public JSEventCallback<MouseEvent> OnMouseUp { get => new JSEventCallback<MouseEvent>("mouseup", AddEventListener, RemoveEventListener); set { } }
+        #endregion
+        #region Focus events
         /// <summary>
         /// Fired when an element has lost focus.
         /// </summary>
         public JSEventCallback<FocusEvent> OnBlur { get => new JSEventCallback<FocusEvent>("blur", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when an element has gained focus.
+        /// </summary>
+        public JSEventCallback<FocusEvent> OnFocus { get => new JSEventCallback<FocusEvent>("focus", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when an element has gained focus, after focus.
+        /// </summary>
+        public JSEventCallback<FocusEvent> OnFocusIn { get => new JSEventCallback<FocusEvent>("focusin", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when an element has lost focus, after blur.
+        /// </summary>
+        public JSEventCallback<FocusEvent> OnFocusOut { get => new JSEventCallback<FocusEvent>("focusout", AddEventListener, RemoveEventListener); set { } }
+        #endregion
+        #region Keyboard events
         /// <summary>
         /// The keydown event is fired when a key is pressed.
         /// </summary>
@@ -213,6 +258,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The keyup event is fired when a key is released.
         /// </summary>
         public JSEventCallback<KeyboardEvent> OnKeyUp { get => new JSEventCallback<KeyboardEvent>("keyup", AddEventListener, RemoveEventListener); set { } }
+        #endregion
         #endregion
     }
 }
