@@ -16,23 +16,23 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A Boolean that indicates whether the request(s) the signal is communicating with is/are aborted (true) or not (false).
         /// </summary>
-        public bool Aborted => JSRef.Get<bool>("aborted");
+        public bool Aborted => JSRef!.Get<bool>("aborted");
         /// <summary>
         /// A JavaScript value providing the abort reason, once the signal has aborted.<br />
         /// </summary>
         /// <typeparam name="T">Type to read the property reason as</typeparam>
         /// <returns></returns>
-        public T GetReason<T>() => JSRef.Get<T>("reason");
+        public T GetReason<T>() => JSRef!.Get<T>("reason");
         /// <summary>
         /// A JavaScript value providing the abort reason, once the signal has aborted.<br />
         /// </summary>
-        public JSObject? Reason => JSRef.Get<JSObject?>("reason");
+        public JSObject? Reason => JSRef!.Get<JSObject?>("reason");
 
         #region Methods
         /// <summary>
         /// Throws the signal's abort reason if the signal has been aborted; otherwise it does nothing.
         /// </summary>
-        public void ThrowIfAborted() => JSRef.CallVoid("throwIfAborted");
+        public void ThrowIfAborted() => JSRef!.CallVoid("throwIfAborted");
         #endregion
 
         #region Events
