@@ -170,13 +170,9 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Events
         /// <summary>
-        /// Fires when the value of an input, select, or textarea element has been changed as a direct result of a user action (such as typing in a textbox or checking a checkbox).
+        /// Fires on any element with content-visibility: auto set on it when it starts or stops being relevant to the user and skipping its contents.
         /// </summary>
-        public JSEventCallback<InputEvent> OnInput { get => new JSEventCallback<InputEvent>("input", AddEventListener, RemoveEventListener); set { } }
-        /// <summary>
-        /// Fires when the value of an input or textarea element is about to be modified.
-        /// </summary>
-        public JSEventCallback<InputEvent> OnBeforeInput { get => new JSEventCallback<InputEvent>("beforeinput", AddEventListener, RemoveEventListener); set { } }
+        public JSEventCallback<ContentVisibilityAutoStateChangeEvent> OnContentVisibilityAutoStateChange { get => new JSEventCallback<ContentVisibilityAutoStateChangeEvent>("contentvisibilityautostatechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the document view or an element has been scrolled.
         /// </summary>
@@ -185,6 +181,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fires when the document view has completed scrolling.
         /// </summary>
         public JSEventCallback<Event> OnScrollEnd { get => new JSEventCallback<Event>("scrollend", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the user rotates a wheel button on a pointing device (typically a mouse).
+        /// </summary>
+        public JSEventCallback<WheelEvent> OnWheel { get => new JSEventCallback<WheelEvent>("wheel", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fires when the value of an input, select, or textarea element has been changed as a direct result of a user action (such as typing in a textbox or checking a checkbox).
+        /// </summary>
+        public JSEventCallback<InputEvent> OnInput { get => new JSEventCallback<InputEvent>("input", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fires when the value of an input or textarea element is about to be modified.
+        /// </summary>
+        public JSEventCallback<InputEvent> OnBeforeInput { get => new JSEventCallback<InputEvent>("beforeinput", AddEventListener, RemoveEventListener); set { } }
         #region Mouse events
         /// <summary>
         /// Fired when a non-primary pointing device button (e.g., any mouse button other than the left button) has been pressed and released on an element.
