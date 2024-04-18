@@ -177,20 +177,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fires for elements containing a resource when the resource has successfully loaded.
         /// </summary>
         public JSEventCallback<Event> OnLoad { get => new JSEventCallback<Event>("load", AddEventListener, RemoveEventListener); set { } }
-        #region Clipboard events
-        /// <summary>
-        /// Fires when the user initiates a copy action through the browser's user interface.
-        /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCopy { get => new JSEventCallback<ClipboardEvent>("copy", AddEventListener, RemoveEventListener); set { } }
-        /// <summary>
-        /// Fired when the user has initiated a "cut" action through the browser's user interface.
-        /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCut { get => new JSEventCallback<ClipboardEvent>("cut", AddEventListener, RemoveEventListener); set { } }
-        /// <summary>
-        /// Fires when the user initiates a paste action through the browser's user interface.
-        /// </summary>
-        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>("paste", AddEventListener, RemoveEventListener); set { } }
-        #endregion
         #region Drag & drop events
         /// <summary>
         /// Fired every few hundred milliseconds as an element or text selection is being dragged by the user.
