@@ -329,7 +329,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Vector128_Sum(Vector128<float> vector)
         {
-#if NET7_0_OR_GREATER && true
+#if NET7_0_OR_GREATER 
             return Vector128.Sum(vector);
 #else
             return vector.GetElement(0) + vector.GetElement(1) + vector.GetElement(2) + vector.GetElement(3);
@@ -339,7 +339,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector128<float> Vector128_Add(Vector128<float> left, Vector128<float> right)
         {
-#if NET8_0_OR_GREATER && true
+#if NET8_0_OR_GREATER
             //return left + right;
             return PackedSimd.Add(left, right);
             //return Vector128.Add(left, right);

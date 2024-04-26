@@ -7,12 +7,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The FileList interface represents an object of this type returned by the files property of the HTML input element; this lets you access the list of files selected with the input type="file" element. It's also used for a list of files dropped into web content when using the drag and drop API; see the DataTransfer object for details on this usage.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileList
     /// </summary>
-    public class FileList : JSObject//, IEnumerable<File>
+    public class FileList : JSObject
     {
-        #region Enable IEnumerable
-        //public IEnumerator GetEnumerator() => new SimpleEnumerator<File>(this.Item, () => this.Length);
-        //IEnumerator<File> IEnumerable<File>.GetEnumerator() => new SimpleEnumerator<File>(this.Item, () => this.Length);
-        #endregion
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -30,6 +26,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         public File Item(int index) => JSRef.Call<File>("item", index);
         #region Enumerable like
         /// <summary>
+        /// Indexer property
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        [System.Runtime.CompilerServices.IndexerName("ElementAt")]
+        public File this[int i] => Item(i);
+        /// <summary>
         /// Returns first or default
         /// </summary>
         /// <returns></returns>
@@ -43,7 +46,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the array as a .Net Array
         /// </summary>
         /// <returns></returns>
-        public File[] ToArray() => Enumerable.Range(0, Length).Select(i => Item(i)).ToArray();
+        public File[] ToArray() => JSRef!.As<File[]>();
         /// <summary>
         /// Returns the array as a .Net Array
         /// </summary>
