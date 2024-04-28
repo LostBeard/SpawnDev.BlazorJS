@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Collections;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -17,13 +16,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A read-only value indicating the number of files in the list.
         /// </summary>
-        public int Length => JSRef.Get<int>("length");
+        public int Length => JSRef!.Get<int>("length");
         /// <summary>
         /// Returns a File object representing the file at the specified index in the file list.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public File Item(int index) => JSRef.Call<File>("item", index);
+        public File Item(int index) => JSRef!.Call<File>("item", index);
         #region Enumerable like
         /// <summary>
         /// Indexer property
@@ -46,14 +45,26 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the array as a .Net Array
         /// </summary>
         /// <returns></returns>
-        public File[] ToArray() => JSRef!.As<File[]>();
+        public File[] ToArray() => Enumerable.Range(0, Length).Select(Item).ToArray();
         /// <summary>
         /// Returns the array as a .Net Array
         /// </summary>
         /// <param name="start"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public File[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(i => Item(i)).ToArray();
+        public File[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(Item).ToArray();
+        /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <returns></returns>
+        public List<File> ToList() => Enumerable.Range(0, Length).Select(Item).ToList();
+        /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<File> ToList(int start, int count) => Enumerable.Range(start, count).Select(Item).ToList();
         #endregion
     }
 }

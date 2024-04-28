@@ -6,31 +6,74 @@ namespace SpawnDev.BlazorJS
 {
     public static class IJSInProcessObjectReferenceExtensions
     {
-        static PropertyInfo? JSObjectReferenceIdProp = null;
-        public static T[]? AsArray<T>(this IJSInProcessObjectReference _ref) where T : JSObject => JSInterop.ReturnArrayJSObjects<T>(_ref);
-        public static IJSInProcessObjectReference[]? AsArray(this IJSInProcessObjectReference _ref) => JSInterop.ReturnArrayJSObjectReferences(_ref);
+        static PropertyInfo? JSObjectReferenceIdProp => _JSObjectReferenceIdProp.Value;
+        static Lazy<PropertyInfo?> _JSObjectReferenceIdProp = new Lazy<PropertyInfo?>(typeof(JSObjectReference).GetProperty("Id", BindingFlags.NonPublic | BindingFlags.Instance));
         /// <summary>
-        /// Import the IJSInProcessObjectReference instance from Javascript as T
+        /// Returns the IJSInProcessObjectReference as an array of IJSInProcessObjectReference?
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
+        public static T?[]? AsArray<T>(this IJSInProcessObjectReference _ref) where T : JSObject => JSInterop.ReturnArrayJSObjects<T>(_ref);
+        /// <summary>
+        /// Returns the IJSInProcessObjectReference as an array of T? where T inherits from JSObject
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
+        public static IJSInProcessObjectReference?[]? AsArray(this IJSInProcessObjectReference _ref) => JSInterop.ReturnArrayJSObjectReferences(_ref);
+        /// <summary>
+        /// Returns the IJSInProcessObjectReference as instance of type T
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="_ref"></param>
         /// <returns></returns>
         public static T As<T>(this IJSInProcessObjectReference _ref) => JSInterop.ReturnMe<T>(_ref);
+        /// <summary>
+        /// Returns the IJSInProcessObjectReference as instance of returnType
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <param name="returnType"></param>
+        /// <returns></returns>
         public static object As(this IJSInProcessObjectReference _ref, Type returnType) => JSInterop.ReturnMe(returnType, _ref)!;
+        /// <summary>
+        /// Returns a new copy of the IJSInProcessObjectReference
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
         public static IJSInProcessObjectReference CreateCopy(this IJSInProcessObjectReference _ref) => JSInterop.ReturnMe<IJSInProcessObjectReference>(_ref);
-        public static long GetJSRefId(this IJSInProcessObjectReference _ref)
-        {
-            if (JSObjectReferenceIdProp == null)
-            {
-                JSObjectReferenceIdProp = typeof(JSObjectReference).GetProperty("Id", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            }
-            return (long)JSObjectReferenceIdProp.GetValue(_ref);
-        }
-
+        /// <summary>
+        /// Returns the Id property value of the IJSInProcessObjectReference
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
+        public static long GetJSRefId(this IJSInProcessObjectReference _ref) => (long)JSObjectReferenceIdProp!.GetValue(_ref)!;
+        /// <summary>
+        /// Returns the constructor.name of the IJSInProcessObjectReference
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
         public static string GetConstructorName(this IJSInProcessObjectReference _ref) => JSInterop.Get<string>(_ref, "constructor.name");
         public static List<string> GetPropertyNames(this IJSInProcessObjectReference _ref, bool hasOwnProperty = false) => JSInterop.GetPropertyNames(_ref, null, hasOwnProperty);
+        /// <summary>
+        /// Returns the typeof IJSInProcessObjectReference
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
         public static string PropertyType(this IJSInProcessObjectReference _ref, object? identifier = null) => JSInterop.TypeOf(_ref, identifier);
+        /// <summary>
+        /// Returns true if the property name === undefined
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
         public static bool PropertyIsUndefined(this IJSInProcessObjectReference _ref, object? identifier = null) => JSInterop.TypeOf(_ref, identifier) == "undefined";
+        /// <summary>
+        /// Returns the constructor.name pf the IJSInProcessObjectReference property
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
         public static string PropertyInstanceOf(this IJSInProcessObjectReference _ref, object? identifier = null) => JSInterop.InstanceOf(_ref, identifier);
 
         #region IJSInProcessObjectReference Base Accessors
