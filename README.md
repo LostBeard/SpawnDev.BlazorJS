@@ -691,6 +691,7 @@ public async Task TaskPoolExpressionWithCancellationTokenTest2()
     {
         throw new Exception("Worker not supported by browser. Expected failure.");
     }
+    // Cancel the task after 2 seconds
     using var cts = new CancellationTokenSource(2000);
     var cancelled = await WebWorkerService.TaskPool.Run(() => CancellableMethod(10000, cts.Token));
     if (!cancelled) throw new Exception("Task Cancellation failed");
