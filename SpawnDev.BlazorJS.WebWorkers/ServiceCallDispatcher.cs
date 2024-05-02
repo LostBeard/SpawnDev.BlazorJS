@@ -3,6 +3,7 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using SpawnDev.BlazorJS.Reflection;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
@@ -128,6 +129,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         {
                             RemoteCancellationTokens.Remove(tokenId);
                             remoteTokenSource.TokenSource.Cancel();
+                            remoteTokenSource.Dispose();
                         }
                         break;
                     case "init":
@@ -245,10 +247,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
             // Post call cleanup
             // remove any uncancelled remote CancellationTokens for this request
-            var tokensToRemove = RemoteCancellationTokens.Values.Where(o => o.RequestId == requestId).Select(o => o.TokenId).ToArray();
-            foreach (var key in tokensToRemove)
+            var tokensToRemove = RemoteCancellationTokens.Values.Where(o => o.RequestId == requestId).ToArray();
+            foreach (var remoteTokenSource in tokensToRemove)
             {
-                RemoteCancellationTokens.Remove(key);
+                RemoteCancellationTokens.Remove(remoteTokenSource.TokenId);
+                remoteTokenSource.Dispose();
             }
             try
             {
