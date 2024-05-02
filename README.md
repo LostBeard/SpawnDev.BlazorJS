@@ -697,7 +697,8 @@ public async Task TaskPoolExpressionWithCancellationTokenTest2()
     if (!cancelled) throw new Exception("Task Cancellation failed");
 }
 
-// Returns true if cancelled
+// Returns true if cancelled  
+// This method will run for 10 secodns if not cancelled  
 private static async Task<bool> CancellableMethod(double maxRunTimeMS, CancellationToken token)
 {
     var startTime = DateTime.Now;
