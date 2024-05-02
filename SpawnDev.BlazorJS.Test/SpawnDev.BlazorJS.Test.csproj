@@ -14,14 +14,19 @@
 		<PackageReference Include="Radzen.Blazor" Version="4.25.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.3" PrivateAssets="all" />
-		<!-- <PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.87" /> -->
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.88" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj" />
+	</ItemGroup>
+	
+	<!-- 
+	<ItemGroup>
 		<ProjectReference Include="..\SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj" />
 		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
 	</ItemGroup>
+	-->
 
 	<!-- SpawnDev.BlazorJS.WebWorkers config -->
 	<PropertyGroup>
