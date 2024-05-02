@@ -7,26 +7,27 @@
 		<Version>2.2.88</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="Markdig" Version="0.35.0" />
 		<PackageReference Include="Markdown.ColorCode" Version="2.2.1" />
 		<PackageReference Include="Radzen.Blazor" Version="4.25.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.3" PrivateAssets="all" />
-		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.88" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj" />
 	</ItemGroup>
-	
-	<!-- 
+
 	<ItemGroup>
+		<!-- 
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.88" />
+		-->
 		<ProjectReference Include="..\SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj" />
 		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
 	</ItemGroup>
-	-->
+
 
 	<!-- SpawnDev.BlazorJS.WebWorkers config -->
 	<PropertyGroup>

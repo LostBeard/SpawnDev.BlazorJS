@@ -97,6 +97,44 @@
     // }
     #endregion
 
+    #region TestWindowTask access of Window scope static property
+    [TestMethod]
+    public async Task TaskPoolExpressionStaticPropertyReadToCancelTest()
+    {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        CancelWorkers = false;
+        // CancelWorkers will be set to true on the window scope after 2000 seconds
+        // the WebWorker task will read this property every so often to check if it should continue running
+        using var cts = new CancellationTokenSource(2000);
+        cts.Token.Register(() => CancelWorkers = true);
+        var cancelled = await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(null!, 10000));
+        if (!cancelled)
+        {
+            throw new Exception("Func<string> call failed");
+        }
+    }
+    // This property will be set on the Window scope and read by the WebWorker scope
+    static bool CancelWorkers { get; set; } = false;
+
+    // Method returns true if it was cancelled, false if it ran until completion
+    private static async Task<bool> ThisMethodWillGetCalledInAWorker([FromServices] WebWorkerService webWorkerService, double maxRunTimeMS)
+    {
+        var startTime = DateTime.Now;
+        var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
+        while (DateTime.Now - startTime < maxRunTime)
+        {
+            Console.WriteLine("Waiting");
+            await Task.Delay(50);
+            var cancelled = await webWorkerService.WindowTask!.Run(() => CancelWorkers);
+            if (cancelled) return true;
+        }
+        return false;
+    }
+    #endregion
+
     #region Test WebWorker CancellationToken parameter
     // *********** CancellationToken ***********
     [TestMethod]
