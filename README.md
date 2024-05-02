@@ -682,7 +682,7 @@ public class MyService
 
 ### Using CancellationToken to cancel a WebWorker task
 
-As of version 2.2.88 ```CancellationToken``` is a supported parameter type and can used to cancel a running task.  
+As of version 2.2.88 ```CancellationToken``` is a supported parameter type and can be used to cancel a running task.  
 
 ```cs
 public async Task TaskPoolExpressionWithCancellationTokenTest2()
