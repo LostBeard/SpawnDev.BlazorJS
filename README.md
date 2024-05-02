@@ -680,6 +680,38 @@ public class MyService
 }
 ```
 
+### Using CancellationToken to cancel a WebWorker task
+
+As of version 2.2.88 ```CancellationToken``` is a supported parameter type and can used to cancel a running task.  
+
+```cs
+public async Task TaskPoolExpressionWithCancellationTokenTest2()
+{
+    if (!WebWorkerService.WebWorkerSupported)
+    {
+        throw new Exception("Worker not supported by browser. Expected failure.");
+    }
+    using var cts = new CancellationTokenSource(2000);
+    var cancelled = await WebWorkerService.TaskPool.Run(() => CancellableMethod(10000, cts.Token));
+    if (!cancelled) throw new Exception("Task Cancellation failed");
+}
+
+// Returns true if cancelled
+private static async Task<bool> CancellableMethod(double maxRunTimeMS, CancellationToken token)
+{
+    var startTime = DateTime.Now;
+    var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
+    while (DateTime.Now - startTime < maxRunTime)
+    {
+        // do some work ...
+        await Task.Delay(50);
+        // check if cancelled
+        if (token.IsCancellationRequested) return true;
+    }
+    return false;
+}
+```
+
 ## WebWorker
 You can use the properties ```WebWorkerService.SharedWebWorkerSupported``` and ```WebWorkerService.WebWorkerSupported``` to check for support. 
 

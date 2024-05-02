@@ -113,7 +113,7 @@
         var cancelled = await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(null!, 10000));
         if (!cancelled)
         {
-            throw new Exception("Func<string> call failed");
+            throw new Exception("Test failed");
         }
     }
     // This property will be set on the Window scope and read by the WebWorker scope
@@ -137,6 +137,32 @@
 
     #region Test WebWorker CancellationToken parameter
     // *********** CancellationToken ***********
+    [TestMethod]
+    public async Task TaskPoolExpressionWithCancellationTokenTest2()
+    {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        using var cts = new CancellationTokenSource(2000);
+        var cancelled = await WebWorkerService.TaskPool.Run(() => CancellableMethod(10000, cts.Token));
+        if (!cancelled) throw new Exception("Task Cancellation failed");
+    }
+    // Returns true if cancelled
+    private static async Task<bool> CancellableMethod(double maxRunTimeMS, CancellationToken token)
+    {
+        var startTime = DateTime.Now;
+        var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
+        while (DateTime.Now - startTime < maxRunTime)
+        {
+            // do some work ...
+            await Task.Delay(50);
+            // check if cancelled
+            if (token.IsCancellationRequested) return true;
+        }
+        return false;
+    }
+
     [TestMethod]
     public async Task TaskPoolExpressionWithCancellationTokenTest()
     {
