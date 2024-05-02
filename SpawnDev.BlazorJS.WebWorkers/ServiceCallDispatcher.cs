@@ -2,6 +2,8 @@
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using SpawnDev.BlazorJS.Reflection;
+using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 using Array = SpawnDev.BlazorJS.JSObjects.Array;
@@ -87,7 +89,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (_port == null) return;
             ReadyFlagSent = true;
-            _port.PostMessage(new object?[] {  "init", LocalInfo });
+            _port.PostMessage(new object?[] { "init", LocalInfo });
         }
         public event Action<ServiceCallDispatcher, Array> OnMessage;
         public delegate void BusyStateChangedDelegate(ServiceCallDispatcher sender, bool busy);
@@ -120,6 +122,14 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 var msgType = args.Shift<string>(); // 0
                 switch (msgType)
                 {
+                    case "cancelToken":
+                        var tokenId = args.Shift<string>(); // 1
+                        if (RemoteCancellationTokens.TryGetValue(tokenId, out var remoteTokenSource))
+                        {
+                            RemoteCancellationTokens.Remove(tokenId);
+                            remoteTokenSource.TokenSource.Cancel();
+                        }
+                        break;
                     case "init":
                         {
                             if (RemoteInfo == null)
@@ -233,6 +243,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 // the call failed
                 err = ex.Message;
             }
+            // Post call cleanup
+            // remove any uncancelled remote CancellationTokens for this request
+            var tokensToRemove = RemoteCancellationTokens.Values.Where(o => o.RequestId == requestId).Select(o => o.TokenId).ToArray();
+            foreach (var key in tokensToRemove)
+            {
+                RemoteCancellationTokens.Remove(key);
+            }
             try
             {
                 if (!string.IsNullOrEmpty(requestId))
@@ -262,7 +279,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     _port?.PostMessage(callbackMsg, transfer);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // failed to notify remote endpoint of result
                 Console.WriteLine($"Failed to notify remote endpoint of result: {ex.Message}");
@@ -326,7 +343,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             try
             {
                 var returnArray = await workerTask.Task;
-                // remove any callbacks
+                // remove any request callbacks (currently only Action)
                 var keysToRemove = _actionHandles.Values.Where(o => o.RequestId == requestId).Select(o => o.Id).ToArray();
                 foreach (var key in keysToRemove) _actionHandles.Remove(key);
                 // get result or exception
@@ -392,6 +409,32 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     _actionHandles[cb.Id] = cb;
                     ret[i] = cb.Id;
                 }
+                else if (arg is CancellationToken token)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        // "" represents an already cancelled token
+                        ret[i] = "";
+                    }
+                    else if (token.CanBeCanceled)
+                    {
+                        // a token id will be sent which can be referenced later to cancel the token
+                        // lsiten for the token cancellation event and send the cancel request at that time
+                        var tokenId = Guid.NewGuid().ToString();
+                        token.Register(() =>
+                        {
+                            // send cancel message to worker
+                            var callbackMsg = new List<object?> { "cancelToken", tokenId };
+                            _port?.PostMessage(callbackMsg);
+                        });
+                        ret[i] = tokenId;
+                    }
+                    else
+                    {
+                        // null represents CancellationToken.None (the default)
+                        ret[i] = null;
+                    }
+                }
                 else if (arg is byte[] bytes)
                 {
                     // to get better performance when sending byte arrays we convert it to a Uint8Array reference first, and add its array buffer to the transferables list.
@@ -416,6 +459,26 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
             transferable = transferableList.ToArray();
             return ret;
+        }
+        /// <summary>
+        /// Holds references to deserialized CancellationTokens from requests<br/>
+        /// These will be disposed and removed when the request is completed<br/>
+        /// </summary>
+        Dictionary<string, RemoteCancellationTokenSource> RemoteCancellationTokens = new Dictionary<string, RemoteCancellationTokenSource>();
+        class RemoteCancellationTokenSource : IDisposable
+        {
+            public string TokenId { get; private set; }
+            public CancellationTokenSource TokenSource { get; private set; } = new CancellationTokenSource();
+            public string RequestId { get; private set; }
+            public RemoteCancellationTokenSource(string requestId, string tokenId)
+            {
+                RequestId = requestId;
+                TokenId = tokenId;
+            }
+            public void Dispose()
+            {
+                TokenSource.Dispose();
+            }
         }
         /// <summary>
         /// Imports method call arguments from Javascript and finishes deserializing them<br />
@@ -446,6 +509,28 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 if (resolved)
                 {
                     ret[i] = value;
+                }
+                else if (typeof(CancellationToken) == methodParamType)
+                {
+                    // Create a local action that can be called to relay the call to the remote endpoint
+                    var tokenId = callArgs.GetItem<string?>(i);
+                    if (tokenId == null)
+                    {
+                        // default token
+                        ret[i] = CancellationToken.None;
+                    }
+                    else if (tokenId == "")
+                    {
+                        // already cancelled
+                        ret[i] = new CancellationToken(true);
+                    }
+                    else
+                    {
+                        // can be cancelled
+                        var remoteCancellationToken = new RemoteCancellationTokenSource(requestId, tokenId);
+                        RemoteCancellationTokens[tokenId] = remoteCancellationToken;
+                        ret[i] = remoteCancellationToken.TokenSource.Token;
+                    }
                 }
                 else if (typeof(Delegate).IsAssignableFrom(methodParamType))
                 {

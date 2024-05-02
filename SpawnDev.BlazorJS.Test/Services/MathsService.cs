@@ -27,11 +27,10 @@ namespace SpawnDev.BlazorJS.Test.Services
         Task<string> TestMultiSigMethod(string value, double dblValue);
 
         Task<T2> TestGenerics<T1, T2>(T1 value1, T2 value2);
+
+        Task CancellationTokenTest(double maxRuntimeMS, CancellationToken token);
     }
 
-    /// <summary>
-    /// This service runs insinde the worker.
-    /// </summary>
     public class MathsService : IMathsService {
         WebWorkerService _webWorkerService;
         WebAssemblyHostConfiguration _configuration;
@@ -73,6 +72,19 @@ namespace SpawnDev.BlazorJS.Test.Services
                 // Put delays in progress for performance reasons
             }
             return result;
+        }
+
+        public async Task CancellationTokenTest(double maxRuntimeMS, CancellationToken token)
+        {
+            var tokenCanBeCanceled = token.CanBeCanceled;
+            Console.WriteLine($"token.CanBeCanceled: {tokenCanBeCanceled} token.IsCancellationRequested: {token.IsCancellationRequested}");
+            var startTime = DateTime.Now;
+            var maxRunTime = TimeSpan.FromMilliseconds(maxRuntimeMS);
+            while (DateTime.Now - startTime < maxRunTime)
+            {
+                await Task.Delay(50);
+                token.ThrowIfCancellationRequested();
+            }
         }
 
         public async Task<string> CalculatePiWithActionProgress(int digits, Action<int>? progress = null) {

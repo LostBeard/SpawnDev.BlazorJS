@@ -71,6 +71,132 @@
         Console.WriteLine($"{BlazorJSRuntime.JS.GlobalThisTypeName} {BlazorJSRuntime.JS.InstanceId} {remoteInstanceId}");
     }
 
+    #region Test Func
+    // *********** Func<bool> ***********
+    [TestMethod]
+    public async Task TaskPoolExpressionFuncTest()
+    {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        var startTime = DateTime.Now;
+        var cancelAfter = TimeSpan.FromMilliseconds(1000);
+        Func<bool> checkCancelled = () => DateTime.Now - startTime >= cancelAfter;
+        try
+        {
+            await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(5000, checkCancelled));
+            Console.WriteLine($"Task cancellation via Func<bool> failed");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Success: task was cancelled via Func<bool>");
+            return;
+        }
+        throw new Exception("Task Cancellation failed");
+    }
+    private static async Task ThisMethodWillGetCalledInAWorker(double maxRunTimeMS, Func<bool> checkCancelled)
+    {
+        Console.WriteLine($"maxRunTimeMS: {maxRunTimeMS}");
+        var startTime = DateTime.Now;
+        var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
+        while (DateTime.Now - startTime < maxRunTime)
+        {
+            await Task.Delay(50);
+            var cancelled = checkCancelled();
+            Console.WriteLine($"cancelled: {cancelled}");
+            if (cancelled) throw new Exception("Task cancelled!");
+        }
+    }
+    #endregion
+
+    #region Test CancellationToken
+    // *********** CancellationToken ***********
+    [TestMethod]
+    public async Task TaskPoolExpressionWithCancellationTokenTest()
+    {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        using var cts = new CancellationTokenSource(4000);
+        try
+        {
+            await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(10000, cts.Token));
+            Console.WriteLine($"Task Cancellation failed");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Success. The task was cancelled");
+            return;
+        }
+        throw new Exception("Task Cancellation failed");
+    }
+    [TestMethod]
+    public async Task TaskPoolExpressionWithCancellationTokenPreCancelledTest()
+    {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        var cancelledToken = new CancellationToken(true);
+        try
+        {
+            await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(5000, cancelledToken));
+            Console.WriteLine($"Task Cancellation failed");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Success. The task was cancelled");
+            return;
+        }
+        throw new Exception("Task Cancellation failed");
+    }
+    [TestMethod]
+    public async Task TaskPoolExpressionWithCancellationTokenNoneTest()
+    {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(2000, CancellationToken.None));
+        Console.WriteLine($"Success. The task ran to completion.");
+    }
+    private static async Task ThisMethodWillGetCalledInAWorker(double maxRunTimeMS, CancellationToken token)
+    {
+        Console.WriteLine($"maxRunTimeMS: {maxRunTimeMS} token.CanBeCanceled: {token.CanBeCanceled} token.IsCancellationRequested: {token.IsCancellationRequested}");
+        var startTime = DateTime.Now;
+        var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
+        while (DateTime.Now - startTime < maxRunTime)
+        {
+            Console.WriteLine("Waiting");
+            await Task.Delay(50);
+            token.ThrowIfCancellationRequested();
+        }
+    }
+    [TestMethod]
+    public async Task WebWorkerCancellationTokenAlreadyCancelledTest()
+    {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        var methodInfo = typeof(MathsService).GetMethod("CancellationTokenTest");
+        using var worker = await WebWorkerService.GetWebWorker();
+        var cancelledToken = new CancellationToken(true);
+        try
+        {
+            await worker!.Call(methodInfo!, new object[] { 5000d, cancelledToken });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Success. The task was cancelled: {ex.Message}");
+            return;
+        }
+        throw new Exception("Task Cancellation failed");
+    }
+    #endregion
+
     private static string ThisMethodWillGetCalledInAWorker([FromServices] BlazorJSRuntime JS, string callingScope, string instanceId)
     {
         Console.WriteLine($"{JS.GlobalThisTypeName} {JS.InstanceId} {callingScope} {instanceId}");
@@ -109,7 +235,7 @@
         var strValueOrig = "apples";
         var dblValueOrig = Math.PI;
 
-        // test call IMathsService.TestMultiSigMethod which has 3 signatures total. 
+        // test call IMathsService.TestMultiSigMethod which has 3 signatures total.
 
         // this call is intended for the only method with this name and 2 arguments.
         var twoArgReadBack = await mathService.TestMultiSigMethod(strValueOrig, dblValueOrig);
@@ -339,7 +465,7 @@
         var length = binaryString.JSRef.Get<int>("length");
         var arrayBuffer = new ArrayBuffer(length);
         var uint8Array = new Uint8Array(arrayBuffer);
-        for(var i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
         {
             uint8Array[i] = binaryString.JSRef.Call<byte>("charCodeAt", i);
         }
