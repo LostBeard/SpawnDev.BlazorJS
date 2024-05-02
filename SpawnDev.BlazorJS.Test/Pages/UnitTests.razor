@@ -71,43 +71,30 @@
         Console.WriteLine($"{BlazorJSRuntime.JS.GlobalThisTypeName} {BlazorJSRuntime.JS.InstanceId} {remoteInstanceId}");
     }
 
+    // The below region is used to test Func<> callbacks in WebWorker calls.
+    // Currently Func<> is not supported, only Actions are supported
+    // When support has been added for Func the below methods can be uncommented to enable testing
     #region Test Func
-    // *********** Func<bool> ***********
-    [TestMethod]
-    public async Task TaskPoolExpressionFuncTest()
-    {
-        if (!WebWorkerService.WebWorkerSupported)
-        {
-            throw new Exception("Worker not supported by browser. Expected failure.");
-        }
-        var startTime = DateTime.Now;
-        var cancelAfter = TimeSpan.FromMilliseconds(1000);
-        Func<bool> checkCancelled = () => DateTime.Now - startTime >= cancelAfter;
-        try
-        {
-            await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(5000, checkCancelled));
-            Console.WriteLine($"Task cancellation via Func<bool> failed");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Success: task was cancelled via Func<bool>");
-            return;
-        }
-        throw new Exception("Task Cancellation failed");
-    }
-    private static async Task ThisMethodWillGetCalledInAWorker(double maxRunTimeMS, Func<bool> checkCancelled)
-    {
-        Console.WriteLine($"maxRunTimeMS: {maxRunTimeMS}");
-        var startTime = DateTime.Now;
-        var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
-        while (DateTime.Now - startTime < maxRunTime)
-        {
-            await Task.Delay(50);
-            var cancelled = checkCancelled();
-            Console.WriteLine($"cancelled: {cancelled}");
-            if (cancelled) throw new Exception("Task cancelled!");
-        }
-    }
+    // // *********** Func<bool> ***********
+    // [TestMethod]
+    // public async Task TaskPoolExpressionFuncTest()
+    // {
+    //     if (!WebWorkerService.WebWorkerSupported)
+    //     {
+    //         throw new Exception("Worker not supported by browser. Expected failure.");
+    //     }
+    //     var dataString = Guid.NewGuid().ToString();
+    //     var callbackFunc = () => dataString;
+    //     var dataStringRet = await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(callbackFunc));
+    //     if (dataString != dataStringRet)
+    //     {
+    //         throw new Exception("Func<string> call failed");
+    //     }
+    // }
+    // private static string ThisMethodWillGetCalledInAWorker(Func<string> funcCallback)
+    // {
+    //     return funcCallback();
+    // }
     #endregion
 
     #region Test CancellationToken

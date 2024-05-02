@@ -358,6 +358,54 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 CheckBusyStateChanged();
             }
         }
+        static List<Type> GenericActions = new List<Type> {
+            typeof(Action),
+            typeof(Action<>),
+            typeof(Action<,>),
+            typeof(Action<,,>),
+            typeof(Action<,,,>),
+            typeof(Action<,,,,>),
+            typeof(Action<,,,,,>),
+            typeof(Action<,,,,,,>),
+            typeof(Action<,,,,,,,>),
+            typeof(Action<,,,,,,,,>),
+            typeof(Action<,,,,,,,,,>),
+            typeof(Action<,,,,,,,,,,>),
+            typeof(Action<,,,,,,,,,,,>),
+            typeof(Action<,,,,,,,,,,,,>),
+        };
+        static List<Type> GenericFuncs = new List<Type> {
+            typeof(Func<>),
+            typeof(Func<,>),
+            typeof(Func<,,>),
+            typeof(Func<,,,>),
+            typeof(Func<,,,,>),
+            typeof(Func<,,,,,>),
+            typeof(Func<,,,,,,>),
+            typeof(Func<,,,,,,,>),
+            typeof(Func<,,,,,,,,>),
+            typeof(Func<,,,,,,,,,>),
+            typeof(Func<,,,,,,,,,,>),
+            typeof(Func<,,,,,,,,,,,>),
+            typeof(Func<,,,,,,,,,,,,>),
+        };
+        static bool IsFunc(Type type)
+        {
+            Type? generic = null;
+            if (type.IsGenericTypeDefinition) generic = type;
+            else if (type.IsGenericType) generic = type.GetGenericTypeDefinition();
+            if (generic == null) return false;
+            return GenericFuncs.Contains(generic);
+        }
+        static bool IsAction(Type type)
+        {
+            if (type == typeof(Action)) return true;
+            Type? generic = null;
+            if (type.IsGenericTypeDefinition) generic = type;
+            else if (type.IsGenericType) generic = type.GetGenericTypeDefinition();
+            if (generic == null) return false;
+            return GenericActions.Contains(generic);
+        }
         private Dictionary<string, CallbackAction> _actionHandles = new Dictionary<string, CallbackAction>();
         List<CallSideParameter> additionalCallArgs { get; } = new List<CallSideParameter>();
         /// <summary>
@@ -381,6 +429,15 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 if (arg == null) continue;
                 var methodParam = methodsParamTypes[i];
                 var methodParamType = methodParam.ParameterType;
+                Type? genericType = null;
+                if (methodParamType.IsGenericTypeDefinition) genericType = methodParamType;
+                else if (methodParamType.IsGenericType) genericType = methodParamType.GetGenericTypeDefinition();
+#if DEBUG
+                var genericTypeStr = genericType == null ? "NULL" : genericType.FullName;
+                Console.WriteLine($"genericTypeStr: {genericTypeStr}");
+#endif
+                var coreType = genericType ?? methodParamType;
+
                 var methodParamTypeIsTransferable = IsTransferable(methodParamType);
                 var allowTransferable = methodParamType.IsClass;
                 if (allowTransferable)
@@ -400,14 +457,25 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 }
                 else if (arg is Delegate argDelegate)
                 {
-                    var cb = new CallbackAction
+                    if (IsAction(coreType))
                     {
-                        RequestId = requestId,
-                        ParameterTypes = genericTypes,
-                        Target = argDelegate,
-                    };
-                    _actionHandles[cb.Id] = cb;
-                    ret[i] = cb.Id;
+                        var cb = new CallbackAction
+                        {
+                            RequestId = requestId,
+                            ParameterTypes = genericTypes,
+                            Target = argDelegate,
+                        };
+                        _actionHandles[cb.Id] = cb;
+                        ret[i] = cb.Id;
+                    }
+                    else if (IsFunc(coreType))
+                    {
+                        throw new Exception("Func delegate parameters are not currently supported.");
+                    }
+                    else
+                    {
+                        throw new Exception("Unknown delegate parameter type");
+                    }
                 }
                 else if (arg is CancellationToken token)
                 {
