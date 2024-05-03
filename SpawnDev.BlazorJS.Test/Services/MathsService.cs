@@ -82,8 +82,10 @@ namespace SpawnDev.BlazorJS.Test.Services
             var maxRunTime = TimeSpan.FromMilliseconds(maxRuntimeMS);
             while (DateTime.Now - startTime < maxRunTime)
             {
+                // do some work (fake here)
                 await Task.Delay(50);
-                token.ThrowIfCancellationRequested();
+                // check is cancel message received
+                await token.ThrowIfCancellationRequestedAsync();
             }
         }
 

@@ -157,7 +157,7 @@
         {
             // do some work ...
             // check if cancelled using IsCancellationRequestedAsync extension method 
-            // internally calls Task.Delay() to allow event handlers time to receive a cancel message
+            // internally calls Task.Delay(1) to allow event handlers time to receive a cancel message
             if (await token.IsCancellationRequestedAsync()) return true;
         }
         return false;
@@ -221,8 +221,10 @@
         while (DateTime.Now - startTime < maxRunTime)
         {
             Console.WriteLine("Waiting");
+            // do some fake work
             await Task.Delay(50);
-            token.ThrowIfCancellationRequested();
+            // check if cancellation message received
+            await token.ThrowIfCancellationRequestedAsync();
         }
     }
     [TestMethod]
@@ -540,8 +542,17 @@
     #region SharedCancellationTokenSource Test
 
     [TestMethod]
-    public async Task AssembleCancellationTest()
+    public async Task WebWorkerSharedCancellationTokenSourceTest()
     {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+
+        if (!JS.CrossOriginIsolated)
+        {
+            throw new Exception("Not CrossOriginIsolated. Expected failure.");
+        }
         var retd = -2;
         var loops = 0;
         using (var cts = new SharedCancellationTokenSource())
@@ -569,6 +580,35 @@
             if (token.IsCancellationRequested) return i;
         }
         return -42;
+    }
+
+    public async Task WebWorkerSharedCancellationTokenTest()
+    {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        // Cancel the task after 2 seconds
+        using var cts = new SharedCancellationTokenSource(2000);
+        var i = await WebWorkerService.TaskPool.Run(() => CancellableMethod(10000, cts.Token));
+        if (i == -1) throw new Exception("Task Cancellation failed");
+    }
+
+    // Returns -1 if not cancelled
+    // This method will run for 10 seconds if not cancelled
+    private static async Task<long> CancellableMethod(double maxRunTimeMS, SharedCancellationToken token)
+    {
+        var startTime = DateTime.Now;
+        var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
+        long i = 0;
+        while (DateTime.Now - startTime < maxRunTime)
+        {
+            // do some work ...
+            i += 1;
+            // check if cancelled message received
+            if (token.IsCancellationRequested) return i;
+        }
+        return -1;
     }
     #endregion
 }

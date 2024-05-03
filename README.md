@@ -698,7 +698,7 @@ public async Task TaskPoolExpressionWithCancellationTokenTest2()
 }
 
 // Returns true if cancelled  
-// This method will run for 10 secodns if not cancelled  
+// This method will run for 10 seconds if not cancelled  
 private static async Task<bool> CancellableMethod(double maxRunTimeMS, CancellationToken token)
 {
     var startTime = DateTime.Now;
@@ -707,12 +707,53 @@ private static async Task<bool> CancellableMethod(double maxRunTimeMS, Cancellat
     {
         // do some work ...
         await Task.Delay(50);
-        // check if cancelled
-        if (token.IsCancellationRequested) return true;
+        // check if cancelled message received
+        if (await token.IsCancellationRequestedAsync()) return true;
     }
     return false;
 }
 ```
+
+#### Limitation: CancellationToken requires the receiving method to be async
+When a CancellationTokenSource cancels a token that has been passed to a WebWorker a postMessage is sent to the WebWorker(s) to notify them and they call cancel on their instance of a CancellationTokenSource. The problem, is that this requires the method that uses the CancellationToken allows the message event handler time to receive the cancellation message by yielding the thread briefly (```await Task.Delay(1)```) before rechecking if the CancellationToken is cancelled. The extension methods ```CancellationToken.IsCancellationRequestedAsync()``` and ```CancellationToken.ThrowIfCancellationRequestedAsync()``` do this automatically internally. Therefore, CancellationToken will not work in a synchronous method as the message event will never receive the cancellation message. SharedCancellationToken does not have this limitation.
+
+### Using SharedCancellationToken to cancel a WebWorker task
+
+As of version 2.2.91 ```SharedCancellationToken``` is a supported parameter type and can be used to cancel a running task. SharedCancellationToken works in a similar way to CancellationToken. SharedCancellationTokenSource works in a similar way to CancellationTokenSource.
+
+```cs
+public async Task WebWorkerSharedCancellationTokenTest()
+{
+    if (!WebWorkerService.WebWorkerSupported)
+    {
+        throw new Exception("Worker not supported by browser. Expected failure.");
+    }
+    // Cancel the task after 2 seconds
+    using var cts = new SharedCancellationTokenSource(2000);
+    var i = await WebWorkerService.TaskPool.Run(() => CancellableMethod(10000, cts.Token));
+    if (i == -1) throw new Exception("Task Cancellation failed");
+}
+
+// Returns -1 if not cancelled
+// This method will run for 10 seconds if not cancelled
+private static async Task<long> CancellableMethod(double maxRunTimeMS, SharedCancellationToken token)
+{
+    var startTime = DateTime.Now;
+    var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
+    long i = 0;
+    while (DateTime.Now - startTime < maxRunTime)
+    {
+        // do some work ...
+        i += 1;
+        // check if cancelled message received
+        if (token.IsCancellationRequested) return i;
+    }
+    return -1;
+}
+```
+
+#### Limitation: SharedCancellationToken requires cross-origin isolation
+SharedCancellationToken and SharedCancellationTokenSource use a SharedArrayBuffer for signaling instead of postMessage like CancellationToken uses. This adds the benefit of working in both synchronous and asynchronous methods. However, they have their own limitation of requiring a cross-origin isolation due to SharedArrayBuffer restrictions.
 
 ## WebWorker
 You can use the properties ```WebWorkerService.SharedWebWorkerSupported``` and ```WebWorkerService.WebWorkerSupported``` to check for support. 
