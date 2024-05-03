@@ -107,6 +107,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="nodes"></param>
         public void Append(params Union<Node, string>[] nodes) => JSRef.CallApplyVoid("append", nodes);
         /// <summary>
+        /// Inserts a set of Node objects or strings before the first child of the element.
+        /// </summary>
+        /// <param name="nodes"></param>
+        public void Prepend(params Union<Node, string>[] nodes) => JSRef.CallApplyVoid("prepend", nodes);
+        /// <summary>
         /// The Element.before() method inserts a set of Node or string objects in the children list of this Element's parent, just before this Element. String objects are inserted as equivalent Text nodes.
         /// </summary>
         /// <param name="nodes"></param>
