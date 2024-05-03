@@ -156,9 +156,9 @@
         while (DateTime.Now - startTime < maxRunTime)
         {
             // do some work ...
-            await Task.Delay(50);
-            // check if cancelled
-            if (token.IsCancellationRequested) return true;
+            // check if cancelled using IsCancellationRequestedAsync extension method 
+            // internally calls Task.Delay() to allow event handlers time to receive a cancel message
+            if (await token.IsCancellationRequestedAsync()) return true;
         }
         return false;
     }
