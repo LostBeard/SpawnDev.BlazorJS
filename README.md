@@ -753,7 +753,7 @@ private static async Task<long> CancellableMethod(double maxRunTimeMS, SharedCan
 ```
 
 #### Limitation: SharedCancellationToken requires cross-origin isolation
-SharedCancellationToken and SharedCancellationTokenSource use a SharedArrayBuffer for signaling instead of postMessage like CancellationToken uses. This adds the benefit of working in both synchronous and asynchronous methods. However, they have their own limitation of requiring a cross-origin isolation due to SharedArrayBuffer restrictions.
+```SharedCancellationToken``` and ```SharedCancellationTokenSource``` use a ```SharedArrayBuffer``` for signaling instead of postMessage like ```CancellationToken``` uses. This adds the benefit of working in both synchronous and asynchronous methods. However, they have their own limitation of requiring a cross-origin isolation due to ```SharedArrayBuffer``` restrictions.
 
 ## WebWorker
 You can use the properties ```WebWorkerService.SharedWebWorkerSupported``` and ```WebWorkerService.WebWorkerSupported``` to check for support. 
