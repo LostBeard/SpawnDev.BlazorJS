@@ -536,4 +536,39 @@
         }
         JS.Log("Done");
     }
+
+    #region SharedCancellationTokenSource Test
+
+    [TestMethod]
+    public async Task AssembleCancellationTest()
+    {
+        var retd = -2;
+        var loops = 0;
+        using (var cts = new SharedCancellationTokenSource())
+        {
+            var token = cts.Token;
+            var runningTask = WebWorkerService.TaskPool.Run(() => AssembleSyncXXX(token));
+            while (true)
+            {
+                ++loops;
+                try
+                {
+                    retd = await runningTask.WaitAsync(TimeSpan.FromMilliseconds(10));
+                    break;
+                }
+                catch (TimeoutException) { }
+                cts.Cancel();
+            }
+        }
+        Console.WriteLine($"main retd: {retd}, loops: {loops}");
+    }
+    static int AssembleSyncXXX(SharedCancellationToken token)
+    {
+        for (var i = 0; i < 100000000; i++)
+        {
+            if (token.IsCancellationRequested) return i;
+        }
+        return -42;
+    }
+    #endregion
 }

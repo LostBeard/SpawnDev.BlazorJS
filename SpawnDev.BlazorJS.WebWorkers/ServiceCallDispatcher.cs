@@ -435,7 +435,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 Type? genericType = null;
                 if (methodParamType.IsGenericTypeDefinition) genericType = methodParamType;
                 else if (methodParamType.IsGenericType) genericType = methodParamType.GetGenericTypeDefinition();
-#if DEBUG
+#if DEBUG && false
                 var genericTypeStr = genericType == null ? "NULL" : genericType.FullName;
                 Console.WriteLine($"genericTypeStr: {genericTypeStr}");
 #endif

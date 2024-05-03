@@ -61,6 +61,17 @@ namespace SpawnDev.BlazorJS
             if (BlazorJSRuntime.RuntimeJsonSerializerOptions != null) configure(BlazorJSRuntime.RuntimeJsonSerializerOptions);
             return _this;
         }
+        /// <summary>
+        /// Allows adding additional Javascript runtime JsonConverterFactory instances
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddJSRuntimeJsonConverterFactories(this IServiceCollection _this, Action<JsonConverterCollection> configure)
+        {
+            if (BlazorJSRuntime.RuntimeJsonConverters != null) configure(BlazorJSRuntime.RuntimeJsonConverters);
+            return _this;
+        }
         static IServiceCollection? serviceCollection = null;
         static bool _AddBlazorJSRuntimeCalled = false;
         /// <summary>

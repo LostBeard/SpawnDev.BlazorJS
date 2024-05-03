@@ -18,6 +18,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <returns></returns>
         public static IServiceCollection AddWebWorkerService(this IServiceCollection _this, Action<WebWorkerService>? configureCallback = null)
         {
+            _this.AddJSRuntimeJsonConverterFactories(o =>
+            {
+                o.Add(new SharedCancellationTokenJsonConverter());
+            });
             return _this.AddSingleton(sp =>
             {
                 // create the service and pass it to the configureCallback to allow configuration at startup

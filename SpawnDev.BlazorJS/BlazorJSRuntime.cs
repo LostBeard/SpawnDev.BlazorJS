@@ -5,11 +5,13 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
     public partial class BlazorJSRuntime
     {
+        internal static JsonConverterCollection RuntimeJsonConverters { get; private set; } = new JsonConverterCollection();
         internal static readonly IJSInProcessRuntime _js;
         public static BlazorJSRuntime JS { get; internal set; }
         internal static JsonSerializerOptions? RuntimeJsonSerializerOptions { get; private set; }
@@ -54,6 +56,7 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new DynamicJSObjectConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(RuntimeJsonConverters);
             RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
         }
 
@@ -169,6 +172,7 @@ namespace SpawnDev.BlazorJS
         public double ReadyTime { get; internal set; }
         internal void SetReady()
         {
+            RuntimeJsonConverters.Lock();
             ReadyTime = Performance?.Now() ?? 0;
         }
         public bool IsDisplayModeStandalone()
