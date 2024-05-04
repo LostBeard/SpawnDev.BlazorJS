@@ -15,10 +15,20 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             _worker = worker;
         }
-
-        public override void Dispose(bool disposing)
+        /// <summary>
+        /// Called when being Disposed, before the disposal
+        /// </summary>
+        public event Action<WebWorker> OnDisposing;
+        /// <summary>
+        /// Returns true if disposal has started
+        /// </summary>
+        public bool IsDisposing { get; protected set; } = false;
+        protected override void Dispose(bool disposing)
         {
             if (IsDisposed) return;
+            if (IsDisposing) return;
+            IsDisposing = true;
+            OnDisposing?.Invoke(this);
             try
             {
                 _worker?.Terminate();

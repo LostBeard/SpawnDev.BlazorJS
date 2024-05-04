@@ -156,7 +156,7 @@
         while (DateTime.Now - startTime < maxRunTime)
         {
             // do some work ...
-            // check if cancelled using IsCancellationRequestedAsync extension method 
+            // check if cancelled using IsCancellationRequestedAsync extension method
             // internally calls Task.Delay(1) to allow event handlers time to receive a cancel message
             if (await token.IsCancellationRequestedAsync()) return true;
         }
@@ -546,12 +546,12 @@
     {
         if (!WebWorkerService.WebWorkerSupported)
         {
-            throw new Exception("Worker not supported by browser. Expected failure.");
+            throw new NotSupportedException("Worker not supported by browser. Expected failure.");
         }
 
         if (!JS.CrossOriginIsolated)
         {
-            throw new Exception("Not CrossOriginIsolated. Expected failure.");
+            throw new NotSupportedException("Not CrossOriginIsolated. Expected failure.");
         }
         var retd = -2;
         var loops = 0;

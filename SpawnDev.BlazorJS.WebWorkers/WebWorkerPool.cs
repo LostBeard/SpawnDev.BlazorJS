@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             // Call the private method WorkerMethod on this scope (normal)
             Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
-            
+
             // Call the private method WorkerMethod in a WebWorker thread using an Expression
             Console.WriteLine(await WebWorkerService.TaskPool.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
 
@@ -161,13 +161,19 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (!IdleWebWorkers.Contains(worker) && _workers.Contains(worker))
             {
-                if (_workers.Count > _PoolSize)
+                if (_workers.Count > _PoolSize || worker.IsDisposing)
                 {
                     _workers.Remove(worker);
+                    worker.OnDisposing -= Worker_OnDisposing;
                     worker.OnLocked -= Worker_OnLocked;
                     worker.OnUnlocked -= Worker_OnUnlocked;
-                    worker.Dispose();
-                    return;
+                    if (!worker.IsDisposing) worker.Dispose();
+                    if (_workers.Count > _PoolSize) return;
+                    if (worker.IsDisposing && _workers.Count < _PoolSize)
+                    {
+                        _ = AddWorker();
+                        return;
+                    }
                 }
                 while (JobQueue.TryDequeue(out var job))
                 {
@@ -258,7 +264,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 worker!.AcquireLock();
                 return worker;
             }
-            if ((!AutoGrow && PoolSize == 0))
+            if (!AutoGrow && PoolSize == 0)
             {
                 if (FallbackToLocalScope)
                 {
@@ -294,6 +300,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         async Task AddWorker()
         {
+            if (IsDisposed) return;
             var worker = await WebWorkerService.GetWebWorker();
             if (worker != null)
             {
@@ -301,6 +308,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 Console.WriteLine("AddWorker");
 #endif
                 _workers.Add(worker);
+                worker.OnDisposing += Worker_OnDisposing;
                 worker.OnLocked += Worker_OnLocked;
                 worker.OnUnlocked += Worker_OnUnlocked;
                 OnWorkerCreated?.Invoke(worker);
@@ -308,12 +316,17 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
 
-        private void Worker_OnUnlocked(Reflection.AsyncCallDispatcher obj)
+        private void Worker_OnUnlocked(AsyncCallDispatcher obj)
         {
             ReleaseWorker((WebWorker)obj);
         }
 
-        private void Worker_OnLocked(Reflection.AsyncCallDispatcher obj)
+        private void Worker_OnDisposing(WebWorker worker)
+        {
+            ReleaseWorker(worker);
+        }
+
+        private void Worker_OnLocked(AsyncCallDispatcher obj)
         {
             //throw new NotImplementedException();
         }
@@ -321,13 +334,14 @@ namespace SpawnDev.BlazorJS.WebWorkers
         SemaphoreSlim _SetWorkerCountLock = new SemaphoreSlim(1);
         public async Task<bool> SetWorkerCount(int count)
         {
-            if (!WebWorker.Supported) return false;
+            if (!WebWorker.Supported || IsDisposed) return false;
             if (MaxPoolSize < count) MaxPoolSize = count;
             _PoolSize = Math.Max(0, count);
             try
             {
                 if (_PoolSize == _workers.Count) return true;
                 await _SetWorkerCountLock.WaitAsync();
+                if (IsDisposed) return false;
                 var countToAdd = _PoolSize - _workers.Count;
                 if (countToAdd > 0)
                 {
@@ -342,6 +356,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 {
                     var w = GetWorker();
                     if (w == null) break;
+                    w.OnDisposing -= Worker_OnDisposing;
                     w.OnLocked -= Worker_OnLocked;
                     w.OnUnlocked -= Worker_OnUnlocked;
                     _workers.Remove(w);

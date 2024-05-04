@@ -2,11 +2,7 @@
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using SpawnDev.BlazorJS.Reflection;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
-using System.Text.Json;
 using Array = SpawnDev.BlazorJS.JSObjects.Array;
 
 namespace SpawnDev.BlazorJS.WebWorkers
@@ -674,7 +670,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             return additionalCallArgs.Where(o => o.Name == p.Name && o.Type == p.ParameterType).FirstOrDefault();
         }
         public bool IsDisposed { get; private set; } = false;
-        public virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (IsDisposed) return;
             IsDisposed = true;
@@ -683,7 +679,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
             }
         }
-        public virtual void Dispose()
+        public void Dispose()
         {
             Dispose(true);
         }

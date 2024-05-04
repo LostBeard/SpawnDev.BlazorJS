@@ -191,7 +191,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         }
 
         /// <summary>
-        /// Returns a WebWorker
+        /// Creates a new a WebWorker instance and returns it when it when it is ready for use.
         /// </summary>
         /// <returns></returns>
         public async Task<WebWorker?> GetWebWorker()
@@ -217,7 +217,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         }
 
         /// <summary>
-        /// Returns a SharedWebWorker
+        /// Returns a new SharedWebWorker instance. If a SharedWorker already existed by this name SharedWebWorker will be connected to that instance.
         /// </summary>
         /// <param name="sharedWorkerName">SharedWebWorkers are identified by name. 1 shared worker will be created per name.</param>
         /// <returns></returns>
