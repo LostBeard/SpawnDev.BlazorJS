@@ -1018,7 +1018,7 @@ In the Server project ```App.razor```:
 ```Interactive render mode``` - ```Auto (Server and WebAssembly)```  
 ```Interactivity location``` - ```Per page/component```   
 
-In WebAssembly components that require SpawnDev.BlazorJS:  
+In WebAssembly pages and components that require SpawnDev.BlazorJS:  
 ```cs
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 ```
