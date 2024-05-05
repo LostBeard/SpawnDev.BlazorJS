@@ -3,29 +3,6 @@ using System.Reflection;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
-    public class MyService
-    {
-        WebWorkerService WebWorkerService;
-        public MyService(WebWorkerService webWorkerService)
-        {
-            WebWorkerService = webWorkerService;
-        }
-        string WorkerMethod(string input)
-        {
-            return $"Hello {input} from {WebWorkerService.InstanceId}";
-        }
-        public async Task CallWorkerMethod()
-        {
-            // Call the private method WorkerMethod on this scope (normal)
-            Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
-
-            // Call the private method WorkerMethod in a WebWorker thread using an Expression
-            Console.WriteLine(await WebWorkerService.TaskPool.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
-
-            // Call the private method WorkerMethod in a WebWorker thread using a Delegate
-            Console.WriteLine(await WebWorkerService.TaskPool.Invoke(WorkerMethod, WebWorkerService.InstanceId));
-        }
-    }
     /// <summary>
     /// Manages a pool of web workers that can be acquired and released as needed
     /// </summary>
@@ -168,7 +145,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     worker.OnLocked -= Worker_OnLocked;
                     worker.OnUnlocked -= Worker_OnUnlocked;
                     if (!worker.IsDisposing) worker.Dispose();
-                    if (_workers.Count > _PoolSize) return;
+                    if (_workers.Count >= _PoolSize) return;
                     if (worker.IsDisposing && _workers.Count < _PoolSize)
                     {
                         _ = AddWorker();
@@ -300,14 +277,22 @@ namespace SpawnDev.BlazorJS.WebWorkers
 
         async Task AddWorker()
         {
-            if (IsDisposed) return;
+            if (IsDisposed || _workers.Count >= MaxPoolSize) return;
             var worker = await WebWorkerService.GetWebWorker();
-            if (worker != null)
+            if (IsDisposed || _workers.Count >= MaxPoolSize)
             {
 #if DEBUG
-                Console.WriteLine("AddWorker");
+                Console.WriteLine($"AddWorker disposing unneeded worker: {_workers.Count}");
 #endif
+                worker?.Dispose();
+                return;
+            }
+            if (worker != null)
+            {
                 _workers.Add(worker);
+#if DEBUG
+                Console.WriteLine($"AddWorker: {_workers.Count}");
+#endif
                 worker.OnDisposing += Worker_OnDisposing;
                 worker.OnLocked += Worker_OnLocked;
                 worker.OnUnlocked += Worker_OnUnlocked;

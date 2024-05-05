@@ -582,6 +582,7 @@
         return -42;
     }
 
+    [TestMethod]
     public async Task WebWorkerSharedCancellationTokenTest()
     {
         if (!WebWorkerService.WebWorkerSupported)
@@ -609,6 +610,30 @@
             if (token.IsCancellationRequested) return i;
         }
         return -1;
+    }
+    #endregion
+
+    #region WorkerPool Worker Disposal Test
+
+    [TestMethod]
+    public async Task WebWorkerTaskPoolWorkerDisposalTest()
+    {
+        if (!WebWorkerService.WebWorkerSupported)
+        {
+            throw new Exception("Worker not supported by browser. Expected failure.");
+        }
+        // Cancel the task after 2 seconds
+        var worker = await WebWorkerService.TaskPool.GetWorkerAsync();
+        Console.WriteLine($"WebWorkerService.TaskPool count/max before disposal: {WebWorkerService.TaskPool.WorkersRunning} / {WebWorkerService.TaskPool.MaxPoolSize}");
+        worker.Dispose();
+        Console.WriteLine($"WebWorkerService.TaskPool count immediately after disposal: {WebWorkerService.TaskPool.WorkersRunning}");
+        var worker2 = await WebWorkerService.TaskPool.GetWorkerAsync();
+        //await Task.Delay(2000);
+        Console.WriteLine($"WebWorkerService.TaskPool count after disposal and await : {WebWorkerService.TaskPool.WorkersRunning}");
+        worker2.ReleaseLock();
+
+        await Task.Delay(2000);
+        Console.WriteLine($"WebWorkerService.TaskPool count after disposal and await (b) : {WebWorkerService.TaskPool.WorkersRunning}");
     }
     #endregion
 }

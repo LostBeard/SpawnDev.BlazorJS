@@ -824,7 +824,6 @@ var workerMathService = sharedWebWorker.GetService<IMathsService>();
 
 // Call async methods on your shared worker service
 var result = await workerMathService.CalculatePi(piDecimalPlaces);
-
 ```
 
 ## Send events
@@ -840,7 +839,7 @@ worker.OnMessage += (sender, msg) =>
     }
 };
 
-// From SharedWebWorker or WebWorker threads send an event to connected parents
+// From SharedWebWorker or WebWorker threads, send an event to connected parent(s)
 workerService.SendEventToParents("progress", new PiProgress { Progress = piProgress });
 
 // Or on send an event to a connected worker
@@ -891,7 +890,7 @@ RTCDataChannel
 ## ServiceWorker
 As of version 2.2.21 SpawnDev.BlazorJS.WebWorkers supports running Blazor WASM apps in ServiceWorkers. Your app can now register a class to run in the ServiceWorker to handle ServiceWorker events.
 
-### wwwroot/service-worker.js
+#### wwwroot/service-worker.js
 Create or modify to match the line below.
 ```js
 importScripts('_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js');
@@ -995,9 +994,33 @@ public class AppServiceWorker : ServiceWorkerEventHandler
         Log($"ServiceWorker_OnNotificationClickAsync");
     }
 }
-
 ```
 
+# Blazor Web App compatibility
+.Net 8 introduced a new hosting model that allows mixing [Blazor server render mode](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-modes?view=aspnetcore-8.0#interactive-server-side-rendering-interactive-ssr) and [Blazor WebAssembly render mode](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-modes?view=aspnetcore-8.0#client-side-rendering-csr). [Prerendering](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-modes?view=aspnetcore-8.0#prerendering) was also added to improve initial rendering times. "Prerendering is the process of initially rendering page content on the server without enabling event handlers for rendered controls." 
+
+One of the primary goals of SpawnDev.BlazorJS is to give [Web API](https://developer.mozilla.org/en-US/docs/Web/API) access to Blazor WebAssembly that mirrors Javascript's own Web API. This includes calling conventions. For example, a call that is synchronous in Javascript is synchronous in Blazor, an asynchronous call is asynchronous. To provide that, SpawnDev.BlazorJS requires access to Micorosft's IJSInProcessRuntime and IJSInProcessRuntime is only available in Blazor WebAssembly.
+
+
+Compatible ```Blazor Web App``` options:  
+
+### WebAssembly - Global or Per page/component
+```Interactive render mode``` - ```WebAssembly```  
+```Interactivity location``` - Global 
+
+In the Server project ```App.razor```:  
+```html
+    <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)"  />
+```
+
+### Auto - Per page/component
+```Interactive render mode``` - ```Auto (Server and WebAssembly)```  
+```Interactivity location``` - ```Per page/component```   
+
+In WebAssembly components that require SpawnDev.BlazorJS:  
+```cs
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+```
 
 # IDisposable 
 NOTE: The above code shows quick examples. Some objects implement IDisposable, such as JSObject, Callback, and IJSInProcessObjectReference types. 

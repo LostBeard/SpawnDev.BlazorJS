@@ -19,7 +19,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (_port is MessagePort port) port.Start();
         }
 
-        public override void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (IsDisposed) return;
             _shareWorker?.Dispose();
