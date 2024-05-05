@@ -1006,7 +1006,7 @@ One of the primary goals of SpawnDev.BlazorJS is to give [Web API](https://devel
 
 ### WebAssembly - Global or Per page/component
 ```Interactive render mode``` - ```WebAssembly```  
-```Interactivity location``` - Global 
+```Interactivity location``` - Any 
 
 In the Server project ```App.razor```:  
 ```html
