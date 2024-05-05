@@ -1005,22 +1005,18 @@ One of the primary goals of SpawnDev.BlazorJS is to give [Web API](https://devel
 ## Compatible ```Blazor Web App``` options:  
 Prerendering is not compatible with SpawnDev.BlazorJS because it runs on the server. So we need to let Blazor know that SpawnDev.BlazorJS components must be rendered only with WebAssembly. How this is done depends on your project settings.
 
-### WebAssembly - Global or Per page/component
-```Interactive render mode``` - ```WebAssembly```  
-```Interactivity location``` - Any 
+```Interactive render mode``` - ```Auto (Server and WebAssembly)``` or ```WebAssembly```  
 
-In the Server project ```App.razor```:  
-```html
-    <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)"  />
-```
-
-### Auto - Per page/component
-```Interactive render mode``` - ```Auto (Server and WebAssembly)```  
 ```Interactivity location``` - ```Per page/component```   
-
 In WebAssembly pages and components that require SpawnDev.BlazorJS:  
 ```cs
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+```
+  
+```Interactivity location``` - ```Global```   
+In the Server project ```App.razor```:  
+```html
+    <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)"  />
 ```
 
 # IDisposable 
