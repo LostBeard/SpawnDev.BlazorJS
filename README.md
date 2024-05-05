@@ -1002,7 +1002,7 @@ public class AppServiceWorker : ServiceWorkerEventHandler
 One of the primary goals of SpawnDev.BlazorJS is to give [Web API](https://developer.mozilla.org/en-US/docs/Web/API) access to Blazor WebAssembly that mirrors Javascript's own Web API. This includes calling conventions. For example, a call that is synchronous in Javascript is synchronous in Blazor, an asynchronous call is asynchronous. To provide that, SpawnDev.BlazorJS requires access to Micorosft's IJSInProcessRuntime and IJSInProcessRuntime is only available in Blazor WebAssembly.
 
 
-Compatible ```Blazor Web App``` options:  
+## Compatible ```Blazor Web App``` options:  
 
 ### WebAssembly - Global or Per page/component
 ```Interactive render mode``` - ```WebAssembly```  
