@@ -652,6 +652,8 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void Int8ArrayTest()
@@ -666,6 +668,8 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void Uint16ArrayTest()
@@ -680,6 +684,8 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void Int16ArrayTest()
@@ -694,6 +700,8 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void Uint32ArrayTest()
@@ -708,6 +716,8 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void Int32ArrayTest()
@@ -722,6 +732,8 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void BigUint64ArrayTest()
@@ -738,10 +750,7 @@
         var valueMatch = typedArray[4] == values[4];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
         typedArray[4] = 6;
-        if (typedArray[4] != 6)
-        {
-            throw new Exception("Failed");
-        }
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void BigInt64ArrayTest()
@@ -758,10 +767,7 @@
         var valueMatch = typedArray[4] == values[4];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
         typedArray[4] = 6;
-        if (typedArray[4] != 6)
-        {
-            throw new Exception("Failed");
-        }
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void Float32ArrayTest()
@@ -776,6 +782,8 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void Float64ArrayTest()
@@ -790,6 +798,8 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6) throw new Exception("Failed");
     }
     [TestMethod]
     public void BigIntTest()
