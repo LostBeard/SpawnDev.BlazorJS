@@ -215,6 +215,30 @@ namespace SpawnDev.BlazorJS.WebWorkers
             await webWorker.WhenReady;
             return webWorker;
         }
+        /// <summary>
+        /// Creates a new a WebWorker instance and returns.
+        /// </summary>
+        /// <returns></returns>
+        public WebWorker? GetWebWorkerSync()
+        {
+            if (!WebWorkerSupported) return null;
+            var queryParams = new Dictionary<string, string>();
+#if DEBUG
+            queryParams["forceCompatMode"] = "0";
+#endif
+            if (!string.IsNullOrEmpty(WorkerIndexHtml))
+            {
+                queryParams["indexHtml"] = WorkerIndexHtml;
+            }
+            var scriptUrl = WebWorkerJSScript;
+            if (queryParams.Count > 0)
+            {
+                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $""));
+            }
+            var worker = new Worker(scriptUrl);
+            var webWorker = new WebWorker(worker, ServiceProvider, ServiceDescriptors);
+            return webWorker;
+        }
 
         /// <summary>
         /// Returns a new SharedWebWorker instance. If a SharedWorker already existed by this name SharedWebWorker will be connected to that instance.
@@ -240,6 +264,31 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var sharedWorker = new SharedWorker(scriptUrl, sharedWorkerName);
             var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, ServiceProvider, ServiceDescriptors);
             await sharedWebWorker.WhenReady;
+            return sharedWebWorker;
+        }
+        /// <summary>
+        /// Returns a new SharedWebWorker instance. If a SharedWorker already existed by this name SharedWebWorker will be connected to that instance.
+        /// </summary>
+        /// <param name="sharedWorkerName"></param>
+        /// <returns></returns>
+        public SharedWebWorker? GetSharedWebWorkerSync(string sharedWorkerName = "")
+        {
+            if (!SharedWebWorkerSupported) return null;
+            var queryParams = new Dictionary<string, string>();
+#if DEBUG
+            queryParams["forceCompatMode"] = "0";
+#endif
+            if (!string.IsNullOrEmpty(WorkerIndexHtml))
+            {
+                queryParams["indexHtml"] = WorkerIndexHtml;
+            }
+            var scriptUrl = WebWorkerJSScript;
+            if (queryParams.Count > 0)
+            {
+                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $""));
+            }
+            var sharedWorker = new SharedWorker(scriptUrl, sharedWorkerName);
+            var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, ServiceProvider, ServiceDescriptors);
             return sharedWebWorker;
         }
 

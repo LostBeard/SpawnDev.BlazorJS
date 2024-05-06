@@ -1,5 +1,6 @@
 ﻿using SpawnDev.BlazorJS.Reflection;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
@@ -129,28 +130,64 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 }
             }
         }
+        /// <summary>
+        /// Disposes a worker and start a new one
+        /// </summary>
+        /// <param name="worker"></param>
+        public void DisposeWorker(WebWorker worker)
+        {
+            if (!_workers.Contains(worker)) return;
+            _workers.Remove(worker);
+            worker.OnDisposing -= Worker_OnDisposing;
+            worker.OnLocked -= Worker_OnLocked;
+            worker.OnUnlocked -= Worker_OnUnlocked;
+            if (!worker.IsDisposing)
+            {
+                worker.Dispose();
+            }
+            if (!IsDisposed && ReplaceDisposedWorkers && _workers.Count < _PoolSize)
+            {
+                _ = AddWorker();
+            }
+        }
+        /// <summary>
+        /// Disposes a worker and, optionally, starts a new one if less than WorkerCount &lt; PoolSize
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="replaceWorker"></param>
+        public void DisposeWorker(WebWorker worker, bool replaceWorker)
+        {
+            if (!_workers.Contains(worker)) return;
+            _workers.Remove(worker);
+            worker.OnDisposing -= Worker_OnDisposing;
+            worker.OnLocked -= Worker_OnLocked;
+            worker.OnUnlocked -= Worker_OnUnlocked;
+            if (!worker.IsDisposing)
+            {
+                worker.Dispose();
+            }
+            if (!IsDisposed && replaceWorker && _workers.Count < _PoolSize)
+            {
+                _ = AddWorker();
+            }
+        }
+        /// <summary>
+        /// If true, disposed workers will automatically be replaced
+        /// </summary>
+        public bool ReplaceDisposedWorkers { get; set; } = true;
 
         /// <summary>
         /// Releases a worker back into the pool for reuse
         /// </summary>
         /// <param name="worker"></param>
-        public void ReleaseWorker(WebWorker? worker)
+        public void ReleaseWorker(WebWorker worker)
         {
             if (!IdleWebWorkers.Contains(worker) && _workers.Contains(worker))
             {
-                if (_workers.Count > _PoolSize || worker.IsDisposing)
+                if (IsDisposed || worker.IsDisposing || _workers.Count > _PoolSize)
                 {
-                    _workers.Remove(worker);
-                    worker.OnDisposing -= Worker_OnDisposing;
-                    worker.OnLocked -= Worker_OnLocked;
-                    worker.OnUnlocked -= Worker_OnUnlocked;
-                    if (!worker.IsDisposing) worker.Dispose();
-                    if (_workers.Count >= _PoolSize) return;
-                    if (worker.IsDisposing && _workers.Count < _PoolSize)
-                    {
-                        _ = AddWorker();
-                        return;
-                    }
+                    DisposeWorker(worker);
+                    return;
                 }
                 while (JobQueue.TryDequeue(out var job))
                 {
@@ -275,30 +312,21 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public delegate void BusyStateChangedDelegate();
         public event BusyStateChangedDelegate OnBusyStateChanged;
 
-        async Task AddWorker()
+        public async Task AddWorker()
         {
-            if (IsDisposed || _workers.Count >= MaxPoolSize) return;
-            var worker = await WebWorkerService.GetWebWorker();
-            if (IsDisposed || _workers.Count >= MaxPoolSize)
-            {
+            if (IsDisposed || _workers.Count >= _PoolSize) return;
+            var worker = WebWorkerService.GetWebWorkerSync();
+            if (worker == null) return;
+            _workers.Add(worker);
 #if DEBUG
-                Console.WriteLine($"AddWorker disposing unneeded worker: {_workers.Count}");
+            Console.WriteLine($"AddWorker: {_workers.Count}");
 #endif
-                worker?.Dispose();
-                return;
-            }
-            if (worker != null)
-            {
-                _workers.Add(worker);
-#if DEBUG
-                Console.WriteLine($"AddWorker: {_workers.Count}");
-#endif
-                worker.OnDisposing += Worker_OnDisposing;
-                worker.OnLocked += Worker_OnLocked;
-                worker.OnUnlocked += Worker_OnUnlocked;
-                OnWorkerCreated?.Invoke(worker);
-                ReleaseWorker(worker);
-            }
+            await worker.WhenReady;
+            worker.OnDisposing += Worker_OnDisposing;
+            worker.OnLocked += Worker_OnLocked;
+            worker.OnUnlocked += Worker_OnUnlocked;
+            OnWorkerCreated?.Invoke(worker);
+            ReleaseWorker(worker);
         }
 
         private void Worker_OnUnlocked(AsyncCallDispatcher obj)
@@ -320,7 +348,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public async Task<bool> SetWorkerCount(int count)
         {
             if (!WebWorker.Supported || IsDisposed) return false;
-            if (MaxPoolSize < count) MaxPoolSize = count;
+            if (_PoolSize < count) _PoolSize = count;
             _PoolSize = Math.Max(0, count);
             try
             {
@@ -341,11 +369,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 {
                     var w = GetWorker();
                     if (w == null) break;
-                    w.OnDisposing -= Worker_OnDisposing;
-                    w.OnLocked -= Worker_OnLocked;
-                    w.OnUnlocked -= Worker_OnUnlocked;
-                    _workers.Remove(w);
-                    w.Dispose();
+                    DisposeWorker(w);
                 }
             }
             finally
@@ -374,11 +398,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (disposing)
             {
                 _SetWorkerCountLock.Dispose();
-                foreach (var w in _workers)
+                var workers = _workers.ToArray();
+                foreach (var w in workers)
                 {
-                    w.Dispose();
+                    DisposeWorker(w);
                 }
-                _workers.Clear();
             }
         }
         ~WebWorkerPool()
