@@ -1,6 +1,7 @@
 ﻿@using SpawnDev.Blazor.UnitTesting;
 @using System.Reflection;
 @using SpawnDev.BlazorJS.Reflection;
+@using System.Runtime.InteropServices
 
 @page "/UnitTests"
 
@@ -635,5 +636,150 @@
         await Task.Delay(2000);
         Console.WriteLine($"WebWorkerService.TaskPool count after disposal and await (b) : {WebWorkerService.TaskPool.WorkersRunning}");
     }
+    #endregion
+
+    #region TypedArrays
+    [TestMethod]
+    public void Int32ArrayTest()
+    {
+        var values = new int[] { 0, 1, 2, 3, 195006260, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new Int32Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var valueMatch = typedArray[1] == values[1];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+    }
+    [TestMethod]
+    public void Uint32ArrayTest()
+    {
+        var values = new uint[] { 0, 1, 2, 3, 195006260, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new Uint32Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var valueMatch = typedArray[1] == values[1];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+    }
+    [TestMethod]
+    public void Int16ArrayTest()
+    {
+        var values = new short[] { 0, 1, 2, 3, 55, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new Int16Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var valueMatch = typedArray[1] == values[1];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+    }
+    [TestMethod]
+    public void Uint16ArrayTest()
+    {
+        var values = new ushort[] { 0, 1, 2, 3, 55, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new Uint16Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var valueMatch = typedArray[1] == values[1];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+    }
+    [TestMethod]
+    public void Float32ArrayTest()
+    {
+        var values = new float[] { 0, 1, 2, 3, 195006260, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new Float32Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var valueMatch = typedArray[1] == values[1];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+    }
+    [TestMethod]
+    public void Float64ArrayTest()
+    {
+        var values = new double[] { 0, 1, 2, 3, 195006260, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new Float64Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var valueMatch = typedArray[1] == values[1];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+    }
+    [TestMethod]
+    public void BigInt64ArrayTest()
+    {
+        var values = new long[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new BigInt64Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var secondValue = typedArray.ToArray(4, 1);
+        var valueMatch = typedArray[4] == values[4];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6)
+        {
+            throw new Exception("Failed");
+        }
+    }
+    [TestMethod]
+    public void BigUint64ArrayTest()
+    {
+        var values = new ulong[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new BigUint64Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var secondValue = typedArray.ToArray(4, 1);
+        var valueMatch = typedArray[4] == values[4];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6)
+        {
+            throw new Exception("Failed");
+        }
+    }
+    [TestMethod]
+    public void BigIntTest()
+    {
+        var values = new BigInt[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new BigInt64Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+
+        var bytes = typedArray.ToArray<byte>(32, 8);
+        var bytesLong = BitConverter.GetBytes((long)values[4]!);
+        var bbb = true;
+
+        var el4View = typedArray.SubArray(4, 5);
+        var bytes2 = el4View.ReadBytes();
+        var nmt = true;
+    }
+
     #endregion
 }
