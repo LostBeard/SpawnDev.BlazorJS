@@ -11,6 +11,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         public static implicit operator long?(BigInt? bigInt) => bigInt == null ? null : bigInt.ValueOf();
 
         public static implicit operator BigInt?(long? value) => value == null ? null : new BigInt(value.Value);
+
+        public static implicit operator long(BigInt bigInt) => bigInt == null ? throw new NullReferenceException(nameof(bigInt)) : bigInt.ValueOf();
+
+        public static implicit operator BigInt(long value) => new BigInt(value);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -21,21 +25,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="value">The value to be converted to a BigInt value. It may be a string, an integer, a boolean, or another BigInt.</param>
         public BigInt(long value) : base(JS.Call<IJSInProcessObjectReference>(nameof(BigInt), value.ToString())) { }
-        //public BigInt(long value) : base(NullRef)
-        //{
-        //    using var bigIntArray = new BigInt64Array(new[] { value });
-        //    var jsRef = bigIntArray.JSRef!.Get<IJSInProcessObjectReference>(0);
-        //    FromReference(jsRef);
-        //}
         /// <summary>
         /// Returns this BigInt value. Overrides the Object.prototype.valueOf() method.
         /// </summary>
         /// <returns></returns>
         public long ValueOf() => long.Parse(JSRef!.Call<string>("toString"));
-        //{
-        //    var longStr = JSRef!.Call<string>("toString");
-        //    using var bigIntArray = new BigInt64Array(new[] { this });
-        //    return bigIntArray[0];
-        //}
     }
 }

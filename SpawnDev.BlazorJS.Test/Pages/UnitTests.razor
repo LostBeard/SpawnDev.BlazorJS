@@ -640,11 +640,11 @@
 
     #region TypedArrays
     [TestMethod]
-    public void Int32ArrayTest()
+    public void Uint8ArrayTest()
     {
-        var values = new int[] { 0, 1, 2, 3, 195006260, 5, 6, 7 };
+        var values = new byte[] { 0, 1, 2, 3, 55, 5, 6, 7 };
         JS.Set("values", values);
-        using var typedArray = new Int32Array(values);
+        using var typedArray = new Uint8Array(values);
         JS.Set("typedArray", typedArray);
         JS.Log("typedArray", typedArray);
         var valuesReadBack = typedArray.ToArray(1, 5);
@@ -654,11 +654,25 @@
         if (!valueMatch) throw new Exception("ValueMatch Failed");
     }
     [TestMethod]
-    public void Uint32ArrayTest()
+    public void Int8ArrayTest()
     {
-        var values = new uint[] { 0, 1, 2, 3, 195006260, 5, 6, 7 };
+        var values = new sbyte[] { 0, 1, 2, 3, 55, 5, 6, 7 };
         JS.Set("values", values);
-        using var typedArray = new Uint32Array(values);
+        using var typedArray = new Int8Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var valueMatch = typedArray[1] == values[1];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+    }
+    [TestMethod]
+    public void Uint16ArrayTest()
+    {
+        var values = new ushort[] { 0, 1, 2, 3, 55, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new Uint16Array(values);
         JS.Set("typedArray", typedArray);
         JS.Log("typedArray", typedArray);
         var valuesReadBack = typedArray.ToArray(1, 5);
@@ -682,11 +696,11 @@
         if (!valueMatch) throw new Exception("ValueMatch Failed");
     }
     [TestMethod]
-    public void Uint16ArrayTest()
+    public void Uint32ArrayTest()
     {
-        var values = new ushort[] { 0, 1, 2, 3, 55, 5, 6, 7 };
+        var values = new uint[] { 0, 1, 2, 3, 195006260, 5, 6, 7 };
         JS.Set("values", values);
-        using var typedArray = new Uint16Array(values);
+        using var typedArray = new Uint32Array(values);
         JS.Set("typedArray", typedArray);
         JS.Log("typedArray", typedArray);
         var valuesReadBack = typedArray.ToArray(1, 5);
@@ -694,6 +708,60 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
+    }
+    [TestMethod]
+    public void Int32ArrayTest()
+    {
+        var values = new int[] { 0, 1, 2, 3, 195006260, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new Int32Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var valueMatch = typedArray[1] == values[1];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+    }
+    [TestMethod]
+    public void BigUint64ArrayTest()
+    {
+        var values = new ulong[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new BigUint64Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var secondValue = typedArray.ToArray(4, 1);
+        var valueMatch = typedArray[4] == values[4];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6)
+        {
+            throw new Exception("Failed");
+        }
+    }
+    [TestMethod]
+    public void BigInt64ArrayTest()
+    {
+        var values = new long[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
+        JS.Set("values", values);
+        using var typedArray = new BigInt64Array(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var valuesReadBack = typedArray.ToArray(1, 5);
+        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
+        if (!match) throw new Exception("Match Failed");
+        var secondValue = typedArray.ToArray(4, 1);
+        var valueMatch = typedArray[4] == values[4];
+        if (!valueMatch) throw new Exception("ValueMatch Failed");
+        typedArray[4] = 6;
+        if (typedArray[4] != 6)
+        {
+            throw new Exception("Failed");
+        }
     }
     [TestMethod]
     public void Float32ArrayTest()
@@ -722,46 +790,6 @@
         if (!match) throw new Exception("Match Failed");
         var valueMatch = typedArray[1] == values[1];
         if (!valueMatch) throw new Exception("ValueMatch Failed");
-    }
-    [TestMethod]
-    public void BigInt64ArrayTest()
-    {
-        var values = new long[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
-        JS.Set("values", values);
-        using var typedArray = new BigInt64Array(values);
-        JS.Set("typedArray", typedArray);
-        JS.Log("typedArray", typedArray);
-        var valuesReadBack = typedArray.ToArray(1, 5);
-        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
-        if (!match) throw new Exception("Match Failed");
-        var secondValue = typedArray.ToArray(4, 1);
-        var valueMatch = typedArray[4] == values[4];
-        if (!valueMatch) throw new Exception("ValueMatch Failed");
-        typedArray[4] = 6;
-        if (typedArray[4] != 6)
-        {
-            throw new Exception("Failed");
-        }
-    }
-    [TestMethod]
-    public void BigUint64ArrayTest()
-    {
-        var values = new ulong[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
-        JS.Set("values", values);
-        using var typedArray = new BigUint64Array(values);
-        JS.Set("typedArray", typedArray);
-        JS.Log("typedArray", typedArray);
-        var valuesReadBack = typedArray.ToArray(1, 5);
-        var match = values.Skip(1).Take(5).SequenceEqual(valuesReadBack);
-        if (!match) throw new Exception("Match Failed");
-        var secondValue = typedArray.ToArray(4, 1);
-        var valueMatch = typedArray[4] == values[4];
-        if (!valueMatch) throw new Exception("ValueMatch Failed");
-        typedArray[4] = 6;
-        if (typedArray[4] != 6)
-        {
-            throw new Exception("Failed");
-        }
     }
     [TestMethod]
     public void BigIntTest()
