@@ -395,15 +395,6 @@ window.Alert("Hello!");
 SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class.
 Promises can be created in .Net to wrap async methods or Tasks. They are essentially Javascript's version of Task.
 
-Ways to create a Promise in .Net
-```cs
-var promise = new Promise();
-// pass to Javascript api
-...
-// then later resolve
-promise.Resolve();
-```
-
 Create Promise from lambda
 ```cs
 var promise = new Promise(async () => {

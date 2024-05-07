@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using static SpawnDev.BlazorJS.JSObjects.Promise;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -12,22 +11,24 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
             {
-                ResolveFunc = resolveFunc;
-                RejectFunc = rejectFunc;
+                //ResolveFunc = resolveFunc;
+                //RejectFunc = rejectFunc;
                 task().ContinueWith(t =>
                 {
                     if (t.IsFaulted)
                     {
-                        Reject();
+                        rejectFunc.CallVoid();
                     }
                     else if (t.IsCanceled)
                     {
-                        Reject();
+                        rejectFunc.CallVoid();
                     }
                     else
                     {
-                        Resolve(t.Result);
+                        resolveFunc.CallVoid(null, t.Result);
                     }
+                    resolveFunc.Dispose();
+                    rejectFunc.Dispose();
                 });
             })));
         }
@@ -36,39 +37,39 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
             {
-                ResolveFunc = resolveFunc;
-                RejectFunc = rejectFunc;
+                //ResolveFunc = resolveFunc;
+                //RejectFunc = rejectFunc;
                 task.ContinueWith(t =>
                 {
                     if (t.IsFaulted)
                     {
-                        Reject();
+                        rejectFunc.CallVoid();
                     }
                     else if (t.IsCanceled)
                     {
-                        Reject();
+                        rejectFunc.CallVoid();
                     }
                     else
                     {
-                        Resolve(t.Result);
+                        resolveFunc.CallVoid(null, t.Result);
                     }
+                    resolveFunc.Dispose();
+                    rejectFunc.Dispose();
                 });
             })));
         }
 
-        public Promise() : base(NullRef)
-        {
-            FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
-            {
-                ResolveFunc = resolveFunc;
-                RejectFunc = rejectFunc;
-            })));
-        }
+        //public Promise() : base(NullRef)
+        //{
+        //    FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
+        //    {
+        //        ResolveFunc = resolveFunc;
+        //        RejectFunc = rejectFunc;
+        //    })));
+        //}
 
-        public Promise(Action<Function, Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor)))
-        {
-
-        }
+        public Promise(Action<Function, Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
+        public Promise(Action<Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
 
         //protected override void LosingReference()
         //{
@@ -79,15 +80,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    ResolveFunc = null;
         //}
 
-        public Function? ResolveFunc { get; protected set; }
-        public Function? RejectFunc { get; protected set; }
+        //public void Resolve(TResult result) => ResolveFunc.CallVoid(null, result);
+        //public void Reject(object reason) => RejectFunc.CallVoid(null, reason);
+        //public void Reject() => RejectFunc.CallVoid();
+
+        //public Function? ResolveFunc { get; protected set; }
+        //public Function? RejectFunc { get; protected set; }
 
         public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
         public void Then(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
-
-        public void Resolve(TResult result) => ResolveFunc.CallVoid(null, result);
-        public void Reject(object reason) => RejectFunc.CallVoid(null, reason);
-        public void Reject() => RejectFunc.CallVoid();
 
         public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
 
@@ -151,12 +152,6 @@ namespace SpawnDev.BlazorJS.JSObjects
             }
             return t.Task;
         }
-        protected override void Dispose(bool disposing)
-        {
-            ResolveFunc = null;
-            RejectFunc = null;
-            base.Dispose(disposing);
-        }
     }
 
     public class Promise : JSObject
@@ -168,22 +163,24 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
             {
-                ResolveFunc = resolveFunc;
-                RejectFunc = rejectFunc;
+                //ResolveFunc = resolveFunc;
+                //RejectFunc = rejectFunc;
                 task().ContinueWith(t =>
                 {
                     if (t.IsFaulted)
                     {
-                        Reject();
+                        rejectFunc.CallVoid();
                     }
                     else if (t.IsCanceled)
                     {
-                        Reject();
+                        rejectFunc.CallVoid();
                     }
                     else
                     {
-                        Resolve();
+                        resolveFunc.CallVoid();
                     }
+                    resolveFunc.Dispose();
+                    rejectFunc.Dispose();
                 });
             })));
         }
@@ -192,58 +189,61 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
             {
-                ResolveFunc = resolveFunc;
-                RejectFunc = rejectFunc;
+                //ResolveFunc = resolveFunc;
+                //RejectFunc = rejectFunc;
                 task.ContinueWith(t =>
                 {
                     if (t.IsFaulted)
                     {
-                        Reject();
+                        rejectFunc.CallVoid();
                     }
                     else if (t.IsCanceled)
                     {
-                        Reject();
+                        rejectFunc.CallVoid();
                     }
                     else
                     {
-                        Resolve();
+                        resolveFunc.CallVoid();
                     }
+                    resolveFunc.Dispose();
+                    rejectFunc.Dispose();
                 });
             })));
         }
 
-        public Promise() : base(NullRef)
-        {
-            FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
-            {
-                ResolveFunc = resolveFunc;
-                RejectFunc = rejectFunc;
-            })));
-        }
+        //public Promise() : base(NullRef)
+        //{
+        //    FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
+        //    {
+        //        ResolveFunc = resolveFunc;
+        //        RejectFunc = rejectFunc;
+        //    })));
+        //}
 
         public Promise(Action<Function, Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
+        public Promise(Action<Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
 
-        protected override void Dispose(bool disposing)
-        {
-            ResolveFunc = null;
-            RejectFunc = null;
-            base.Dispose(disposing);
-        }
+        public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public Function? ResolveFunc { get; protected set; }
-        public Function? RejectFunc { get; protected set; }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    ResolveFunc = null;
+        //    RejectFunc = null;
+        //    base.Dispose(disposing);
+        //}
+
+        //public Function? ResolveFunc { get; protected set; }
+        //public Function? RejectFunc { get; protected set; }
 
         public void ThenCatch<TError>(ActionCallback thenCallback, ActionCallback<TError> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
         public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
         public void Then<TResult>(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
         public void ThenCatch<TResult, TError>(ActionCallback<TResult> thenCallback, ActionCallback<TError> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
 
-        public void Resolve(object? value) => ResolveFunc.CallVoid(null, value);
-        public void Resolve() => ResolveFunc.CallVoid();
-        public void Reject() => RejectFunc.CallVoid();
-        public void Reject(object? reason) => RejectFunc.CallVoid(null, reason);
-
-        public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
+        //public void Resolve(object? value) => ResolveFunc.CallVoid(null, value);
+        //public void Resolve() => ResolveFunc.CallVoid();
+        //public void Reject() => RejectFunc.CallVoid();
+        //public void Reject(object? reason) => RejectFunc.CallVoid(null, reason);
 
         public Task ThenAsync(int timeoutMS = 0)
         {

@@ -897,4 +897,30 @@
     }
 
     #endregion
+    [TestMethod]
+    public async Task LockManagerTest()
+    {
+        using var navigator = JS.Get<Navigator>("navigator");
+        using var locks = navigator.Locks;
+        var randId = Guid.NewGuid().ToString();
+        Console.WriteLine("requesting lock");
+        await locks.RequestAsync(randId, async (l) =>
+        {
+            Console.WriteLine("have lock");
+        });
+        Console.WriteLine("released lock");
+    }
+    [TestMethod]
+    public async Task LockManagerTest2()
+    {
+        using var navigator = JS.Get<Navigator>("navigator");
+        using var locks = navigator.Locks;
+        var randId = Guid.NewGuid().ToString();
+        Console.WriteLine("requesting lock");
+        await locks.RequestAsync(randId, async (l) =>
+        {
+            Console.WriteLine("have lock");
+        });
+        Console.WriteLine("released lock");
+    }
 }

@@ -4,26 +4,34 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS.JsonConverters {
-    public class TaskConverterFactory : JsonConverterFactory {
-        public override bool CanConvert(Type type) {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>)) {
+namespace SpawnDev.BlazorJS.JsonConverters
+{
+    public class TaskConverterFactory : JsonConverterFactory
+    {
+        public override bool CanConvert(Type type)
+        {
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
+            {
                 return true;
             }
-            if (type == typeof(Task)) {
+            if (type == typeof(Task))
+            {
                 return true;
             }
             return false;
         }
 
-        public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options) {
+        public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+        {
             var genericTypes = typeToConvert.GetGenericArguments();
-            if (genericTypes.Length > 0) {
+            if (genericTypes.Length > 0)
+            {
                 var covnerterType = typeof(TaskConverter<>).MakeGenericType(genericTypes);
                 JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
                 return converter;
             }
-            else if (typeToConvert == typeof(Task)) {
+            else if (typeToConvert == typeof(Task))
+            {
                 var covnerterType = typeof(TaskConverter);
                 JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
                 return converter;
@@ -31,33 +39,43 @@ namespace SpawnDev.BlazorJS.JsonConverters {
             return null;
         }
     }
-    public class TaskConverter : JsonConverter<Task>, IJSInProcessObjectReferenceConverter {
+    public class TaskConverter : JsonConverter<Task>, IJSInProcessObjectReferenceConverter
+    {
 
-        public override bool CanConvert(Type type) {
+        public override bool CanConvert(Type type)
+        {
             return type == typeof(Task);
         }
-        public override Task Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+        public override Task Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
             using var promise = new Promise(_ref);
             return promise.ThenAsync();
         }
-        public override void Write(Utf8JsonWriter writer, Task value, JsonSerializerOptions options) {
-            var promise = value.PromiseGet(true);
+        public override void Write(Utf8JsonWriter writer, Task value, JsonSerializerOptions options)
+        {
+            //var promise = value.PromiseGet(true);
+            using var promise = new Promise(value);
             JsonSerializer.Serialize(writer, promise, options);
         }
     }
-    public class TaskConverter<TResult> : JsonConverter<Task<TResult>>, IJSInProcessObjectReferenceConverter {
+    public class TaskConverter<TResult> : JsonConverter<Task<TResult>>, IJSInProcessObjectReferenceConverter
+    {
 
-        public override bool CanConvert(Type type) {
+        public override bool CanConvert(Type type)
+        {
             return type.GetGenericTypeDefinition() == typeof(Task<>);
         }
-        public override Task<TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+        public override Task<TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
             using var promise = new Promise<TResult>(_ref);
             return promise.ThenAsync();
         }
-        public override void Write(Utf8JsonWriter writer, Task<TResult> value, JsonSerializerOptions options) {
-            var promise = value.PromiseGet(true);
+        public override void Write(Utf8JsonWriter writer, Task<TResult> value, JsonSerializerOptions options)
+        {
+            //var promise = value.PromiseGet(true);
+            using var promise = new Promise(value);
             JsonSerializer.Serialize(writer, promise, options);
         }
     }

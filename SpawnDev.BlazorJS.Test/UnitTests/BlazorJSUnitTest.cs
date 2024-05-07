@@ -279,17 +279,24 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             if (arrayReadBack.ToList().Where(w => w.Name != randName).Any()) throw new Exception("Interface array set/get failed");
         }
 
-        // Promise
         [TestMethod]
-        public async Task JSObjectPromiseResolve()
+        public async Task PromiseFromErroredTask()
+        {
+            using var promise = new Promise(Task.FromException(new Exception("Faulted promise")));
+            try
+            {
+                await promise.ThenAsync();
+                throw new Exception("Promise should have caused an exception");
+            }
+            catch
+            { }
+        }
+
+        [TestMethod]
+        public async Task PromiseFromCompletedTask()
         {
             var randValue = Guid.NewGuid().ToString();
-            using var promise = new Promise<string>();
-            Async.Run(async () =>
-            {
-                await Task.Delay(1);
-                promise.Resolve(randValue);
-            });
+            using var promise = new Promise<string>(Task.FromResult(randValue));
             var returnedValue = await promise.ThenAsync();
             if (returnedValue != randValue) throw new Exception("Promise return value mismatch");
         }
@@ -324,27 +331,13 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         }
 
         [TestMethod]
-        public async Task JSObjectPromiseResolveVoid()
-        {
-            var randValue = Guid.NewGuid().ToString();
-            using var promise = new Promise();
-            Async.Run(async () =>
-            {
-                await Task.Delay(1);
-                promise.Resolve(randValue);
-            });
-            await promise.ThenAsync();
-        }
-
-        [TestMethod]
         public async Task JSObjectPromiseRejectVoid()
         {
             var randValue = Guid.NewGuid().ToString();
-            using var promise = new Promise();
-            Async.Run(async () =>
+            using var promise = new Promise(async () =>
             {
                 await Task.Delay(1);
-                promise.Reject();
+                throw new Exception();
             });
             try
             {
