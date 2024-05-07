@@ -8,6 +8,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Int32Array : TypedArray<int>
     {
+        public static implicit operator int[]?(Int32Array? values) => values == null ? null : values.ToArray();
+        public static implicit operator Int32Array?(int[]? values) => values == null ? null : new Int32Array(values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -104,5 +106,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="end">Element to end at. The offset is exclusive. If not specified, all elements from the one specified by begin to the end of the array are included in the new view.</param>
         /// <returns></returns>
         public Int32Array SubArray(long start, long end) => JSRef!.Call<Int32Array>("subarray", start, end);
+
+        
     }
 }

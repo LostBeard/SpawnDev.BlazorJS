@@ -57,6 +57,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="length">The number of TElements to return</param>
         /// <returns>An array of type TElement</returns>
         public virtual TElement[] ToArray(long start, long length) => ToArray<TElement>(start * BYTES_PER_ELEMENT, length);
+        /// <summary>
+        /// Returns a value iterator 
+        /// </summary>
+        /// <returns></returns>
+        public Iterator<TElement> Values() => JSRef.Call<Iterator<TElement>>("values");
     }
     /// <summary>
     /// A TypedArray object describes an array-like view of an underlying binary data buffer. There is no global property named TypedArray, nor is there a directly visible TypedArray constructor. Instead, there are a number of different global properties, whose values are typed array constructors for specific element types, listed below. On the following pages you will find common properties and methods that can be used with any typed array containing elements of any type.<br />
@@ -93,6 +98,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="typedArray"></param>
+        public void Set(sbyte[] typedArray) => JSRef!.CallVoid("set", typedArray);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(sbyte[] typedArray, long targetOffset) => JSRef!.CallVoid("set", typedArray, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
         public void Set(byte[] typedArray) => JSRef!.CallVoid("set", typedArray);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
@@ -100,6 +116,94 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="typedArray"></param>
         /// <param name="targetOffset"></param>
         public void Set(byte[] typedArray, long targetOffset) => JSRef!.CallVoid("set", typedArray, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        public void Set(short[] array) => JSRef!.CallVoid("set", array);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(short[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        public void Set(ushort[] array) => JSRef!.CallVoid("set", array);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(ushort[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        public void Set(int[] array) => JSRef!.CallVoid("set", array);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(int[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        public void Set(uint[] array) => JSRef!.CallVoid("set", array);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(uint[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        public void Set(long[] array) => JSRef!.CallVoid("set", array);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(long[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        public void Set(ulong[] array) => JSRef!.CallVoid("set", array);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(ulong[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        public void Set(float[] array) => JSRef!.CallVoid("set", array);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(float[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        public void Set(double[] array) => JSRef!.CallVoid("set", array);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(double[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>

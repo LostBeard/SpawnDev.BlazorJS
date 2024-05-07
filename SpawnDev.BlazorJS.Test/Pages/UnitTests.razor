@@ -638,6 +638,26 @@
     }
     #endregion
 
+    #region Atomics
+    [TestMethod]
+    public async Task AtomicsTest()
+    {
+        var values = new int[] { 0, 1, 2, 3, 55, 5, 6, 7 };
+        JS.Set("values", values);
+        using var sharedArrayBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * values.Length);
+        using var typedArray = new Int32Array(sharedArrayBuffer);
+        typedArray.Set(new byte[] { 1, 2, 3, 55, 5, 6, 7 }, 1);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        var oldValue = Atomics.Add(typedArray, 1, 42);
+        Console.WriteLine($"oldValue: {oldValue}");
+        if (oldValue != values[1]) throw new Exception("Match Failed 1");
+        var curValue = Atomics.Load(typedArray, 1);
+        Console.WriteLine($"curValue: {curValue}");
+        if (curValue != 43) throw new Exception("Match Failed 2");
+    }
+    #endregion
+
     #region TypedArrays
     [TestMethod]
     public void Uint8ArrayTest()
