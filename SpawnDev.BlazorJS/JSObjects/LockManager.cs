@@ -26,7 +26,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task Request(string lockName, Func<Lock, Task> callback)
         {
-            using var funcCallback = new AsyncActionCallback<Lock>(callback));
+            using var funcCallback = new AsyncActionCallback<Lock>(callback);
             await JSRef!.CallVoidAsync("request", lockName, callback);
         }
         /// <summary>
@@ -38,7 +38,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task Request(string lockName, LockRequestOptions options, Func<Lock, Task> callback)
         {
-            using var funcCallback = new AsyncActionCallback<Lock>(callback));
+            using var funcCallback = new AsyncActionCallback<Lock>(callback);
             await JSRef!.CallVoidAsync("request", lockName, options, callback);
         }
         /// <summary>
