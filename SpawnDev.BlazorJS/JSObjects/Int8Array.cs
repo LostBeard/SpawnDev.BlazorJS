@@ -69,6 +69,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="array"></param>
         public Int8Array(sbyte[] array) : base(JS.New(nameof(Int8Array), array)) { }
         /// <summary>
+        /// The Int8Array() constructor creates Int8Array objects.
+        /// </summary>
+        /// <param name="array"></param>
+        public Int8Array(Array<sbyte> array) : base(JS.New(nameof(Int8Array), array)) { }
+        /// <summary>
         /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
         /// </summary>
         /// <returns></returns>

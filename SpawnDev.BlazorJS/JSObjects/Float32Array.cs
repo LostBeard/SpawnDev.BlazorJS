@@ -69,6 +69,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="array"></param>
         public Float32Array(float[] array) : base(JS.New(nameof(Float32Array), array)) { }
         /// <summary>
+        /// The Float32Array() constructor creates Float32Array objects.
+        /// </summary>
+        /// <param name="array"></param>
+        public Float32Array(Array<float> array) : base(JS.New(nameof(Float32Array), array)) { }
+        /// <summary>
         /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
         /// </summary>
         /// <returns></returns>

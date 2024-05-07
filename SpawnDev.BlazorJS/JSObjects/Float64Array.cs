@@ -69,6 +69,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="array"></param>
         public Float64Array(double[] array) : base(JS.New(nameof(Float64Array), array)) { }
         /// <summary>
+        /// The Float64Array() constructor creates Float64Array objects.
+        /// </summary>
+        /// <param name="array"></param>
+        public Float64Array(Array<double> array) : base(JS.New(nameof(Float64Array), array)) { }
+        /// <summary>
         /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
         /// </summary>
         /// <returns></returns>

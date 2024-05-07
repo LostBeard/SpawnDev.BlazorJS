@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Uint8ClampedArray typed array represents an array of 8-bit unsigned integers clamped to 0–255. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).<br />
+    /// The Uint8ClampedArray typed array represents an array of 8-bit unsigned integers clamped to 0–255. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray
     /// </summary>
     public class Uint8ClampedArray : TypedArray<byte>
@@ -14,37 +14,100 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public Uint8ClampedArray(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. The contents are initialized to 0.
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects.
         /// </summary>
-        /// <param name="uint8Array"></param>
-        public Uint8ClampedArray(byte[] uint8Array) : base(JS.New(nameof(Uint8ClampedArray), uint8Array)) { }
+        public Uint8ClampedArray() : base(JS.New(nameof(Uint8ClampedArray))) { }
         /// <summary>
-        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. The contents are initialized to 0.
-        /// </summary>
-        /// <param name="typedArray"></param>
-        public Uint8ClampedArray(TypedArray typedArray) : base(JS.New(nameof(Uint8ClampedArray), typedArray)) { }
-        /// <summary>
-        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. The contents are initialized to 0.
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. 
         /// </summary>
         /// <param name="length"></param>
         public Uint8ClampedArray(long length) : base(JS.New(nameof(Uint8ClampedArray), length)) { }
         /// <summary>
-        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. The contents are initialized to 0.
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. 
+        /// </summary>
+        /// <param name="typedArray"></param>
+        public Uint8ClampedArray(TypedArray typedArray) : base(JS.New(nameof(Uint8ClampedArray), typedArray)) { }
+        /// <summary>
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. 
         /// </summary>
         /// <param name="arrayBuffer"></param>
         public Uint8ClampedArray(ArrayBuffer arrayBuffer) : base(JS.New(nameof(Uint8ClampedArray), arrayBuffer)) { }
         /// <summary>
-        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. The contents are initialized to 0.
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. 
         /// </summary>
         /// <param name="arrayBuffer"></param>
         /// <param name="byteOffset"></param>
         public Uint8ClampedArray(ArrayBuffer arrayBuffer, long byteOffset) : base(JS.New(nameof(Uint8ClampedArray), arrayBuffer, byteOffset)) { }
         /// <summary>
-        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. The contents are initialized to 0.
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. 
         /// </summary>
         /// <param name="arrayBuffer"></param>
         /// <param name="byteOffset"></param>
         /// <param name="length"></param>
         public Uint8ClampedArray(ArrayBuffer arrayBuffer, long byteOffset, long length) : base(JS.New(nameof(Uint8ClampedArray), arrayBuffer, byteOffset, length)) { }
+        /// <summary>
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. 
+        /// </summary>
+        /// <param name="sharedArrayBuffer"></param>
+        public Uint8ClampedArray(SharedArrayBuffer sharedArrayBuffer) : base(JS.New(nameof(Uint8ClampedArray), sharedArrayBuffer)) { }
+        /// <summary>
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. 
+        /// </summary>
+        /// <param name="sharedArrayBuffer"></param>
+        /// <param name="byteOffset"></param>
+        public Uint8ClampedArray(SharedArrayBuffer sharedArrayBuffer, long byteOffset) : base(JS.New(nameof(Uint8ClampedArray), sharedArrayBuffer, byteOffset)) { }
+        /// <summary>
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects. 
+        /// </summary>
+        /// <param name="sharedArrayBuffer"></param>
+        /// <param name="byteOffset"></param>
+        /// <param name="length"></param>
+        public Uint8ClampedArray(SharedArrayBuffer sharedArrayBuffer, long byteOffset, long length) : base(JS.New(nameof(Uint8ClampedArray), sharedArrayBuffer, byteOffset, length)) { }
+        /// <summary>
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects.
+        /// </summary>
+        /// <param name="array"></param>
+        public Uint8ClampedArray(byte[] array) : base(JS.New(nameof(Uint8ClampedArray), array)) { }
+        /// <summary>
+        /// The Uint32Array() constructor creates Uint32Array objects.
+        /// </summary>
+        /// <param name="array"></param>
+        public Uint8ClampedArray(Array<byte> array) : base(JS.New(nameof(Uint32Array), array)) { }
+        /// <summary>
+        /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
+        /// </summary>
+        /// <returns></returns>
+        public Uint8ClampedArray Slice() => JSRef!.Call<Uint8ClampedArray>("slice");
+        /// <summary>
+        /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
+        /// </summary>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public Uint8ClampedArray Slice(long start) => JSRef!.Call<Uint8ClampedArray>("slice", start);
+        /// <summary>
+        /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public Uint8ClampedArray Slice(long start, long end) => JSRef!.Call<Uint8ClampedArray>("slice", start, end);
+        /// <summary>
+        /// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
+        /// </summary>
+        /// <returns></returns>
+        public Uint8ClampedArray SubArray() => JSRef!.Call<Uint8ClampedArray>("subarray");
+        /// <summary>
+        /// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
+        /// </summary>
+        /// <param name="start">Element to begin at. The offset is inclusive. The whole array will be included in the new view if this value is not specified.</param>
+        /// <returns></returns>
+        public Uint8ClampedArray SubArray(long start) => JSRef!.Call<Uint8ClampedArray>("subarray", start);
+        /// <summary>
+        /// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
+        /// </summary>
+        /// <param name="start">Element to begin at. The offset is inclusive. The whole array will be included in the new view if this value is not specified.</param>
+        /// <param name="end">Element to end at. The offset is exclusive. If not specified, all elements from the one specified by begin to the end of the array are included in the new view.</param>
+        /// <returns></returns>
+        public Uint8ClampedArray SubArray(long start, long end) => JSRef!.Call<Uint8ClampedArray>("subarray", start, end);
     }
 }

@@ -69,6 +69,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="array"></param>
         public Uint32Array(uint[] array) : base(JS.New(nameof(Uint32Array), array)) { }
         /// <summary>
+        /// The Uint32Array() constructor creates Uint32Array objects.
+        /// </summary>
+        /// <param name="array"></param>
+        public Uint32Array(Array<uint> array) : base(JS.New(nameof(Uint32Array), array)) { }
+        /// <summary>
         /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
         /// </summary>
         /// <returns></returns>

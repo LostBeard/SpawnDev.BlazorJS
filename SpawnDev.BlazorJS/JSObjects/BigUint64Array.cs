@@ -24,7 +24,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="length"></param>
         public BigUint64Array(long length) : base(JS.New(nameof(BigUint64Array), length)) { }
+        /// <summary>
+        /// Creates a new BigUint64Array object.
+        /// </summary>
+        /// <param name="array"></param>
         public BigUint64Array(BigInt<ulong>[] array) : base(JS.New(nameof(BigUint64Array), array)) { }
+        /// <summary>
+        /// Creates a new BigUint64Array object.
+        /// </summary>
+        /// <param name="array"></param>
+        public BigUint64Array(Array<BigInt<ulong>> array) : base(JS.New(nameof(BigUint64Array), array)) { }
+        /// <summary>
+        /// Creates a new BigUint64Array object.
+        /// </summary>
+        /// <param name="array"></param>
         public BigUint64Array(ulong[] array) : base(NullRef)
         {
             var myByteArray = new byte[array.Length * sizeof(ulong)];

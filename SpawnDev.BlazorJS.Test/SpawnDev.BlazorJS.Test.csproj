@@ -4,16 +4,16 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.91</Version>
+		<Version>2.2.92</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Markdig" Version="0.35.0" />
-		<PackageReference Include="Markdown.ColorCode" Version="2.2.1" />
-		<PackageReference Include="Radzen.Blazor" Version="4.25.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.3" PrivateAssets="all" />
+		<PackageReference Include="Markdig" Version="0.37.0" />
+		<PackageReference Include="Markdown.ColorCode" Version="2.2.2" />
+		<PackageReference Include="Radzen.Blazor" Version="4.31.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -21,11 +21,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.92" />
 		<!-- 
-		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.91" />
-		-->
 		<ProjectReference Include="..\SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj" />
 		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
+		-->
 	</ItemGroup>
 
 

@@ -69,6 +69,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="array"></param>
         public Int16Array(short[] array) : base(JS.New(nameof(Int16Array), array)) { }
         /// <summary>
+        /// The Int16Array() constructor creates Int16Array objects.
+        /// </summary>
+        /// <param name="array"></param>
+        public Int16Array(Array<short> array) : base(JS.New(nameof(Int16Array), array)) { }
+        /// <summary>
         /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
         /// </summary>
         /// <returns></returns>

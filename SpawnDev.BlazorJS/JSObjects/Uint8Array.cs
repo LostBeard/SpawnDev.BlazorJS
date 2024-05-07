@@ -68,6 +68,11 @@ namespace SpawnDev.BlazorJS.JSObjects {
         /// </summary>
         /// <param name="sourceBytes"></param>
         public Uint8Array(byte[] sourceBytes) : base(JS.ReturnMe<IJSInProcessObjectReference>(sourceBytes)) { }
+        /// <summary>
+        /// The Uint32Array() constructor creates Uint32Array objects.
+        /// </summary>
+        /// <param name="array"></param>
+        public Uint8Array(Array<byte> array) : base(JS.New(nameof(Uint32Array), array)) { }
         #endregion
         /// <summary>
         /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
