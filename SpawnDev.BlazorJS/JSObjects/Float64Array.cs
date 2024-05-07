@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Float64Array : TypedArray<double>
     {
         /// <summary>
+        /// Returns a copy of the Javascript typed array as a .Net array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator double[]?(Float64Array? values) => values == null ? null : values.ToArray();
+        /// <summary>
+        /// Returns a copy of the .Net array as a Javascript typed array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator Float64Array?(double[]? values) => values == null ? null : new Float64Array(values);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

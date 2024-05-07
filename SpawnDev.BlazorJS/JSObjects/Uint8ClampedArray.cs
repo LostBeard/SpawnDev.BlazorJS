@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Uint8ClampedArray : TypedArray<byte>
     {
         /// <summary>
+        /// Returns a copy of the Javascript typed array as a .Net array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator byte[]?(Uint8ClampedArray? values) => values == null ? null : values.ToArray();
+        /// <summary>
+        /// Returns a copy of the .Net array as a Javascript typed array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator Uint8ClampedArray?(byte[]? values) => values == null ? null : new Uint8ClampedArray(values);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

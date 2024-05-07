@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Int16Array : TypedArray<short>
     {
         /// <summary>
+        /// Returns a copy of the Javascript typed array as a .Net array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator short[]?(Int16Array? values) => values == null ? null : values.ToArray();
+        /// <summary>
+        /// Returns a copy of the .Net array as a Javascript typed array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator Int16Array?(short[]? values) => values == null ? null : new Int16Array(values);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

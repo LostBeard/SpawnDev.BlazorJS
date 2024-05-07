@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Int8Array : TypedArray<sbyte>
     {
         /// <summary>
+        /// Returns a copy of the Javascript typed array as a .Net array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator sbyte[]?(Int8Array? values) => values == null ? null : values.ToArray();
+        /// <summary>
+        /// Returns a copy of the .Net array as a Javascript typed array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator Int8Array?(sbyte[]? values) => values == null ? null : new Int8Array(values);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Uint16Array : TypedArray<ushort>
     {
         /// <summary>
+        /// Returns a copy of the Javascript typed array as a .Net array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator ushort[]?(Uint16Array? values) => values == null ? null : values.ToArray();
+        /// <summary>
+        /// Returns a copy of the .Net array as a Javascript typed array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator Uint16Array?(ushort[]? values) => values == null ? null : new Uint16Array(values);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

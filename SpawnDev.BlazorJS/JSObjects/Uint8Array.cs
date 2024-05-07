@@ -1,12 +1,23 @@
 ﻿using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
+namespace SpawnDev.BlazorJS.JSObjects
+{
     /// <summary>
     /// The Uint8Array typed array represents an array of 8-bit unsigned integers. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).<br />
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array
     /// </summary>
     public class Uint8Array : TypedArray<byte>
     {
+        /// <summary>
+        /// Returns a copy of the Javascript typed array as a .Net array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator byte[]?(Uint8Array? values) => values == null ? null : values.ToArray();
+        /// <summary>
+        /// Returns a copy of the .Net array as a Javascript typed array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator Uint8Array?(byte[]? values) => values == null ? null : new Uint8Array(values);
         #region Constructors
         /// <summary>
         /// Deserialization constructor

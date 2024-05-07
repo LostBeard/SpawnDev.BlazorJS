@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Uint32Array : TypedArray<uint>
     {
         /// <summary>
+        /// Returns a copy of the Javascript typed array as a .Net array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator uint[]?(Uint32Array? values) => values == null ? null : values.ToArray();
+        /// <summary>
+        /// Returns a copy of the .Net array as a Javascript typed array
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator Uint32Array?(uint[]? values) => values == null ? null : new Uint32Array(values);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

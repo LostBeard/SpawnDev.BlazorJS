@@ -8,7 +8,15 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class BigUint64Array : TypedArray<ulong>
     {
+        /// <summary>
+        /// Returns a copy of the Javascript typed array as a .Net array
+        /// </summary>
+        /// <param name="values"></param>
         public static explicit operator ulong[]?(BigUint64Array? values) => values == null ? null : values.ToArray();
+        /// <summary>
+        /// Returns a copy of the .Net array as a Javascript typed array
+        /// </summary>
+        /// <param name="values"></param>
         public static explicit operator BigUint64Array?(ulong[]? values) => values == null ? null : new BigUint64Array(values);
         /// <summary>
         /// Deserialization constructor

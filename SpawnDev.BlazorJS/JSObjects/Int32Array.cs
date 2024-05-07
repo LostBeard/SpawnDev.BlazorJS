@@ -8,7 +8,15 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Int32Array : TypedArray<int>
     {
+        /// <summary>
+        /// Returns a copy of the Javascript typed array as a .Net array
+        /// </summary>
+        /// <param name="values"></param>
         public static explicit operator int[]?(Int32Array? values) => values == null ? null : values.ToArray();
+        /// <summary>
+        /// Returns a copy of the .Net array as a Javascript typed array
+        /// </summary>
+        /// <param name="values"></param>
         public static explicit operator Int32Array?(int[]? values) => values == null ? null : new Int32Array(values);
         /// <summary>
         /// Deserialization constructor
