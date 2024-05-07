@@ -70,6 +70,20 @@ namespace SpawnDev.BlazorJS.JSObjects
     public abstract class TypedArray : JSObject
     {
         /// <summary>
+        /// Create a new typed array starting at this typed array's ByteOffset + byteOffset, returning length number of items in the resulting typed array
+        /// </summary>
+        /// <typeparam name="TTypedArray"></typeparam>
+        /// <param name="byteOffset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public TTypedArray ReCast<TTypedArray>(long byteOffset, long length) where TTypedArray : TypedArray => Buffer.Using(o => (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), new object?[] { o, ByteOffset + byteOffset, length})!);
+        /// <summary>
+        /// Create a new typed array starting at this typed array's ByteOffset + byteOffset
+        /// </summary>
+        /// <typeparam name="TTypedArray"></typeparam>
+        /// <returns></returns>
+        public TTypedArray ReCast<TTypedArray>() where TTypedArray : TypedArray => Buffer.Using(o => (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), new object?[] { o, ByteOffset, ByteLength })!);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

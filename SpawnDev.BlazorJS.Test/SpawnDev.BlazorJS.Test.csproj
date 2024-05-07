@@ -20,12 +20,13 @@
 		<ProjectReference Include="..\SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.92" />
-		<!-- 
+	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
 		<ProjectReference Include="..\SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj" />
 		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
-		-->
+	</ItemGroup>
+	
+	<ItemGroup Condition=" '$(Configuration)' == 'Release' ">
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.92" />
 	</ItemGroup>
 
 

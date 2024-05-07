@@ -877,11 +877,15 @@
     [TestMethod]
     public void BigIntTest()
     {
-        var values = new BigInt<long>[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
+        var values = new BigInt<long>[] { 0, 1, 2, 3, long.MaxValue, 5, 6, 7 };
         JS.Set("values", values);
         using var typedArray = new BigInt64Array(values);
         JS.Set("typedArray", typedArray);
         JS.Log("typedArray", typedArray);
+
+        using var byteArray = typedArray.ReCast<Uint8Array>();
+        JS.Set("byteArray", byteArray);
+        JS.Log("byteArray", byteArray);
 
         var bytes = typedArray.ToArray<byte>(32, 8);
         var bytesLong = BitConverter.GetBytes((long)values[4]!);
