@@ -260,6 +260,17 @@ namespace SpawnDev.BlazorJS.JSObjects
             return uint8Array.ReadBytes();
         }
         /// <summary>
+        /// Write bytes to the underlying ArrayBuffer starting at this TypedArray's byteOffset
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="byteOffset"></param>
+        public virtual void WriteBytes(byte[] data, long byteOffset = 0)
+        {
+            using var buffer = Buffer;
+            using var uint8Array = new Uint8Array(buffer, ByteOffset + byteOffset, data.Length);
+            uint8Array.Set(data);
+        }
+        /// <summary>
         /// Returns an array of type T
         /// </summary>
         /// <typeparam name="T"></typeparam>

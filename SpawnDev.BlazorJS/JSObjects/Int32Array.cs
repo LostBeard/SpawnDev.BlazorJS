@@ -106,7 +106,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="end">Element to end at. The offset is exclusive. If not specified, all elements from the one specified by begin to the end of the array are included in the new view.</param>
         /// <returns></returns>
         public Int32Array SubArray(long start, long end) => JSRef!.Call<Int32Array>("subarray", start, end);
-
-        
     }
 }

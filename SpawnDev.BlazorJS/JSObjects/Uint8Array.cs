@@ -141,5 +141,11 @@ namespace SpawnDev.BlazorJS.JSObjects {
         /// <param name="length"></param>
         /// <returns></returns>
         public override byte[] ReadBytes(long start, long length) => JSRef!.Call<byte[]>("subarray", start, start + length);
+        /// <summary>
+        /// Write bytes to the underlying ArrayBuffer starting at this TypedArray's byteOffset
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="byteOffset"></param>
+        public override void WriteBytes(byte[] data, long byteOffset = 0) => Set(data, byteOffset);
     }
 }
