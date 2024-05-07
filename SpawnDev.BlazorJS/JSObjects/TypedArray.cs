@@ -164,24 +164,24 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
-        public void Set(long[] array) => JSRef!.CallVoid("set", array);
+        public void Set(long[] array) => new BigInt64Array(array).Using(o => JSRef!.CallVoid("set", o));
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(long[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        public void Set(long[] array, long targetOffset) => new BigInt64Array(array).Using(o => JSRef!.CallVoid("set", o, targetOffset));
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
-        public void Set(ulong[] array) => JSRef!.CallVoid("set", array);
+        public void Set(ulong[] array) => new BigUint64Array(array).Using(o => JSRef!.CallVoid("set", o));
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(ulong[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        public void Set(ulong[] array, long targetOffset) => new BigUint64Array(array).Using(o => JSRef!.CallVoid("set", o, targetOffset));
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>

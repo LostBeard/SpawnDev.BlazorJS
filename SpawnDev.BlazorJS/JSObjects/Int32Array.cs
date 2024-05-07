@@ -8,8 +8,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Int32Array : TypedArray<int>
     {
-        public static implicit operator int[]?(Int32Array? values) => values == null ? null : values.ToArray();
-        public static implicit operator Int32Array?(int[]? values) => values == null ? null : new Int32Array(values);
+        public static explicit operator int[]?(Int32Array? values) => values == null ? null : values.ToArray();
+        public static explicit operator Int32Array?(int[]? values) => values == null ? null : new Int32Array(values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>

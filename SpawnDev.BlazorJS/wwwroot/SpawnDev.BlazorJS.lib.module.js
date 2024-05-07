@@ -316,7 +316,15 @@
             else if ('__undefinedref__' in value) {
                 return;
             }
+            else if ('$bigint' in value) {
+                return BigInt(value.$bigint);
+            }
         }
         return value;
     });
+    // Below code adds support for serializing BigInt
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#use_within_json
+    BigInt.prototype.toJSON = function () {
+        return { $bigint: this.toString() };
+    };
 })();

@@ -1,6 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Runtime.InteropServices;
-using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -26,7 +24,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="length"></param>
         public BigInt64Array(long length) : base(JS.New(nameof(BigInt64Array), length)) { }
-        public BigInt64Array(BigInt[] array) : base(JS.New(nameof(BigInt64Array), array)) { }
+        public BigInt64Array(BigInt<long>[] array) : base(JS.New(nameof(BigInt64Array), array)) { }
         public BigInt64Array(long[] array) : base(NullRef)
         {
             var myByteArray = new byte[array.Length * sizeof(long)];
@@ -35,13 +33,11 @@ namespace SpawnDev.BlazorJS.JSObjects
             var jsRef = JS.New(nameof(BigInt64Array), uint8Array.Buffer);
             FromReference(jsRef);
         }
-        #region Disabled - Throws error on Chrome
         /// <summary>
         /// Creates a new BigInt64Array object.
         /// </summary>
         /// <param name="typedArray"></param>
-        //public BigInt64Array(TypedArray typedArray) : base(JS.New(nameof(BigInt64Array), typedArray)) { }
-        #endregion
+        public BigInt64Array(TypedArray typedArray) : base(JS.New(nameof(BigInt64Array), typedArray)) { }
         /// <summary>
         /// Creates a new BigInt64Array object.
         /// </summary>
@@ -119,7 +115,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="index">Zero-based index of the typed array element to be returned, converted to an integer. Negative index counts back from the end of the typed array — if index &lt; 0, index + array.length is accessed.</param>
         /// <returns>The element in the typed array matching the given index. Always returns undefined if index &lt; -array.length or index &gt;= array.length without attempting to access the corresponding property.</returns>
-        public override long At(long index) => BitConverter.ToInt64(ReadBytes(index * BYTES_PER_ELEMENT, BYTES_PER_ELEMENT));
+        public override long At(long index) => JSRef!.Call<BigInt<long>>("at", index);
         /// <summary>
         /// Gets or sets the element at the given index
         /// </summary>
@@ -127,8 +123,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>The value of the element at the given index if getting</returns>
         public override long this[long i]
         {
-            get => At(i);
-            set => new BigInt64Array(new[] { value }).Using(o => Set(o, i));
+            get => JSRef!.Get<BigInt<long>>(i);
+            set => JSRef!.Set(i, (BigInt<long>)value);
         }
     }
 }

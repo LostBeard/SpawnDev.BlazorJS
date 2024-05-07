@@ -655,6 +655,59 @@
         var curValue = Atomics.Load(typedArray, 1);
         Console.WriteLine($"curValue: {curValue}");
         if (curValue != 43) throw new Exception("Match Failed 2");
+        var ret = await WebWorkerService.TaskPool.Run(() => WebWorkerAtomicsTest(values, sharedArrayBuffer, 6));
+        if (ret != typedArray[6]) throw new Exception("Match Failed 3");
+    }
+    static int WebWorkerAtomicsTest(int[] values, SharedArrayBuffer sharedArrayBuffer, long index)
+    {
+        using var typedArray = new Int32Array(sharedArrayBuffer);
+        Console.WriteLine($"worker exchanging [{index}] with 1");
+        var oldValue = Atomics.Exchange(typedArray, index, 1);
+        Console.WriteLine($"worker oldValue 6a: {oldValue}");
+        oldValue = Atomics.Add(typedArray, index, 42);
+        Console.WriteLine($"worker oldValue a2: {oldValue}");
+        if (oldValue != values[1]) throw new Exception("Match Failed 1");
+        var curValue = Atomics.Load(typedArray, index);
+        Console.WriteLine($"curValue: {curValue}");
+        if (curValue != 43) throw new Exception("Match Failed 2");
+        return curValue;
+    }
+    [TestMethod]
+    public async Task AtomicsSharedArrayBufferBigInt64ArrayTest()
+    {
+        var bigValue = long.MaxValue - 100;
+        var values = new long[] { 0, 1, 2, 3, 55, 5, 6, 7 };
+        JS.Set("values", values);
+        using var sharedArrayBuffer = new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * values.Length);
+        using var typedArray = new BigInt64Array(sharedArrayBuffer);
+        typedArray.Set(values);
+        JS.Set("typedArray", typedArray);
+        JS.Log("typedArray", typedArray);
+        Atomics.Exchange(typedArray, 1, bigValue);
+        if (typedArray[1] != bigValue) throw new Exception("Match Failed 1");
+        Atomics.Exchange(typedArray, 1, values[1]);
+        var oldValue = Atomics.Add(typedArray, 1, 42);
+        Console.WriteLine($"oldValue: {oldValue}");
+        if (oldValue != values[1]) throw new Exception("Match Failed 1a");
+        var curValue = Atomics.Load(typedArray, 1);
+        Console.WriteLine($"curValue: {curValue}");
+        if (curValue != 43) throw new Exception("Match Failed 2");
+        var ret = await WebWorkerService.TaskPool.Run(() => WebWorkerAtomicsSharedArrayBufferBigInt64ArrayTest(values, sharedArrayBuffer, 6));
+        if (ret != typedArray[6]) throw new Exception("Match Failed 3");
+    }
+    static long WebWorkerAtomicsSharedArrayBufferBigInt64ArrayTest(long[] values, SharedArrayBuffer sharedArrayBuffer, long index)
+    {
+        using var typedArray = new BigInt64Array(sharedArrayBuffer);
+        Console.WriteLine($"worker exchanging [{index}] with 1");
+        var oldValue = Atomics.Exchange(typedArray, index, 1);
+        Console.WriteLine($"worker oldValue 6a: {oldValue}");
+        oldValue = Atomics.Add(typedArray, index, 42);
+        Console.WriteLine($"worker oldValue a2: {oldValue}");
+        if (oldValue != values[1]) throw new Exception("Match Failed 1");
+        var curValue = Atomics.Load(typedArray, index);
+        Console.WriteLine($"curValue: {curValue}");
+        if (curValue != 43) throw new Exception("Match Failed 2");
+        return curValue;
     }
     #endregion
 
@@ -824,7 +877,7 @@
     [TestMethod]
     public void BigIntTest()
     {
-        var values = new BigInt[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
+        var values = new BigInt<long>[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
         JS.Set("values", values);
         using var typedArray = new BigInt64Array(values);
         JS.Set("typedArray", typedArray);

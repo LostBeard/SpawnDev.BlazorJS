@@ -1,6 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Runtime.InteropServices;
-using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -26,7 +24,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="length"></param>
         public BigUint64Array(long length) : base(JS.New(nameof(BigUint64Array), length)) { }
-        public BigUint64Array(BigInt[] array) : base(JS.New(nameof(BigUint64Array), array)) { }
+        public BigUint64Array(BigInt<ulong>[] array) : base(JS.New(nameof(BigUint64Array), array)) { }
         public BigUint64Array(ulong[] array) : base(NullRef)
         {
             var myByteArray = new byte[array.Length * sizeof(ulong)];
@@ -34,14 +32,12 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var uint8Array = new Uint8Array(myByteArray);
             var jsRef = JS.New(nameof(BigUint64Array), uint8Array.Buffer);
             FromReference(jsRef);
-        }
-        #region Disabled - Throws error on Chrome
+        }        
         /// <summary>
         /// Creates a new BigUint64Array object.
         /// </summary>
         /// <param name="typedArray"></param>
-        //public BigUint64Array(TypedArray typedArray) : base(JS.New(nameof(BigUint64Array), typedArray)) { }
-        #endregion
+        public BigUint64Array(TypedArray typedArray) : base(JS.New(nameof(BigUint64Array), typedArray)) { }
         /// <summary>
         /// Creates a new BigUint64Array object.
         /// </summary>
@@ -119,7 +115,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="index">Zero-based index of the typed array element to be returned, converted to an integer. Negative index counts back from the end of the typed array — if index &lt; 0, index + array.length is accessed.</param>
         /// <returns>The element in the typed array matching the given index. Always returns undefined if index &lt; -array.length or index &gt;= array.length without attempting to access the corresponding property.</returns>
-        public override ulong At(long index) => BitConverter.ToUInt64(ReadBytes(index * BYTES_PER_ELEMENT, BYTES_PER_ELEMENT));
+        public override ulong At(long index) => JSRef!.Call<BigInt<ulong>>("at", index);
         /// <summary>
         /// Gets or sets the element at the given index
         /// </summary>
@@ -127,8 +123,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>The value of the element at the given index if getting</returns>
         public override ulong this[long i]
         {
-            get => At(i);
-            set => new BigUint64Array(new[] { value }).Using(o => Set(o, i));
+            get => JSRef!.Get<BigInt<ulong>>(i);
+            set => JSRef!.Set(i, (BigInt<ulong>)value);
         }
     }
 }
