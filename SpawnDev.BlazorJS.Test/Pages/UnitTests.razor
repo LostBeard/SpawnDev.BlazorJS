@@ -911,19 +911,20 @@
         Console.WriteLine("released lock");
     }
     [TestMethod]
-    public async Task LockManagerTest2()
+    public async Task LockManagerReturnValueTest()
     {
         using var navigator = JS.Get<Navigator>("navigator");
         using var locks = navigator.Locks;
         var randId = Guid.NewGuid().ToString();
         Console.WriteLine("requesting lock");
-        await locks.Request(randId, async (l) =>
+        var clientId2 = await locks.Request(randId, async (l) =>
         {
             var lockState = await locks.Query();
             var clientId = lockState.Held.First(o => o.Name == randId).ClientId;
             Console.WriteLine($"Have lock ClientId: {clientId}");
+            return clientId;
         });
-        Console.WriteLine("released lock");
+        Console.WriteLine($"released lock: {clientId2}");
     }
     [TestMethod]
     public async Task LockManagerClientId()
