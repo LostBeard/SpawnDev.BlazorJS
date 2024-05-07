@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -27,7 +26,41 @@ namespace SpawnDev.BlazorJS.JSObjects
         public async Task Request(string lockName, Func<Lock, Task> callback)
         {
             using var funcCallback = new AsyncActionCallback<Lock>(callback);
-            await JSRef!.CallVoidAsync("request", lockName, callback);
+            await JSRef!.CallVoidAsync("request", lockName, funcCallback);
+        }
+        /// <summary>
+        /// The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="lockName"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<TResult> Request<TResult>(string lockName, Func<Lock, Task<TResult>> callback)
+        {
+            using var funcCallback = new AsyncFuncCallback<Lock, TResult>(callback);
+            return await JSRef!.CallAsync<TResult>("request", lockName, funcCallback);
+        }
+        /// <summary>
+        /// The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
+        /// </summary>
+        /// <param name="lockName"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task Request(string lockName, Func<Task> callback)
+        {
+            using var funcCallback = new AsyncActionCallback(callback);
+            await JSRef!.CallVoidAsync("request", lockName, funcCallback);
+        }
+        /// <summary>
+        /// The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
+        /// </summary>
+        /// <param name="lockName"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<TResult> Request<TResult>(string lockName, Func<Task<TResult>> callback)
+        {
+            using var funcCallback = new AsyncFuncCallback<TResult>(callback);
+            return await JSRef!.CallAsync<TResult>("request", lockName, funcCallback);
         }
         /// <summary>
         /// The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
@@ -39,13 +72,74 @@ namespace SpawnDev.BlazorJS.JSObjects
         public async Task Request(string lockName, LockRequestOptions options, Func<Lock, Task> callback)
         {
             using var funcCallback = new AsyncActionCallback<Lock>(callback);
-            await JSRef!.CallVoidAsync("request", lockName, options, callback);
+            await JSRef!.CallVoidAsync("request", lockName, options, funcCallback);
+        }
+        /// <summary>
+        /// The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
+        /// </summary>
+        /// <param name="lockName"></param>
+        /// <param name="options"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<TResult> Request<TResult>(string lockName, LockRequestOptions options, Func<Lock, Task<TResult>> callback)
+        {
+            using var funcCallback = new AsyncFuncCallback<Lock, TResult>(callback);
+            return await JSRef!.CallAsync<TResult>("request", lockName, options, funcCallback);
+        }
+        /// <summary>
+        /// The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
+        /// </summary>
+        /// <param name="lockName"></param>
+        /// <param name="options"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task Request(string lockName, LockRequestOptions options, Func<Task> callback)
+        {
+            using var funcCallback = new AsyncActionCallback(callback);
+            await JSRef!.CallVoidAsync("request", lockName, options, funcCallback);
+        }
+        /// <summary>
+        /// The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
+        /// </summary>
+        /// <param name="lockName"></param>
+        /// <param name="options"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public async Task<TResult> Request<TResult>(string lockName, LockRequestOptions options, Func<Task<TResult>> callback)
+        {
+            using var funcCallback = new AsyncFuncCallback<TResult>(callback);
+            return await JSRef!.CallAsync<TResult>("request", lockName, options, funcCallback);
+        }
+        /// <summary>
+        /// Returns an array of client ids that are holding or waiting for locks
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string[]> QueryClientIds()
+        {
+            var state = await Query();
+            return state.Held.Select(o => o.ClientId).Concat(state.Pending.Select(o => o.ClientId)).Distinct().ToArray();
         }
         /// <summary>
         /// The query() method of the LockManager interface returns a Promise that resolves with an object containing information about held and pending locks.
         /// </summary>
         /// <returns></returns>
         public Task<LockManagerState> Query() => JSRef!.CallAsync<LockManagerState>("query");
-
+        /// <summary>
+        /// This client id
+        /// </summary>
+        public Task<string> ClientId => _clientId.Value;
+        static Lazy<Task<string>> _clientId = new Lazy<Task<string>>(async () =>
+        {
+            var clientId = "";
+            using var navigator = BlazorJSRuntime.JS.Get<Navigator>("navigator");
+            using var locks = navigator.Locks;
+            var randId = Guid.NewGuid().ToString();
+            await locks.Request(randId, async () =>
+            {
+                var lockState = await locks.Query();
+                clientId = lockState.Held.First(o => o.Name == randId).ClientId;
+            });
+            return clientId;
+        });
     }
 }

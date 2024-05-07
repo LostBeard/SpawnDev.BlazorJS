@@ -48,9 +48,8 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
         public override Task Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
-            using var promise = new Promise(_ref);
-            return promise.ThenAsync();
+            using var promise = JsonSerializer.Deserialize<Promise>(ref reader, options);
+            return promise?.ThenAsync();
         }
         public override void Write(Utf8JsonWriter writer, Task value, JsonSerializerOptions options)
         {
@@ -68,9 +67,8 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
         public override Task<TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
-            using var promise = new Promise<TResult>(_ref);
-            return promise.ThenAsync();
+            using var promise = JsonSerializer.Deserialize<Promise<TResult>>(ref reader, options);
+            return promise?.ThenAsync();
         }
         public override void Write(Utf8JsonWriter writer, Task<TResult> value, JsonSerializerOptions options)
         {

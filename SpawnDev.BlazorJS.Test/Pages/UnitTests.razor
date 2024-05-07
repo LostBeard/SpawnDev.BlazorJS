@@ -925,4 +925,12 @@
         });
         Console.WriteLine("released lock");
     }
+    [TestMethod]
+    public async Task LockManagerClientId()
+    {
+        using var navigator = JS.Get<Navigator>("navigator");
+        using var locks = navigator.Locks;
+        Console.WriteLine($"LockManager.ClientId: {await locks.ClientId}");
+        Console.WriteLine($"LockManager.ClientIds: {string.Join(", ", await locks.QueryClientIds())}");
+    }
 }
