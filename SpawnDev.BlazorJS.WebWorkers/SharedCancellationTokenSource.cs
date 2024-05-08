@@ -4,14 +4,20 @@ using System.Diagnostics.CodeAnalysis;
 namespace SpawnDev.BlazorJS.WebWorkers
 {
     /// <summary>
-    /// 
+    /// SharedCancellationTokenSource works similarly to CancellationTokenSource allowing the creation and controlling of SharedCancellationTokens<br/>
+    /// which can be passed to WekWorkers to allow workers a synchronous method of checking for a cancellation flag set in another thread<br/>
+    /// Requires globalThis.crossOriginIsolated == true due to using SharedArrayBuffer for cancellation signaling
     /// </summary>
     public class SharedCancellationTokenSource : IDisposable
     {
+        const int BUFFER_SIZE = 1;
         private bool _cancelled = false;
         internal Uint8Array? SharedArrayBufferView { get; private set; }
         internal SharedArrayBuffer? SharedArrayBuffer { get; private set; }
         private Lazy<SharedCancellationToken> _token;
+        /// <summary>
+        /// Returns the cancellation token
+        /// </summary>
         public SharedCancellationToken Token => _token.Value;
         internal SharedCancellationTokenSource(SharedArrayBuffer sharedArrayBuffer)
         {
@@ -19,11 +25,19 @@ namespace SpawnDev.BlazorJS.WebWorkers
             SharedArrayBufferView = new Uint8Array(sharedArrayBuffer);
             _token = new Lazy<SharedCancellationToken>(() => new SharedCancellationToken(new SharedCancellationTokenSource(SharedArrayBuffer.JSRefCopy<SharedArrayBuffer>())));
         }
-        public SharedCancellationTokenSource(bool cancelled = false) : this(new SharedArrayBuffer(1))
+        /// <summary>
+        /// Creates a new instance with a pre-set cancelled state
+        /// </summary>
+        /// <param name="cancelled"></param>
+        public SharedCancellationTokenSource(bool cancelled = false) : this(new SharedArrayBuffer(BUFFER_SIZE))
         {
             if (cancelled) Cancel();
         }
-        public SharedCancellationTokenSource(int cancelAfterMillisecondDelay) : this(new SharedArrayBuffer(1))
+        /// <summary>
+        /// Creates a new instance that cancels after the given number of milliseconds
+        /// </summary>
+        /// <param name="cancelAfterMillisecondDelay"></param>
+        public SharedCancellationTokenSource(int cancelAfterMillisecondDelay) : this(new SharedArrayBuffer(BUFFER_SIZE))
         {
             CancelAfter(cancelAfterMillisecondDelay);
         }
@@ -33,9 +47,15 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public void Cancel()
         {
             ThrowIfDisposed();
+            SetCancelled();
+        }
+        private void SetCancelled()
+        {
+            if (IsDisposed) return;
             if (IsCancellationRequested) return;
             if (SharedArrayBufferView == null) return;
-            SharedArrayBufferView[0] = 1;
+            _cancelled = true;
+            Atomics.Store<byte>(SharedArrayBufferView, 0, 1);
         }
         /// <summary>
         /// Cancels the token after a set amount of time
@@ -48,10 +68,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var cts = new CancellationTokenSource(millisecondDelay);
             cts.Token.Register(() =>
             {
-                if (IsCancellationRequested) return;
-                if (SharedArrayBufferView == null) return;
-                SharedArrayBufferView[0] = 1;
                 cts.Dispose();
+                SetCancelled();
             });
         }
         /// <summary>Throws an exception if the source has been disposed.</summary>
@@ -72,8 +90,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 if (_cancelled) return true;
                 if (SharedArrayBufferView != null)
                 {
-                    // reads the cancelled flag byte from the shared array buffer
-                    _cancelled = SharedArrayBufferView[0] == 1;
+                    var cancelledFlag = Atomics.Load(SharedArrayBufferView, 0);
+                    if (cancelledFlag != 0)
+                    {
+                        _cancelled = true;
+                    }
                 }
                 return _cancelled;
             }
@@ -92,12 +113,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (SharedArrayBufferView != null)
             {
                 SharedArrayBufferView.Dispose();
-                //SharedArrayBufferView = null;
+                SharedArrayBufferView = null;
             }
             if (SharedArrayBuffer != null)
             {
                 SharedArrayBuffer.Dispose();
-                //SharedArrayBuffer = null;
+                SharedArrayBuffer = null;
             }
         }
     }

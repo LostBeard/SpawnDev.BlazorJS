@@ -1,11 +1,7 @@
-﻿using SpawnDev.BlazorJS.JSObjects;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
-
-
     /// <summary>
     /// SharedCancellationToken is a class that uses a SharedArrayBuffer to allow checking if a task has been cancelled by another browser thread<br/>
     /// synchronously and without relying on message event handling.<br/>
@@ -14,18 +10,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
     {
         private bool _cancelled = false;
         internal SharedCancellationTokenSource? _source = null;
-        /// <summary>
-        /// Creates an instance of SharedCancellationToken and setting the cancelled state that cannot be cancelled in the future
-        /// </summary>
-        /// <param name="sharedArrayBuffer"></param>
-        //internal SharedCancellationToken(SharedArrayBuffer sharedArrayBuffer)
-        //{
-        //    _source = new SharedCancellationTokenSource(sharedArrayBuffer);
-        //}
         internal SharedCancellationToken(SharedCancellationTokenSource source)
         {
             _source = source;
         }
+        /// <summary>
+        /// Creates an instance of SharedCancellationToken and setting the cancelled state that cannot be cancelled in the future
+        /// </summary>
         public SharedCancellationToken(bool cancelled = false)
         {
             _cancelled = cancelled;
@@ -83,7 +74,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (_source != null)
             {
                 _source.Dispose();
-                //_source = null;
+                _source = null;
             }
         }
     }

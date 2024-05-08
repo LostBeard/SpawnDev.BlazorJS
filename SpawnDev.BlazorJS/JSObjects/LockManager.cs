@@ -70,7 +70,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public async Task Request(string lockName, LockRequestOptions options, Func<Lock, Task> callback)
+        public async Task Request(string lockName, LockRequestOptions options, Func<Lock?, Task> callback)
         {
             using var funcCallback = new AsyncActionCallback<Lock>(callback);
             await JSRef!.CallVoidAsync("request", lockName, options, funcCallback);
@@ -82,7 +82,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public async Task<TResult> Request<TResult>(string lockName, LockRequestOptions options, Func<Lock, Task<TResult>> callback)
+        public async Task<TResult> Request<TResult>(string lockName, LockRequestOptions options, Func<Lock?, Task<TResult>> callback)
         {
             using var funcCallback = new AsyncFuncCallback<Lock, TResult>(callback);
             return await JSRef!.CallAsync<TResult>("request", lockName, options, funcCallback);
@@ -165,7 +165,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public async Task Request(string lockName, LockRequestOptions options, Action<Lock> callback)
+        public async Task Request(string lockName, LockRequestOptions options, Action<Lock?> callback)
         {
             using var funcCallback = new ActionCallback<Lock>(callback);
             await JSRef!.CallVoidAsync("request", lockName, options, funcCallback);
@@ -177,7 +177,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public async Task<TResult> Request<TResult>(string lockName, LockRequestOptions options, Func<Lock, TResult> callback)
+        public async Task<TResult> Request<TResult>(string lockName, LockRequestOptions options, Func<Lock?, TResult> callback)
         {
             using var funcCallback = new FuncCallback<Lock, TResult>(callback);
             return await JSRef!.CallAsync<TResult>("request", lockName, options, funcCallback);

@@ -13,6 +13,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public AbortSignal(IJSInProcessObjectReference _ref) : base(_ref) { }
+
+        #region Properties
         /// <summary>
         /// A Boolean that indicates whether the request(s) the signal is communicating with is/are aborted (true) or not (false).
         /// </summary>
@@ -22,11 +24,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T">Type to read the property reason as</typeparam>
         /// <returns></returns>
-        public T GetReason<T>() => JSRef!.Get<T>("reason");
+        public T ReasonAs<T>() => JSRef!.Get<T>("reason");
         /// <summary>
         /// A JavaScript value providing the abort reason, once the signal has aborted.<br />
         /// </summary>
         public JSObject? Reason => JSRef!.Get<JSObject?>("reason");
+        #endregion
 
         #region Methods
         /// <summary>
@@ -59,7 +62,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="time">The "active" time in milliseconds before the returned AbortSignal will abort.</param>
         /// <returns>An AbortSignal.</returns>
-        public static AbortSignal Timeout(float time) => JS.Call<AbortSignal>($"{nameof(AbortSignal)}.abort", time);
+        public static AbortSignal Timeout(float time) => JS.Call<AbortSignal>($"{nameof(AbortSignal)}.timeout", time);
+        /// <summary>
+        /// Returns an AbortSignal that aborts when any of the given abort signals abort.
+        /// </summary>
+        /// <param name="signals"></param>
+        /// <returns>
+        /// An AbortSignal that is:<br/>
+        /// - Already aborted, if any of the abort signals given is already aborted. The returned AbortSignal's reason will be already set to the reason of the first abort signal that was already aborted.<br/>
+        /// - Asynchronously aborted, when any abort signal in iterable aborts. The reason will be set to the reason of the first abort signal that is aborted.
+        /// </returns>
+        public static AbortSignal Any(Array<AbortSignal> signals) => JS.Call<AbortSignal>($"{nameof(AbortSignal)}.any", signals);
         #endregion
     }
 }

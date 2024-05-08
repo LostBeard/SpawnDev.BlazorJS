@@ -24,19 +24,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an AbortSignal object instance, which can be used to communicate with, or to abort, a DOM request.
         /// </summary>
-        public AbortSignal Signal => JSRef.Get<AbortSignal>("signal");
+        public AbortSignal Signal => JSRef!.Get<AbortSignal>("signal");
         #endregion
 
         #region Methods
         /// <summary>
         /// The abort() method of the AbortController interface aborts a DOM request before it has completed. This is able to abort fetch requests, the consumption of any response bodies, or streams.
         /// </summary>
-        public void Abort() => JSRef.CallVoid("abort");
+        public void Abort() => JSRef!.CallVoid("abort");
         /// <summary>
         /// The abort() method of the AbortController interface aborts a DOM request before it has completed. This is able to abort fetch requests, the consumption of any response bodies, or streams.
         /// </summary>
         /// <param name="reason">The reason why the operation was aborted, which can be any JavaScript value. If not specified, the reason is set to "AbortError" DOMException.</param>
-        public void Abort(object reason) => JSRef.CallVoid("abort", reason);
+        public void Abort(object reason) => JSRef!.CallVoid("abort", reason);
         #endregion
     }
 }

@@ -15,7 +15,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("mode")]
         public string? Mode { get; set; }
         /// <summary>
-        /// If true, the lock request will only be granted if it is not already held. If it cannot be granted, the callback will be invoked with null instead of a Lock instance. The default value is false.
+        /// If true, the lock request will only be granted if it is not already held.<br/>
+        /// If it cannot be granted, the callback will be invoked with null instead of a Lock instance. The default value is false.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("ifAvailable")]

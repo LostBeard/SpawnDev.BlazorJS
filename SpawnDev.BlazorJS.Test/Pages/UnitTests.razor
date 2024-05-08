@@ -931,4 +931,109 @@
         Console.WriteLine($"LockManager.ClientId: {await locks.ClientId}");
         Console.WriteLine($"LockManager.ClientIds: {string.Join(", ", await locks.QueryClientIds())}");
     }
+
+    [TestMethod]
+    public async Task AbortSignalTest()
+    {
+
+        //var worker = await WebWorkerService.TaskPool.GetWorkerAsync();
+        var signal = AbortSignal.Timeout(1000);
+        var task = WindowAbortSignalTest(signal);
+        await Task.Delay(1000);
+        //abortController.Abort("taking too long");
+        var ret = await task;
+        Console.WriteLine($"ret: {ret}");
+        //worker.ReleaseLock();
+    }
+    private static async Task<long> WindowAbortSignalTest(AbortSignal abortSignal)
+    {
+        var startTime = DateTime.Now;
+        var maxRunTime = TimeSpan.FromMilliseconds(5000);
+        long i = 0;
+        while (DateTime.Now - startTime < maxRunTime)
+        {
+            // do some work ...
+            i += 1;
+            await Task.Delay(5);
+            // check if cancelled message received
+            if (abortSignal.Aborted)
+            {
+                var reason = abortSignal.ReasonAs<DOMException>();
+                Console.WriteLine($"reason: {reason.Name}");
+                return i;
+            }
+        }
+        return -1;
+    }
+    private static async Task<long> WebWorkerAbortSignalTest(AbortSignal abortSignal)
+    {
+        var startTime = DateTime.Now;
+        var maxRunTime = TimeSpan.FromMilliseconds(5000);
+        long i = 0;
+        while (DateTime.Now - startTime < maxRunTime)
+        {
+            // do some work ...
+            i += 1;
+            // check if cancelled message received
+            if (abortSignal.Aborted) return i;
+        }
+        return -1;
+    }
+
+    [TestMethod]
+    public async Task LockManagerExclusiveLockTimeoutTest()
+    {
+        using var navigator = JS.Get<Navigator>("navigator");
+        using var locks = navigator.Locks;
+        var lockName = Guid.NewGuid().ToString();
+        // Request the lock and get a TaskCompletionSource
+        TaskCompletionSource lockHandle1 = await locks.RequestHandle(lockName);
+        // the below lock will fail after 1000 milliseconds because we are already holding the lock lockName
+        try
+        {
+            TaskCompletionSource lockHandle2 = await locks.RequestHandle(lockName, 1000);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Success. Lock acquisition timed out as expected");
+            // release lockHandle1
+            lockHandle1.SetResult();
+            return;
+        }
+        lockHandle1.SetResult();
+        throw new Exception("Failed");
+    }
+
+    [TestMethod]
+    public async Task LockManagerLockRejectTest()
+    {
+        using var navigator = JS.Get<Navigator>("navigator");
+        using var locks = navigator.Locks;
+        var lockName = Guid.NewGuid().ToString();
+        // Request the lock and get a TaskCompletionSource
+        TaskCompletionSource lockHandle1 = await locks.RequestHandle(lockName);
+        JS.Log($"Acquired lock: {lockName}");
+        await Task.Delay(10);
+        JS.Log("locks", await locks.Query());
+        JS.Log($"Releasing lock: {lockName}");
+        lockHandle1.SetException(new Exception("test"));
+        await Task.Delay(10);
+        JS.Log("locks", await locks.Query());
+    }
+
+
+    private static async Task<long> WebWorkerLockManagerTest(AbortSignal abortSignal)
+    {
+        var startTime = DateTime.Now;
+        var maxRunTime = TimeSpan.FromMilliseconds(5000);
+        long i = 0;
+        while (DateTime.Now - startTime < maxRunTime)
+        {
+            // do some work ...
+            i += 1;
+            // check if cancelled message received
+            if (abortSignal.Aborted) return i;
+        }
+        return -1;
+    }
 }
