@@ -15,26 +15,72 @@ namespace SpawnDev.BlazorJS.WebWorkers
     /// </summary>
     public class WebWorkerService : IDisposable, IAsyncBackgroundService
     {
+        /// <summary>
+        /// If this instance is running in a DedicatedWorkerGlobalScope this is a connection to the parent instance
+        /// </summary>
         public ServiceCallDispatcher? DedicatedWorkerParent { get; private set; } = null;
+        /// <summary>        
+        /// If this instance is running in a SharedWorkerGlobalScope this is all the incoming connections
+        /// </summary>
         public List<ServiceCallDispatcher> SharedWorkerIncomingConnections { get; private set; } = new List<ServiceCallDispatcher>();
+        /// <summary>
+        /// Returns true if SharedWebWorker is supported
+        /// </summary>
         public bool SharedWebWorkerSupported { get; private set; }
+        /// <summary>
+        /// Returns true if WebWorker is supported
+        /// </summary>
         public bool WebWorkerSupported { get; private set; }
+        /// <summary>
+        /// Returns true if ServiceWorker is supported
+        /// </summary>
         public bool ServiceWorkerSupported { get; private set; }
+        /// <summary>
+        /// Returns true if BroadcastChannel is supported
+        /// </summary>
         public bool BroadcastChannelSupported { get; private set; }
+        /// <summary>
+        /// Returns true if LockManager is supported
+        /// </summary>
         public bool LockManagerSupported { get; private set; }
+        /// <summary>
+        /// If true, InterConnect can be used for inter-instance communication negotiation
+        /// </summary>
         public bool InterConnectSupported { get; private set; }
-        public bool InterConnectEnabled { get; set; } = false;
+        /// <summary>
+        /// If set to true and InterConnectSupported == true, the interconnect shared worker will be used to enable using MessagePort for inter-instance communication instead of BroadcastChannel>br/>
+        /// MessagePort supports transferable objects, BroadcastChannel does not. 
+        /// </summary>
+        public bool InterConnectEnabled { get; set; } = true;
+        /// <summary>
+        /// A ServiceCallDispatcher that executes on this instance
+        /// </summary>
         public ServiceCallDispatcher Local { get; }
         public IServiceProvider ServiceProvider { get; }
         public IServiceCollection ServiceDescriptors { get; }
         public string AppBaseUri { get; }
         public bool BeenInit { get; private set; }
         DateTime StartTime = DateTime.Now;
+        /// <summary>
+        /// The navigator.hardwareConcurrency value
+        /// </summary>
         public int MaxWorkerCount { get; private set; } = 0;
+        /// <summary>
+        /// If this is a shared worker, this is the shared worker's name
+        /// </summary>
         public string ThisSharedWorkerName { get; private set; } = "";
         Callback? OnSharedWorkerConnectCallback = null;
+        /// <summary>
+        /// This app instance's id
+        /// </summary>
         public string InstanceId { get; }
+        /// <summary>
+        /// The script location used for new worker instances
+        /// </summary>
         public string WebWorkerJSScript { get; } = "_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js";
+        /// <summary>
+        /// The script used for instance interconnect shared worker instance (if used)
+        /// </summary>
         public string WebWorkerInterconnectJSScript { get; } = "_content/SpawnDev.BlazorJS.WebWorkers/interconnect.js";
         public BlazorJSRuntime JS { get; }
         public GlobalScope GlobalScope { get; }
