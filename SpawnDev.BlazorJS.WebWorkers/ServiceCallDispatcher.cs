@@ -97,7 +97,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (_portSimple == null) return;
             ReadyFlagSent = true;
             var needsInfo = RemoteInfo == null;
-#if DEBUG
+#if DEBUG && false
             JS.Log("SendReadyFlag sent", "init", LocalInfo, needsInfo);
 #endif
             _portSimple.PostMessage(new object?[] { "init", LocalInfo, needsInfo });
@@ -140,20 +140,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         {
                             var remoteInfo = args.Shift<ServiceCallDispatcherInfo>(); // 1
                             var needsInfo = args.Shift<bool>(); // 2
-#if DEBUG
-                            JS.Log("_worker_OnMessage", "init recvd", "needsInfo", needsInfo);
-#endif
                             if (RemoteInfo == null)
                             {
                                 RemoteInfo = remoteInfo;
                                 if (RemoteInfo != null)
                                 {
-                                    needsInfo = true;
                                     _oninit.TrySetResult(0);
                                     CheckBusyStateChanged(true);
-#if DEBUG
-                                    JS.Log("Connected");
-#endif
                                 }
                             }
                             if (needsInfo) SendReadyFlag();
