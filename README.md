@@ -30,7 +30,7 @@ For more information about Blazor types:
 ](https://www.c-sharpcorner.com/article/blazor-versions-benefits-and-when-to-use-it/)
 
 ### Features:
-- Over 300 strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, and Promises allow direct interaction with Javascript
+- Over 300 strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, Atomics, TypedArrays, and Promises allow direct interaction with Javascript
 - Use Javascript libraries in Blazor without writing any Javascript code
 - BlazorJSRuntime wraps the default JSRuntime adding additional functionality
 - Create new Javascript objects directly from Blazor
