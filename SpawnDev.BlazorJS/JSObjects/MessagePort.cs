@@ -2,13 +2,37 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public interface IMessagePort
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IMessagePort : IMessagePortSimple
     {
-        JSEventCallback<MessageEvent> OnMessageError { get; set; }
-        JSEventCallback<MessageEvent> OnMessage { get; set; }
-        void Dispose();
-        void PostMessage(object message);
+        /// <summary>
+        /// Sends a message from the port, and optionally, transfers ownership of objects to other browsing contexts.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="transfer"></param>
         void PostMessage(object message, object[] transfer);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IMessagePortSimple : IDisposable
+    {
+        /// <summary>
+        /// Fired when a MessagePort object receives a message that can't be deserialized.
+        /// </summary>
+        JSEventCallback<MessageEvent> OnMessageError { get; set; }
+        /// <summary>
+        /// Fired when a MessagePort object receives a message.
+        /// Start() must be called to start receiving messages when using addEventListener instead of assigning onmessage.
+        /// </summary>
+        JSEventCallback<MessageEvent> OnMessage { get; set; }
+        /// <summary>
+        /// Sends a message from the port, and optionally, transfers ownership of objects to other browsing contexts.
+        /// </summary>
+        /// <param name="message"></param>
+        void PostMessage(object message);
     }
 
     /// <summary>

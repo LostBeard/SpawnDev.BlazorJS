@@ -208,35 +208,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
         #endregion
         /// <summary>
-        /// Returns an array of client ids that are holding or waiting for locks
-        /// </summary>
-        /// <returns></returns>
-        public async Task<string[]> QueryClientIds()
-        {
-            var state = await Query();
-            return state.Held.Select(o => o.ClientId).Concat(state.Pending.Select(o => o.ClientId)).Distinct().ToArray();
-        }
-        /// <summary>
         /// The query() method of the LockManager interface returns a Promise that resolves with an object containing information about held and pending locks.
         /// </summary>
         /// <returns></returns>
         public Task<LockManagerState> Query() => JSRef!.CallAsync<LockManagerState>("query");
-        /// <summary>
-        /// This client id
-        /// </summary>
-        public Task<string> ClientId => _clientId.Value;
-        static Lazy<Task<string>> _clientId = new Lazy<Task<string>>(async () =>
-        {
-            var clientId = "";
-            using var navigator = BlazorJSRuntime.JS.Get<Navigator>("navigator");
-            using var locks = navigator.Locks;
-            var randId = Guid.NewGuid().ToString();
-            await locks.Request(randId, async () =>
-            {
-                var lockState = await locks.Query();
-                clientId = lockState.Held.First(o => o.Name == randId).ClientId;
-            });
-            return clientId;
-        });
     }
 }

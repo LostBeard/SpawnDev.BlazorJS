@@ -72,5 +72,43 @@ builder.Services.AddSingleton<ContextMenuService>();
 // App service
 builder.Services.AddSingleton<JSObjectAnalyzer>();
 
+#if DEBUG
+var host = builder.Build();
+await host.StartBackgroundServices();
+//
+var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
+JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
+{
+    var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
+    var windowInstances = webWorkerService.Windows;
+    var instanceId = JS.InstanceId;
+    var tasks = new List<Task>();
+    foreach (var windowInstance in windowInstances)
+    {
+        tasks.Add(Async.RunAsync(async () =>
+        {
+            var removeInstanceId = await windowInstance.Dispatcher!.Run(() => JS.InstanceId);
+            await windowInstance.Dispatcher.Run(() => TestA.WriteLine("Hello " +removeInstanceId + " from " + instanceId));
+        }));
+    }
+    try
+    {
+        await Task.WhenAll(tasks);
+    }
+    catch (Exception ex)
+    {
+        JS.Log($"WhenAll error:", ex.Message, ex.StackTrace);
+    }
+    return "ok";
+}));
+// 
+await host.BlazorJSRunAsync();
+#else
 // build and Init using BlazorJSRunAsync (instead of RunAsync)
 await builder.Build().BlazorJSRunAsync();
+#endif
+
+static class TestA
+{
+    public static void WriteLine(string msg) => Console.WriteLine(msg);
+}

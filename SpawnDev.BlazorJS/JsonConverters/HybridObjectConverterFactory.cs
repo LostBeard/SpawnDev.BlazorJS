@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JsonConverters
 {
     public class HybridObjectConverterFactory : JsonConverterFactory
     {
+        /// <summary>
+        /// Types this factory has been used with
+        /// </summary>
+        public List<Type> Types { get; private set; } = new List<Type>();
         // this converter is for converting class types that would normally be passed as JSON but has special property types that need to be loaded individually to work
         public override bool CanConvert(Type typeToConvert)
         {
@@ -27,6 +31,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 var pType = prop.PropertyType;
                 if (typeof(JSObject).IsAssignableFrom(pType))
                 {
+                    
                     return true;
                 }
                 if (typeof(IJSObjectProxy).IsAssignableFrom(pType))
@@ -39,6 +44,17 @@ namespace SpawnDev.BlazorJS.JsonConverters
 
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
+            if (!Types.Contains(typeToConvert))
+            {
+                Types.Add(typeToConvert);
+                if (typeToConvert == typeof(BlazorJSRuntime))
+                {
+                    var stopHere = true;
+                }
+#if DEBUG
+                Console.WriteLine($"HybridObjectConverterFactory: {typeToConvert.Name} - {typeToConvert.FullName}");
+#endif
+            }
             var converterType = typeof(HybridObjectConverter<>).MakeGenericType(typeToConvert);
             JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
             return converter;

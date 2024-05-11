@@ -43,7 +43,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public static bool IsTransferable(Type type) => _transferableTypes.Contains(type);
         public static bool IsTransferable<T>() => _transferableTypes.Contains(typeof(T));
         public static bool IsTransferable<T>(T obj) => _transferableTypes.Contains(typeof(T));
-        public IMessagePort? _port { get; set; }
+        protected IMessagePort? _port { get; set; }
+        protected IMessagePortSimple? _portSimple { get; set; }
         public bool LocalInvoker { get; private set; }
         public ServiceCallDispatcherInfo? RemoteInfo { get; private set; } = null;
         public ServiceCallDispatcherInfo LocalInfo { get; }
@@ -51,13 +52,22 @@ namespace SpawnDev.BlazorJS.WebWorkers
         Dictionary<string, TaskCompletionSource<Array>> _waiting = new Dictionary<string, TaskCompletionSource<Array>>();
         protected IServiceProvider _serviceProvider;
         protected IServiceCollection ServiceDescriptors;
-        public ServiceCallDispatcher(IServiceProvider serviceProvider, IServiceCollection serviceDescriptors, IMessagePort port)
+        /// <summary>
+        /// Returns true if a message port is used and it supports transferable objects
+        /// </summary>
+        public bool MessagePortSupportsTransferable { get; private set; }
+        public ServiceCallDispatcher(IServiceProvider serviceProvider, IServiceCollection serviceDescriptors, IMessagePortSimple port)
         {
             _serviceProvider = serviceProvider;
             ServiceDescriptors = serviceDescriptors;
-            _port = port;
-            _port.OnMessage += _worker_OnMessage;
-            _port.OnMessageError += _port_OnError;
+            if (port is IMessagePort messagePort)
+            {
+                _port = messagePort;
+                MessagePortSupportsTransferable = true;
+            }
+            _portSimple = port;
+            _portSimple.OnMessage += _worker_OnMessage;
+            _portSimple.OnMessageError += _port_OnError;
             additionalCallArgs.Add(new CallSideParameter("caller", () => this, typeof(ServiceCallDispatcher)));
             LocalInfo = new ServiceCallDispatcherInfo { InstanceId = JS.InstanceId, GlobalThisTypeName = JS.GlobalThisTypeName };
         }
@@ -84,9 +94,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
         private bool ReadyFlagSent = false;
         public void SendReadyFlag()
         {
-            if (_port == null) return;
+            if (_portSimple == null) return;
             ReadyFlagSent = true;
-            _port.PostMessage(new object?[] { "init", LocalInfo });
+            var needsInfo = RemoteInfo == null;
+#if DEBUG
+            JS.Log("SendReadyFlag sent", "init", LocalInfo, needsInfo);
+#endif
+            _portSimple.PostMessage(new object?[] { "init", LocalInfo, needsInfo });
         }
         public event Action<ServiceCallDispatcher, Array> OnMessage;
         public delegate void BusyStateChangedDelegate(ServiceCallDispatcher sender, bool busy);
@@ -111,6 +125,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
         }
         protected async void _worker_OnMessage(MessageEvent e)
         {
+#if DEBUG && false
+            JS.Log("_worker_OnMessage", e);
+#endif
             try
             {
                 var args = e.GetData<Array>();
@@ -119,6 +136,29 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 var msgType = args.Shift<string>(); // 0
                 switch (msgType)
                 {
+                    case "init":
+                        {
+                            var remoteInfo = args.Shift<ServiceCallDispatcherInfo>(); // 1
+                            var needsInfo = args.Shift<bool>(); // 2
+#if DEBUG
+                            JS.Log("_worker_OnMessage", "init recvd", "needsInfo", needsInfo);
+#endif
+                            if (RemoteInfo == null)
+                            {
+                                RemoteInfo = remoteInfo;
+                                if (RemoteInfo != null)
+                                {
+                                    needsInfo = true;
+                                    _oninit.TrySetResult(0);
+                                    CheckBusyStateChanged(true);
+#if DEBUG
+                                    JS.Log("Connected");
+#endif
+                                }
+                            }
+                            if (needsInfo) SendReadyFlag();
+                        }
+                        break;
                     case "cancelToken":
                         var tokenId = args.Shift<string>(); // 1
                         if (RemoteCancellationTokens.TryGetValue(tokenId, out var remoteTokenSource))
@@ -126,23 +166,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
                             RemoteCancellationTokens.Remove(tokenId);
                             remoteTokenSource.TokenSource.Cancel();
                             remoteTokenSource.Dispose();
-                        }
-                        break;
-                    case "init":
-                        {
-                            if (RemoteInfo == null)
-                            {
-                                RemoteInfo = args.Shift<ServiceCallDispatcherInfo>(); // 1
-                                if (RemoteInfo != null)
-                                {
-                                    if (!ReadyFlagSent)
-                                    {
-                                        SendReadyFlag();
-                                    }
-                                    _oninit.TrySetResult(0);
-                                    CheckBusyStateChanged(true);
-                                }
-                            }
                         }
                         break;
                     case "action":
@@ -275,7 +298,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     }
                     callbackMsg.Add(err);
                     callbackMsg.Add(retValue);
-                    _port?.PostMessage(callbackMsg, transfer);
+                    if (_port != null) _port?.PostMessage(callbackMsg, transfer);
+                    else _portSimple?.PostMessage(callbackMsg);
                 }
             }
             catch (Exception ex)
@@ -289,7 +313,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             var outMsg = new List<object?> { "event", eventName };
             if (data != null) outMsg.AddRange(data);
-            _port?.PostMessage(outMsg);
+            _portSimple?.PostMessage(outMsg);
         }
         private async Task<object?> LocalCall(MethodInfo methodInfo, object?[]? args = null)
         {
@@ -317,12 +341,16 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <returns></returns>
         public override async Task<object?> Call(MethodInfo methodInfo, object?[]? args = null)
         {
+#if DEBUG && false
+            JS.Log($"Call", methodInfo.Name, LocalInvoker);
+#endif
             if (LocalInvoker)
             {
-                return LocalCall(methodInfo, args);
+                return await LocalCall(methodInfo, args);
             }
+            await WhenReady;
             var serviceType = methodInfo.ReflectedType;
-            if (_port == null)
+            if (_portSimple == null)
             {
                 throw new Exception("ServiceCallDispatcher.Call: port is null.");
             }
@@ -336,7 +364,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var msgOut = new List<object?> { "call", requestId, targetMethod };
             msgOut.AddRange(msgData);
             var workerTask = new TaskCompletionSource<Array>();
-            _port.PostMessage(msgOut, transferable);
+            if (_port != null)_port.PostMessage(msgOut, transferable);
+            else _portSimple?.PostMessage(msgOut);
             _waiting.Add(requestId, workerTask);
             CheckBusyStateChanged();
             try
@@ -349,8 +378,21 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 string? err = returnArray.GetItem<string?>(0);
                 if (!string.IsNullOrEmpty(err)) throw new Exception(err);
                 var finalReturnType = methodInfo.GetFinalReturnType();
-                if (finalReturnType.IsVoid()) return null;
-                return returnArray.GetItem(finalReturnType, 1);
+#if DEBUG && false
+                JS.Log($"Call", methodInfo.Name, "return", finalReturnType.Name);
+#endif
+                if (finalReturnType.IsVoid())
+                {
+#if DEBUG && false
+                    JS.Log($"Call", methodInfo.Name, "return IsVoid");
+#endif
+                    return null;
+                }
+                var ret = returnArray.GetItem(finalReturnType, 1);
+#if DEBUG && false
+                JS.Log($"Call", methodInfo.Name, "return", finalReturnType.Name, ret);
+#endif
+                return ret;
             }
             finally
             {
@@ -492,7 +534,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         {
                             // send cancel message to worker
                             var callbackMsg = new List<object?> { "cancelToken", tokenId };
-                            _port?.PostMessage(callbackMsg);
+                            _portSimple?.PostMessage(callbackMsg);
                         });
                         ret[i] = tokenId;
                     }
@@ -609,7 +651,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                         {
                             //JS.Log($"Action called: {actionId}");
                             var callbackMsg = new List<object?> { "action", requestId, actionId };
-                            _port?.PostMessage(callbackMsg);
+                            _portSimple?.PostMessage(callbackMsg);
                         });
                     }
                     else
@@ -619,7 +661,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                             //JS.Log($"Action called: {actionId} {o}");
                             var callbackMsg = new List<object?> { "action", requestId, actionId };
                             callbackMsg.AddRange(args);
-                            _port?.PostMessage(callbackMsg);
+                            _portSimple?.PostMessage(callbackMsg);
                         }));
                     }
                 }

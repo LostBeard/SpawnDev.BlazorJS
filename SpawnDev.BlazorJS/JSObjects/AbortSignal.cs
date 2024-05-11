@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T">Type to read the property reason as</typeparam>
         /// <returns></returns>
-        public T ReasonAs<T>() => JSRef!.Get<T>("reason");
+        public T GetReason<T>() => JSRef!.Get<T>("reason");
         /// <summary>
         /// A JavaScript value providing the abort reason, once the signal has aborted.<br />
         /// </summary>

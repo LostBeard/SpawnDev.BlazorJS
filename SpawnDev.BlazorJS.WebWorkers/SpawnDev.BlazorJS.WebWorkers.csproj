@@ -4,7 +4,7 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.93</Version>
+		<Version>2.2.94</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
@@ -52,6 +52,8 @@
 			<Pack>true</Pack>
 			<PackagePath>tasks</PackagePath>
 		</Content>
+		<Content Remove="wwwroot\interconnect.js" />
+		<_ContentIncludedByDefault Remove="wwwroot\interconnect.js" />
 		<None Include="Images\icon-128.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
@@ -61,6 +63,7 @@
 			<PackagePath>\</PackagePath>
 		</None>
 		<None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
+		<None Include="wwwroot\interconnect.js" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">

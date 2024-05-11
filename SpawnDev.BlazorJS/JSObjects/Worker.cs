@@ -20,26 +20,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="url"></param>
         public Worker(string url) : base(JS.New(nameof(Worker), url)) { }
         #endregion
-        #region Properties
-
-        #endregion
         #region Methods
-        //public void Start() => JSRef.CallVoid("start");
         /// <summary>
         /// Immediately terminates the worker. This does not let worker finish its operations; it is halted at once. ServiceWorker instances do not support this method.
         /// </summary>
-        public void Terminate() => JSRef.CallVoid("terminate");
+        public void Terminate() => JSRef!.CallVoid("terminate");
         /// <summary>
         /// Sends a message — consisting of any JavaScript object — to the worker's inner scope.
         /// </summary>
         /// <param name="message"></param>
-        public void PostMessage(object message) => JSRef.CallVoid("postMessage", message);
+        public void PostMessage(object message) => JSRef!.CallVoid("postMessage", message);
         /// <summary>
         /// Sends a message — consisting of any JavaScript object — to the worker's inner scope.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="transfer"></param>
-        public void PostMessage(object message, object[] transfer) => JSRef.CallVoid("postMessage", message, transfer);
+        public void PostMessage(object message, object[] transfer) => JSRef!.CallVoid("postMessage", message, transfer);
         #endregion
         #region Events
         /// <summary>
