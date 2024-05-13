@@ -1,0 +1,81 @@
+﻿<div style="display: flex; flex-direction: row;">
+    <div style="">
+        <canvas @ref=CanvasElRef></canvas>
+    </div>
+    <div style="flex-grow: 1;">
+        <table style="width: 100%;">
+            <tr>
+                <td>Population</td>
+                <td>@Board.GenerationStat.Population</td>
+            </tr>
+            <tr>
+                <td>Deaths</td>
+                <td>@Board.GenerationStat.Deaths</td>
+            </tr>
+            <tr>
+                <td>Babies</td>
+                <td>@Board.GenerationStat.Babies</td>
+            </tr>
+            <tr>
+                <td>Younglings</td>
+                <td>@Board.GenerationStat.Younglings</td>
+            </tr>
+            <tr>
+                <td>Adults</td>
+                <td>@Board.GenerationStat.Adults</td>
+            </tr>
+            <tr>
+                <td>Elders</td>
+                <td>@Board.GenerationStat.Elders</td>
+            </tr>
+            <tr>
+                <td>Generation</td>
+                <td>@Board.GenerationStat.Generation</td>
+            </tr>
+            <tr>
+                <td>Tick Cost</td>
+                <td>@(Math.Round(Board.GenerationStat.Elapsed.TotalMilliseconds)) ms</td>
+            </tr>
+            <tr>
+                <td>Draw Cost</td>
+                <td>@(Math.Round(drawTime.TotalMilliseconds)) ms</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">Legend</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Void</td>
+                <td><div style="width: @(LegendColorSize)px;height: @(LegendColorSize)px; background-color: @(Colors[GameOfLife.BoardTileState.Void]);"></div></td>
+            </tr>
+            <tr>
+                <td>Baby</td>
+                <td><div style="width: @(LegendColorSize)px;height: @(LegendColorSize)px; background-color: @(Colors[GameOfLife.BoardTileState.Birth]);"></div></td>
+            </tr>
+            <tr>
+                <td>Youngling</td>
+                <td><div style="width: @(LegendColorSize)px;height: @(LegendColorSize)px; background-color: @(Colors[GameOfLife.BoardTileState.Youngling]);"></div></td>
+            </tr>
+            <tr>
+                <td>Adult</td>
+                <td><div style="width: @(LegendColorSize)px;height: @(LegendColorSize)px; background-color: @(Colors[GameOfLife.BoardTileState.Adult]);"></div></td>
+            </tr>
+            <tr>
+                <td>Elder</td>
+                <td><div style="width: @(LegendColorSize)px;height: @(LegendColorSize)px; background-color: @(Colors[GameOfLife.BoardTileState.Elder]);"></div></td>
+            </tr>
+            <tr>
+                <td>Dead Under Population</td>
+                <td><div style="width: @(LegendColorSize)px;height: @(LegendColorSize)px; background-color: @(Colors[GameOfLife.BoardTileState.DeathUnderPopulation]);"></div></td>
+            </tr>
+            <tr>
+                <td>Dead Over Population</td>
+                <td><div style="width: @(LegendColorSize)px;height: @(LegendColorSize)px; background-color: @(Colors[GameOfLife.BoardTileState.DeathOverPopulation]);"></div></td>
+            </tr>
+        </table>
+        <button onclick="@(() => TogglePaused())">@(Paused ? "Resume" : "Pause")</button>
+        <button disabled="@(!Paused)" onclick="@(() => Board.Tick())">Tick</button>
+        <button onclick="@(() => Reset())">Reset</button>
+        <!-- <button onclick="@(() => Snapshot())">Snapshot</button> -->
+    </div>
+</div>

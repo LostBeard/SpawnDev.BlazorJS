@@ -72,7 +72,7 @@ builder.Services.AddSingleton<ContextMenuService>();
 // App service
 builder.Services.AddSingleton<JSObjectAnalyzer>();
 
-#if DEBUG
+#if DEBUG && false
 var host = builder.Build();
 await host.StartBackgroundServices();
 //
@@ -116,40 +116,8 @@ JS.Set("_cancellationToken", cancellationSource.Token);
 JS.Log("_cancellationToken", cancellationSource.Token);
 var copyToken = JS.Get<SharedCancellationToken>("_cancellationToken");
 
-
-//using var arrayBuffer = new ArrayBuffer(16);
-//JS.Set("_arrayBuffer", arrayBuffer);
-//JS.Log("_arrayBuffer", arrayBuffer);
-//using var intArray = new Int32Array(arrayBuffer);
-//JS.Set("_intArray", intArray);
-//JS.Log("_intArray", intArray);
-
-//try
-//{
-//    var g1 = JS.Get<int[]>("_arrayBuffer");
-//    var gg = true;
-//}
-//catch
-//{
-//    var gg = true;
-//}
-//try
-//{
-//    var g2 = JS.Get<int[]>("intArray");
-//    var gg = true;
-//}
-//catch
-//{
-//    var gg = true;
-//}
-// 
 await host.BlazorJSRunAsync();
 #else
 // build and Init using BlazorJSRunAsync (instead of RunAsync)
 await builder.Build().BlazorJSRunAsync();
 #endif
-
-static class TestA
-{
-    public static void WriteLine(string msg) => Console.WriteLine(msg);
-}
