@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             _this.AddJSRuntimeJsonConverterFactories(o =>
             {
-                o.Add(new SharedCancellationTokenJsonConverter());
+                //o.Add(new SharedCancellationTokenJsonConverter());
             });
             return _this.AddSingleton(sp =>
             {

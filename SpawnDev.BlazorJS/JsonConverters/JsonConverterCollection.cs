@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SpawnDev.BlazorJS
+namespace SpawnDev.BlazorJS.JsonConverters
 {
     public class JsonConverterCollection : JsonConverterFactory
     {

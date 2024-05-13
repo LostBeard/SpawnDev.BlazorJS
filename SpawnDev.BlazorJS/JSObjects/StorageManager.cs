@@ -17,21 +17,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a Promise that resolves to true if persistence has already been granted for your site's storage.
         /// </summary>
         /// <returns></returns>
-        public Task<bool> Persisted() => JSRef.CallAsync<bool>("persisted");
+        public Task<bool> Persisted() => JSRef!.CallAsync<bool>("persisted");
         /// <summary>
         /// Returns a Promise that resolves to true if the user agent is able to persist your site's storage.
         /// </summary>
         /// <returns></returns>
-        public Task<bool> Persist() => JSRef.CallAsync<bool>("persist");
+        public Task<bool> Persist() => JSRef!.CallAsync<bool>("persist");
         /// <summary>
         /// Returns a Promise that resolves to an object containing usage and quota numbers for your origin.
         /// </summary>
         /// <returns></returns>
-        public Task<StorageManagerEstimate> Estimate() => JSRef.CallAsync<StorageManagerEstimate>("estimate");
+        public Task<StorageManagerEstimate> Estimate() => JSRef!.CallAsync<StorageManagerEstimate>("estimate");
         /// <summary>
         /// The getDirectory() method of the StorageManager interface is used to obtain a reference to a FileSystemDirectoryHandle object allowing access to a directory and its contents, stored in the origin private file system (OPFS).
         /// </summary>
         /// <returns></returns>
-        public Task<FileSystemDirectoryHandle> GetDirectory() => JSRef.CallAsync<FileSystemDirectoryHandle>("getDirectory");
+        public Task<FileSystemDirectoryHandle> GetDirectory() => JSRef!.CallAsync<FileSystemDirectoryHandle>("getDirectory");
     }
 }

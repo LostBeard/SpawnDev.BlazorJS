@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
@@ -7,6 +9,58 @@ namespace SpawnDev.BlazorJS
     /// </summary>
     public static class TypeExtensions
     {
+        /// <summary>
+        /// Returns a Dictionary with key value being the property's json name and the value the .Net property
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="jsonNamingPolicy"></param>
+        /// <returns></returns>
+        public static Dictionary<string, MemberInfo> GetTypeJsonProperties(this Type t, JsonNamingPolicy? jsonNamingPolicy = null)
+        {
+            // check
+            var value = new Dictionary<string, MemberInfo>();
+            var props = t.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            foreach (var prop in props)
+            {
+                var jsonIgnoreAttr = prop.GetCustomAttribute<JsonIgnoreAttribute>(true);
+                if (jsonIgnoreAttr != null && jsonIgnoreAttr.Condition == JsonIgnoreCondition.Always) continue;
+                var isPublic = prop.GetAccessors(false).Length > 0;
+                var jsonPropNameAttr = prop.GetCustomAttribute<JsonPropertyNameAttribute>(true);
+                var include = jsonPropNameAttr != null || Attribute.IsDefined(prop, typeof(JsonIncludeAttribute));
+                if (!include && !isPublic) continue;
+                var propName = jsonPropNameAttr?.Name ?? prop.Name;
+                if (jsonPropNameAttr != null)
+                {
+                    propName = jsonPropNameAttr.Name;
+                }
+                else
+                {
+                    propName = jsonNamingPolicy == null ? prop.Name : jsonNamingPolicy.ConvertName(prop.Name);
+                }
+                value[propName] = prop;
+            }
+            var fields = t.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            foreach (var prop in fields)
+            {
+                var jsonIgnoreAttr = prop.GetCustomAttribute<JsonIgnoreAttribute>(true);
+                if (jsonIgnoreAttr != null && jsonIgnoreAttr.Condition == JsonIgnoreCondition.Always) continue;
+                var jsonPropNameAttr = prop.GetCustomAttribute<JsonPropertyNameAttribute>(true);
+                var include = jsonPropNameAttr != null || Attribute.IsDefined(prop, typeof(JsonIncludeAttribute));
+                if (!include) continue;
+                var propName = jsonPropNameAttr?.Name ?? prop.Name;
+                if (jsonPropNameAttr != null)
+                {
+                    propName = jsonPropNameAttr.Name;
+                }
+                else
+                {
+                    propName = jsonNamingPolicy == null ? prop.Name : jsonNamingPolicy.ConvertName(prop.Name);
+                }
+                value[propName] = prop;
+            }
+            return value!;
+        }
+
         //public static Type FinalReturnType(this Type type) => type.IsAsync() ? type.AsyncReturnType() ?? typeof(void) : type;
         static Dictionary<Type, object?> TypeDefaultsCache { get; } = new Dictionary<Type, object?>();
         static object? GetDefault<T>() => default(T);

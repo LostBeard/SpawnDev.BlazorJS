@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {
@@ -8,12 +9,20 @@ namespace SpawnDev.BlazorJS.WebWorkers
     /// </summary>
     public class SharedCancellationToken : IDisposable
     {
-        private bool _cancelled = false;
+
+        [JsonInclude]
+        [JsonPropertyName("cancelled")]
+        internal bool _cancelled = false;
+
+        [JsonInclude]
+        [JsonPropertyName("source")]
         internal SharedCancellationTokenSource? _source = null;
         internal SharedCancellationToken(SharedCancellationTokenSource source)
         {
             _source = source;
         }
+        [JsonConstructor]
+        internal SharedCancellationToken() { }
         /// <summary>
         /// Creates an instance of SharedCancellationToken and setting the cancelled state that cannot be cancelled in the future
         /// </summary>
@@ -43,6 +52,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <summary>
         /// Returns true if the cancelled flag is set to true
         /// </summary>
+        [JsonIgnore]
         public bool IsCancellationRequested
         {
             get

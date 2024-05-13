@@ -88,7 +88,7 @@ JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
         tasks.Add(Async.RunAsync(async () =>
         {
             var removeInstanceId = await windowInstance.Dispatcher!.Run(() => JS.InstanceId);
-            await windowInstance.Dispatcher.Run(() => TestA.WriteLine("Hello " +removeInstanceId + " from " + instanceId));
+            await windowInstance.Dispatcher.Run(() => TestA.WriteLine("Hello " + removeInstanceId + " from " + instanceId));
         }));
     }
     try
@@ -101,6 +101,47 @@ JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
     }
     return "ok";
 }));
+//var actt = new Action(() => {
+//    var sharedArrayBuffer = new SharedArrayBuffer(1);
+//    Int32Array array = new Int32Array(sharedArrayBuffer);
+//    Span<int> nativeArray = array; // error  
+//});
+
+using var cancellationSource = new SharedCancellationTokenSource();
+JS.Set("_cancellationSource", cancellationSource);
+JS.Log("_cancellationSource", cancellationSource);
+var copy = JS.Get<SharedCancellationTokenSource>("_cancellationSource");
+
+JS.Set("_cancellationToken", cancellationSource.Token);
+JS.Log("_cancellationToken", cancellationSource.Token);
+var copyToken = JS.Get<SharedCancellationToken>("_cancellationToken");
+
+
+//using var arrayBuffer = new ArrayBuffer(16);
+//JS.Set("_arrayBuffer", arrayBuffer);
+//JS.Log("_arrayBuffer", arrayBuffer);
+//using var intArray = new Int32Array(arrayBuffer);
+//JS.Set("_intArray", intArray);
+//JS.Log("_intArray", intArray);
+
+//try
+//{
+//    var g1 = JS.Get<int[]>("_arrayBuffer");
+//    var gg = true;
+//}
+//catch
+//{
+//    var gg = true;
+//}
+//try
+//{
+//    var g2 = JS.Get<int[]>("intArray");
+//    var gg = true;
+//}
+//catch
+//{
+//    var gg = true;
+//}
 // 
 await host.BlazorJSRunAsync();
 #else
