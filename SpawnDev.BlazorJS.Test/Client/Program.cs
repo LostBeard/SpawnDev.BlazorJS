@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
@@ -9,6 +10,8 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 
 #if DEBUG
@@ -85,11 +88,11 @@ JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
     var tasks = new List<Task>();
     foreach (var windowInstance in windowInstances)
     {
-        tasks.Add(Async.RunAsync(async () =>
-        {
-            var removeInstanceId = await windowInstance.Dispatcher!.Run(() => JS.InstanceId);
-            await windowInstance.Dispatcher.Run(() => TestA.WriteLine("Hello " + removeInstanceId + " from " + instanceId));
-        }));
+        //tasks.Add(Async.RunAsync(async () =>
+        //{
+        //    var removeInstanceId = await windowInstance.Dispatcher!.Run(() => JS.InstanceId);
+        //    await windowInstance.Dispatcher.Run(() => TestA.WriteLine("Hello " + removeInstanceId + " from " + instanceId));
+        //}));
     }
     try
     {
@@ -106,6 +109,25 @@ JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
 //    Int32Array array = new Int32Array(sharedArrayBuffer);
 //    Span<int> nativeArray = array; // error  
 //});
+var sharedArrayBuffer = new ArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 5000000);
+var array = new Int32Array(sharedArrayBuffer);
+var uint8Array = new Uint8Array(sharedArrayBuffer);
+var sw = Stopwatch.StartNew();
+var arint = array.ToArray<int>();
+sw.Stop();
+var gg = sw.Elapsed.TotalMilliseconds;
+
+var apples = new Apple[2];
+apples[0] = new Apple { X = 1, Y = 2, Z = 3 };
+apples[1] = new Apple { X = 7, Y = 8, Z = 9 };
+var applesBytes = MemoryMarshal.Cast<Apple, byte>(apples).ToArray();
+
+
+uint8Array.Write(apples);
+var applesBack = uint8Array.ToArray<Apple>(0, 2);
+
+//var readBack = array.ToArray();
+
 
 using var cancellationSource = new SharedCancellationTokenSource();
 JS.Set("_cancellationSource", cancellationSource);
@@ -121,3 +143,11 @@ await host.BlazorJSRunAsync();
 // build and Init using BlazorJSRunAsync (instead of RunAsync)
 await builder.Build().BlazorJSRunAsync();
 #endif
+
+[StructLayout(LayoutKind.Sequential)]
+struct Apple
+{
+    public int X;
+    public int Y;
+    public int Z;
+}

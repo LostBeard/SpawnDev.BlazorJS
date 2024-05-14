@@ -124,7 +124,7 @@ namespace SpawnDev.BlazorJS.Test.GameOfLife
                     }
                     if (selfValueNew != selfValue)
                     {
-                        generationStat.Changed.Add(new ChangedCell { X = x, Y = y, OldValue = selfValue, Value = selfValueNew });
+                        generationStat.Changed.Add(new ChangedCell { X = x, Y = y, Value = selfValueNew });
                     }
                     BackState[x, y] = selfValueNew;
                 }
@@ -160,7 +160,7 @@ namespace SpawnDev.BlazorJS.Test.GameOfLife
                     {
                         GenerationStat.Babies++;
                         GenerationStat.Population++;
-                        GenerationStat.Changed.Add(new ChangedCell { X = x, Y = y, OldValue = BoardTileState.Void, Value = value });
+                        GenerationStat.Changed.Add(new ChangedCell { X = x, Y = y, Value = value });
                     }
                 }
             }

@@ -1,11 +1,13 @@
-﻿namespace SpawnDev.BlazorJS.Test.GameOfLife
+﻿using System.Text.Json.Serialization;
+
+namespace SpawnDev.BlazorJS.Test.GameOfLife
 {
     public class ChangedCell
     {
         public int X { get; set; }
         public int Y { get; set; }
+        [JsonPropertyName("V")]
         public BoardTileState Value { get; set; }
-        public BoardTileState OldValue { get; set; }
     }
     public class GenerationStat
     {

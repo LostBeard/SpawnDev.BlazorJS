@@ -76,7 +76,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="byteOffset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public TTypedArray ReCast<TTypedArray>(long byteOffset, long length) where TTypedArray : TypedArray => Buffer.Using(o => (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), new object?[] { o, ByteOffset + byteOffset, length})!);
+        public TTypedArray ReCast<TTypedArray>(long byteOffset, long length) where TTypedArray : TypedArray => Buffer.Using(o => (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), new object?[] { o, ByteOffset + byteOffset, length })!);
         /// <summary>
         /// Create a new typed array starting at this typed array's ByteOffset + byteOffset
         /// </summary>
@@ -285,6 +285,25 @@ namespace SpawnDev.BlazorJS.JSObjects
             uint8Array.Set(data);
         }
         /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
+        public void Write<T>(T[] typedArray) where T : unmanaged
+        {
+            if (typeof(T) == typeof(byte)) WriteBytes((byte[])(object)typedArray);
+            else WriteBytes(MemoryMarshal.Cast<T, byte>(typedArray).ToArray());
+        }
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
+        /// <param name="targetOffset"></param>
+        public void Write<T>(T[] typedArray, long targetOffset) where T : unmanaged
+        {
+            if (typeof(T) == typeof(byte)) WriteBytes((byte[])(object)typedArray, targetOffset);
+            else WriteBytes(MemoryMarshal.Cast<T, byte>(typedArray).ToArray(), targetOffset);
+        }
+        /// <summary>
         /// Returns an array of type T
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -294,10 +313,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             var bytes = ReadBytes();
             var typeofT = typeof(T);
             if (typeofT == typeof(byte)) return (T[])(object)bytes;
-            var size = Marshal.SizeOf<T>();
-            var array = (T[])System.Array.CreateInstance(typeofT, bytes.Length / size);
-            System.Buffer.BlockCopy(bytes, 0, array, 0, bytes.Length);
-            return array;
+            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
+            return byteSpan.ToArray();
         }
         /// <summary>
         /// Read an array of type T starting at this TypedArray's ByteOffset + byteOffset
@@ -310,10 +327,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             var typeofT = typeof(T);
             var bytes = ReadBytes(byteOffset);
             if (typeofT == typeof(byte)) return (T[])(object)bytes;
-            var size = Marshal.SizeOf<T>();
-            var array = (T[])System.Array.CreateInstance(typeofT, bytes.Length / size);
-            System.Buffer.BlockCopy(bytes, 0, array, 0, bytes.Length);
-            return array;
+            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
+            return byteSpan.ToArray();
         }
         /// <summary>        
         /// Read an array of type T starting at this TypedArray's ByteOffset + byteOffset
@@ -329,9 +344,34 @@ namespace SpawnDev.BlazorJS.JSObjects
             var byteLength = count * size;
             var bytes = ReadBytes(byteOffset, byteLength);
             if (typeofT == typeof(byte)) return (T[])(object)bytes;
-            var array = (T[])System.Array.CreateInstance(typeofT, bytes.Length / size);
-            System.Buffer.BlockCopy(bytes, 0, array, 0, bytes.Length);
-            return array;
+            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
+            return byteSpan.ToArray();
+        }
+        public Span<T> ToSpan<T>() where T : struct
+        {
+            var typeofT = typeof(T);
+            var bytes = ReadBytes();
+            if (typeofT == typeof(byte)) return (T[])(object)bytes;
+            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
+            return byteSpan;
+        }
+        public Span<T> ToSpan<T>(long byteOffset) where T : struct
+        {
+            var typeofT = typeof(T);
+            var bytes = ReadBytes(byteOffset);
+            if (typeofT == typeof(byte)) return (T[])(object)bytes;
+            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
+            return byteSpan;
+        }
+        public Span<T> ToSpan<T>(long byteOffset, long count) where T : struct
+        {
+            var typeofT = typeof(T);
+            var size = Marshal.SizeOf<T>();
+            var byteLength = count * size;
+            var bytes = ReadBytes(byteOffset, byteLength);
+            if (typeofT == typeof(byte)) return (T[])(object)bytes;
+            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
+            return byteSpan;
         }
     }
 }

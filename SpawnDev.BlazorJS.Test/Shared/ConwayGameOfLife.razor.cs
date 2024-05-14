@@ -3,6 +3,7 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Test.GameOfLife;
 using System.Diagnostics;
 using Timer = System.Timers.Timer;
+using SpawnDev.BlazorJS.WebWorkers;
 
 namespace SpawnDev.BlazorJS.Test.Shared
 {
@@ -12,22 +13,26 @@ namespace SpawnDev.BlazorJS.Test.Shared
         CanvasRenderingContext2D? ctx = null;
         ElementReference CanvasElRef { get; set; }
         Timer? Timer = null;
-        int TileSize = 10;
-        int LegendColorSize => TileSize * 2;
+        int TileSize = 4;
+        int LegendColorSize => 16;
         int BoardRowWidth => TileSize * Board.Width;
         int BoardRowHeight => TileSize * Board.Height;
         Board Board = new Board();
         bool Paused = false;
         TimeSpan drawTime = new TimeSpan();
-        protected override void OnAfterRender(bool firstRender)
+        //WebWorker? worker = null;
+        [Inject]
+        WebWorkerService WebWorkerService { get; set; }
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (canvas == null)
             {
                 canvas = new HTMLCanvasElement(CanvasElRef);
+                //worker = await WebWorkerService.GetWebWorker();
                 ctx = canvas.Get2DContext();
                 Board.OnTicked += Board_OnTicked;
                 Board.OnReset += Board_OnReset;
-                Board.Resize(64, 64, 30);
+                Board.Resize(128, 128, 20);
                 Timer = new Timer();
                 Timer.Elapsed += Timer_Elapsed;
                 Timer.Interval = 5;
@@ -35,6 +40,32 @@ namespace SpawnDev.BlazorJS.Test.Shared
                 Timer.Start();
             }
         }
+        //public static class Renderer
+        //{
+        //    static OffscreenCanvas? OffscreenCanvas { get; set; } = null;
+        //    static CanvasRenderingContext2D? ctx { get; set; } = null;
+        //    static string FillStyle = "";
+        //    public static void Render(List<ChangedCell> data)
+        //    {
+
+        //    }
+        //    public static void Clear(string color)
+        //    {
+
+        //    }
+        //    public static void Init(OffscreenCanvas offscreenCanvas)
+        //    {
+        //        OffscreenCanvas = offscreenCanvas;
+        //        ctx = offscreenCanvas.Get2DContext();
+        //    }
+        //    public static void Release()
+        //    {
+        //        ctx?.Dispose();
+        //        ctx = null;
+        //        OffscreenCanvas?.Dispose();
+        //        OffscreenCanvas = null;
+        //    }
+        //}
         void Snapshot()
         {
             var snapshot = Board.SaveSnapShot();
@@ -58,7 +89,7 @@ namespace SpawnDev.BlazorJS.Test.Shared
             ctx.FillStyle = Colors[BoardTileState.Void];
             ctx.FillRect(0, 0, canvasWidth, canvasHeight);
         }
-        Dictionary<BoardTileState, string> Colors = new Dictionary<BoardTileState, string> {
+        static Dictionary<BoardTileState, string> Colors = new Dictionary<BoardTileState, string> {
             { BoardTileState.Void, "#000000" },
             { BoardTileState.Birth, "#0062ff" },
             { BoardTileState.Youngling, "#2e7eff" },
