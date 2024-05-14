@@ -58,9 +58,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>An array of type TElement</returns>
         public virtual TElement[] ToArray(long start, long length) => ToArray<TElement>(start * BYTES_PER_ELEMENT, length);
         /// <summary>
+        /// Read a Span of type TElement
+        /// </summary>
+        /// <param name="start">The TElement index to start at</param>
+        /// <param name="length">The number of TElements to return</param>
+        /// <returns>An array of type TElement</returns>
+        public virtual Span<TElement> ToSpan(long start, long length) => ToSpan<TElement>(start * BYTES_PER_ELEMENT, length);
+        /// <summary>
+        /// Read a Span of type TElement
+        /// </summary>
+        /// <param name="start">The TElement index to start at</param>
+        /// <returns>A Span of type TElement</returns>
+        public virtual Span<TElement> ToSpan(long start) => ToSpan<TElement>(start * BYTES_PER_ELEMENT);
+        /// <summary>
+        /// Read a Span of type TElement
+        /// </summary>
+        /// <returns>A Span of type TElement</returns>
+        public virtual Span<TElement> ToSpan() => ToSpan<TElement>();
+        /// <summary>
         /// Returns a value iterator 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A Span of type TElement</returns>
         public Iterator<TElement> Values() => JSRef!.Call<Iterator<TElement>>("values");
     }
     /// <summary>
@@ -347,29 +365,47 @@ namespace SpawnDev.BlazorJS.JSObjects
             var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
             return byteSpan.ToArray();
         }
+        /// <summary>
+        /// Read a Span of type T starting at this TypedArray's ByteOffset + byteOffset
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public Span<T> ToSpan<T>() where T : struct
         {
             var typeofT = typeof(T);
             var bytes = ReadBytes();
-            if (typeofT == typeof(byte)) return (T[])(object)bytes;
+            if (typeofT == typeof(byte)) return (Span<T>)(T[])(object)bytes;
             var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
             return byteSpan;
         }
+        /// <summary>
+        /// Read a Span of type T starting at this TypedArray's ByteOffset + byteOffset
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="byteOffset"></param>
+        /// <returns></returns>
         public Span<T> ToSpan<T>(long byteOffset) where T : struct
         {
             var typeofT = typeof(T);
             var bytes = ReadBytes(byteOffset);
-            if (typeofT == typeof(byte)) return (T[])(object)bytes;
+            if (typeofT == typeof(byte)) return (Span<T>)(T[])(object)bytes;
             var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
             return byteSpan;
         }
+        /// <summary>
+        /// Read a Span of type T starting at this TypedArray's ByteOffset + byteOffset
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="byteOffset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public Span<T> ToSpan<T>(long byteOffset, long count) where T : struct
         {
             var typeofT = typeof(T);
             var size = Marshal.SizeOf<T>();
             var byteLength = count * size;
             var bytes = ReadBytes(byteOffset, byteLength);
-            if (typeofT == typeof(byte)) return (T[])(object)bytes;
+            if (typeofT == typeof(byte)) return (Span<T>)(T[])(object)bytes;
             var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
             return byteSpan;
         }
