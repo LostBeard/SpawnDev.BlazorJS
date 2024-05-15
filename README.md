@@ -632,16 +632,24 @@ Where **AsyncCallDispatcher** is used:
 - Does not support static methods, private methods, synchronous calls, or properties.
 - Requires services to be registered using an interface.
 
-Example that demonstrates using an Expression and a Delegate.   
+Example that demonstrates using an Expression, a Delegate, and an Interface.
 ```cs
-public class MyService
+public interface IMyService
+{
+    Task<string> WorkerMethodAsync(string input);
+}
+public class MyService : IMyService
 {
     WebWorkerService WebWorkerService;
     public MyService(WebWorkerService webWorkerService)
     {
         WebWorkerService = webWorkerService;
     }
-    string WorkerMethod(string input)
+    private string WorkerMethod(string input)
+    {
+        return $"Hello {input} from {WebWorkerService.InstanceId}";
+    }
+    public async Task<string> WorkerMethodAsync(string input)
     {
         return $"Hello {input} from {WebWorkerService.InstanceId}";
     }
@@ -650,11 +658,15 @@ public class MyService
         // Call the private method WorkerMethod on this scope (normal)
         Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
 
-        // Call the private method WorkerMethod in a WebWorker thread using an Expression
+        // Call a private synchronous method in a WebWorker thread using an Expression
         Console.WriteLine(await WebWorkerService.TaskPool.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
 
-        // Call the private method WorkerMethod in a WebWorker thread using a Delegate
+        // Call a private synchronous method in a WebWorker thread using a Delegate
         Console.WriteLine(await WebWorkerService.TaskPool.Invoke(WorkerMethod, WebWorkerService.InstanceId));
+
+        // Call a public async method in a WebWorker thread using am Interface Proxy
+        var service = WebWorkerService.TaskPool.GetService<IMyService>();
+        Console.WriteLine(await service.WorkerMethodAsync(WebWorkerService.InstanceId));
     }
 }
 ```
