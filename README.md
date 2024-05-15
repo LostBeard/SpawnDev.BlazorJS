@@ -676,6 +676,7 @@ WebWorkerService.Instances is a **List&lt;AppInstance&gt;** where each item repr
 
 The below example iterates all running window instances, reads a service proeprty, and calls a method in that instance.  
 ```cs
+// below gets an instance of AppInstance for each instance running in a Window global scope
 var windowInstances = WebWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
 var localInstanceId = WebWorkerService.InstanceId;
 foreach (var windowInstance in windowInstances)
