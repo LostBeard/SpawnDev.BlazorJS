@@ -1,4 +1,6 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.Reflection;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.WebWorkers
@@ -6,7 +8,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
     /// <summary>
     /// Represents a known WebWorkerService app instance connection
     /// </summary>
-    public class AppInstance : IDisposable
+    public class AppInstance : AsyncCallDispatcher
     {
         List<ServiceCallDispatcher> IncomingConnections = new List<ServiceCallDispatcher>();
         WebWorkerService? WebWorkerService = null;
@@ -30,7 +32,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <summary>
         /// Returns the service call dispatcher for this instance
         /// </summary>
-        public ServiceCallDispatcher? Dispatcher
+        ServiceCallDispatcher? Dispatcher
         {
             get
             {
@@ -38,6 +40,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 if (!IsDisposed && !DispatcherLoadFailed) TryConnect();
                 return _Dispatcher;
             }
+        }
+        public override Task<object?> Call(MethodInfo methodInfo, object?[]? args = null)
+        {
+            return Dispatcher!.Call(methodInfo, args);
         }
         internal AppInstance(WebWorkerService webWorkerService, AppInstanceInfo info)
         {

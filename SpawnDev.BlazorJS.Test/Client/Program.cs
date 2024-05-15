@@ -9,6 +9,8 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 #if DEBUG
 JSObject.UndisposedHandleVerboseMode = false;
@@ -84,11 +86,11 @@ JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
     var tasks = new List<Task>();
     foreach (var windowInstance in windowInstances)
     {
-        //tasks.Add(Async.RunAsync(async () =>
-        //{
-        //    var removeInstanceId = await windowInstance.Dispatcher!.Run(() => JS.InstanceId);
-        //    await windowInstance.Dispatcher.Run(() => TestA.WriteLine("Hello " + removeInstanceId + " from " + instanceId));
-        //}));
+        tasks.Add(Async.RunAsync(async () =>
+        {
+            var removeInstanceId = await windowInstance!.Run(() => JS.InstanceId);
+            await windowInstance.Run(() => Console.WriteLine("Hello " + removeInstanceId + " from " + instanceId));
+        }));
     }
     try
     {
@@ -100,39 +102,39 @@ JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
     }
     return "ok";
 }));
-//var actt = new Action(() => {
-//    var sharedArrayBuffer = new SharedArrayBuffer(1);
-//    Int32Array array = new Int32Array(sharedArrayBuffer);
-//    Span<int> nativeArray = array; // error  
-//});
-var sharedArrayBuffer = new ArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 5000000);
-var array = new Int32Array(sharedArrayBuffer);
-var uint8Array = new Uint8Array(sharedArrayBuffer);
-var sw = Stopwatch.StartNew();
-var arint = array.ToArray<int>();
-sw.Stop();
-var gg = sw.Elapsed.TotalMilliseconds;
+////var actt = new Action(() => {
+////    var sharedArrayBuffer = new SharedArrayBuffer(1);
+////    Int32Array array = new Int32Array(sharedArrayBuffer);
+////    Span<int> nativeArray = array; // error  
+////});
+//var sharedArrayBuffer = new ArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 5000000);
+//var array = new Int32Array(sharedArrayBuffer);
+//var uint8Array = new Uint8Array(sharedArrayBuffer);
+//var sw = Stopwatch.StartNew();
+//var arint = array.ToArray<int>();
+//sw.Stop();
+//var gg = sw.Elapsed.TotalMilliseconds;
 
-var apples = new Apple[2];
-apples[0] = new Apple { X = 1, Y = 2, Z = 3 };
-apples[1] = new Apple { X = 7, Y = 8, Z = 9 };
-var applesBytes = MemoryMarshal.Cast<Apple, byte>(apples).ToArray();
-
-
-uint8Array.Write(apples);
-var applesBack = uint8Array.ToArray<Apple>(0, 2);
-
-//var readBack = array.ToArray();
+//var apples = new Apple[2];
+//apples[0] = new Apple { X = 1, Y = 2, Z = 3 };
+//apples[1] = new Apple { X = 7, Y = 8, Z = 9 };
+//var applesBytes = MemoryMarshal.Cast<Apple, byte>(apples).ToArray();
 
 
-using var cancellationSource = new SharedCancellationTokenSource();
-JS.Set("_cancellationSource", cancellationSource);
-JS.Log("_cancellationSource", cancellationSource);
-var copy = JS.Get<SharedCancellationTokenSource>("_cancellationSource");
+//uint8Array.Write(apples);
+//var applesBack = uint8Array.ToArray<Apple>(0, 2);
 
-JS.Set("_cancellationToken", cancellationSource.Token);
-JS.Log("_cancellationToken", cancellationSource.Token);
-var copyToken = JS.Get<SharedCancellationToken>("_cancellationToken");
+////var readBack = array.ToArray();
+
+
+//using var cancellationSource = new SharedCancellationTokenSource();
+//JS.Set("_cancellationSource", cancellationSource);
+//JS.Log("_cancellationSource", cancellationSource);
+//var copy = JS.Get<SharedCancellationTokenSource>("_cancellationSource");
+
+//JS.Set("_cancellationToken", cancellationSource.Token);
+//JS.Log("_cancellationToken", cancellationSource.Token);
+//var copyToken = JS.Get<SharedCancellationToken>("_cancellationToken");
 
 await host.BlazorJSRunAsync();
 #else

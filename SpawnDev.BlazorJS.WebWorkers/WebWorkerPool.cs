@@ -1,6 +1,5 @@
 ﻿using SpawnDev.BlazorJS.Reflection;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace SpawnDev.BlazorJS.WebWorkers
 {

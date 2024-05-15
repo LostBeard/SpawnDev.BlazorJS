@@ -632,7 +632,7 @@ Where **AsyncCallDispatcher** is used:
 - Does not support static methods, private methods, synchronous calls, or properties.
 - Requires services to be registered using an interface.
 
-Example that demonstrates using an Expression, a Delegate, and an Interface.
+Example that demonstrates using an Expression, a Delegate, and an Interface proxy to call service methods in a TaskPool WebWorker.
 ```cs
 public interface IMyService
 {
