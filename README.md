@@ -674,6 +674,20 @@ public class MyService : IMyService
 ## WebWorkerService.Instances
 WebWorkerService tracks the start and termination of every instance of WebWorkerService on the same origin. WebWorkerService.Instances is a **List&lt;AppInstance&gt;** where each item represents a running instance. The **AppInstance** class provides some basic information about the running Blazor instance and also allows calling into the instance via its base class [**AsyncCallDispatcher**]($asynccalldispatcher)
 
+The below example iterates all running window instances, reads a service proeprty, and calls a method in that instance.  
+```cs
+var windowInstances = WebWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
+var localInstanceId = WebWorkerService.InstanceId;
+foreach (var windowInstance in windowInstances)
+{
+    // below line is an example of how to read a property from another instance
+    // here we are reading the BlazorJSRuntime service's InstanceId property from a window instance
+    var remoteInstanceId = await windowInstance!.Run(() => JS.InstanceId);
+    // below line is an example of how to call a method (here, the static method Console.WriteLine) in another instance
+    await windowInstance.Run(() => Console.WriteLine("Hello " + remoteInstanceId + " from " + localInstanceId));
+}
+```
+
 ## WebWorkerService.TaskPool
 WebWorkerService.TaskPool is ready to call any registered service in a background thread. If WebWorkers are not supported, TaskPool calls will run in the Window scope. The TaskPool settings can be configured when calling AddWebWorkerService(). By default, no worker tasks are started automatically at startup and the max pool size is set to 1.
 

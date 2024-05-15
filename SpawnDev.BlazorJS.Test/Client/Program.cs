@@ -81,24 +81,15 @@ var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
 {
     var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
-    var windowInstances = webWorkerService.Windows;
-    var instanceId = JS.InstanceId;
-    var tasks = new List<Task>();
+    var windowInstances = webWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
+    var localInstanceId = webWorkerService.InstanceId;
     foreach (var windowInstance in windowInstances)
     {
-        tasks.Add(Async.RunAsync(async () =>
-        {
-            var removeInstanceId = await windowInstance!.Run(() => JS.InstanceId);
-            await windowInstance.Run(() => Console.WriteLine("Hello " + removeInstanceId + " from " + instanceId));
-        }));
-    }
-    try
-    {
-        await Task.WhenAll(tasks);
-    }
-    catch (Exception ex)
-    {
-        JS.Log($"WhenAll error:", ex.Message, ex.StackTrace);
+        // below line is an example of how to read a property from another instance
+        // here we are reading the BlazorJSRuntime service's InstanceId property from a window instance
+        var remoteInstanceId = await windowInstance!.Run(() => JS.InstanceId);
+        // below line is an example of how to call a method (here, the static method Console.WriteLine) in another instance
+        await windowInstance.Run(() => Console.WriteLine("Hello " + remoteInstanceId + " from " + localInstanceId));
     }
     return "ok";
 }));
