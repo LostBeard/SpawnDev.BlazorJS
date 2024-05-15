@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
@@ -10,9 +9,6 @@ using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
 using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text.Json;
 
 #if DEBUG
 JSObject.UndisposedHandleVerboseMode = false;
@@ -144,10 +140,10 @@ await host.BlazorJSRunAsync();
 await builder.Build().BlazorJSRunAsync();
 #endif
 
-[StructLayout(LayoutKind.Sequential)]
-struct Apple
-{
-    public int X;
-    public int Y;
-    public int Z;
-}
+//[StructLayout(LayoutKind.Sequential)]
+//struct Apple
+//{
+//    public int X;
+//    public int Y;
+//    public int Z;
+//}
