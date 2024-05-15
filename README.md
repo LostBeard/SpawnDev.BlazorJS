@@ -672,7 +672,7 @@ public class MyService : IMyService
 ```
 
 ## WebWorkerService.Instances
-WebWorkerService tracks the start and termination of every instance of WebWorkerService on the same origin. WebWorkerService.Instances is a **List&lt;AppInstance&gt;** where each item represents a running instance. The **AppInstance** class provides some basic information about the running Blazor instance and also allows calling into the instance via its base class [**AsyncCallDispatcher**]($asynccalldispatcher)
+WebWorkerService.Instances is a **List&lt;AppInstance&gt;** where each item represents a running instance. The **AppInstance** class provides some basic information about the running Blazor instance and also allows calling into the instance via its base class [**AsyncCallDispatcher**]($asynccalldispatcher)
 
 The below example iterates all running window instances, reads a service proeprty, and calls a method in that instance.  
 ```cs
