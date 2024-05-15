@@ -612,10 +612,10 @@ await builder.Build().BlazorJSRunAsync();
 **AsyncCallDispatcher** is the base class used for accessing other instances of Blazor. **AsyncCallDispatcher** provides a few different calling conventions for instance to instance communication.
 
 Where **AsyncCallDispatcher** is used:  
-- The classes [**WebWorker**](#webworker), [**SharedWebWorker**](#sharedwebworker), and **WebWorkerPool** all inherit from **AsyncCallDispatcher**.
+- The classes **AppInstance**, [**WebWorker**](#webworker), [**SharedWebWorker**](#sharedwebworker), and **WebWorkerPool** all inherit from **AsyncCallDispatcher**.
 - [**WebWorkerService.TaskPool**](#webworkerservicetaskpool) - an instance of **WebWorkerPool**, which inherits from **AsyncCallDispatcher**
 - **[WebWorkerService.WindowTask](#webworkerservicewindowtask)** - an instance of **AsyncCallDispatcher**
-- [**WebWorkerService.Instances**](#webworkerserviceinstances) - a **List&lt;AppInstance&gt;**. **AppInstance.Dispatcher** inherits from **AsyncCallDispatcher**  
+- [**WebWorkerService.Instances**](#webworkerserviceinstances) - a **List&lt;AppInstance&gt;**. **AppInstance** inherits from **AsyncCallDispatcher**  
 
 ### Supported Instance To Instance Calling Conventions
 
@@ -672,7 +672,7 @@ public class MyService : IMyService
 ```
 
 ## WebWorkerService.Instances
-WebWorkerService tracks the start and termination of every instance of WebWorkerService on the same origin. WebWorkerService.Instances is a **List&lt;AppInstance&gt;** where each item represents a running instance. The **AppInstance** class provides some basic information about the running Blazor instance and also allows calling into the instance via **AppInstance.Dispatcher**, an instance of [**AsyncCallDispatcher**]($asynccalldispatcher)
+WebWorkerService tracks the start and termination of every instance of WebWorkerService on the same origin. WebWorkerService.Instances is a **List&lt;AppInstance&gt;** where each item represents a running instance. The **AppInstance** class provides some basic information about the running Blazor instance and also allows calling into the instance via its base class [**AsyncCallDispatcher**]($asynccalldispatcher)
 
 ## WebWorkerService.TaskPool
 WebWorkerService.TaskPool is ready to call any registered service in a background thread. If WebWorkers are not supported, TaskPool calls will run in the Window scope. The TaskPool settings can be configured when calling AddWebWorkerService(). By default, no worker tasks are started automatically at startup and the max pool size is set to 1.
