@@ -560,6 +560,18 @@ Tested working in the following browsers (tested with .Net 8.) Chrome Android do
 
 Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
 
+## WebWorkerService
+The WebWorkerService singleton contains many methods for working with multiple instances of your Blazor app running in any scope, whether Window, Worker, SharedWorker, or ServiceWorker.
+
+### Primary WebWorkerService members:
+- **Info** - This property provides basic info about the currently running instance.
+- [**TaskPool**](#webworkerservicetaskpool) - This WebWorkerPool property gives quick and easy access to any number of Blazor instances running in dedicated worker threads. Access your services in separate threads. TaskPool threads can be started at startup or set to start as needed.
+- [**WindowTask**](#webworkerservicewindowtask) - If the current scope is a Window it dispatches on the current scope. If the current scope is a WebWorker and its parent is a Window it will dispatch on the parent Window's scope. Only available in a Window context, or in a WebWorker created by a Window.
+- [**Instances**](#webworkerserviceinstances) - This property gives access to every running instance of your Blazor App in the active browser. This includes every scope including other Windows, Workers, SharedWorkers, and ServiceWorkers. Call directly into any running instance from any instance.
+- **Locks** - This property is an instance of LockManager acquired from Navigator.Locks. LockManager provides access to cross-thread locks in all browser scopes. Locks work in a very similar manner to the .Net Mutex.
+- [**GetWebWorker**](#webworker) - This async method creates and returns a new instance of WebWorker when it is ready.
+- [**GetSharedWebWorker**](#sharedwebworker) - This async method returns an instance of SharedWebWorker with the given name, accessible by all Blazor instances. The worker is created the if it does not already exist. 
+
 Example WebWorkerService setup and usage. 
 
 ```cs
@@ -596,21 +608,26 @@ builder.Services.AddScoped((sp) => new HttpClient { BaseAddress = new Uri(builde
 await builder.Build().BlazorJSRunAsync();
 ```
 
-## WebWorkerService.TaskPool
-WebWorkerService.TaskPool is ready to call any registered service in a background thread. If WebWorkers are not supported, TaskPool calls will run in the Window scope. The TaskPool settings can be configured when calling AddWebWorkerService(). By default, no worker tasks are started automatically at startup and the max pool size is set to 1.
+## AsyncCallDispatcher
+**AsyncCallDispatcher** is the base class used for accessing other instances of Blazor. **AsyncCallDispatcher** provides a few different calling conventions for instance to instance communication.
 
-### Supported Calling Conventions
-This applies to any class that inherits from AsyncCallDispatcher such as the instances TaskPool, and WindowTask or the classes WebWorker, SharedWebWorker, and WebWorkerPool.  
+Where **AsyncCallDispatcher** is used:  
+- The classes [**WebWorker**](#webworker), [**SharedWebWorker**](#sharedwebworker), and **WebWorkerPool** all inherit from **AsyncCallDispatcher**.
+- [**WebWorkerService.TaskPool**](#webworkerservicetaskpool) - an instance of **WebWorkerPool**, which inherits from **AsyncCallDispatcher**
+- **[WebWorkerService.WindowTask](#webworkerservicewindowtask)** - an instance of **AsyncCallDispatcher**
+- [**WebWorkerService.Instances**](#webworkerserviceinstances) - a **List&lt;AppInstance&gt;**. **AppInstance.Dispatcher** inherits from **AsyncCallDispatcher**  
 
-Expressions - Run(), Set()  
+### Supported Instance To Instance Calling Conventions
+
+**Expressions** - Run(), Set()  
 - Supports generics, property get and set, asynchronous and synchronous method calls.
 - Supports calling private methods from inside the owning class.
 
-Delegates - Invoke()  
+**Delegates** - Invoke()  
 - Supports generics, asynchronous and synchronous method calls.  
 - Supports calling private methods from inside the owning class.
 
-Interface proxy - GetService()
+**Interface proxy** - GetService()
 - Supports generics, and asynchronous method calls. (uses DispatchProxy)  
 - Does not support static methods, private methods, synchronous calls, or properties.
 - Requires services to be registered using an interface.
@@ -642,8 +659,15 @@ public class MyService
 }
 ```
 
+## WebWorkerService.Instances
+WebWorkerService tracks the start and termination of every instance of WebWorkerService on the same origin. WebWorkerService.Instances is a **List&lt;AppInstance&gt;** where each item represents a running instance. The **AppInstance** class provides some basic information about the running Blazor instance and also allows calling into the instance via **AppInstance.Dispatcher**, an instance of [**AsyncCallDispatcher**]($asynccalldispatcher)
+
+## WebWorkerService.TaskPool
+WebWorkerService.TaskPool is ready to call any registered service in a background thread. If WebWorkers are not supported, TaskPool calls will run in the Window scope. The TaskPool settings can be configured when calling AddWebWorkerService(). By default, no worker tasks are started automatically at startup and the max pool size is set to 1.
+
 ## WebWorkerService.WindowTask
-Sometimes WebWorkers may need to call back into the Window thread that owns them. This can easily be achieved using WebWorkerService.WindowTask. 
+Sometimes WebWorkers may need to call back into the Window thread that owns them. This can easily be achieved using WebWorkerService.WindowTask. If the current scope is a Window it dispatches on the current scope. If the current scope is a WebWorker and its parent is a Window it will dispatch on the parent Window's scope. Only available in a Window context, or in a WebWorker created by a Window.
+
 ```cs
 public class MyService
 {
@@ -670,43 +694,6 @@ public class MyService
     }
 }
 ```
-
-### Using CancellationToken to cancel a WebWorker task
-
-As of version 2.2.88 ```CancellationToken``` is a supported parameter type and can be used to cancel a running task.  
-
-```cs
-public async Task TaskPoolExpressionWithCancellationTokenTest2()
-{
-    if (!WebWorkerService.WebWorkerSupported)
-    {
-        throw new Exception("Worker not supported by browser. Expected failure.");
-    }
-    // Cancel the task after 2 seconds
-    using var cts = new CancellationTokenSource(2000);
-    var cancelled = await WebWorkerService.TaskPool.Run(() => CancellableMethod(10000, cts.Token));
-    if (!cancelled) throw new Exception("Task Cancellation failed");
-}
-
-// Returns true if cancelled  
-// This method will run for 10 seconds if not cancelled  
-private static async Task<bool> CancellableMethod(double maxRunTimeMS, CancellationToken token)
-{
-    var startTime = DateTime.Now;
-    var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
-    while (DateTime.Now - startTime < maxRunTime)
-    {
-        // do some work ...
-        await Task.Delay(50);
-        // check if cancelled message received
-        if (await token.IsCancellationRequestedAsync()) return true;
-    }
-    return false;
-}
-```
-
-#### Limitation: CancellationToken requires the receiving method to be async
-When a CancellationTokenSource cancels a token that has been passed to a WebWorker a postMessage is sent to the WebWorker(s) to notify them and they call cancel on their instance of a CancellationTokenSource. The problem, is that this requires the method that uses the CancellationToken allows the message event handler time to receive the cancellation message by yielding the thread briefly (```await Task.Delay(1)```) before rechecking if the CancellationToken is cancelled. The extension methods ```CancellationToken.IsCancellationRequestedAsync()``` and ```CancellationToken.ThrowIfCancellationRequestedAsync()``` do this automatically internally. Therefore, CancellationToken will not work in a synchronous method as the message event will never receive the cancellation message. SharedCancellationToken does not have this limitation.
 
 ### Using SharedCancellationToken to cancel a WebWorker task
 
@@ -745,6 +732,43 @@ private static async Task<long> CancellableMethod(double maxRunTimeMS, SharedCan
 
 #### Limitation: SharedCancellationToken requires cross-origin isolation
 ```SharedCancellationToken``` and ```SharedCancellationTokenSource``` use a ```SharedArrayBuffer``` for signaling instead of postMessage like ```CancellationToken``` uses. This adds the benefit of working in both synchronous and asynchronous methods. However, they have their own limitation of requiring a cross-origin isolation due to ```SharedArrayBuffer``` restrictions.
+
+### Using CancellationToken to cancel a WebWorker task
+
+As of version 2.2.88 ```CancellationToken``` is a supported parameter type and can be used to cancel a running task.  
+
+```cs
+public async Task TaskPoolExpressionWithCancellationTokenTest2()
+{
+    if (!WebWorkerService.WebWorkerSupported)
+    {
+        throw new Exception("Worker not supported by browser. Expected failure.");
+    }
+    // Cancel the task after 2 seconds
+    using var cts = new CancellationTokenSource(2000);
+    var cancelled = await WebWorkerService.TaskPool.Run(() => CancellableMethod(10000, cts.Token));
+    if (!cancelled) throw new Exception("Task Cancellation failed");
+}
+
+// Returns true if cancelled  
+// This method will run for 10 seconds if not cancelled  
+private static async Task<bool> CancellableMethod(double maxRunTimeMS, CancellationToken token)
+{
+    var startTime = DateTime.Now;
+    var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
+    while (DateTime.Now - startTime < maxRunTime)
+    {
+        // do some work ...
+        await Task.Delay(50);
+        // check if cancelled message received
+        if (await token.IsCancellationRequestedAsync()) return true;
+    }
+    return false;
+}
+```
+
+#### Limitation: CancellationToken requires the receiving method to be async
+When a CancellationTokenSource cancels a token that has been passed to a WebWorker a postMessage is sent to the WebWorker(s) to notify them and they call cancel on their instance of a CancellationTokenSource. The problem, is that this requires the method that uses the CancellationToken allows the message event handler time to receive the cancellation message by yielding the thread briefly (```await Task.Delay(1)```) before rechecking if the CancellationToken is cancelled. The extension methods ```CancellationToken.IsCancellationRequestedAsync()``` and ```CancellationToken.ThrowIfCancellationRequestedAsync()``` do this automatically internally. Therefore, CancellationToken will not work in a synchronous method as the message event will never receive the cancellation message. SharedCancellationToken does not have this limitation.
 
 ## WebWorker
 You can use the properties ```WebWorkerService.SharedWebWorkerSupported``` and ```WebWorkerService.WebWorkerSupported``` to check for support. 

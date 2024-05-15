@@ -56,11 +56,22 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// A ServiceCallDispatcher that executes on this instance
         /// </summary>
         public ServiceCallDispatcher Local { get; }
+        /// <summary>
+        /// An instance of IServiceProvider this service belongs to
+        /// </summary>
         public IServiceProvider ServiceProvider { get; }
+        /// <summary>
+        /// An instance of IServiceCollection this service belongs to
+        /// </summary>
         public IServiceCollection ServiceDescriptors { get; }
+        /// <summary>
+        /// The baseUri of this Blazor app
+        /// </summary>
         public string AppBaseUri { get; }
+        /// <summary>
+        /// Returns true if this service has been initialized
+        /// </summary>
         public bool BeenInit { get; private set; }
-        DateTime StartTime = DateTime.Now;
         /// <summary>
         /// The navigator.hardwareConcurrency value
         /// </summary>
@@ -69,7 +80,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// If this is a shared worker, this is the shared worker's name
         /// </summary>
         public string ThisSharedWorkerName { get; private set; } = "";
-        Callback? OnSharedWorkerConnectCallback = null;
         /// <summary>
         /// This app instance's id
         /// </summary>
@@ -82,9 +92,14 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// The script used for instance interconnect shared worker instance (if used)
         /// </summary>
         public string WebWorkerInterconnectJSScript { get; } = "_content/SpawnDev.BlazorJS.WebWorkers/interconnect.js";
+        /// <summary>
+        /// The instance of BlazorJSRuntime this service uses
+        /// </summary>
         public BlazorJSRuntime JS { get; }
+        /// <summary>
+        /// The current global scope
+        /// </summary>
         public GlobalScope GlobalScope { get; }
-        TaskCompletionSource? InstanceLock = null;
         /// <summary>
         /// If WebWorkers are supported it dispatches on a free WebWorker in the WebWorkerPool<br />
         /// If WebWorkers are not supported it dispatches on the local scope
@@ -96,16 +111,41 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// Only available in a Window context, or in a WebWorker created by a Window
         /// </summary>
         public AsyncCallDispatcher? WindowTask { get; private set; }
+        /// <summary>
+        /// Configuration used for ServiceWorker registration
+        /// </summary>
         public ServiceWorkerConfig ServiceWorkerConfig { get; private set; } = new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.None };
         // below is set to true if base address starts with chrome-extension
+        /// <summary>
+        /// The index.html that wll be loaded by new workers
+        /// </summary>
         public string WorkerIndexHtml { get; private set; } = "";
+        /// <summary>
+        /// AppInstanceInfo for this app instance
+        /// </summary>
         public AppInstanceInfo Info { get; }
-        BroadcastChannel? SharedBroadcastChannel = null;
+        /// <summary>
+        /// Returns true if this instance has notified other instances it exists
+        /// </summary>
+        public bool InstanceRegistered { get; private set; } = false;
+        private bool InstanceRegistering = false;
         /// <summary>
         /// Navigator.Locks instance of LockManager or null if not supported
         /// </summary>
         public LockManager? Locks { get; private set; }
-        SharedWorker? Interconnect = null;
+        private SharedWorker? Interconnect = null;
+        private DateTime StartTime = DateTime.Now;
+        private Callback? OnSharedWorkerConnectCallback = null;
+        private BroadcastChannel? SharedBroadcastChannel = null;
+        private TaskCompletionSource? InstanceLock = null;
+        /// <summary>
+        /// Creates a new instance of WebWorkerService
+        /// </summary>
+        /// <param name="navigationManager"></param>
+        /// <param name="serviceProvider"></param>
+        /// <param name="serviceDescriptors"></param>
+        /// <param name="hostEnvironment"></param>
+        /// <param name="js"></param>
         public WebWorkerService(NavigationManager navigationManager, IServiceProvider serviceProvider, IServiceCollection serviceDescriptors, IWebAssemblyHostEnvironment hostEnvironment, BlazorJSRuntime js)
         {
             JS = js;
@@ -159,7 +199,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             TaskPool = new WebWorkerPool(this, 0, 1, true);
         }
         BroadcastChannel? InstanceBroadcastChannel = null;
-        void EnableInterconnectWorker()
+        private void EnableInterconnectWorker()
         {
             if (Interconnect == null)
             {
@@ -173,13 +213,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
             EnableInterconnectWorker();
             Interconnect!.Port.PostMessage(new object[] { "dropOff", instanceId, Info }, new object[] { port });
         }
-        void GetInterconnectMessages()
+        private void GetInterconnectMessages()
         {
             EnableInterconnectWorker();
             // tell the interconnect we would like to pickup our messages
             Interconnect!.Port.PostMessage(new object[] { "pickUp", InstanceId });
         }
-        void InstanceBroadcastChannel_OnMessage(MessageEvent messageEvent)
+        private void InstanceBroadcastChannel_OnMessage(MessageEvent messageEvent)
         {
             // if interconnect is not available (likely due to missing SharedWorker support (Chrome Android))
             using var args = messageEvent.GetData<Array>();
@@ -211,12 +251,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 }
             }
         }
-        class InterconnectIncomingMessage
+        private class InterconnectIncomingMessage
         {
             public AppInstanceInfo FromInstanceInfo { get; set; }
             public long Time { get; set; }
         }
-        void Interconnect_OnMessage(MessageEvent messageEvent)
+        private void Interconnect_OnMessage(MessageEvent messageEvent)
         {
             InterconnectIncomingMessage data;
             try
@@ -243,7 +283,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var port = ports[0];
             fromInstance.AddIncomingInterconnectPort(port);
         }
-        void SharedBroadcastChannel_OnMessage(MessageEvent messageEvent)
+        private void SharedBroadcastChannel_OnMessage(MessageEvent messageEvent)
         {
             try
             {
@@ -322,16 +362,20 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 p.SendEvent(eventName, data);
             }
         }
+        /// <summary>
+        /// This event fires if this instance is running in a WebWorker when the connection to the parent has been established
+        /// </summary>
         public event Action OnDedicatedWorkerParentReady;
         /// <summary>
-        /// A list of running instances including this one
+        /// A list of running instances including this one<br/>
+        /// Instances allows calling into any running instance
         /// </summary>
         public List<AppInstance> Instances => _Instances.Values.ToList();
         /// <summary>
         /// A list of known instances running in a window scope
         /// </summary>
         public List<AppInstance> Windows => _Instances.Values.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
-        Dictionary<string, AppInstance> _Instances = new Dictionary<string, AppInstance>();
+        private Dictionary<string, AppInstance> _Instances = new Dictionary<string, AppInstance>();
         /// <summary>
         /// Fires when a new instance is found
         /// </summary>
@@ -344,7 +388,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// Fires when one or more instances have been found or lost
         /// </summary>
         public event Action OnInstancesChanged;
-        bool InstanceLost(string instanceId, bool fireChangedEvent)
+        private bool InstanceLost(string instanceId, bool fireChangedEvent)
         {
             if (!_Instances.TryGetValue(instanceId, out var instance)) return false;
             if (instance.IsLocal) return false;
@@ -357,7 +401,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (fireChangedEvent) OnInstancesChanged?.Invoke();
             return true;
         }
-        bool InstanceFound(AppInstanceInfo instanceInfo, bool fireChangedEvent)
+        private bool InstanceFound(AppInstanceInfo instanceInfo, bool fireChangedEvent)
         {
             var instanceId = instanceInfo.InstanceId;
             if (_Instances.ContainsKey(instanceId)) return false;
@@ -390,7 +434,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// Returns information about running instances using locks to obtain it
         /// </summary>
         /// <returns></returns>
-        async Task UpdateInstancesViaLocks()
+        private async Task UpdateInstancesViaLocks()
         {
             // client id is used here as it will be available due to also using LockManager
             if (Locks != null)
@@ -430,21 +474,25 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 }
             }
         }
-        static readonly string IdentPrefix = $"{nameof(AppInstanceInfo)}:";
-        string GetName()
+        private static readonly string IdentPrefix = $"{nameof(AppInstanceInfo)}:";
+        private string GetName()
         {
             if (JS.WindowThis != null) return JS.WindowThis.Name ?? "";
             if (JS.DedicateWorkerThis != null) return JS.DedicateWorkerThis.Name ?? "";
             if (JS.SharedWorkerThis != null) return JS.SharedWorkerThis.Name ?? "";
             return "";
         }
-        string GetParentInstanceId()
+        private string GetParentInstanceId()
         {
             if (JS.WindowThis != null) return JS.WindowThis.Name ?? "";
             if (JS.DedicateWorkerThis != null) return JS.DedicateWorkerThis.Name ?? "";
             if (JS.SharedWorkerThis != null) return JS.SharedWorkerThis.Name ?? "";
             return "";
         }
+        /// <summary>
+        /// Called by BlazorJSRuntime at startup
+        /// </summary>
+        /// <returns></returns>
         public async Task InitAsync()
         {
             if (BeenInit) return;
@@ -511,13 +559,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
             await RegisterInstance();
         }
-
         /// <summary>
         /// Returns true if this instance has notified other instances
         /// </summary>
-        public bool InstanceRegistered { get; private set; } = false;
-        bool InstanceRegistering = false;
-        async Task RegisterInstance()
+        private async Task RegisterInstance()
         {
             if (InstanceRegistered || InstanceRegistering) return;
             InstanceRegistering = true;
@@ -549,7 +594,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 using var registration = await serviceWorker.Register(ServiceWorkerConfig.ScriptURL, ServiceWorkerConfig.Options);
             }
         }
-
         /// <summary>
         /// Registers the default 'service-worker.js' in the app's base path.<br />
         /// </summary>
@@ -562,7 +606,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             ServiceWorkerConfig.Options = options;
             return RegisterServiceWorker();
         }
-
         /// <summary>
         /// Unregisters a registered service worker
         /// </summary>
@@ -581,7 +624,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
             return false;
         }
-
         /// <summary>
         /// Creates a new a WebWorker instance and returns it when it when it is ready for use.
         /// </summary>
@@ -631,7 +673,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var webWorker = new WebWorker(worker, ServiceProvider, ServiceDescriptors);
             return webWorker;
         }
-
         /// <summary>
         /// Returns a new SharedWebWorker instance. If a SharedWorker already existed by this name SharedWebWorker will be connected to that instance.
         /// </summary>
@@ -683,7 +724,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, ServiceProvider, ServiceDescriptors);
             return sharedWebWorker;
         }
-
         /// <summary>
         /// Disposes all disposable resources used by this object
         /// </summary>
@@ -691,13 +731,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             OnSharedWorkerConnectCallback?.Dispose();
         }
-
-        void OnSharedWorkerConnect(MessageEvent e)
+        private void OnSharedWorkerConnect(MessageEvent e)
         {
             e.Ports.ToList().ForEach(AddIncomingPort);
         }
-
-        void AddIncomingPort(MessagePort incomingPort)
+        private void AddIncomingPort(MessagePort incomingPort)
         {
             var incomingHandler = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors, incomingPort);
             incomingPort.Start();

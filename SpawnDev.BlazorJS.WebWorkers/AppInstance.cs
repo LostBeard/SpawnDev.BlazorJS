@@ -47,7 +47,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 IsLocal = true;
             }
-            _InstanceBroadcastChannel = new Lazy<BroadcastChannel>(() => new BroadcastChannel(Info.InstanceId));
+            else
+            {
+                _InstanceBroadcastChannel = new Lazy<BroadcastChannel>(() => new BroadcastChannel(Info.InstanceId));
+            }
         }
         void TryConnect()
         {
@@ -70,9 +73,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
 #endif
                     _Dispatcher = WebWorkerService.GetSharedWebWorkerSync(Info.Name!);
                 }
-                else if (WebWorkerService!.InterConnectSupported && WebWorkerService.InterConnectEnabled)
+                else if (WebWorkerService.InterConnectSupported && WebWorkerService.InterConnectEnabled)
                 {
-                    // best connection is a MessageChannel that we can pass along via interconnect
+                    // best connection is a MessageChannel that we can pass along via interconnect (supports transferables)
 #if DEBUG && false
                     Console.WriteLine("best connection is a MessageChannel that we can pass along via interconnect");
 #endif
@@ -86,7 +89,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 }
                 else if (WebWorkerService.BroadcastChannelSupported)
                 {
-                    // best connection is a separate BroadcastChannel
+                    // best connection is a separate BroadcastChannel (does not support transferables)
 #if DEBUG && false
                     Console.WriteLine("best connection is a separate BroadcastChannel");
 #endif
@@ -98,7 +101,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 }
                 else
                 {
-                    throw new NotSupportedException();
+                    throw new NotSupportedException("No communication channel available");
                 }
             }
             catch
@@ -108,13 +111,16 @@ namespace SpawnDev.BlazorJS.WebWorkers
         }
         Lazy<BroadcastChannel>? _InstanceBroadcastChannel = null;
         BroadcastChannel? InstanceBroadcastChannel => _InstanceBroadcastChannel?.Value;
-        internal void SendConnectMessageToInstanceBroadcastChannel(string broadcastChannelId)
+        void SendConnectMessageToInstanceBroadcastChannel(string broadcastChannelId)
         {
             SendMessageToInstanceBroadcastChannel(new object[] { "broadcastChannelConnect", WebWorkerService!.Info, broadcastChannelId });
         }
-        internal void SendMessageToInstanceBroadcastChannel(object data)
+        void SendMessageToInstanceBroadcastChannel(object data)
         {
-            InstanceBroadcastChannel?.PostMessage(data);
+            if (!IsLocal)
+            {
+                InstanceBroadcastChannel?.PostMessage(data);
+            }
         }
         internal void AddIncomingInterconnectPort(IMessagePortSimple incomingPort)
         {
