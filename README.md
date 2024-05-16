@@ -564,7 +564,7 @@ Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/iss
 The WebWorkerService singleton contains many methods for working with multiple instances of your Blazor app running in any scope, whether Window, Worker, SharedWorker, or ServiceWorker.
 
 ### Primary WebWorkerService members:
-- **Info** - This property provides basic info about the currently running instance.
+- **Info** - This property provides basic info about the currently running instance, like instance id and the global scope type.
 - [**TaskPool**](#webworkerservicetaskpool) - This WebWorkerPool property gives quick and easy access to any number of Blazor instances running in dedicated worker threads. Access your services in separate threads. TaskPool threads can be started at startup or set to start as needed.
 - [**WindowTask**](#webworkerservicewindowtask) - If the current scope is a Window it dispatches on the current scope. If the current scope is a WebWorker and its parent is a Window it will dispatch on the parent Window's scope. Only available in a Window context, or in a WebWorker created by a Window.
 - [**Instances**](#webworkerserviceinstances) - This property gives access to every running instance of your Blazor App in the active browser. This includes every scope including other Windows, Workers, SharedWorkers, and ServiceWorkers. Call directly into any running instance from any instance.
