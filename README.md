@@ -691,7 +691,7 @@ foreach (var windowInstance in windowInstances)
 ```
 
 ## WebWorkerService.TaskPool
-WebWorkerService.TaskPool is ready to call any registered service in a background thread. If WebWorkers are not supported, TaskPool calls will run in the Window scope. The TaskPool settings can be configured when calling AddWebWorkerService(). By default, no worker tasks are started automatically at startup and the max pool size is set to 1.
+WebWorkerService.TaskPool is ready to call any registered service in a background thread. If WebWorkers are not supported, TaskPool calls will run in the Window scope. The TaskPool settings can be configured when calling AddWebWorkerService(). By default, no worker tasks are started automatically at startup and the max pool size is set to 1. See above example.
 
 ## WebWorkerService.WindowTask
 Sometimes WebWorkers may need to call back into the Window thread that owns them. This can easily be achieved using WebWorkerService.WindowTask. If the current scope is a Window it dispatches on the current scope. If the current scope is a WebWorker and its parent is a Window it will dispatch on the parent Window's scope. Only available in a Window context, or in a WebWorker created by a Window.
@@ -797,6 +797,65 @@ private static async Task<bool> CancellableMethod(double maxRunTimeMS, Cancellat
 
 #### Limitation: CancellationToken requires the receiving method to be async
 When a CancellationTokenSource cancels a token that has been passed to a WebWorker a postMessage is sent to the WebWorker(s) to notify them and they call cancel on their instance of a CancellationTokenSource. The problem, is that this requires the method that uses the CancellationToken allows the message event handler time to receive the cancellation message by yielding the thread briefly (```await Task.Delay(1)```) before rechecking if the CancellationToken is cancelled. The extension methods ```CancellationToken.IsCancellationRequestedAsync()``` and ```CancellationToken.ThrowIfCancellationRequestedAsync()``` do this automatically internally. Therefore, CancellationToken will not work in a synchronous method as the message event will never receive the cancellation message. SharedCancellationToken does not have this limitation.
+
+## WebWorkerService.Locks
+**WebWorkerService.Locks** is an instance of [LockManager](https://developer.mozilla.org/en-US/docs/Web/API/LockManager) acquired from of ```navigator.locks```. The MDN documentation for [LockManager](https://developer.mozilla.org/en-US/docs/Web/API/LockManager) is explains the interface and has examples.
+
+From MDN [LockManager.request()](https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request)
+> The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
+
+> The mode property of the options parameter may be either "exclusive" or "shared".
+
+> Request an "exclusive" lock when it should only be held by one code instance at a time. This applies to code in both tabs and workers. Use this to represent mutually exclusive access to a resource. When an "exclusive" lock for a given name is held, no other lock with the same name can be held.
+
+> Request a "shared" lock when multiple instances of the code can share access to a resource. When a "shared" lock for a given name is held, other "shared" locks for the same name can be granted, but no "exclusive" locks with that name can be held or granted.
+
+> This shared/exclusive lock pattern is common in database transaction architecture, for example to allow multiple simultaneous readers (each requests a "shared" lock) but only one writer (a single "exclusive" lock). This is known as the readers-writer pattern. In the IndexedDB API, this is exposed as "readonly" and "readwrite" transactions which have the same semantics.
+
+### WebWorkerService.Locks.Request()
+
+Locks.RequestHandle() example:  
+```cs
+public async Task SynchronizeDatabase()
+{
+    JS.Log("requesting lock");
+    await WebWorkerService.Locks.Request("my_lock", async (lockInfo) =>
+    {
+        // because this is an exclusive lock, 
+        // the code in this callback will never run in more than 1 thread at a time.
+        JS.Log("have lock", lockInfo);
+        // simulating async work like synchronizing a browser db to the server
+        await Task.Delay(1000);
+        // the lock is not released until this async method exits
+        JS.Log("releasing lock");
+    });
+    JS.Log("released lock");
+}
+```
+
+### WebWorkerService.Locks.RequestHandle()
+
+LockManager.RequestHandle() is an extension method that instead of taking a callback to call when the lock is acquired, it waits for the lock and then returns a TaskCompletionSource that is used to release the lock.
+
+The below example is functionally equivalent to the one above. LockManager.RequestHandle() becomes more useful when a lock needs to be held for an extended period of time.
+
+Locks.RequestHandle() example:  
+```cs
+public async Task SynchronizeDatabase()
+{
+    JS.Log("requesting lock");
+    TaskCompletionSource tcs = await WebWorkerService.Locks.RequestHandle("my_lock");
+    // because this is an exclusive lock,
+    // the code between here and 'tcs.SetResult();' will never run in more than 1 thread at a time.
+    JS.Log("have lock");
+    // simulating async work like synchronizing a browser db to the server
+    await Task.Delay(1000);
+    // the lock is not released until this async method exits
+    JS.Log("releasing lock");
+    tcs.SetResult();
+    JS.Log("released lock");
+}
+```
 
 ## WebWorker
 You can use the properties ```WebWorkerService.SharedWebWorkerSupported``` and ```WebWorkerService.WebWorkerSupported``` to check for support. 

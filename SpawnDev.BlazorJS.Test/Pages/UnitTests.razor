@@ -900,15 +900,41 @@
     [TestMethod]
     public async Task LockManagerTest()
     {
-        using var navigator = JS.Get<Navigator>("navigator");
-        using var locks = navigator.Locks;
-        var randId = Guid.NewGuid().ToString();
-        Console.WriteLine("requesting lock");
-        await locks.Request(randId, async (l) =>
+        if (WebWorkerService.Locks == null)
         {
-            Console.WriteLine("have lock");
+            throw new Exception("Locks not supported by browser. Expected failure.");
+        }
+        JS.Log("requesting lock");
+        await WebWorkerService.Locks.Request("my_lock", async (lockInfo) =>
+        {
+            // because this is an exclusive lock,
+            // the code in this callback will never run in more than 1 thread at a time.
+            JS.Log("have lock", lockInfo);
+            // simulating async work like synchronizing a browser db to the server
+            await Task.Delay(1000);
+            // the lock is not released until this async method exits
+            JS.Log("releasing lock");
         });
-        Console.WriteLine("released lock");
+        JS.Log("released lock");
+    }
+    [TestMethod]
+    public async Task LockManagerRequestHandleTest()
+    {
+        if (WebWorkerService.Locks == null)
+        {
+            throw new Exception("Locks not supported by browser. Expected failure.");
+        }
+        JS.Log("requesting lock");
+        TaskCompletionSource tcs = await WebWorkerService.Locks.RequestHandle("my_lock");
+        // because this is an exclusive lock,
+        // the code in this callback will never run in more than 1 thread at a time.
+        JS.Log("have lock");
+        // simulating async work like synchronizing a browser db to the server
+        await Task.Delay(1000);
+        // the lock is not released until this async method exits
+        JS.Log("releasing lock");
+        tcs.SetResult();
+        JS.Log("released lock");
     }
     [TestMethod]
     public async Task LockManagerReturnValueTest()
