@@ -421,7 +421,7 @@ var promise = new Promise<string>(taskSource.Task);
 taskSource.TrySetResult("Hello world!");
 ```
 
-Below is a an example that uses Promises to utilize the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)
+Below is a an example that uses Promises to utilize the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) (Tip: This code is desgined to demonstrate the use of a Promise. This is not the recommended way of using LockManager. See [WebWorkerService.Locks](#webworkerservicelocks) for more info.)
 
 ```cs
 using var navigator = JS.Get<Navigator>("navigator");
