@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.97</Version>
+		<Version>2.2.98</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
@@ -12,8 +12,8 @@
 		<PackageReference Include="Markdig" Version="0.37.0" />
 		<PackageReference Include="Markdown.ColorCode" Version="2.2.2" />
 		<PackageReference Include="Radzen.Blazor" Version="4.31.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.5" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -26,8 +26,8 @@
 	</ItemGroup>
 	
 	<ItemGroup Condition=" '$(Configuration)' == 'Release' ">
-		<PackageReference Include="SpawnDev.BlazorJS" Version="2.2.97" />
-		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.97" />
+		<PackageReference Include="SpawnDev.BlazorJS" Version="2.2.98" />
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.98" />
 	</ItemGroup>
 
 
