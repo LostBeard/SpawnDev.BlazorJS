@@ -803,13 +803,13 @@ When a CancellationTokenSource cancels a token that has been passed to a WebWork
 
 From MDN [LockManager.request()](https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request)
 > The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
-
+>
 > The mode property of the options parameter may be either "exclusive" or "shared".
-
+>
 > Request an "exclusive" lock when it should only be held by one code instance at a time. This applies to code in both tabs and workers. Use this to represent mutually exclusive access to a resource. When an "exclusive" lock for a given name is held, no other lock with the same name can be held.
-
+>
 > Request a "shared" lock when multiple instances of the code can share access to a resource. When a "shared" lock for a given name is held, other "shared" locks for the same name can be granted, but no "exclusive" locks with that name can be held or granted.
-
+>
 > This shared/exclusive lock pattern is common in database transaction architecture, for example to allow multiple simultaneous readers (each requests a "shared" lock) but only one writer (a single "exclusive" lock). This is known as the readers-writer pattern. In the IndexedDB API, this is exposed as "readonly" and "readwrite" transactions which have the same semantics.
 
 ### WebWorkerService.Locks.Request()
