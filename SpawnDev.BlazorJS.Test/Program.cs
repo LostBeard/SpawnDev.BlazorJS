@@ -35,14 +35,14 @@ builder.Services.AddWebWorkerService(webWorkerService =>
     // Default WebWorkerService.TaskPool settings: PoolSize = 0, MaxPoolSize = 1, AutoGrow = true
     // Below sets TaskPool max size to 2 if in a Window scope, 0 otherwise. By default the TaskPool size will grow as needed up to the max pool size.
     // Setting max pool size to -1 will set it to the value of navigator.hardwareConcurrency
-    webWorkerService.TaskPool.MaxPoolSize = 2; // webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
+    webWorkerService.TaskPool.MaxPoolSize = 4; // webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
     // Below is telling the WebWorkerService TaskPool to set the initial size to 2 if running in a Window scope and 0 otherwise
     // This starts up 2 WebWorkers to handle TaskPool tasks as needed
     // Setting this to -1 will set the initial pool size to max pool size
 #if DEBUG
-    webWorkerService.TaskPool.PoolSize = 2;  // once web workers startup the VS debugger does not work properly
+    webWorkerService.TaskPool.PoolSize = 1;  // once web workers startup the VS debugger does not work properly
 #else
-    webWorkerService.TaskPool.PoolSize = 0; //webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
+    webWorkerService.TaskPool.PoolSize = 1; //webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
 #endif
 });
 

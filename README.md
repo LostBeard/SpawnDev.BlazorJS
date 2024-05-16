@@ -930,6 +930,20 @@ OffscreenCanvas
 RTCDataChannel  
 
 
+## Javascript dependencies in WebWorkers
+When loading a WebWorker, SpawnDev.BlazorJS.WebWorkers ignores all &lt;script&gt; tags in index.html except those marked with the attribute "webworker-enabled". If those scripts will be referenced in workers add the attribute ```webworker-enabled```. This applies to both inline and external scripts.
+
+index.html (partial view)  
+```html
+    <script webworker-enabled>
+        console.log('This script will run in all scopes including window and worker due to the webworker-enabled attribute');
+    </script>
+    <script>
+        console.log('This script will only run in a window scope');
+    </script>
+```
+
+
 ## ServiceWorker
 As of version 2.2.21 SpawnDev.BlazorJS.WebWorkers supports running Blazor WASM apps in ServiceWorkers. Your app can now register a class to run in the ServiceWorker to handle ServiceWorker events.
 

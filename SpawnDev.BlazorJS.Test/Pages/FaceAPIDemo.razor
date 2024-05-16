@@ -41,8 +41,8 @@
     </div>
     <div>
         <RadzenCard>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @WebWorkerService.TaskPool.WorkersIdle / @WebWorkerService.TaskPool.WorkersRunning / @WebWorkerService.TaskPool.PoolSize / @WebWorkerService.MaxWorkerCount (Idle/Running/Requested/Max)</RadzenText>
-            <RadzenSlider @bind-Value=@WebWorkerService.TaskPool.PoolSize TValue="int" Min="0" Max=@WebWorkerService.MaxWorkerCount />
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Worker Pool @WebWorkerService.TaskPool.WorkersIdle / @WebWorkerService.TaskPool.WorkersRunning / @WebWorkerService.TaskPool.PoolSize / @WebWorkerService.TaskPool.MaxPoolSize (Idle/Running/Requested/Max)</RadzenText>
+            <RadzenSlider @bind-Value=@WebWorkerService.TaskPool.PoolSize TValue="int" Min="0" Max=@WebWorkerService.TaskPool.MaxPoolSize />
         </RadzenCard>
     </div>
     <div style="padding: 4px;">
