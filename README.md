@@ -568,7 +568,7 @@ The WebWorkerService singleton contains many methods for working with multiple i
 - [**TaskPool**](#webworkerservicetaskpool) - This WebWorkerPool property gives quick and easy access to any number of Blazor instances running in dedicated worker threads. Access your services in separate threads. TaskPool threads can be started at startup or set to start as needed.
 - [**WindowTask**](#webworkerservicewindowtask) - If the current scope is a Window it dispatches on the current scope. If the current scope is a WebWorker and its parent is a Window it will dispatch on the parent Window's scope. Only available in a Window context, or in a WebWorker created by a Window.
 - [**Instances**](#webworkerserviceinstances) - This property gives access to every running instance of your Blazor App in the active browser. This includes every scope including other Windows, Workers, SharedWorkers, and ServiceWorkers. Call directly into any running instance from any instance.
-- **Locks** - This property is an instance of LockManager acquired from Navigator.Locks. LockManager provides access to cross-thread locks in all browser scopes. Locks work in a very similar manner to the .Net Mutex.
+- [**Locks**](webworkerservicelocks) - This property is an instance of LockManager acquired from Navigator.Locks. LockManager provides access to cross-thread locks in all browser scopes. Locks work in a very similar manner to the .Net Mutex.
 - [**GetWebWorker**](#webworker) - This async method creates and returns a new instance of WebWorker when it is ready.
 - [**GetSharedWebWorker**](#sharedwebworker) - This async method returns an instance of SharedWebWorker with the given name, accessible by all Blazor instances. The worker is created the if it does not already exist. 
 
