@@ -35,12 +35,12 @@ builder.Services.AddWebWorkerService(webWorkerService =>
     // Default WebWorkerService.TaskPool settings: PoolSize = 0, MaxPoolSize = 1, AutoGrow = true
     // Below sets TaskPool max size to 2 if in a Window scope, 0 otherwise. By default the TaskPool size will grow as needed up to the max pool size.
     // Setting max pool size to -1 will set it to the value of navigator.hardwareConcurrency
-    webWorkerService.TaskPool.MaxPoolSize = webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
+    webWorkerService.TaskPool.MaxPoolSize = 2; // webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
     // Below is telling the WebWorkerService TaskPool to set the initial size to 2 if running in a Window scope and 0 otherwise
     // This starts up 2 WebWorkers to handle TaskPool tasks as needed
     // Setting this to -1 will set the initial pool size to max pool size
 #if DEBUG
-    webWorkerService.TaskPool.PoolSize = 0;  // once web workers startup the VS debugger does not work properly
+    webWorkerService.TaskPool.PoolSize = 2;  // once web workers startup the VS debugger does not work properly
 #else
     webWorkerService.TaskPool.PoolSize = 0; //webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
 #endif
@@ -78,11 +78,11 @@ var host = builder.Build();
 await host.StartBackgroundServices();
 //
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
+var WebWorkerService = host.Services.GetRequiredService<WebWorkerService>();
 JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
 {
-    var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
-    var windowInstances = webWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
-    var localInstanceId = webWorkerService.InstanceId;
+    var windowInstances = WebWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
+    var localInstanceId = WebWorkerService.InstanceId;
     foreach (var windowInstance in windowInstances)
     {
         // below line is an example of how to read a property from another instance
@@ -95,80 +95,36 @@ JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
 }));
 JS.Set("_testWorkerGetTimeout", new AsyncFuncCallback<string>(async () =>
 {
-    var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
-    var windowInstances = webWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
-    var t1 = webWorkerService.TaskPool.Run(()=> TestWorkerTimeout.Wait(10000));
-    var t2 = webWorkerService.TaskPool.Run(() => TestWorkerTimeout.Wait(10000));
+    if (WebWorkerService.TaskPool.MaxPoolSize == 0)
+    {
+        return $"Test requires TaskPool.MaxPoolSize > 0. This scope: {WebWorkerService.GlobalScope}";
+    }
+    // the below line calls Task.Delay(2000) in all usable worker threads, allowing the timeout test for TaskPool.GetWebWorkerAsync
+    var tasks = Enumerable.Range(1, WebWorkerService.TaskPool.MaxPoolSize).Select(i => WebWorkerService.TaskPool.Run(() => Task.Delay(2000))).ToList();
+    Console.WriteLine($"Started {tasks.Count} tasks to hold all the workers to test TaskPool.GetWorkerAsync timeout handling.");
     try
     {
-        var worker = await webWorkerService.TaskPool.GetWorkerAsync(2000);
+        // set GetWorkerAsync timeout to 1000
+        var worker = await WebWorkerService.TaskPool.GetWorkerAsync(1000);
         Console.WriteLine($"GetWorker success???");
         worker.ReleaseLock();
     }
     catch(TaskCanceledException taskCanceledException)
     {
+        // This is the expected result
         Console.WriteLine($"GetWorker TaskCanceledException: {taskCanceledException.GetType().Name} {taskCanceledException.Message}");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"GetWorker error: {ex.GetType().Name} {ex.Message}");
+        // This is not the expected result
+        Console.WriteLine($"GetWorker Exception: {ex.GetType().Name} {ex.Message}");
     }
-    await t1;
-    await t2;
+    await Task.WhenAll(tasks);
     return "ok";
 }));
-////var actt = new Action(() => {
-////    var sharedArrayBuffer = new SharedArrayBuffer(1);
-////    Int32Array array = new Int32Array(sharedArrayBuffer);
-////    Span<int> nativeArray = array; // error  
-////});
-//var sharedArrayBuffer = new ArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 5000000);
-//var array = new Int32Array(sharedArrayBuffer);
-//var uint8Array = new Uint8Array(sharedArrayBuffer);
-//var sw = Stopwatch.StartNew();
-//var arint = array.ToArray<int>();
-//sw.Stop();
-//var gg = sw.Elapsed.TotalMilliseconds;
-
-//var apples = new Apple[2];
-//apples[0] = new Apple { X = 1, Y = 2, Z = 3 };
-//apples[1] = new Apple { X = 7, Y = 8, Z = 9 };
-//var applesBytes = MemoryMarshal.Cast<Apple, byte>(apples).ToArray();
-
-
-//uint8Array.Write(apples);
-//var applesBack = uint8Array.ToArray<Apple>(0, 2);
-
-////var readBack = array.ToArray();
-
-
-//using var cancellationSource = new SharedCancellationTokenSource();
-//JS.Set("_cancellationSource", cancellationSource);
-//JS.Log("_cancellationSource", cancellationSource);
-//var copy = JS.Get<SharedCancellationTokenSource>("_cancellationSource");
-
-//JS.Set("_cancellationToken", cancellationSource.Token);
-//JS.Log("_cancellationToken", cancellationSource.Token);
-//var copyToken = JS.Get<SharedCancellationToken>("_cancellationToken");
 
 await host.BlazorJSRunAsync();
 #else
 // build and Init using BlazorJSRunAsync (instead of RunAsync)
 await builder.Build().BlazorJSRunAsync();
 #endif
-
-//[StructLayout(LayoutKind.Sequential)]
-//struct Apple
-//{
-//    public int X;
-//    public int Y;
-//    public int Z;
-//}
-
-static class TestWorkerTimeout
-{
-    public static async Task Wait(int howLongToWaitMS)
-    {
-        await Task.Delay(howLongToWaitMS);
-    }
-}

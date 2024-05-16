@@ -42,5 +42,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? LockName { get; set; }
+        /// <summary>
+        /// Returns true if this instance is a TaaskPool worker
+        /// </summary>
+        public bool TaskPoolWorker { get; set; }
     }
 }

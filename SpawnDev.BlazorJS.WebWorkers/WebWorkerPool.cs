@@ -12,22 +12,18 @@ namespace SpawnDev.BlazorJS.WebWorkers
         protected List<WebWorker> _workers = new List<WebWorker>();
         private int _MaxPoolSize = 0;
         /// <summary>
-        /// Maximum number of workers that can be started
+        /// Maximum number of workers that can be started.<br/>
+        /// Setting to -1 will set it to WebWorkerService.MaxWorkerCount (navigator.hardwareConcurrency)
         /// </summary>
         public int MaxPoolSize
         {
-            get
-            {
-                return _MaxPoolSize;
-            }
+            get => _MaxPoolSize;
             set
             {
+                if (LockMaxPoolSize) return;
                 var tmp = value < 0 ? WebWorkerService.MaxWorkerCount : value;
-                _MaxPoolSize = Math.Max(0, Math.Min(WebWorkerService.MaxWorkerCount, tmp));
-                if (PoolSize > _MaxPoolSize)
-                {
-                    PoolSize = _MaxPoolSize;
-                }
+                _MaxPoolSize = Math.Clamp(tmp, 0, WebWorkerService.MaxWorkerCount);
+                if (PoolSize > _MaxPoolSize) PoolSize = _MaxPoolSize;
             }
         }
         /// <summary>
@@ -43,11 +39,9 @@ namespace SpawnDev.BlazorJS.WebWorkers
             get => _PoolSize;
             set
             {
-                if (MaxPoolSize < value) MaxPoolSize = value;
-                var tmp = Math.Max(0, value);
-                if (_PoolSize == tmp) return;
-                _PoolSize = tmp;
-                _ = SetWorkerCount(_PoolSize);
+                var count = Math.Clamp(value, 0, MaxPoolSize);
+                if (_PoolSize == count) return;
+                _ = SetWorkerCount(count);
             }
         }
         /// <summary>
@@ -71,25 +65,32 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// Whether the pool will grow when a WenWorker is requested and PoolSize &lt; MaxPoolSize
         /// </summary>
         public bool AutoGrow { get; set; } = true;
+        /// <summary>
+        /// When set, the max pool size cannot be changed<br/>
+        /// This will be true by default in the WebWorkerService.TaskPool WebWorkerPool when running in a task pool worker
+        /// </summary>
+        public bool LockMaxPoolSize { get; set; } = false;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="webWorkerService"></param>
-        /// <param name="autoStartCount">-1 - Start all, 0 - Start none</param>
-        /// <param name="poolSize">-1 - MaxConcurrency, 0 - Do not allow adding</param>
+        /// <param name="startingPoolSize">-1 - Start all, 0 - Start none</param>
+        /// <param name="maxPoolSize">-1 - MaxConcurrency, 0 - Do not allow adding</param>
         /// <param name="autoGrow">Allow the number of running workers to grow automatically as long as belwo the max allowed</param>
         /// <param name="fallbackToLocalScope">If WebWorkers are not supported and fallbackToLocalScope == true, run on the local scope (default)</param>
-        public WebWorkerPool(WebWorkerService webWorkerService, int autoStartCount = 0, int poolSize = -1, bool autoGrow = true, bool fallbackToLocalScope = true)
+        /// <param name="lockMaxPoolSize">If true, MaxWorkerPoolSize will not be settable</param>
+        public WebWorkerPool(WebWorkerService webWorkerService, int startingPoolSize = 0, int maxPoolSize = -1, bool autoGrow = true, bool fallbackToLocalScope = true, bool lockMaxPoolSize = false)
         {
             AutoGrow = autoGrow;
             WebWorkerService = webWorkerService;
             Supported = WebWorkerService.WebWorkerSupported;
             if (!Supported) return;
-            MaxPoolSize = poolSize;
             FallbackToLocalScope = fallbackToLocalScope;
-            if (autoStartCount < 0) autoStartCount = MaxPoolSize;
-            PoolSize = Math.Max(Math.Min(MaxPoolSize, autoStartCount), 0);
+            MaxPoolSize = maxPoolSize;
+            if (startingPoolSize < 0) startingPoolSize = MaxPoolSize;
+            PoolSize = startingPoolSize;
+            LockMaxPoolSize = lockMaxPoolSize;
         }
 
         /// <summary>
@@ -293,22 +294,23 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 }
                 throw new Exception("Max pool size is 0");
             }
-            var tcs = new TaskCompletionSource<WebWorker>(cancellationToken);
-            JobQueue.Enqueue(tcs);
+            var job = new TaskCompletionSource<WebWorker>(cancellationToken);
+            JobQueue.Enqueue(job);
             if (AutoGrow && PoolSize < MaxPoolSize)
             {
                 PoolSize += 1;
             }
             try
             {
-                worker = await tcs.Task.WaitAsync(cancellationToken);
+                worker = await job.Task.WaitAsync(cancellationToken);
             }
-            catch(TaskCanceledException)
+            catch(TaskCanceledException canceledException)
             {
-                // the worker will be released immediately as the caller has cancelled and no longer wants it
-                _ = tcs.Task.ContinueWith(t => { 
-                    if (t.IsCompletedSuccessfully) t.Result!.ReleaseLock();
-                });
+                job.TrySetException(canceledException);
+                //// the worker will be released immediately as the caller has cancelled and no longer wants it
+                //_ = tcs.Task.ContinueWith(t => { 
+                //    if (t.IsCompletedSuccessfully) t.Result!.ReleaseLock();
+                //});
                 throw;
             }
             return worker;
@@ -325,7 +327,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         async Task AddWorker()
         {
             if (IsDisposed || _workers.Count >= _PoolSize) return;
-            var worker = WebWorkerService.GetWebWorkerSync();
+            var worker = WebWorkerService.GetWebWorkerSync(new Dictionary<string, string> { { "taskPool", "1"} });
             if (worker == null) return;
             _workers.Add(worker);
             await worker.WhenReady;
@@ -352,10 +354,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
         }
 
         SemaphoreSlim _SetWorkerCountLock = new SemaphoreSlim(1);
-        async Task<bool> SetWorkerCount(int count)
+        public async Task<bool> SetWorkerCount(int count)
         {
             if (!WebWorker.Supported || IsDisposed) return false;
-            count = Math.Min(Math.Max(0, count), MaxPoolSize);
+            count = Math.Clamp(count, 0, MaxPoolSize);
             _PoolSize = count;
             try
             {

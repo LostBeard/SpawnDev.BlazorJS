@@ -5,6 +5,7 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Reflection;
 using SpawnDev.BlazorJS.Toolbox;
 using System.Text.Json;
+using System.Web;
 using Array = SpawnDev.BlazorJS.JSObjects.Array;
 
 namespace SpawnDev.BlazorJS.WebWorkers
@@ -161,6 +162,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
             WebWorkerJSScript = workerScriptUri.ToString();
             Locks = JS.Get<LockManager>("navigator.locks");
             LockManagerSupported = Locks != null;
+            var queryParams = HttpUtility.ParseQueryString(new Uri(navigationManager.Uri).Query);
+            var isTaskPoolWorker = queryParams["taskPool"] == "1" && JS.IsScope(GlobalScope.DedicatedAndSharedWorkers);
             Info = new AppInstanceInfo
             {
                 InstanceId = InstanceId,
@@ -168,6 +171,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 Name = GetName(),
                 BaseUrl = AppBaseUri,
                 Url = navigationManager.Uri,
+                TaskPoolWorker = isTaskPoolWorker,
             };
             BroadcastChannelSupported = !JS.IsUndefined(nameof(BroadcastChannel));
             if (BroadcastChannelSupported)
@@ -190,13 +194,22 @@ namespace SpawnDev.BlazorJS.WebWorkers
             Console.WriteLine("WebWorkerJSScript: " + WebWorkerJSScript);
 #endif
             var hardwareConcurrency = JS.Get<int?>("navigator.hardwareConcurrency");
-            MaxWorkerCount = hardwareConcurrency == null || hardwareConcurrency.Value == 0 ? 0 : hardwareConcurrency.Value;
+            MaxWorkerCount = hardwareConcurrency ?? 0;
             if (IServiceCollectionExtensions.ServiceWorkerConfig != null)
             {
                 ServiceWorkerConfig = IServiceCollectionExtensions.ServiceWorkerConfig;
             };
             Local = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors);
-            TaskPool = new WebWorkerPool(this, 0, 1, true);
+            if (isTaskPoolWorker)
+            {
+                // task pool workers have their TaskPool.MaxWorkerPoolCount locked to 0.
+                // It can be unlocked, but this prevents apps that auto-start TaskPool workers from accidentally auto-starting task pool workers recursively
+                TaskPool = new WebWorkerPool(this, 0, 0, false, true, true);
+            }
+            else
+            {
+                TaskPool = new WebWorkerPool(this, 0, 1, true);
+            }
         }
         BroadcastChannel? InstanceBroadcastChannel = null;
         private void EnableInterconnectWorker()
@@ -642,7 +655,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var scriptUrl = WebWorkerJSScript;
             if (queryParams.Count > 0)
             {
-                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $""));
+                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $"{o.Key}={o.Value}"));
             }
             var worker = new Worker(scriptUrl);
             var webWorker = new WebWorker(worker, ServiceProvider, ServiceDescriptors);
@@ -653,10 +666,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// Creates a new a WebWorker instance and returns.
         /// </summary>
         /// <returns></returns>
-        public WebWorker? GetWebWorkerSync()
+        public WebWorker? GetWebWorkerSync(Dictionary<string, string>? queryParams = null)
         {
             if (!WebWorkerSupported) return null;
-            var queryParams = new Dictionary<string, string>();
+            queryParams ??= new Dictionary<string, string>();
 #if DEBUG
             queryParams["forceCompatMode"] = "0";
 #endif
@@ -667,7 +680,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var scriptUrl = WebWorkerJSScript;
             if (queryParams.Count > 0)
             {
-                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $""));
+                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $"{o.Key}={o.Value}"));
             }
             var worker = new Worker(scriptUrl);
             var webWorker = new WebWorker(worker, ServiceProvider, ServiceDescriptors);
@@ -692,7 +705,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var scriptUrl = WebWorkerJSScript;
             if (queryParams.Count > 0)
             {
-                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $""));
+                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $"{o.Key}={o.Value}"));
             }
             var sharedWorker = new SharedWorker(scriptUrl, sharedWorkerName);
             var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, ServiceProvider, ServiceDescriptors);
@@ -718,7 +731,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var scriptUrl = WebWorkerJSScript;
             if (queryParams.Count > 0)
             {
-                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $""));
+                scriptUrl += "?" + string.Join('&', queryParams.Select(o => $"{o.Key}={o.Value}"));
             }
             var sharedWorker = new SharedWorker(scriptUrl, sharedWorkerName);
             var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, ServiceProvider, ServiceDescriptors);
