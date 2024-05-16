@@ -33,9 +33,9 @@ builder.Services.AddWebWorkerService(webWorkerService =>
 {
     // Optionally configure the WebWorkerService service before it is used
     // Default WebWorkerService.TaskPool settings: PoolSize = 0, MaxPoolSize = 1, AutoGrow = true
-    // Below sets TaskPool max size to 2. By default the TaskPool size will grow as needed up to the max pool size.
+    // Below sets TaskPool max size to 2 if in a Window scope, 0 otherwise. By default the TaskPool size will grow as needed up to the max pool size.
     // Setting max pool size to -1 will set it to the value of navigator.hardwareConcurrency
-    webWorkerService.TaskPool.MaxPoolSize = 2;
+    webWorkerService.TaskPool.MaxPoolSize = webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
     // Below is telling the WebWorkerService TaskPool to set the initial size to 2 if running in a Window scope and 0 otherwise
     // This starts up 2 WebWorkers to handle TaskPool tasks as needed
     // Setting this to -1 will set the initial pool size to max pool size
@@ -73,7 +73,7 @@ builder.Services.AddSingleton<ContextMenuService>();
 // App service
 builder.Services.AddSingleton<JSObjectAnalyzer>();
 
-#if DEBUG && false
+#if DEBUG && true
 var host = builder.Build();
 await host.StartBackgroundServices();
 //
@@ -91,6 +91,30 @@ JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
         // below line is an example of how to call a method (here, the static method Console.WriteLine) in another instance
         await windowInstance.Run(() => Console.WriteLine("Hello " + remoteInstanceId + " from " + localInstanceId));
     }
+    return "ok";
+}));
+JS.Set("_testWorkerGetTimeout", new AsyncFuncCallback<string>(async () =>
+{
+    var webWorkerService = host.Services.GetRequiredService<WebWorkerService>();
+    var windowInstances = webWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
+    var t1 = webWorkerService.TaskPool.Run(()=> TestWorkerTimeout.Wait(10000));
+    var t2 = webWorkerService.TaskPool.Run(() => TestWorkerTimeout.Wait(10000));
+    try
+    {
+        var worker = await webWorkerService.TaskPool.GetWorkerAsync(2000);
+        Console.WriteLine($"GetWorker success???");
+        worker.ReleaseLock();
+    }
+    catch(TaskCanceledException taskCanceledException)
+    {
+        Console.WriteLine($"GetWorker TaskCanceledException: {taskCanceledException.GetType().Name} {taskCanceledException.Message}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"GetWorker error: {ex.GetType().Name} {ex.Message}");
+    }
+    await t1;
+    await t2;
     return "ok";
 }));
 ////var actt = new Action(() => {
@@ -140,3 +164,11 @@ await builder.Build().BlazorJSRunAsync();
 //    public int Y;
 //    public int Z;
 //}
+
+static class TestWorkerTimeout
+{
+    public static async Task Wait(int howLongToWaitMS)
+    {
+        await Task.Delay(howLongToWaitMS);
+    }
+}

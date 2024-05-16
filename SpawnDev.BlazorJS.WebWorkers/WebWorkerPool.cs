@@ -181,6 +181,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <param name="worker"></param>
         public void ReleaseWorker(WebWorker worker)
         {
+            if (worker == null) return;
             if (!IdleWebWorkers.Contains(worker) && _workers.Contains(worker))
             {
                 if (IsDisposed || worker.IsDisposing || _workers.Count > _PoolSize)
@@ -192,9 +193,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 {
                     if (!job.Task.IsCompleted)
                     {
-                        worker!.AcquireLock();
+                        worker.AcquireLock();
                         if (job.TrySetResult(worker)) return;
-                        worker.ReleaseLock();
                     }
                 }
                 // no work to do
@@ -299,7 +299,18 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 PoolSize += 1;
             }
-            worker = await tcs.Task.WaitAsync(cancellationToken);
+            try
+            {
+                worker = await tcs.Task.WaitAsync(cancellationToken);
+            }
+            catch(TaskCanceledException)
+            {
+                // the worker will be released immediately as the caller has cancelled and no longer wants it
+                _ = tcs.Task.ContinueWith(t => { 
+                    if (t.IsCompletedSuccessfully) t.Result!.ReleaseLock();
+                });
+                throw;
+            }
             return worker;
         }
 
@@ -311,15 +322,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public delegate void BusyStateChangedDelegate();
         public event BusyStateChangedDelegate OnBusyStateChanged;
 
-        public async Task AddWorker()
+        async Task AddWorker()
         {
             if (IsDisposed || _workers.Count >= _PoolSize) return;
             var worker = WebWorkerService.GetWebWorkerSync();
             if (worker == null) return;
             _workers.Add(worker);
-#if DEBUG
-            Console.WriteLine($"AddWorker: {_workers.Count}");
-#endif
             await worker.WhenReady;
             worker.OnDisposing += Worker_OnDisposing;
             worker.OnLocked += Worker_OnLocked;
@@ -344,16 +352,16 @@ namespace SpawnDev.BlazorJS.WebWorkers
         }
 
         SemaphoreSlim _SetWorkerCountLock = new SemaphoreSlim(1);
-        public async Task<bool> SetWorkerCount(int count)
+        async Task<bool> SetWorkerCount(int count)
         {
             if (!WebWorker.Supported || IsDisposed) return false;
-            if (_PoolSize < count) _PoolSize = count;
-            _PoolSize = Math.Max(0, count);
+            count = Math.Min(Math.Max(0, count), MaxPoolSize);
+            _PoolSize = count;
             try
             {
-                if (_PoolSize == _workers.Count) return true;
                 await _SetWorkerCountLock.WaitAsync();
                 if (IsDisposed) return false;
+                if (_PoolSize == _workers.Count) return true;
                 var countToAdd = _PoolSize - _workers.Count;
                 if (countToAdd > 0)
                 {
