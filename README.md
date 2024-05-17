@@ -561,7 +561,7 @@ Tested working in the following browsers (tested with .Net 8.) Chrome Android do
 Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
 
 ## WebWorkerService
-The WebWorkerService singleton contains many methods for working with multiple instances of your Blazor app running in any scope, whether Window, Worker, SharedWorker, or ServiceWorker.
+The WebWorkerService singleton contains many methods for working with multiple instances of your Blazor app running in any scope, whether Window, Worker, SharedWorker, or ServiceWorker. 
 
 ### Primary WebWorkerService members:
 - **Info** - This property provides basic info about the currently running instance, like instance id and the global scope type.
@@ -572,7 +572,19 @@ The WebWorkerService singleton contains many methods for working with multiple i
 - [**GetWebWorker**](#webworker) - This async method creates and returns a new instance of WebWorker when it is ready.
 - [**GetSharedWebWorker**](#sharedwebworker) - This async method returns an instance of SharedWebWorker with the given name, accessible by all Blazor instances. The worker is created the if it does not already exist. 
 
-Example WebWorkerService setup and usage. 
+### Notes and Common Issues
+WebWorkers are separate instances of your Blazor WASM app running in [Workers](https://developer.mozilla.org/en-US/docs/Web/API/Worker). These instances are called into using [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage).
+
+#### Developer console shows blazor startup message more than once.
+Workers share the window's console. Startup messages and other console messages from them is normal.
+
+#### Missing Javascript dependencies in WebWorkers
+See (Javascript dependencies in WebWorkers)[#javascriptdependenciesinwebworkers]
+
+#### Serialization and WebWorkers
+Communication with WebWorkers is done using [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage). Because postMessage is a Javascript method, the data passed to it will be serialized and deserialized using the JSRuntime serializer. Not all .Net types are supported by the JSRuntime serializer so calling methods with unsupported parameter or return types will throw an exception.
+
+### Example WebWorkerService setup and usage. 
 
 ```cs
 // Program.cs
