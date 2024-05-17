@@ -671,11 +671,14 @@ public class MyService : IMyService
         // Call the private method WorkerMethod on this scope (normal)
         Console.WriteLine(WorkerMethod(WebWorkerService.InstanceId));
 
+        // Call a private synchronous method in a WebWorker thread using a Delegate
+        Console.WriteLine(await WebWorkerService.TaskPool.Invoke(WorkerMethod, WebWorkerService.InstanceId));
+
         // Call a private synchronous method in a WebWorker thread using an Expression
         Console.WriteLine(await WebWorkerService.TaskPool.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
 
-        // Call a private synchronous method in a WebWorker thread using a Delegate
-        Console.WriteLine(await WebWorkerService.TaskPool.Invoke(WorkerMethod, WebWorkerService.InstanceId));
+        // Call a public async method in a WebWorker thread using am Expression, specifying the registered service to call via a Type parameter
+        Console.WriteLine(await worker.Run<IMyService, string>(myService => myService.WorkerMethodAsync(WebWorkerService.InstanceId)));
 
         // Call a public async method in a WebWorker thread using am Interface Proxy
         var service = WebWorkerService.TaskPool.GetService<IMyService>();
