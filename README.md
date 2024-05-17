@@ -677,7 +677,7 @@ public class MyService : IMyService
         // Call a private synchronous method in a WebWorker thread using an Expression
         Console.WriteLine(await WebWorkerService.TaskPool.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
 
-        // Call a public async method in a WebWorker thread using am Expression, specifying the registered service to call via a Type parameter
+        // Call a public async method in a WebWorker thread using am Expression, specifying the registered service to call via a Type parameter (as well as the return type)
         Console.WriteLine(await worker.Run<IMyService, string>(myService => myService.WorkerMethodAsync(WebWorkerService.InstanceId)));
 
         // Call a public async method in a WebWorker thread using am Interface Proxy
