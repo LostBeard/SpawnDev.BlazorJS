@@ -579,7 +579,7 @@ WebWorkers are separate instances of your Blazor WASM app running in [Workers](h
 Workers share the window's console. Startup messages and other console messages from them is normal.
 
 #### Missing Javascript dependencies in WebWorkers
-See (Javascript dependencies in WebWorkers)[#javascriptdependenciesinwebworkers]
+See [Javascript dependencies in WebWorkers](#javascriptdependenciesinwebworkers)
 
 #### Serialization and WebWorkers
 Communication with WebWorkers is done using [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage). Because postMessage is a Javascript method, the data passed to it will be serialized and deserialized using the JSRuntime serializer. Not all .Net types are supported by the JSRuntime serializer so calling methods with unsupported parameter or return types will throw an exception.
