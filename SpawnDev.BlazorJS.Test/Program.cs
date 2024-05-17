@@ -82,6 +82,13 @@ await host.StartBackgroundServices();
 //
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 var WebWorkerService = host.Services.GetRequiredService<WebWorkerService>();
+
+var rootScope = host.Services.GetService<IServiceScope>();
+
+var serviceScopeFactory = host.Services.GetService<IServiceScopeFactory>();
+
+var nmt22 = true;
+
 JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
 {
     var windowInstances = WebWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
@@ -112,7 +119,7 @@ JS.Set("_testWorkerGetTimeout", new AsyncFuncCallback<string>(async () =>
         Console.WriteLine($"GetWorker success???");
         worker.ReleaseLock();
     }
-    catch(TaskCanceledException taskCanceledException)
+    catch (TaskCanceledException taskCanceledException)
     {
         // This is the expected result
         Console.WriteLine($"GetWorker TaskCanceledException: {taskCanceledException.GetType().Name} {taskCanceledException.Message}");

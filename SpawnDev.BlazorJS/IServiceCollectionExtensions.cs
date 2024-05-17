@@ -112,7 +112,7 @@ namespace SpawnDev.BlazorJS
             var rets = _this.GetRegisteredServices().Where(o => o.Item1 == serviceType && o.Item2 == serviceKey).ToList();
             return rets.Any() ? rets.Last() : null;
         }
-        internal static List<AutoStartedService> AutoStartedServices { get; private set; } = new List<AutoStartedService>();
+        internal static List<ServiceInfo> AutoStartedServices { get; private set; } = new List<ServiceInfo>();
         internal enum StartupState
         {
             None,
@@ -121,7 +121,7 @@ namespace SpawnDev.BlazorJS
             Constructing,
             Started,
         }
-        internal class AutoStartedService
+        internal class ServiceInfo
         {
             public Type ServiceType { get; set; }
             public Type ImplementationType { get; set; }
@@ -148,7 +148,7 @@ namespace SpawnDev.BlazorJS
             public Type? DependencyOfType { get; set; }
             public bool InitAsyncCalled { get; set; }
             public ConstructorInfo? ConstructorInfo { get; private set; }
-            public AutoStartedService(ServiceDescriptor serviceDescriptor, GlobalScope currentGlobalScope, IServiceCollection serviceCollection)
+            internal ServiceInfo(ServiceDescriptor serviceDescriptor, GlobalScope currentGlobalScope, IServiceCollection serviceCollection)
             {
                 ServiceDescriptor = serviceDescriptor;
                 ServiceType = ServiceDescriptor.ServiceType;
@@ -260,7 +260,7 @@ namespace SpawnDev.BlazorJS
             var JS = BlazorJSRuntime.JS;
             //WebAssemblyHost = _this;
             //Services = _this.Services;
-            AutoStartedServices = serviceCollection!.Select(o => new AutoStartedService(o, JS.GlobalScope, serviceCollection!)).ToList();
+            AutoStartedServices = serviceCollection!.Select(o => new ServiceInfo(o, JS.GlobalScope, serviceCollection!)).ToList();
             foreach (var serviceInfo in AutoStartedServices)
             {
                 await InitServiceAsync(serviceCollection!, _this.Services, serviceInfo, null, false);
@@ -297,20 +297,29 @@ namespace SpawnDev.BlazorJS
         //    return autoStartedService;
         //}
 
+        public static ServiceDescriptor? GetServiceDescriptor(this IServiceProvider _this, Type type)
+        {
+            var serviceInfo = GetServiceInfo(type, null);
+            return serviceInfo?.ServiceDescriptor;
+        }
+
         public static async Task<object?> GetServiceAsync(this IServiceProvider _this, Type type)
         {
             var serviceInfo = GetServiceInfo(type, null);
-            if (serviceInfo == null) return null;
+            if (serviceInfo == null)
+            {
+                return null;
+            }
             await InitServiceAsync(serviceCollection!, _this, serviceInfo, null, true);
             return _this.GetService(type);
         }
 
-        static AutoStartedService? GetServiceInfo(Type serviceType, object? serviceKey)
+        static ServiceInfo? GetServiceInfo(Type serviceType, object? serviceKey)
         {
             return AutoStartedServices.Where(o => o.ServiceType == serviceType && o.ServiceKey == serviceKey).LastOrDefault();
         }
 
-        static List<AutoStartedService> GetServiceInfos(Type serviceType, object? serviceKey)
+        static List<ServiceInfo> GetServiceInfos(Type serviceType, object? serviceKey)
         {
             return AutoStartedServices.Where(o => o.ServiceType == serviceType && o.ServiceKey == serviceKey).ToList();
         }
@@ -320,7 +329,7 @@ namespace SpawnDev.BlazorJS
             return (T?)await _this.GetServiceAsync(typeof(T));
         }
 
-        internal static async Task InitServiceAsync(IServiceCollection serviceDescriptors, IServiceProvider _this, AutoStartedService? serviceInfo, Type? dependencyOfType, bool isRequired = false)
+        internal static async Task InitServiceAsync(IServiceCollection serviceDescriptors, IServiceProvider _this, ServiceInfo? serviceInfo, Type? dependencyOfType, bool isRequired = false)
         {
             if (serviceInfo == null)
             {
@@ -396,44 +405,55 @@ namespace SpawnDev.BlazorJS
             }
         }
 
-        public static async Task<object?> FindServiceAsync(this IServiceProvider _this, Type? type)
+        public static List<ServiceDescriptor>? FindServiceDescriptors(this IServiceCollection _this, Type? type)
         {
             if (type == null) return null;
-            var service = await _this.GetServiceAsync(type);
-            if (service == null)
-            {
-                //Console.WriteLine($"serviceType not found: {type.Name}");
-                foreach (var serviceDescriptor in serviceCollection)
-                {
-                    //var serviceType = serviceDescriptor.ServiceType;
-                    //var implementationType = serviceDescriptor.ImplementationType != null ? serviceDescriptor.ImplementationType :
-                    //    (serviceDescriptor.ImplementationInstance != null ? serviceDescriptor.ImplementationInstance.GetType() : null);
-                    var autoStartInfo = AutoStartedServices.Where(o => o.ServiceDescriptor == serviceDescriptor).FirstOrDefault();
-                    if (autoStartInfo == null)
-                    {
-                        continue;
-                    }
-                    var serviceType = autoStartInfo.ServiceType;
-                    var implementationType = autoStartInfo.ImplementationType;
-
-                    //var implementationTypeName = implementationType == null ? "[UNNAMED]" : implementationType.Name;
-                    //Console.WriteLine($">>> {serviceType.Name} {implementationTypeName}");
-                    if (type == implementationType)
-                    {
-                        //Console.WriteLine($"+++ serviceType found using implementation: {serviceType.Name} {implementationTypeName}");
-                        service = await _this.GetServiceAsync(serviceType);
-                        break;
-                    }
-                    else if (serviceType.IsAssignableFrom(type))
-                    {
-                        //Console.WriteLine($"+++ serviceType found using implementation: {serviceType.Name} {implementationTypeName}");
-                        service = await _this.GetServiceAsync(serviceType);
-                        break;
-                    }
-                }
-            }
-            return service;
+            var services = _this.Where(o => o.ServiceType == type).ToList();
+            if (services.Count > 0) return services;
+            services = _this.Where(o => o.ImplementationType == type).ToList();
+            if (services.Count > 0) return services;
+            services = _this.Where(o => o.ServiceType.IsAssignableFrom(type)).ToList();
+            return services;
         }
+
+        //public static async Task<object?> FindServiceAsync(this IServiceProvider _this, Type? type)
+        //{
+        //    if (type == null) return null;
+        //    var service = await _this.GetServiceAsync(type);
+        //    if (service == null)
+        //    {
+        //        //Console.WriteLine($"serviceType not found: {type.Name}");
+        //        foreach (var serviceDescriptor in serviceCollection)
+        //        {
+        //            //var serviceType = serviceDescriptor.ServiceType;
+        //            //var implementationType = serviceDescriptor.ImplementationType != null ? serviceDescriptor.ImplementationType :
+        //            //    (serviceDescriptor.ImplementationInstance != null ? serviceDescriptor.ImplementationInstance.GetType() : null);
+        //            var autoStartInfo = AutoStartedServices.Where(o => o.ServiceDescriptor == serviceDescriptor).FirstOrDefault();
+        //            if (autoStartInfo == null)
+        //            {
+        //                continue;
+        //            }
+        //            var serviceType = autoStartInfo.ServiceType;
+        //            var implementationType = autoStartInfo.ImplementationType;
+
+        //            //var implementationTypeName = implementationType == null ? "[UNNAMED]" : implementationType.Name;
+        //            //Console.WriteLine($">>> {serviceType.Name} {implementationTypeName}");
+        //            if (type == implementationType)
+        //            {
+        //                //Console.WriteLine($"+++ serviceType found using implementation: {serviceType.Name} {implementationTypeName}");
+        //                service = await _this.GetServiceAsync(serviceType);
+        //                break;
+        //            }
+        //            else if (serviceType.IsAssignableFrom(type))
+        //            {
+        //                //Console.WriteLine($"+++ serviceType found using implementation: {serviceType.Name} {implementationTypeName}");
+        //                service = await _this.GetServiceAsync(serviceType);
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    return service;
+        //}
 
         /// <summary>
         /// BlazorJSRunAsync() is a scope aware replacement for RunAsync().<br />

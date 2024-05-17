@@ -50,15 +50,16 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public ServiceCallDispatcherInfo LocalInfo { get; }
         public bool WaitingForResponse => _waiting.Count > 0;
         Dictionary<string, TaskCompletionSource<Array>> _waiting = new Dictionary<string, TaskCompletionSource<Array>>();
-        protected IServiceProvider _serviceProvider;
+        protected IServiceProvider ServiceProvider;
         protected IServiceCollection ServiceDescriptors;
+        IServiceScope? ConnectionScope;
         /// <summary>
         /// Returns true if a message port is used and it supports transferable objects
         /// </summary>
         public bool MessagePortSupportsTransferable { get; private set; }
         public ServiceCallDispatcher(IServiceProvider serviceProvider, IServiceCollection serviceDescriptors, IMessagePortSimple port)
         {
-            _serviceProvider = serviceProvider;
+            ServiceProvider = serviceProvider;
             ServiceDescriptors = serviceDescriptors;
             if (port is IMessagePort messagePort)
             {
@@ -74,7 +75,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public ServiceCallDispatcher(IServiceProvider serviceProvider, IServiceCollection serviceDescriptors)
         {
             LocalInvoker = true;
-            _serviceProvider = serviceProvider;
+            ServiceProvider = serviceProvider;
             ServiceDescriptors = serviceDescriptors;
             additionalCallArgs.Add(new CallSideParameter("caller", () => this, typeof(ServiceCallDispatcher)));
             LocalInfo = new ServiceCallDispatcherInfo { InstanceId = JS.InstanceId, GlobalThisTypeName = JS.GlobalThisTypeName };
@@ -243,7 +244,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 if (!methodInfo.IsStatic)
                 {
                     // non-static methods calls must point at a registered service
-                    service = await _serviceProvider.FindServiceAsync(serviceType);
+                    service = await GetServiceAsync(serviceType);
                     if (service == null)
                     {
                         throw new Exception($"Service type not found: {(serviceType == null ? "" : serviceType.Name)}");
@@ -256,6 +257,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 // the call failed
                 err = ex.Message;
+#if DEBUG
+                Console.WriteLine($"Execution of remote call failed: {ex.Message}");
+                Console.WriteLine($"Stack: {ex.StackTrace ?? ""}");
+#endif
             }
             // Post call cleanup
             // remove any uncancelled remote CancellationTokens for this request
@@ -318,7 +323,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (!methodInfo.IsStatic)
             {
                 // non-static methods calls must point at a registered service
-                service = await _serviceProvider.FindServiceAsync(methodInfo.ReflectedType);
+                service = await GetServiceAsync(methodInfo.ReflectedType);
                 if (service == null)
                 {
                     throw new NullReferenceException(nameof(service));
@@ -357,7 +362,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var msgOut = new List<object?> { "call", requestId, targetMethod };
             msgOut.AddRange(msgData);
             var workerTask = new TaskCompletionSource<Array>();
-            if (_port != null)_port.PostMessage(msgOut, transferable);
+            if (_port != null) _port.PostMessage(msgOut, transferable);
             else _portSimple?.PostMessage(msgOut);
             _waiting.Add(requestId, workerTask);
             CheckBusyStateChanged();
@@ -680,6 +685,54 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (GetCallSideParameter(methodParam) != null) return true;
             return false;
         }
+
+        /// <summary>
+        /// When a call is dispatched on a service with a Lifetime set to Scoped, when is the actual scope of Scoped
+        /// - Singleton - Shared by all callers onto this instance. This is how it works when using Scoped services in Blazor WASM apps by default.
+        /// - Scoped - The scope is the Lifetime of this ServiceCallDispatcher. Per connection. Each connection would access its own copy of the service in this worker.
+        /// - Transient - The scope is per call. A new instance of the service is used for each call.
+        /// </summary>
+        public ServiceLifetime ScopedServiceLifetime { get; set; } = ServiceLifetime.Singleton;
+
+        public static IServiceScope? SharedScope { get; set; } = null;
+
+        async Task<object?> GetServiceAsync(Type serviceType)
+        {
+            if (serviceType == null) return null;
+            var info = ServiceDescriptors.FindServiceDescriptors(serviceType)!.FirstOrDefault();
+            if (info == null) return null;
+            switch (info.Lifetime)
+            {
+                case ServiceLifetime.Singleton: return await ServiceProvider.GetServiceAsync(info.ServiceType);
+                case ServiceLifetime.Scoped:
+                    {
+                        switch (ScopedServiceLifetime)
+                        {
+                            case ServiceLifetime.Singleton:
+                                {
+                                    SharedScope ??= ServiceProvider.CreateScope();
+                                    return SharedScope!.ServiceProvider.GetService(info.ServiceType);
+                                }
+                            case ServiceLifetime.Scoped:
+                                {
+                                    ConnectionScope ??= ServiceProvider.CreateScope();
+                                    return ConnectionScope!.ServiceProvider.GetService(info.ServiceType);
+                                }
+                            case ServiceLifetime.Transient:
+                                {
+                                    using(var scope = ServiceProvider.CreateScope())
+                                    {
+                                        return scope.ServiceProvider.GetService(info.ServiceType);
+                                    }
+                                }
+                            default: throw new NotSupportedException();
+                        }
+                    }
+                case ServiceLifetime.Transient: return ServiceProvider.GetService(info.ServiceType);
+            }
+            throw new NotSupportedException();
+        }
+
         async Task<(bool, object?)> TryResolveCallSideParamValue(ParameterInfo methodParam)
         {
             object? value = null;
@@ -687,7 +740,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             var fromServiceAttr = methodParam.GetCustomAttribute<FromServicesAttribute>();
             if (fromServiceAttr != null)
             {
-                value = await _serviceProvider.GetServiceAsync(methodParam.ParameterType);
+                value = await GetServiceAsync(methodParam.ParameterType);
                 return (true, value);
             }
             // call side
@@ -709,6 +762,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         {
             if (IsDisposed) return;
             IsDisposed = true;
+            ConnectionScope?.Dispose();
             if (disposing)
             {
 
