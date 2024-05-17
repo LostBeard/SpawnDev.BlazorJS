@@ -1054,4 +1054,18 @@
         }
         return -1;
     }
+
+    [TestMethod]
+    public async Task TypeSerializationTest()
+    {
+        var type = typeof(WebWorkerService);
+        var typeRB = await WebWorkerService.TaskPool.Run(() => WebWorkerTypeSerializationTest(type));
+        if (type != typeRB) throw new Exception("Failed");
+    }
+
+    private static async Task<Type> WebWorkerTypeSerializationTest(Type type)
+    {
+        Console.WriteLine($"Type recvd: {type.FullName}");
+        return type;
+    }
 }

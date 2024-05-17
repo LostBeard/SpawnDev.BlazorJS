@@ -6,6 +6,7 @@ using SpawnDev.BlazorJS.JsonConverters;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace SpawnDev.BlazorJS
 {
@@ -43,6 +44,7 @@ namespace SpawnDev.BlazorJS
         {
             _js = (IJSInProcessRuntime)typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime")!.GetField("Instance", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
             RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(_js, null)!;
+            RuntimeJsonSerializerOptions.Converters.Add(new TypeJsonConverter());
             RuntimeJsonSerializerOptions.Converters.Add(new TupleConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new ValueTupleConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
@@ -152,7 +154,7 @@ namespace SpawnDev.BlazorJS
                     StartUpTime = Performance?.Now() ?? 0;
                     break;
             }
-            
+
 #if DEBUG && true
             Log("JS.GlobalThisTypeName", GlobalThisTypeName, StartUpTime);
             Set("JSInterop.debugLevel", 1);

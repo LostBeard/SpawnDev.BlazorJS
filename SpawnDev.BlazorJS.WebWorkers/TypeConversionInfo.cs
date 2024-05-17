@@ -3,6 +3,7 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JSObjects.WebRTC;
 using System.Collections;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.WebWorkers
@@ -40,24 +41,19 @@ namespace SpawnDev.BlazorJS.WebWorkers
         public bool IsTransferable { get; private set; }
 
         static List<Type> IgnoreInterfaces = new List<Type> {
-                typeof(IJSInProcessObjectReference),
-                typeof(IJSObjectReference),
-                typeof(IJSStreamReference),
-            };
-
+            typeof(IJSInProcessObjectReference),
+            typeof(IJSObjectReference),
+            typeof(IJSStreamReference),
+        };
+        static JsonNamingPolicy JsonNamingPolicy = JsonNamingPolicy.CamelCase;
         static string GetPropertyJSName(PropertyInfo prop)
         {
             // TODO - json name attribute
+            var jsonPropNameAttr = prop.GetCustomAttribute<JsonPropertyNameAttribute>(true);
+            if (jsonPropNameAttr != null) return jsonPropNameAttr.Name;
             string propName = prop.Name;
-            try
-            {
-                propName = string.IsNullOrEmpty(propName) ? "" : propName.Substring(0, 1).ToLowerInvariant() + propName.Substring(1);
-            }
-            catch (Exception ex)
-            {
-                var nmt = true;
-            }
-            return propName;
+            if (string.IsNullOrEmpty(propName)) return propName;
+            return JsonNamingPolicy.ConvertName(propName);
         }
         internal TypeConversionInfo(Type returnType)
         {
@@ -66,7 +62,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
 #endif
             if (returnType == null) throw new Exception("Invalid Return Type");
             ReturnType = returnType;
-            if (returnType.IsValueType || returnType == typeof(string))
+            if (typeof(Type).IsAssignableFrom(returnType))
+            {
+                useDefaultReader = true;
+                return;
+            }
+            else if (returnType.IsValueType || returnType == typeof(string))
             {
                 useDefaultReader = true;
                 return;

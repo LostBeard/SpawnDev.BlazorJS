@@ -4,6 +4,7 @@ using Radzen;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Diagnostics;
 using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.JsonConverters;
 using SpawnDev.BlazorJS.Reflection;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
@@ -11,6 +12,8 @@ using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 #if DEBUG
 JSObject.UndisposedHandleVerboseMode = false;
@@ -40,7 +43,7 @@ builder.Services.AddWebWorkerService(webWorkerService =>
     // This starts up 2 WebWorkers to handle TaskPool tasks as needed
     // Setting this to -1 will set the initial pool size to max pool size
 #if DEBUG
-    webWorkerService.TaskPool.PoolSize = 1;  // once web workers startup the VS debugger does not work properly
+    webWorkerService.TaskPool.PoolSize = 0;  // once web workers startup the VS debugger does not work properly
 #else
     webWorkerService.TaskPool.PoolSize = 1; //webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
 #endif
