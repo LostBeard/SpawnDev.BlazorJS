@@ -48,7 +48,7 @@ namespace SpawnDev.BlazorJS
             }
             var isIBackgroundService = typeof(IBackgroundService).IsAssignableFrom(ServiceType) || typeof(IBackgroundService).IsAssignableFrom(ImplementationType);
             var isIAsyncBackgroundService = typeof(IAsyncBackgroundService).IsAssignableFrom(ServiceType) || typeof(IAsyncBackgroundService).IsAssignableFrom(ImplementationType);
-            var serviceAutoStartScopeSet = WebAssmeblyServices.GetExtension(serviceCollection)!.GetAutoStartMode(ServiceType);
+            var serviceAutoStartScopeSet = WebAssemblyServices.GetExtension(serviceCollection)!.GetAutoStartMode(ServiceType);
             var serviceAutoStartScope = GlobalScope.None;
             if (serviceAutoStartScopeSet == null || serviceAutoStartScopeSet.Value == GlobalScope.Default)
             {
@@ -70,7 +70,7 @@ namespace SpawnDev.BlazorJS
         }
         void GetBestConstructor(IServiceCollection serviceCollection, Type type, out ConstructorInfo? constructorInfo, out List<(Type, object?)> requiredServices)
         {
-            var availableServices = WebAssmeblyServices.GetExtension(serviceCollection)!.GetRegisteredServices();
+            var availableServices = WebAssemblyServices.GetExtension(serviceCollection)!.GetRegisteredServices();
             var constructors = type.GetConstructors().OrderByDescending(o => o.GetParameters().Length).ToList();
             // check for a constructor marked for use when activating type using ActivatorUtilities
             // https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.activatorutilitiesconstructorattribute?view=dotnet-plat-ext-8.0

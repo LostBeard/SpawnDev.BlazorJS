@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS
         IServiceCollection Descriptors { get; }
         IServiceProvider Services { get; }
     }
-    public class WebAssmeblyServices : IWebAssemblyServices
+    public class WebAssemblyServices : IWebAssemblyServices
     {
         public IServiceProvider Services { get; internal set; }
         public WebAssemblyHost Host { get; internal set; }
@@ -23,16 +23,16 @@ namespace SpawnDev.BlazorJS
         {
             return AutoStartedServices.Where(o => o.ServiceType == serviceType && o.ServiceKey == serviceKey).ToList();
         }
-        static Dictionary<IServiceCollection, WebAssmeblyServices> Extensions = new Dictionary<IServiceCollection, WebAssmeblyServices>();
+        static Dictionary<IServiceCollection, WebAssemblyServices> Extensions = new Dictionary<IServiceCollection, WebAssemblyServices>();
         public IServiceCollection Descriptors { get; }
-        public WebAssmeblyServices(IServiceCollection serviceCollection)
+        public WebAssemblyServices(IServiceCollection serviceCollection)
         {
             Descriptors = serviceCollection;
         }
-        public static WebAssmeblyServices? GetExtension(IServiceCollection serviceCollection, bool allowCreate = true)
+        public static WebAssemblyServices? GetExtension(IServiceCollection serviceCollection, bool allowCreate = true)
         {
-            if (Extensions.TryGetValue(serviceCollection, out WebAssmeblyServices? extension) || !allowCreate) return extension;
-            extension = new WebAssmeblyServices(serviceCollection);
+            if (Extensions.TryGetValue(serviceCollection, out WebAssemblyServices? extension) || !allowCreate) return extension;
+            extension = new WebAssemblyServices(serviceCollection);
             Extensions.Add(serviceCollection, extension);
             return extension;
         }

@@ -58,7 +58,7 @@ namespace SpawnDev.BlazorJS
             }
             if (!_this.Any(o => o.ServiceType == typeof(IWebAssemblyServices)))
             {
-                _this.AddSingleton<IWebAssemblyServices>(WebAssmeblyServices.GetExtension(_this, true)!);
+                _this.AddSingleton<IWebAssemblyServices>(WebAssemblyServices.GetExtension(_this, true)!);
             }
             BlazorJSRuntime.JS ??= new BlazorJSRuntime();
             if (!_this.Any(o => o.ServiceType == typeof(BlazorJSRuntime)))
@@ -78,15 +78,15 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static async Task<WebAssemblyHost> StartBackgroundServices(this WebAssemblyHost _this)
         {
-            var webAssmeblyServices = (WebAssmeblyServices)_this.Services.GetRequiredService<IWebAssemblyServices>();
-            if (webAssmeblyServices.Started) return _this;
-            webAssmeblyServices.Started = true;
-            webAssmeblyServices.Host = _this;
-            webAssmeblyServices.Services = _this.Services;
+            var webAssemblyServices = (WebAssemblyServices)_this.Services.GetRequiredService<IWebAssemblyServices>();
+            if (webAssemblyServices.Started) return _this;
+            webAssemblyServices.Started = true;
+            webAssemblyServices.Host = _this;
+            webAssemblyServices.Services = _this.Services;
             var JS = _this.Services.GetRequiredService<BlazorJSRuntime>();
             var serviceCollection = _this.Services.GetRequiredService<IServiceCollection>();
-            webAssmeblyServices.AutoStartedServices = serviceCollection!.Select(o => new ServiceInfo(o, JS.GlobalScope, serviceCollection!)).ToList();
-            foreach (var serviceInfo in webAssmeblyServices.AutoStartedServices)
+            webAssemblyServices.AutoStartedServices = serviceCollection!.Select(o => new ServiceInfo(o, JS.GlobalScope, serviceCollection!)).ToList();
+            foreach (var serviceInfo in webAssemblyServices.AutoStartedServices)
             {
                 await InitServiceAsync(serviceCollection!, _this.Services, serviceInfo, null, false);
             }
@@ -95,8 +95,8 @@ namespace SpawnDev.BlazorJS
 
         public static async Task<object?> GetServiceAsync(this IServiceProvider _this, Type type)
         {
-            var webAssmeblyServices = (WebAssmeblyServices)_this.GetRequiredService<IWebAssemblyServices>();
-            var serviceInfo = webAssmeblyServices.GetServiceInfo(type, null);
+            var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
+            var serviceInfo = webAssemblyServices.GetServiceInfo(type, null);
             if (serviceInfo == null)
             {
                 return null;
@@ -108,8 +108,8 @@ namespace SpawnDev.BlazorJS
 
         public static ServiceDescriptor? GetServiceDescriptor(this IServiceProvider _this, Type type)
         {
-            var webAssmeblyServices = (WebAssmeblyServices)_this.GetRequiredService<IWebAssemblyServices>();
-            var serviceInfo = webAssmeblyServices.GetServiceInfo(type, null);
+            var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
+            var serviceInfo = webAssemblyServices.GetServiceInfo(type, null);
             return serviceInfo?.ServiceDescriptor;
         }
 
@@ -134,12 +134,12 @@ namespace SpawnDev.BlazorJS
             {
                 return;
             }
-            var webAssmeblyServices = (WebAssmeblyServices)_this.GetRequiredService<IWebAssemblyServices>();
+            var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
             serviceInfo.StartupState = StartupState.Starting;
             foreach (var dependencyType in serviceInfo.DependencyTypes)
             {
                 //var dependencyInfo = serviceDescriptors.GetRegisteredServiceInfo(dependencyType.Item1, dependencyType.Item2);
-                var autoStartInfo = webAssmeblyServices.AutoStartedServices.Where(o => o.ServiceType == dependencyType.Item1 && o.ServiceKey == dependencyType.Item2).LastOrDefault();
+                var autoStartInfo = webAssemblyServices.AutoStartedServices.Where(o => o.ServiceType == dependencyType.Item1 && o.ServiceKey == dependencyType.Item2).LastOrDefault();
                 if (autoStartInfo != null)
                 {
                     await InitServiceAsync(serviceDescriptors, _this, autoStartInfo, serviceInfo.ServiceType);
@@ -159,7 +159,7 @@ namespace SpawnDev.BlazorJS
 #else
             service = _this.GetRequiredService(serviceInfo.ServiceDescriptor.ServiceType);
 #endif
-            serviceInfo.DependencyOrder = webAssmeblyServices.AutoStartedServices.Where(o => o.StartupState == StartupState.Started).Count();
+            serviceInfo.DependencyOrder = webAssemblyServices.AutoStartedServices.Where(o => o.StartupState == StartupState.Started).Count();
             serviceInfo.StartupState = StartupState.Started;
 #if DEBUG
             Console.WriteLine($"Processed service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name}");
@@ -261,7 +261,7 @@ namespace SpawnDev.BlazorJS
         public static IServiceCollection AddSingleton<TService, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TImplementation>(this IServiceCollection services, GlobalScope autoStartMode) where TService : class where TImplementation : class, TService
         {
             ThrowIfNull(services);
-            WebAssmeblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
+            WebAssemblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
             return services.AddSingleton(typeof(TService), typeof(TImplementation));
         }
 
@@ -278,7 +278,7 @@ namespace SpawnDev.BlazorJS
         {
             ThrowIfNull(services);
             ThrowIfNull(serviceType);
-            WebAssmeblyServices.GetExtension(services)!.AutoStartModes[serviceType] = autoStartMode;
+            WebAssemblyServices.GetExtension(services)!.AutoStartModes[serviceType] = autoStartMode;
             return services.AddSingleton(serviceType, serviceType);
         }
 
@@ -293,7 +293,7 @@ namespace SpawnDev.BlazorJS
         public static IServiceCollection AddSingleton<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TService>(this IServiceCollection services, GlobalScope autoStartMode) where TService : class
         {
             ThrowIfNull(services);
-            WebAssmeblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
+            WebAssemblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
             return services.AddSingleton(typeof(TService));
         }
 
@@ -311,7 +311,7 @@ namespace SpawnDev.BlazorJS
         {
             ThrowIfNull(services);
             ThrowIfNull(implementationFactory);
-            WebAssmeblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
+            WebAssemblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
             return services.AddSingleton(typeof(TService), implementationFactory);
         }
 
@@ -331,7 +331,7 @@ namespace SpawnDev.BlazorJS
         {
             ThrowIfNull(services);
             ThrowIfNull(implementationFactory);
-            WebAssmeblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
+            WebAssemblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
             return services.AddSingleton(typeof(TService), implementationFactory);
         }
 
@@ -350,7 +350,7 @@ namespace SpawnDev.BlazorJS
             ThrowIfNull(services);
             ThrowIfNull(serviceType);
             ThrowIfNull(implementationInstance);
-            WebAssmeblyServices.GetExtension(services)!.AutoStartModes[serviceType] = autoStartMode;
+            WebAssemblyServices.GetExtension(services)!.AutoStartModes[serviceType] = autoStartMode;
             var serviceDescriptor = new ServiceDescriptor(serviceType, implementationInstance);
             services.Add(serviceDescriptor);
             return services;
@@ -369,7 +369,7 @@ namespace SpawnDev.BlazorJS
         {
             ThrowIfNull(services);
             ThrowIfNull(implementationInstance);
-            WebAssmeblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
+            WebAssemblyServices.GetExtension(services)!.AutoStartModes[typeof(TService)] = autoStartMode;
             return services.AddSingleton(typeof(TService), implementationInstance);
         }
 
