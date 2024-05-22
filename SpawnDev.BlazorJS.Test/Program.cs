@@ -76,19 +76,13 @@ builder.Services.AddSingleton<ContextMenuService>();
 // App service
 builder.Services.AddSingleton<JSObjectAnalyzer>();
 
-#if DEBUG && true
+#if DEBUG && false
 var host = builder.Build();
 await host.StartBackgroundServices();
 //
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 var WebWorkerService = host.Services.GetRequiredService<WebWorkerService>();
-
-var rootScope = host.Services.GetService<IServiceScope>();
-
-var serviceScopeFactory = host.Services.GetService<IServiceScopeFactory>();
-
-var nmt22 = true;
-
+// debug tests
 JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
 {
     var windowInstances = WebWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();

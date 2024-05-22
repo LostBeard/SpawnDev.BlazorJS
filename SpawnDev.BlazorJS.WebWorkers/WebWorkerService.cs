@@ -140,23 +140,27 @@ namespace SpawnDev.BlazorJS.WebWorkers
         private BroadcastChannel? SharedBroadcastChannel = null;
         private TaskCompletionSource? InstanceLock = null;
         /// <summary>
+        /// IWebAssemblyServices singleton
+        /// </summary>
+        public IWebAssemblyServices WebAssemblyServices { get; init; }
+        /// <summary>
         /// Creates a new instance of WebWorkerService
         /// </summary>
         /// <param name="navigationManager"></param>
-        /// <param name="serviceProvider"></param>
-        /// <param name="serviceDescriptors"></param>
+        /// <param name="webAssemblyServices"></param>
         /// <param name="hostEnvironment"></param>
         /// <param name="js"></param>
-        public WebWorkerService(NavigationManager navigationManager, IServiceProvider serviceProvider, IServiceCollection serviceDescriptors, IWebAssemblyHostEnvironment hostEnvironment, BlazorJSRuntime js)
+        public WebWorkerService(NavigationManager navigationManager, IWebAssemblyServices webAssemblyServices, IWebAssemblyHostEnvironment hostEnvironment, BlazorJSRuntime js)
         {
             JS = js;
             GlobalScope = JS.GlobalScope;
             InstanceId = JS.InstanceId;
+            WebAssemblyServices = webAssemblyServices;
             WebWorkerSupported = !JS.IsUndefined("Worker");
             SharedWebWorkerSupported = !JS.IsUndefined("SharedWorker");
             ServiceWorkerSupported = !JS.IsUndefined("ServiceWorkerRegistration");
-            ServiceProvider = serviceProvider;
-            ServiceDescriptors = serviceDescriptors;
+            ServiceProvider = WebAssemblyServices.Services;
+            ServiceDescriptors = WebAssemblyServices.Descriptors;
             AppBaseUri = JS.Get<string>("document.baseURI");
             var workerScriptUri = new Uri(new Uri(AppBaseUri), WebWorkerJSScript);
             WebWorkerJSScript = workerScriptUri.ToString();
@@ -199,7 +203,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 ServiceWorkerConfig = IServiceCollectionExtensions.ServiceWorkerConfig;
             };
-            Local = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors);
+            Local = new ServiceCallDispatcher(WebAssemblyServices);
             if (isTaskPoolWorker)
             {
                 // task pool workers have their TaskPool.MaxWorkerPoolCount locked to 0.
@@ -529,7 +533,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
             else if (JS.GlobalThis is DedicatedWorkerGlobalScope workerGlobalScope)
             {
-                DedicatedWorkerParent = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors, workerGlobalScope);
+                DedicatedWorkerParent = new ServiceCallDispatcher(WebAssemblyServices, workerGlobalScope);
                 DedicatedWorkerParent.SendReadyFlag();
                 Async.Run(async () =>
                 {
@@ -658,7 +662,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 scriptUrl += "?" + string.Join('&', queryParams.Select(o => $"{o.Key}={o.Value}"));
             }
             var worker = new Worker(scriptUrl);
-            var webWorker = new WebWorker(worker, ServiceProvider, ServiceDescriptors);
+            var webWorker = new WebWorker(worker, WebAssemblyServices);
             await webWorker.WhenReady;
             return webWorker;
         }
@@ -683,7 +687,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 scriptUrl += "?" + string.Join('&', queryParams.Select(o => $"{o.Key}={o.Value}"));
             }
             var worker = new Worker(scriptUrl);
-            var webWorker = new WebWorker(worker, ServiceProvider, ServiceDescriptors);
+            var webWorker = new WebWorker(worker, WebAssemblyServices);
             return webWorker;
         }
         /// <summary>
@@ -708,7 +712,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 scriptUrl += "?" + string.Join('&', queryParams.Select(o => $"{o.Key}={o.Value}"));
             }
             var sharedWorker = new SharedWorker(scriptUrl, sharedWorkerName);
-            var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, ServiceProvider, ServiceDescriptors);
+            var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, WebAssemblyServices);
             await sharedWebWorker.WhenReady;
             return sharedWebWorker;
         }
@@ -734,7 +738,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 scriptUrl += "?" + string.Join('&', queryParams.Select(o => $"{o.Key}={o.Value}"));
             }
             var sharedWorker = new SharedWorker(scriptUrl, sharedWorkerName);
-            var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, ServiceProvider, ServiceDescriptors);
+            var sharedWebWorker = new SharedWebWorker(sharedWorkerName, sharedWorker, WebAssemblyServices);
             return sharedWebWorker;
         }
         /// <summary>
@@ -750,7 +754,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         }
         private void AddIncomingPort(MessagePort incomingPort)
         {
-            var incomingHandler = new ServiceCallDispatcher(ServiceProvider, ServiceDescriptors, incomingPort);
+            var incomingHandler = new ServiceCallDispatcher(WebAssemblyServices, incomingPort);
             incomingPort.Start();
             SharedWorkerIncomingConnections.Add(incomingHandler);
             incomingHandler.SendReadyFlag();

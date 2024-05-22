@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
 {
     public class HybridObjectConverterFactory : JsonConverterFactory
     {
-#if DEBUG && false
+#if DEBUG && true
         /// <summary>
         /// Types this factory has been used with
         /// </summary>
@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
         bool CanConvert(Type typeToConvert, bool internalCall)
         {
-#if DEBUG && false
+#if DEBUG && true
             if (!internalCall)
             {
                 Console.WriteLine($"HybridObjectConverterFactory.CanConvert(typeToConvert: {typeToConvert.Name})");
@@ -43,11 +43,10 @@ namespace SpawnDev.BlazorJS.JsonConverters
             if (baseType == typeof(List<>)) return false;
             if (baseType == typeof(Dictionary<,>)) return false;
             var classProps = typeToConvert.GetTypeJsonProperties();// typeToConvert.GetProperties(BindingFlags.Instance);
-            foreach (var kvp in classProps)
+            foreach (var prop in classProps)
             {
-                var prop = kvp.Value;
-                var propertyInfo = kvp.Value as PropertyInfo;
-                var fieldInfo = kvp.Value as FieldInfo;
+                var propertyInfo = prop.PropertyInfo;
+                var fieldInfo = prop.FieldInfo;
                 var pType = propertyInfo?.PropertyType ?? fieldInfo!.FieldType;
                 if (typeof(JSObject).IsAssignableFrom(pType))
                 {
@@ -71,7 +70,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
 
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
-#if DEBUG && false
+#if DEBUG && true
             if (!Types.Contains(typeToConvert))
             {
                 Types.Add(typeToConvert);
@@ -93,29 +92,20 @@ namespace SpawnDev.BlazorJS.JsonConverters
     /// <typeparam name="T"></typeparam>
     public class HybridObjectConverter<T> : JsonConverter<T>, IJSInProcessObjectReferenceConverter where T : class
     {
-        Dictionary<string, Dictionary<string, MemberInfo>> classProps = new Dictionary<string, Dictionary<string, MemberInfo>>();
-        Dictionary<string, MemberInfo> GetProps(JsonNamingPolicy? jsonNamingPolicy)
-        {
-            var name = jsonNamingPolicy == null ? "" : jsonNamingPolicy.GetType().Name;
-            if (classProps.TryGetValue(name, out var r)) return r;
-            r = typeof(T).GetTypeJsonProperties(jsonNamingPolicy);
-            classProps[name] = r;
-            return r;
-        }
+        List<ClassMemberJsonInfo>? classProps = null;
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var classProps = GetProps(options?.PropertyNamingPolicy);
+            classProps ??= typeof(T).GetTypeJsonProperties();
             using var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
             if (_ref == null) return null;
             // create an instance using the json constructor
             var tmpRet = JsonSerializer.Deserialize<T>("{}")!;// (T)Activator.CreateInstance(typeof(T))!;
-            foreach (var kvp in classProps)
+            foreach (var prop in classProps)
             {
-                var prop = kvp.Value;
-                var propertyInfo = kvp.Value as PropertyInfo;
-                var fieldInfo = kvp.Value as FieldInfo;
+                var propertyInfo = prop.PropertyInfo;
+                var fieldInfo = prop.FieldInfo;
                 var pType = propertyInfo?.PropertyType ?? fieldInfo!.FieldType;
-                var propName = kvp.Key;
+                var propName = prop.GetJsonName(options);
                 object? value;
                 try
                 {
@@ -142,14 +132,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
-            var classProps = GetProps(options?.PropertyNamingPolicy);
+            classProps ??= typeof(T).GetTypeJsonProperties();
             writer.WriteStartObject();
-            foreach (var kvp in classProps)
+            foreach (var prop in classProps)
             {
-                var prop = kvp.Value;
-                var propertyInfo = kvp.Value as PropertyInfo;
-                var fieldInfo = kvp.Value as FieldInfo;
-                var propName = kvp.Key;
+                var propertyInfo = prop.PropertyInfo;
+                var fieldInfo = prop.FieldInfo;
+                var propName = prop.GetJsonName(options);
                 object? propValue = null;
                 if (propertyInfo != null)
                 {
@@ -159,6 +148,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 {
                     propValue = fieldInfo.GetValue(value);
                 }
+                if (!prop.GetShouldWrite(propValue, options)) continue;
                 writer.WritePropertyName(propName);
                 JsonSerializer.Serialize(writer, propValue, options);
             }

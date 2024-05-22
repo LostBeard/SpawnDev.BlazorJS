@@ -4,21 +4,57 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+    public class ClassMemberJsonInfo
+    {
+        public object? DefaultValue { get; private set; }
+        public string Name { get; private set; }
+        public JsonIgnoreAttribute? JsonIgnoreAttribute { get; set; }
+        public JsonPropertyNameAttribute? JsonPropertyNameAttribute { get; set; }
+        public bool? JsonIncludeAttribute { get; set; }
+        public PropertyInfo? PropertyInfo { get; private set; }
+        public FieldInfo? FieldInfo { get; private set; }
+        public ClassMemberJsonInfo(FieldInfo fieldInfo)
+        {
+            FieldInfo = fieldInfo;
+            Name = FieldInfo.Name;
+            DefaultValue = FieldInfo.FieldType.GetDefaultValue();
+        }
+        public ClassMemberJsonInfo(PropertyInfo propertyInfo)
+        {
+            PropertyInfo = propertyInfo;
+            Name = PropertyInfo.Name;
+            DefaultValue = PropertyInfo.PropertyType.GetDefaultValue();
+        }
+        public bool GetShouldWrite(object? value, JsonSerializerOptions? jsonSerializerOptions = null)
+        {
+            if (JsonIgnoreAttribute == null) return true;
+            if (JsonIgnoreAttribute.Condition == JsonIgnoreCondition.Always) return false;
+            if (JsonIgnoreAttribute.Condition == JsonIgnoreCondition.WhenWritingNull && value is null) return false;
+            if (JsonIgnoreAttribute.Condition == JsonIgnoreCondition.WhenWritingDefault && value == DefaultValue) return false;
+            return true;
+        }
+        public string GetJsonName(JsonSerializerOptions? jsonSerializerOptions = null)
+        {
+            if (JsonPropertyNameAttribute != null) return JsonPropertyNameAttribute.Name;
+            var jsonNamingPolicy = jsonSerializerOptions?.PropertyNamingPolicy;
+            return jsonNamingPolicy == null ? Name : jsonNamingPolicy.ConvertName(Name);
+        }
+    }
     /// <summary>
     /// Static class that contains Type extension methods
     /// </summary>
     public static class TypeExtensions
     {
         /// <summary>
-        /// Returns a Dictionary with key value being the property's json name and the value the .Net property
+        /// Returns a List of ClassMemberJsonInfo for properties and fields that may be included during serialization and deserialization
         /// </summary>
         /// <param name="t"></param>
         /// <param name="jsonNamingPolicy"></param>
         /// <returns></returns>
-        public static Dictionary<string, MemberInfo> GetTypeJsonProperties(this Type t, JsonNamingPolicy? jsonNamingPolicy = null)
+        public static List<ClassMemberJsonInfo> GetTypeJsonProperties(this Type t)
         {
             // check
-            var value = new Dictionary<string, MemberInfo>();
+            var ret = new List<ClassMemberJsonInfo>();
             var props = t.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             foreach (var prop in props)
             {
@@ -28,16 +64,10 @@ namespace SpawnDev.BlazorJS
                 var jsonPropNameAttr = prop.GetCustomAttribute<JsonPropertyNameAttribute>(true);
                 var include = jsonPropNameAttr != null || Attribute.IsDefined(prop, typeof(JsonIncludeAttribute));
                 if (!include && !isPublic) continue;
-                var propName = jsonPropNameAttr?.Name ?? prop.Name;
-                if (jsonPropNameAttr != null)
-                {
-                    propName = jsonPropNameAttr.Name;
-                }
-                else
-                {
-                    propName = jsonNamingPolicy == null ? prop.Name : jsonNamingPolicy.ConvertName(prop.Name);
-                }
-                value[propName] = prop;
+                var p = new ClassMemberJsonInfo(prop);
+                p.JsonIgnoreAttribute = jsonIgnoreAttr;
+                p.JsonPropertyNameAttribute = jsonPropNameAttr;
+                ret.Add(p);
             }
             var fields = t.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             foreach (var prop in fields)
@@ -47,18 +77,12 @@ namespace SpawnDev.BlazorJS
                 var jsonPropNameAttr = prop.GetCustomAttribute<JsonPropertyNameAttribute>(true);
                 var include = jsonPropNameAttr != null || Attribute.IsDefined(prop, typeof(JsonIncludeAttribute));
                 if (!include) continue;
-                var propName = jsonPropNameAttr?.Name ?? prop.Name;
-                if (jsonPropNameAttr != null)
-                {
-                    propName = jsonPropNameAttr.Name;
-                }
-                else
-                {
-                    propName = jsonNamingPolicy == null ? prop.Name : jsonNamingPolicy.ConvertName(prop.Name);
-                }
-                value[propName] = prop;
+                var p = new ClassMemberJsonInfo(prop);
+                p.JsonIgnoreAttribute = jsonIgnoreAttr;
+                p.JsonPropertyNameAttribute = jsonPropNameAttr;
+                ret.Add(p);
             }
-            return value!;
+            return ret!;
         }
 
         //public static Type FinalReturnType(this Type type) => type.IsAsync() ? type.AsyncReturnType() ?? typeof(void) : type;

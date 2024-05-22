@@ -30,6 +30,7 @@ For more information about Blazor types:
 ](https://www.c-sharpcorner.com/article/blazor-versions-benefits-and-when-to-use-it/)
 
 ### Features:
+- Full support for all [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API). If you find anything in the Web API we have missed, open an issue and it will be updated ASAP.
 - Over 300 strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, Atomics, TypedArrays, and Promises allow direct interaction with Javascript
 - Use Javascript libraries in Blazor without writing any Javascript code
 - BlazorJSRuntime wraps the default JSRuntime adding additional functionality

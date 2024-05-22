@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
         }
         SharedWorker _shareWorker { get; set; }
         public string Name { get; }
-        public SharedWebWorker(string name, SharedWorker sharedWorker, IServiceProvider serviceProvider, IServiceCollection serviceDescriptors) : base(serviceProvider, serviceDescriptors, sharedWorker.Port)
+        public SharedWebWorker(string name, SharedWorker sharedWorker, IWebAssemblyServices webAssemblyServices) : base(webAssemblyServices, sharedWorker.Port)
         {
             Name = name;
             _shareWorker = sharedWorker;

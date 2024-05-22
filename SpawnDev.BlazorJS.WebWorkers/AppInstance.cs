@@ -88,7 +88,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
                     using var messageChannel = new MessageChannel();
                     var port1 = messageChannel.Port1;
                     using var port2 = messageChannel.Port2;
-                    _Dispatcher = new ServiceCallDispatcher(WebWorkerService.ServiceProvider, WebWorkerService.ServiceDescriptors, port1);
+                    _Dispatcher = new ServiceCallDispatcher(WebWorkerService.WebAssemblyServices, port1);
                     port1.Start();
                     WebWorkerService.SendInterconnectPort(Info.InstanceId, port2);
                     _Dispatcher.SendReadyFlag();
@@ -101,7 +101,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
 #endif
                     var connectionId = Guid.NewGuid().ToString();
                     var messageChannel = new BroadcastChannel(connectionId);
-                    _Dispatcher = new ServiceCallDispatcher(WebWorkerService.ServiceProvider, WebWorkerService.ServiceDescriptors, messageChannel);
+                    _Dispatcher = new ServiceCallDispatcher(WebWorkerService.WebAssemblyServices, messageChannel);
                     SendConnectMessageToInstanceBroadcastChannel(connectionId);
                     _Dispatcher.SendReadyFlag();
                 }
@@ -133,7 +133,7 @@ namespace SpawnDev.BlazorJS.WebWorkers
 #if DEBUG && false
             Console.WriteLine($"AddIncomingConnection: {Info.InstanceId}");
 #endif
-            var incomingHandler = new ServiceCallDispatcher(WebWorkerService!.ServiceProvider, WebWorkerService.ServiceDescriptors, incomingPort);
+            var incomingHandler = new ServiceCallDispatcher(WebWorkerService.WebAssemblyServices, incomingPort);
             IncomingConnections.Add(incomingHandler);
             if (incomingPort is MessagePort messagePort)
             {
