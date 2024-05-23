@@ -440,6 +440,9 @@ override void OnInitialized()
 ```
 
 ## Cache
+From [Cache on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Cache)  
+> The Cache interface provides a persistent storage mechanism for Request / Response object pairs that are cached in long lived memory.  
+
 ***Example coming soon***
 
 ## TypedArray
