@@ -351,7 +351,7 @@ override void OnInitialized()
 ```
 
 ## IndexedDB
-The below code was coded to test various features of the IndexedDB API including the support for Tuples that was added.
+The below code was written to test various features of the IndexedDB API and this code specifically tests using a Tuple as an ObjectStore key.
 
 ```cs
 [Inject] 
