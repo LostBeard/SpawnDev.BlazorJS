@@ -327,6 +327,127 @@ public void IJSObjectInterfaceTest() {
 }
 ```
 
+# JSObjects
+Over 300 Javascript types are ready to go in Blazor. The interfaces are designed to match thte Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
+
+## HTMLVideoElement
+***Example coming soon***
+
+## HTMLCanvasElement
+***Example coming soon***
+
+## Storage - LocalStorage, SessionStorage
+```cs
+[Inject] 
+BlazorJSRuntime JS { get; set; }
+
+override void OnInitialized()
+{
+    using Storage localStorage = JS.Get<Storage>("localStorage");
+    localStorage.SetItem("myKey", "myValue");
+    var myValue = localStorage.GetItem("myKey");
+    // myValue == "myValue"
+}
+```
+
+## IndexedDB
+The below code was coded to test various features of the IndexedDB API including the support for Tuples that was added.
+
+```cs
+[Inject] 
+BlazorJSRuntime JS { get; set; }
+
+public class Fruit
+{
+    public (byte[], long) MyKey { get; set; }
+    public string Name { get; set; }
+    public string Color { get; set; }
+}
+
+override void OnInitialized()
+{
+    var dbName = "garden_tuple";
+    var dbStoreName = "fruit";
+    // Get the global IDBFactory (equivalent to 'JS.Get<IDBFactory>("indexedDB")')
+    using var idbFactory = new IDBFactory();    
+    var idb = await idbFactory.OpenAsync(dbName, 2, (evt) =>
+    {
+        // upgrade needed
+        using var request = evt.Target;
+        using var db = request.Result;
+        var stores = db.ObjectStoreNames;
+        if (!stores.Contains(dbStoreName))
+        {
+            using var store = db.CreateObjectStore<string, Fruit>(dbStoreName, new IDBObjectStoreCreateOptions { KeyPath = "name" });
+            store.CreateIndex<(byte[], long)>("tuple_index", "myKey");
+        }
+    });
+
+    // transaction
+    using var tx = idb.Transaction(dbStoreName, "readwrite");
+    using var objectStore = tx.ObjectStore<string, Fruit>(dbStoreName);
+
+    // add some data
+    await objectStore.PutAsync(new Fruit { Name = "apple", Color = "red", MyKey = (new byte[] { 1, 2, 3 }, 5) });
+    await objectStore.PutAsync(new Fruit { Name = "orange", Color = "orange", MyKey = (new byte[] { 1, 2, 5 }, 5) });
+    await objectStore.PutAsync(new Fruit { Name = "lemon", Color = "yellow", MyKey = (new byte[] { 1, 2, 5 }, 5) });
+    await objectStore.PutAsync(new Fruit { Name = "lime", Color = "green", MyKey = (new byte[] { 33, 33, 45 }, 5) });
+
+    // get an IDBIndex
+    using var myIndex = objectStore.Index<(byte[], long)>("tuple_index");
+
+    // create a range using ValueTuple type
+    using var range = IDBKeyRange<(byte[], long)>.Bound((new byte[] { 0, 0, 0 }, 0), (new byte[] { 5, 5, 5 }, long.MaxValue));
+
+    var included = range.Includes((new byte[] { 1, 2, 4 }, 5));
+
+    var cmpRet0 = idbFactory.Cmp<(byte[], long)>((new byte[] { 1, 2, 3 }, 6), (new byte[] { 1, 2, 3 }, 5));
+    var cmpRet1 = idbFactory.Cmp<(byte[], long)>((new byte[] { 1, 2, 3 }, 5), (new byte[] { 1, 2, 3 }, 5));
+    var cmpRet2 = idbFactory.Cmp<(byte[], long)>((new byte[] { 1, 2, 2 }, 5), (new byte[] { 1, 2, 3 }, 5));
+    var cmpRet3 = idbFactory.Cmp<(byte[], long)>((new byte[] { 1, 2, 4 }, 5), (new byte[] { 1, 2, 3 }, 4));
+
+    // getAll on IDBIndex using the above range
+    using var getAll = await myIndex.GetAllAsync(range);
+
+    // below prints "apple", "orange", "lemon"
+    // the "lime" entry's byte[] is outside of our range and therefore not included
+    foreach (var item in getAll.ToArray())
+    {
+        JS.Log(item.Name);
+    }
+
+    // get on IDBIndex. returns null if not found.
+    var get = await myIndex.GetAsync((new byte[] { 1, 2, 5 }, 5));
+    JS.Log("get", get);
+
+    // getAll on ObjectStore
+    var getAllStore = await objectStore.GetAllAsync();
+    JS.Log("getAllStore", getAllStore);
+
+    // IDBCursor iteration
+    using var cursor = await myIndex.OpenCursorAsync();
+    var hasData = cursor != null;
+    while (hasData)
+    {
+        var canCont1 = await cursor.CanContinue();
+        JS.Log("Entry", cursor!.Value);
+        hasData = await cursor!.ContinueAsync();
+        var canCont2 = await cursor.CanContinue();
+        var nmt = true;
+    }
+    JS.Log("Done");
+}
+```
+
+## Cache
+***Example coming soon***
+
+## TypedArray
+***Example coming soon***
+
+## Atomics
+***Example coming soon***
+
 # JSObject Base Class
 
 JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow strongly typed access to the underlying object.
