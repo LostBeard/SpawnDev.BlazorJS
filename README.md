@@ -443,7 +443,7 @@ override void OnInitialized()
 ***Example coming soon***
 
 ## TypedArray
-SpawnDev.BlazorJS supports all TypedArray types.
+SpawnDev.BlazorJS supports all TypedArray types.  
 ***Example coming soon***
 
 ## Atomics
