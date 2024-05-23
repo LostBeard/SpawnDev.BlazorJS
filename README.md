@@ -351,6 +351,9 @@ override void OnInitialized()
 ```
 
 ## IndexedDB
+From [IndexedDB on MDN](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API):  
+> IndexedDB is a low-level API for client-side storage of significant amounts of structured data, including files/blobs.
+
 The below code was written to test various features of the IndexedDB API and this code specifically tests using a Tuple as an ObjectStore key.
 
 ```cs
