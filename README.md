@@ -44,7 +44,6 @@ For more information about Blazor types:
 - Run Blazor WASM in ServiceWorkers to handle ServiceWorker events in .Net
 - Supports Promises, Union method parameters, passing undefined to Javascript, and more
 
-
 # Issues and Feature requests
 I'm here to help. If you find a bug or missing properties, methods, or Javascript objects please submit an issue [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. I will help as soon as possible.
 
@@ -117,7 +116,6 @@ var total = JS.Call<int>("AddNum", 20, 22);
 // total == 42 here
 ```
 
-
 Use asynchronous BlazorJSRuntime calls for asynchronous Javascript methods.
 ```js
 // Javascript
@@ -147,8 +145,6 @@ function AddNum(num1, num2){
 var total = await JS.CallAsync<int>("AddNum", 20, 22);
 // total == 42 here
 ```
-
-
 
 # IJSInProcessObjectReference extended
 
@@ -678,7 +674,7 @@ public class MyService : IMyService
         // Call a private synchronous method in a WebWorker thread using an Expression
         Console.WriteLine(await WebWorkerService.TaskPool.Run(() => WorkerMethod(WebWorkerService.InstanceId)));
 
-        // Call a public async method in a WebWorker thread using am Expression, specifying the registered service to call via a Type parameter (as well as the return type)
+        // Call a public async method in a WebWorker thread using an Expression, specifying the registered service to call via a Type parameter (as well as the return type)
         Console.WriteLine(await worker.Run<IMyService, string>(myService => myService.WorkerMethodAsync(WebWorkerService.InstanceId)));
 
         // Call a public async method in a WebWorker thread using am Interface Proxy
