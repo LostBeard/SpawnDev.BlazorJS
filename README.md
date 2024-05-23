@@ -443,9 +443,14 @@ override void OnInitialized()
 ***Example coming soon***
 
 ## TypedArray
+SpawnDev.BlazorJS supports all TypedArray types.
 ***Example coming soon***
 
 ## Atomics
+From [Atomics on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics):  
+> The Atomics namespace object contains static methods for carrying out atomic operations. They are used with SharedArrayBuffer and ArrayBuffer objects.
+
+
 ***Example coming soon***
 
 # JSObject Base Class
