@@ -1,0 +1,35 @@
+﻿@page "/HTMLVideoElementExample"
+@implements IDisposable
+
+<video @ref=videoElRef></video>
+
+@code {
+    [Inject]
+    BlazorJSRuntime JS { get; set; }
+
+    ElementReference videoElRef;
+
+    HTMLVideoElement? videoEl = null;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            videoEl = new HTMLVideoElement(videoElRef);
+            videoEl.OnLoadedMetadata += VideoEl_OnLoadedMetadata;
+        }
+    }
+    void VideoEl_OnLoadedMetadata(Event e)
+    {
+
+    }
+    public void Dispose()
+    {
+        if (videoEl != null)
+        {
+            videoEl.OnLoadedMetadata -= VideoEl_OnLoadedMetadata;
+            videoEl.Dispose();
+            videoEl = null;
+        }
+    }
+}

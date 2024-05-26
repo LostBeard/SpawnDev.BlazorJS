@@ -331,6 +331,29 @@ public void IJSObjectInterfaceTest() {
 Over 300 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfaces are designed to match thte Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
 
 ## HTMLVideoElement
+From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement):  
+> Implemented by the \<video> element, the HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.
+
+```html
+<video @ref= >
+```
+
+```cs
+[Inject] 
+BlazorJSRuntime JS { get; set; }
+
+ElementReference
+
+override void OnInitialized()
+{
+    using Storage localStorage = JS.Get<Storage>("localStorage");
+    localStorage.SetItem("myKey", "myValue");
+    var myValue = localStorage.GetItem("myKey");
+    // myValue == "myValue"
+}
+```
+
+
 ***Example coming soon***
 
 ## HTMLCanvasElement
@@ -1308,6 +1331,11 @@ https://blazorjs.spawndev.com/
 
 Current site under development using Blazor WASM  
 https://www.spawndev.com/  
+
+Consider sponsoring me to give me more time to work on SpawnDev.BlazorJS.
+[Sponsor](https://github.com/sponsors/LostBeard)
+
+[SpawnDev Discord](https://discord.gg/UkGfHtRdSt)
 
 Buy me a coffee 
 

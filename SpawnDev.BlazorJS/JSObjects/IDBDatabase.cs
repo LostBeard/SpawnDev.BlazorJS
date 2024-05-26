@@ -76,22 +76,32 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store. Runs in a separate thread.
         /// </summary>
         /// <param name="storeNames">The names of object stores that are in the scope of the new transaction, declared as an array of strings. Specify only the object stores that you need to access. If you need to access only one object store, you can specify its name as a string. Therefore the following lines are equivalent:</param>
-        /// <returns></returns>
+        /// <returns>IDBTransaction</returns>
         public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames) => JSRef.Call<IDBTransaction>("transaction", storeNames);
         /// <summary>
         /// Immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store. Runs in a separate thread.
         /// </summary>
         /// <param name="storeNames">The names of object stores that are in the scope of the new transaction, declared as an array of strings. Specify only the object stores that you need to access. If you need to access only one object store, you can specify its name as a string. Therefore the following lines are equivalent:</param>
-        /// <param name="mode">The types of access that can be performed in the transaction. Transactions are opened in one of three modes: readonly, readwrite and readwriteflush (non-standard, Firefox-only.) versionchange mode can't be specified here. If you don't provide the parameter, the default access mode is readonly. To avoid slowing things down, don't open a readwrite transaction unless you actually need to write into the database.</param>
-        /// <returns></returns>
+        /// <param name="mode">The types of access that can be performed in the transaction. Transactions are opened in one of three modes: <br/>
+        /// - readonly (default)<br/> 
+        /// - readwrite<br/>
+        /// - readwriteflush (non-standard, Firefox-only.)<br/>
+        /// If you don't provide the parameter, the default access mode is readonly. To avoid slowing things down, don't open a readwrite transaction unless you actually need to write into the database.
+        /// </param>
+        /// <returns>IDBTransaction</returns>
         public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, string mode) => JSRef.Call<IDBTransaction>("transaction", storeNames, mode);
         /// <summary>
         /// Immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store. Runs in a separate thread.
         /// </summary>
         /// <param name="storeNames">The names of object stores that are in the scope of the new transaction, declared as an array of strings. Specify only the object stores that you need to access. If you need to access only one object store, you can specify its name as a string. Therefore the following lines are equivalent:</param>
-        /// <param name="mode">The types of access that can be performed in the transaction. Transactions are opened in one of three modes: readonly, readwrite and readwriteflush (non-standard, Firefox-only.) versionchange mode can't be specified here. If you don't provide the parameter, the default access mode is readonly. To avoid slowing things down, don't open a readwrite transaction unless you actually need to write into the database.</param>
+        /// <param name="mode">The types of access that can be performed in the transaction. Transactions are opened in one of three modes: <br/>
+        /// - readonly (default)<br/> 
+        /// - readwrite<br/>
+        /// - readwriteflush (non-standard, Firefox-only.)<br/>
+        /// If you don't provide the parameter, the default access mode is readonly. To avoid slowing things down, don't open a readwrite transaction unless you actually need to write into the database.
+        /// </param>
         /// <param name="options">Additional options</param>
-        /// <returns></returns>
+        /// <returns>IDBTransaction</returns>
         public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, string mode, IDBDatabaseTransactionOptions options) => JSRef.Call<IDBTransaction>("transaction", storeNames, mode, options);
     }
 }
