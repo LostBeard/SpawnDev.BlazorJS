@@ -39,137 +39,148 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <summary>
         /// Returns a Promise that resolves to an RTCIdentityAssertion which contains a string identifying the remote peer. Once this promise resolves successfully, the resulting identity is the target peer identity and will not change for the duration of the connection.
         /// </summary>
-        public Task<RTCIdentityAssertion> PeerIdentity => JSRef.GetAsync<RTCIdentityAssertion>("peerIdentity");
+        public Task<RTCIdentityAssertion> PeerIdentity => JSRef!.GetAsync<RTCIdentityAssertion>("peerIdentity");
         /// <summary>
         /// The read-only property RTCPeerConnection.iceConnectionState returns a string which state of the ICE agent associated with the RTCPeerConnection: new, checking, connected, completed, failed, disconnected, and closed.
         /// </summary>
-        public string IceConnectionState => JSRef.Get<string>("iceConnectionState");
+        public string IceConnectionState => JSRef!.Get<string>("iceConnectionState");
         /// <summary>
         /// Returns a string that describes connection's ICE gathering state. This lets you detect, for example, when collection of ICE candidates has finished. Possible values are: new, gathering, or complete.
         /// </summary>
-        public string IceGatheringState => JSRef.Get<string>("iceGatheringState");
+        public string IceGatheringState => JSRef!.Get<string>("iceGatheringState");
         /// <summary>
         /// The read-only RTCPeerConnection property canTrickleIceCandidates returns a boolean value which indicates whether or not the remote peer can accept trickled ICE candidates.
         /// </summary>
-        public bool CanTrickleIceCandidates => JSRef.Get<bool>("canTrickleIceCandidates");
+        public bool CanTrickleIceCandidates => JSRef!.Get<bool>("canTrickleIceCandidates");
         /// <summary>
         /// The read-only connectionState property of the RTCPeerConnection interface indicates the current state of the peer connection by returning one of the following string values: new, connecting, connected, disconnected, failed, or closed.
         /// </summary>
-        public string ConnectionState => JSRef.Get<string>("connectionState");
+        public string ConnectionState => JSRef!.Get<string>("connectionState");
         /// <summary>
         /// The read-only signalingState property on the RTCPeerConnection interface returns a string value describing the state of the signaling process on the local end of the connection while connecting or reconnecting to another peer. See Signaling in our WebRTC session lifetime page.
         /// </summary>
-        public string SignalingState => JSRef.Get<string>("signalingState");
+        public string SignalingState => JSRef!.Get<string>("signalingState");
         /// <summary>
         /// Returns an RTCSctpTransport object describing the SCTP transport layer over which SCTP data is being sent and received. If SCTP hasn't been negotiated, this value is null.
         /// </summary>
-        public RTCSctpTransport? Sctp => JSRef.Get<RTCSctpTransport>("sctp");
+        public RTCSctpTransport? Sctp => JSRef!.Get<RTCSctpTransport>("sctp");
         /// <summary>
         /// The read-only property RTCPeerConnection.localDescription returns an RTCSessionDescription describing the session for the local end of the connection. If it has not yet been set, this is null.
         /// </summary>
-        public RTCSessionDescription? LocalDescription => JSRef.Get<RTCSessionDescription?>("localDescription");
+        public RTCSessionDescription? LocalDescription => JSRef!.Get<RTCSessionDescription?>("localDescription");
         /// <summary>
         /// Returns an RTCSessionDescription object describing a pending configuration change for the local end of the connection. This does not describe the connection as it currently stands, but as it may exist in the near future.
         /// </summary>
-        public RTCSessionDescription? PendingLocalDescription => JSRef.Get<RTCSessionDescription?>("pendingLocalDescription");
+        public RTCSessionDescription? PendingLocalDescription => JSRef!.Get<RTCSessionDescription?>("pendingLocalDescription");
         /// <summary>
         /// Returns an RTCSessionDescription object describing a pending configuration change for the remote end of the connection. This does not describe the connection as it currently stands, but as it may exist in the near future.
         /// </summary>
-        public RTCSessionDescription? PendingRemoteDescription => JSRef.Get<RTCSessionDescription?>("pendingRemoteDescription");
+        public RTCSessionDescription? PendingRemoteDescription => JSRef!.Get<RTCSessionDescription?>("pendingRemoteDescription");
         /// <summary>
         /// Returns an RTCSessionDescription object describing the session, including configuration and media information, for the remote end of the connection. If this hasn't been set yet, this returns null.
         /// </summary>
-        public RTCSessionDescription? RemoteDescription => JSRef.Get<RTCSessionDescription?>("remoteDescription");
+        public RTCSessionDescription? RemoteDescription => JSRef!.Get<RTCSessionDescription?>("remoteDescription");
         /// <summary>
         /// The read-only property RTCPeerConnection.currentLocalDescription returns an RTCSessionDescription object describing the local end of the connection as it was most recently successfully negotiated since the last time the RTCPeerConnection finished negotiating and connecting to a remote peer. Also included is a list of any ICE candidates that may already have been generated by the ICE agent since the offer or answer represented by the description was first instantiated.
         /// </summary>
-        public RTCSessionDescription? CurrentLocalDescription => JSRef.Get<RTCSessionDescription?>("currentLocalDescription");
+        public RTCSessionDescription? CurrentLocalDescription => JSRef!.Get<RTCSessionDescription?>("currentLocalDescription");
         /// <summary>
         /// The read-only property RTCPeerConnection.currentRemoteDescription returns an RTCSessionDescription object describing the remote end of the connection as it was most recently successfully negotiated since the last time the RTCPeerConnection finished negotiating and connecting to a remote peer. Also included is a list of any ICE candidates that may already have been generated by the ICE agent since the offer or answer represented by the description was first instantiated.
         /// </summary>
-        public RTCSessionDescription? CurrentRemoteDescription => JSRef.Get<RTCSessionDescription?>("currentRemoteDescription");
+        public RTCSessionDescription? CurrentRemoteDescription => JSRef!.Get<RTCSessionDescription?>("currentRemoteDescription");
 
         /// <summary>
         /// When a website or app using RTCPeerConnection receives a new ICE candidate from the remote peer over its signaling channel, it delivers the newly-received candidate to the browser's ICE agent by calling RTCPeerConnection.addIceCandidate(). This adds this new remote candidate to the RTCPeerConnection's remote description, which describes the state of the remote end of the connection.
         /// </summary>
         /// <param name="candidate"></param>
         /// <returns></returns>
-        public Task AddIceCandidate(RTCIceCandidate candidate) => JSRef.CallVoidAsync("addIceCandidate", candidate);
+        public Task AddIceCandidate(RTCIceCandidate candidate) => JSRef!.CallVoidAsync("addIceCandidate", candidate);
         /// <summary>
         /// When a website or app using RTCPeerConnection receives a new ICE candidate from the remote peer over its signaling channel, it delivers the newly-received candidate to the browser's ICE agent by calling RTCPeerConnection.addIceCandidate(). This adds this new remote candidate to the RTCPeerConnection's remote description, which describes the state of the remote end of the connection.
         /// </summary>
         /// <param name="candidate"></param>
         /// <returns></returns>
-        public Promise AddIceCandidatePromise(RTCIceCandidate candidate) => JSRef.Call<Promise>("addIceCandidate", candidate);
+        public Promise AddIceCandidatePromise(RTCIceCandidate candidate) => JSRef!.Call<Promise>("addIceCandidate", candidate);
         /// <summary>
         /// When a website or app using RTCPeerConnection receives a new ICE candidate from the remote peer over its signaling channel, it delivers the newly-received candidate to the browser's ICE agent by calling RTCPeerConnection.addIceCandidate(). This adds this new remote candidate to the RTCPeerConnection's remote description, which describes the state of the remote end of the connection.
         /// </summary>
         /// <param name="candidate"></param>
         /// <returns></returns>
-        public Task AddIceCandidate(string candidate) => JSRef.CallVoidAsync("addIceCandidate", candidate);
+        public Task AddIceCandidate(string candidate) => JSRef!.CallVoidAsync("addIceCandidate", candidate);
         /// <summary>
         /// The RTCPeerConnection.close() method closes the current peer connection.
         /// </summary>
-        public void Close() => JSRef.CallVoid("close");
+        public void Close() => JSRef!.CallVoid("close");
         /// <summary>
         /// The createAnswer() method on the RTCPeerConnection interface creates an SDP answer to an offer received from a remote peer during the offer/answer negotiation of a WebRTC connection. The answer contains information about any media already attached to the session, codecs and options supported by the browser, and any ICE candidates already gathered. The answer is delivered to the returned Promise, and should then be sent to the source of the offer to continue the negotiation process.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Task<RTCSessionDescription> CreateAnswer() => JSRef.CallAsync<RTCSessionDescription>("createAnswer");
+        public Task<RTCSessionDescription> CreateAnswer() => JSRef!.CallAsync<RTCSessionDescription>("createAnswer");
+        /// <summary>
+        /// The createAnswer() method on the RTCPeerConnection interface creates an SDP answer to an offer received from a remote peer during the offer/answer negotiation of a WebRTC connection. The answer contains information about any media already attached to the session, codecs and options supported by the browser, and any ICE candidates already gathered. The answer is delivered to the returned Promise, and should then be sent to the source of the offer to continue the negotiation process.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task<RTCSessionDescription> CreateAnswer(RTCAnswerOptions options) => JSRef!.CallAsync<RTCSessionDescription>("createAnswer", options);
         /// <summary>
         /// The createDataChannel() method on the RTCPeerConnection interface creates a new channel linked with the remote peer, over which any kind of data may be transmitted. This can be useful for back-channel content, such as images, file transfer, text chat, game update packets, and so forth.
         /// </summary>
         /// <param name="label"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public RTCDataChannel CreateDataChannel(string label, RTCDataChannelOptions? options = null) => JSRef.Call<RTCDataChannel>("createDataChannel", label, options);
+        public RTCDataChannel CreateDataChannel(string label, RTCDataChannelOptions? options = null) => JSRef!.Call<RTCDataChannel>("createDataChannel", label, options);
         /// <summary>
         /// The createOffer() method of the RTCPeerConnection interface initiates the creation of an SDP offer for the purpose of starting a new WebRTC connection to a remote peer. The SDP offer includes information about any MediaStreamTrack objects already attached to the WebRTC session, codec, and options supported by the browser, and any candidates already gathered by the ICE agent, for the purpose of being sent over the signaling channel to a potential peer to request a connection or to update the configuration of an existing connection.
         /// </summary>
         /// <returns></returns>
-        public Task<RTCSessionDescription> CreateOffer()  => JSRef.CallAsync<RTCSessionDescription>("createOffer");
+        public Task<RTCSessionDescription> CreateOffer()  => JSRef!.CallAsync<RTCSessionDescription>("createOffer");
+        /// <summary>
+        /// The createOffer() method of the RTCPeerConnection interface initiates the creation of an SDP offer for the purpose of starting a new WebRTC connection to a remote peer. The SDP offer includes information about any MediaStreamTrack objects already attached to the WebRTC session, codec, and options supported by the browser, and any candidates already gathered by the ICE agent, for the purpose of being sent over the signaling channel to a potential peer to request a connection or to update the configuration of an existing connection.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task<RTCSessionDescription> CreateOffer(RTCOfferOptions options) => JSRef!.CallAsync<RTCSessionDescription>("createOffer", options);
         /// <summary>
         /// The RTCPeerConnection method setLocalDescription() changes the local description associated with the connection. This description specifies the properties of the local end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
         /// </summary>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public Task SetLocalDescription(RTCSessionDescription desc) => JSRef.CallVoidAsync("setLocalDescription", desc);
+        public Task SetLocalDescription(RTCSessionDescription desc) => JSRef!.CallVoidAsync("setLocalDescription", desc);
         /// <summary>
         /// The RTCPeerConnection method setLocalDescription() changes the local description associated with the connection. This description specifies the properties of the local end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
         /// </summary>
         /// <returns></returns>
-        public Task SetLocalDescription() => JSRef.CallVoidAsync("setLocalDescription");
+        public Task SetLocalDescription() => JSRef!.CallVoidAsync("setLocalDescription");
         /// <summary>
         /// The RTCPeerConnection method setRemoteDescription() sets the specified session description as the remote peer's current offer or answer. The description specifies the properties of the remote end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
         /// </summary>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public Task SetRemoteDescription(RTCSessionDescription desc) => JSRef.CallVoidAsync("setRemoteDescription", desc);
+        public Task SetRemoteDescription(RTCSessionDescription desc) => JSRef!.CallVoidAsync("setRemoteDescription", desc);
         /// <summary>
         /// The RTCPeerConnection method setRemoteDescription() sets the specified session description as the remote peer's current offer or answer. The description specifies the properties of the remote end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
         /// </summary>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public Promise SetRemoteDescriptionPromise(RTCSessionDescription desc) => JSRef.Call<Promise>("setRemoteDescription", desc);
+        public Promise SetRemoteDescriptionPromise(RTCSessionDescription desc) => JSRef!.Call<Promise>("setRemoteDescription", desc);
         /// <summary>
         /// The WebRTC API's RTCPeerConnection interface offers the restartIce() method to allow a web application to easily request that ICE candidate gathering be redone on both ends of the connection. This simplifies the process by allowing the same method to be used by either the caller or the receiver to trigger an ICE restart.
         /// </summary>
-        public void RestartIce() => JSRef.CallVoid("restartIce");
+        public void RestartIce() => JSRef!.CallVoid("restartIce");
         /// <summary>
         /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
         /// </summary>
         /// <param name="track">A MediaStreamTrack object representing the media track to add to the peer connection.</param>
         /// <returns>The RTCRtpSender object which will be used to transmit the media data.</returns>
-        public RTCRtpSender AddTrack(MediaStreamTrack track) => JSRef.Call<RTCRtpSender>("addTrack", track);
+        public RTCRtpSender AddTrack(MediaStreamTrack track) => JSRef!.Call<RTCRtpSender>("addTrack", track);
 
-        public RTCRtpTransceiver AddTransceiver(string trackOrKind) => JSRef.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+        public RTCRtpTransceiver AddTransceiver(string trackOrKind) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
 
-        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind) => JSRef.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
 
-        public RTCRtpTransceiver AddTransceiver(string trackOrKind, TransceiverRequestInit init) => JSRef.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+        public RTCRtpTransceiver AddTransceiver(string trackOrKind, TransceiverRequestInit init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
 
-        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind, TransceiverRequestInit init) => JSRef.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind, TransceiverRequestInit init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
         /// <summary>
         /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
         /// </summary>
@@ -180,29 +191,29 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         {
             var args = new List<object> { track };
             args.AddRange(mediaStreams);
-            return JSRef.CallApply<RTCRtpSender>("addTrack", args.ToArray());
+            return JSRef!.CallApply<RTCRtpSender>("addTrack", args.ToArray());
         }
         /// <summary>
         /// The RTCPeerConnection.removeTrack() method tells the local end of the connection to stop sending media from the specified track, without actually removing the corresponding RTCRtpSender from the list of senders as reported by RTCPeerConnection.getSenders(). If the track is already stopped, or is not in the connection's senders list, this method has no effect.
         /// </summary>
         /// <param name="sender"></param>
-        public void RemoveTrack(RTCRtpSender sender) => JSRef.CallVoid("removeTrack", sender);
+        public void RemoveTrack(RTCRtpSender sender) => JSRef!.CallVoid("removeTrack", sender);
         /// <summary>
         /// The RTCPeerConnection method getSenders() returns an array of RTCRtpSender objects, each of which represents the RTP sender responsible for transmitting one track's data. A sender object provides methods and properties for examining and controlling the encoding and transmission of the track's data.
         /// </summary>
         /// <returns></returns>
-        public RTCRtpSender[] GetSenders() => JSRef.Call<RTCRtpSender[]>("getSenders");
+        public RTCRtpSender[] GetSenders() => JSRef!.Call<RTCRtpSender[]>("getSenders");
         /// <summary>
         /// The RTCPeerConnection.getReceivers() method returns an array of RTCRtpReceiver objects, each of which represents one RTP receiver. Each RTP receiver manages the reception and decoding of data for a MediaStreamTrack on an RTCPeerConnection.
         /// </summary>
         /// <returns></returns>
-        public RTCRtpReceiver[] GetReceivers() => JSRef.Call<RTCRtpReceiver[]>("getReceivers");
+        public RTCRtpReceiver[] GetReceivers() => JSRef!.Call<RTCRtpReceiver[]>("getReceivers");
         /// <summary>
         /// Returns a Promise which resolves with data providing statistics about either the overall connection or about the specified MediaStreamTrack.
         /// </summary>
         /// <param name="selector">A MediaStreamTrack for which to gather statistics. If this is null (the default value), statistics will be gathered for the entire RTCPeerConnection.</param>
         /// <returns></returns>
-        public Task<RTCStatsReport> GetStats(MediaStreamTrack? selector = null) => JSRef.CallAsync<RTCStatsReport>("getStats", selector);
+        public Task<RTCStatsReport> GetStats(MediaStreamTrack? selector = null) => JSRef!.CallAsync<RTCStatsReport>("getStats", selector);
         // TODO ... 
         // unless there is a compatibility issue ...
         // switch to JSEventCallback with AddEventListener instead of using property assigning which limits usage more... 
