@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using System.Text;
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
@@ -7,7 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
     /// Used in RTCPeerConnection.AddTransceiver
     /// https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/addTransceiver#init
     /// </summary>
-    public class TransceiverRequestInit
+    public class RTCRtpTransceiverOptions
     {
         /// <summary>
         /// The directionality indicates whether the transceiver will offer to send and/or receive RTP data, or whether it is inactive or stopped (terminated). When setting the transceiver's direction, the value is not applied immediately. The current direction is indicated by the currentDirection property.<br />

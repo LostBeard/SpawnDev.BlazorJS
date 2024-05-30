@@ -24,76 +24,76 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A MediaStream representing the media to play or that has played in the current HTMLMediaElement, or null if not assigned.
         /// </summary>
-        public JSObject? SrcObject { get => JSRef.Get<JSObject>("srcObject"); set => JSRef.Set("srcObject", value); }
-        public T? GetSrcObject<T>() => JSRef.Get<T>("srcObject");
+        public Union<MediaStream, File, Blob, MediaSource>? SrcObject { get => JSRef!.Get<Union<MediaStream, File, Blob, MediaSource>?>("srcObject"); set => JSRef!.Set("srcObject", value); }
+        public T? GetSrcObject<T>() => JSRef!.Get<T>("srcObject");
         /// <summary>
         /// A string that reflects the src HTML attribute, which contains the URL of a media resource to use.
         /// </summary>
-        public string? Src { get => JSRef.Get<string>("src"); set => JSRef.Set("src", value); }
+        public string? Src { get => JSRef!.Get<string>("src"); set => JSRef!.Set("src", value); }
         /// <summary>
         /// A double-precision floating-point value indicating the current playback time in seconds; if the media has not started to play and has not been seeked, this value is the media's initial playback time. Setting this value seeks the media to the new time. The time is specified relative to the media's timeline.
         /// </summary>
-        public double CurrentTime { get => JSRef.Get<double>("currentTime"); set => JSRef.Set("currentTime", value); }
+        public double CurrentTime { get => JSRef!.Get<double>("currentTime"); set => JSRef!.Set("currentTime", value); }
         /// <summary>
         /// A read-only double-precision floating-point value indicating the total duration of the media in seconds. If no media data is available, the returned value is NaN. If the media is of indefinite length (such as streamed live media, a WebRTC call's media, or similar), the value is +Infinity.
         /// </summary>
-        public double? Duration => JSRef.Get<double?>("duration");
+        public double? Duration => JSRef!.Get<double?>("duration");
         /// <summary>
         /// A double indicating the audio volume, from 0.0 (silent) to 1.0 (loudest).
         /// </summary>
-        public double Volume { get => JSRef.Get<double>("volume"); set => JSRef.Set("volume", value); }
+        public double Volume { get => JSRef!.Get<double>("volume"); set => JSRef!.Set("volume", value); }
         /// <summary>
         /// A double indicating the default playback rate for the media.
         /// </summary>
-        public double DefaultPlaybackRate { get => JSRef.Get<double>("defaultPlaybackRate"); set => JSRef.Set("defaultPlaybackRate", value); }
+        public double DefaultPlaybackRate { get => JSRef!.Get<double>("defaultPlaybackRate"); set => JSRef!.Set("defaultPlaybackRate", value); }
         /// <summary>
         /// A double that indicates the rate at which the media is being played back.
         /// </summary>
-        public double PlaybackRate { get => JSRef.Get<double>("playbackRate"); set => JSRef.Set("playbackRate", value); }
+        public double PlaybackRate { get => JSRef!.Get<double>("playbackRate"); set => JSRef!.Set("playbackRate", value); }
         /// <summary>
         /// A boolean value that reflects the autoplay HTML attribute, indicating whether playback should automatically begin as soon as enough media is available to do so without interruption.
         /// </summary>
-        public bool AutoPlay { get => JSRef.Get<bool>("autoplay"); set => JSRef.Set("autoplay", value); }
+        public bool AutoPlay { get => JSRef!.Get<bool>("autoplay"); set => JSRef!.Set("autoplay", value); }
         /// <summary>
         /// A boolean that determines whether audio is muted. true if the audio is muted and false otherwise.
         /// </summary>
-        public bool Muted { get => JSRef.Get<bool>("muted"); set => JSRef.Set("muted", value); }
+        public bool Muted { get => JSRef!.Get<bool>("muted"); set => JSRef!.Set("muted", value); }
         /// <summary>
         /// A boolean that reflects the muted HTML attribute, which indicates whether the media element's audio output should be muted by default.
         /// </summary>
-        public bool DefaultMuted { get => JSRef.Get<bool>("defaultMuted"); set => JSRef.Set("defaultMuted", value); }
+        public bool DefaultMuted { get => JSRef!.Get<bool>("defaultMuted"); set => JSRef!.Set("defaultMuted", value); }
         /// <summary>
         /// A boolean that sets or returns the remote playback state, indicating whether the media element is allowed to have a remote playback UI.
         /// </summary>
-        public bool DisableRemotePlayback { get => JSRef.Get<bool>("disableRemotePlayback"); set => JSRef.Set("disableRemotePlayback", value); }
+        public bool DisableRemotePlayback { get => JSRef!.Get<bool>("disableRemotePlayback"); set => JSRef!.Set("disableRemotePlayback", value); }
         /// <summary>
         /// A boolean that reflects the controls HTML attribute, indicating whether user interface items for controlling the resource should be displayed.
         /// </summary>
-        public bool Controls { get => JSRef.Get<bool>("controls"); set => JSRef.Set("controls", value); }
+        public bool Controls { get => JSRef!.Get<bool>("controls"); set => JSRef!.Set("controls", value); }
         /// <summary>
         /// Returns a boolean that indicates whether the media element is paused.
         /// </summary>
-        public bool Paused => JSRef.Get<bool>("paused");
+        public bool Paused => JSRef!.Get<bool>("paused");
         /// <summary>
         /// Returns a boolean that indicates whether the media element has finished playing.
         /// </summary>
-        public bool Ended => JSRef.Get<bool>("ended");
+        public bool Ended => JSRef!.Get<bool>("ended");
         /// <summary>
         /// A boolean that reflects the loop HTML attribute, which indicates whether the media element should start over when it reaches the end.
         /// </summary>
-        public bool Loop { get => JSRef.Get<bool>("loop"); set => JSRef.Set("loop", value); }
+        public bool Loop { get => JSRef!.Get<bool>("loop"); set => JSRef!.Set("loop", value); }
         /// <summary>
         /// Returns a string with the absolute URL of the chosen media resource.
         /// </summary>
-        public string? CurrentSrc => JSRef.Get<string?>("currentSrc");
+        public string? CurrentSrc => JSRef!.Get<string?>("currentSrc");
         /// <summary>
         /// A string indicating the CORS setting for this media element.
         /// </summary>
-        public string? CrossOrigin { get => JSRef.Get<string?>("crossOrigin"); set => JSRef.Set("crossOrigin", value); }
+        public string? CrossOrigin { get => JSRef!.Get<string?>("crossOrigin"); set => JSRef!.Set("crossOrigin", value); }
         /// <summary>
         /// Returns a MediaError object for the most recent error, or null if there has not been an error.
         /// </summary>
-        public MediaError? Error => JSRef.Get<MediaError?>("error");
+        public MediaError? Error => JSRef!.Get<MediaError?>("error");
         /// <summary>
         /// Returns a unsigned short (enumeration) indicating the readiness state of the media.<br />
         /// 0 HAVE_NOTHING - No information is available about the media resource.<br />
@@ -102,7 +102,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// 3 HAVE_FUTURE_DATA - Data for the current playback position as well as for at least a little bit of time into the future is available (in other words, at least two frames of video, for example).<br />
         /// 4 HAVE_ENOUGH_DATA - Enough data is available—and the download rate is high enough—that the media can be played through to the end without interruption.<br />
         /// </summary>
-        public ushort ReadyState => JSRef.Get<ushort>("readyState");
+        public ushort ReadyState => JSRef!.Get<ushort>("readyState");
         #endregion
 
         #region Methods
@@ -110,26 +110,26 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Begins playback of the media.
         /// </summary>
         /// <returns></returns>
-        public Task Play() => JSRef.CallVoidAsync("play");
+        public Task Play() => JSRef!.CallVoidAsync("play");
         /// <summary>
         /// Pauses the media playback.
         /// </summary>
-        public void Pause() => JSRef.CallVoid("pause");
+        public void Pause() => JSRef!.CallVoid("pause");
         /// <summary>
         /// Resets the media to the beginning and selects the best available source from the sources provided using the src attribute or the source element.
         /// </summary>
-        public void Load() => JSRef.CallVoid("load");
+        public void Load() => JSRef!.CallVoid("load");
         /// <summary>
         /// Given a string specifying a MIME media type (potentially with the codecs parameter included), canPlayType() returns the string probably if the media should be playable, maybe if there's not enough information to determine whether the media will play or not, or an empty string if the media cannot be played.
         /// </summary>
         /// <param name="mimeType"></param>
         /// <returns></returns>
-        public string CanPlayType(string mimeType) => JSRef.Call<string>("canPlayType", mimeType);
+        public string CanPlayType(string mimeType) => JSRef!.Call<string>("canPlayType", mimeType);
         /// <summary>
         /// Returns MediaStream, captures a stream of the media content.
         /// </summary>
         /// <returns></returns>
-        public MediaStream CaptureStream() => JSRef.Call<MediaStream>("capture");
+        public MediaStream CaptureStream() => JSRef!.Call<MediaStream>("capture");
         #endregion
 
         #region Events

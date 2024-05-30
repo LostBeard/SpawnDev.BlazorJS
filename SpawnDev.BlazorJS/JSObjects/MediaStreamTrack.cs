@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The MediaStreamTrack interface of the Media Capture and Streams API represents a single media track within a stream; typically, these are audio or video tracks, but other track types may exist as well.
+    /// The MediaStreamTrack interface of the Media Capture and Streams API represents a single media track within a stream; typically, these are audio or video tracks, but other track types may exist as well.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack
     /// </summary>
     public class MediaStreamTrack : EventTarget
     {
@@ -25,6 +26,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a string set to "audio" if the track is an audio track and to "video", if it is a video track. It doesn't change if the track is disassociated from its source.
         /// </summary>
         public string Kind => JSRef.Get<string>("kind");
+        /// <summary>
+        /// A string that may be used by the web application to provide a hint as to what type of content the track contains to guide how it should be treated by API consumers.
+        /// </summary>
         public string ContentHint => JSRef.Get<string>("contentHint");
         /// <summary>
         /// Returns a string containing a user agent-assigned label that identifies the track source, as in "internal microphone". The string may be left empty and is empty as long as no source has been connected. When the track is disassociated from its source, the label is not changed.
@@ -36,7 +40,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "ended" which indicates that the input is not giving any more data and will never provide new data.
         /// </summary>
         public string ReadyState => JSRef.Get<string>("readyState");
-
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MediaStreamTrack(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a MediaTrackSettings object containing the current values of each of the MediaStreamTrack's constrainable properties.

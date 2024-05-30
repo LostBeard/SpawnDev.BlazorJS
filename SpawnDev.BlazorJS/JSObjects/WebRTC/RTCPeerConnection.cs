@@ -173,14 +173,32 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <param name="track">A MediaStreamTrack object representing the media track to add to the peer connection.</param>
         /// <returns>The RTCRtpSender object which will be used to transmit the media data.</returns>
         public RTCRtpSender AddTrack(MediaStreamTrack track) => JSRef!.Call<RTCRtpSender>("addTrack", track);
-
+        /// <summary>
+        /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
+        /// </summary>
+        /// <param name="trackOrKind"></param>
+        /// <returns></returns>
         public RTCRtpTransceiver AddTransceiver(string trackOrKind) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
-
+        /// <summary>
+        /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
+        /// </summary>
+        /// <param name="trackOrKind"></param>
+        /// <returns></returns>
         public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
-
-        public RTCRtpTransceiver AddTransceiver(string trackOrKind, TransceiverRequestInit init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
-
-        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind, TransceiverRequestInit init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+        /// <summary>
+        /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
+        /// </summary>
+        /// <param name="trackOrKind"></param>
+        /// <param name="init"></param>
+        /// <returns></returns>
+        public RTCRtpTransceiver AddTransceiver(string trackOrKind, RTCRtpTransceiverOptions init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+        /// <summary>
+        /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
+        /// </summary>
+        /// <param name="trackOrKind"></param>
+        /// <param name="init"></param>
+        /// <returns></returns>
+        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind, RTCRtpTransceiverOptions init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
         /// <summary>
         /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
         /// </summary>

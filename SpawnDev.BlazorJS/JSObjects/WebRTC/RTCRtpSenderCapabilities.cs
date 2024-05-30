@@ -2,7 +2,7 @@
 {
     public class RTCRtpSenderCapabilities
     {
-        public List<RTCRtpSenderCapabilityCodec> Codecs { get; set; }
+        public List<RTCRtpTransceiverCodec> Codecs { get; set; }
         public List<RTCRtpSenderCapabilityHeaderExtension> HeaderExtensions { get; set; }
     }
 }
