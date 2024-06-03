@@ -5,8 +5,6 @@ using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 
 namespace SpawnDev.BlazorJS
 {
@@ -322,21 +320,6 @@ namespace SpawnDev.BlazorJS
         public string TypeOf(JSObject obj) => JSInterop.TypeOf(obj, null);
 
         public void Log(params object?[] args) => CallApplyVoid("console.log", args);
-        //public string GetConstructorName(object identifier)
-        //{
-        //    var jso =
-        //    Get<string>($"{identifier}.constructor.name");
-        //}
-        //public string GetConstructorName(JSObject obj, object identifier)
-        //{
-        //    if (obj == null || obj.JSRef == null) return "";
-        //    try
-        //    {
-        //        return obj.JSRef.PropertyInstanceOf(identifier);
-        //    }
-        //    catch { }
-        //    return "";
-        //}
         public Task<Response> Fetch(Request resource) => JS.CallAsync<Response>("fetch", resource);
         public Task<Response> Fetch(string resource) => JS.CallAsync<Response>("fetch", resource);
         public Task<Response> Fetch(string resource, FetchOptions options) => JS.CallAsync<Response>("fetch", resource, options);
