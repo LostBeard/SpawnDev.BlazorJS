@@ -67,7 +67,18 @@ namespace SpawnDev.BlazorJS
             }
             return _this;
         }
-        
+        /// <summary>
+        /// Adds the BlazorJSRuntime singleton service and initializes it.
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="JS">BlazorJSRuntime singleton instance</param>
+        /// <returns></returns>
+        public static IServiceCollection AddBlazorJSRuntime(this IServiceCollection _this, out BlazorJSRuntime JS)
+        {
+            _this.AddBlazorJSRuntime();
+            JS = BlazorJSRuntime.JS;
+            return _this;
+        }
         /// <summary>
         /// Services implementing IBackgroundService or IAsyncBackgroundService will be started
         /// Services implementing IAsyncBackgroundService will have their InitAsync methods called in the order the were constructed
