@@ -1,23 +1,41 @@
 ﻿using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
-    public class ScreenDetailed : JSObject {
+namespace SpawnDev.BlazorJS.JSObjects
+{
+    /// <summary>
+    /// The ScreenDetailed interface of the Window Management API represents detailed information about one specific screen available to the user's device.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/ScreenDetailed
+    /// </summary>
+    public class ScreenDetailed : Screen
+    {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public ScreenDetailed(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public int AvailHeight => JSRef.Get<int>("availHeight");
-        public int AvailLeft => JSRef.Get<int>("availLeft");
-        public int AvailTop => JSRef.Get<int>("availTop");
-        public int AvailWidth => JSRef.Get<int>("availWidth");
-        public int ColorDepth => JSRef.Get<int>("colorDepth");
-        public double DevicePixelRatio { get { var tmp = JSRef.Get<double>("devicePixelRatio"); return tmp > 0d ? tmp : 1d; } }
-        public int Height => JSRef.Get<int>("height");
-        public bool IsExtended => JSRef.Get<bool>("isExtended");
-        public bool IsInternal => JSRef.Get<bool>("isInternal");
-        public bool IsPrimary => JSRef.Get<bool>("isPrimary");
-        public string Label => JSRef.Get<string>("label");
-        public int Left => JSRef.Get<int>("left");
-        public int PixelDepth => JSRef.Get<int>("pixelDepth");
-        public int Top => JSRef.Get<int>("top");
-        public int Width => JSRef.Get<int>("width");
-        public ScreenOrientation Orientation => JSRef.Get<ScreenOrientation>("orientation");
+        /// <summary>
+        /// A number representing the screen's device pixel ratio.
+        /// </summary>
+        public double DevicePixelRatio => JSRef!.Get<double>("devicePixelRatio");
+        /// <summary>
+        /// A boolean indicating whether the screen is internal to the device or external.
+        /// </summary>
+        public bool IsInternal => JSRef!.Get<bool>("isInternal");
+        /// <summary>
+        /// A boolean indicating whether the screen is set as the operating system (OS) primary screen or not.
+        /// </summary>
+        public bool IsPrimary => JSRef!.Get<bool>("isPrimary");
+        /// <summary>
+        /// A string providing a descriptive label for the screen, for example "Built-in Retina Display".
+        /// </summary>
+        public string Label => JSRef!.Get<string>("label");
+        /// <summary>
+        /// A number representing the x-coordinate (left-hand edge) of the total screen area.
+        /// </summary>
+        public int Left => JSRef!.Get<int>("left");
+        /// <summary>
+        /// A number representing the y-coordinate (top edge) of the total screen area.
+        /// </summary>
+        public int Top => JSRef!.Get<int>("top");
     }
 }
