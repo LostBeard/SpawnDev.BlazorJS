@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.2.102</Version>
+		<Version>2.2.106</Version>
 		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
@@ -26,8 +26,8 @@
 	</ItemGroup>
 	
 	<ItemGroup Condition=" '$(Configuration)' == 'Release' ">
-		<PackageReference Include="SpawnDev.BlazorJS" Version="2.2.102" />
-		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.102" />
+		<PackageReference Include="SpawnDev.BlazorJS" Version="2.2.106" />
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.2.106" />
 	</ItemGroup>
 
 

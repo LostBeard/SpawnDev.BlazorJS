@@ -76,7 +76,7 @@ builder.Services.AddSingleton<ContextMenuService>();
 // App service
 builder.Services.AddSingleton<JSObjectAnalyzer>();
 
-#if DEBUG && true
+#if DEBUG && false
 var host = builder.Build();
 await host.StartBackgroundServices();
 //
