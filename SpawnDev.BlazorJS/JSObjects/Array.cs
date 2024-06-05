@@ -455,6 +455,15 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Array<TArrayItem> : Array
     {
+        /// <summary>
+        /// Explicit cast to .Net array
+        /// </summary>
+        /// <param name="array"></param>
+        public static explicit operator TArrayItem[]?(Array<TArrayItem>? array) => array == null ? null : array.ToArray();
+        /// <summary>
+        /// Explicit cast to .Net List
+        /// </summary>
+        public static explicit operator List<TArrayItem>?(Array<TArrayItem>? array) => array == null ? null : array.ToList();
         #region Enumerable like
         /// <summary>
         /// Returns first or default

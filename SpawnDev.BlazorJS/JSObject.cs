@@ -87,15 +87,21 @@ namespace SpawnDev.BlazorJS
             return _ref;
         }
         /// <summary>
+        /// Returns this JSObject as type T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>T</returns>
+        public T JSRefAs<T>() => JSInterop.ReturnMe<T>(this);
+        /// <summary>
         /// Returns a new JSObject of type T using a copy of this JSObject's IJSInProcessObjectReference
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <returns>T</returns>
         public T JSRefCopy<T>() where T : JSObject => JSInterop.ReturnMe<T>(this);
         /// <summary>
         /// Returns a copy of this JSObject's JSRef, a IJSInProcessObjectReference
         /// </summary>
-        /// <returns></returns>
+        /// <returns>IJSInProcessObjectReference</returns>
         public IJSInProcessObjectReference JSRefCopy() => JSInterop.ReturnMe<IJSInProcessObjectReference>(this);
         /// <summary>
         /// Dispose resources

@@ -4,10 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-    /// <summary>
-    /// On creation, SerializableMethodInfoSlim extracts the information needed to allow serialization, deserialization, and resolving of a MethodInfo.<br />
-    /// </summary>
-    public class SerializableMethodInfo
+    public class SerializableMethodInfoSlim
     {
         [JsonIgnore]
         public MethodInfo? MethodInfo
@@ -47,13 +44,13 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Deserialization constructor
         /// </summary>
-        public SerializableMethodInfo() { }
+        public SerializableMethodInfoSlim() { }
         /// <summary>
-        /// Creates a new instance of SerializableMethodInfo that represents
+        /// Creates a new instance of SerializableMethodInfoSlim that represents
         /// </summary>
         /// <param name="methodInfo"></param>
         /// <exception cref="Exception"></exception>
-        public SerializableMethodInfo(MethodInfo methodInfo)
+        public SerializableMethodInfoSlim(MethodInfo methodInfo)
         {
             var mi = methodInfo;
             if (methodInfo.ReflectedType == null) throw new Exception("Cannot serialize MethodInfo without ReflectedType");
@@ -70,7 +67,7 @@ namespace SpawnDev.BlazorJS
             _MethodInfo = methodInfo;
             Resolved = true;
         }
-        public SerializableMethodInfo(Delegate methodDelegate)
+        public SerializableMethodInfoSlim(Delegate methodDelegate)
         {
             var methodInfo = methodDelegate.Method;
             var mi = methodInfo;
@@ -89,18 +86,18 @@ namespace SpawnDev.BlazorJS
             Resolved = true;
         }
         /// <summary>
-        /// Deserializes SerializableMethodInfo instance from string using System.Text.Json<br />
+        /// Deserializes SerializableMethodInfoSlim instance from string using System.Text.Json<br />
         /// PropertyNameCaseInsensitive = true is used in deserialization
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
-        public static SerializableMethodInfo? FromString(string json)
+        public static SerializableMethodInfoSlim? FromString(string json)
         {
-            var ret = string.IsNullOrEmpty(json) || !json.StartsWith("{") ? null : JsonSerializer.Deserialize<SerializableMethodInfo>(json, DefaultJsonSerializerOptions);
+            var ret = string.IsNullOrEmpty(json) || !json.StartsWith("{") ? null : JsonSerializer.Deserialize<SerializableMethodInfoSlim>(json, DefaultJsonSerializerOptions);
             return ret;
         }
         /// <summary>
-        /// Serializes SerializableMethodInfo to a string using System.Text.Json
+        /// Serializes SerializableMethodInfoSlim to a string using System.Text.Json
         /// </summary>
         /// <returns></returns>
         public override string ToString() => JsonSerializer.Serialize(this);
@@ -110,7 +107,7 @@ namespace SpawnDev.BlazorJS
         static string GetTypeName(Type? type)
         {
             if (type == null) return "";
-            return !string.IsNullOrEmpty(type.AssemblyQualifiedName) ? type.AssemblyQualifiedName : (!string.IsNullOrEmpty(type.FullName) ? type.FullName : type.Name);
+            return !string.IsNullOrEmpty(type.FullName) ? type.FullName : type.Name;
         }
 
         void Resolve()
@@ -134,7 +131,7 @@ namespace SpawnDev.BlazorJS
             MethodInfo? mi = null;
             foreach (var method in methodsWithName)
             {
-                var msi = new SerializableMethodInfo(method);
+                var msi = new SerializableMethodInfoSlim(method);
                 if (msi.ReturnType == ReturnType && msi.ParameterTypes.SequenceEqual(ParameterTypes))
                 {
                     mi = method;
@@ -178,8 +175,8 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         /// <param name="methodInfo"></param>
         /// <returns></returns>
-        public static string SerializeMethodInfo(MethodInfo methodInfo) => new SerializableMethodInfo(methodInfo).ToString();
-        public static string SerializeMethodInfo(Delegate methodDeleate) => new SerializableMethodInfo(methodDeleate.Method).ToString();
+        public static string SerializeMethodInfo(MethodInfo methodInfo) => new SerializableMethodInfoSlim(methodInfo).ToString();
+        public static string SerializeMethodInfo(Delegate methodDeleate) => new SerializableMethodInfoSlim(methodDeleate.Method).ToString();
         /// <summary>
         /// Converts a MethodInfo that has been serialized using SerializeMethodInfo into a MethodInfo if serialization is successful or a null otherwise.
         /// </summary>
