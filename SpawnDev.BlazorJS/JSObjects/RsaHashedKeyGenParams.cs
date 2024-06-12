@@ -21,11 +21,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         public byte[] PublicExponent { get; set; }
         /// <summary>
         /// A string representing the name of the digest function to use. You can pass any of SHA-256, SHA-384, or SHA-512 here.<br/>
+        /// MDN Docs state this is a string, which works when generating a key, but<br/>
+        /// when read from the CryptoKey.Algorithm property, Hash is an object with one property, Name.<br/>
+        /// That is why RsaHash is also allowed here.
         /// </summary>
         public Union<string, RsaHash> Hash { get; set; }
         /// <summary>
         /// Returns the hash name from the Hash property, which can be an object or a string<br/>
-        /// non-standard property
+        /// non-standard property to simplify reading the Hash from Union.Value
         /// </summary>
         [JsonIgnore]
         public string? HashName
@@ -37,9 +40,5 @@ namespace SpawnDev.BlazorJS.JSObjects
                 return null;
             }
         }
-    }
-    public class RsaHash
-    {
-        public string Name { get; set; }
     }
 }
