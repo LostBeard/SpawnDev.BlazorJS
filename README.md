@@ -1321,17 +1321,6 @@ IDisposable objects returned from a WebWorker or SharedWorker service are automa
 
 # Support
 
-Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
-
-SpawnDev.BlazorJS.WebWorkers is inspired by Tewr's BlazorWorker implementation. Thank you!  
-https://github.com/Tewr/BlazorWorker
-
-BlazorJS and WebWorkers Demo  
-https://blazorjs.spawndev.com/
-
-Current site under development using Blazor WASM  
-https://www.spawndev.com/  
-
 Consider sponsoring me to give me more time to work on SpawnDev.BlazorJS.
 [Sponsor](https://github.com/sponsors/LostBeard)
 
@@ -1340,3 +1329,15 @@ Consider sponsoring me to give me more time to work on SpawnDev.BlazorJS.
 Buy me a coffee 
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=7QTATH4UGGY9U)
+
+Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
+
+SpawnDev.BlazorJS.WebWorkers is inspired by Tewr's BlazorWorker implementation. Thank you!  
+https://github.com/Tewr/BlazorWorker
+
+# Demos
+BlazorJS and WebWorkers Demo  
+https://blazorjs.spawndev.com/
+
+Current site under development using Blazor WASM  
+https://www.spawndev.com/  

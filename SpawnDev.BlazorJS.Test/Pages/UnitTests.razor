@@ -404,6 +404,56 @@
         if (valueGetWorkerB == valueSetWorkerA1) throw new Exception("SharedWorker with different name unexpectedly same as first SharedWorker");
     }
 
+    /// <summary>
+    /// Tests signing and verification<br/>
+    /// https://github.com/mdn/dom-examples/blob/main/web-crypto/sign-verify/rsa-pss.js
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    [TestMethod]
+    public async Task SubtleCryptoSignVerifyTest()
+    {
+        if (!Crypto.IsSupported)
+        {
+            throw new Exception("Crypto not supported by browser.");
+        }
+        using var crypto = new Crypto();
+        using var subtle = crypto.Subtle;
+        var keyPair = await subtle.GenerateKey<CryptoKeyPair>(
+            new RsaHashedKeyGenParams
+                {
+                    Name = "RSA-PSS",
+                    ModulusLength = 4096,
+                    PublicExponent = new byte[] { 1, 0, 1 },
+                    Hash = "SHA-256"
+                },
+            true,
+            new string[] { "sign", "verify" }
+        );
+        var testString = "Hello Crypto!";
+        var data = await StringToArrayBuffer(testString);
+        var signature = await SignDataWithPrivateKey(data, keyPair.PrivateKey);
+        var verified = await VerifyDataSignatureWithPublicKey(signature, data, keyPair.PublicKey);
+        if (!verified) throw new Exception("Unexpected result");
+
+    }
+
+    async Task<ArrayBuffer> SignDataWithPrivateKey(ArrayBuffer data, CryptoKey key)
+    {
+        using var crypto = new Crypto();
+        using var subtle = crypto.Subtle;
+        var ret = await subtle.Sign(new RsaPssParams(), key, data);
+        return ret;
+    }
+
+    async Task<bool> VerifyDataSignatureWithPublicKey(ArrayBuffer signature, ArrayBuffer data, CryptoKey key)
+    {
+        using var crypto = new Crypto();
+        using var subtle = crypto.Subtle;
+        var ret = await subtle.Verify(new RsaPssParams(), key, signature, data);
+        return ret;
+    }
+
     [TestMethod]
     public async Task SubtleCryptoRsaOaepEncryptDecryptTest()
     {

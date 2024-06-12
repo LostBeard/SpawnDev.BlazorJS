@@ -13,15 +13,15 @@ namespace SpawnDev.BlazorJS
         public IServiceProvider Services { get; internal set; }
         public WebAssemblyHost Host { get; internal set; }
         public bool Started { get; internal set; }
-        internal List<ServiceInfo> AutoStartedServices { get; set; } = new List<ServiceInfo>();
+        public List<ServiceInformation> ServiceInformation { get; internal set; } = new List<ServiceInformation>();
         public Dictionary<Type, GlobalScope> AutoStartModes { get; private set; } = new Dictionary<Type, GlobalScope>();
-        internal ServiceInfo? GetServiceInfo(Type serviceType, object? serviceKey)
+        internal ServiceInformation? GetServiceInfo(Type serviceType, object? serviceKey)
         {
-            return AutoStartedServices.Where(o => o.ServiceType == serviceType && o.ServiceKey == serviceKey).LastOrDefault();
+            return ServiceInformation.Where(o => o.ServiceType == serviceType && o.ServiceKey == serviceKey).LastOrDefault();
         }
-        internal List<ServiceInfo> GetServiceInfos(Type serviceType, object? serviceKey)
+        internal List<ServiceInformation> GetServiceInfos(Type serviceType, object? serviceKey)
         {
-            return AutoStartedServices.Where(o => o.ServiceType == serviceType && o.ServiceKey == serviceKey).ToList();
+            return ServiceInformation.Where(o => o.ServiceType == serviceType && o.ServiceKey == serviceKey).ToList();
         }
         static Dictionary<IServiceCollection, WebAssemblyServices> Extensions = new Dictionary<IServiceCollection, WebAssemblyServices>();
         public IServiceCollection Descriptors { get; }
@@ -40,7 +40,7 @@ namespace SpawnDev.BlazorJS
         /// Returns a list of registered services represented as a Tuple - ServiceType, ServiceKey, ServiceDescriptor
         /// </summary>
         /// <param name="_this"></param>
-        /// <returns></returns>
+        /// <returns>Tuple (ServiceType, ServiceKey, ServiceDescriptor)</returns>
         public List<(Type, object?, ServiceDescriptor)> GetRegisteredServices()
         {
             return Descriptors.Select(x =>

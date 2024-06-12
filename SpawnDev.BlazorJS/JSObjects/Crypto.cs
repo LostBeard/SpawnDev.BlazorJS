@@ -25,7 +25,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Properties
-        public SubtleCrypto Subtle => JSRef.Get<SubtleCrypto>("subtle");
+        /// <summary>
+        /// Returns a SubtleCrypto object providing access to common cryptographic primitives, like hashing, signing, encryption, or decryption.
+        /// </summary>
+        public SubtleCrypto Subtle => JSRef!.Get<SubtleCrypto>("subtle");
         #endregion
 
         #region Methods
@@ -34,12 +37,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="typedArray">An integer-based TypedArray, that is one of: Int8Array, Uint8Array, Uint8ClampedArray, Int16Array, Uint16Array, Int32Array, Uint32Array, BigInt64Array, BigUint64Array (but not Float32Array nor Float64Array). All elements in the array will be overwritten with random numbers.</param>
         /// <returns></returns>
-        public TypedArray GetRandomValues(TypedArray typedArray) => JSRef.Call<TypedArray>("getRandomValues", typedArray);
+        public TypedArray GetRandomValues(TypedArray typedArray) => JSRef!.Call<TypedArray>("getRandomValues", typedArray);
         /// <summary>
         /// A string containing a randomly generated, 36 character long v4 UUID.
         /// </summary>
         /// <returns></returns>
-        public string RandomUUID() => JSRef.Call<string>("randomUUID");
+        public string RandomUUID() => JSRef!.Call<string>("randomUUID");
         #endregion
     }
 }

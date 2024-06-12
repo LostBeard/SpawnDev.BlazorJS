@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.Reflection
     /// MethodInfo - All calls funnel to this call. Supports generics, property get and set, asynchronous and synchronous method calls.<br />
     /// - Call<br />
     /// </summary>
-    public partial class AsyncCallDispatcher : IAsyncCallDispatcher
+    public partial class AsyncCallDispatcher
     {
         /// <summary>
         /// The binding flags to use when searching for methods
@@ -49,7 +49,7 @@ namespace SpawnDev.BlazorJS.Reflection
         {
             var typeofT = typeof(TServiceInterface);
             if (ServiceInterfaces.TryGetValue(typeofT, out var serviceWorker)) return (TServiceInterface)serviceWorker;
-            var ret = InterfaceCallDispatcher<TServiceInterface>.CreateInterfaceDispatcher(this);
+            var ret = InterfaceCallDispatcher<TServiceInterface>.CreateInterfaceDispatcher(Call);
             ServiceInterfaces[typeofT] = ret;
             return ret;
         }
@@ -82,7 +82,6 @@ namespace SpawnDev.BlazorJS.Reflection
         #endregion
 
         #region Expressions
-
         /// <summary>
         /// Converts an Expression into a MethodInfo and a call arguments array<br />
         /// Then calls DispatchCall with them

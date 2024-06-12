@@ -100,8 +100,9 @@ namespace SpawnDev.BlazorJS.Toolbox
             return supportAudioVideoFormats;
         });
         public List<string> MediaRecorderAudioVideoFormats => _MediaRecorderAudioVideoFormats.Value;
-
-        public async Task InitAsync()
+        public Task Ready => _Ready != null ? _Ready : _Ready = InitAsync();
+        private Task? _Ready = null;
+        async Task InitAsync()
         {
             if (!Supported) return;
             await UpdateDeviceList();

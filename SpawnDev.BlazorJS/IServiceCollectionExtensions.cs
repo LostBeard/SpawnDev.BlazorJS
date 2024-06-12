@@ -11,20 +11,23 @@ namespace SpawnDev.BlazorJS
     {
         None,
         ShouldStart,
-        Starting,
-        Constructing,
-        Started,
     }
     public interface IBackgroundService { }
+    /// <summary>
+    /// IAsyncBackgroundService are started at app startup by default
+    /// or started based on GlobalScope settings when registered and the current global scope<br/>
+    /// </summary>
     public interface IAsyncBackgroundService : IBackgroundService
     {
-        Task InitAsync();
+        Task Ready { get; }
     }
-
+    /// <summary>
+    /// SpawnDev.BlazorJS IServiceCollection extension methods
+    /// </summary>
     public static class IServiceCollectionExtensions
     {
         /// <summary>
-        /// WARNING: Modifying the JSRuntime.JsonSerializerOptions can have unexpected results.
+        /// WARNING: Modifying the JSRuntime.JsonSerializerOptions can have unexpected results
         /// </summary>
         /// <param name="_this"></param>
         /// <param name="configure"></param>
@@ -81,8 +84,8 @@ namespace SpawnDev.BlazorJS
         }
         /// <summary>
         /// Services implementing IBackgroundService or IAsyncBackgroundService will be started
-        /// Services implementing IAsyncBackgroundService will have their InitAsync methods called in the order the were constructed
-        /// Singletons registered with an auto start GlobalScope that matches the current scope will be started
+        /// Services implementing IAsyncBackgroundService will have their IAsyncBackgroundService.Ready Task property awaited in parallel<br/>
+        /// Singletons registered with an auto start GlobalScope that matches the current scope will be started<br/>
         /// Background services must be careful to not take too long in their InitAsync methods as other services are waiting to init and the app is waiting to start
         /// </summary>
         /// <param name="_this"></param>
@@ -96,32 +99,59 @@ namespace SpawnDev.BlazorJS
             webAssemblyServices.Services = _this.Services;
             var JS = _this.Services.GetRequiredService<BlazorJSRuntime>();
             var serviceCollection = _this.Services.GetRequiredService<IServiceCollection>();
-            webAssemblyServices.AutoStartedServices = serviceCollection!.Select(o => new ServiceInfo(o, JS.GlobalScope, serviceCollection!)).ToList();
-            foreach (var serviceInfo in webAssemblyServices.AutoStartedServices)
+            webAssemblyServices.ServiceInformation = serviceCollection!.Select(o => new ServiceInformation(o, JS.GlobalScope, serviceCollection!)).ToList();
+            var shouldStartInfos = webAssemblyServices.ServiceInformation.Where(o => o.CurrentScopeAutoStart).ToList();
+            var services = new List<object>();
+            foreach (var shouldStartInfo in shouldStartInfos)
             {
-                await InitServiceAsync(serviceCollection!, _this.Services, serviceInfo, null, false);
+                var service = shouldStartInfo.GetService(_this.Services)!;
+                services.Add(service);
             }
+            var asyncServiceReadyTasks = new List<Task>();
+            foreach (var service in services)
+            {
+                if (service is IAsyncBackgroundService asyncBackgroundService)
+                {
+                    asyncServiceReadyTasks.Add(asyncBackgroundService.Ready);
+                }
+            }
+            await Task.WhenAll(asyncServiceReadyTasks);
             return _this;
         }
 
+        /// <summary>
+        /// Returns the service of the given service type.<br/>
+        /// If the service is implements IAsyncBackgroundService, IAsyncBackgroundService.Ready will be awaited.
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static async Task<object?> GetServiceAsync(this IServiceProvider _this, Type type)
         {
-            var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
-            var serviceInfo = webAssemblyServices.GetServiceInfo(type, null);
-            if (serviceInfo == null)
+            //var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
+            //var serviceInfo = webAssemblyServices.GetServiceInfo(type, null);
+            //if (serviceInfo == null)
+            //{
+            //    return null;
+            //}
+            //var serviceCollection = _this.GetRequiredService<IServiceCollection>();
+            //await InitServiceAsync(serviceCollection, _this, serviceInfo, null, true);
+            //return _this.GetService(type);
+            var service = _this.GetService(type);
+            if (service is IAsyncBackgroundService asyncBackgroundService)
             {
-                return null;
+                await asyncBackgroundService.Ready;
             }
-            var serviceCollection = _this.GetRequiredService<IServiceCollection>();
-            await InitServiceAsync(serviceCollection, _this, serviceInfo, null, true);
-            return _this.GetService(type);
+            return service;
         }
 
         public static ServiceDescriptor? GetServiceDescriptor(this IServiceProvider _this, Type type)
         {
-            var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
-            var serviceInfo = webAssemblyServices.GetServiceInfo(type, null);
-            return serviceInfo?.ServiceDescriptor;
+            //var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
+            //var serviceInfo = webAssemblyServices.GetServiceInfo(type, null);
+            //return serviceInfo?.ServiceDescriptor;
+            var descriptors = _this.GetRequiredService<IServiceCollection>();
+            return descriptors.FirstOrDefault(o => o.ServiceType == type);
         }
 
         public static async Task<T?> GetServiceAsync<T>(this IServiceProvider _this) where T : class
@@ -129,83 +159,13 @@ namespace SpawnDev.BlazorJS
             return (T?)await _this.GetServiceAsync(typeof(T));
         }
 
-        internal static async Task InitServiceAsync(IServiceCollection serviceDescriptors, IServiceProvider _this, ServiceInfo? serviceInfo, Type? dependencyOfType, bool isRequired = false)
-        {
-            if (serviceInfo == null)
-            {
-                return;
-            }
-            var instanceExists = serviceInfo.ImplementationInstance != null;
-            if (serviceInfo.StartupState == StartupState.None && (isRequired || dependencyOfType != null))
-            {
-                serviceInfo.StartupState = StartupState.ShouldStart;
-                serviceInfo.DependencyOfType = dependencyOfType;
-            }
-            if (serviceInfo.StartupState != StartupState.ShouldStart)
-            {
-                return;
-            }
-            var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
-            serviceInfo.StartupState = StartupState.Starting;
-            foreach (var dependencyType in serviceInfo.DependencyTypes)
-            {
-                //var dependencyInfo = serviceDescriptors.GetRegisteredServiceInfo(dependencyType.Item1, dependencyType.Item2);
-                var autoStartInfo = webAssemblyServices.AutoStartedServices.Where(o => o.ServiceType == dependencyType.Item1 && o.ServiceKey == dependencyType.Item2).LastOrDefault();
-                if (autoStartInfo != null)
-                {
-                    await InitServiceAsync(serviceDescriptors, _this, autoStartInfo, serviceInfo.ServiceType);
-                }
-            }
-            // this actual creates the instance
-            object? service = null;
-#if NET8_0_OR_GREATER
-            if (serviceInfo.IsKeyedService)
-            {
-                service = _this.GetRequiredKeyedService(serviceInfo.ServiceDescriptor.ServiceType, serviceInfo.ServiceKey);
-            }
-            else
-            {
-                service = _this.GetRequiredService(serviceInfo.ServiceDescriptor.ServiceType);
-            }
-#else
-            service = _this.GetRequiredService(serviceInfo.ServiceDescriptor.ServiceType);
-#endif
-            serviceInfo.DependencyOrder = webAssemblyServices.AutoStartedServices.Where(o => o.StartupState == StartupState.Started).Count();
-            serviceInfo.StartupState = StartupState.Started;
-#if DEBUG
-            Console.WriteLine($"Processed service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name}");
-#endif
-            if (!instanceExists)
-            {
-#if DEBUG && true
-                if (serviceInfo.DependencyOfType != null)
-                {
-                    Console.WriteLine($"Started background service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name} dependency of {serviceInfo.DependencyOfType.Name}");
-                }
-                else
-                {
-                    Console.WriteLine($"Started background service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name}");
-                }
-#endif
-            }
-            //if (!serviceInfo.InitAsyncCalled && service is IAsyncBackgroundService asyncBG)
-            if (!instanceExists && service is IAsyncBackgroundService asyncBG)
-            {
-#if DEBUG && true
-                if (serviceInfo.DependencyOfType != null)
-                {
-                    Console.WriteLine($"InitAsync background service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name} dependency of {serviceInfo.DependencyOfType.Name}");
-                }
-                else
-                {
-                    Console.WriteLine($"InitAsync background service: {serviceInfo.DependencyOrder} {serviceInfo.ServiceDescriptor.ServiceType.Name}");
-                }
-#endif
-                serviceInfo.InitAsyncCalled = true;
-                await asyncBG.InitAsync();
-            }
-        }
-
+        /// <summary>
+        /// Returns all ServiceDescriptors for services registered with the given service type<br/>
+        /// Type can be the type or the implementing type
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static List<ServiceDescriptor>? FindServiceDescriptors(this IServiceCollection _this, Type? type)
         {
             if (type == null) return null;
@@ -251,7 +211,7 @@ namespace SpawnDev.BlazorJS
             else
             {
 #if DEBUG && true
-                Console.WriteLine($"BlazorJSRunAsync mode: Worker");
+                Console.WriteLine($"BlazorJSRunAsync mode: ServiceOnlyMode");
 #endif
                 // This is a worker so we are going to use this to allow services in workers without the html renderer trying to load pages
                 var tcs = new TaskCompletionSource<object>();

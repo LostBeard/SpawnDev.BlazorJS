@@ -18,6 +18,19 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Methods
         /// <summary>
+        /// The digest() method of the SubtleCrypto interface generates a digest of the given data. A digest is a short fixed-length value derived from some variable-length input. Cryptographic digests should exhibit collision-resistance, meaning that it's hard to come up with two different inputs that have the same digest value.
+        /// </summary>
+        /// <param name="algorithm">
+        /// This may be a string or an object with a single property name that is a string. The string names the hash function to use. Supported values are:<br/>
+        /// "SHA-1" (but don't use this in cryptographic applications)<br/>
+        /// "SHA-256"<br/>
+        /// "SHA-384"<br/>
+        /// "SHA-512".
+        /// </param>
+        /// <param name="data">An ArrayBuffer, a TypedArray or a DataView object containing the data to be digested.</param>
+        /// <returns></returns>
+        public Task<ArrayBuffer> Digest(string algorithm, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef.CallAsync<ArrayBuffer>("digest", algorithm, data);
+        /// <summary>
         /// The decrypt() method of the SubtleCrypto interface decrypts some encrypted data. It takes as arguments a key to decrypt with, some optional extra parameters, and the data to decrypt (also known as "ciphertext"). It returns a Promise which will be fulfilled with the decrypted data (also known as "plaintext").
         /// </summary>
         /// <param name="algorithm">An object specifying the algorithm to be used, and any extra parameters as required. The values given for the extra parameters must match those passed into the corresponding encrypt() call.</param>
@@ -91,7 +104,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="extractable">A boolean value indicating whether it will be possible to export the key using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().</param>
         /// <param name="keyUsages">An Array indicating what can be done with the key. Possible array values are: encrypt, decrypt, sign, verify, deriveKey, deriveBits, wrapKey, or unwrapKey.</param>
         /// <returns></returns>
-        public Task<CryptoKey> ImportKey(string format, Union<ArrayBuffer, TypedArray, DataView, byte[]> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) => JSRef.CallAsync<CryptoKey>("importKey", format, keyData, algorithm, extractable, keyUsages);
+        public Task<CryptoKey> ImportKey(string format, Union<ArrayBuffer, TypedArray, DataView, byte[], JSObject> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) => JSRef.CallAsync<CryptoKey>("importKey", format, keyData, algorithm, extractable, keyUsages);
         /// <summary>
         /// The sign() method of the SubtleCrypto interface generates a digital signature.<br />
         /// It takes as its arguments a key to sign with, some algorithm-specific parameters, and the data to sign. It returns a Promise which will be fulfilled with the signature.

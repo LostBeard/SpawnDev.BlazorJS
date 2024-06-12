@@ -6,7 +6,9 @@
     public class EcKeyGenParams : KeyGenParams
     {
         /// <summary>
-        /// A string. This should be set to ECDSA or ECDH, depending on the algorithm you want to use.
+        /// A string. This should be set to:<br/>
+        /// ECDSA<br/>
+        /// ECDH
         /// </summary>
         public override string Name { get; set; }
         /// <summary>
@@ -15,6 +17,6 @@
         /// P-384<br />
         /// P-521
         /// </summary>
-        public string NamedVurve { get; set; }
+        public string NamedCurve { get; set; }
     }
 }

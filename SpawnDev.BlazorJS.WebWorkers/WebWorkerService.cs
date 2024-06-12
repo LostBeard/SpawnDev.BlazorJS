@@ -116,11 +116,12 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// Configuration used for ServiceWorker registration
         /// </summary>
         public ServiceWorkerConfig ServiceWorkerConfig { get; private set; } = new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.None };
-        // below is set to true if base address starts with chrome-extension
         /// <summary>
-        /// The index.html that wll be loaded by new workers
+        /// The HTML file that will be loaded by new WebWorker and SharedWebWorker instances<br/>
+        /// to determine what Javascript &lt;script&gt; tags to load in the worker scope.<br/>
+        /// If empty, the default will be used "./"<br/>
         /// </summary>
-        public string WorkerIndexHtml { get; private set; } = "";
+        public string WorkerIndexHtml { get; set; } = "";
         /// <summary>
         /// AppInstanceInfo for this app instance
         /// </summary>
@@ -506,11 +507,13 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (JS.SharedWorkerThis != null) return JS.SharedWorkerThis.Name ?? "";
             return "";
         }
+        public Task Ready => _Ready != null ? _Ready : _Ready = InitAsync();
+        private Task? _Ready = null;
         /// <summary>
         /// Called by BlazorJSRuntime at startup
         /// </summary>
         /// <returns></returns>
-        public async Task InitAsync()
+        private async Task InitAsync()
         {
             if (BeenInit) return;
             BeenInit = true;

@@ -8,105 +8,100 @@ namespace SpawnDev.BlazorJS.Reflection
     /// <typeparam name="TServiceInterface"></typeparam>
     public class InterfaceCallDispatcher<TServiceInterface> : DispatchProxy where TServiceInterface : class
     {
-        internal IAsyncCallDispatcher CallDispatcher { get; private set; }
-        internal MethodInfo _InvokeTaskInfo;
-        internal MethodInfo _InvokeValueTaskInfo;
-        public InterfaceCallDispatcher() : base()
+        private Func<MethodInfo, object?[]?, object?>? Resolver { get; set; }
+        private Func<object?, MethodInfo, object?[]?, object?>? KeyedResolver { get; set; }
+        private Func<MethodInfo, object?[]?, Task<object?>>? AsyncResolver { get; set; }
+        private Func<object?, MethodInfo, object?[]?, Task<object?>>? AsyncKeyedResolver { get; set; }
+        private object? Key { get; set; }
+        private bool Keyed { get; set; }
+        private Task<object?> CallAsync(MethodInfo methodInfo, object?[]? args)
         {
-            _InvokeTaskInfo = typeof(InterfaceCallDispatcher<TServiceInterface>).GetMethod(nameof(InvokeTask), BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception($"WorkerServiceProxy static constructor error");
-            _InvokeValueTaskInfo = typeof(InterfaceCallDispatcher<TServiceInterface>).GetMethod(nameof(InvokeValueTask), BindingFlags.NonPublic | BindingFlags.Instance) ?? throw new Exception($"WorkerServiceProxy static constructor error");
+            if (AsyncKeyedResolver != null) return AsyncKeyedResolver(Key, methodInfo, args);
+            if (AsyncResolver != null) return AsyncResolver(methodInfo, args);
+            throw new NullReferenceException("No valid async call resolver found");
         }
-
-        public static TServiceInterface CreateInterfaceDispatcher(IAsyncCallDispatcher worker)
+        private object? Call(MethodInfo methodInfo, object?[]? args)
         {
-            var proxy = Create<TServiceInterface, InterfaceCallDispatcher<TServiceInterface>>() as InterfaceCallDispatcher<TServiceInterface>;
-            proxy.CallDispatcher = worker;
-            var ret = proxy as TServiceInterface;
-            if (ret == null) throw new Exception("Failed to create interface proxy");
-            return ret;
+            if (KeyedResolver != null) return KeyedResolver(Key, methodInfo, args);
+            if (Resolver != null) return Resolver(methodInfo, args);
+            throw new NullReferenceException("No valid call resolver found");
         }
-
-        internal async Task<TReturnType> InvokeTask<TReturnType>(MethodInfo targetMethod, object?[]? args)
-        {
-            var ret = await CallDispatcher.Call(targetMethod, args);
-            return (TReturnType)ret;
-        }
-
-        internal ValueTask<TReturnType> InvokeValueTask<TReturnType>(MethodInfo targetMethod, object?[]? args)
-        {
-            return new ValueTask<TReturnType>(InvokeTask<TReturnType>(targetMethod, args));
-        }
-
-        internal async Task InvokeTaskVoid(MethodInfo targetMethod, object?[]? args)
-        {
-            await CallDispatcher.Call(targetMethod, args);
-        }
-
-        internal ValueTask InvokeValueTaskVoid(MethodInfo targetMethod, object?[]? args)
-        {
-            return new ValueTask(InvokeTaskVoid(targetMethod, args));
-        }
-
+        /// <summary>
+        /// Handles all requests on interface TServiceInterface
+        /// </summary>
+        /// <param name="targetMethod"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
         {
             if (targetMethod == null) return null;
             var returnType = targetMethod.ReturnType;
             var isTask = returnType.IsTask();
-            var isValueTask = !isTask && returnType.IsValueTask(); ;
+            var isValueTask = !isTask && returnType.IsValueTask();
             Type finalReturnType = isTask || isValueTask ? returnType.GetGenericArguments().FirstOrDefault() ?? typeof(void) : returnType;
-            if (isTask)
-            {
-                if (finalReturnType == typeof(void))
-                {
-                    return InvokeTaskVoid(targetMethod, args);
-                }
-                else
-                {
-                    return InvokeTaskTyped(finalReturnType, targetMethod, args);
-                }
-            }
-            else if (isValueTask)
-            {
-                if (finalReturnType == typeof(void))
-                {
-                    return InvokeValueTaskVoid(targetMethod, args);
-                }
-                else
-                {
-                    return InvokeValueTaskTyped(finalReturnType, targetMethod, args);
-                }
-            }
-            throw new Exception("Worker service interface calls must return Task or ValueTask");
+            if (isTask) return CallAsync(targetMethod, args).RecastTask(finalReturnType);
+            if (isValueTask) return CallAsync(targetMethod, args).RecastValueTask(finalReturnType);
+            return Call(targetMethod, args);
         }
-
-        static Dictionary<Type, MethodInfo> InvokeValueTaskCache = new Dictionary<Type, MethodInfo>();
-        MethodInfo? GetInvokeValueTaskGeneric(Type type)
+        /// <summary>
+        /// Creates a new AsyncInterfaceCallDispatcher returned as type TServiceInterface
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="keyedResolver"></param>
+        /// <param name="asyncKeyedResolver"></param>
+        /// <returns></returns>
+        public static TServiceInterface CreateInterfaceDispatcher(object? key, Func<object?, MethodInfo, object?[]?, Task<object?>> keyedResolver, Func<object?, MethodInfo, object?[]?, Task<object?>>? asyncKeyedResolver = null)
         {
-            if (InvokeValueTaskCache.TryGetValue(type, out var methodInfo)) return methodInfo;
-            var methodInfoTyped = _InvokeValueTaskInfo.MakeGenericMethod(type);
-            InvokeValueTaskCache[type] = methodInfoTyped;
-            return methodInfoTyped;
+            var ret = Create<TServiceInterface, InterfaceCallDispatcher<TServiceInterface>>();
+            var proxy = ret as InterfaceCallDispatcher<TServiceInterface>;
+            proxy!.KeyedResolver = keyedResolver;
+            proxy!.AsyncKeyedResolver = asyncKeyedResolver;
+            proxy.Key = key;
+            proxy.Keyed = true;
+            return ret;
         }
-
-        static Dictionary<Type, MethodInfo?> InvokeTaskCache = new Dictionary<Type, MethodInfo?>();
-        MethodInfo? GetInvokeTaskGeneric(Type type)
+        /// <summary>
+        /// Creates a new AsyncInterfaceCallDispatcher returned as type TServiceInterface
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="asyncKeyedResolver"></param>
+        /// <returns></returns>
+        public static TServiceInterface CreateInterfaceDispatcher(object? key, Func<object?, MethodInfo, object?[]?, Task<object?>> asyncKeyedResolver)
         {
-            if (InvokeTaskCache.TryGetValue(type, out var methodInfo)) return methodInfo;
-            var methodInfoTyped = _InvokeTaskInfo.MakeGenericMethod(type);
-            InvokeTaskCache[type] = methodInfoTyped;
-            return methodInfoTyped;
+            var ret = Create<TServiceInterface, InterfaceCallDispatcher<TServiceInterface>>();
+            var proxy = ret as InterfaceCallDispatcher<TServiceInterface>;
+            proxy!.AsyncKeyedResolver = asyncKeyedResolver;
+            proxy.Key = key;
+            proxy.Keyed = true;
+            return ret;
         }
-
-        internal object? InvokeTaskTyped(Type type, MethodInfo targetMethod, object?[]? args)
+        /// <summary>
+        /// Creates a new AsyncInterfaceCallDispatcher returned as type TServiceInterface
+        /// </summary>
+        /// <param name="asyncResolver"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static TServiceInterface CreateInterfaceDispatcher(Func<MethodInfo, object?[]?, Task<object?>> asyncResolver)
         {
-            var mi = GetInvokeTaskGeneric(type);
-            return mi.Invoke(this, new object[] { targetMethod, args });
+            var ret = Create<TServiceInterface, InterfaceCallDispatcher<TServiceInterface>>();
+            var proxy = ret as InterfaceCallDispatcher<TServiceInterface>;
+            proxy!.AsyncResolver = asyncResolver;
+            return ret;
         }
-
-        internal object? InvokeValueTaskTyped(Type type, MethodInfo targetMethod, object?[]? args)
+        /// <summary>
+        /// Creates a new AsyncInterfaceCallDispatcher returned as type TServiceInterface
+        /// </summary>
+        /// <param name="resolver"></param>
+        /// <param name="asyncResolver"></param>
+        /// <returns></returns>
+        public static TServiceInterface CreateInterfaceDispatcher(Func<MethodInfo, object?[]?, object?> resolver, Func<MethodInfo, object?[]?, Task<object?>>? asyncResolver = null)
         {
-            var mi = GetInvokeValueTaskGeneric(type);
-            return mi.Invoke(this, new object[] { targetMethod, args });
+            var ret = Create<TServiceInterface, InterfaceCallDispatcher<TServiceInterface>>();
+            var proxy = ret as InterfaceCallDispatcher<TServiceInterface>;
+            proxy!.AsyncResolver = asyncResolver;
+            proxy.Resolver = resolver;
+            return ret;
         }
     }
 }
