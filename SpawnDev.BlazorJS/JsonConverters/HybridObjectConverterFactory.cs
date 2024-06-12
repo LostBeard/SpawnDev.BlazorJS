@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.JSObjects;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -16,6 +17,11 @@ namespace SpawnDev.BlazorJS.JsonConverters
         bool CanConvert(Type typeToConvert, bool internalCall)
         {
 #if DEBUG && false
+            if (typeToConvert == typeof(RsaHashedKeyGenParams))
+            {
+                var nmtt = true;
+
+            }
             if (!internalCall)
             {
                 Console.WriteLine($"HybridObjectConverterFactory.CanConvert(typeToConvert: {typeToConvert.Name})");
@@ -57,6 +63,10 @@ namespace SpawnDev.BlazorJS.JsonConverters
                     goto CanConvertTrue;
                 }
                 if (typeof(IJSInProcessObjectReference) == pType)
+                {
+                    goto CanConvertTrue;
+                }
+                if (typeof(byte[]) == pType)
                 {
                     goto CanConvertTrue;
                 }

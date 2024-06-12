@@ -21,10 +21,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A CryptoKey object representing the private key. For encryption and decryption algorithms, this key is used to decrypt. For signing and verification algorithms it is used to sign.
         /// </summary>
-        public CryptoKey PrivateKey { get => JSRef!.Get<CryptoKey>("privateKey"); set => JSRef!.Set("privateKey", value); }
+        public CryptoKey? PrivateKey { get => JSRef!.Get<CryptoKey?>("privateKey"); set => JSRef!.Set("privateKey", value); }
         /// <summary>
         /// A CryptoKey object representing the public key. For encryption and decryption algorithms, this key is used to encrypt. For signing and verification algorithms it is used to verify signatures.
         /// </summary>
-        public CryptoKey PublicKey { get => JSRef!.Get<CryptoKey>("publicKey"); set => JSRef!.Set("publicKey", value); }
+        public CryptoKey? PublicKey { get => JSRef!.Get<CryptoKey?>("publicKey"); set => JSRef!.Set("publicKey", value); }
     }
 }

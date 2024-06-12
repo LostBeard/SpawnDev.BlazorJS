@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using System.Text.Json.Serialization;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The RsaHashedKeyGenParams dictionary of the Web Crypto API represents the object that should be passed as the algorithm parameter into SubtleCrypto.generateKey(), when generating any RSA-based key pair: that is, when the algorithm is identified as any of RSASSA-PKCS1-v1_5, RSA-PSS, or RSA-OAEP.
@@ -18,8 +20,26 @@
         /// </summary>
         public byte[] PublicExponent { get; set; }
         /// <summary>
-        /// A string representing the name of the digest function to use. You can pass any of SHA-256, SHA-384, or SHA-512 here.
+        /// A string representing the name of the digest function to use. You can pass any of SHA-256, SHA-384, or SHA-512 here.<br/>
         /// </summary>
-        public string Hash { get; set; }
+        public Union<string, RsaHash> Hash { get; set; }
+        /// <summary>
+        /// Returns the hash name from the Hash property, which can be an object or a string<br/>
+        /// non-standard property
+        /// </summary>
+        [JsonIgnore]
+        public string? HashName
+        {
+            get
+            {
+                if (Hash.Value is string hashStr) return hashStr;
+                else if (Hash.Value is RsaHash hashObj) return hashObj.Name;
+                return null;
+            }
+        }
+    }
+    public class RsaHash
+    {
+        public string Name { get; set; }
     }
 }

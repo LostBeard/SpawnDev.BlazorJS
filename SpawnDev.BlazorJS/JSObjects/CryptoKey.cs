@@ -21,8 +21,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A boolean value indicating whether or not the key may be extracted using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().
         /// </summary>
         public bool Extractable => JSRef!.Get<bool>("extractable");
-
+        /// <summary>
+        /// An object describing the algorithm for which this key can be used and any associated extra parameters.<br/>
+        /// Use AlgorithmAs to get the full object
+        /// </summary>
         public KeyGenParams Algorithm => JSRef!.Get<KeyGenParams>("algorithm");
+        /// <summary>
+        /// Returns the Algorithm.Name
+        /// </summary>
+        public string AlgorithmName => JSRef!.Get<KeyGenParams>("algorithm").Name;
         /// <summary>
         /// An object describing the algorithm for which this key can be used and any associated extra parameters.
         /// </summary>

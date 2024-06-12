@@ -2,52 +2,49 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class P384JWKKey
+    /// <summary>
+    /// Contains public key
+    /// </summary>
+    public class ECJWKPublic : JWK
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("crv")]
         public string? Crv { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("d")]
-        public string D { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("ext")]
-        public bool? Ext { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("key_ops")]
-        public string[] KeyOps { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("kty")]
-        public string KeyType { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("x")]
-        public string X { get; set; }
+        public string? X { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("y")]
-        public string Y { get; set; }
+        public string? Y { get; set; }
     }
-    public class PS256JWKPublicKey
+    /// <summary>
+    /// Contains both private key and public key
+    /// </summary>
+    public class ECJWKFull : ECJWKPublic
     {
+        /// <summary>
+        /// Private key
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("alg")]
-        public string? Alg { get; set; }
+        [JsonPropertyName("d")]
+        public string? D { get; set; }
+    }
+    /// <summary>
+    /// Contains public key
+    /// </summary>
+    public class RSAPS256JWKPublic : JWK
+    {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("e")]
         public string? E { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("ext")]
-        public bool? Ext { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("key_ops")]
-        public string[] KeyOps { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("kty")]
-        public string? KeyType { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("n")]
         public string? N { get; set; }
     }
-    public class PS256JWKPrivateKey : PS256JWKPublicKey
+    /// <summary>
+    /// Contains both private key and public key
+    /// </summary>
+    public class RSAPS256JWKFull : RSAPS256JWKPublic
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("d")]
@@ -55,6 +52,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("dp")]
         public string? Dp { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("dq")]
+        public string? Dq { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("p")]
         public string? P { get; set; }
