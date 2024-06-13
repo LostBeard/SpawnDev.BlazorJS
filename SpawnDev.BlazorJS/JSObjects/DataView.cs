@@ -229,7 +229,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="byteOffset">The offset, in bytes, from the start of the view to store the data in.</param>
         /// <param name="value">The value to set. For how the value is encoded in bytes, see Value encoding and normalization.</param>
-        /// <param name="littleEndian">Indicates whether the data is stored in little- or big-endian format. If false or undefined, a big-endian value is written.</param>
         public void SetInt16(long byteOffset, short value) => JSRef!.CallVoid("setInt16", byteOffset, value);
         /// <summary>
         /// The setInt16() method of DataView instances takes a number and stores it as a 16-bit signed integer in the 2 bytes starting at the specified byte offset of this DataView. There is no alignment constraint; multi-byte values may be stored at any offset within bounds.
@@ -275,7 +274,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="byteOffset">The offset, in bytes, from the start of the view to store the data in.</param>
         /// <param name="value">The value to set. For how the value is encoded in bytes, see Value encoding and normalization.</param>
-        /// <param name="littleEndian">Indicates whether the data is stored in little- or big-endian format. If false or undefined, a big-endian value is written.</param>
         public void SetUint32(long byteOffset, uint value) => JSRef!.CallVoid("setUint32", byteOffset, value);
         /// <summary>
         /// The setUint32() method of DataView instances takes a number and stores it as a 32-bit unsigned integer in the 4 bytes starting at the specified byte offset of this DataView. There is no alignment constraint; multi-byte values may be stored at any offset within bounds.
