@@ -134,7 +134,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="signature">A ArrayBuffer containing the signature to verify.</param>
         /// <param name="data">A ArrayBuffer containing the data whose signature is to be verified.</param>
         /// <returns>A Promise that fulfills with a boolean value: true if the signature is valid, false otherwise.</returns>
-        public Task<bool> Verify(Union<CryptoSignParams, string> algorithm, CryptoKey key, ArrayBuffer signature, ArrayBuffer data) => JSRef!.CallAsync<bool>("verify", algorithm, key, signature, data);
+        public Task<bool> Verify(Union<CryptoSignParams, string> algorithm, CryptoKey key, ArrayBuffer signature, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<bool>("verify", algorithm, key, signature, data);
         /// <summary>
         /// The unwrapKey() method of the SubtleCrypto interface "unwraps" a key. This means that it takes as its input a key that has been exported and then encrypted (also called "wrapped"). It decrypts the key and then imports it, returning a CryptoKey object that can be used in the Web Crypto API.
         /// </summary>

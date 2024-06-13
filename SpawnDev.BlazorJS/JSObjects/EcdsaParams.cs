@@ -8,7 +8,7 @@
         /// <summary>
         /// A string. This should be set to ECDSA.
         /// </summary>
-        public override string Name { get; set; }
+        public override string Name { get; set; } = "ECDSA";
         /// <summary>
         /// A string. An identifier for the digest algorithm to use. This should be one of the following:<br />
         /// SHA-256: selects the SHA-256 algorithm.<br />

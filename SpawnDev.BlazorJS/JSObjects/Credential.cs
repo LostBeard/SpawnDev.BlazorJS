@@ -22,10 +22,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a string containing the credential's identifier. This might be any one of a GUID, username, or email address.
         /// </summary>
-        public string Id => JSRef.Get<string>("id");
+        public string Id => JSRef!.Get<string>("id");
         /// <summary>
         /// Returns a string containing the credential's type. Valid values are password, federated, public-key, identity and otp. (For PasswordCredential, FederatedCredential, PublicKeyCredential, IdentityCredential and OTPCredential)
         /// </summary>
-        public string Type => JSRef.Get<string>("type");
+        public string Type => JSRef!.Get<string>("type");
     }
 }
