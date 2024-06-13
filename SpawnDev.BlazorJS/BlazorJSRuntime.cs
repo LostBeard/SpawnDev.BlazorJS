@@ -55,6 +55,7 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new TaskConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new BigIntegerConverter());
             RuntimeJsonSerializerOptions.Converters.Add(new DynamicJSObjectConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(RuntimeJsonConverters);
             RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
