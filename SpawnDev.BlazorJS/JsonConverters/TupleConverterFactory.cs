@@ -34,29 +34,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return converter;
         }
     }
-    public class TupleConverter<T1> : JsonConverter<Tuple<T1>>
+    public class TupleConverter<T1> : JsonConverter<Tuple<T1>>, IJSInProcessObjectReferenceConverter
     {
         public override Tuple<T1> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.Null)
-            {
-                return null;
-            }
-            else if (reader.TokenType != JsonTokenType.StartArray)
-            {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from non-array types");
-            }
+            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
             var genericTypes = typeToConvert.GenericTypeArguments;
-            var genericIndex = 0;
             var list = new object?[genericTypes.Length];
-            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+            for (var i = 0; i < genericTypes.Length; i++)
             {
-                if (genericIndex < genericTypes.Length)
-                {
-                    var itemType = genericTypes[genericIndex];
-                    list[genericIndex] = JsonSerializer.Deserialize(ref reader, itemType, options);
-                    genericIndex++;
-                }
+                list[i] = array.GetItem(genericTypes[i], i);
             }
             var ret = (Tuple<T1>)Activator.CreateInstance(typeToConvert, list)!;
             return ret;
@@ -68,29 +55,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2> : JsonConverter<Tuple<T1, T2>>
+    public class TupleConverter<T1, T2> : JsonConverter<Tuple<T1, T2>>, IJSInProcessObjectReferenceConverter
     {
         public override Tuple<T1, T2> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.Null)
-            {
-                return null;
-            }
-            else if (reader.TokenType != JsonTokenType.StartArray)
-            {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from non-array types");
-            }
+            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
             var genericTypes = typeToConvert.GenericTypeArguments;
-            var genericIndex = 0;
             var list = new object?[genericTypes.Length];
-            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+            for (var i = 0; i < genericTypes.Length; i++)
             {
-                if (genericIndex < genericTypes.Length)
-                {
-                    var itemType = genericTypes[genericIndex];
-                    list[genericIndex] = JsonSerializer.Deserialize(ref reader, itemType, options);
-                    genericIndex++;
-                }
+                list[i] = array.GetItem(genericTypes[i], i);
             }
             var ret = (Tuple<T1, T2>)Activator.CreateInstance(typeToConvert, list)!;
             return ret;
@@ -103,29 +77,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3> : JsonConverter<Tuple<T1, T2, T3>>
+    public class TupleConverter<T1, T2, T3> : JsonConverter<Tuple<T1, T2, T3>>, IJSInProcessObjectReferenceConverter
     {
         public override Tuple<T1, T2, T3> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.Null)
-            {
-                return null;
-            }
-            else if (reader.TokenType != JsonTokenType.StartArray)
-            {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from non-array types");
-            }
+            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
             var genericTypes = typeToConvert.GenericTypeArguments;
-            var genericIndex = 0;
             var list = new object?[genericTypes.Length];
-            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+            for (var i = 0; i < genericTypes.Length; i++)
             {
-                if (genericIndex < genericTypes.Length)
-                {
-                    var itemType = genericTypes[genericIndex];
-                    list[genericIndex] = JsonSerializer.Deserialize(ref reader, itemType, options);
-                    genericIndex++;
-                }
+                list[i] = array.GetItem(genericTypes[i], i);
             }
             var ret = (Tuple<T1, T2, T3>)Activator.CreateInstance(typeToConvert, list)!;
             return ret;
@@ -139,29 +100,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3, T4> : JsonConverter<Tuple<T1, T2, T3, T4>>
+    public class TupleConverter<T1, T2, T3, T4> : JsonConverter<Tuple<T1, T2, T3, T4>>, IJSInProcessObjectReferenceConverter
     {
         public override Tuple<T1, T2, T3, T4> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.Null)
-            {
-                return null;
-            }
-            else if (reader.TokenType != JsonTokenType.StartArray)
-            {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from non-array types");
-            }
+            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
             var genericTypes = typeToConvert.GenericTypeArguments;
-            var genericIndex = 0;
             var list = new object?[genericTypes.Length];
-            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+            for (var i = 0; i < genericTypes.Length; i++)
             {
-                if (genericIndex < genericTypes.Length)
-                {
-                    var itemType = genericTypes[genericIndex];
-                    list[genericIndex] = JsonSerializer.Deserialize(ref reader, itemType, options);
-                    genericIndex++;
-                }
+                list[i] = array.GetItem(genericTypes[i], i);
             }
             var ret = (Tuple<T1, T2, T3, T4>)Activator.CreateInstance(typeToConvert, list)!;
             return ret;
@@ -176,29 +124,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3, T4, T5> : JsonConverter<Tuple<T1, T2, T3, T4, T5>>
+    public class TupleConverter<T1, T2, T3, T4, T5> : JsonConverter<Tuple<T1, T2, T3, T4, T5>>, IJSInProcessObjectReferenceConverter
     {
         public override Tuple<T1, T2, T3, T4, T5> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.Null)
-            {
-                return null;
-            }
-            else if (reader.TokenType != JsonTokenType.StartArray)
-            {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from non-array types");
-            }
+            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
             var genericTypes = typeToConvert.GenericTypeArguments;
-            var genericIndex = 0;
             var list = new object?[genericTypes.Length];
-            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+            for (var i = 0; i < genericTypes.Length; i++)
             {
-                if (genericIndex < genericTypes.Length)
-                {
-                    var itemType = genericTypes[genericIndex];
-                    list[genericIndex] = JsonSerializer.Deserialize(ref reader, itemType, options);
-                    genericIndex++;
-                }
+                list[i] = array.GetItem(genericTypes[i], i);
             }
             var ret = (Tuple<T1, T2, T3, T4, T5>)Activator.CreateInstance(typeToConvert, list)!;
             return ret;
@@ -214,29 +149,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3, T4, T5, T6> : JsonConverter<Tuple<T1, T2, T3, T4, T5, T6>>
+    public class TupleConverter<T1, T2, T3, T4, T5, T6> : JsonConverter<Tuple<T1, T2, T3, T4, T5, T6>>, IJSInProcessObjectReferenceConverter
     {
         public override Tuple<T1, T2, T3, T4, T5, T6> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.Null)
-            {
-                return null;
-            }
-            else if (reader.TokenType != JsonTokenType.StartArray)
-            {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from non-array types");
-            }
+            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
             var genericTypes = typeToConvert.GenericTypeArguments;
-            var genericIndex = 0;
             var list = new object?[genericTypes.Length];
-            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+            for (var i = 0; i < genericTypes.Length; i++)
             {
-                if (genericIndex < genericTypes.Length)
-                {
-                    var itemType = genericTypes[genericIndex];
-                    list[genericIndex] = JsonSerializer.Deserialize(ref reader, itemType, options);
-                    genericIndex++;
-                }
+                list[i] = array.GetItem(genericTypes[i], i);
             }
             var ret = (Tuple<T1, T2, T3, T4, T5, T6>)Activator.CreateInstance(typeToConvert, list)!;
             return ret;
@@ -253,29 +175,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3, T4, T5, T6, T7> : JsonConverter<Tuple<T1, T2, T3, T4, T5, T6, T7>>
+    public class TupleConverter<T1, T2, T3, T4, T5, T6, T7> : JsonConverter<Tuple<T1, T2, T3, T4, T5, T6, T7>>, IJSInProcessObjectReferenceConverter
     {
         public override Tuple<T1, T2, T3, T4, T5, T6, T7> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.Null)
-            {
-                return null;
-            }
-            else if (reader.TokenType != JsonTokenType.StartArray)
-            {
-                throw new Exception("Non-nullable Tuple cannot be deserialized from non-array types");
-            }
+            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
             var genericTypes = typeToConvert.GenericTypeArguments;
-            var genericIndex = 0;
             var list = new object?[genericTypes.Length];
-            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+            for (var i = 0; i < genericTypes.Length; i++)
             {
-                if (genericIndex < genericTypes.Length)
-                {
-                    var itemType = genericTypes[genericIndex];
-                    list[genericIndex] = JsonSerializer.Deserialize(ref reader, itemType, options);
-                    genericIndex++;
-                }
+                list[i] = array.GetItem(genericTypes[i], i);
             }
             var ret = (Tuple<T1, T2, T3, T4, T5, T6, T7>)Activator.CreateInstance(typeToConvert, list)!;
             return ret;
