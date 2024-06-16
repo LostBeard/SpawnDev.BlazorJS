@@ -19,6 +19,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         public static explicit operator Uint8Array?(byte[]? values) => values == null ? null : new Uint8Array(values);
+        /// <summary>
+        /// Returns a new Uint8Array from an ArrayBuffer
+        /// </summary>
+        /// <param name="values"></param>
+        public static explicit operator Uint8Array?(ArrayBuffer? values) => values == null ? null : new Uint8Array(values);
         #region Constructors
         /// <summary>
         /// Deserialization constructor

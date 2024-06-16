@@ -14,6 +14,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="arrayBuffer"></param>
         public static explicit operator byte[]?(ArrayBuffer? arrayBuffer) => arrayBuffer?.ReadBytes();
         /// <summary>
+        /// Returns a copy of the byte array as an ArrayBuffer
+        /// </summary>
+        /// <param name="bytes"></param>
+        public static explicit operator ArrayBuffer?(byte[]? bytes)
+        {
+            if (bytes == null) return null;
+            using var uint8Array = new Uint8Array(bytes);
+            return uint8Array.Buffer;
+        }
+        /// <summary>
         /// The size, in bytes, of the ArrayBuffer. This is established when the array is constructed and can only be changed using the ArrayBuffer.prototype.resize() method if the ArrayBuffer is resizable.
         /// </summary>
         public long ByteLength => JSRef!.Get<long>("byteLength");

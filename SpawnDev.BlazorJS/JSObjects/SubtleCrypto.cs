@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<ArrayBuffer> Digest(string algorithm, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<ArrayBuffer>("digest", algorithm, data);
         /// <summary>
-        /// The decrypt() method of the SubtleCrypto interface decrypts some encrypted data. It takes as arguments a key to decrypt with, some optional extra parameters, and the data to decrypt (also known as "ciphertext"). It returns a Promise which will be fulfilled with the decrypted data (also known as "plaintext").
+        /// The decrypt() method of the SubtleCrypto interface decrypts some encrypted data. It takes as arguments a key to decrypt with, some optional extra parameters, and the data to decrypt (also known as "ciphertext"). It returns a Promise which will be fulfilled with the decrypted data (also known as "plaintext").<br/>
         /// </summary>
         /// <param name="algorithm">An object specifying the algorithm to be used, and any extra parameters as required. The values given for the extra parameters must match those passed into the corresponding encrypt() call.</param>
         /// <param name="key">A CryptoKey containing the key to be used for decryption. If using RSA-OAEP, this is the privateKey property of the CryptoKeyPair object.</param>

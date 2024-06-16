@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using System.Text.Json.Serialization;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// Represents the object that should be passed as the algorithm parameter into SubtleCrypto.importKey() or SubtleCrypto.unwrapKey()
@@ -10,6 +12,7 @@
         /// For PBKDF2: Pass the string PBKDF2.<br />
         /// For HKDF: Pass the string HKDF.
         /// </summary>
+        [JsonPropertyName("name")]
         public virtual string Name { get; set; }
     }
 }
