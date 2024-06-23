@@ -39,36 +39,35 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return null;
         }
     }
-    public class TaskConverter : JsonConverter<Task>, IJSInProcessObjectReferenceConverter
+    public class TaskConverter : JSInProcessObjectReferenceConverterBase<Task>
     {
-
         public override bool CanConvert(Type type)
         {
             return type == typeof(Task);
         }
-        public override Task Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Task? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            using var promise = JsonSerializer.Deserialize<Promise>(ref reader, options);
-            return promise?.ThenAsync();
+            if (_ref == null) return null;
+            using var promise = new Promise(_ref);
+            return (Task)promise.ThenAsync();
         }
         public override void Write(Utf8JsonWriter writer, Task value, JsonSerializerOptions options)
         {
-            //var promise = value.PromiseGet(true);
             using var promise = new Promise(value);
             JsonSerializer.Serialize(writer, promise, options);
         }
     }
-    public class TaskConverter<TResult> : JsonConverter<Task<TResult>>, IJSInProcessObjectReferenceConverter
+    public class TaskConverter<TResult> : JSInProcessObjectReferenceConverterBase<Task<TResult>>
     {
-
         public override bool CanConvert(Type type)
         {
             return type.GetGenericTypeDefinition() == typeof(Task<>);
         }
-        public override Task<TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Task<TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            using var promise = JsonSerializer.Deserialize<Promise<TResult>>(ref reader, options);
-            return promise?.ThenAsync();
+            if (_ref == null) return null;
+            using var promise = new Promise<TResult>(_ref);
+            return (Task<TResult>)promise.ThenAsync();
         }
         public override void Write(Utf8JsonWriter writer, Task<TResult> value, JsonSerializerOptions options)
         {

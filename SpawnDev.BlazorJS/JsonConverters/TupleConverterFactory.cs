@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.JSInterop;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -34,11 +36,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return converter;
         }
     }
-    public class TupleConverter<T1> : JsonConverter<Tuple<T1>>, IJSInProcessObjectReferenceConverter
+    public class TupleConverter<T1> : JSInProcessObjectReferenceConverterBase<Tuple<T1>>
     {
-        public override Tuple<T1> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Tuple<T1>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
+            if (_ref == null) return null;
+            using var array = new JSObjects.Array(_ref);
+            var typeToConvert = typeof(Tuple<T1>);
             var genericTypes = typeToConvert.GenericTypeArguments;
             var list = new object?[genericTypes.Length];
             for (var i = 0; i < genericTypes.Length; i++)
@@ -55,11 +59,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2> : JsonConverter<Tuple<T1, T2>>, IJSInProcessObjectReferenceConverter
+    public class TupleConverter<T1, T2> : JSInProcessObjectReferenceConverterBase<Tuple<T1, T2>>
     {
-        public override Tuple<T1, T2> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Tuple<T1, T2>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
+            if (_ref == null) return null;
+            using var array = new JSObjects.Array(_ref);
+            var typeToConvert = typeof(Tuple<T1, T2>);
             var genericTypes = typeToConvert.GenericTypeArguments;
             var list = new object?[genericTypes.Length];
             for (var i = 0; i < genericTypes.Length; i++)
@@ -77,11 +83,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3> : JsonConverter<Tuple<T1, T2, T3>>, IJSInProcessObjectReferenceConverter
+    public class TupleConverter<T1, T2, T3> : JSInProcessObjectReferenceConverterBase<Tuple<T1, T2, T3>>
     {
-        public override Tuple<T1, T2, T3> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Tuple<T1, T2, T3>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
+            if (_ref == null) return null;
+            using var array = new JSObjects.Array(_ref);
+            var typeToConvert = typeof(Tuple<T1, T2, T3>);
             var genericTypes = typeToConvert.GenericTypeArguments;
             var list = new object?[genericTypes.Length];
             for (var i = 0; i < genericTypes.Length; i++)
@@ -100,11 +108,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3, T4> : JsonConverter<Tuple<T1, T2, T3, T4>>, IJSInProcessObjectReferenceConverter
+    public class TupleConverter<T1, T2, T3, T4> : JSInProcessObjectReferenceConverterBase<Tuple<T1, T2, T3, T4>>
     {
-        public override Tuple<T1, T2, T3, T4> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Tuple<T1, T2, T3, T4>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
+            if (_ref == null) return null;
+            using var array = new JSObjects.Array(_ref);
+            var typeToConvert = typeof(Tuple<T1, T2, T3, T4>);
             var genericTypes = typeToConvert.GenericTypeArguments;
             var list = new object?[genericTypes.Length];
             for (var i = 0; i < genericTypes.Length; i++)
@@ -124,11 +134,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3, T4, T5> : JsonConverter<Tuple<T1, T2, T3, T4, T5>>, IJSInProcessObjectReferenceConverter
+    public class TupleConverter<T1, T2, T3, T4, T5> : JSInProcessObjectReferenceConverterBase<Tuple<T1, T2, T3, T4, T5>>
     {
-        public override Tuple<T1, T2, T3, T4, T5> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Tuple<T1, T2, T3, T4, T5>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
+            if (_ref == null) return null;
+            using var array = new JSObjects.Array(_ref);
+            var typeToConvert = typeof(Tuple<T1, T2, T3, T4, T5>);
             var genericTypes = typeToConvert.GenericTypeArguments;
             var list = new object?[genericTypes.Length];
             for (var i = 0; i < genericTypes.Length; i++)
@@ -149,11 +161,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3, T4, T5, T6> : JsonConverter<Tuple<T1, T2, T3, T4, T5, T6>>, IJSInProcessObjectReferenceConverter
+    public class TupleConverter<T1, T2, T3, T4, T5, T6> : JSInProcessObjectReferenceConverterBase<Tuple<T1, T2, T3, T4, T5, T6>>
     {
-        public override Tuple<T1, T2, T3, T4, T5, T6> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Tuple<T1, T2, T3, T4, T5, T6>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
+            if (_ref == null) return null;
+            using var array = new JSObjects.Array(_ref);
+            var typeToConvert = typeof(Tuple<T1, T2, T3, T4, T5, T6>);
             var genericTypes = typeToConvert.GenericTypeArguments;
             var list = new object?[genericTypes.Length];
             for (var i = 0; i < genericTypes.Length; i++)
@@ -175,11 +189,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
             writer.WriteEndArray();
         }
     }
-    public class TupleConverter<T1, T2, T3, T4, T5, T6, T7> : JsonConverter<Tuple<T1, T2, T3, T4, T5, T6, T7>>, IJSInProcessObjectReferenceConverter
+    public class TupleConverter<T1, T2, T3, T4, T5, T6, T7> : JSInProcessObjectReferenceConverterBase<Tuple<T1, T2, T3, T4, T5, T6, T7>>
     {
-        public override Tuple<T1, T2, T3, T4, T5, T6, T7> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Tuple<T1, T2, T3, T4, T5, T6, T7>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            using var array = JsonSerializer.Deserialize<JSObjects.Array>(ref reader, options)!;
+            if (_ref == null) return null;
+            using var array = new JSObjects.Array(_ref);
+            var typeToConvert = typeof(Tuple<T1, T2, T3, T4, T5, T6, T7>);
             var genericTypes = typeToConvert.GenericTypeArguments;
             var list = new object?[genericTypes.Length];
             for (var i = 0; i < genericTypes.Length; i++)

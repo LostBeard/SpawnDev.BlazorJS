@@ -1,6 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JSObjects;
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -8,16 +6,26 @@ namespace SpawnDev.BlazorJS.JsonConverters
 {
     public class HybridObjectConverterFactory : JsonConverterFactory
     {
+        JsonSerializerOptions Options;
+        public HybridObjectConverterFactory(JsonSerializerOptions options)
+        {
+            Options = options;
+        }
+        
         // this converter is for converting class types that would normally be passed as JSON but has special property types that need to be loaded individually to work
         public override bool CanConvert(Type typeToConvert)
         {
-            return CanConvert(typeToConvert, false);
+            var ret = CanConvert(typeToConvert, false);
+#if DEBUG && false
+            Console.WriteLine($"HybridObjectConverterFactory.CanConvert(typeToConvert: {typeToConvert.Name} {ret})");
+#endif
+            return ret;
         }
         Dictionary<Type, bool?> CanConvertAnswers = new Dictionary<Type, bool?>();
         bool CanConvert(Type typeToConvert, bool internalCall)
         {
 #if DEBUG && false
-            if (typeToConvert == typeof(RsaHashedKeyGenParams))
+            if (typeToConvert.Name == "TestClass")
             {
                 var nmtt = true;
 
@@ -36,11 +44,11 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 return canConvertCached ?? false;
             }
             CanConvertAnswers[typeToConvert] = null;
+            if (typeToConvert.IsValueType) goto CanConvertFalse;
             if (!typeToConvert.IsClass) goto CanConvertFalse;
             if (typeToConvert.IsInterface) goto CanConvertFalse;
             if (typeToConvert.IsArray) goto CanConvertFalse;
             if (typeToConvert.IsAbstract) goto CanConvertFalse;
-            if (typeToConvert.IsValueType) goto CanConvertFalse;
             if (typeof(JSObject).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
             if (typeof(IJSObjectProxy).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
             if (typeof(Callback).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
@@ -49,28 +57,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             if (baseType == typeof(List<>)) goto CanConvertFalse;
             if (baseType == typeof(Dictionary<,>)) goto CanConvertFalse;
             var classProps = typeToConvert.GetTypeJsonProperties();// typeToConvert.GetProperties(BindingFlags.Instance);
-            foreach (var prop in classProps)
+            var propertyTypes = classProps.Select(o => o.PropertyInfo?.PropertyType ?? o.FieldInfo?.FieldType).Distinct().ToList();
+            foreach (var pType in propertyTypes)
             {
-                var propertyInfo = prop.PropertyInfo;
-                var fieldInfo = prop.FieldInfo;
-                var pType = propertyInfo?.PropertyType ?? fieldInfo!.FieldType;
-                if (typeof(JSObject).IsAssignableFrom(pType))
+                if (pType!.IsValueType || !typeToConvert.IsClass) continue;
+                var perInstanceRequired = Options.TypeDeserializationRequiresPerInstance(pType);
+                if (perInstanceRequired)
                 {
                     goto CanConvertTrue;
                 }
-                if (typeof(IJSObjectProxy).IsAssignableFrom(pType))
-                {
-                    goto CanConvertTrue;
-                }
-                if (typeof(IJSInProcessObjectReference) == pType)
-                {
-                    goto CanConvertTrue;
-                }
-                if (typeof(byte[]) == pType)
-                {
-                    goto CanConvertTrue;
-                }
-                if (CanConvert(pType, true))
+                else if (CanConvert(pType, true))
                 {
                     goto CanConvertTrue;
                 }
@@ -86,7 +82,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var converterType = typeof(HybridObjectConverter<>).MakeGenericType(typeToConvert);
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType)!;
+            JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, options)!;
             return converter;
         }
     }
@@ -94,14 +90,18 @@ namespace SpawnDev.BlazorJS.JsonConverters
     /// HybridObjectConverter allows deserializing of classes that have IJSInProcessObjectReference based properties
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class HybridObjectConverter<T> : JsonConverter<T>, IJSInProcessObjectReferenceConverter where T : class
+    public class HybridObjectConverter<T> : JSInProcessObjectReferenceConverterBase<T> where T : class
     {
         List<ClassMemberJsonInfo>? classProps = null;
-        public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        JsonSerializerOptions Options;
+        public HybridObjectConverter(JsonSerializerOptions options)
         {
+            Options = options;
+        }
+        public override T? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+        {
+            if (_ref == null) return default(T);
             classProps ??= typeof(T).GetTypeJsonProperties();
-            using var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
-            if (_ref == null) return null;
             // create an instance using the json constructor
             var tmpRet = JsonSerializer.Deserialize<T>("{}")!;// (T)Activator.CreateInstance(typeof(T))!;
             foreach (var prop in classProps)
@@ -109,7 +109,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 var propertyInfo = prop.PropertyInfo;
                 var fieldInfo = prop.FieldInfo;
                 var pType = propertyInfo?.PropertyType ?? fieldInfo!.FieldType;
-                var propName = prop.GetJsonName(options);
+                var propName = prop.GetJsonName(Options);
                 object? value;
                 try
                 {

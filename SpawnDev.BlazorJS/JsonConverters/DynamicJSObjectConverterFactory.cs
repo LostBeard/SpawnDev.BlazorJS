@@ -17,15 +17,14 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
     }
 
-    public class DynamicJSObjectConverter : JsonConverter<DynamicJSObject>, IJSInProcessObjectReferenceConverter
+    public class DynamicJSObjectConverter : JSInProcessObjectReferenceConverterBase<DynamicJSObject>
     {
         public override bool CanConvert(Type typeToConvert)
         {
             return typeToConvert == typeof(DynamicJSObject);
         }
-        public override DynamicJSObject? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override DynamicJSObject? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference?>(ref reader, options);
             return _ref == null ? null : new DynamicJSObject(_ref);
         }
 

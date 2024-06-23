@@ -90,7 +90,7 @@ namespace SpawnDev.BlazorJS.Reflection
         protected bool NeedRemoteReadyFlag { get; set; } = true;
         protected virtual async Task<object?> ReadyFlagReceived(JSObject? remoteFlagData)
         {
-            Console.WriteLine("ReadyFlagReceived");
+            //Console.WriteLine("ReadyFlagReceived");
             remoteFlagData?.Dispose();
             return null;
         }

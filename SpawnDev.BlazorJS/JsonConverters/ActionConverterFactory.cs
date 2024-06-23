@@ -38,15 +38,15 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return null;
         }
     }
-    public class ActionConverter : JsonConverter<Action>, IJSInProcessObjectReferenceConverter
+    public class ActionConverter : JSInProcessObjectReferenceConverterBase<Action>
     {
         public override bool CanConvert(Type type)
         {
             return type.GetGenericTypeDefinition() == typeof(Action);
         }
-        public override Action Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Action? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+            if (_ref == null) return null;
             var fn = new Function(_ref);
             var ret = fn.ToAction();
             return ret;
@@ -57,16 +57,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             JsonSerializer.Serialize(writer, ret, options);
         }
     }
-    public class ActionConverter<T0> : JsonConverter<Action<T0>>, IJSInProcessObjectReferenceConverter
+    public class ActionConverter<T0> : JSInProcessObjectReferenceConverterBase<Action<T0>>
     {
 
         public override bool CanConvert(Type type)
         {
             return type.GetGenericTypeDefinition() == typeof(Action<>);
         }
-        public override Action<T0> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Action<T0>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+            if (_ref == null) return null;
             var fn = new Function(_ref);
             var ret = fn.ToAction<T0>();
             return ret;
@@ -77,16 +77,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             JsonSerializer.Serialize(writer, ret, options);
         }
     }
-    public class ActionConverter<T0, T1> : JsonConverter<Action<T0, T1>>, IJSInProcessObjectReferenceConverter
+    public class ActionConverter<T0, T1> : JSInProcessObjectReferenceConverterBase<Action<T0, T1>>
     {
 
         public override bool CanConvert(Type type)
         {
             return type.GetGenericTypeDefinition() == typeof(Action<,>);
         }
-        public override Action<T0, T1> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Action<T0, T1>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+            if (_ref == null) return null;
             var fn = new Function(_ref);
             var ret = fn.ToAction<T0, T1>();
             return ret;
@@ -97,16 +97,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
             JsonSerializer.Serialize(writer, ret, options);
         }
     }
-    public class ActionConverter<T0, T1, T2> : JsonConverter<Action<T0, T1, T2>>, IJSInProcessObjectReferenceConverter
+    public class ActionConverter<T0, T1, T2> : JSInProcessObjectReferenceConverterBase<Action<T0, T1, T2>>
     {
 
         public override bool CanConvert(Type type)
         {
             return type.GetGenericTypeDefinition() == typeof(Action<,,>);
         }
-        public override Action<T0, T1, T2> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Action<T0, T1, T2>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+            if (_ref == null) return null;
             var fn = new Function(_ref);
             var ret = fn.ToAction<T0, T1, T2>();
             return ret;
@@ -118,16 +118,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
     }
 
-    public class ActionConverter<T0, T1, T2, T3> : JsonConverter<Action<T0, T1, T2, T3>>, IJSInProcessObjectReferenceConverter
+    public class ActionConverter<T0, T1, T2, T3> : JSInProcessObjectReferenceConverterBase<Action<T0, T1, T2, T3>>
     {
 
         public override bool CanConvert(Type type)
         {
             return type.GetGenericTypeDefinition() == typeof(Action<,,,>);
         }
-        public override Action<T0, T1, T2, T3> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override Action<T0, T1, T2, T3>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
+            if (_ref == null) return null;
             var fn = new Function(_ref);
             var ret = fn.ToAction<T0, T1, T2, T3>();
             return ret;

@@ -20,26 +20,15 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
     }
 
-    public class JSObjectConverter<TJSObject> : JsonConverter<TJSObject>, IJSInProcessObjectReferenceConverter where TJSObject : JSObject
+    public class JSObjectConverter<TJSObject> : JSInProcessObjectReferenceConverterBase<TJSObject> where TJSObject : JSObject
     {
         public override bool CanConvert(Type type)
         {
             return typeof(TJSObject).IsAssignableFrom(type);
         }
-        public override TJSObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override TJSObject? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            var typeofT = typeof(TJSObject);
-            var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
-            TJSObject? ret = null;
-            try
-            {
-                ret = _ref == null ? null : (TJSObject)Activator.CreateInstance(typeofT, _ref);
-            }
-            catch (Exception ex)
-            {
-                var nmt = true;
-            }
-            return ret;
+            return (TJSObject?)(_ref == null ? null : Activator.CreateInstance(typeof(TJSObject), _ref));
         }
         public override void Write(Utf8JsonWriter writer, TJSObject value, JsonSerializerOptions options)
         {

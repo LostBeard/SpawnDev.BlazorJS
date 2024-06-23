@@ -14,13 +14,13 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <param name="_ref"></param>
         /// <returns></returns>
-        public static T?[]? AsArray<T>(this IJSInProcessObjectReference _ref) where T : JSObject => JSInterop.ReturnArrayJSObjects<T>(_ref);
+        public static T?[] AsArray<T>(this IJSInProcessObjectReference _ref) where T : JSObject => JSInterop.ReturnArrayJSObjects<T>(_ref)!;
         /// <summary>
         /// Returns the IJSInProcessObjectReference as an array of T? where T inherits from JSObject
         /// </summary>
         /// <param name="_ref"></param>
         /// <returns></returns>
-        public static IJSInProcessObjectReference?[]? AsArray(this IJSInProcessObjectReference _ref) => JSInterop.ReturnArrayJSObjectReferences(_ref);
+        public static IJSInProcessObjectReference?[] AsArray(this IJSInProcessObjectReference _ref) => JSInterop.ReturnArrayJSObjectReferences(_ref)!;
         /// <summary>
         /// Returns the IJSInProcessObjectReference as instance of type T
         /// </summary>

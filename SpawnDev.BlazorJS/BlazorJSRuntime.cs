@@ -49,16 +49,16 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
             RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new JSObjectArrayConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectArrayConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new TaskConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new BigIntegerConverter());
             RuntimeJsonSerializerOptions.Converters.Add(new DynamicJSObjectConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(RuntimeJsonConverters);
-            RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new JSObjectReferenceArrayConverterFactory(RuntimeJsonSerializerOptions));
+            RuntimeJsonSerializerOptions.Converters.Add(new JSObjectReferenceListConverterFactory(RuntimeJsonSerializerOptions));
+            RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory(RuntimeJsonSerializerOptions));
         }
 
         /// <summary>
