@@ -432,10 +432,9 @@
         );
         var testString = "Hello Crypto!";
         var data = await StringToArrayBuffer(testString);
-        var signature = await SignDataWithPrivateKey(data, keyPair.PrivateKey);
-        var verified = await VerifyDataSignatureWithPublicKey(signature, data, keyPair.PublicKey);
+        var signature = await SignDataWithPrivateKey(data, keyPair.PrivateKey!);
+        var verified = await VerifyDataSignatureWithPublicKey(signature, data, keyPair.PublicKey!);
         if (!verified) throw new Exception("Unexpected result");
-
     }
 
     async Task<ArrayBuffer> SignDataWithPrivateKey(ArrayBuffer data, CryptoKey key)
