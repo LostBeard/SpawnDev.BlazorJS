@@ -3,10 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using SpawnDev.BlazorJS.JsonConverters;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using static SpawnDev.BlazorJS.IServiceCollectionExtensions;
 
 namespace SpawnDev.BlazorJS
 {
+    // unnecessary
     internal enum StartupState
     {
         None,
