@@ -17,6 +17,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
     public class WebWorkerService : IDisposable, IAsyncBackgroundService
     {
         /// <summary>
+        /// Completes successfully when asynchronous initialization has completed
+        /// </summary>
+        public Task Ready => _Ready ??= InitAsync();
+        private Task? _Ready = null;
+        /// <summary>
         /// If this instance is running in a DedicatedWorkerGlobalScope this is a connection to the parent instance
         /// </summary>
         public ServiceCallDispatcher? DedicatedWorkerParent { get; private set; } = null;
@@ -507,8 +512,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             if (JS.SharedWorkerThis != null) return JS.SharedWorkerThis.Name ?? "";
             return "";
         }
-        public Task Ready => _Ready != null ? _Ready : _Ready = InitAsync();
-        private Task? _Ready = null;
         /// <summary>
         /// Called by BlazorJSRuntime at startup
         /// </summary>
