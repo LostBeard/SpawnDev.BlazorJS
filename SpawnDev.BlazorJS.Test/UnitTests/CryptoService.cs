@@ -107,5 +107,59 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             // assert expected value
             if (!decryptedDataBytes.SequenceEqual(TestData)) throw new Exception("Failed");
         }
+
+        /// <summary>
+        /// Demonstrates the saving and retrieval of a KeyPair in an IndexedDB
+        /// </summary>
+        /// <returns></returns>
+        public async Task KeyStorageExample()
+        {
+            var keyStoreDBName = "MyKeysDB";
+            var keyStoreName = "MyKeyStore";
+            var myKeysKeyName = "mySigningKeys";
+            // initialize IndexedDB and create the key store if needed
+            using var idbFactory = new IDBFactory();
+            using var idb = await idbFactory.OpenAsync(keyStoreDBName, 1, (evt) =>
+            {
+                // upgrade needed
+                using var request = evt.Target;
+                using var db = request.Result;
+                var stores = db.ObjectStoreNames;
+                if (!stores.Contains(keyStoreName))
+                {
+                    using var myKeysStore = db.CreateObjectStore<string, CryptoKeyPair>(keyStoreName);
+                }
+            });
+            // create a keypair to store
+            using var Crypto = new Crypto();
+            using var SubtleCrypto = Crypto.Subtle;
+            // create signing key pair
+            using var signingKeys = await SubtleCrypto!.GenerateKey<CryptoKeyPair>(new EcKeyGenParams
+            {
+                Name = "ECDSA",
+                NamedCurve = "P-384"
+            }, false, new string[] { "sign", "verify" });
+            // save the key pair in the key store
+            {
+                // start the IndexedDB transaction in ready and write mode
+                using var tx = idb.Transaction(keyStoreName, true);
+                // get the key store
+                using var objectStore = tx.ObjectStore<string, CryptoKeyPair>(keyStoreName);
+                // put the keys into the key store
+                await objectStore.PutAsync(signingKeys, myKeysKeyName);
+            }
+            // ...
+            // load the key pair from the key store
+            {
+                // start the IndexedDB transaction in ready only mode
+                using var tx = idb.Transaction(keyStoreName);
+                // get the key store
+                using var objectStore = tx.ObjectStore<string, CryptoKeyPair>(keyStoreName);
+                // get the keys from the key store or null if not found
+                using var loadedKeys = await objectStore.GetAsync(myKeysKeyName);
+                // compare with original keys to prove keys were saved and loaded as expected (just comparing algorithm names here for simplicity)
+                if (signingKeys.PrivateKey!.AlgorithmName != loadedKeys.PrivateKey!.AlgorithmName) throw new Exception("Failed");
+            }
+        }
     }
 }
