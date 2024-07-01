@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
                 Name = "ECDSA",
                 NamedCurve = "P-384"
             }, false, new string[] { "sign", "verify" });
-            // sign TestData using signing private key
+            // create TestData signature using signing private key
             using var signature = await SubtleCrypto!.Sign(new EcdsaParams { Hash = "SHA-384" }, signingKeys.PrivateKey!, TestData);
             // verify signature using signing public key
             var verified = await SubtleCrypto!.Verify(new EcdsaParams { Hash = "SHA-384" }, signingKeys.PublicKey!, signature, TestData);
@@ -53,7 +53,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
                 PublicExponent = new byte[] { 1, 0, 1 },
                 Hash = "SHA-256"
             }, false, new string[] { "sign", "verify" });
-            // sign TestData using signing private key
+            // create TestData signature using signing private key
             using var signature = await SubtleCrypto!.Sign(new RsaPssParams { SaltLength = 32 }, signingKeys.PrivateKey!, TestData);
             // verify signature using signing public key
             var verified = await SubtleCrypto!.Verify(new RsaPssParams { SaltLength = 32 }, signingKeys.PublicKey!, signature, TestData);
