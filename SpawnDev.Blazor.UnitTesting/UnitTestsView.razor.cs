@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace SpawnDev.Blazor.UnitTesting {
@@ -14,6 +15,12 @@ namespace SpawnDev.Blazor.UnitTesting {
         [Parameter]
         public Func<Type, object?>? TypeInstanceResolver { get; set; }
 
+        [Inject]
+        IServiceProvider ServiceProvider { get; set; }
+
+        [Inject]
+        IServiceCollection ServiceDescriptors { get; set; }
+
         bool _beenInit = false;
 
         protected override void OnParametersSet()
@@ -27,12 +34,10 @@ namespace SpawnDev.Blazor.UnitTesting {
             unitTestService.OnUnitTestResolverEvent += UnitTestService_OnUnitTestResolverEvent;
         }
 
-        private void UnitTestService_OnUnitTestResolverEvent(UnitTestRunner.UnitTestResolverEvent resolverEvent)
+        private void UnitTestService_OnUnitTestResolverEvent(UnitTestResolverEvent resolverEvent)
         {
-            if (TypeInstanceResolver != null)
-            {
-                resolverEvent.TypeInstance = TypeInstanceResolver(resolverEvent.TestType);
-            }
+            resolverEvent.TypeInstance = TypeInstanceResolver?.Invoke(resolverEvent.TestType);
+            resolverEvent.TypeInstance ??= ServiceProvider.GetService(resolverEvent.TestType);
         }
 
         void LoadFromParams()

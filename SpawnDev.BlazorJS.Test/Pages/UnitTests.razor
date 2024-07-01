@@ -26,18 +26,21 @@
     [Inject]
     IMathsService MathService { get; set; }
 
-    IEnumerable<Assembly>? Assemblies = new List<Assembly>();
-    IEnumerable<Type>? Types = new List<Type>();
+    [Inject]
+    IServiceCollection ServiceDescriptors { get; set; }
+
+    List<Assembly>? Assemblies = new List<Assembly>();
+    List<Type>? Types = new List<Type>();
 
     protected override void OnInitialized()
     {
-        Types = new List<Type> {
-            this.GetType(),
-        };
-        Assemblies = new List<Assembly> {
-            //typeof(UnitTestsView).Assembly,
-            typeof(UnitTests).Assembly
-        };
+        Types = new List<Type> { this.GetType() };
+        Assemblies = new List<Assembly> { typeof(UnitTests).Assembly };
+        // add all services. only services with tests will be used.
+        foreach (var descriptor in ServiceDescriptors)
+        {
+            Types.Add(descriptor.ServiceType);
+        }
     }
 
     object? TestTypeResolver(Type testType)
@@ -45,8 +48,6 @@
         if (testType == this.GetType()) return this;
         return null;
     }
-
-
 
     [TestMethod]
     public async Task TaskPoolFullTest()

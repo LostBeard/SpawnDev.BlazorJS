@@ -8,6 +8,7 @@ using SpawnDev.BlazorJS.JsonConverters;
 using SpawnDev.BlazorJS.Reflection;
 using SpawnDev.BlazorJS.Test;
 using SpawnDev.BlazorJS.Test.Services;
+using SpawnDev.BlazorJS.Test.UnitTests;
 using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
 using System.Diagnostics;
@@ -75,6 +76,8 @@ builder.Services.AddSingleton<ContextMenuService>();
 
 // App service
 builder.Services.AddSingleton<JSObjectAnalyzer>();
+
+builder.Services.AddSingleton<CryptoService>();
 
 #if DEBUG && false
 var host = builder.Build();

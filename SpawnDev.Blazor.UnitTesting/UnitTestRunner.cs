@@ -4,35 +4,6 @@ using System.Threading;
 
 namespace SpawnDev.Blazor.UnitTesting
 {
-    public class TestMethodAttribute : Attribute
-    { 
-        public string Name { get; set; }
-        public TestMethodAttribute(string name = "") {
-            Name = name;
-        }
-
-    }
-    public class TestClassAttribute : Attribute
-    {
-        public string Name { get; set; }
-        public TestClassAttribute(string name = "")
-        {
-            Name = name;
-        }
-
-    }
-    public enum TestState
-    {
-        None,
-        Running,
-        Done,
-    }
-    public enum TestResult
-    {
-        None,
-        Error,
-        Success,
-    }
     public class UnitTestRunner
     {
         public event Action TestStatusChanged;
@@ -47,7 +18,7 @@ namespace SpawnDev.Blazor.UnitTesting
             }
             UnitTestTypes = unitTestTypes.Distinct().ToList();
             Tests.Clear();
-            foreach (var unitTestType in UnitTestTypes)
+            foreach (Type unitTestType in UnitTestTypes)
             {
                 var methods = unitTestType.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(o => o.GetParameters().Length == 0).ToList();
                 foreach (var method in methods)
@@ -59,16 +30,6 @@ namespace SpawnDev.Blazor.UnitTesting
             }
             State = TestState.None;
             TestStatusChanged?.Invoke();
-        }
-
-        public class UnitTestResolverEvent
-        {
-            public object? TypeInstance { get; set; } = null;
-            public Type TestType { get; private set; }
-            public UnitTestResolverEvent(Type testType)
-            {
-                TestType = testType;
-            }
         }
 
         public delegate void UnitTestResolverEventDelegate(UnitTestResolverEvent resolverEvent);
