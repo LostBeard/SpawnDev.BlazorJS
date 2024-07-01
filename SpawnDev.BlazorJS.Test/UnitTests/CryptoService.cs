@@ -5,18 +5,6 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
 {
     public class CryptoService
     {
-        BlazorJSRuntime JS;
-        Crypto Crypto;
-        SubtleCrypto SubtleCrypto;
-
-        byte[] TestData = new byte[] { 1, 3, 5, 7, 9 };
-        public CryptoService(BlazorJSRuntime js)
-        {
-            JS = js;
-            Crypto = new Crypto();
-            SubtleCrypto = Crypto.Subtle;
-        }
-
         /// <summary>
         /// Tests ECDSA GenerateKey, Sign, and Verify
         /// </summary>
@@ -24,6 +12,9 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         [TestMethod]
         public async Task ECDSASignAndVerifyExample()
         {
+            byte[] TestData = new byte[] { 1, 3, 5, 7, 9 };
+            using var Crypto = new Crypto();
+            using var SubtleCrypto = Crypto.Subtle;
             // create signing key pair
             using var signingKeys = await SubtleCrypto!.GenerateKey<CryptoKeyPair>(new EcKeyGenParams
             {
@@ -45,6 +36,9 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         [TestMethod]
         public async Task RSAPSSSignAndVerifyExample()
         {
+            byte[] TestData = new byte[] { 1, 3, 5, 7, 9 };
+            using var Crypto = new Crypto();
+            using var SubtleCrypto = Crypto.Subtle;
             // create signing key pair
             using var signingKeys = await SubtleCrypto!.GenerateKey<CryptoKeyPair>(new RsaHashedKeyGenParams
             {
@@ -68,6 +62,9 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         [TestMethod]
         public async Task ECDHEncryptionExample()
         {
+            byte[] TestData = new byte[] { 1, 3, 5, 7, 9 };
+            using var Crypto = new Crypto();
+            using var SubtleCrypto = Crypto.Subtle;
             // create ECDH key pair for Alice
             using var ecdhKeysAlice = await SubtleCrypto!.GenerateKey<CryptoKeyPair>(new EcKeyGenParams
             {
