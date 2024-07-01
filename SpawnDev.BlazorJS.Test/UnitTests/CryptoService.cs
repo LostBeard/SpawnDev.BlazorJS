@@ -1,5 +1,7 @@
 ﻿using SpawnDev.Blazor.UnitTesting;
 using SpawnDev.BlazorJS.JSObjects;
+using System.Security.Cryptography.X509Certificates;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpawnDev.BlazorJS.Test.UnitTests
 {
@@ -27,9 +29,9 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             // create signing key pair
             using var signingKeys = await GenerateECDSASigningKey();
             // sign TestData using signing private key
-            using var signature = await Sign(signingKeys.PrivateKey!, TestData);
+            using var signature = await SubtleCrypto!.Sign(new EcdsaParams { Hash = "SHA-384" }, signingKeys.PrivateKey!, TestData);
             // verify signature using signing public key
-            var verified = await Verify(signingKeys.PublicKey!, signature, TestData);
+            var verified = await SubtleCrypto!.Verify(new EcdsaParams { Hash = "SHA-384" }, signingKeys.PublicKey!, signature, TestData);
             // assert expected value
             if (!verified) throw new Exception("Failed");
         }
@@ -44,9 +46,9 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             // create signing key pair
             using var signingKeys = await GenerateRSAPSSSigningKey();
             // sign TestData using signing private key
-            using var signature = await Sign(signingKeys.PrivateKey!, TestData);
+            using var signature = await SubtleCrypto!.Sign(new RsaPssParams { SaltLength = 32 }, signingKeys.PrivateKey!, TestData);
             // verify signature using signing public key
-            var verified = await Verify(signingKeys.PublicKey!, signature, TestData);
+            var verified = await SubtleCrypto!.Verify(new RsaPssParams { SaltLength = 32 }, signingKeys.PublicKey!, signature, TestData);
             // assert expected value
             if (!verified) throw new Exception("Failed");
         }
@@ -66,15 +68,18 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             // derive shared encryption key pair for Alice using Alice's private key and Bob's public key
             using var encryptionKeyAlice = await DeriveAesGcmEncryptionKey(ecdhKeysAlice.PrivateKey!, ecdhKeysBob.PublicKey!);
             // derive shared encryption key pair for Bob using Bob's private key and Alice's public key
-            using var encryptionKeyBob = await DeriveAesGcmEncryptionKey(ecdhKeysAlice.PrivateKey!, ecdhKeysBob.PublicKey!);
+            using var encryptionKeyBob = await DeriveAesGcmEncryptionKey(ecdhKeysBob.PrivateKey!, ecdhKeysAlice.PublicKey!);
             // Alice can now encrypt messages that only Bob can decrypt and vice versa
             // Create a new IV for use in encrypting (each message should use a new iv)
             // https://developer.mozilla.org/en-US/docs/Web/API/AesGcmParams#iv
-            using var iv = GenerateAesGcmIV();
-            using var encryptedData = await EncryptAesGcm(encryptionKeyAlice, TestData, iv);
-            // Alice can now safely send encryptedData (and the iv) to Bob
+            using var iv = new Uint8Array(12);
+            // use Crypto to fill the Uint8Array with random data
+            Crypto!.GetRandomValues(iv);
+            // Encrypt using Alice's shared encryption key
+            using var encryptedData = await SubtleCrypto!.Encrypt(new AesGcmParams { Iv = iv }, encryptionKeyAlice, TestData);
+            // Alice can now send encryptedData (and the iv) to Bob
             // Bob can decrypt the message using his shared encryption key and the message iv
-            using var decryptedData = await DecryptAesGcm(encryptionKeyBob, encryptedData, iv);
+            using var decryptedData = await SubtleCrypto!.Decrypt(new AesGcmParams { Iv = iv }, encryptionKeyBob, encryptedData);
             // convert the ArrayBuffer to byte[] for easy comparison with the source data
             var decryptedDataBytes = (byte[])decryptedData!;
             // assert expected value
@@ -129,47 +134,6 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             }, extractable, new string[] { "sign", "verify" });
             return keys;
         }
-        EcdsaParams DefaultEcdsaParams = new EcdsaParams { Hash = "SHA-384" };
-        RsaPssParams DefaultRsaPssParams = new RsaPssParams { SaltLength = 32 };
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="privateKey"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<ArrayBuffer> Sign(CryptoKey privateKey, Union<ArrayBuffer, TypedArray, DataView, byte[]> data)
-        {
-            switch (privateKey.AlgorithmName)
-            {
-                case "ECDSA":
-                    return await SubtleCrypto!.Sign(DefaultEcdsaParams, privateKey, data);
-                case "RSA-PSS":
-                    return await SubtleCrypto!.Sign(DefaultRsaPssParams, privateKey, data);
-                default:
-                    throw new Exception("Invalid keys");
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="publicKey"></param>
-        /// <param name="data"></param>
-        /// <param name="signature"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<bool> Verify(CryptoKey publicKey, ArrayBuffer signature, Union<ArrayBuffer, TypedArray, DataView, byte[]> data)
-        {
-            switch (publicKey.AlgorithmName)
-            {
-                case "ECDSA":
-                    return await SubtleCrypto!.Verify(DefaultEcdsaParams, publicKey, signature, data);
-                case "RSA-PSS":
-                    return await SubtleCrypto!.Verify(DefaultRsaPssParams, publicKey, signature, data);
-                default:
-                    throw new Exception("Invalid keys");
-            }
-        }
         /// <summary>
         /// Generates a shared encryption key from this user's ECDH privateKey and the other user's ECDH publicKey<br/>
         /// </summary>
@@ -184,38 +148,6 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
                 extractable,
                 new string[] { "encrypt", "decrypt" }
             );
-        }
-        /// <summary>
-        /// Generates an IV for use in AesGcmEncryption
-        /// </summary>
-        /// <param name="size"></param>
-        /// <returns></returns>
-        public Uint8Array GenerateAesGcmIV(int size = 12)
-        {
-            using var iv = new Uint8Array(size);
-            // use Crypto to fill the Uint8Array with random data
-            return Crypto!.GetRandomValues(iv);
-        }
-        /// <summary>
-        /// Encrypts using AES in GCM mode.<br/>
-        /// https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt#aes-gcm_2
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ArrayBuffer> EncryptAesGcm(CryptoKey aesGcmKey, Union<ArrayBuffer, TypedArray, DataView, byte[]> data, Union<ArrayBuffer, TypedArray, DataView, byte[]> iv)
-        {
-            var ret = await SubtleCrypto!.Encrypt(new AesGcmParams { Iv = iv }, aesGcmKey, data);
-            return ret;
-        }
-        /// <summary>
-        /// Decrypts using AES in GCM mode.
-        /// </summary>
-        /// <param name="aesGcmKey"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public async Task<ArrayBuffer> DecryptAesGcm(CryptoKey aesGcmKey, Union<ArrayBuffer, TypedArray, DataView, byte[]> cipherData, Union<ArrayBuffer, TypedArray, DataView, byte[]> iv)
-        {
-            var ret = await SubtleCrypto!.Decrypt(new AesGcmParams { Iv = iv }, aesGcmKey, cipherData);
-            return ret;
         }
     }
 }
