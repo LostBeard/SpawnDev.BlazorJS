@@ -112,6 +112,7 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
         /// Demonstrates the saving and retrieval of a KeyPair in an IndexedDB
         /// </summary>
         /// <returns></returns>
+        [TestMethod]
         public async Task KeyStorageExample()
         {
             var keyStoreDBName = "MyKeysDB";
