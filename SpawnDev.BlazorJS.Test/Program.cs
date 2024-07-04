@@ -85,58 +85,67 @@ await host.StartBackgroundServices();
 //
 var JS = host.Services.GetRequiredService<BlazorJSRuntime>();
 
-var windows = Enumerable.Range(0, 10).Select(i => JS.Get<Window>("window")).ToArray();
-JS.Set("_windows", windows);
-JS.Log("_windows", windows);
+EnumString<VideoResizeModeEnum> enumString = VideoResizeModeEnum.CropAndScale;
 
-var windowsRB = JS.Get<Array<Window>>("_windows");
-var windowsAr = windowsRB.ToArray();
+JS.Set("enumString", enumString);
+JS.Log("enumString", enumString);
 
-var WebWorkerService = host.Services.GetRequiredService<WebWorkerService>();
-// debug tests
-JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
-{
-    var windowInstances = WebWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
-    var localInstanceId = WebWorkerService.InstanceId;
-    foreach (var windowInstance in windowInstances)
-    {
-        // below line is an example of how to read a property from another instance
-        // here we are reading the BlazorJSRuntime service's InstanceId property from a window instance
-        var remoteInstanceId = await windowInstance!.Run(() => JS.InstanceId);
-        // below line is an example of how to call a method (here, the static method Console.WriteLine) in another instance
-        await windowInstance.Run(() => Console.WriteLine("Hello " + remoteInstanceId + " from " + localInstanceId));
-    }
-    return "ok";
-}));
-JS.Set("_testWorkerGetTimeout", new AsyncFuncCallback<string>(async () =>
-{
-    if (WebWorkerService.TaskPool.MaxPoolSize == 0)
-    {
-        return $"Test requires TaskPool.MaxPoolSize > 0. This scope: {WebWorkerService.GlobalScope}";
-    }
-    // the below line calls Task.Delay(2000) in all usable worker threads, allowing the timeout test for TaskPool.GetWebWorkerAsync
-    var tasks = Enumerable.Range(1, WebWorkerService.TaskPool.MaxPoolSize).Select(i => WebWorkerService.TaskPool.Run(() => Task.Delay(2000))).ToList();
-    Console.WriteLine($"Started {tasks.Count} tasks to hold all the workers to test TaskPool.GetWorkerAsync timeout handling.");
-    try
-    {
-        // set GetWorkerAsync timeout to 1000
-        var worker = await WebWorkerService.TaskPool.GetWorkerAsync(1000);
-        Console.WriteLine($"GetWorker success???");
-        worker.ReleaseLock();
-    }
-    catch (TaskCanceledException taskCanceledException)
-    {
-        // This is the expected result
-        Console.WriteLine($"GetWorker TaskCanceledException: {taskCanceledException.GetType().Name} {taskCanceledException.Message}");
-    }
-    catch (Exception ex)
-    {
-        // This is not the expected result
-        Console.WriteLine($"GetWorker Exception: {ex.GetType().Name} {ex.Message}");
-    }
-    await Task.WhenAll(tasks);
-    return "ok";
-}));
+var enumString1 = JS.Get<EnumString<VideoResizeModeEnum>>("enumString");
+var nmt = true;
+
+
+//var windows = Enumerable.Range(0, 10).Select(i => JS.Get<Window>("window")).ToArray();
+//JS.Set("_windows", windows);
+//JS.Log("_windows", windows);
+
+//var windowsRB = JS.Get<Array<Window>>("_windows");
+//var windowsAr = windowsRB.ToArray();
+
+//var WebWorkerService = host.Services.GetRequiredService<WebWorkerService>();
+//// debug tests
+//JS.Set("_testWindows", new AsyncFuncCallback<string>(async () =>
+//{
+//    var windowInstances = WebWorkerService.Instances.Where(o => o.Info.Scope == GlobalScope.Window).ToList();
+//    var localInstanceId = WebWorkerService.InstanceId;
+//    foreach (var windowInstance in windowInstances)
+//    {
+//        // below line is an example of how to read a property from another instance
+//        // here we are reading the BlazorJSRuntime service's InstanceId property from a window instance
+//        var remoteInstanceId = await windowInstance!.Run(() => JS.InstanceId);
+//        // below line is an example of how to call a method (here, the static method Console.WriteLine) in another instance
+//        await windowInstance.Run(() => Console.WriteLine("Hello " + remoteInstanceId + " from " + localInstanceId));
+//    }
+//    return "ok";
+//}));
+//JS.Set("_testWorkerGetTimeout", new AsyncFuncCallback<string>(async () =>
+//{
+//    if (WebWorkerService.TaskPool.MaxPoolSize == 0)
+//    {
+//        return $"Test requires TaskPool.MaxPoolSize > 0. This scope: {WebWorkerService.GlobalScope}";
+//    }
+//    // the below line calls Task.Delay(2000) in all usable worker threads, allowing the timeout test for TaskPool.GetWebWorkerAsync
+//    var tasks = Enumerable.Range(1, WebWorkerService.TaskPool.MaxPoolSize).Select(i => WebWorkerService.TaskPool.Run(() => Task.Delay(2000))).ToList();
+//    Console.WriteLine($"Started {tasks.Count} tasks to hold all the workers to test TaskPool.GetWorkerAsync timeout handling.");
+//    try
+//    {
+//        // set GetWorkerAsync timeout to 1000
+//        var worker = await WebWorkerService.TaskPool.GetWorkerAsync(1000);
+//        Console.WriteLine($"GetWorker success???");
+//        worker.ReleaseLock();
+//    }
+//    catch (TaskCanceledException taskCanceledException)
+//    {
+//        // This is the expected result
+//        Console.WriteLine($"GetWorker TaskCanceledException: {taskCanceledException.GetType().Name} {taskCanceledException.Message}");
+//    }
+//    catch (Exception ex)
+//    {
+//        // This is not the expected result
+//        Console.WriteLine($"GetWorker Exception: {ex.GetType().Name} {ex.Message}");
+//    }
+//    await Task.WhenAll(tasks);
+//    return "ok";
+//}));
 
 await host.BlazorJSRunAsync();
 #else

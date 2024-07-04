@@ -91,7 +91,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             //tmp.DisposeAll();
             return ret;
         }
-
+        /// <summary>
+        /// Obtains an array of information about the media input and output devices available on the system.
+        /// </summary>
+        /// <returns></returns>
         public Task<MediaDeviceInfo[]> EnumerateDevices() => JSRef.CallAsync<MediaDeviceInfo[]>("enumerateDevices");
 
         public Task<MediaStream?> GetUserMedia(object constraints) => JSRef.CallAsync<MediaStream?>("getUserMedia", constraints);
