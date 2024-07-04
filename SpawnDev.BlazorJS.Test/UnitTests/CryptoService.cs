@@ -77,21 +77,21 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
                 Name = "ECDH",
                 NamedCurve = "P-384"
             }, false, new string[] { "deriveKey" });
-            // derive shared encryption key pair for Alice using Alice's private key and Bob's public key
+            // derive shared encryption key for Alice using Alice's private key and Bob's public key
             using var encryptionKeyAlice = await SubtleCrypto!.DeriveKey(new EcdhKeyDeriveParams { Public = ecdhKeysBob.PublicKey! },
                 ecdhKeysAlice.PrivateKey!,
                 new AesKeyGenParams { Name = "AES-GCM", Length = 256 },
                 false,
                 new string[] { "encrypt", "decrypt" }
             );
-            // derive shared encryption key pair for Bob using Bob's private key and Alice's public key
+            // derive shared encryption key for Bob using Bob's private key and Alice's public key
             using var encryptionKeyBob = await SubtleCrypto!.DeriveKey(new EcdhKeyDeriveParams { Public = ecdhKeysAlice.PublicKey! },
                 ecdhKeysBob.PrivateKey!,
                 new AesKeyGenParams { Name = "AES-GCM", Length = 256 },
                 false,
                 new string[] { "encrypt", "decrypt" }
             );
-            // Alice can now encrypt messages that only Bob can decrypt and vice versa
+            // Alice and Bob now have the same encryption key that can be used to encrypt messages only they can decrypt
             // Create a new IV for use in encrypting (each message should use a new iv)
             // https://developer.mozilla.org/en-US/docs/Web/API/AesGcmParams#iv
             using var iv = new Uint8Array(12);
