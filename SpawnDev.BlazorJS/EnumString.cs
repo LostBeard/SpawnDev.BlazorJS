@@ -40,11 +40,13 @@ namespace SpawnDev.BlazorJS
                 {
                     _String = jsonName;
                     _Enum = value;
+                    IsDefined = true;
                 }
                 else
                 {
                     _Enum = null;
                     _String = null;
+                    IsDefined = false;
                 }
             }
         }
@@ -61,7 +63,7 @@ namespace SpawnDev.BlazorJS
             get => _String;
             set
             {
-                foreach(var typeMapping in TypeMapping)
+                foreach (var typeMapping in TypeMapping)
                 {
                     if (typeMapping.Value == value)
                     {
