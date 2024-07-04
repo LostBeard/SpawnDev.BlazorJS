@@ -112,14 +112,11 @@ namespace SpawnDev.BlazorJS.Test.GameOfLife
                             generationStat.Population++;
                         }
                         // Any live cell with more than three live neighbors dies, as if by overpopulation.
-                        else if (aliveNeighbors > 3)
+                        // aliveNeighbors > 3
+                        else
                         {
                             selfValueNew = BoardTileState.DeathOverPopulation;
                             generationStat.Deaths++;
-                        }
-                        else
-                        {
-                            var nmt = true;
                         }
                     }
                     if (selfValueNew != selfValue)
