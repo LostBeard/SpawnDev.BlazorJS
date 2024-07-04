@@ -36,11 +36,10 @@ namespace SpawnDev.BlazorJS
             get => _Enum;
             set
             {
-                IsDefined = value != null && System.Enum.IsDefined(typeof(T), value.Value);
-                if (IsDefined)
+                if (value != null && TypeMapping.TryGetValue(value.Value, out var jsonName))
                 {
+                    _String = jsonName;
                     _Enum = value;
-                    _String = value!.Value.ToString();
                 }
                 else
                 {
@@ -62,22 +61,54 @@ namespace SpawnDev.BlazorJS
             get => _String;
             set
             {
-                _String = value;
-                if (!string.IsNullOrEmpty(value) && System.Enum.TryParse(typeof(T), value, out var e))
+                foreach(var typeMapping in TypeMapping)
                 {
-                    IsDefined = true;
-                    _Enum = (T)e!;
+                    if (typeMapping.Value == value)
+                    {
+                        IsDefined = true;
+                        _Enum = (T)typeMapping.Key;
+                        _String = typeMapping.Value;
+                        return;
+                    }
                 }
-                else
-                {
-                    IsDefined = false;
-                    _Enum = null;
-                }
+                IsDefined = false;
+                _Enum = null;
+                _String = null;
             }
         }
-        public EnumString() { }
-        public EnumString(T value) { Enum = value; }
-        public EnumString(string value) { String = value; }
+        static Dictionary<Type, Dictionary<Enum, string>> Mappings = new Dictionary<Type, Dictionary<Enum, string>>();
+        Dictionary<Enum, string> GetMapping()
+        {
+            var enumType = typeof(T);
+            if (!Mappings.TryGetValue(enumType, out var typeMappings))
+            {
+                typeMappings = new Dictionary<Enum, string>();
+                var values = (T[])System.Enum.GetValues(enumType);
+                foreach(var value in values)
+                {
+                    var stringValue = value.ToString();
+                    var jsonPropertyNameAttr = (JsonPropertyNameAttribute?)typeof(T).GetField(stringValue)?.GetCustomAttributes(typeof(JsonPropertyNameAttribute), true).FirstOrDefault();
+                    typeMappings[value] = jsonPropertyNameAttr?.Name ?? stringValue;
+                }
+                Mappings.Add(enumType, typeMappings);
+            }
+            return typeMappings;
+        }
+        Dictionary<Enum, string> TypeMapping;
+        public EnumString()
+        {
+            TypeMapping = GetMapping();
+        }
+        public EnumString(T value)
+        {
+            TypeMapping = GetMapping();
+            Enum = value;
+        }
+        public EnumString(string value)
+        {
+            TypeMapping = GetMapping();
+            String = value;
+        }
         // T
         public static implicit operator EnumString<T>(T value) => new EnumString<T>(value);
         public static implicit operator T(EnumString<T> value) => value.Enum!.Value;
