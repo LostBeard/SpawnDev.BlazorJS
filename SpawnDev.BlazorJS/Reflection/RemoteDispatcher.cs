@@ -66,11 +66,10 @@ namespace SpawnDev.BlazorJS.Reflection
         }
         protected void ResetWhenReady()
         {
-            if (WhenReadySource.Task.IsCompleted) return;
-            //Console.WriteLine("ResetWhenReady");
-            WhenReadySource = new TaskCompletionSource();
             NeedRemoteReadyFlag = true;
-            CancelAllWaitingRequests();
+            if (WhenReadySource.Task.IsCompleted)
+                WhenReadySource = new TaskCompletionSource();
+            CancelAllWaitingRequests("Connection reset");
             ReadyStateChanged?.Invoke(this);
         }
         /// <summary>
@@ -90,7 +89,6 @@ namespace SpawnDev.BlazorJS.Reflection
         protected bool NeedRemoteReadyFlag { get; set; } = true;
         protected virtual async Task<object?> ReadyFlagReceived(JSObject? remoteFlagData)
         {
-            //Console.WriteLine("ReadyFlagReceived");
             remoteFlagData?.Dispose();
             return null;
         }
@@ -530,7 +528,6 @@ namespace SpawnDev.BlazorJS.Reflection
                     goto SendResponse;
                 }
                 targetType = methodInfo!.ReflectedType;
-                Console.WriteLine($"targetType: {targetType?.Name ?? "ReflectedType == null"}.{methodInfo.Name}");
                 remoteCallableAttr = methodInfo.GetCustomAttribute<RemoteCallableAttribute>();
                 // locate info about the type being called
                 info = ServiceDescriptors.FindServiceDescriptors(methodInfo.ReflectedType)!.FirstOrDefault();
