@@ -5,10 +5,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The ConstrainBoolean constraint type is used to specify a constraint for a property whose value is a Boolean value. Its value may either be set to a Boolean (true or false) or an object containing the following properties:
     /// </summary>
-    public class ConstrainBoolean : MediaTrackConstraint
+    public class ConstrainBooleanParameters //: MediaTrackConstraint
     {
-        public static implicit operator bool?(ConstrainBoolean? exactConstraint) => exactConstraint == null ? null : exactConstraint.Exact;
-        public static implicit operator ConstrainBoolean(bool? exactConstraint) => new ConstrainBoolean { Exact = exactConstraint };
+        //public static implicit operator bool?(ConstrainBoolean? exactConstraint) => exactConstraint == null ? null : exactConstraint.Exact;
+        //public static implicit operator ConstrainBoolean(bool? exactConstraint) => new ConstrainBoolean { Exact = exactConstraint };
         /// <summary>
         /// A boolean specifying a specific, required, value the property must have to be considered acceptable.
         /// </summary>
@@ -21,5 +21,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("ideal")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Ideal { get; set; }
+    }
+    [JsonConverter(typeof(SpawnDev.BlazorJS.JsonConverters.UnionJsonConverter))]
+    public class ConstrainBoolean : Union<bool, ConstrainBooleanParameters>
+    {
+        public static implicit operator ConstrainBoolean(bool value) => new ConstrainBoolean(value);
+        public static implicit operator ConstrainBoolean?(bool? value) => value == null ? null : new ConstrainBoolean(value.Value);
+        public static implicit operator ConstrainBoolean?(ConstrainBooleanParameters value) => value == null ? null : new ConstrainBoolean(value);
+        public ConstrainBoolean(bool value) : base(value) { }
+        public ConstrainBoolean(ConstrainBooleanParameters value) : base(value) { }
     }
 }

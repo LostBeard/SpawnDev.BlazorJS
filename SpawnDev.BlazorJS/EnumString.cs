@@ -89,7 +89,7 @@ namespace SpawnDev.BlazorJS
                 foreach(var value in values)
                 {
                     var stringValue = value.ToString();
-                    var jsonPropertyNameAttr = (JsonPropertyNameAttribute?)typeof(T).GetField(stringValue)?.GetCustomAttributes(typeof(JsonPropertyNameAttribute), true).FirstOrDefault();
+                    var jsonPropertyNameAttr = (JsonPropertyNameAttribute?)typeof(T).GetField(stringValue)?.GetCustomAttributes(typeof(JsonPropertyNameAttribute), false).FirstOrDefault();
                     typeMappings[value] = jsonPropertyNameAttr?.Name ?? stringValue;
                 }
                 Mappings.Add(enumType, typeMappings);

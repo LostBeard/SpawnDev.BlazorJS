@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.JSInterop;
-using System.Dynamic;
-using System.Text.Json.Serialization;
+﻿using Microsoft.JSInterop;
+//using System.Dynamic;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -21,60 +19,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fired when a media input or output device is attached to or removed from the user's computer.
         /// </summary>
         public JSEventCallback<Event> OnDeviceChange { get => new JSEventCallback<Event>("devicechange", AddEventListener, RemoveEventListener); set { } }
-
-        public async Task<MediaStream?> GetMediaDeviceStream(MediaDeviceInfo? deviceVideo, MediaDeviceInfo? deviceAudio)
-        {
-            var deviceIdVideo = deviceVideo == null ? null : deviceVideo.DeviceId;
-            var deviceIdAudio = deviceAudio == null ? null : deviceAudio.DeviceId;
-            return await GetMediaDeviceStream(deviceIdVideo, deviceIdAudio);
-        }
-
-        public async Task<MediaStream?> GetMediaDeviceStream(string? deviceIdVideo, string? deviceIdAudio)
-        {
-            dynamic constraints = new ExpandoObject();
-            if (!string.IsNullOrEmpty(deviceIdVideo))
-            {
-                constraints.video = new
-                {
-                    deviceId = deviceIdVideo,
-                    width = new { ideal = 4096 },
-                    height = new { ideal = 2160 },
-                };
-                //constraints.video = new ExpandoObject();
-                //constraints.video.deviceId = new ExpandoObject();
-                //constraints.video.deviceId.exact = deviceIdVideo;
-                ////// get largest
-                //constraints.video.width = new ExpandoObject();//= 4096;
-                //constraints.video.width.ideal = 4096;
-                //constraints.video.height = new ExpandoObject();//= 2160;
-                //constraints.video.height.ideal = 2160;
-            }
-            else
-            {
-                constraints.video = false;
-            }
-            if (!string.IsNullOrEmpty(deviceIdAudio))
-            {
-                //constraints.audio = new ExpandoObject();
-                //constraints.audio.deviceId = new ExpandoObject();
-                //constraints.audio.deviceId.exact = deviceIdAudio; 
-                constraints.audio = new
-                {
-                    deviceId = deviceIdAudio,
-                };
-            }
-            else
-            {
-                constraints.audio = false;
-            }
-            var stream = await GetUserMedia(constraints);
-            return stream;
-        }
-
         // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia
-        public Task<MediaStream?> GetDisplayMedia(object constraints) => JSRef.CallAsync<MediaStream?>("getDisplayMedia", constraints);
-        public Task<MediaStream?> GetDisplayMedia() => JSRef.CallAsync<MediaStream?>("getDisplayMedia");
-
+        /// <summary>
+        /// Prompts the user to select a display or portion of a display (such as a window) to capture as a MediaStream for sharing or recording purposes. Returns a promise that resolves to a MediaStream.
+        /// </summary>
+        /// <param name="constraints"></param>
+        /// <returns></returns>
+        public Task<MediaStream?> GetDisplayMedia(object constraints) => JSRef!.CallAsync<MediaStream?>("getDisplayMedia", constraints);
+        /// <summary>
+        /// Prompts the user to select a display or portion of a display (such as a window) to capture as a MediaStream for sharing or recording purposes. Returns a promise that resolves to a MediaStream.
+        /// </summary>
+        /// <returns></returns>
+        public Task<MediaStream?> GetDisplayMedia() => JSRef!.CallAsync<MediaStream?>("getDisplayMedia");
+        /// <summary>
+        /// Returns true if there is at least 1 device enumerated with an empty or null label or deviceId<br/>
+        /// </summary>
+        /// <returns></returns>
         public async Task<bool> AreDevicesHidden()
         {
             var tmp = await EnumerateDevices();
@@ -88,27 +48,68 @@ namespace SpawnDev.BlazorJS.JSObjects
                     break;
                 }
             }
-            //tmp.DisposeAll();
+            tmp.DisposeAll();
             return ret;
         }
         /// <summary>
         /// Obtains an array of information about the media input and output devices available on the system.
         /// </summary>
         /// <returns></returns>
-        public Task<MediaDeviceInfo[]> EnumerateDevices() => JSRef.CallAsync<MediaDeviceInfo[]>("enumerateDevices");
-
-        public Task<MediaStream?> GetUserMedia(object constraints) => JSRef.CallAsync<MediaStream?>("getUserMedia", constraints);
-
+        public Task<MediaDeviceInfo[]> EnumerateDevices() => JSRef!.CallAsync<MediaDeviceInfo[]>("enumerateDevices");
+        /// <summary>
+        /// With the user's permission through a prompt, turns on a camera and/or a microphone on the system and provides a MediaStream containing a video track and/or an audio track with the input.
+        /// </summary>
+        /// <param name="constraints">
+        /// An object specifying the types of media to request, along with any requirements for each type.<br/>
+        /// The constraints parameter is an object with two members: video and audio, describing the media types requested. Either or both must be specified. If the browser cannot find all media tracks with the specified types that meet the constraints given, then the returned promise is rejected with NotFoundError DOMException.<br/>
+        /// </param>
+        /// <returns></returns>
+        public Task<MediaStream?> GetUserMedia(object constraints) => JSRef!.CallAsync<MediaStream?>("getUserMedia", constraints);
+        /// <summary>
+        /// With the user's permission through a prompt, turns on a camera and/or a microphone on the system and provides a MediaStream containing a video track and/or an audio track with the input.
+        /// </summary>
+        /// <param name="constraints">
+        /// An object specifying the types of media to request, along with any requirements for each type.<br/>
+        /// The constraints parameter is an object with two members: video and audio, describing the media types requested. Either or both must be specified. If the browser cannot find all media tracks with the specified types that meet the constraints given, then the returned promise is rejected with NotFoundError DOMException.<br/>
+        /// </param>
+        /// <returns></returns>
+        public Task<MediaStream?> GetUserMedia(MediaStreamConstraints constraints) => JSRef!.CallAsync<MediaStream?>("getUserMedia", constraints);
         /// <summary>
         /// With the user's permission through a prompt, turns on a camera and/or a microphone on the system and provides a MediaStream containing a video track and/or an audio track with the input.
         /// </summary>
         /// <returns>A Task whose fulfillment handler receives a MediaStream object when the requested media has successfully been obtained.</returns>
         public Task<MediaStream?> GetUserMedia(bool video, bool audio) => GetUserMedia(new { video = video, audio = audio });
-
+        /// <summary>
+        /// With the user's permission through a prompt, turns on a camera and/or a microphone on the system and provides a MediaStream containing a video track and/or an audio track with the input.
+        /// </summary>
+        /// <param name="deviceIdVideo"></param>
+        /// <param name="deviceIdAudio"></param>
+        /// <returns></returns>
+        public Task<MediaStream?> GetMediaDeviceStream(string? deviceIdVideo, string? deviceIdAudio)
+        {
+            var constraints = new MediaStreamConstraints();
+            if (!string.IsNullOrEmpty(deviceIdVideo))
+            {
+                constraints.Video = new MediaTrackConstraints
+                {
+                    DeviceId = deviceIdVideo,
+                    Width = new ConstrainULongRange { Ideal = 4096 },
+                    Height = new ConstrainULongRange { Ideal = 2160 },
+                };
+            }
+            if (!string.IsNullOrEmpty(deviceIdAudio))
+            {
+                constraints.Audio = new MediaTrackConstraints
+                {
+                    DeviceId = deviceIdAudio,
+                };
+            }
+            return GetUserMedia(constraints);
+        }
         /// <summary>
         /// Returns an object conforming to MediaTrackSupportedConstraints indicating which constrainable properties are supported on the MediaStreamTrack interface. See Media Streams API to learn more about constraints and how to use them.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, bool> GetSupportedConstraints() => JSRef.Call<Dictionary<string, bool>>("getSupportedConstraints");
+        public Dictionary<string, bool> GetSupportedConstraints() => JSRef!.Call<Dictionary<string, bool>>("getSupportedConstraints");
     }
 }

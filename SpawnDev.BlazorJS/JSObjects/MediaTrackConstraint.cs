@@ -3,8 +3,8 @@
     /// <summary>
     /// Base class for MediaTrackConstraints
     /// </summary>
-    public class MediaTrackConstraint
-    {
+    //public class MediaTrackConstraint
+    //{
        
-    }
+    //}
 }

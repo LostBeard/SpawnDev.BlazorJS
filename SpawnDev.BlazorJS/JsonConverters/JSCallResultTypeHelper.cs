@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JsonConverters {
             if (FromGenericMethodInfo == null) {
                 FromGenericMethodInfo = typeof(JSCallResultType).Assembly.GetType("Microsoft.JSInterop.JSCallResultTypeHelper")!.GetMethod("FromGeneric", BindingFlags.Public | BindingFlags.Static);
             }
-            result = FromGenericMethodInfo.MakeGenericMethod(type);
+            result = FromGenericMethodInfo!.MakeGenericMethod(type);
             FromGenericTypedCache[type] = result;
             return result;
         }
