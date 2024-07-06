@@ -23,7 +23,8 @@ namespace SpawnDev.BlazorJS.JsonConverters
 
         public override object? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var value = UnionConverter.ImportFromJson(ref reader, options, typeToConvert.GenericTypeArguments);
+            var types = UnionConverter.GetUnionTypeGenericTypes(typeToConvert);
+            var value = UnionConverter.ImportFromJson(ref reader, options, types!);
             if (value == null) return null;
             var ret = Activator.CreateInstance(typeToConvert, value);
             return ret;
@@ -59,6 +60,35 @@ namespace SpawnDev.BlazorJS.JsonConverters
     }
     static class UnionConverter
     {
+        public static Type[]? GetUnionTypeGenericTypes(Type unionType)
+        {
+            if (!typeof(Union).IsAssignableFrom(unionType)) return null;
+            var testType = unionType;
+            while (testType != null && testType != typeof(object))
+            {
+                if (testType.IsGenericType)
+                {
+                    var genericTypeDefinition = testType.GetGenericTypeDefinition();
+                    if (SupportedGenericTypes.Contains(genericTypeDefinition))
+                    {
+                        return testType.GenericTypeArguments;
+                    }
+                }
+                testType = testType.BaseType;
+            }
+            return null;
+        }
+        public static List<Type> SupportedGenericTypes { get; } = new List<Type> {
+            { typeof(Union<,>) },
+            { typeof(Union<,,>) },
+            { typeof(Union<,,,>)},
+            { typeof(Union<,,,,>)},
+            { typeof(Union<,,,,,>)},
+            { typeof(Union<,,,,,,>)},
+            { typeof(Union<,,,,,,,>)},
+            { typeof(Union<,,,,,,,,>)},
+            { typeof(Union<,,,,,,,,,>)},
+        };
         static Lazy<List<string>> TypedArrayTypeNames = new Lazy<List<string>>(() => TypedArrayTypes!.Select(o => o.Name).ToList());
         public static List<Type> TypedArrayTypes = new List<Type>
         {
@@ -140,7 +170,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
                     }
                     break;
                 case JsonTokenType.StartObject:
-                    var objectTypes = types.Where(o => o.IsClass && o != typeof(string) && !typeof(JSObject).IsAssignableFrom(o)).ToList();
+                    var objectTypes = types.Where(o => o.IsClass && o != typeof(string)).ToList();
                     if (objectTypes.Count == 1)
                     {
                         var type = objectTypes[0];
@@ -163,10 +193,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public static object? ImportFromIJSInprocessObjectReference(IJSInProcessObjectReference _ref, Type[] types)
         {
             var jsObject = new JSObject(_ref);
-            var isArray = Array.IsArray(jsObject);
-            var typeOf = isArray ? "array" : jsObject.JSRef!.PropertyType();
             var jsTypeName = jsObject.JSRef!.PropertyIsUndefined("constructor") ? "" : jsObject.JSRef!.GetConstructorName()!;
-            //Console.WriteLine($"{jsTypeName}");
             if (!string.IsNullOrEmpty(jsTypeName))
             {
                 if (jsTypeName == "Uint8Array")
@@ -227,6 +254,8 @@ namespace SpawnDev.BlazorJS.JsonConverters
                     }
                 }
             }
+            var isArray = Array.IsArray(jsObject);
+            var typeOf = isArray ? "array" : jsObject.JSRef!.PropertyType();
             switch (typeOf)
             {
                 case "string":
@@ -241,6 +270,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
                     }
                     jsObject.Dispose();
                     throw new Exception($"String type not found in union: {typeOf} - {jsTypeName} Union<{string.Join(", ", types.Select(o => o.Name))}>");
+                case "boolean":
+                    // Boolean will get picked up by Type.Name checker
+                    if (types.Contains(typeof(bool)))
+                    {
+                        var ret = jsObject.JSRef!.As<bool>();
+                        jsObject.Dispose();
+                        return ret;
+                    }
+                    jsObject.Dispose();
+                    throw new Exception($"Number type not found in union: {typeOf} - {jsTypeName} Union<{string.Join(", ", types.Select(o => o.Name))}>");
                 case "number":
                     foreach (var type in types)
                     {
@@ -290,179 +329,183 @@ namespace SpawnDev.BlazorJS.JsonConverters
     }
     public class UnionConverterFactory : JsonConverterFactory
     {
-        static Dictionary<Type, Type> SupportedGenericTypes = new Dictionary<Type, Type> {
-            { typeof(Union<,>), typeof(UnionConverter<,>) },
-            { typeof(Union<,,>), typeof(UnionConverter<,,>) },
-            { typeof(Union<,,,>), typeof(UnionConverter<,,,>) },
-            { typeof(Union<,,,,>), typeof(UnionConverter<,,,,>) },
-            { typeof(Union<,,,,,>), typeof(UnionConverter<,,,,,>) },
-            { typeof(Union<,,,,,,>), typeof(UnionConverter<,,,,,,>) },
-            { typeof(Union<,,,,,,,>), typeof(UnionConverter<,,,,,,,>) },
-            { typeof(Union<,,,,,,,,>), typeof(UnionConverter<,,,,,,,,>) },
-            { typeof(Union<,,,,,,,,,>), typeof(UnionConverter<,,,,,,,,,>) },
-        };
         public override bool CanConvert(Type type)
         {
-            var baseType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
-            if (SupportedGenericTypes.ContainsKey(baseType)) return true;
-            return false;
+            return typeof(Union).IsAssignableFrom(type);
         }
-
         public override JsonConverter? CreateConverter(Type type, JsonSerializerOptions options)
         {
-            var baseType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
-            var genericTypes = type.GetGenericArguments();
-            if (SupportedGenericTypes.TryGetValue(baseType, out var converterBaseType))
-            {
-                var converterType = type.IsGenericType ? converterBaseType.MakeGenericType(genericTypes) : converterBaseType;
-                JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
-                return converter;
-            }
-            return null;
+            return new UnionJSRuntimeConverter(type);
         }
     }
-    public class UnionConverter<T1, T2> : JSInProcessObjectReferenceConverterBase<Union<T1, T2>>
+    public class UnionJSRuntimeConverter : JSInProcessObjectReferenceConverterBase<Union>
     {
-        public override Union<T1, T2>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+        Type TypeToConvert;
+        Type[] UnionTypes;
+        public UnionJSRuntimeConverter(Type typeToConvert)
+        {
+            TypeToConvert = typeToConvert;
+            UnionTypes = UnionConverter.GetUnionTypeGenericTypes(TypeToConvert)!;
+        }
+        public override bool CanConvert(Type type)
+        {
+            return TypeToConvert == type;
+        }
+        public override Union? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
             if (_ref == null) return null;
-            var typeToConvert = typeof(Union<T1, T2>);
-            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, UnionTypes);
             if (value == null) return null;
-            var ret = Activator.CreateInstance(typeToConvert, value);
-            return (Union<T1, T2>?)ret;
+            var ret = Activator.CreateInstance(TypeToConvert, value)!;
+            return (Union)ret;
         }
-        public override void Write(Utf8JsonWriter writer, Union<T1, T2> value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, Union value, JsonSerializerOptions options)
         {
             JsonSerializer.Serialize(writer, value.Value, options);
         }
     }
-    public class UnionConverter<T1, T2, T3> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3>>
-    {
-        public override Union<T1, T2, T3>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var typeToConvert = typeof(Union<T1, T2, T3>);
-            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
-            if (value == null) return null;
-            var ret = Activator.CreateInstance(typeToConvert, value);
-            return (Union<T1, T2, T3>?)ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3> value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, value.Value, options);
-        }
-    }
-    public class UnionConverter<T1, T2, T3, T4> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4>>
-    {
-        public override Union<T1, T2, T3, T4>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var typeToConvert = typeof(Union<T1, T2, T3, T4>);
-            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
-            if (value == null) return null;
-            var ret = Activator.CreateInstance(typeToConvert, value);
-            return (Union<T1, T2, T3, T4>?)ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4> value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, value.Value, options);
-        }
-    }
-    public class UnionConverter<T1, T2, T3, T4, T5> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5>>
-    {
-        public override Union<T1, T2, T3, T4, T5>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var typeToConvert = typeof(Union<T1, T2, T3, T4, T5>);
-            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
-            if (value == null) return null;
-            var ret = Activator.CreateInstance(typeToConvert, value);
-            return (Union<T1, T2, T3, T4, T5>?)ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5> value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, value.Value, options);
-        }
-    }
-    public class UnionConverter<T1, T2, T3, T4, T5, T6> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6>>
-    {
-        public override Union<T1, T2, T3, T4, T5, T6>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6>);
-            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
-            if (value == null) return null;
-            var ret = Activator.CreateInstance(typeToConvert, value);
-            return (Union<T1, T2, T3, T4, T5, T6>?)ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6> value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, value.Value, options);
-        }
-    }
-    public class UnionConverter<T1, T2, T3, T4, T5, T6, T7> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6, T7>>
-    {
-        public override Union<T1, T2, T3, T4, T5, T6, T7>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6, T7>);
-            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
-            if (value == null) return null;
-            var ret = Activator.CreateInstance(typeToConvert, value);
-            return (Union<T1, T2, T3, T4, T5, T6, T7>?)ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6, T7> value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, value.Value, options);
-        }
-    }
-    public class UnionConverter<T1, T2, T3, T4, T5, T6, T7, T8> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6, T7, T8>>
-    {
-        public override Union<T1, T2, T3, T4, T5, T6, T7, T8>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6, T7, T8>);
-            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
-            if (value == null) return null;
-            var ret = Activator.CreateInstance(typeToConvert, value);
-            return (Union<T1, T2, T3, T4, T5, T6, T7, T8>?)ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6, T7, T8> value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, value.Value, options);
-        }
-    }
-    public class UnionConverter<T1, T2, T3, T4, T5, T6, T7, T8, T9> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>
-    {
-        public override Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>);
-            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
-            if (value == null) return null;
-            var ret = Activator.CreateInstance(typeToConvert, value);
-            return (Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>?)ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, value.Value, options);
-        }
-    }
-    public class UnionConverter<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>
-    {
-        public override Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>);
-            var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
-            if (value == null) return null;
-            var ret = Activator.CreateInstance(typeToConvert, value)!;
-            return (Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>)ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, value.Value, options);
-        }
-    }
+    //public class UnionConverter<T1, T2> : JSInProcessObjectReferenceConverterBase<Union<T1, T2>>
+    //{
+    //    public override Union<T1, T2>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var typeToConvert = typeof(Union<T1, T2>);
+    //        var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+    //        if (value == null) return null;
+    //        var ret = Activator.CreateInstance(typeToConvert, value);
+    //        return (Union<T1, T2>?)ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Union<T1, T2> value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.Value, options);
+    //    }
+    //}
+    //public class UnionConverter<T1, T2, T3> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3>>
+    //{
+    //    public override Union<T1, T2, T3>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var typeToConvert = typeof(Union<T1, T2, T3>);
+    //        var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+    //        if (value == null) return null;
+    //        var ret = Activator.CreateInstance(typeToConvert, value);
+    //        return (Union<T1, T2, T3>?)ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3> value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.Value, options);
+    //    }
+    //}
+    //public class UnionConverter<T1, T2, T3, T4> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4>>
+    //{
+    //    public override Union<T1, T2, T3, T4>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var typeToConvert = typeof(Union<T1, T2, T3, T4>);
+    //        var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+    //        if (value == null) return null;
+    //        var ret = Activator.CreateInstance(typeToConvert, value);
+    //        return (Union<T1, T2, T3, T4>?)ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4> value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.Value, options);
+    //    }
+    //}
+    //public class UnionConverter<T1, T2, T3, T4, T5> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5>>
+    //{
+    //    public override Union<T1, T2, T3, T4, T5>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var typeToConvert = typeof(Union<T1, T2, T3, T4, T5>);
+    //        var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+    //        if (value == null) return null;
+    //        var ret = Activator.CreateInstance(typeToConvert, value);
+    //        return (Union<T1, T2, T3, T4, T5>?)ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5> value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.Value, options);
+    //    }
+    //}
+    //public class UnionConverter<T1, T2, T3, T4, T5, T6> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6>>
+    //{
+    //    public override Union<T1, T2, T3, T4, T5, T6>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6>);
+    //        var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+    //        if (value == null) return null;
+    //        var ret = Activator.CreateInstance(typeToConvert, value);
+    //        return (Union<T1, T2, T3, T4, T5, T6>?)ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6> value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.Value, options);
+    //    }
+    //}
+    //public class UnionConverter<T1, T2, T3, T4, T5, T6, T7> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6, T7>>
+    //{
+    //    public override Union<T1, T2, T3, T4, T5, T6, T7>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6, T7>);
+    //        var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+    //        if (value == null) return null;
+    //        var ret = Activator.CreateInstance(typeToConvert, value);
+    //        return (Union<T1, T2, T3, T4, T5, T6, T7>?)ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6, T7> value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.Value, options);
+    //    }
+    //}
+    //public class UnionConverter<T1, T2, T3, T4, T5, T6, T7, T8> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6, T7, T8>>
+    //{
+    //    public override Union<T1, T2, T3, T4, T5, T6, T7, T8>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6, T7, T8>);
+    //        var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+    //        if (value == null) return null;
+    //        var ret = Activator.CreateInstance(typeToConvert, value);
+    //        return (Union<T1, T2, T3, T4, T5, T6, T7, T8>?)ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6, T7, T8> value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.Value, options);
+    //    }
+    //}
+    //public class UnionConverter<T1, T2, T3, T4, T5, T6, T7, T8, T9> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>
+    //{
+    //    public override Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>);
+    //        var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+    //        if (value == null) return null;
+    //        var ret = Activator.CreateInstance(typeToConvert, value);
+    //        return (Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>?)ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.Value, options);
+    //    }
+    //}
+    //public class UnionConverter<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : JSInProcessObjectReferenceConverterBase<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>
+    //{
+    //    public override Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var typeToConvert = typeof(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>);
+    //        var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, typeToConvert.GetGenericArguments());
+    //        if (value == null) return null;
+    //        var ret = Activator.CreateInstance(typeToConvert, value)!;
+    //        return (Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>)ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> value, JsonSerializerOptions options)
+    //    {
+    //        JsonSerializer.Serialize(writer, value.Value, options);
+    //    }
+    //}
 }
