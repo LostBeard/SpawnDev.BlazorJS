@@ -50,12 +50,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T GetSettings<T>() where T : MediaStreamTrackSettings => JSRef!.Call<T>("getSettings");
+        public T GetSettings<T>() where T : MediaTrackSettings => JSRef!.Call<T>("getSettings");
         /// <summary>
         /// Returns a MediaTrackSettings object containing the current values of each of the MediaStreamTrack's constrainable properties.
         /// </summary>
         /// <returns></returns>
-        public MediaStreamTrackSettings GetSettings() => JSRef!.Call<MediaStreamTrackSettings>("getSettings");
+        public MediaTrackSettings GetSettings() => JSRef!.Call<MediaTrackSettings>("getSettings");
         /// <summary>
         /// Stops playing the source associated to the track, both the source and the track are disassociated. The track state is set to ended.
         /// </summary>
@@ -68,14 +68,25 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The applyConstraints() method of the MediaStreamTrack interface applies a set of constraints to the track; these constraints let the website or app establish ideal values and acceptable ranges of values for the constrainable properties of the track, such as frame rate, dimensions, echo cancellation, and so forth.
         /// </summary>
-        /// <param name="constraints"></param>
-        /// <returns></returns>
+        /// <param name="constraints">A MediaTrackConstraints object listing the constraints to apply to the track's constrainable properties; any existing constraints are replaced with the new values specified, and any constrainable properties not included are restored to their default constraints. If this parameter is omitted, all currently set custom constraints are cleared. This object represents the basic set of constraints that must apply for the Promise to resolve. The object may contain an advanced property containing an array of additional MediaTrackConstraints objects, which are treated as exact requires.</param>
+        /// <returns>A Promise which resolves when the constraints have been successfully applied. If the constraints cannot be applied, the promise is rejected with a OverconstrainedError that is a DOMException whose name is OverconstrainedError with additional parameters, and, to indicate that the constraints could not be met. This can happen if the specified constraints are too strict to find a match when attempting to configure the track.</returns>
         public Task ApplyConstraints(object constraints) => JSRef!.CallVoidAsync("applyConstraints", constraints);
+        /// <summary>
+        /// The applyConstraints() method of the MediaStreamTrack interface applies a set of constraints to the track; these constraints let the website or app establish ideal values and acceptable ranges of values for the constrainable properties of the track, such as frame rate, dimensions, echo cancellation, and so forth.
+        /// </summary>
+        /// <param name="constraints">A MediaTrackConstraints object listing the constraints to apply to the track's constrainable properties; any existing constraints are replaced with the new values specified, and any constrainable properties not included are restored to their default constraints. If this parameter is omitted, all currently set custom constraints are cleared. This object represents the basic set of constraints that must apply for the Promise to resolve. The object may contain an advanced property containing an array of additional MediaTrackConstraints objects, which are treated as exact requires.</param>
+        /// <returns>A Promise which resolves when the constraints have been successfully applied. If the constraints cannot be applied, the promise is rejected with a OverconstrainedError that is a DOMException whose name is OverconstrainedError with additional parameters, and, to indicate that the constraints could not be met. This can happen if the specified constraints are too strict to find a match when attempting to configure the track.</returns>
+        public Task ApplyConstraints(MediaTrackConstraints constraints) => JSRef!.CallVoidAsync("applyConstraints", constraints);
         /// <summary>
         /// The applyConstraints() method of the MediaStreamTrack interface applies a set of constraints to the track; these constraints let the website or app establish ideal values and acceptable ranges of values for the constrainable properties of the track, such as frame rate, dimensions, echo cancellation, and so forth.
         /// </summary>
         /// <returns></returns>
         public Task ApplyConstraints() => JSRef!.CallVoidAsync("applyConstraints");
+        /// <summary>
+        /// The getConstraints() method of the MediaStreamTrack interface returns a MediaTrackConstraints object containing the set of constraints most recently established for the track using a prior call to applyConstraints(). These constraints indicate values and ranges of values that the website or application has specified are required or acceptable for the included constrainable properties.
+        /// </summary>
+        /// <returns></returns>
+        public MediaTrackConstraints GetConstraints() => JSRef!.Call<MediaTrackConstraints>("getConstraints");
         /// <summary>
         /// Returns the a list of constrainable properties available for the MediaStreamTrack.
         /// </summary>

@@ -2,21 +2,10 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public class ConstrainULongRange : ULongRange
-    {
-        /// <summary>
-        /// The exact required value for this property.
-        /// </summary>
-        [JsonPropertyName("exact")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public uint? Exact { get; set; }
-        /// <summary>
-        /// The ideal (target) value for this property.
-        /// </summary>
-        [JsonPropertyName("ideal")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public uint? Ideal { get; set; }
-    }
+    /// <summary>
+    /// The ConstrainULong constraint type is used to specify a constraint for a property whose value is an integer. Its value may either be set to a number or an object.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints#constrainulong
+    /// </summary>
     [JsonConverter(typeof(SpawnDev.BlazorJS.JsonConverters.UnionJsonConverter))]
     public class ConstrainULong : Union<uint, ConstrainULongRange>
     {

@@ -7,7 +7,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class DoubleRange
     {
-
         /// <summary>
         /// The maximum valid value of this property.
         /// </summary>
