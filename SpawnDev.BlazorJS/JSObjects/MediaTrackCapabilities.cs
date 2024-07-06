@@ -2,8 +2,6 @@
 {
     /// <summary>
     /// Object which specifies the value or range of values which are supported for each of the user agent's supported constrainable properties<br/>
-    /// MDN Docs do not seem to match up with real world on Chrome desktop, and Firefox does not support InputDeviceInfo let alone InputDeviceInfo.getCapabilities()<br/>
-    /// W3.org docs DO match Chrome's output<br/>
     /// https://www.w3.org/TR/mediacapture-streams/#media-track-capabilities<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/getCapabilities#return_value<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/InputDeviceInfo/getCapabilities#return_value<br/>

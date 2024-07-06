@@ -92,5 +92,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public MediaTrackCapabilities GetCapabilities() => JSRef!.Call<MediaTrackCapabilities>("getCapabilities");
+        /// <summary>
+        /// The ended event of the MediaStreamTrack interface is fired when playback or streaming has stopped because the end of the media was reached or because no further data is available.
+        /// </summary>
+        public JSEventCallback<Event> OnEnded { get => new JSEventCallback<Event>("ended", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// The mute event is sent to a MediaStreamTrack when the track's source is temporarily unable to provide media data.
+        /// </summary>
+        public JSEventCallback<Event> OnMute { get => new JSEventCallback<Event>("mute", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// The unmute event is sent to a MediaStreamTrack when the track's source is once again able to provide media data after a period of not being able to do so.
+        /// </summary>
+        public JSEventCallback<Event> OnUnMute { get => new JSEventCallback<Event>("unmute", AddEventListener, RemoveEventListener); set { } }
     }
 }

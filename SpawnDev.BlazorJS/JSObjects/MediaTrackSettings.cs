@@ -87,7 +87,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A long integer value indicating the current value of the height property, specifying the height of the track's video data in pixels.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public uint Height { get; set; }
+        public uint? Height { get; set; }
         /// <summary>
         /// A long integer value indicating the current value of the width property, specifying the width of the track's video data in pixels.
         /// </summary>
