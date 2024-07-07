@@ -23,9 +23,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Prompts the user to select a display or portion of a display (such as a window) to capture as a MediaStream for sharing or recording purposes. Returns a promise that resolves to a MediaStream.
         /// </summary>
-        /// <param name="constraints"></param>
+        /// <param name="options"></param>
         /// <returns></returns>
-        public Task<MediaStream?> GetDisplayMedia(object constraints) => JSRef!.CallAsync<MediaStream?>("getDisplayMedia", constraints);
+        public Task<MediaStream?> GetDisplayMedia(object options) => JSRef!.CallAsync<MediaStream?>("getDisplayMedia", options);
+        /// <summary>
+        /// The getDisplayMedia() method of the MediaDevices interface prompts the user to select and grant permission to capture the contents of a display or portion thereof (such as a window) as a MediaStream.
+        /// </summary>
+        /// <param name="options">An optional object specifying requirements for the returned MediaStream. The options for getDisplayMedia() work in the same as the constraints for the MediaDevices.getUserMedia() method, although in that case only audio and video can be specified.</param>
+        /// <returns>A Promise that resolves to a MediaStream containing a video track whose contents come from a user-selected screen area, as well as an optional audio track.</returns>
+        public Task<MediaStream?> GetDisplayMedia(DisplayMediaStreamOptions options) => JSRef!.CallAsync<MediaStream?>("getDisplayMedia", options);
         /// <summary>
         /// Prompts the user to select a display or portion of a display (such as a window) to capture as a MediaStream for sharing or recording purposes. Returns a promise that resolves to a MediaStream.
         /// </summary>
