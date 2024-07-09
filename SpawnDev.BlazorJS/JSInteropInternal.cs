@@ -190,7 +190,7 @@ namespace SpawnDev.BlazorJS
         internal static IJSInProcessObjectReference?[]? ReturnArrayJSObjectReferences(IJSInProcessObjectReference? targetObject)
         {
             if (targetObject == null) return null;
-            var ids = CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new[] { targetObject });
+            var ids = CallGlobal<long[]?>("JSInterop._returnArrayJSObjectReferenceIds", new object?[] { targetObject });
             if (ids == null) return null;
             var ret = new IJSInProcessObjectReference?[ids.Length];
             for (var i = 0; i < ret.Length; i++)
