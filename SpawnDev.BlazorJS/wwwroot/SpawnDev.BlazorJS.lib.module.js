@@ -203,10 +203,16 @@
         }
     }
 
+    function createJSObjectReference(o){
+        let mustWrap = createJSObjectReferenceMustWrapType(o);
+        if (mustWrap) o = wrapJSObject(o);
+        return DotNet.createJSObjectReference(o);
+    }
+
     JSInterop._returnArrayJSObjectReferenceIds = function (obj) {
         if (obj === null || obj === void 0) return null;
         var ret = [];
-        for (var o of obj) ret.push(o === null || o === void 0 ? -1 : DotNet.createJSObjectReference(o).__jsObjectId);
+        for (var o of obj) ret.push(o === null || o === void 0 ? -1 : createJSObjectReference(o).__jsObjectId);
         return ret;
     };
 
@@ -308,7 +314,7 @@
                     }
                 };
                 callbacks[callbackId] = callback;
-                return callback; 
+                return callback;
             }
             else if ('__wrappedJSObject' in value) {
                 return value.__wrappedJSObject;
