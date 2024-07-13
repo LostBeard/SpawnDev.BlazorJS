@@ -23,13 +23,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public Uint8Array Encode(string text) => JSRef.Call<Uint8Array>("encode", text);
+        public Uint8Array Encode(string text) => JSRef!.Call<Uint8Array>("encode", text);
         /// <summary>
         /// Takes a string to encode and a destination Uint8Array to put resulting UTF-8 encoded text into, and returns an object indicating the progress of the encoding. This is potentially more performant than the older encode() method.
         /// </summary>
         /// <param name="text"></param>
         /// <param name="dest"></param>
         /// <returns></returns>
-        public EncodeIntoProgress EncodeInto(string text, Uint8Array dest) => JSRef.Call<EncodeIntoProgress>("encodeInto", text, dest);
+        public EncodeIntoProgress EncodeInto(string text, Uint8Array dest) => JSRef!.Call<EncodeIntoProgress>("encodeInto", text, dest);
     }
 }

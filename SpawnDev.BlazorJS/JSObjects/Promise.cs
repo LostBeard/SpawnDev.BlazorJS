@@ -87,8 +87,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         //public Function? ResolveFunc { get; protected set; }
         //public Function? RejectFunc { get; protected set; }
 
-        public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
-        public void Then(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
+        public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        public void Then(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
 
         public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
 
@@ -235,10 +235,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         //public Function? ResolveFunc { get; protected set; }
         //public Function? RejectFunc { get; protected set; }
 
-        public void ThenCatch<TError>(ActionCallback thenCallback, ActionCallback<TError> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
-        public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
-        public void Then<TResult>(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
-        public void ThenCatch<TResult, TError>(ActionCallback<TResult> thenCallback, ActionCallback<TError> catchCallback) => JSRef.CallVoid("then", thenCallback, catchCallback);
+        public void ThenCatch<TError>(ActionCallback thenCallback, ActionCallback<TError> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        public void Then<TResult>(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        public void ThenCatch<TResult, TError>(ActionCallback<TResult> thenCallback, ActionCallback<TError> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
 
         //public void Resolve(object? value) => ResolveFunc.CallVoid(null, value);
         //public void Resolve() => ResolveFunc.CallVoid();

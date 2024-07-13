@@ -23,13 +23,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="dbName"></param>
         /// <param name="dbVersion"></param>
         /// <returns></returns>
-        public IDBOpenDBRequest Open(string dbName, long dbVersion) => JSRef.Call<IDBOpenDBRequest>("open", dbName, dbVersion);
+        public IDBOpenDBRequest Open(string dbName, long dbVersion) => JSRef!.Call<IDBOpenDBRequest>("open", dbName, dbVersion);
         /// <summary>
         /// The current method to request opening a connection to a database.
         /// </summary>
         /// <param name="dbName"></param>
         /// <returns></returns>
-        public IDBOpenDBRequest Open(string dbName) => JSRef.Call<IDBOpenDBRequest>("open", dbName);
+        public IDBOpenDBRequest Open(string dbName) => JSRef!.Call<IDBOpenDBRequest>("open", dbName);
         /// <summary>
         /// The current async method to request opening a connection to a database.
         /// </summary>
@@ -120,18 +120,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="dbName"></param>
         /// <returns></returns>
-        public IDBOpenDBRequest DeleteDatabase(string dbName) => JSRef.Call<IDBOpenDBRequest>("deleteDatabase", dbName);
+        public IDBOpenDBRequest DeleteDatabase(string dbName) => JSRef!.Call<IDBOpenDBRequest>("deleteDatabase", dbName);
         /// <summary>
         /// A method to request the deletion of a database.
         /// </summary>
         /// <param name="dbName"></param>
         /// <returns></returns>
-        public Task DeleteDatabaseAsync(string dbName) => JSRef.Call<IDBOpenDBRequest>("deleteDatabase", dbName).WaitAsync();
+        public Task DeleteDatabaseAsync(string dbName) => JSRef!.Call<IDBOpenDBRequest>("deleteDatabase", dbName).WaitAsync();
         /// <summary>
         /// A method that returns a list of all available databases, including their names and versions.
         /// </summary>
         /// <returns></returns>
-        public Task<List<IDBDatabaseInfo>> Databases() => JSRef.CallAsync<List<IDBDatabaseInfo>>("databases");
+        public Task<List<IDBDatabaseInfo>> Databases() => JSRef!.CallAsync<List<IDBDatabaseInfo>>("databases");
         /// <summary>
         /// The cmp() method of the IDBFactory interface compares two values as keys to determine equality and ordering for IndexedDB operations, such as storing and iterating.<br />
         /// 
@@ -143,6 +143,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///  0 - 1st key is equal to the 2nd key<br />
         ///  1 - 1st key is greater than the 2nd key
         /// </returns>
-        public int Cmp<TKey>(TKey first, TKey second) => JSRef.Call<int>("cmp", first, second);
+        public int Cmp<TKey>(TKey first, TKey second) => JSRef!.Call<int>("cmp", first, second);
     }
 }

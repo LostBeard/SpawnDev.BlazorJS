@@ -25,23 +25,23 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a boolean indicating whether or not the readable stream is locked to a reader.
         /// </summary>
-        public bool Locked => JSRef.Get<bool>("locked");
+        public bool Locked => JSRef!.Get<bool>("locked");
         /// <summary>
         /// Returns a Promise that resolves when the stream is canceled. Calling this method signals a loss of interest in the stream by a consumer. The supplied reason argument will be given to the underlying source, which may or may not use it.
         /// </summary>
         /// <returns></returns>
-        public Task Cancel() => JSRef.CallVoidAsync("cancel");
+        public Task Cancel() => JSRef!.CallVoidAsync("cancel");
         /// <summary>
         /// Returns a Promise that resolves when the stream is canceled. Calling this method signals a loss of interest in the stream by a consumer. The supplied reason argument will be given to the underlying source, which may or may not use it.
         /// </summary>
         /// <param name="reason"></param>
         /// <returns></returns>
-        public Task Cancel(string reason) => JSRef.CallVoidAsync("cancel", reason);
+        public Task Cancel(string reason) => JSRef!.CallVoidAsync("cancel", reason);
         /// <summary>
         /// Creates a reader and locks the stream to it. While the stream is locked, no other reader can be acquired until this one is released.
         /// </summary>
         /// <returns></returns>
-        public ReadableStreamDefaultReader GetReader() => JSRef.Call<ReadableStreamDefaultReader>("getReader");
+        public ReadableStreamDefaultReader GetReader() => JSRef!.Call<ReadableStreamDefaultReader>("getReader");
         //public Uint8Array? Read()
         //{
         //    Uint8Array? ret = null;
@@ -52,7 +52,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         //    catch { }
         //    return ret;
         //}
-        //public AsyncIterator GetAsyncIterator() => JSRef.Call<AsyncIterator>(Symbol.AsyncIterator);
-        //public void Destroy() => JSRef.CallVoid("destroy");
+        //public AsyncIterator GetAsyncIterator() => JSRef!.Call<AsyncIterator>(Symbol.AsyncIterator);
+        //public void Destroy() => JSRef!.CallVoid("destroy");
     }
 }

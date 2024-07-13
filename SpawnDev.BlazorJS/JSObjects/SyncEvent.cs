@@ -16,10 +16,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns true if the user agent will not make further synchronization attempts after the current attempt.
         /// </summary>
-        public bool LastChance => JSRef.Get<bool>("lastChance");
+        public bool LastChance => JSRef!.Get<bool>("lastChance");
         /// <summary>
         /// Returns the developer-defined identifier for this SyncEvent.
         /// </summary>
-        public string Tag => JSRef.Get<string>("tag");
+        public string Tag => JSRef!.Get<string>("tag");
     }
 }

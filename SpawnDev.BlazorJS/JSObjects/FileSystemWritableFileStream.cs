@@ -18,54 +18,54 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task Write(ArrayBuffer data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(ArrayBuffer data) => JSRef!.CallVoidAsync("write", data);
         /// <summary>
         /// The write() method of the FileSystemWritableFileStream interface writes content into the file the method is called on, at the current file cursor offset.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task Write(Blob data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(Blob data) => JSRef!.CallVoidAsync("write", data);
         /// <summary>
         /// The write() method of the FileSystemWritableFileStream interface writes content into the file the method is called on, at the current file cursor offset.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task Write(TypedArray data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(TypedArray data) => JSRef!.CallVoidAsync("write", data);
         /// <summary>
         /// The write() method of the FileSystemWritableFileStream interface writes content into the file the method is called on, at the current file cursor offset.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task Write(byte[] data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(byte[] data) => JSRef!.CallVoidAsync("write", data);
         /// <summary>
         /// The write() method of the FileSystemWritableFileStream interface writes content into the file the method is called on, at the current file cursor offset.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task Write(DataView data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(DataView data) => JSRef!.CallVoidAsync("write", data);
         /// <summary>
         /// The write() method of the FileSystemWritableFileStream interface writes content into the file the method is called on, at the current file cursor offset.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task Write(string data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(string data) => JSRef!.CallVoidAsync("write", data);
         /// <summary>
         /// The write() method of the FileSystemWritableFileStream interface writes content into the file the method is called on, at the current file cursor offset.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task Write(FileSystemWriteOptions data) => JSRef.CallVoidAsync("write", data);
+        public Task Write(FileSystemWriteOptions data) => JSRef!.CallVoidAsync("write", data);
         /// <summary>
         /// Resizes the file associated with the stream to be the specified size in bytes.
         /// </summary>
         /// <param name="size"></param>
         /// <returns></returns>
-        public Task Truncate(ulong size) => JSRef.CallVoidAsync("truncate", size);
+        public Task Truncate(ulong size) => JSRef!.CallVoidAsync("truncate", size);
         /// <summary>
         /// Updates the current file cursor offset to the position (in bytes) specified.
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        public Task Seek(ulong position) => JSRef.CallVoidAsync("seek", position);
+        public Task Seek(ulong position) => JSRef!.CallVoidAsync("seek", position);
     }
 }

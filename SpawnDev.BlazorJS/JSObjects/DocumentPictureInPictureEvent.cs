@@ -15,6 +15,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a Window instance representing the browsing context inside the DocumentPictureInPicture window the event was fired on.
         /// </summary>
-        public Window? Window => JSRef.Get<Window?>("window");
+        public Window? Window => JSRef!.Get<Window?>("window");
     }
 }

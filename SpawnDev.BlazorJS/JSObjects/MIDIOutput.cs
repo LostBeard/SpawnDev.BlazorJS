@@ -14,14 +14,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Queues a message to be sent to the MIDI port.
         /// </summary>
-        public void Send(byte[] data) => JSRef.CallVoid("send", data);
+        public void Send(byte[] data) => JSRef!.CallVoid("send", data);
         /// <summary>
         /// Queues a message to be sent to the MIDI port.
         /// </summary>
-        public void Send(byte[] data, double timestamp) => JSRef.CallVoid("send", data, timestamp);
+        public void Send(byte[] data, double timestamp) => JSRef!.CallVoid("send", data, timestamp);
         /// <summary>
         /// Clears any pending send data from the queue.
         /// </summary>
-        public void Clear() => JSRef.CallVoid("clear");
+        public void Clear() => JSRef!.CallVoid("clear");
     }
 }

@@ -17,13 +17,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public Task<MediaCapabilitiesInfo> DecodingInfo(DecodingConfiguration configuration) => JSRef.CallAsync<MediaCapabilitiesInfo>("decodingInfo", configuration);
+        public Task<MediaCapabilitiesInfo> DecodingInfo(DecodingConfiguration configuration) => JSRef!.CallAsync<MediaCapabilitiesInfo>("decodingInfo", configuration);
         /// <summary>
         /// When passed a valid media configuration, it returns a promise with information as to whether the media type is supported, and whether encoding such media would be smooth and power efficient.
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public Task<MediaCapabilitiesInfo> EncodingInfo(EncodingConfiguration configuration) => JSRef.CallAsync<MediaCapabilitiesInfo>("encodingInfo", configuration);
+        public Task<MediaCapabilitiesInfo> EncodingInfo(EncodingConfiguration configuration) => JSRef!.CallAsync<MediaCapabilitiesInfo>("encodingInfo", configuration);
         #endregion
     }
 }

@@ -27,69 +27,69 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Text CreateTextNode(string data) => JSRef.Call<Text>("createTextNode", data);
+        public Text CreateTextNode(string data) => JSRef!.Call<Text>("createTextNode", data);
         /// <summary>
         /// In an HTML document, the document.createElement() method creates the HTML element specified by tagName, or an HTMLUnknownElement if tagName isn't recognized.
         /// </summary>
         /// <typeparam name="T">Element type</typeparam>
         /// <param name="tagName"></param>
         /// <returns></returns>
-        public T CreateElement<T>(string tagName) where T : Element => JSRef.Call<T>("createElement", tagName);
+        public T CreateElement<T>(string tagName) where T : Element => JSRef!.Call<T>("createElement", tagName);
         /// <summary>
         /// In an HTML document, the document.createElement() method creates the HTML element specified by tagName, or an HTMLUnknownElement if tagName isn't recognized.
         /// </summary>
         /// <param name="tagName"></param>
         /// <returns></returns>
-        public IJSInProcessObjectReference CreateElement(string tagName) => JSRef.Call<IJSInProcessObjectReference>("createElement", tagName);
+        public IJSInProcessObjectReference CreateElement(string tagName) => JSRef!.Call<IJSInProcessObjectReference>("createElement", tagName);
         /// <summary>
         /// The Document method exitFullscreen() requests that the element on this document which is currently being presented in fullscreen mode be taken out of fullscreen mode, restoring the previous state of the screen. This usually reverses the effects of a previous call to Element.requestFullscreen().
         /// </summary>
         /// <returns></returns>
-        public Task ExitFullscreen() => JSRef.CallVoidAsync("exitFullscreen");
+        public Task ExitFullscreen() => JSRef!.CallVoidAsync("exitFullscreen");
         /// <summary>
         /// The Document method querySelectorAll() returns a static (not live) NodeList representing a list of the document's elements that match the specified group of selectors.
         /// </summary>
         /// <param name="selector">A string containing one or more selectors to match against. This string must be a valid CSS selector string; if it's not, a SyntaxError exception is thrown. See Locating DOM elements using selectors for more information about using selectors to identify elements. Multiple selectors may be specified by separating them using commas.</param>
         /// <returns>A non-live NodeList containing one Element object for each element that matches at least one of the specified selectors or an empty NodeList in case of no matches.</returns>
-        public NodeList QuerySelectorAll(string selector) => JSRef.Call<NodeList>("querySelectorAll", selector);
+        public NodeList QuerySelectorAll(string selector) => JSRef!.Call<NodeList>("querySelectorAll", selector);
         /// <summary>
         /// The Document method querySelectorAll() returns a static (not live) NodeList representing a list of the document's elements that match the specified group of selectors.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public NodeList<T> QuerySelectorAll<T>(string selector) where T : Node => JSRef.Call<NodeList<T>>("querySelectorAll", selector);
+        public NodeList<T> QuerySelectorAll<T>(string selector) where T : Node => JSRef!.Call<NodeList<T>>("querySelectorAll", selector);
         /// <summary>
         /// The Document method querySelector() returns the first Element within the document that matches the specified selector, or group of selectors. If no matches are found, null is returned.
         /// </summary>
         /// <param name="selector">A string containing one or more selectors to match. This string must be a valid CSS selector string; if it isn't, a SyntaxError exception is thrown. See Locating DOM elements using selectors for more about selectors and how to manage them.</param>
         /// <returns>An Element object representing the first element in the document that matches the specified set of CSS selectors, or null is returned if there are no matches.</returns>
-        public Element? QuerySelector(string selector) => JSRef.Call<Element?>("querySelector", selector);
+        public Element? QuerySelector(string selector) => JSRef!.Call<Element?>("querySelector", selector);
         /// <summary>
         /// The Document method querySelector() returns the first Element within the document that matches the specified selector, or group of selectors. If no matches are found, null is returned.
         /// </summary>
         /// <typeparam name="TElement"></typeparam>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public TElement? QuerySelector<TElement>(string selector) where TElement : Element => JSRef.Call<TElement?>("querySelector", selector);
+        public TElement? QuerySelector<TElement>(string selector) where TElement : Element => JSRef!.Call<TElement?>("querySelector", selector);
         /// <summary>
         /// Returns an object reference to the identified element.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Element? GetElementById(string id) => JSRef.Call<Element?>("getElementById", id);
+        public Element? GetElementById(string id) => JSRef!.Call<Element?>("getElementById", id);
         /// <summary>
         /// Returns an object reference to the identified element.
         /// </summary>
         /// <typeparam name="TElement"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public TElement? GetElementById<TElement>(string id) where TElement : Element => JSRef.Call<TElement?>("getElementById", id);
+        public TElement? GetElementById<TElement>(string id) where TElement : Element => JSRef!.Call<TElement?>("getElementById", id);
         /// <summary>
         /// The hasFocus() method of the Document interface returns a boolean value indicating whether the document or any element inside the document has focus. This method can be used to determine whether the active element in a document has focus.
         /// </summary>
         /// <returns></returns>
-        public bool HasFocus() => JSRef.Call<bool>("hasFocus");
+        public bool HasFocus() => JSRef!.Call<bool>("hasFocus");
         /// <summary>
         /// The Document.open() method opens a document for writing.<br />
         /// This does come with some side effects.For example:<br />
@@ -97,117 +97,117 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// All existing nodes are removed from the document.
         /// </summary>
         /// <returns></returns>
-        public Document Open() => JSRef.Call<Document>("open");
+        public Document Open() => JSRef!.Call<Document>("open");
         /// <summary>
         /// The Document.append() method inserts a set of Node objects or string objects after the last child of the document. String objects are inserted as equivalent Text nodes.
         /// </summary>
         /// <param name="nodes"></param>
-        public void Append(params Union<string, Node>[] nodes) => JSRef.CallApplyVoid("append", nodes);
+        public void Append(params Union<string, Node>[] nodes) => JSRef!.CallApplyVoid("append", nodes);
         /// <summary>
         /// The Document.prepend() method inserts a set of Node objects or string objects before the first child of the document. String objects are inserted as equivalent Text nodes.
         /// </summary>
         /// <param name="nodes"></param>
-        public void Prepend(params Union<string, Node>[] nodes) => JSRef.CallApplyVoid("prepend", nodes);
+        public void Prepend(params Union<string, Node>[] nodes) => JSRef!.CallApplyVoid("prepend", nodes);
         /// <summary>
         /// The Window.getSelection() method returns a Selection object representing the range of text selected by the user or the current position of the caret.
         /// </summary>
         /// <returns></returns>
-        public Selection GetSelection() => JSRef.Call<Selection>("getSelection");
+        public Selection GetSelection() => JSRef!.Call<Selection>("getSelection");
         #endregion
 
         #region Properties
         /// <summary>
         /// The activeElement read-only property of the Document interface returns the Element within the DOM that currently has focus.
         /// </summary>
-        public Element? ActiveElement => JSRef.Get<Element?>("activeElement");
+        public Element? ActiveElement => JSRef!.Get<Element?>("activeElement");
         /// <summary>
         /// The head read-only property of the Document interface returns the head element of the current document.
         /// </summary>
-        public HTMLHeadElement? Head => JSRef.Get<HTMLHeadElement?>("head");
+        public HTMLHeadElement? Head => JSRef!.Get<HTMLHeadElement?>("head");
         /// <summary>
         /// The Document.body property represents the body or frameset node of the current document, or null if no such element exists.
         /// </summary>
-        public HTMLBodyElement? Body => JSRef.Get<HTMLBodyElement?>("body");
+        public HTMLBodyElement? Body => JSRef!.Get<HTMLBodyElement?>("body");
         /// <summary>
         /// The Document property cookie lets you read and write cookies associated with the document. It serves as a getter and setter for the actual values of the cookies.
         /// </summary>
-        public string Cookie { get => JSRef.Get<string>("cookie"); set => JSRef.Set("cookie", value); }
+        public string Cookie { get => JSRef!.Get<string>("cookie"); set => JSRef!.Set("cookie", value); }
         /// <summary>
         /// document.designMode controls whether the entire document is editable. Valid values are "on" and "off". According to the specification, this property is meant to default to "off". Firefox follows this standard. The earlier versions of Chrome and IE default to "inherit". Starting in Chrome 43, the default is "off" and "inherit" is no longer supported. In IE6-10, the value is capitalized.
         /// </summary>
-        public string DesignMode { get => JSRef.Get<string>("designMode"); set => JSRef.Set("designMode", value); }
+        public string DesignMode { get => JSRef!.Get<string>("designMode"); set => JSRef!.Set("designMode", value); }
         /// <summary>
         /// The Document.dir property is a string representing the directionality of the text of the document, whether left to right (default) or right to left. Possible values are 'rtl', right to left, and 'ltr', left to right.
         /// </summary>
-        public string Dir => JSRef.Get<string>("dir");
+        public string Dir => JSRef!.Get<string>("dir");
         /// <summary>
         /// Returns the Document Type Declaration (DTD) associated with current document. The returned object implements the DocumentType interface. Use DOMImplementation.createDocumentType() to create a DocumentType.
         /// </summary>
-        public string? Doctype => JSRef.Get<string?>("doctype");
+        public string? Doctype => JSRef!.Get<string?>("doctype");
         /// <summary>
         /// Document.documentElement returns the Element that is the root element of the document (for example, the html element for HTML documents).
         /// </summary>
-        public Element? DocumentElement => JSRef.Get<Element?>("documentElement");
+        public Element? DocumentElement => JSRef!.Get<Element?>("documentElement");
         /// <summary>
         /// The documentURI read-only property of the Document interface returns the document location as a string.
         /// </summary>
-        public string DocumentURI => JSRef.Get<string>("documentURI");
+        public string DocumentURI => JSRef!.Get<string>("documentURI");
         /// <summary>
         /// The Document.fullscreenElement read-only property returns the Element that is currently being presented in fullscreen mode in this document, or null if fullscreen mode is not currently in use.
         /// </summary>
-        public Element? FullscreenElement => JSRef.Get<Element?>("fullscreenElement");
+        public Element? FullscreenElement => JSRef!.Get<Element?>("fullscreenElement");
         /// <summary>
         /// The read-only fullscreenEnabled property on the Document interface indicates whether or not fullscreen mode is available.
         /// </summary>
-        public bool FullscreenEnabled => JSRef.Get<bool>("fullscreenEnabled");
+        public bool FullscreenEnabled => JSRef!.Get<bool>("fullscreenEnabled");
         /// <summary>
         /// The Document.hidden read-only property returns a Boolean value indicating if the page is considered hidden or not.
         /// </summary>
-        public bool Hidden => JSRef.Get<bool>("hidden");
+        public bool Hidden => JSRef!.Get<bool>("hidden");
         /// <summary>
         /// The Document.lastElementChild read-only property returns the document's last child Element, or null if there are no child elements.
         /// </summary>
-        public Element? LastElementChild => JSRef.Get<Element?>("lastElementChild");
+        public Element? LastElementChild => JSRef!.Get<Element?>("lastElementChild");
         /// <summary>
         /// The Document.location read-only property returns a Location object, which contains information about the URL of the document and provides methods for changing that URL and loading another URL.
         /// </summary>
-        public Location? Location => JSRef.Get<Location?>("location");
+        public Location? Location => JSRef!.Get<Location?>("location");
         /// <summary>
         /// The lastModified property of the Document interface returns a string containing the date and time on which the current document was last modified.
         /// </summary>
-        public string LastModified => JSRef.Get<string>("lastModified");
+        public string LastModified => JSRef!.Get<string>("lastModified");
         /// <summary>
         /// The Document.pictureInPictureElement read-only property returns the Element that is currently being presented in picture-in-picture mode in this document, or null if picture-in-picture mode is not currently in use.
         /// </summary>
-        public Element? PictureInPictureElement => JSRef.Get<Element?>("pictureInPictureElement");
+        public Element? PictureInPictureElement => JSRef!.Get<Element?>("pictureInPictureElement");
         /// <summary>
         /// The read-only pictureInPictureEnabled property of the Document interface indicates whether or not picture-in-picture mode is available.
         /// </summary>
-        public bool PictureInPictureEnabled => JSRef.Get<bool>("pictureInPictureEnabled");
+        public bool PictureInPictureEnabled => JSRef!.Get<bool>("pictureInPictureEnabled");
         /// <summary>
         /// The read-only pointerLockElement property of the Document interface provides the element set as the target for mouse events while the pointer is locked. It is null if lock is pending, pointer is unlocked, or the target is in another document.
         /// </summary>
-        public Element? PointerLockElement => JSRef.Get<Element?>("pointerLockElement");
+        public Element? PointerLockElement => JSRef!.Get<Element?>("pointerLockElement");
         /// <summary>
         /// The prerendering read-only property of the Document interface returns true if the document is currently in the process of prerendering, as initiated via the Speculation Rules API.
         /// </summary>
-        public bool Prerendering => JSRef.Get<bool>("prerendering");
+        public bool Prerendering => JSRef!.Get<bool>("prerendering");
         /// <summary>
         /// The Document.readyState property describes the loading state of the document. When the value of this property changes, a readystatechange event fires on the document object.
         /// </summary>
-        public string ReadyState => JSRef.Get<string>("readyState");
+        public string ReadyState => JSRef!.Get<string>("readyState");
         /// <summary>
         /// The Document.referrer property returns the URI of the page that linked to this page.
         /// </summary>
-        public string Referrer => JSRef.Get<string>("referrer");
+        public string Referrer => JSRef!.Get<string>("referrer");
         /// <summary>
         /// The document.title property gets or sets the current title of the document. When present, it defaults to the value of the title.
         /// </summary>
-        public string Title { get => JSRef.Get<string>("title"); set => JSRef.Set("title", value); }
+        public string Title { get => JSRef!.Get<string>("title"); set => JSRef!.Set("title", value); }
         /// <summary>
         /// The Document.visibilityState read-only property returns the visibility of the document. It can be used to check whether the document is in the background or in a minimized window, or is otherwise not visible to the user.
         /// </summary>
-        public string VisibilityState => JSRef.Get<string>("visibilityState");
+        public string VisibilityState => JSRef!.Get<string>("visibilityState");
         #endregion
 
         #region Events

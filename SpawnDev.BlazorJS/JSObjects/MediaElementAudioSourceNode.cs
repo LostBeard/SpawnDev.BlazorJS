@@ -23,6 +23,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The HTMLMediaElement used when constructing this MediaStreamAudioSourceNode.
         /// </summary>
-        public HTMLMediaElement MediaElement => JSRef.Get<HTMLMediaElement>("mediaElement");
+        public HTMLMediaElement MediaElement => JSRef!.Get<HTMLMediaElement>("mediaElement");
     }
 }

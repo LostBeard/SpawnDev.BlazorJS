@@ -19,19 +19,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The name of the family or class of GPUs the adapter belongs to. Returns an empty string if it is not available.
         /// </summary>
-        public string Architecture => JSRef.Get<string>("architecture");
+        public string Architecture => JSRef!.Get<string>("architecture");
         /// <summary>
         /// A human-readable string describing the adapter. Returns an empty string if it is not available.
         /// </summary>
-        public string Description => JSRef.Get<string>("description");
+        public string Description => JSRef!.Get<string>("description");
         /// <summary>
         /// A vendor-specific identifier for the adapter. Returns an empty string if it is not available.
         /// </summary>
-        public string Device => JSRef.Get<string>("device");
+        public string Device => JSRef!.Get<string>("device");
         /// <summary>
         /// The name of the adapter vendor. Returns an empty string if it is not available.
         /// </summary>
-        public string Vendor => JSRef.Get<string>("vendor");
+        public string Vendor => JSRef!.Get<string>("vendor");
         #endregion
     }
 }

@@ -16,10 +16,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A DOMRect representing the position and size of the title bar region.
         /// </summary>
-        public DOMRectReadOnly TitlebarAreaRect() => JSRef.Get<DOMRectReadOnly>("titlebarAreaRect");
+        public DOMRectReadOnly TitlebarAreaRect() => JSRef!.Get<DOMRectReadOnly>("titlebarAreaRect");
         /// <summary>
         /// A Boolean that indicates whether the window controls overlay is visible or not.
         /// </summary>
-        public bool Visible => JSRef.Get<bool>("visible");
+        public bool Visible => JSRef!.Get<bool>("visible");
     }
 }

@@ -26,13 +26,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns any data passed when initializing the event.
         /// </summary>
-        public JSObject? Detail => JSRef.Get<JSObject?>("detail");
+        public JSObject? Detail => JSRef!.Get<JSObject?>("detail");
         /// <summary>
         /// Returns any data passed when initializing the event.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T DetailAs<T>() => JSRef.Get<T>("detail");
+        public T DetailAs<T>() => JSRef!.Get<T>("detail");
     }
     /// <summary>
     /// The CustomEvent interface represents events initialized by an application for any purpose.
@@ -58,6 +58,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns any data passed when initializing the event.
         /// </summary>
-        public TDetail Detail => JSRef.Get<TDetail>("detail");
+        public TDetail Detail => JSRef!.Get<TDetail>("detail");
     }
 }

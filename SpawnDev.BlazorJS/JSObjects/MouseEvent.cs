@@ -110,7 +110,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool GetModifierState(string key) => JSRef.Call<bool>("getModifierState", key);
+        public bool GetModifierState(string key) => JSRef!.Call<bool>("getModifierState", key);
         #endregion
     }
 }

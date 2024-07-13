@@ -33,48 +33,48 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the MIME type that was selected as the recording container for the MediaRecorder object when it was created.
         /// </summary>
-        public string MimeType => JSRef.Get<string>("mimeType");
+        public string MimeType => JSRef!.Get<string>("mimeType");
         /// <summary>
         /// Returns the current state of the MediaRecorder object (inactive, recording, or paused.)
         /// </summary>
-        public string State => JSRef.Get<string>("state");
+        public string State => JSRef!.Get<string>("state");
         /// <summary>
         /// Returns the stream that was passed into the constructor when the MediaRecorder was created.
         /// </summary>
-        public MediaStream Stream => JSRef.Get<MediaStream>("strean");
+        public MediaStream Stream => JSRef!.Get<MediaStream>("strean");
         /// <summary>
         /// Returns the video encoding bit rate in use. This may differ from the bit rate specified in the constructor (if it was provided).
         /// </summary>
-        public long VideoBitsPerSecond => JSRef.Get<long>("videoBitsPerSecond");
+        public long VideoBitsPerSecond => JSRef!.Get<long>("videoBitsPerSecond");
         /// <summary>
         /// Returns the audio encoding bit rate in use. This may differ from the bit rate specified in the constructor (if it was provided).
         /// </summary>
-        public long AudioBitsPerSecond => JSRef.Get<long>("audioBitsPerSecond");
+        public long AudioBitsPerSecond => JSRef!.Get<long>("audioBitsPerSecond");
         /// <summary>
         /// Pauses the recording of media.
         /// </summary>
-        public void Pause() => JSRef.CallVoid("pause");
+        public void Pause() => JSRef!.CallVoid("pause");
         /// <summary>
         /// Used to raise a dataavailable event containing a Blob object of the captured media as it was when the method was called. This can then be grabbed and manipulated as you wish.
         /// </summary>
-        public void RequestData() => JSRef.CallVoid("requestData");
+        public void RequestData() => JSRef!.CallVoid("requestData");
         /// <summary>
         /// Resumes recording of media after having been paused.
         /// </summary>
-        public void Resume() => JSRef.CallVoid("resume");
+        public void Resume() => JSRef!.CallVoid("resume");
         /// <summary>
         /// Begins recording media; this method can optionally be passed a timeslice argument with a value in milliseconds. If this is specified, the media will be captured in separate chunks of that duration, rather than the default behavior of recording the media in a single large chunk.
         /// </summary>
-        public void Start() => JSRef.CallVoid("start");
+        public void Start() => JSRef!.CallVoid("start");
         /// <summary>
         /// Begins recording media; this method can optionally be passed a timeslice argument with a value in milliseconds. If this is specified, the media will be captured in separate chunks of that duration, rather than the default behavior of recording the media in a single large chunk.
         /// </summary>
         /// <param name="timeslice">The number of milliseconds to record into each Blob. If this parameter isn't included, the entire media duration is recorded into a single Blob unless the requestData() method is called to obtain the Blob and trigger the creation of a new Blob into which the media continues to be recorded.</param>
-        public void Start(double timeslice) => JSRef.CallVoid("start", timeslice);
+        public void Start(double timeslice) => JSRef!.CallVoid("start", timeslice);
         /// <summary>
         /// Stops recording, at which point a dataavailable event containing the final Blob of saved data is fired. No more recording occurs.
         /// </summary>
-        public void Stop() => JSRef.CallVoid("stop");
+        public void Stop() => JSRef!.CallVoid("stop");
         /// <summary>
         /// Fires periodically each time timeslice milliseconds of media have been recorded (or when the entire media has been recorded, if timeslice wasn't specified). The event, of type BlobEvent, contains the recorded media in its data property.
         /// </summary>

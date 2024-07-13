@@ -40,17 +40,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the numeric value of the specified date as the number of milliseconds since January 1, 1970, 00:00:00 UTC. (Negative values are returned for prior times.)
         /// </summary>
         /// <returns></returns>
-        public long GetTime() => JSRef.Call<long>("getTime");
+        public long GetTime() => JSRef!.Call<long>("getTime");
         /// <summary>
         /// Returns the time-zone offset in minutes for the current locale.
         /// </summary>
         /// <returns></returns>
-        public int GetTimezoneOffset() => JSRef.Call<int>("getTimezoneOffset");
+        public int GetTimezoneOffset() => JSRef!.Call<int>("getTimezoneOffset");
         /// <summary>
         /// Converts a date to a string following the ISO 8601 Extended Format.
         /// </summary>
         /// <returns></returns>
-        public string ToISOString() => JSRef.Call<string>("toISOString");
+        public string ToISOString() => JSRef!.Call<string>("toISOString");
         /// <summary>
         /// Returns the DateTimeOffset
         /// </summary>

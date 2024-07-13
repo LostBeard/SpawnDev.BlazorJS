@@ -26,7 +26,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The description accessor property of Symbol values returns a string containing the description of this symbol, or undefined if the symbol has no description.
         /// </summary>
-        public string? Description => JSRef.Get<string?>("description");
+        public string? Description => JSRef!.Get<string?>("description");
         /// <summary>
         /// The Symbol.isConcatSpreadable static data property represents the well-known symbol @@isConcatSpreadable. The Array.prototype.concat() method looks up this symbol on each object being concatenated to determine if it should be treated as an array-like object and flattened to its array elements.<br />
         /// Do not dispose.

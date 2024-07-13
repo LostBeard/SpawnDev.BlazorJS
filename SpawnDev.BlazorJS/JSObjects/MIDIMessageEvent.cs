@@ -12,6 +12,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A Uint8Array containing the data bytes of a single MIDI message. See the MIDI specification for more information on its form.
         /// </summary>
-        public Uint8Array Data => JSRef.Get<Uint8Array>("data");
+        public Uint8Array Data => JSRef!.Get<Uint8Array>("data");
     }
 }

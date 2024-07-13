@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A Boolean that indicates whether the device dispatches touch events.
         /// </summary>
-        public bool FiresTouchEvents => JSRef.Get<bool>("firesTouchEvents");
+        public bool FiresTouchEvents => JSRef!.Get<bool>("firesTouchEvents");
     }
 }

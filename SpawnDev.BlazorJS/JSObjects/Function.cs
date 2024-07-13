@@ -18,11 +18,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The name of the function.
         /// </summary>
-        public string? Name => JSRef.Get<string?>("name");
+        public string? Name => JSRef!.Get<string?>("name");
         /// <summary>
         /// Specifies the number of arguments expected by the function.
         /// </summary>
-        public int Length => JSRef.Get<int>("length");
+        public int Length => JSRef!.Get<int>("length");
 
         public T NewApply<T>(object?[]? args = null) => JSInterop.ReturnNew<T>(JSRef, args);
         public T New<T>() => NewApply<T>();
@@ -46,13 +46,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="args"></param>
         public Function(params string[] args) : base(JS.NewApply("Function", args)) { }
 
-        public T Apply<T>(object? thisObj = null, object?[]? args = null) => JSRef.Call<T>("apply", thisObj, args);
-        public Task<T> ApplyAsync<T>(object? thisObj = null, object?[]? args = null) => JSRef.CallAsync<T>("apply", thisObj, args);
-        public void ApplyVoid(object? thisObj = null, object?[]? args = null) => JSRef.CallVoid("apply", thisObj, args);
+        public T Apply<T>(object? thisObj = null, object?[]? args = null) => JSRef!.Call<T>("apply", thisObj, args);
+        public Task<T> ApplyAsync<T>(object? thisObj = null, object?[]? args = null) => JSRef!.CallAsync<T>("apply", thisObj, args);
+        public void ApplyVoid(object? thisObj = null, object?[]? args = null) => JSRef!.CallVoid("apply", thisObj, args);
 
-        public T Call<T>(object? thisObj = null, params object?[] args) => JSRef.Call<T>("apply", thisObj, args);
-        public Task<T> CallAsync<T>(object? thisObj = null, params object?[] args) => JSRef.CallAsync<T>("apply", thisObj, args);
-        public void CallVoid(object? thisObj = null, params object?[] args) => JSRef.CallVoid("apply", thisObj, args);
+        public T Call<T>(object? thisObj = null, params object?[] args) => JSRef!.Call<T>("apply", thisObj, args);
+        public Task<T> CallAsync<T>(object? thisObj = null, params object?[] args) => JSRef!.CallAsync<T>("apply", thisObj, args);
+        public void CallVoid(object? thisObj = null, params object?[] args) => JSRef!.CallVoid("apply", thisObj, args);
 
         public Action ToAction()
         {

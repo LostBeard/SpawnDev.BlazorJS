@@ -12,10 +12,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a read-only array of FileSystemHandle objects representing any files passed along with the launch navigation via the POST method
         /// </summary>
-        public FileSystemHandle[] Files => JSRef.Get<FileSystemHandle[]>("files");
+        public FileSystemHandle[] Files => JSRef!.Get<FileSystemHandle[]>("files");
         /// <summary>
         /// Returns the target URL of the launch.
         /// </summary>
-        public string TargetURL => JSRef.Get<string>("targetURL");
+        public string TargetURL => JSRef!.Get<string>("targetURL");
     }
 }

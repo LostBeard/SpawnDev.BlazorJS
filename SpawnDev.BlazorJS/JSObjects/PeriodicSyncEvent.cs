@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the developer-defined identifier for this PeriodicSyncEvent. Multiple tags can be used by the web app to run different periodic tasks at different frequencies.
         /// </summary>
-        public string Tag => JSRef.Get<string>("tag");
+        public string Tag => JSRef!.Get<string>("tag");
     }
 }

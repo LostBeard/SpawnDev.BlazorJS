@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Properties
-        public int Length => JSRef.Get<int>("length");
+        public int Length => JSRef!.Get<int>("length");
         #endregion
 
         #region Methods
@@ -29,13 +29,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public string? Key(int index) => JSRef.Call<string?>("key", index);
+        public string? Key(int index) => JSRef!.Call<string?>("key", index);
         /// <summary>
         /// When passed a key name and value, will add that key to the storage, or update that key's value if it already exists.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void SetItem(string key, string value) => JSRef.CallVoid("setItem", key, value);
+        public void SetItem(string key, string value) => JSRef!.CallVoid("setItem", key, value);
         /// <summary>
         /// Returns keys using Object.keys
         /// </summary>
@@ -46,22 +46,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public string? GetItem(string key) => JSRef.Call<string?>("getItem", key);
+        public string? GetItem(string key) => JSRef!.Call<string?>("getItem", key);
         /// <summary>
         /// Tests for a key's existence using hasOwnProperty
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool ItemExists(string key) => JSRef.Call<bool>("hasOwnProperty", key);
+        public bool ItemExists(string key) => JSRef!.Call<bool>("hasOwnProperty", key);
         /// <summary>
         /// When passed a key name, will remove that key from the storage.
         /// </summary>
         /// <param name="key"></param>
-        public void RemoveItem(string key) => JSRef.CallVoid("removeItem", key);
+        public void RemoveItem(string key) => JSRef!.CallVoid("removeItem", key);
         /// <summary>
         /// When invoked, will empty all keys out of the storage.
         /// </summary>
-        public void Clear() => JSRef.CallVoid("clear");
+        public void Clear() => JSRef!.CallVoid("clear");
         /// <summary>
         /// JSON getter
         /// </summary>
@@ -80,7 +80,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void SetJSON<T>(string key, T value) => JSRef.CallVoid("setItem", key, JsonSerializer.Serialize(value, DefaultJsonSerializerOptions));
+        public void SetJSON<T>(string key, T value) => JSRef!.CallVoid("setItem", key, JsonSerializer.Serialize(value, DefaultJsonSerializerOptions));
         #endregion
     }
 }

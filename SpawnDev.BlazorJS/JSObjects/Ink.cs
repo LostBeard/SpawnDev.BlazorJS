@@ -9,6 +9,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Ink : JSObject
     {
         public Ink(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public Task<InkPresenter> RequestPresenter(InkPresenterParam param) => JSRef.CallAsync<InkPresenter>("requestPresenter", param);
+        public Task<InkPresenter> RequestPresenter(InkPresenterParam param) => JSRef!.CallAsync<InkPresenter>("requestPresenter", param);
     }
 }

@@ -16,22 +16,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Discards any tasks queued in the WorkerGlobalScope's event loop, effectively closing this particular scope.
         /// </summary>
-        public void Close() => JSRef.CallVoid("close");
+        public void Close() => JSRef!.CallVoid("close");
         /// <summary>
         /// The name that the SharedWorker was (optionally) given when it was created using the SharedWorker() constructor. This is mainly useful for debugging purposes.
         /// </summary>
-        public string Name => JSRef.Get<string>("name");
+        public string Name => JSRef!.Get<string>("name");
         /// <summary>
         /// Sends a message from the port, and optionally, transfers ownership of objects to other browsing contexts.
         /// </summary>
         /// <param name="message"></param>
-        public void PostMessage(object message) => JSRef.CallVoid("postMessage", message);
+        public void PostMessage(object message) => JSRef!.CallVoid("postMessage", message);
         /// <summary>
         /// Sends a message from the port, and optionally, transfers ownership of objects to other browsing contexts.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="transfer"></param>
-        public void PostMessage(object message, object[] transfer) => JSRef.CallVoid("postMessage", message, transfer);
+        public void PostMessage(object message, object[] transfer) => JSRef!.CallVoid("postMessage", message, transfer);
         /// <summary>
         /// Fired when the worker receives a message from its parent.
         /// </summary>

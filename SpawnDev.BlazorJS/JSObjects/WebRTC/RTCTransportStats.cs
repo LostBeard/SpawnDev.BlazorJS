@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <summary>
         /// A string containing the unique identifier for the object that was inspected to produce the RTCIceCandidatePairStats associated with this transport.
         /// </summary>
-        public string? SelectedCandidatePairId => JSRef.Get<string?>("selectedCandidatePairId");
+        public string? SelectedCandidatePairId => JSRef!.Get<string?>("selectedCandidatePairId");
     }
 }

@@ -11,10 +11,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an ArrayBuffer containing the initialization data found. If there is no initialization data associated with the format, it returns null.
         /// </summary>
-        public ArrayBuffer? InitData => JSRef.Get<ArrayBuffer?>("initData");
+        public ArrayBuffer? InitData => JSRef!.Get<ArrayBuffer?>("initData");
         /// <summary>
         /// Returns a case-sensitive string with the type of the format of the initialization data found.
         /// </summary>
-        public string InitDataType => JSRef.Get<string>("initDataType");
+        public string InitDataType => JSRef!.Get<string>("initDataType");
     }
 }

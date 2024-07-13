@@ -23,17 +23,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Removes all key-value pairs from the Map object.
         /// </summary>
-        public void Clear() => JSRef.CallVoid("clear");
+        public void Clear() => JSRef!.CallVoid("clear");
         /// <summary>
         /// Returns true if an element in the Map object existed and has been removed, or false if the element does not exist. map.has(key) will return false afterwards.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool Delete(TKey key) => JSRef.Call<bool>("delete");
+        public bool Delete(TKey key) => JSRef!.Call<bool>("delete");
         /// <summary>
         /// Sets the value for the passed key in the Map object. Returns the Map object.
         /// </summary>
-        public Map<TKey, TValue> Set(TKey key, TValue value) => JSRef.Call<Map<TKey, TValue>>("set", key, value);
+        public Map<TKey, TValue> Set(TKey key, TValue value) => JSRef!.Call<Map<TKey, TValue>>("set", key, value);
         #endregion
 
         #region Events
@@ -58,17 +58,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Removes all key-value pairs from the Map object.
         /// </summary>
-        public void Clear() => JSRef.CallVoid("clear");
+        public void Clear() => JSRef!.CallVoid("clear");
         /// <summary>
         /// Returns true if an element in the Map object existed and has been removed, or false if the element does not exist. map.has(key) will return false afterwards.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool Delete<TKey>(TKey key) => JSRef.Call<bool>("delete");
+        public bool Delete<TKey>(TKey key) => JSRef!.Call<bool>("delete");
         /// <summary>
         /// Sets the value for the passed key in the Map object. Returns the Map object.
         /// </summary>
-        public Map<TKey, TValue> Set<TKey, TValue>(TKey key, TValue value) => JSRef.Call<Map<TKey, TValue>>("set", key, value);
+        public Map<TKey, TValue> Set<TKey, TValue>(TKey key, TValue value) => JSRef!.Call<Map<TKey, TValue>>("set", key, value);
         #endregion
 
         #region Events

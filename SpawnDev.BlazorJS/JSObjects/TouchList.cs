@@ -22,6 +22,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public Touch Items(int i) => JSRef.Call<Touch>("item", i);
+        public Touch Items(int i) => JSRef!.Call<Touch>("item", i);
     }
 }

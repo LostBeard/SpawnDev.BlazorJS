@@ -11,6 +11,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the HIDDevice instance representing the device associated with the connection event.
         /// </summary>
-        public HIDDevice Device => JSRef.Get<HIDDevice>("device");
+        public HIDDevice Device => JSRef!.Get<HIDDevice>("device");
     }
 }

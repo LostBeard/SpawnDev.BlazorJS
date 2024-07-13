@@ -16,11 +16,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A string (either "open" or "closed"), representing the state the element is transitioning to.
         /// </summary>
-        public string NewState => JSRef.Get<string>("newState");
+        public string NewState => JSRef!.Get<string>("newState");
         /// <summary>
         /// A string (either "open" or "closed"), representing the state the element is transitioning from.
         /// </summary>
-        public string OldState => JSRef.Get<string>("oldState");
+        public string OldState => JSRef!.Get<string>("oldState");
 
     }
 }

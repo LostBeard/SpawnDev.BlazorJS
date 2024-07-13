@@ -27,47 +27,47 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A string containing a '#' followed by the fragment identifier of the URL.
         /// </summary>
-        public string Hash => JSRef.Get<string>("hash");
+        public string Hash => JSRef!.Get<string>("hash");
         /// <summary>
         /// A string containing the domain (that is the hostname) followed by (if a port was specified) a ':' and the port of the URL.
         /// </summary>
-        public string Host => JSRef.Get<string>("host");
+        public string Host => JSRef!.Get<string>("host");
         /// <summary>
         /// A string containing the domain of the URL.
         /// </summary>
-        public string Hostname => JSRef.Get<string>("hostname");
+        public string Hostname => JSRef!.Get<string>("hostname");
         /// <summary>
         /// A stringifier that returns a string containing the whole URL.
         /// </summary>
-        public string Href => JSRef.Get<string>("href");
+        public string Href => JSRef!.Get<string>("href");
         /// <summary>
         /// Returns a string containing the origin of the URL, that is its scheme, its domain and its port.
         /// </summary>
-        public string Origin => JSRef.Get<string>("origin");
+        public string Origin => JSRef!.Get<string>("origin");
         /// <summary>
         /// A string containing the password specified before the domain name.
         /// </summary>
-        public string Password => JSRef.Get<string>("password");
+        public string Password => JSRef!.Get<string>("password");
         /// <summary>
         /// A string containing an initial '/' followed by the path of the URL, not including the query string or fragment.
         /// </summary>
-        public string Pathname => JSRef.Get<string>("pathname");
+        public string Pathname => JSRef!.Get<string>("pathname");
         /// <summary>
         /// A string containing the port number of the URL.
         /// </summary>
-        public string Port => JSRef.Get<string>("port");
+        public string Port => JSRef!.Get<string>("port");
         /// <summary>
         /// A string containing the protocol scheme of the URL, including the final ':'.
         /// </summary>
-        public string Protocol => JSRef.Get<string>("protocol");
+        public string Protocol => JSRef!.Get<string>("protocol");
         /// <summary>
         /// A string indicating the URL's parameter string; if any parameters are provided, this string includes all of them, beginning with the leading ? character.
         /// </summary>
-        public string Search => JSRef.Get<string>("search");
+        public string Search => JSRef!.Get<string>("search");
         /// <summary>
         /// A string containing the username specified before the domain name.
         /// </summary>
-        public string Username => JSRef.Get<string>("username");
+        public string Username => JSRef!.Get<string>("username");
         /// <summary>
         /// Returns a string containing a unique blob URL, that is a URL with blob: as its scheme, followed by an opaque string uniquely identifying the object in the browser.
         /// </summary>
@@ -83,7 +83,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a string containing the whole URL. It is a synonym for URL.href, though it can't be used to modify the value
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => JSRef.Call<string>("toString");
+        public override string ToString() => JSRef!.Call<string>("toString");
         /// <summary>
         /// Returns a string containing the whole URL. It is a synonym for URL.href, though it can't be used to modify the value
         /// </summary>

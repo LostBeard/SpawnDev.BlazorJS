@@ -17,15 +17,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Contains the ServiceWorkerRegistration object that represents the service worker's registration.
         /// </summary>
-        public ServiceWorkerRegistration Registration => JSRef.Get<ServiceWorkerRegistration>("registration");
+        public ServiceWorkerRegistration Registration => JSRef!.Get<ServiceWorkerRegistration>("registration");
         /// <summary>
         /// Contains the Clients object associated with the service worker.
         /// </summary>
-        public Clients Clients => JSRef.Get<Clients>("clients");
+        public Clients Clients => JSRef!.Get<Clients>("clients");
         /// <summary>
         /// Returns an object reference to the ServiceWorkerGlobalScope object itself
         /// </summary>
-        public override ServiceWorkerGlobalScope Self => JSRef.Get<ServiceWorkerGlobalScope>("self");
+        public override ServiceWorkerGlobalScope Self => JSRef!.Get<ServiceWorkerGlobalScope>("self");
         #endregion
         #region methods
         /// <summary>
@@ -33,7 +33,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Use this method with Clients.claim() to ensure that updates to the underlying service worker take effect immediately for both the current client and all other active
         /// </summary>
         /// <returns></returns>
-        public Task SkipWaiting() => JSRef.CallVoidAsync("skipWaiting");
+        public Task SkipWaiting() => JSRef!.CallVoidAsync("skipWaiting");
         #endregion
         #region events
         /// <summary>

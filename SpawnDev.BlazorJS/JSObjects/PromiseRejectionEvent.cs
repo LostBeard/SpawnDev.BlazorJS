@@ -19,10 +19,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T ReasonAs<T>() => JSRef.Get<T>("reason");
+        public T ReasonAs<T>() => JSRef!.Get<T>("reason");
         /// <summary>
         /// The JavaScript Promise that was rejected.
         /// </summary>
-        public Promise Promise => JSRef.Get<Promise>("promise");
+        public Promise Promise => JSRef!.Get<Promise>("promise");
     }
 }

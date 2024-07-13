@@ -15,6 +15,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a MediaStreamTrack object representing the track associated with the event.
         /// </summary>
-        public MediaStreamTrack Track => JSRef.Get<MediaStreamTrack>("track");
+        public MediaStreamTrack Track => JSRef!.Get<MediaStreamTrack>("track");
     }
 }

@@ -16,19 +16,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a list of exported property names
         /// </summary>
         /// <returns></returns>
-        public List<string> GetExportNames() => JSRef.GetPropertyNames();
+        public List<string> GetExportNames() => JSRef!.GetPropertyNames();
         /// <summary>
         /// Returns the exported property as type T
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="exportName"></param>
         /// <returns></returns>
-        public T GetExport<T>(string exportName) => JSRef.Get<T>(exportName);
+        public T GetExport<T>(string exportName) => JSRef!.Get<T>(exportName);
         /// <summary>
         /// Returns a Function that represents the class. Function has methods allowing instantiation of the type.
         /// </summary>
         /// <param name="exportName"></param>
         /// <returns></returns>
-        public Function GetExportClass(string exportName) => JSRef.Get<Function>(exportName);
+        public Function GetExportClass(string exportName) => JSRef!.Get<Function>(exportName);
     }
 }

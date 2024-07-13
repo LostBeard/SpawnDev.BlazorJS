@@ -20,19 +20,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the effective bandwidth estimate in megabits per second, rounded to the nearest multiple of 25 kilobits per seconds.
         /// </summary>
-        public float Downlink => JSRef.Get<float>("downlink");
+        public float Downlink => JSRef!.Get<float>("downlink");
         /// <summary>
         /// Returns the effective type of the connection meaning one of 'slow-2g', '2g', '3g', or '4g'. This value is determined using a combination of recently observed round-trip time and downlink values.
         /// </summary>
-        public string EffectiveType => JSRef.Get<string>("effectiveType");
+        public string EffectiveType => JSRef!.Get<string>("effectiveType");
         /// <summary>
         /// Returns the estimated effective round-trip time of the current connection, rounded to the nearest multiple of 25 milliseconds.
         /// </summary>
-        public float Rtt => JSRef.Get<float>("rtt");
+        public float Rtt => JSRef!.Get<float>("rtt");
         /// <summary>
         /// Returns true if the user has set a reduced data usage option on the user agent.
         /// </summary>
-        public bool SaveData => JSRef.Get<bool>("saveData");
+        public bool SaveData => JSRef!.Get<bool>("saveData");
         #endregion
 
         #region Events

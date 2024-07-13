@@ -6,8 +6,8 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
     public class RTCRtpReceiver : JSObject
     {
         public RTCRtpReceiver(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public MediaStreamTrack Track => JSRef.Get<MediaStreamTrack>("track");
-        public RTCDtlsTransport Transport => JSRef.Get<RTCDtlsTransport>("transport");
+        public MediaStreamTrack Track => JSRef!.Get<MediaStreamTrack>("track");
+        public RTCDtlsTransport Transport => JSRef!.Get<RTCDtlsTransport>("transport");
         /// <summary>
         /// The static method RTCRtpReceiver.getCapabilities() returns an object describing the codec and header extension capabilities supported by RTCRtpReceiver objects on the current device.
         /// </summary>

@@ -17,15 +17,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An ArrayBuffer that holds the globally unique identifier for this PublicKeyCredential. This identifier can be used to look up credentials for future calls to navigator.credentials.get().
         /// </summary>
-        public ArrayBuffer RawId => JSRef.Get<ArrayBuffer>("rawId");
+        public ArrayBuffer RawId => JSRef!.Get<ArrayBuffer>("rawId");
         /// <summary>
         /// A string that indicates the mechanism by which the WebAuthn implementation is attached to the authenticator at the time the associated navigator.credentials.create() or navigator.credentials.get() call completes.
         /// </summary>
-        public string AuthenticatorAttachment => JSRef.Get<string>("authenticatorAttachment");
+        public string AuthenticatorAttachment => JSRef!.Get<string>("authenticatorAttachment");
         /// <summary>
         /// An instance of an AuthenticatorResponse object. It is either of type AuthenticatorAttestationResponse if the PublicKeyCredential was the results of a navigator.credentials.create() call, or of type AuthenticatorAssertionResponse if the PublicKeyCredential was the result of a navigator.credentials.get() call.
         /// </summary>
-        public TResponse Response => JSRef.Get<TResponse>("response");
+        public TResponse Response => JSRef!.Get<TResponse>("response");
         /// <summary>
         /// Returns a Promise which resolves to true if an authenticator bound to the platform is capable of verifying the user.
         /// </summary>

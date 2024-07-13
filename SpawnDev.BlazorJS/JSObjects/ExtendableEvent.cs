@@ -17,11 +17,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Extends the lifetime of the event. It is intended to be called in the install event handler for the installing worker and on the activate event handler for the active worker.
         /// </summary>
         /// <param name="promise"></param>
-        public void WaitUntil(Promise promise) => JSRef.CallVoid("waitUntil", promise);
+        public void WaitUntil(Promise promise) => JSRef!.CallVoid("waitUntil", promise);
         /// <summary>
         /// Extends the lifetime of the event. It is intended to be called in the install event handler for the installing worker and on the activate event handler for the active worker.
         /// </summary>
         /// <param name="promise"></param>
-        public void WaitUntil(Task promise) => JSRef.CallVoid("waitUntil", (Promise)promise);
+        public void WaitUntil(Task promise) => JSRef!.CallVoid("waitUntil", (Promise)promise);
     }
 }

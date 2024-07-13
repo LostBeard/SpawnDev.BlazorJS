@@ -18,6 +18,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Task<WakeLockSentinel> Request(string type = "screen") => JSRef.CallAsync<WakeLockSentinel>("request", type);
+        public Task<WakeLockSentinel> Request(string type = "screen") => JSRef!.CallAsync<WakeLockSentinel>("request", type);
     }
 }

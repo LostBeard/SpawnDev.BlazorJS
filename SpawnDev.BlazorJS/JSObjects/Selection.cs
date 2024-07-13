@@ -17,54 +17,54 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the Node in which the selection begins. Can return null if selection never existed in the document (e.g., an iframe that was never clicked on).
         /// </summary>
-        public Node AnchorNode => JSRef.Get<Node>("anchorNode");
+        public Node AnchorNode => JSRef!.Get<Node>("anchorNode");
         /// <summary>
         /// Returns a number representing the offset of the selection's anchor within the anchorNode. If anchorNode is a text node, this is the number of characters within anchorNode preceding the anchor. If anchorNode is an element, this is the number of child nodes of the anchorNode preceding the anchor.
         /// </summary>
-        public int AnchorOffset => JSRef.Get<int>("anchorOffset");
-        public Node BaseNode => JSRef.Get<Node>("baseNode");
-        public int BaseOffset => JSRef.Get<int>("baseOffset");
-        public Node ExtentNode => JSRef.Get<Node>("extentNode");
-        public int ExtentOffset => JSRef.Get<int>("extentOffset");
+        public int AnchorOffset => JSRef!.Get<int>("anchorOffset");
+        public Node BaseNode => JSRef!.Get<Node>("baseNode");
+        public int BaseOffset => JSRef!.Get<int>("baseOffset");
+        public Node ExtentNode => JSRef!.Get<Node>("extentNode");
+        public int ExtentOffset => JSRef!.Get<int>("extentOffset");
         /// <summary>
         /// Returns the Node in which the selection ends. Can return null if selection never existed in the document (for example, in an iframe that was never clicked on).
         /// </summary>
-        public Node FocusNode => JSRef.Get<Node>("focusNode");
+        public Node FocusNode => JSRef!.Get<Node>("focusNode");
         /// <summary>
         /// Returns a number representing the offset of the selection's anchor within the focusNode. If focusNode is a text node, this is the number of characters within focusNode preceding the focus. If focusNode is an element, this is the number of child nodes of the focusNode preceding the focus.
         /// </summary>
-        public int FocusOffset => JSRef.Get<int>("focusOffset");
+        public int FocusOffset => JSRef!.Get<int>("focusOffset");
         /// <summary>
         /// Returns a Boolean indicating whether the selection's start and end points are at the same position.
         /// </summary>
-        public bool IsCollapsed => JSRef.Get<bool>("isCollapsed");
+        public bool IsCollapsed => JSRef!.Get<bool>("isCollapsed");
         /// <summary>
         /// Returns the number of ranges in the selection.
         /// </summary>
-        public int RangeCount => JSRef.Get<int>("rangeCount");
+        public int RangeCount => JSRef!.Get<int>("rangeCount");
         /// <summary>
         /// Returns a string describing the type of the current selection.
         /// </summary>
-        public string Type => JSRef.Get<string>("type");
+        public string Type => JSRef!.Get<string>("type");
         #endregion
 
         #region Methods
-        //public void AddRange() => JSRef.CallVoid("addRange");
-        //public void Collapse() => JSRef.CallVoid("collapse");
-        //public void CollapseToEnd() => JSRef.CallVoid("collapseToEnd");
-        //public void CollapseToStart() => JSRef.CallVoid("collapseToStart");
-        //public void ContainsNode() => JSRef.CallVoid("containsNode");
-        //public void DeleteFromDocument() => JSRef.CallVoid("deleteFromDocument");
-        //public void Empty() => JSRef.CallVoid("empty");
-        //public void Extend() => JSRef.CallVoid("extend");
-        //public void GetRangeAt() => JSRef.CallVoid("getRangeAt");
-        //public void Modify() => JSRef.CallVoid("modify");
-        //public void RemoveAllRanges() => JSRef.CallVoid("removeAllRanges");
-        //public void RemoveRange() => JSRef.CallVoid("removeRange");
-        //public void SelectAllChildren() => JSRef.CallVoid("selectAllChildren");
-        //public void SetBaseAndExtent() => JSRef.CallVoid("setBaseAndExtent");
-        //public void SetPosition() => JSRef.CallVoid("setPosition");
-        public override string ToString() => JSRef.Call<string>("toString");
+        //public void AddRange() => JSRef!.CallVoid("addRange");
+        //public void Collapse() => JSRef!.CallVoid("collapse");
+        //public void CollapseToEnd() => JSRef!.CallVoid("collapseToEnd");
+        //public void CollapseToStart() => JSRef!.CallVoid("collapseToStart");
+        //public void ContainsNode() => JSRef!.CallVoid("containsNode");
+        //public void DeleteFromDocument() => JSRef!.CallVoid("deleteFromDocument");
+        //public void Empty() => JSRef!.CallVoid("empty");
+        //public void Extend() => JSRef!.CallVoid("extend");
+        //public void GetRangeAt() => JSRef!.CallVoid("getRangeAt");
+        //public void Modify() => JSRef!.CallVoid("modify");
+        //public void RemoveAllRanges() => JSRef!.CallVoid("removeAllRanges");
+        //public void RemoveRange() => JSRef!.CallVoid("removeRange");
+        //public void SelectAllChildren() => JSRef!.CallVoid("selectAllChildren");
+        //public void SetBaseAndExtent() => JSRef!.CallVoid("setBaseAndExtent");
+        //public void SetPosition() => JSRef!.CallVoid("setPosition");
+        public override string ToString() => JSRef!.Call<string>("toString");
         #endregion
     }
 }

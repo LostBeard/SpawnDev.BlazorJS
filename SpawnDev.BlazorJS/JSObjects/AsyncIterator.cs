@@ -68,7 +68,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// request the next iterator result
         /// </summary>
         /// <returns></returns>
-        public Task<IteratorResult<TValue>> Next() => JSRef.CallAsync<IteratorResult<TValue>>("next");
+        public Task<IteratorResult<TValue>> Next() => JSRef!.CallAsync<IteratorResult<TValue>>("next");
         /// <summary>
         /// Returns an IAsyncEnumerable
         /// </summary>

@@ -26,26 +26,26 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T ResultAs<T>() => JSRef.Get<T>("result");
+        public T ResultAs<T>() => JSRef!.Get<T>("result");
         /// <summary>
         /// The file's contents. This property is only valid after the read operation is complete, and the format of the data depends on which of the methods was used to initiate the read operation.
         /// </summary>
-        public JSObject? Result => JSRef.Get<JSObject?>("result");
+        public JSObject? Result => JSRef!.Get<JSObject?>("result");
         /// <summary>
         /// Starts reading the contents of the specified Blob, once finished, the result attribute contains a data: URL representing the file's data.
         /// </summary>
         /// <param name="blob"></param>
-        public void ReadAsDataURL(Blob blob) => JSRef.CallVoid("readAsDataURL", blob);
+        public void ReadAsDataURL(Blob blob) => JSRef!.CallVoid("readAsDataURL", blob);
         /// <summary>
         /// Starts reading the contents of the specified Blob, once finished, the result attribute contains an ArrayBuffer representing the file's data.
         /// </summary>
         /// <param name="blob"></param>
-        public void ReadAsArrayBuffer(Blob blob) => JSRef.CallVoid("readAsArrayBuffer", blob);
+        public void ReadAsArrayBuffer(Blob blob) => JSRef!.CallVoid("readAsArrayBuffer", blob);
         /// <summary>
         /// Starts reading the contents of the specified Blob, once finished, the result attribute contains the contents of the file as a text string. An optional encoding name can be specified.
         /// </summary>
         /// <param name="blob"></param>
-        public void ReadAsText(Blob blob) => JSRef.CallVoid("readAsText", blob);
+        public void ReadAsText(Blob blob) => JSRef!.CallVoid("readAsText", blob);
         /// <summary>
         /// Fired when a read has been aborted, for example because the program called FileReader.abort().
         /// </summary>

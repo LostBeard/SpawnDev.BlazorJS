@@ -16,15 +16,15 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <summary>
         /// A string that uniquely identifies the object was monitored to produce the set of statistics. This value persists across reports for (at least) the lifetime of the connection. Note however that for some statistics the ID may vary between browsers and for subsequent connections, even to the same peer.
         /// </summary>
-        public string Id => JSRef.Get<string>("id");
+        public string Id => JSRef!.Get<string>("id");
         /// <summary>
         /// A string with a value that indicates the type of statistics that the object contains, such as candidate-pair, inbound-rtp, certificate, and so on. The types of statistics and their corresponding objects are listed below.
         /// </summary>
-        public string Type => JSRef.Get<string>("type");
+        public string Type => JSRef!.Get<string>("type");
         /// <summary>
         /// A DOMHighResTimeStamp object indicating the time at which the sample was taken for this statistics object.
         /// </summary>
-        public double Timestamp => JSRef.Get<double>("timestamp");
+        public double Timestamp => JSRef!.Get<double>("timestamp");
         public RTCStats Typed()
         {
             switch (Type)

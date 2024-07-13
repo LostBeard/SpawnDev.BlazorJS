@@ -16,18 +16,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Closes the associated stream.
         /// </summary>
-        public void Close() => JSRef.CallVoid("close");
+        public void Close() => JSRef!.CallVoid("close");
         /// <summary>
         /// Enqueues a given chunk in the associated stream.
         /// </summary>
-        public void Enqueue(object data) => JSRef.CallVoid("enqueue", data);
+        public void Enqueue(object data) => JSRef!.CallVoid("enqueue", data);
         /// <summary>
         /// Causes any future interactions with the associated stream to error.
         /// </summary>
-        public void Error() => JSRef.CallVoid("error");
+        public void Error() => JSRef!.CallVoid("error");
         /// <summary>
         /// Causes any future interactions with the associated stream to error.
         /// </summary>
-        public void Error(object error) => JSRef.CallVoid("error", error);
+        public void Error(object error) => JSRef!.CallVoid("error", error);
     }
 }

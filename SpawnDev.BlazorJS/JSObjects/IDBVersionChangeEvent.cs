@@ -17,11 +17,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The oldVersion read-only property of the IDBVersionChangeEvent interface returns the old version number of the database.<br />
         /// A number containing a 64-bit integer.
         /// </summary>
-        public long OldVersion => JSRef.Get<long>("oldVersion");
+        public long OldVersion => JSRef!.Get<long>("oldVersion");
         /// <summary>
         /// The newVersion read-only property of the IDBVersionChangeEvent interface returns the new version number of the database.<br />
         /// A number that is a 64-bit integer or null if the database is being deleted.
         /// </summary>
-        public long? NewVersion => JSRef.Get<long?>("newVersion");
+        public long? NewVersion => JSRef!.Get<long?>("newVersion");
     }
 }

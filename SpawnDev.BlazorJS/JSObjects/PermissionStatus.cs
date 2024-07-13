@@ -17,15 +17,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the name of a requested permission, identical to the name passed to Permissions.query
         /// </summary>
-        public string Name => JSRef.Get<string>("name");
+        public string Name => JSRef!.Get<string>("name");
         /// <summary>
         /// Returns the state of a requested permission; one of 'granted', 'denied', or 'prompt'.
         /// </summary>
-        public string State => JSRef.Get<string>("state");
+        public string State => JSRef!.Get<string>("state");
         /// <summary>
         /// Returns the state of a requested permission; one of 'granted', 'denied', or 'prompt'. Later versions of the specification replace this with PermissionStatus.state.
         /// </summary>
-        public string Status => JSRef.Get<string>("status");
+        public string Status => JSRef!.Get<string>("status");
         /// <summary>
         /// The change event of the PermissionStatus interface fires whenever the PermissionStatus.state property changes.
         /// </summary>

@@ -16,18 +16,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a Promise that resolves with an array of SerialPort objects representing serial ports connected to the host which the origin has permission to access.
         /// </summary>
         /// <returns></returns>
-        public Task<Array<SerialPort>> GetPorts() => JSRef.CallAsync<Array<SerialPort>>("getPorts");
+        public Task<Array<SerialPort>> GetPorts() => JSRef!.CallAsync<Array<SerialPort>>("getPorts");
         /// <summary>
         /// The Serial.requestPort() method of the Serial interface returns a Promise that resolves with an instance of SerialPort representing the device chosen by the user or rejects if no device was selected.
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task<SerialPort> RequestPort(SerialPortRequestOptions options) => JSRef.CallAsync<SerialPort>("requestPort", options);
+        public Task<SerialPort> RequestPort(SerialPortRequestOptions options) => JSRef!.CallAsync<SerialPort>("requestPort", options);
         /// <summary>
         /// The Serial.requestPort() method of the Serial interface returns a Promise that resolves with an instance of SerialPort representing the device chosen by the user or rejects if no device was selected.
         /// </summary>
         /// <returns></returns>
-        public Task<SerialPort> RequestPort() => JSRef.CallAsync<SerialPort>("requestPort");
+        public Task<SerialPort> RequestPort() => JSRef!.CallAsync<SerialPort>("requestPort");
         #endregion
 
         #region Events

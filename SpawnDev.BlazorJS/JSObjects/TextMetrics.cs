@@ -17,6 +17,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the width of a segment of inline text in CSS pixels. It takes into account the current font of the context.
         /// </summary>
-        public double Width { get => JSRef.Get<double>("width"); set => JSRef.Set("width", value); }
+        public double Width { get => JSRef!.Get<double>("width"); set => JSRef!.Set("width", value); }
     }
 }

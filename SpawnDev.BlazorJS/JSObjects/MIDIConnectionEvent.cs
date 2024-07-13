@@ -11,6 +11,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a reference to a MIDIPort instance for a port that has been connected or disconnected.
         /// </summary>
-        public MIDIPort Port => JSRef.Get<MIDIPort>("port");
+        public MIDIPort Port => JSRef!.Get<MIDIPort>("port");
     }
 }

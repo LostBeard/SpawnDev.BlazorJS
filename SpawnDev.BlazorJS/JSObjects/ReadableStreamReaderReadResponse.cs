@@ -15,10 +15,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// True if there is no more data to read
         /// </summary>
-        public bool Done => JSRef.Get<bool>("done");
+        public bool Done => JSRef!.Get<bool>("done");
         /// <summary>
         /// The current chunk if not done
         /// </summary>
-        public Uint8Array? Value => JSRef.Get<Uint8Array?>("value");
+        public Uint8Array? Value => JSRef!.Get<Uint8Array?>("value");
     }
 }

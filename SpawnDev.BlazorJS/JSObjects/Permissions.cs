@@ -10,6 +10,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         public Permissions(IJSInProcessObjectReference _ref) : base(_ref) { }
 
-        public Task<PermissionStatus> Query(PermissionDescriptor permissionDescriptor) => JSRef.CallAsync<PermissionStatus>("query", permissionDescriptor);
+        public Task<PermissionStatus> Query(PermissionDescriptor permissionDescriptor) => JSRef!.CallAsync<PermissionStatus>("query", permissionDescriptor);
     }
 }

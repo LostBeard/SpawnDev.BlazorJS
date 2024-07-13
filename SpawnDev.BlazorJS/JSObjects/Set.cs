@@ -19,17 +19,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Set<TValue> Add<TValue>(TValue value) => JSRef.Call<Set<TValue>>("add", value);
+        public Set<TValue> Add<TValue>(TValue value) => JSRef!.Call<Set<TValue>>("add", value);
         /// <summary>
         /// The clear() method of Set instances removes all elements from this set.
         /// </summary>
-        public void Clear() => JSRef.CallVoid("clear");
+        public void Clear() => JSRef!.CallVoid("clear");
         /// <summary>
         /// The delete() method of Set instances removes a specified value from this set, if it is in the set.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool Delete<TValue>(TValue value) => JSRef.Call<bool>("delete", value);
+        public bool Delete<TValue>(TValue value) => JSRef!.Call<bool>("delete", value);
         #endregion
 
         #region Events
@@ -54,17 +54,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Set<TValue> Add(TValue value) => JSRef.Call<Set<TValue>>("add", value);
+        public Set<TValue> Add(TValue value) => JSRef!.Call<Set<TValue>>("add", value);
         /// <summary>
         /// The clear() method of Set instances removes all elements from this set.
         /// </summary>
-        public void Clear() => JSRef.CallVoid("clear");
+        public void Clear() => JSRef!.CallVoid("clear");
         /// <summary>
         /// The delete() method of Set instances removes a specified value from this set, if it is in the set.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool Delete(TValue value) => JSRef.Call<bool>("delete", value);
+        public bool Delete(TValue value) => JSRef!.Call<bool>("delete", value);
         #endregion
 
         #region Events

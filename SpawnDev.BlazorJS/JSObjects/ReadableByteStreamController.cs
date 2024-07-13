@@ -17,25 +17,25 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the current BYOB pull request, or null if there no outstanding request.
         /// </summary>
-        public ReadableStreamBYOBRequest? ByobRequest => JSRef.Get<ReadableStreamBYOBRequest?>("byobRequest");
+        public ReadableStreamBYOBRequest? ByobRequest => JSRef!.Get<ReadableStreamBYOBRequest?>("byobRequest");
         /// <summary>
         /// Returns the desired size required to fill the stream's internal queue.<br />
         /// Note that this can be negative if the queue is over-full.
         /// </summary>
-        public int DesiredSize => JSRef.Get<int>("desiredSize");
+        public int DesiredSize => JSRef!.Get<int>("desiredSize");
         /// <summary>
         /// Closes the associated stream.
         /// </summary>
-        public void Close() => JSRef.CallVoid("close");
+        public void Close() => JSRef!.CallVoid("close");
         /// <summary>
         /// Enqueues a given chunk in the associated stream.
         /// </summary>
         /// <param name="chunk"></param>
-        public void Enqueue(object chunk) => JSRef.CallVoid("enqueue", chunk);
+        public void Enqueue(object chunk) => JSRef!.CallVoid("enqueue", chunk);
         /// <summary>
         /// Any object that you want future interactions to fail with.
         /// </summary>
         /// <param name="errorObject"></param>
-        public void Error(object errorObject) => JSRef.CallVoid("error", errorObject);
+        public void Error(object errorObject) => JSRef!.CallVoid("error", errorObject);
     }
 }

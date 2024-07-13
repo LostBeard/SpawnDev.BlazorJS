@@ -18,14 +18,14 @@ namespace SpawnDev.BlazorJS.JSObjects {
     // https://developer.mozilla.org/en-US/docs/Web/API/Response
 
     public class Response : JSObject {
-        public bool Ok => JSRef.Get<bool>("ok");
+        public bool Ok => JSRef!.Get<bool>("ok");
         public Response(IJSInProcessObjectReference _ref) : base(_ref) { }
         public Response() : base(JS.New(nameof(Response))) { }
         public Response(string body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
         public Response(Blob body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
         public Response(ArrayBuffer body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
         public Response(ReadableStream body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
-        public Headers Headers => JSRef.Get<Headers>("headers");
+        public Headers Headers => JSRef!.Get<Headers>("headers");
         //public Response(TypedArray body) : base(JS.New(nameof(Response), body)) { }
         //public Response(DataView body) : base(JS.New(nameof(Response), body)) { }
         //public Response(FormData body) : base(JS.New(nameof(Response), body)) { }
@@ -59,9 +59,9 @@ namespace SpawnDev.BlazorJS.JSObjects {
         //    headers.JSRef.CallVoid("set", "Content-Length", data.Length);
         //}
 
-        public Task<Blob> Blob() => JSRef.CallAsync<Blob>("blob");
-        public Task<string> Text() => JSRef.CallAsync<string>("text");
-        public Task<ArrayBuffer> ArrayBuffer() => JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
+        public Task<Blob> Blob() => JSRef!.CallAsync<Blob>("blob");
+        public Task<string> Text() => JSRef!.CallAsync<string>("text");
+        public Task<ArrayBuffer> ArrayBuffer() => JSRef!.CallAsync<ArrayBuffer>("arrayBuffer");
 
         public void HeaderSet(string key, string value) {
             using var headers = JSRef.Get<IJSInProcessObjectReference>("headers");

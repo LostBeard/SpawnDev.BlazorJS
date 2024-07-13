@@ -10,42 +10,42 @@ namespace SpawnDev.BlazorJS.JSObjects
         public DOMRectReadOnly(IJSInProcessObjectReference _ref) : base(_ref) { }
         public virtual float X
         {
-            get => JSRef.Get<float>("x");
+            get => JSRef!.Get<float>("x");
             set { /* ReadOnly */ }
         }
         public virtual float Y
         {
-            get => JSRef.Get<float>("y");
+            get => JSRef!.Get<float>("y");
             set { /* ReadOnly */ }
         }
         public virtual float Width
         {
-            get => JSRef.Get<float>("width");
+            get => JSRef!.Get<float>("width");
             set { /* ReadOnly */ }
         }
         public virtual float Height
         {
-            get => JSRef.Get<float>("height");
+            get => JSRef!.Get<float>("height");
             set { /* ReadOnly */ }
         }
         public virtual float Top
         {
-            get => JSRef.Get<float>("top");
+            get => JSRef!.Get<float>("top");
             set { /* ReadOnly */ }
         }
         public virtual float Right
         {
-            get => JSRef.Get<float>("right");
+            get => JSRef!.Get<float>("right");
             set { /* ReadOnly */ }
         }
         public virtual float Bottom
         {
-            get => JSRef.Get<float>("bottom");
+            get => JSRef!.Get<float>("bottom");
             set { /* ReadOnly */ }
         }
         public virtual float Left
         {
-            get => JSRef.Get<float>("left");
+            get => JSRef!.Get<float>("left");
             set { /* ReadOnly */ }
         }
     }

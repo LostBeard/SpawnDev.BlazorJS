@@ -20,31 +20,31 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the height of the visual viewport in CSS pixels.
         /// </summary>
-        public float Height => JSRef.Get<float>("height");
+        public float Height => JSRef!.Get<float>("height");
         /// <summary>
         /// Returns the offset of the left edge of the visual viewport from the left edge of the layout viewport in CSS pixels.
         /// </summary>
-        public float OffsetLeft => JSRef.Get<float>("offsetLeft");
+        public float OffsetLeft => JSRef!.Get<float>("offsetLeft");
         /// <summary>
         /// Returns the offset of the top edge of the visual viewport from the top edge of the layout viewport in CSS pixels.
         /// </summary>
-        public float OffsetTop => JSRef.Get<float>("offsetTop");
+        public float OffsetTop => JSRef!.Get<float>("offsetTop");
         /// <summary>
         /// Returns the x coordinate of the visual viewport relative to the initial containing block origin of the top edge in CSS pixels.
         /// </summary>
-        public float PageLeft => JSRef.Get<float>("pageLeft");
+        public float PageLeft => JSRef!.Get<float>("pageLeft");
         /// <summary>
         /// Returns the y coordinate of the visual viewport relative to the initial containing block origin of the top edge in CSS pixels.
         /// </summary>
-        public float PageTop => JSRef.Get<float>("pageTop");
+        public float PageTop => JSRef!.Get<float>("pageTop");
         /// <summary>
         /// Returns the pinch-zoom scaling factor applied to the visual viewport.
         /// </summary>
-        public float Scale => JSRef.Get<float>("scale");
+        public float Scale => JSRef!.Get<float>("scale");
         /// <summary>
         /// Returns the width of the visual viewport in CSS pixels.
         /// </summary>
-        public float Width => JSRef.Get<float>("width");
+        public float Width => JSRef!.Get<float>("width");
         #endregion
 
         #region Events

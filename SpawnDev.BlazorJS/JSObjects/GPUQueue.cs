@@ -9,10 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class GPUQueue : JSObject
     {
         public GPUQueue(IJSInProcessObjectReference _ref) : base(_ref){ }
-        public string Label => JSRef.Get<string>("label");
+        public string Label => JSRef!.Get<string>("label");
 
         // TODO finish
-        //public void CopyExternalImageToTexture(source, destination, copySize) => JSRef.CallVoid("copyExternalImageToTexture");
+        //public void CopyExternalImageToTexture(source, destination, copySize) => JSRef!.CallVoid("copyExternalImageToTexture");
         
     }
 }

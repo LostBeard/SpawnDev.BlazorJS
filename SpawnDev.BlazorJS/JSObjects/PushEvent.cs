@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a reference to a PushMessageData object containing data sent to the PushSubscription.
         /// </summary>
-        public PushMessageData Data => JSRef.Get<PushMessageData>("data");
+        public PushMessageData Data => JSRef!.Get<PushMessageData>("data");
     }
 }

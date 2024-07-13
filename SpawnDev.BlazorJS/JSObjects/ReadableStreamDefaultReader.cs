@@ -16,20 +16,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a Promise that fulfills when the stream closes, or rejects if the stream throws an error or the reader's lock is released. This property enables you to write code that responds to an end to the streaming process.
         /// </summary>
-        public bool Closed => JSRef.Get<bool>("closed");
+        public bool Closed => JSRef!.Get<bool>("closed");
         /// <summary>
         /// Returns a Promise that resolves when the stream is canceled. Calling this method signals a loss of interest in the stream by a consumer. The supplied reason argument will be given to the underlying source, which may or may not use it.
         /// </summary>
         /// <returns></returns>
-        public Task Cancel() => JSRef.CallVoidAsync("cancel");
+        public Task Cancel() => JSRef!.CallVoidAsync("cancel");
         /// <summary>
         /// Returns a promise providing access to the next chunk in the stream's internal queue.
         /// </summary>
         /// <returns></returns>
-        public Task<ReadableStreamReaderReadResponse> Read() => JSRef.CallAsync<ReadableStreamReaderReadResponse>("read");
+        public Task<ReadableStreamReaderReadResponse> Read() => JSRef!.CallAsync<ReadableStreamReaderReadResponse>("read");
         /// <summary>
         /// Releases the reader's lock on the stream.
         /// </summary>
-        public void ReleaseLock() => JSRef.CallVoid("releaseLock");
+        public void ReleaseLock() => JSRef!.CallVoid("releaseLock");
     }
 }

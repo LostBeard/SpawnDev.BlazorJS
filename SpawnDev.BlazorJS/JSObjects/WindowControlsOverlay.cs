@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A Boolean that indicates whether the window controls overlay is visible or not.
         /// </summary>
-        public bool Visible => JSRef.Get<bool>("visible");
+        public bool Visible => JSRef!.Get<bool>("visible");
         #endregion
 
         #region Methods
@@ -28,7 +28,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The getTitlebarAreaRect() method of the WindowControlsOverlay interface queries the current geometry of the title bar area of the Progressive Web App window.
         /// </summary>
         /// <returns></returns>
-        public DOMRectReadOnly GetTitlebarAreaRect() => JSRef.Call<DOMRectReadOnly>("getTitlebarAreaRect");
+        public DOMRectReadOnly GetTitlebarAreaRect() => JSRef!.Call<DOMRectReadOnly>("getTitlebarAreaRect");
         #endregion
 
         #region Events

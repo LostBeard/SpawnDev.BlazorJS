@@ -34,7 +34,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A string that reflects the src HTML attribute, indicating the address of the text track data.
         /// </summary>
-        public string Src { get => JSRef.Get<string>("src"); set => JSRef.Set("src", value); }
+        public string Src { get => JSRef!.Get<string>("src"); set => JSRef!.Set("src", value); }
         #endregion
 
         #region Events

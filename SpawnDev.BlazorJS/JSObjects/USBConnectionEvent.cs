@@ -15,6 +15,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a USBDevice object representing the current device.
         /// </summary>
-        public USBDevice Device => JSRef.Get<USBDevice>("device");
+        public USBDevice Device => JSRef!.Get<USBDevice>("device");
     }
 }

@@ -21,11 +21,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Indicates whether the current window has sticky user activation.
         /// </summary>
-        public bool HasBeenActive => JSRef.Get<bool>("hasBeenActive");
+        public bool HasBeenActive => JSRef!.Get<bool>("hasBeenActive");
         /// <summary>
         /// Indicates whether the current window has transient user activation.
         /// </summary>
-        public bool IsActive => JSRef.Get<bool>("isActive");
+        public bool IsActive => JSRef!.Get<bool>("isActive");
         #endregion
     }
 }

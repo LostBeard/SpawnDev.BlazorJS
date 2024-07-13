@@ -17,22 +17,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Subscribes to a push service. It returns a Promise that resolves to a PushSubscription object containing details of a push subscription. A new push subscription is created if the current service worker does not have an existing subscription.
         /// </summary>
         /// <returns></returns>
-        public Task<PushSubscription> Subscribe() => JSRef.CallAsync<PushSubscription>("subscribe");
+        public Task<PushSubscription> Subscribe() => JSRef!.CallAsync<PushSubscription>("subscribe");
         /// <summary>
         /// Subscribes to a push service. It returns a Promise that resolves to a PushSubscription object containing details of a push subscription. A new push subscription is created if the current service worker does not have an existing subscription.
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task<PushSubscription> Subscribe(PushManagerSubscribeOptions options) => JSRef.CallAsync<PushSubscription>("subscribe", options);
+        public Task<PushSubscription> Subscribe(PushManagerSubscribeOptions options) => JSRef!.CallAsync<PushSubscription>("subscribe", options);
         /// <summary>
         /// Retrieves an existing push subscription. It returns a Promise that resolves to a PushSubscription object containing details of an existing subscription. If no existing subscription exists, this resolves to a null value.
         /// </summary>
         /// <returns></returns>
-        public Task<PushSubscription?> GetSubscription() => JSRef.CallAsync<PushSubscription?>("getSubscription");
+        public Task<PushSubscription?> GetSubscription() => JSRef!.CallAsync<PushSubscription?>("getSubscription");
         /// <summary>
         /// Returns a Promise that resolves to the permission state of the current PushManager, which will be one of 'granted', 'denied', or 'prompt'.
         /// </summary>
         /// <returns></returns>
-        public Task<string> PermissionState() => JSRef.CallAsync<string>("permissionState");
+        public Task<string> PermissionState() => JSRef!.CallAsync<string>("permissionState");
     }
 }

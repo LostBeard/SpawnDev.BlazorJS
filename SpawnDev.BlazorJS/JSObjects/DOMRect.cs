@@ -27,64 +27,64 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public override float X
         {
-            get => JSRef.Get<float>("x");
-            set => JSRef.Set("x", value);
+            get => JSRef!.Get<float>("x");
+            set => JSRef!.Set("x", value);
         }
         /// <summary>
         /// The y coordinate of the DOMRect's origin (typically the top-left corner of the rectangle).
         /// </summary>
         public override float Y
         {
-            get => JSRef.Get<float>("y");
-            set => JSRef.Set("y", value);
+            get => JSRef!.Get<float>("y");
+            set => JSRef!.Set("y", value);
         }
         /// <summary>
         /// The width of the DOMRect.
         /// </summary>
         public override float Width
         {
-            get => JSRef.Get<float>("width");
-            set => JSRef.Set("width", value);
+            get => JSRef!.Get<float>("width");
+            set => JSRef!.Set("width", value);
         }
         /// <summary>
         /// The height of the DOMRect.
         /// </summary>
         public override float Height
         {
-            get => JSRef.Get<float>("height");
-            set => JSRef.Set("width", value);
+            get => JSRef!.Get<float>("height");
+            set => JSRef!.Set("width", value);
         }
         /// <summary>
         /// Returns the top coordinate value of the DOMRect (has the same value as y, or y + height if height is negative).
         /// </summary>
         public override float Top
         {
-            get => JSRef.Get<float>("top");
-            set => JSRef.Set("top", value);
+            get => JSRef!.Get<float>("top");
+            set => JSRef!.Set("top", value);
         }
         /// <summary>
         /// Returns the right coordinate value of the DOMRect (has the same value as x + width, or x if width is negative).
         /// </summary>
         public override float Right
         {
-            get => JSRef.Get<float>("right");
-            set => JSRef.Set("right", value);
+            get => JSRef!.Get<float>("right");
+            set => JSRef!.Set("right", value);
         }
         /// <summary>
         /// Returns the bottom coordinate value of the DOMRect (has the same value as y + height, or y if height is negative).
         /// </summary>
         public override float Bottom
         {
-            get => JSRef.Get<float>("bottom");
-            set => JSRef.Set("bottom", value);
+            get => JSRef!.Get<float>("bottom");
+            set => JSRef!.Set("bottom", value);
         }
         /// <summary>
         /// Returns the left coordinate value of the DOMRect (has the same value as x, or x + width if width is negative).
         /// </summary>
         public override float Left
         {
-            get => JSRef.Get<float>("left");
-            set => JSRef.Set("left", value);
+            get => JSRef!.Get<float>("left");
+            set => JSRef!.Set("left", value);
         }
     }
 }

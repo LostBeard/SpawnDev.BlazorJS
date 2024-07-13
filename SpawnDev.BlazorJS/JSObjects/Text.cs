@@ -29,11 +29,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a HTMLSlotElement representing the <slot> the node is inserted in.
         /// </summary>
-        public HTMLSlotElement? AssignedSlot => JSRef.Get<HTMLSlotElement?>("assignedSlot");
+        public HTMLSlotElement? AssignedSlot => JSRef!.Get<HTMLSlotElement?>("assignedSlot");
         /// <summary>
         /// Returns a string containing the text of all Text nodes logically adjacent to this Node, concatenated in document order.
         /// </summary>
-        public string WholeText => JSRef.Get<string>("wholeText");
+        public string WholeText => JSRef!.Get<string>("wholeText");
         #endregion
 
         #region Methods
@@ -42,7 +42,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="offset">The index immediately before which to break the text node.</param>
         /// <returns>Returns the newly created Text node that contains the text after the specified offset point.</returns>
-        public Text SplitText(int offset) => JSRef.Call<Text>("splitText", offset);
+        public Text SplitText(int offset) => JSRef!.Call<Text>("splitText", offset);
         #endregion
     }
 }

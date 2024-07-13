@@ -20,15 +20,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an instance of MIDIInputMap which provides access to any available MIDI input ports.
         /// </summary>
-        public MIDIInputMap Inputs => JSRef.Get<MIDIInputMap>("inputs");
+        public MIDIInputMap Inputs => JSRef!.Get<MIDIInputMap>("inputs");
         /// <summary>
         /// Returns an instance of MIDIOutputMap which provides access to any available MIDI output ports.
         /// </summary>
-        public MIDIOutputMap Outputs => JSRef.Get<MIDIOutputMap>("outputs");
+        public MIDIOutputMap Outputs => JSRef!.Get<MIDIOutputMap>("outputs");
         /// <summary>
         /// A boolean attribute indicating whether system exclusive support is enabled on the current MIDIAccess instance.
         /// </summary>
-        public bool SysexEnabled => JSRef.Get<bool>("sysexEnabled");
+        public bool SysexEnabled => JSRef!.Get<bool>("sysexEnabled");
         #endregion
 
         #region Methods

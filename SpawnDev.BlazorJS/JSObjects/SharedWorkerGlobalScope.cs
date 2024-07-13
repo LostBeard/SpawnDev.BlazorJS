@@ -16,11 +16,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Discards any tasks queued in the WorkerGlobalScope's event loop, effectively closing this particular scope.
         /// </summary>
-        public void Close() => JSRef.CallVoid("close");
+        public void Close() => JSRef!.CallVoid("close");
         /// <summary>
         /// The name that the SharedWorker was (optionally) given when it was created using the SharedWorker() constructor. This is mainly useful for debugging purposes.
         /// </summary>
-        public string Name => JSRef.Get<string>("name");
+        public string Name => JSRef!.Get<string>("name");
         /// <summary>
         /// Fired on shared workers when a new client connects.
         /// </summary>

@@ -17,22 +17,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Extracts the data as an ArrayBuffer object.
         /// </summary>
         /// <returns></returns>
-        public ArrayBuffer ArrayBuffer() => JSRef.Call<ArrayBuffer>("arrayBuffer");
+        public ArrayBuffer ArrayBuffer() => JSRef!.Call<ArrayBuffer>("arrayBuffer");
         /// <summary>
         /// Extracts the data as a Blob object.
         /// </summary>
         /// <returns></returns>
-        public Blob Blob() => JSRef.Call<Blob>("blob");
+        public Blob Blob() => JSRef!.Call<Blob>("blob");
         /// <summary>
         /// Extracts the data as a JSON object.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T Json<T>() => JSRef.Call<T>("json");
+        public T Json<T>() => JSRef!.Call<T>("json");
         /// <summary>
         /// Extracts the data as a plain text string.
         /// </summary>
         /// <returns></returns>
-        public string Text() => JSRef.Call<string>("text");
+        public string Text() => JSRef!.Call<string>("text");
     }
 }

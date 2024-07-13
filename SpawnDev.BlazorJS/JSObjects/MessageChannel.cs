@@ -20,10 +20,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns port1 of the channel.
         /// </summary>
-        public MessagePort Port1 => JSRef.Get<MessagePort>("port1");
+        public MessagePort Port1 => JSRef!.Get<MessagePort>("port1");
         /// <summary>
         /// Returns port2 of the channel.
         /// </summary>
-        public MessagePort Port2 => JSRef.Get<MessagePort>("port2");
+        public MessagePort Port2 => JSRef!.Get<MessagePort>("port2");
     }
 }

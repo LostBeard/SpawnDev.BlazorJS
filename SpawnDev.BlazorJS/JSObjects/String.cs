@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the primitive value of the specified object. Overrides the Object.prototype.valueOf() method.
         /// </summary>
         /// <returns></returns>
-        public string ValueOf() => JSRef.Call<string>("valueOf");
+        public string ValueOf() => JSRef!.Call<string>("valueOf");
         /// <summary>
         /// Implicit conversion to .Net string
         /// </summary>

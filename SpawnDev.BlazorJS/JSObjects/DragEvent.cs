@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The data that is transferred during a drag and drop interaction.
         /// </summary>
-        public DataTransfer DataTransfer => JSRef.Get<DataTransfer>("dataTransfer");
+        public DataTransfer DataTransfer => JSRef!.Get<DataTransfer>("dataTransfer");
     }
 }

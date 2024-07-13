@@ -8,6 +8,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class GamepadEvent : Event
     {
         public GamepadEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public Gamepad Gamepad => JSRef.Get<Gamepad>("gamepad");
+        public Gamepad Gamepad => JSRef!.Get<Gamepad>("gamepad");
     }
 }

@@ -5,6 +5,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
 
     public class OffscreenCanvasRenderingContext2D : CanvasRenderingContext2D {
         public OffscreenCanvasRenderingContext2D(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public void Commit() => JSRef.CallVoid("commit");
+        public void Commit() => JSRef!.CallVoid("commit");
     }
 }

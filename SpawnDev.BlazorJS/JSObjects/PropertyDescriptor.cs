@@ -12,8 +12,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public PropertyDescriptor(IJSInProcessObjectReference _ref) : base(_ref) { }
-        public Function? Get => JSRef.Get<Function?>("get");
-        public Function? Set => JSRef.Get<Function?>("set");
+        public Function? Get => JSRef!.Get<Function?>("get");
+        public Function? Set => JSRef!.Get<Function?>("set");
         public bool HasGetter => !JSRef.PropertyIsUndefined("get");
         public bool HasSetter => !JSRef.PropertyIsUndefined("set");
         public bool HasValueProperty => !JSRef.PropertyIsUndefined("value");
@@ -22,14 +22,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// if true, the value can be changed, otherwise it’s read-only.
         /// </summary>
-        public bool? Writable => JSRef.Get<bool?>("writable");
+        public bool? Writable => JSRef!.Get<bool?>("writable");
         /// <summary>
         /// if true, then listed in loops, otherwise not listed.
         /// </summary>
-        public bool? Enumerable => JSRef.Get<bool?>("enumerable");
+        public bool? Enumerable => JSRef!.Get<bool?>("enumerable");
         /// <summary>
         ///  if true, the property can be deleted and these attributes can be modified, otherwise not.
         /// </summary>
-        public bool? Configurable => JSRef.Get<bool?>("configurable");
+        public bool? Configurable => JSRef!.Get<bool?>("configurable");
     }
 }

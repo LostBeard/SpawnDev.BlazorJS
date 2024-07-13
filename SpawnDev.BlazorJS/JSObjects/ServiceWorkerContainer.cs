@@ -19,18 +19,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a ServiceWorker object if its state is activating or activated (the same object returned by ServiceWorkerRegistration.active). This property returns null during a force-refresh request (Shift + refresh) or if there is no active worker.
         /// </summary>
-        public ServiceWorker? Controller => JSRef.Get<ServiceWorker?>("controller");
+        public ServiceWorker? Controller => JSRef!.Get<ServiceWorker?>("controller");
         /// <summary>
         /// Provides a way of delaying code execution until a service worker is active. It returns a Promise that will never reject, and which waits indefinitely until the ServiceWorkerRegistration associated with the current page has an ServiceWorkerRegistration.active worker. Once that condition is met, it resolves with the ServiceWorkerRegistration.
         /// </summary>
-        public Task<ServiceWorkerRegistration> Ready => JSRef.GetAsync<ServiceWorkerRegistration>("ready");
+        public Task<ServiceWorkerRegistration> Ready => JSRef!.GetAsync<ServiceWorkerRegistration>("ready");
         #endregion
         #region Methods
         /// <summary>
         /// Returns all ServiceWorkerRegistration objects associated with a ServiceWorkerContainer in an array. The method returns a Promise that resolves to an array of ServiceWorkerRegistration.
         /// </summary>
         /// <returns></returns>
-        public Task<ServiceWorkerRegistration> GetRegistration() => JSRef.CallAsync<ServiceWorkerRegistration>("getRegistration");
+        public Task<ServiceWorkerRegistration> GetRegistration() => JSRef!.CallAsync<ServiceWorkerRegistration>("getRegistration");
         /// <summary>
         /// Creates or updates a ServiceWorkerRegistration for the given scriptURL.
         /// </summary>

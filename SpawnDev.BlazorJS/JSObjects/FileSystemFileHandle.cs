@@ -17,18 +17,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a Promise which resolves to a File object representing the state on disk of the entry represented by the handle.
         /// </summary>
         /// <returns></returns>
-        public Task<File> GetFile() => JSRef.CallAsync<File>("getFile");
+        public Task<File> GetFile() => JSRef!.CallAsync<File>("getFile");
         /// <summary>
         /// Returns a Promise which resolves to a newly created FileSystemWritableFileStream object that can be used to write to a file.
         /// </summary>
         /// <returns></returns>
-        public Task<FileSystemWritableFileStream> CreateWritable() => JSRef.CallAsync<FileSystemWritableFileStream>("createWritable");
+        public Task<FileSystemWritableFileStream> CreateWritable() => JSRef!.CallAsync<FileSystemWritableFileStream>("createWritable");
         /// <summary>
         /// Returns a Promise which resolves to a newly created FileSystemWritableFileStream object that can be used to write to a file.
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task<FileSystemWritableFileStream> CreateWritable(FileSystemCreateWritableOptions options) => JSRef.CallAsync<FileSystemWritableFileStream>("createWritable", options);
+        public Task<FileSystemWritableFileStream> CreateWritable(FileSystemCreateWritableOptions options) => JSRef!.CallAsync<FileSystemWritableFileStream>("createWritable", options);
         /// <summary>
         /// Returns the file's size<br />
         /// non-standard

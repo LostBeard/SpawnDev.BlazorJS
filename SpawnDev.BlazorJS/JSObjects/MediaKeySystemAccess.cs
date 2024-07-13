@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a string identifying the key system being used.
         /// </summary>
-        public string KeySystem => JSRef.Get<string>("keySystem");
+        public string KeySystem => JSRef!.Get<string>("keySystem");
         #endregion
 
         #region Methods
@@ -28,12 +28,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a Promise that resolves to a new MediaKeys object.
         /// </summary>
         /// <returns></returns>
-        public Task<MediaKeys> CreateMediaKeys() => JSRef.CallAsync<MediaKeys>("createMediaKeys");
+        public Task<MediaKeys> CreateMediaKeys() => JSRef!.CallAsync<MediaKeys>("createMediaKeys");
         /// <summary>
         /// Returns an object with the supported combination of configuration options.
         /// </summary>
         /// <returns></returns>
-        public Task<MediaKeySystemAccessConfig> GetConfiguration() => JSRef.CallAsync<MediaKeySystemAccessConfig>("getConfiguration");
+        public Task<MediaKeySystemAccessConfig> GetConfiguration() => JSRef!.CallAsync<MediaKeySystemAccessConfig>("getConfiguration");
         #endregion
 
         #region Events

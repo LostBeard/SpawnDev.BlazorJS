@@ -21,11 +21,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a Promise that resolves with an array of connected HIDDevice objects.
         /// </summary>
         /// <returns></returns>
-        public Task<Array<HIDDevice>> GetDevices() => JSRef.CallAsync<Array<HIDDevice>>("getDevices");
+        public Task<Array<HIDDevice>> GetDevices() => JSRef!.CallAsync<Array<HIDDevice>>("getDevices");
         /// <summary>
         /// Returns a Promise that resolves with an array of connected HIDDevice objects. Calling this function will trigger the user agent's permission flow in order to gain permission to access one selected device from the returned list of devices.
         /// </summary>
-        public Task<Array<HIDDevice>> RequestDevice(HIDRequestDeviceOptions[] options) => JSRef.CallAsync<Array<HIDDevice>>("requestDevice", options);
+        public Task<Array<HIDDevice>> RequestDevice(HIDRequestDeviceOptions[] options) => JSRef!.CallAsync<Array<HIDDevice>>("requestDevice", options);
         #endregion
 
         #region Events

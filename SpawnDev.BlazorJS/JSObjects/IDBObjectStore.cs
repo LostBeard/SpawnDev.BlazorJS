@@ -19,23 +19,23 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A list of the names of indexes on objects in this object store.
         /// </summary>
-        public string[] IndexNames => JSRef.Get<DOMStringList>("indexNames").ToArray();
+        public string[] IndexNames => JSRef!.Get<DOMStringList>("indexNames").ToArray();
         /// <summary>
         /// The key path of this object store. If this attribute is null, the application must provide a key for each modification operation.
         /// </summary>
-        public Union<string, string[]>? KeyPath => JSRef.Get<Union<string, string[]>?>("keyPath");
+        public Union<string, string[]>? KeyPath => JSRef!.Get<Union<string, string[]>?>("keyPath");
         /// <summary>
         /// The name of this object store.
         /// </summary>
-        public string Name { get => JSRef.Get<string>("name"); set => JSRef.Set("name", value); }
+        public string Name { get => JSRef!.Get<string>("name"); set => JSRef!.Set("name", value); }
         /// <summary>
         /// The IDBTransaction object to which this object store belongs.
         /// </summary>
-        public IDBTransaction Transaction => JSRef.Get<IDBTransaction>("transaction");
+        public IDBTransaction Transaction => JSRef!.Get<IDBTransaction>("transaction");
         /// <summary>
         /// The value of the auto increment flag for this object store.
         /// </summary>
-        public bool AutoIncrement => JSRef.Get<bool>("autoIncrement");
+        public bool AutoIncrement => JSRef!.Get<bool>("autoIncrement");
         #endregion
         #region Methods
         /// <summary>
@@ -43,14 +43,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="name">The name of the index to open.</param>
         /// <returns>An IDBIndex object for accessing the index.</returns>
-        public IDBIndex<TIndexKey, TPrimaryKey, TValue> Index<TIndexKey>(string name) => JSRef.Call<IDBIndex<TIndexKey, TPrimaryKey, TValue>>("index", name);
+        public IDBIndex<TIndexKey, TPrimaryKey, TValue> Index<TIndexKey>(string name) => JSRef!.Call<IDBIndex<TIndexKey, TPrimaryKey, TValue>>("index", name);
         /// <summary>
         /// Creates a new index during a version upgrade, returning a new IDBIndex object in the connected database.
         /// </summary>
         /// <param name="indexName">The name of the index to create. Note that it is possible to create an index with an empty name.</param>
         /// <param name="keyPath">The key path for the index to use. Note that it is possible to create an index with an empty keyPath, and also to pass in a sequence (array) as a keyPath.</param>
         /// <returns></returns>
-        public IDBIndex<TIndexKey, TPrimaryKey, TValue> CreateIndex<TIndexKey>(string indexName, Union<string, string[]> keyPath) => JSRef.Call<IDBIndex<TIndexKey, TPrimaryKey, TValue>>("createIndex", indexName, keyPath);
+        public IDBIndex<TIndexKey, TPrimaryKey, TValue> CreateIndex<TIndexKey>(string indexName, Union<string, string[]> keyPath) => JSRef!.Call<IDBIndex<TIndexKey, TPrimaryKey, TValue>>("createIndex", indexName, keyPath);
         /// <summary>
         /// Creates a new index during a version upgrade, returning a new IDBIndex object in the connected database.
         /// </summary>
@@ -58,13 +58,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="keyPath">The key path for the index to use. Note that it is possible to create an index with an empty keyPath, and also to pass in a sequence (array) as a keyPath.</param>
         /// <param name="options">Additional options</param>
         /// <returns></returns>
-        public IDBIndex<TIndexKey, TPrimaryKey, TValue>  CreateIndex<TIndexKey>(string indexName, string keyPath, IDBObjectStoreCreateIndexOptions options) => JSRef.Call<IDBIndex<TIndexKey, TPrimaryKey, TValue>>("createIndex", indexName, keyPath, options);
+        public IDBIndex<TIndexKey, TPrimaryKey, TValue>  CreateIndex<TIndexKey>(string indexName, string keyPath, IDBObjectStoreCreateIndexOptions options) => JSRef!.Call<IDBIndex<TIndexKey, TPrimaryKey, TValue>>("createIndex", indexName, keyPath, options);
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, deletes the store object selected by the specified key. This is for deleting individual records out of an object store.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IDBRequest Delete(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef.Call<IDBRequest>("delete", key);
+        public IDBRequest Delete(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef!.Call<IDBRequest>("delete", key);
         /// <summary>
         /// Deletes the store object selected by the specified key. This is for deleting individual records out of an object store.
         /// </summary>
@@ -75,7 +75,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Creates and immediately returns an IDBRequest object, and clears this object store in a separate thread. This is for deleting all current records out of an object store.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest Clear() => JSRef.Call<IDBRequest>("clear");
+        public IDBRequest Clear() => JSRef!.Call<IDBRequest>("clear");
         /// <summary>
         /// This is for deleting all current records out of an object store.
         /// </summary>
@@ -87,7 +87,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="value"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IDBRequest Add(TValue value, TPrimaryKey key) => JSRef.Call<IDBRequest>("add", value, key);
+        public IDBRequest Add(TValue value, TPrimaryKey key) => JSRef!.Call<IDBRequest>("add", value, key);
         /// <summary>
         /// Creates a structured clone of the value, and stores the cloned value in the object store. This is for adding new records to an object store.
         /// </summary>
@@ -100,7 +100,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IDBRequest Add(TValue value) => JSRef.Call<IDBRequest>("add", value);
+        public IDBRequest Add(TValue value) => JSRef!.Call<IDBRequest>("add", value);
         /// <summary>
         /// Creates a structured clone of the value, and stores the cloned value in the object store. This is for adding new records to an object store.
         /// </summary>
@@ -113,7 +113,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="value"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IDBRequest Put(TValue value, TPrimaryKey key) => JSRef.Call<IDBRequest>("put", value, key);
+        public IDBRequest Put(TValue value, TPrimaryKey key) => JSRef!.Call<IDBRequest>("put", value, key);
         /// <summary>
         /// Creates a structured clone of the value, and stores the cloned value in the object store. This is for updating existing records in an object store when the transaction's mode is readwrite.
         /// </summary>
@@ -126,7 +126,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IDBRequest Put(TValue value) => JSRef.Call<IDBRequest>("put", value);
+        public IDBRequest Put(TValue value) => JSRef!.Call<IDBRequest>("put", value);
         /// <summary>
         /// Creates a structured clone of the value, and stores the cloned value in the object store. This is for updating existing records in an object store when the transaction's mode is readwrite.
         /// </summary>
@@ -138,7 +138,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IDBRequest<int> Count(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef.Call<IDBRequest<int>>("count", key);
+        public IDBRequest<int> Count(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef!.Call<IDBRequest<int>>("count", key);
         /// <summary>
         /// Returns a Task that returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
         /// </summary>
@@ -149,7 +149,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns an IDBRequest object, and, in a separate thread, returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<int> Count() => JSRef.Call<IDBRequest<int>>("count");
+        public IDBRequest<int> Count() => JSRef!.Call<IDBRequest<int>>("count");
         /// <summary>
         /// Returns a Task that returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
         /// </summary>
@@ -160,13 +160,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IDBRequest<TValue> Get(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef.Call<IDBRequest<TValue>>("get", key);
+        public IDBRequest<TValue> Get(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef!.Call<IDBRequest<TValue>>("get", key);
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, returns the store object store selected by the specified key. This is for retrieving specific records from an object store.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IDBRequest<TValueAlt> Get<TValueAlt>(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef.Call<IDBRequest<TValueAlt>>("get", key);
+        public IDBRequest<TValueAlt> Get<TValueAlt>(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey> key) => JSRef!.Call<IDBRequest<TValueAlt>>("get", key);
         /// <summary>
         /// Returns the store object store selected by the specified key. This is for retrieving specific records from an object store.
         /// </summary>
@@ -183,12 +183,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns an IDBRequest object retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<Array<TValue>> GetAll() => JSRef.Call<IDBRequest<Array<TValue>>>("getAll");
+        public IDBRequest<Array<TValue>> GetAll() => JSRef!.Call<IDBRequest<Array<TValue>>>("getAll");
         /// <summary>
         /// Returns an IDBRequest object retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<Array<TValueAlt>> GetAll<TValueAlt>() => JSRef.Call<IDBRequest<Array<TValueAlt>>>("getAll");
+        public IDBRequest<Array<TValueAlt>> GetAll<TValueAlt>() => JSRef!.Call<IDBRequest<Array<TValueAlt>>>("getAll");
         /// <summary>
         /// Retrieves all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
@@ -227,12 +227,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns an IDBRequest object retrieves record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<Array<TPrimaryKey>> GetAllKeys() => JSRef.Call<IDBRequest<Array<TPrimaryKey>>>("getAllKeys");
+        public IDBRequest<Array<TPrimaryKey>> GetAllKeys() => JSRef!.Call<IDBRequest<Array<TPrimaryKey>>>("getAllKeys");
         /// <summary>
         /// Returns an IDBRequest object retrieves record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
         /// <returns></returns>
-        public IDBRequest<Array<TPrimaryKeyAlt>> GetAllKeys<TPrimaryKeyAlt>() => JSRef.Call<IDBRequest<Array<TPrimaryKeyAlt>>>("getAllKeys");
+        public IDBRequest<Array<TPrimaryKeyAlt>> GetAllKeys<TPrimaryKeyAlt>() => JSRef!.Call<IDBRequest<Array<TPrimaryKeyAlt>>>("getAllKeys");
         /// <summary>
         /// Returns record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         /// </summary>
@@ -247,7 +247,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Destroys the specified index in the connected database, used during a version upgrade.
         /// </summary>
         /// <param name="indexName"></param>
-        public void DeleteIndex(string indexName) => JSRef.CallVoid("deleteIndex", indexName);
+        public void DeleteIndex(string indexName) => JSRef!.CallVoid("deleteIndex", indexName);
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, returns a new IDBCursorWithValue object. Used for iterating through an object store by primary key with a cursor.
         /// </summary>

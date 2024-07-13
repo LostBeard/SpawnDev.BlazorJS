@@ -29,34 +29,34 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public NodeList<Element> QuerySelectorAll(string selector) => JSRef.Call<NodeList<Element>>("querySelectorAll", selector);
+        public NodeList<Element> QuerySelectorAll(string selector) => JSRef!.Call<NodeList<Element>>("querySelectorAll", selector);
         /// <summary>
         /// The Element method querySelectorAll() returns a static (not live) NodeList representing a list of elements matching the specified group of selectors which are descendants of the element on which the method was called.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public NodeList<T> QuerySelectorAll<T>(string selector) where T : Element => JSRef.Call<NodeList<T>>("querySelectorAll", selector);
+        public NodeList<T> QuerySelectorAll<T>(string selector) where T : Element => JSRef!.Call<NodeList<T>>("querySelectorAll", selector);
         /// <summary>
         /// The querySelector() method of the Element interface returns the first element that is a descendant of the element on which it is invoked that matches the specified group of selectors.
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public Element? QuerySelector(string selector) => JSRef.Call<Element?>("querySelector", selector);
+        public Element? QuerySelector(string selector) => JSRef!.Call<Element?>("querySelector", selector);
         /// <summary>
         /// The querySelector() method of the Element interface returns the first element that is a descendant of the element on which it is invoked that matches the specified group of selectors.
         /// </summary>
         /// <typeparam name="TElement"></typeparam>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public TElement? QuerySelector<TElement>(string selector) where TElement : Element => JSRef.Call<TElement?>("querySelector", selector);
+        public TElement? QuerySelector<TElement>(string selector) where TElement : Element => JSRef!.Call<TElement?>("querySelector", selector);
         /// <summary>
         /// The closest() method of the Element interface traverses the element and its parents (heading toward the document root) until it finds a node that matches the specified CSS selector.
         /// </summary>
         /// <typeparam name="TElement"></typeparam>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public TElement? Closest<TElement>(string selector) where TElement : Element => JSRef.Call<TElement?>("closest", selector);
+        public TElement? Closest<TElement>(string selector) where TElement : Element => JSRef!.Call<TElement?>("closest", selector);
         /// <summary>
         /// The checkVisibility() method of the Element interface checks whether the element is visible.
         /// </summary>
@@ -67,66 +67,66 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the size of an element and its position relative to the viewport.
         /// </summary>
         /// <returns></returns>
-        public DOMRect GetBoundingClientRect() => JSRef.Call<DOMRect>("getBoundingClientRect");
+        public DOMRect GetBoundingClientRect() => JSRef!.Call<DOMRect>("getBoundingClientRect");
         /// <summary>
         /// Asynchronously asks the browser to make the element fullscreen.
         /// </summary>
         /// <returns></returns>
-        public Task RequestFullscreen() => JSRef.CallVoidAsync("requestFullscreen");
+        public Task RequestFullscreen() => JSRef!.CallVoidAsync("requestFullscreen");
         /// <summary>
         /// Asynchronously asks the browser to make the element fullscreen.
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task RequestFullscreen(RequestFullscreenOptions options) => JSRef.CallVoidAsync("requestFullscreen", options);
+        public Task RequestFullscreen(RequestFullscreenOptions options) => JSRef!.CallVoidAsync("requestFullscreen", options);
         /// <summary>
         /// Retrieves the value of the named attribute from the current node and returns it as a string.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public string? GetAttribute(string name) => JSRef.Call<string?>("getAttribute", name);
+        public string? GetAttribute(string name) => JSRef!.Call<string?>("getAttribute", name);
         /// <summary>
         /// Removes the named attribute from the current node.
         /// </summary>
         /// <param name="name"></param>
-        public void RemoveAttribute(string name) => JSRef.CallVoid("removeAttribute", name);
+        public void RemoveAttribute(string name) => JSRef!.CallVoid("removeAttribute", name);
         /// <summary>
         /// Sets the value of a named attribute of the current node.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void SetAttribute(string name, string value) => JSRef.CallVoid("setAttribute", name, value);
+        public void SetAttribute(string name, string value) => JSRef!.CallVoid("setAttribute", name, value);
         /// <summary>
         /// Inserts a set of Node objects or strings in the children list of the Element's parent, just after the Element.
         /// </summary>
         /// <param name="nodes"></param>
-        public void After(params Union<Node, string>[] nodes) => JSRef.CallApplyVoid("after", nodes);
+        public void After(params Union<Node, string>[] nodes) => JSRef!.CallApplyVoid("after", nodes);
         /// <summary>
         /// The Element.append() method inserts a set of Node objects or string objects after the last child of the Element. String objects are inserted as equivalent Text nodes.
         /// </summary>
         /// <param name="nodes"></param>
-        public void Append(params Union<Node, string>[] nodes) => JSRef.CallApplyVoid("append", nodes);
+        public void Append(params Union<Node, string>[] nodes) => JSRef!.CallApplyVoid("append", nodes);
         /// <summary>
         /// Inserts a set of Node objects or strings before the first child of the element.
         /// </summary>
         /// <param name="nodes"></param>
-        public void Prepend(params Union<Node, string>[] nodes) => JSRef.CallApplyVoid("prepend", nodes);
+        public void Prepend(params Union<Node, string>[] nodes) => JSRef!.CallApplyVoid("prepend", nodes);
         /// <summary>
         /// The Element.before() method inserts a set of Node or string objects in the children list of this Element's parent, just before this Element. String objects are inserted as equivalent Text nodes.
         /// </summary>
         /// <param name="nodes"></param>
-        public void Before(params Union<Node, string>[] nodes) => JSRef.CallApplyVoid("before", nodes);
+        public void Before(params Union<Node, string>[] nodes) => JSRef!.CallApplyVoid("before", nodes);
         /// <summary>
         /// Removes the element from the children list of its parent.
         /// </summary>
-        public void Remove() => JSRef.CallVoid("remove");
+        public void Remove() => JSRef!.CallVoid("remove");
         /// <summary>
         /// The Element.attachShadow() method attaches a shadow DOM tree to the specified element and returns a reference to its ShadowRoot.<br />
         /// Note that you can't attach a shadow root to every type of element. There are some that can't have a shadow DOM for security reasons (for example a element).
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public ShadowRoot AttachShadow(AttachShadowRootOptions options) => JSRef.Call<ShadowRoot>("attachShadow", options);
+        public ShadowRoot AttachShadow(AttachShadowRootOptions options) => JSRef!.Call<ShadowRoot>("attachShadow", options);
         #endregion
 
         #region Properties
@@ -134,15 +134,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Element.shadowRoot read-only property represents the shadow root hosted by the element.<br />
         /// Use Element.attachShadow() to add a shadow root to an existing element.
         /// </summary>
-        public ShadowRoot ShadowRoot => JSRef.Get<ShadowRoot>("shadowRoot");
+        public ShadowRoot ShadowRoot => JSRef!.Get<ShadowRoot>("shadowRoot");
         /// <summary>
         /// Returns a DOMTokenList containing the list of class attributes.
         /// </summary>
-        public DOMTokenList ClassList => JSRef.Get<DOMTokenList>("classList");
+        public DOMTokenList ClassList => JSRef!.Get<DOMTokenList>("classList");
         /// <summary>
         /// A string representing the class of the element.
         /// </summary>
-        public string ClassName { get => JSRef.Get<string>("className"); set => JSRef.Set("className", value); }
+        public string ClassName { get => JSRef!.Get<string>("className"); set => JSRef!.Set("className", value); }
         /// <summary>
         /// Returns ClassNames from ClassName split on spaces
         /// </summary>
@@ -150,27 +150,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The id property of the Element interface represents the element's identifier, reflecting the id global attribute.
         /// </summary>
-        public string Id { get => JSRef.Get<string>("id"); set => JSRef.Set("id", value); }
+        public string Id { get => JSRef!.Get<string>("id"); set => JSRef!.Set("id", value); }
         /// <summary>
         /// Returns a number representing the scroll view height of an element.
         /// </summary>
-        public float ScrollHeight => JSRef.Get<float>("scrollHeight");
+        public float ScrollHeight => JSRef!.Get<float>("scrollHeight");
         /// <summary>
         /// Returns a number representing the scroll view width of the element.
         /// </summary>
-        public float ScrollWidth => JSRef.Get<float>("scrollWidth");
+        public float ScrollWidth => JSRef!.Get<float>("scrollWidth");
         /// <summary>
         /// A number representing number of pixels the top of the element is scrolled vertically.
         /// </summary>
-        public float ScrollTop { get => JSRef.Get<float>("scrollTop"); set => JSRef.Set("scrollTop", value); }
+        public float ScrollTop { get => JSRef!.Get<float>("scrollTop"); set => JSRef!.Set("scrollTop", value); }
         /// <summary>
         /// Returns a number representing the inner height of the element.
         /// </summary>
-        public float ClientHeight => JSRef.Get<float>("clientHeight");
+        public float ClientHeight => JSRef!.Get<float>("clientHeight");
         /// <summary>
         /// Returns a number representing the inner width of the element.
         /// </summary>
-        public float ClientWidth => JSRef.Get<float>("clientWidth");
+        public float ClientWidth => JSRef!.Get<float>("clientWidth");
         #endregion
 
         #region Events

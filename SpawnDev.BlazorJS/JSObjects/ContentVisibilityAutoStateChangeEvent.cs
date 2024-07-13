@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns true if the user agent is skipping the element's rendering, or false otherwise.
         /// </summary>
-        public bool Skipped => JSRef.Get<bool>("skipped");
+        public bool Skipped => JSRef!.Get<bool>("skipped");
     }
 }
