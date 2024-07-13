@@ -286,7 +286,7 @@ class Document extends Node {
             }
         } else if (node.src) {
             consoleLog('Loading script src');
-            var href = new URL(node.src, this.baseURI);
+            var href = new URL(node.src, this.baseURI).toString();
             try {
                 importScripts(href);
                 if (node.onload) node.onload();
