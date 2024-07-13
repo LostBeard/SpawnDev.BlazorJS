@@ -109,15 +109,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the name of the file referenced by the File object.
         /// </summary>
-        public string Name => JSRef.Get<string>("name");
+        public string Name => JSRef!.Get<string>("name");
         /// <summary>
         /// Returns the last modified time of the file, in millisecond since the UNIX epoch (January 1st, 1970 at Midnight).
         /// </summary>
-        public long LastModified => JSRef.Get<long>("lastModified");
+        public long LastModified => JSRef!.Get<long>("lastModified");
         /// <summary>
         /// Returns the path the URL of the File is relative to.
         /// </summary>
-        public string? WebkitRelativePath => JSRef.Get<string?>("webkitRelativePath");
+        public string? WebkitRelativePath => JSRef!.Get<string?>("webkitRelativePath");
         /// <summary>
         /// Start downloading the File using the File.Name
         /// </summary>

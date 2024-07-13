@@ -17,17 +17,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the name of the associated entry.
         /// </summary>
-        public string Name => JSRef.Get<string>("name");
+        public string Name => JSRef!.Get<string>("name");
         /// <summary>
         /// Returns the type of entry. This is 'file' if the associated entry is a file or 'directory'.
         /// </summary>
-        public string Kind => JSRef.Get<string>("kind");
+        public string Kind => JSRef!.Get<string>("kind");
         /// <summary>
         /// Compares two handles to see if the associated entries (either a file or directory) match.
         /// </summary>
         /// <param name="fsHandle"></param>
         /// <returns></returns>
-        public bool IsSameEntry(FileSystemHandle fsHandle) => JSRef.Call<bool>("isSameEntry", fsHandle);
+        public bool IsSameEntry(FileSystemHandle fsHandle) => JSRef!.Call<bool>("isSameEntry", fsHandle);
         /// <summary>
         /// Returns a FileSystemDirectoryHandle or FileSystemFileHandle based on the FileSystemHandle.Kind
         /// </summary>
@@ -108,20 +108,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         // non-standard implementation to prevent need to polyfill when used
         public async Task<string> QueryPermission(bool writePermission = false)
         {
-            if (JSRef.PropertyType("queryPermission") == "undefined")
+            if (JSRef!.PropertyType("queryPermission") == "undefined")
             {
                 return PERMISSION_GRANTED;
             }
-            return await JSRef.CallAsync<string>("queryPermission", new FilePermissionsOptions(writePermission));
+            return await JSRef!.CallAsync<string>("queryPermission", new FilePermissionsOptions(writePermission));
         }
 
         public async Task<string> RequestPermission(bool writePermission = false)
         {
-            if (JSRef.PropertyType("requestPermission") == "undefined")
+            if (JSRef!.PropertyType("requestPermission") == "undefined")
             {
                 return PERMISSION_GRANTED;
             }
-            return await JSRef.CallAsync<string>("requestPermission", new FilePermissionsOptions(writePermission));
+            return await JSRef!.CallAsync<string>("requestPermission", new FilePermissionsOptions(writePermission));
         }
         /// <summary>
         /// "granted"
