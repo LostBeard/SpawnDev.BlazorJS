@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class HTMLAnchorElement : HTMLElement
     {
+        /// <summary>
+        /// Explicit conversion from ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLAnchorElement?(ElementReference elementReference) => elementReference.Context == null || string.IsNullOrEmpty(elementReference.Id) ? null : new HTMLAnchorElement(elementReference);
+        /// <summary>
+        /// Explicit conversion from ElementReference?
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLAnchorElement?(ElementReference? elementReference) => elementReference == null || elementReference.Value.Context == null || string.IsNullOrEmpty(elementReference.Value.Id) ? null : new HTMLAnchorElement(elementReference.Value);
         #region Constructors
         /// <summary>
         /// Deserialization constructor

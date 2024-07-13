@@ -1,13 +1,24 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects {
+namespace SpawnDev.BlazorJS.JSObjects
+{
     /// <summary>
     /// Implemented by the video element, the HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
     /// </summary>
     public class HTMLVideoElement : HTMLMediaElement
     {
+        /// <summary>
+        /// Explicit conversion from ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLVideoElement?(ElementReference elementReference) => elementReference.Context == null || string.IsNullOrEmpty(elementReference.Id) ? null : new HTMLVideoElement(elementReference);
+        /// <summary>
+        /// Explicit conversion from ElementReference?
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLVideoElement?(ElementReference? elementReference) => elementReference == null || elementReference.Value.Context == null || string.IsNullOrEmpty(elementReference.Value.Id) ? null : new HTMLVideoElement(elementReference.Value);
         /// <summary>
         /// Deserialization constructor
         /// </summary>

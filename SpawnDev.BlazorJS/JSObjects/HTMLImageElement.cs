@@ -10,6 +10,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class HTMLImageElement : HTMLElement
     {
         /// <summary>
+        /// Explicit conversion from ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLImageElement?(ElementReference elementReference) => elementReference.Context == null || string.IsNullOrEmpty(elementReference.Id) ? null : new HTMLImageElement(elementReference);
+        /// <summary>
+        /// Explicit conversion from ElementReference?
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLImageElement?(ElementReference? elementReference) => elementReference == null || elementReference.Value.Context == null || string.IsNullOrEmpty(elementReference.Value.Id) ? null : new HTMLImageElement(elementReference.Value);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class HTMLDocument : Document
     {
         /// <summary>
+        /// Explicit conversion from ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLDocument?(ElementReference elementReference) => elementReference.Context == null || string.IsNullOrEmpty(elementReference.Id) ? null : new HTMLDocument(elementReference);
+        /// <summary>
+        /// Explicit conversion from ElementReference?
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLDocument?(ElementReference? elementReference) => elementReference == null || elementReference.Value.Context == null || string.IsNullOrEmpty(elementReference.Value.Id) ? null : new HTMLDocument(elementReference.Value);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

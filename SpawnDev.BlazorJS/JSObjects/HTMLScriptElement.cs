@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class HTMLScriptElement : HTMLElement
     {
+        /// <summary>
+        /// Explicit conversion from ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLScriptElement?(ElementReference elementReference) => elementReference.Context == null || string.IsNullOrEmpty(elementReference.Id) ? null : new HTMLScriptElement(elementReference);
+        /// <summary>
+        /// Explicit conversion from ElementReference?
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLScriptElement?(ElementReference? elementReference) => elementReference == null || elementReference.Value.Context == null || string.IsNullOrEmpty(elementReference.Value.Id) ? null : new HTMLScriptElement(elementReference.Value);
         #region Constructors
         /// <summary>
         /// Deserialization constructor

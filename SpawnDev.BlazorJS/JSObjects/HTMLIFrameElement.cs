@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class HTMLIFrameElement : HTMLElement
     {
+        /// <summary>
+        /// Explicit conversion from ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLIFrameElement?(ElementReference elementReference) => elementReference.Context == null || string.IsNullOrEmpty(elementReference.Id) ? null : new HTMLIFrameElement(elementReference);
+        /// <summary>
+        /// Explicit conversion from ElementReference?
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public static explicit operator HTMLIFrameElement?(ElementReference? elementReference) => elementReference == null || elementReference.Value.Context == null || string.IsNullOrEmpty(elementReference.Value.Id) ? null : new HTMLIFrameElement(elementReference.Value);
         #region Constructors
         /// <summary>
         /// Deserialization constructor
