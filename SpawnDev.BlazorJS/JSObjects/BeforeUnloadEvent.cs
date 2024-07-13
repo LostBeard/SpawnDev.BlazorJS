@@ -18,6 +18,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// When set to a truthy value, triggers a browser-controlled confirmation dialog asking users to confirm if they want to leave the page when they try to close or reload it. This is a legacy feature, and best practice is to trigger the dialog by invoking event.preventDefault(), while also setting returnValue to support legacy cases.<br />
         /// DEPRACATED
         /// </summary>
-        public string? ReturnValue { get => JSRef.Get<string?>("returnValue"); set => JSRef.Set("returnValue", value); }
+        public string? ReturnValue { get => JSRef!.Get<string?>("returnValue"); set => JSRef!.Set("returnValue", value); }
     }
 }

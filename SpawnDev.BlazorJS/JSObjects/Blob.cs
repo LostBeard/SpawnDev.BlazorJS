@@ -94,21 +94,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The size, in bytes, of the data contained in the Blob object.
         /// </summary>
-        public long Size => JSRef.Get<long>("size");
+        public long Size => JSRef!.Get<long>("size");
         /// <summary>
         /// A string indicating the MIME type of the data contained in the Blob. If the type is unknown, this string is empty.
         /// </summary>
-        public string Type => JSRef.Get<string>("type");
+        public string Type => JSRef!.Get<string>("type");
         /// <summary>
         /// Returns a promise that resolves with a string containing the entire contents of the Blob interpreted as UTF-8 text.
         /// </summary>
         /// <returns></returns>
-        public Task<string> Text() => JSRef.CallAsync<string>("text");
+        public Task<string> Text() => JSRef!.CallAsync<string>("text");
         /// <summary>
         /// Returns a promise that resolves with an ArrayBuffer containing the entire contents of the Blob as binary data.
         /// </summary>
         /// <returns></returns>
-        public Task<ArrayBuffer> ArrayBuffer() => JSRef.CallAsync<ArrayBuffer>("arrayBuffer");
+        public Task<ArrayBuffer> ArrayBuffer() => JSRef!.CallAsync<ArrayBuffer>("arrayBuffer");
         /// <summary>
         /// The Blob interface's slice() method creates and returns a new Blob object which contains data from a subset of the blob on which it's called.
         /// </summary>
@@ -116,12 +116,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="endPos">An index into the Blob indicating the first byte that will *not* be included in the new Blob (i.e. the byte exactly at this index is not included). If you specify a negative value, it's treated as an offset from the end of the Blob toward the beginning. For example, -10 would be the 10th from last byte in the Blob. The default value is size.</param>
         /// <param name="contentType">The content type to assign to the new Blob; this will be the value of its type property. The default value is an empty string.</param>
         /// <returns></returns>
-        public Blob Slice(long startPos, long endPos, string contentType) => JSRef.Call<Blob>("slice", startPos, endPos, contentType);
+        public Blob Slice(long startPos, long endPos, string contentType) => JSRef!.Call<Blob>("slice", startPos, endPos, contentType);
         /// <summary>
         /// Returns a ReadableStream that can be used to read the contents of the Blob.
         /// </summary>
         /// <returns></returns>
-        public ReadableStream Stream() => JSRef.Call<ReadableStream>("stream");
+        public ReadableStream Stream() => JSRef!.Call<ReadableStream>("stream");
         static string atob(string str)
         {
             var bytes = Encoding.UTF8.GetBytes(str);

@@ -17,12 +17,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An unsigned long value representing the size of the FFT (Fast Fourier Transform) to be used to determine the frequency domain.
         /// </summary>
-        public ulong FFTSize => JSRef.Get<ulong>("fftSize");
+        public ulong FFTSize => JSRef!.Get<ulong>("fftSize");
 
         /// <summary>
         /// Copies the current waveform, or time-domain, data into a Float32Array array passed into it.
         /// </summary>
         /// <param name="float32Array"></param>
-        public void GetFloatTimeDomainData(Float32Array float32Array) => JSRef.CallVoid("getFloatTimeDomainData", float32Array);
+        public void GetFloatTimeDomainData(Float32Array float32Array) => JSRef!.CallVoid("getFloatTimeDomainData", float32Array);
     }
 }

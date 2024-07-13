@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Options used when creating a new Blob
+    /// Options used when creating a new Blob<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Blob/Blob#options
     /// </summary>
     public class BlobOptions
     {

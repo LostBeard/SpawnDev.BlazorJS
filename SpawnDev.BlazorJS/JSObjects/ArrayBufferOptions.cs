@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Options used when creating an ArrayBuffer
+    /// Options used when creating an ArrayBuffer<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/ArrayBuffer#options
     /// </summary>
     public class ArrayBufferOptions
     {

@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class AudioSinkOptions
     {
         /// <summary>
-        /// Currently only suppots being set to none
+        /// Currently only supports being set to none
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Type { get; set; }

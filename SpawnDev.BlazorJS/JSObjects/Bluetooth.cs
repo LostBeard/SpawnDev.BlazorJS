@@ -21,17 +21,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The getAvailability() method of the Bluetooth interface returns true if the device has a Bluetooth adapter, and false otherwise (unless the user has configured the browser to not expose a real value).
         /// </summary>
         /// <returns></returns>
-        public Task<bool> GetAvailability() => JSRef.CallApplyAsync<bool>("getAvailability");
+        public Task<bool> GetAvailability() => JSRef!.CallApplyAsync<bool>("getAvailability");
         /// <summary>
         /// Returns a Promise to a BluetoothDevice object with the specified options.
         /// </summary>
         /// <returns></returns>
-        public Task<BluetoothDevice> RequestDevice() => JSRef.CallAsync<BluetoothDevice>("requestDevice");
+        public Task<BluetoothDevice> RequestDevice() => JSRef!.CallAsync<BluetoothDevice>("requestDevice");
         /// <summary>
         /// Returns a Promise that resolves to an array of BluetoothDevices this origin is allowed to access. Permission is obtained via previous calls to Bluetooth.requestDevice().
         /// </summary>
         /// <returns></returns>
-        public Task<Array<BluetoothDevice>> GetDevices() => JSRef.CallAsync<Array<BluetoothDevice>>("getDevices");
+        public Task<Array<BluetoothDevice>> GetDevices() => JSRef!.CallAsync<Array<BluetoothDevice>>("getDevices");
         #endregion
     }
 }

@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A DataTransfer object containing the data affected by the user-initiated cut, copy, or paste operation, along with its MIME type.
         /// </summary>
-        public DataTransfer ClipboardData => JSRef.Get<DataTransfer>("clipboardData");
+        public DataTransfer ClipboardData => JSRef!.Get<DataTransfer>("clipboardData");
     }
 }

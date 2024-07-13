@@ -2,67 +2,67 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-
     /// <summary>
-    /// The EventTarget interface is implemented by objects that can receive events and may have listeners for them. In other words, any target of events implements the three methods associated with this interface.
+    /// The EventTarget interface is implemented by objects that can receive events and may have listeners for them. In other words, any target of events implements the three methods associated with this interface.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
     /// </summary>
     public class EventTarget : JSObject
     {
-        /// <summary>
-        /// The EventTarget() constructor creates a new EventTarget object instance.
-        /// </summary>
-        public EventTarget() : base(JS.New(nameof(EventTarget))) { }
         /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
         public EventTarget(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
+        /// The EventTarget() constructor creates a new EventTarget object instance.
+        /// </summary>
+        public EventTarget() : base(JS.New(nameof(EventTarget))) { }
+        /// <summary>
         /// The dispatchEvent() method of the EventTarget sends an Event to the object, (synchronously) invoking the affected event listeners in the appropriate order. The normal event processing rules (including the capturing and optional bubbling phase) also apply to events dispatched manually with dispatchEvent().
         /// </summary>
         /// <param name="event"></param>
         /// <returns></returns>
-        public bool DispatchEvent(Event @event) => JSRef.Call<bool>("dispatchEvent", @event);
+        public bool DispatchEvent(Event @event) => JSRef!.Call<bool>("dispatchEvent", @event);
         /// <summary>
         /// Registers an event handler of a specific event type on the EventTarget.
         /// </summary>
         /// <param name="type"></param>
         /// <param name="listener"></param>
-        public void AddEventListener(string type, Callback listener) => JSRef.CallVoid("addEventListener", type, listener);
+        public void AddEventListener(string type, Callback listener) => JSRef!.CallVoid("addEventListener", type, listener);
         /// <summary>
         /// Registers an event handler of a specific event type on the EventTarget.
         /// </summary>
         /// <param name="type">A case-sensitive string representing the event type to listen for.</param>
         /// <param name="listener">The object that receives a notification (an object that implements the Event interface) when an event of the specified type occurs. This must be null, an object with a handleEvent() method, or a JavaScript function. See The event listener callback for details on the callback itself.</param>
         /// <param name="useCapture">A boolean value indicating whether events of this type will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree. Events that are bubbling upward through the tree will not trigger a listener designated to use capture. Event bubbling and capturing are two ways of propagating events that occur in an element that is nested within another element, when both elements have registered a handle for that event. The event propagation mode determines the order in which elements receive the event. See DOM Level 3 Events and JavaScript Event order for a detailed explanation. If not specified, useCapture defaults to false.</param>
-        public void AddEventListener(string type, Callback listener, bool useCapture) => JSRef.CallVoid("addEventListener", type, listener, useCapture);
+        public void AddEventListener(string type, Callback listener, bool useCapture) => JSRef!.CallVoid("addEventListener", type, listener, useCapture);
         /// <summary>
         /// Registers an event handler of a specific event type on the EventTarget.
         /// </summary>
         /// <param name="type">A case-sensitive string representing the event type to listen for.</param>
         /// <param name="listener">The object that receives a notification (an object that implements the Event interface) when an event of the specified type occurs. This must be null, an object with a handleEvent() method, or a JavaScript function. See The event listener callback for details on the callback itself.</param>
         /// <param name="options">An object that specifies characteristics about the event listener</param>
-        public void AddEventListener(string type, Callback listener, AddEventListenerOptions options) => JSRef.CallVoid("addEventListener", type, listener, options);
+        public void AddEventListener(string type, Callback listener, AddEventListenerOptions options) => JSRef!.CallVoid("addEventListener", type, listener, options);
         /// <summary>
         /// Removes an event listener from the EventTarget.
         /// </summary>
         /// <param name="type"></param>
         /// <param name="listener"></param>
-        public void RemoveEventListener(string type, Callback listener) => JSRef.CallVoid("removeEventListener", type, listener);
+        public void RemoveEventListener(string type, Callback listener) => JSRef!.CallVoid("removeEventListener", type, listener);
         /// <summary>
         /// Removes an event listener from the EventTarget.
         /// </summary>
         /// <param name="type"></param>
         /// <param name="listener"></param>
         /// <param name="useCapture"></param>
-        public void RemoveEventListener(string type, Callback listener, bool useCapture) => JSRef.CallVoid("removeEventListener", type, listener, useCapture);
+        public void RemoveEventListener(string type, Callback listener, bool useCapture) => JSRef!.CallVoid("removeEventListener", type, listener, useCapture);
         /// <summary>
         /// Removes an event listener from the EventTarget.
         /// </summary>
         /// <param name="type"></param>
         /// <param name="listener"></param>
         /// <param name="options"></param>
-        public void RemoveEventListener(string type, Callback listener, AddEventListenerOptions options) => JSRef.CallVoid("removeEventListener", type, listener, options);
+        public void RemoveEventListener(string type, Callback listener, AddEventListenerOptions options) => JSRef!.CallVoid("removeEventListener", type, listener, options);
 
         
         // AddEventListener and RemoveEventListener that support using actions with auto reference handling

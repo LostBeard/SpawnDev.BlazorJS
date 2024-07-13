@@ -17,29 +17,29 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Sends a message to the client.
         /// </summary>
         /// <param name="message"></param>
-        public void PostMessage(object message) => JSRef.CallVoid("postMessage", message);
+        public void PostMessage(object message) => JSRef!.CallVoid("postMessage", message);
         /// <summary>
         /// Sends a message to the client.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="transfer"></param>
-        public void PostMessage(object message, object[] transfer) => JSRef.CallVoid("postMessage", message, transfer);
+        public void PostMessage(object message, object[] transfer) => JSRef!.CallVoid("postMessage", message, transfer);
 
         /// <summary>
         /// The universally unique identifier of the client as a string.
         /// </summary>
-        public string Id => JSRef.Get<string>("id");
+        public string Id => JSRef!.Get<string>("id");
         /// <summary>
         /// The client's type as a string. It can be "window", "worker", or "sharedworker".
         /// </summary>
-        public string Type => JSRef.Get<string>("type");
+        public string Type => JSRef!.Get<string>("type");
         /// <summary>
         /// The URL of the client as a string.
         /// </summary>
-        public string Url => JSRef.Get<string>("url");
+        public string Url => JSRef!.Get<string>("url");
         /// <summary>
         /// The client's frame type as a string. It can be "auxiliary", "top-level", "nested", or "none".
         /// </summary>
-        public string FrameType => JSRef.Get<string>("frameType");
+        public string FrameType => JSRef!.Get<string>("frameType");
     }
 }

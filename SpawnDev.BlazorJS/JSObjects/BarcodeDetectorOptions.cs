@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// An options object containing a series of BarcodeFormats to search for in the subsequent detect() calls. 
+    /// An options object containing a series of BarcodeFormats to search for in the subsequent detect() calls.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/BarcodeDetector/BarcodeDetector#options
     /// </summary>
     public class BarcodeDetectorOptions
     {

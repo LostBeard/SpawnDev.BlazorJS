@@ -18,6 +18,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The connect() method of the AudioNode interface lets you connect one of the node's outputs to a target, which may be either another AudioNode (thereby directing the sound data to the specified node) or an AudioParam, so that the node's output data is automatically used to change the value of that parameter over time.
         /// </summary>
         /// <returns></returns>
-        public AudioNode Connect(AudioNode audioNode) => JSRef.Call<AudioNode>("connect", audioNode);
+        public AudioNode Connect(AudioNode audioNode) => JSRef!.Call<AudioNode>("connect", audioNode);
     }
 }

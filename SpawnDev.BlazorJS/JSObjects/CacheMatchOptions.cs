@@ -2,6 +2,10 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// An object that sets options for the match operation<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Cache/match#options
+    /// </summary>
     public class CacheMatchOptions
     {
         /// <summary>

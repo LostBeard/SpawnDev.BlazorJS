@@ -19,27 +19,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A string representing the local part of the qualified name of the attribute.
         /// </summary>
-        public string LocalName => JSRef.Get<string>("localName");
+        public string LocalName => JSRef!.Get<string>("localName");
         /// <summary>
         /// The attribute's qualified name. If the attribute is not in a namespace, it will be the same as localName property.
         /// </summary>
-        public string Name => JSRef.Get<string>("name");
+        public string Name => JSRef!.Get<string>("name");
         /// <summary>
         /// A string representing the URI of the namespace of the attribute, or null if there is no namespace.
         /// </summary>
-        public string NamespaceURI => JSRef.Get<string>("namespaceURI");
+        public string NamespaceURI => JSRef!.Get<string>("namespaceURI");
         /// <summary>
         /// The Element the attribute belongs to.
         /// </summary>
-        public HTMLAnchorElement OwnerElement => JSRef.Get<HTMLAnchorElement>("ownerElement");
+        public HTMLAnchorElement OwnerElement => JSRef!.Get<HTMLAnchorElement>("ownerElement");
         /// <summary>
         /// A string representing the namespace prefix of the attribute, or null if a namespace without prefix or no namespace are specified.
         /// </summary>
-        public string Prefix => JSRef.Get<string>("prefix");
+        public string Prefix => JSRef!.Get<string>("prefix");
         /// <summary>
         /// The attribute's value, a string that can be set and get using this property.
         /// </summary>
-        public string Value => JSRef.Get<string>("value");
+        public string Value => JSRef!.Get<string>("value");
         #endregion
     }
 }

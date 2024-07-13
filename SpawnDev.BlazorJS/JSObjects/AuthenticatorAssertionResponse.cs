@@ -16,15 +16,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An assertion signature over AuthenticatorAssertionResponse.authenticatorData and AuthenticatorResponse.clientDataJSON. The assertion signature is created with the private key of the key pair that was created during the originating navigator.credentials.create() call and verified using the public key of that same key pair.
         /// </summary>
-        public ArrayBuffer Signature => JSRef.Get<ArrayBuffer>("signature");
+        public ArrayBuffer Signature => JSRef!.Get<ArrayBuffer>("signature");
         /// <summary>
         /// An ArrayBuffer containing information from the authenticator such as the Relying Party ID Hash (rpIdHash), a signature counter, test of user presence and user verification flags, and any extensions processed by the authenticator.
         /// </summary>
-        public ArrayBuffer AuthenticatorData => JSRef.Get<ArrayBuffer>("authenticatorData");
+        public ArrayBuffer AuthenticatorData => JSRef!.Get<ArrayBuffer>("authenticatorData");
         /// <summary>
         /// An ArrayBuffer containing an opaque user identifier, specified as user.id in the options passed to the originating navigator.credentials.create() call.
         /// </summary>
-        public ArrayBuffer UserHandle => JSRef.Get<ArrayBuffer>("userHandle");
+        public ArrayBuffer UserHandle => JSRef!.Get<ArrayBuffer>("userHandle");
 
     }
 }

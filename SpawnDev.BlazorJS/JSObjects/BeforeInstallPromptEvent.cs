@@ -17,15 +17,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an array of string items containing the platforms on which the event was dispatched. This is provided for user agents that want to present a choice of versions to the user such as, for example, "web" or "play" which would allow the user to choose between a web version or an Android version.
         /// </summary>
-        public string[] Platforms => JSRef.Get<string[]>("platforms");
+        public string[] Platforms => JSRef!.Get<string[]>("platforms");
         /// <summary>
         /// Returns a Promise that resolves to an object describing the user's choice when they were prompted to install the app.
         /// </summary>
-        public Task<InstallPromptResult> UserChoice => JSRef.GetAsync<InstallPromptResult>("userChoice");
+        public Task<InstallPromptResult> UserChoice => JSRef!.GetAsync<InstallPromptResult>("userChoice");
         /// <summary>
         /// Show a prompt asking the user if they want to install the app. This method returns a Promise that resolves to an object describing the user's choice when they were prompted to install the app.
         /// </summary>
         /// <returns></returns>
-        public Task<InstallPromptResult> Prompt() => JSRef.CallAsync<InstallPromptResult>("prompt");
+        public Task<InstallPromptResult> Prompt() => JSRef!.CallAsync<InstallPromptResult>("prompt");
     }
 }

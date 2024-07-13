@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A JSON string in an ArrayBuffer, representing the client data that was passed to CredentialsContainer.create() or CredentialsContainer.get().
         /// </summary>
-        public ArrayBuffer ClientDataJSON => JSRef.Get<ArrayBuffer>("clientDataJSON");
+        public ArrayBuffer ClientDataJSON => JSRef!.Get<ArrayBuffer>("clientDataJSON");
     }
 }

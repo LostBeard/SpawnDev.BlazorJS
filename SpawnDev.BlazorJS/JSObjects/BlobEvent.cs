@@ -16,11 +16,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A Blob representing the data associated with the event. The event was fired on the EventTarget because of something happening on that specific Blob.
         /// </summary>
-        public Blob Data => JSRef.Get<Blob>("data");
+        public Blob Data => JSRef!.Get<Blob>("data");
         /// <summary>
         /// A DOMHighResTimeStamp indicating the difference between the timestamp of the first chunk in data and the timestamp of the first chunk in the first BlobEvent produced by this recorder. Note that the timecode in the first produced BlobEvent does not need to be zero.
         /// </summary>
         /// <returns></returns>
-        public double Timecode => JSRef.Get<double>("timecode");
+        public double Timecode => JSRef!.Get<double>("timecode");
     }
 }

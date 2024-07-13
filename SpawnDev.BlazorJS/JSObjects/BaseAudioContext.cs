@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Creates an AnalyserNode, which can be used to expose audio time and frequency data and for example to create data visualizations.
         /// </summary>
-        public AnalyserNode CreateAnalyser() => JSRef.Call<AnalyserNode>("createAnalyser");
+        public AnalyserNode CreateAnalyser() => JSRef!.Call<AnalyserNode>("createAnalyser");
 
         /// <summary>
         /// A statechange event is fired at a BaseAudioContext object when its state member changes.

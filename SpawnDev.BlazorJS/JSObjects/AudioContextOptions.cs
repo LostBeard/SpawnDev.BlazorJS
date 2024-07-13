@@ -4,6 +4,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// An object used to configure a new AudioContext<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/AudioContext#options
     /// </summary>
     public class AudioContextOptions
     {

@@ -19,12 +19,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The valueOf() method of Boolean values returns the primitive value of a Boolean object.
         /// </summary>
         /// <returns></returns>
-        public bool ValueOf() => JSRef.Call<bool>("valueOf");
+        public bool ValueOf() => JSRef!.Call<bool>("valueOf");
         /// <summary>
         /// The toString() method of Boolean values returns a string representing the specified boolean value.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => JSRef.Call<string>("toString");
+        public override string ToString() => JSRef!.Call<string>("toString");
         /// <summary>
         /// Implicit conversion to a .Net bool
         /// </summary>
