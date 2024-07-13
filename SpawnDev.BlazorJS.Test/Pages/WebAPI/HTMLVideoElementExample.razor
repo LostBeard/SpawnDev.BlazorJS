@@ -7,15 +7,15 @@
     [Inject]
     BlazorJSRuntime JS { get; set; }
 
-    ElementReference videoElRef;
-
+    ElementReference? videoElRef;
     HTMLVideoElement? videoEl = null;
 
     protected override void OnAfterRender(bool firstRender)
     {
+        JS.Log("- OnAfterRender", videoElRef, firstRender);
         if (firstRender)
         {
-            videoEl = new HTMLVideoElement(videoElRef);
+            videoEl = (HTMLVideoElement)videoElRef!;
             videoEl.OnLoadedMetadata += VideoEl_OnLoadedMetadata;
         }
     }

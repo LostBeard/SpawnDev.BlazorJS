@@ -11,10 +11,6 @@ using SpawnDev.BlazorJS.Test.UnitTests;
 using SpawnDev.BlazorJS.Toolbox;
 using SpawnDev.BlazorJS.WebWorkers;
 
-#if DEBUG
-JSObject.UndisposedHandleVerboseMode = false;
-#endif
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 // Add SpawnDev.BlazorJS.BlazorJSRuntime
 builder.Services.AddBlazorJSRuntime(out var JS);
@@ -52,10 +48,10 @@ builder.Services.AddSingleton<CryptoService>();
 //
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+
 #if DEBUG && true
-var host = builder.Build();
-await host.StartBackgroundServices();
-//
+var host = await builder.Build().StartBackgroundServices();
+// 
 
 
 await host.BlazorJSRunAsync();

@@ -25,8 +25,10 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// This event is for diagnostics purposes and will liekly be removed in future releases
         /// </summary>
+#if DEBUG
         public static Action<JSObject>? OnJSObjectCreated { get; set; }
         public static bool UndisposedHandleVerboseMode { get; set; } = false;
+#endif
         protected static BlazorJSRuntime JS => BlazorJSRuntime.JS;
         public static IJSInProcessObjectReference? NullRef { get; } = null;
         public static JSInProcessObjectReferenceUndefined? UndefinedRef { get; } = new JSInProcessObjectReferenceUndefined();
@@ -60,30 +62,43 @@ namespace SpawnDev.BlazorJS
             if (JSRef != null) throw new Exception("IJSObject.FromReference error: _ref object already set.");
             IsJSRefUndefined = _ref != null && typeof(JSInProcessObjectReferenceUndefined).IsAssignableFrom(_ref.GetType());
             JSRef = _ref;
+#if DEBUG
             if (JSRef != null) OnJSObjectCreated?.Invoke(this);
+#endif
         }
         /// <summary>
-        /// Returns a new JSObject of type T using this JSObject's IJSInProcessObjectReference, and setting this JSObject's JSRef value to null
+        /// Returns this object as type T and disposes this wrapper.<br/>
+        /// If type T is a JSObject the JSRef is moved instead of copied.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public T JSRefMove<T>() where T : JSObject
+        public T JSRefMove<T>()
         {
             if (JSRef == null) throw new Exception("JSRefMove failed. Reference not set.");
             var _ref = JSRef;
             JSRef = null;
+            T ret;
+            if (typeof(JSObject).IsAssignableFrom(typeof(T)))
+            {
+                ret = (T)Activator.CreateInstance(typeof(T), _ref)!;
+            }
+            else
+            {
+                ret = JSInterop.ReturnMe<T>(_ref);
+            }
             Dispose();
-            return (T)Activator.CreateInstance(typeof(T), _ref)!;
+            return ret;
         }
         /// <summary>
-        /// Returns the JSRef IJSInProcessObjectReference and unsets the JSRef for this JSObject
+        /// Returns this object's IJSInProcessObjectReference and disposes this wrapper.
         /// </summary>
         /// <returns></returns>
         public IJSInProcessObjectReference? JSRefMove()
         {
             var _ref = JSRef;
             JSRef = null;
+            Dispose();
             return _ref;
         }
         /// <summary>
@@ -92,6 +107,19 @@ namespace SpawnDev.BlazorJS
         /// <typeparam name="T"></typeparam>
         /// <returns>T</returns>
         public T JSRefAs<T>() => JSInterop.ReturnMe<T>(this);
+        /// <summary>
+        /// If this object's constructor.name == constructorName, returns this object as type T, else returns default T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="constructorName"></param>
+        /// <returns></returns>
+        public T JSRefIs<T>(string constructorName) => JSInterop.InstanceOf(JSRef, null).Equals(constructorName) ? JSInterop.ReturnMe<T>(JSRef) : default;
+        /// <summary>
+        /// If this object's constructor.name == typeof(T).Name, returns this object as type T, else returns default T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T JSRefIs<T>() => JSInterop.InstanceOf(JSRef, null).Equals(typeof(T).Name) ? JSInterop.ReturnMe<T>(JSRef) : default;
         /// <summary>
         /// Returns a new JSObject of type T using a copy of this JSObject's IJSInProcessObjectReference
         /// </summary>
@@ -114,7 +142,7 @@ namespace SpawnDev.BlazorJS
             JSRef?.Dispose();
             JSRef = null;
             IsJSRefUndefined = false;
-        }   
+        }
         /// <summary>
         /// Release the IJSInProcessObjectReference, and other resources
         /// </summary>
@@ -129,6 +157,7 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         ~JSObject()
         {
+#if DEBUG
             if (UndisposedHandleVerboseMode)
             {
                 if (JSRef != null)
@@ -137,6 +166,7 @@ namespace SpawnDev.BlazorJS
                     Console.WriteLine($"DEBUG WARNING: JSObject JSDebugName was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
                 }
             }
+#endif
             Dispose(false);
         }
     }
