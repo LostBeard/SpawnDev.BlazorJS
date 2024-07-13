@@ -36,6 +36,15 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static object As(this IJSInProcessObjectReference _ref, Type returnType) => JSInterop.ReturnMe(returnType, _ref)!;
         /// <summary>
+        /// If the constructor name equals the given constructorName, the object ill be imported as type T<br/>
+        /// Otherwise, default T is returned
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_ref"></param>
+        /// <param name="constructorName"></param>
+        /// <returns></returns>
+        public static T Is<T>(this IJSInProcessObjectReference _ref, string constructorName) => _ref.PropertyInstanceOf().Equals(constructorName) ? JSInterop.ReturnMe<T>(_ref) : default;
+        /// <summary>
         /// Returns a new copy of the IJSInProcessObjectReference
         /// </summary>
         /// <param name="_ref"></param>
