@@ -8,12 +8,21 @@ using System.Text.Json;
 
 namespace SpawnDev.BlazorJS
 {
+    /// <summary>
+    /// BlazorJSRuntime provides access to the Javascript environment in a Blazor WebAssembly application
+    /// </summary>
     public partial class BlazorJSRuntime
     {
         internal static JsonConverterCollection RuntimeJsonConverters { get; private set; } = new JsonConverterCollection();
         internal static readonly IJSInProcessRuntime _js;
+        /// <summary>
+        /// BlazorJSRuntime provides access to the Javascript environment in a Blazor WebAssembly application
+        /// </summary>
         public static BlazorJSRuntime JS { get; internal set; }
         internal static JsonSerializerOptions? RuntimeJsonSerializerOptions { get; private set; }
+        /// <summary>
+        /// If the globalThis is Window instance, WindowThis will refer be that window instance
+        /// </summary>
         public Window? WindowThis { get; private set; } = null;
         public DedicatedWorkerGlobalScope? DedicateWorkerThis { get; private set; } = null;
         public SharedWorkerGlobalScope? SharedWorkerThis { get; private set; } = null;
@@ -43,8 +52,7 @@ namespace SpawnDev.BlazorJS
             _js = (IJSInProcessRuntime)typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime")!.GetField("Instance", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
             RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(_js, null)!;
             RuntimeJsonSerializerOptions.Converters.Add(new TypeJsonConverter());
-            RuntimeJsonSerializerOptions.Converters.Add(new TupleConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new ValueTupleConverterFactory());
+            RuntimeJsonSerializerOptions.Converters.Add(new ITupleConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
@@ -294,24 +302,24 @@ namespace SpawnDev.BlazorJS
         /// <param name="obj2"></param>
         /// <returns></returns>
         public bool JSEquals(object? obj1, object? obj2) => JSInterop.IsEqual(obj1, obj2);
-        public T ReturnMe<T>(object obj) => JSInterop.ReturnMe<T>(obj);
+        public T ReturnMe<T>(object? obj) => JSInterop.ReturnMe<T>(obj);
         public T ReturnMe<T>(T obj) => JSInterop.ReturnMe<T>(obj);
-        public object? ReturnMe(Type type, object obj) => JSInterop.ReturnMe(type, obj);
+        public object? ReturnMe(Type type, object? obj) => JSInterop.ReturnMe(type, obj);
         public JSObject FromElementReference(ElementReference elementRef) => ReturnMe<JSObject>(elementRef);
         public IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);
         public T FromElementReference<T>(ElementReference elementRef) where T : JSObject => (T)Activator.CreateInstance(typeof(T), ReturnMe<IJSInProcessObjectReference>(elementRef));
         public IJSInProcessObjectReference NewApply(string className, object?[]? args = null) => JSInterop.ReturnNew<IJSInProcessObjectReference>(className, args);
         public IJSInProcessObjectReference New(string className) => NewApply(className);
-        public IJSInProcessObjectReference New(string className, object arg0) => NewApply(className, new object[] { arg0 });
-        public IJSInProcessObjectReference New(string className, object arg0, object arg1) => NewApply(className, new object[] { arg0, arg1 });
-        public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2) => NewApply(className, new object[] { arg0, arg1, arg2 });
-        public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3) => NewApply(className, new object[] { arg0, arg1, arg2, arg3 });
-        public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4 });
-        public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 });
-        public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-        public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-        public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-        public IJSInProcessObjectReference New(string className, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6, object arg7, object arg8, object arg9) => NewApply(className, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        public IJSInProcessObjectReference New(string className, object? arg0) => NewApply(className, new object?[] { arg0 });
+        public IJSInProcessObjectReference New(string className, object? arg0, object? arg1) => NewApply(className, new object?[] { arg0, arg1 });
+        public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2) => NewApply(className, new object?[] { arg0, arg1, arg2 });
+        public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3 });
+        public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4 });
+        public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
         // bool IsUndefined(JSObject obj, object? identifier = null) => JSInterop.TypeOf(obj, identifier) == "undefined";
         public bool IsUndefined(string identifier) => JSInterop.GlobalTypeOf(identifier) == "undefined";
         //public string TypeOf(JSObject obj, object? identifier = null) => JSInterop.TypeOf(obj, identifier);

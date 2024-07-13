@@ -29,12 +29,23 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 return converter;
             }
         }
+        /// <summary>
+        /// Add new json converter or converter factory
+        /// </summary>
+        /// <param name="jsonConverter"></param>
+        /// <exception cref="Exception"></exception>
         public void Add(JsonConverter jsonConverter)
         {
             if (Locked) throw new Exception("Collection is locked. JsonConverters cannot be added.");
             _converters.Add(jsonConverter);
         }
+        /// <summary>
+        /// Once locked, the converter collection cannot be modified
+        /// </summary>
         public bool Locked { get; private set; } = false;
+        /// <summary>
+        /// Locks the converter collection so it cannot be modified
+        /// </summary>
         public void Lock() => Locked = true;
     }
 }
