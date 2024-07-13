@@ -8,8 +8,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Permissions : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Permissions(IJSInProcessObjectReference _ref) : base(_ref) { }
-
+        /// <summary>
+        /// Returns the user permission status for a given API.
+        /// </summary>
+        /// <param name="permissionDescriptor"></param>
+        /// <returns></returns>
         public Task<PermissionStatus> Query(PermissionDescriptor permissionDescriptor) => JSRef!.CallAsync<PermissionStatus>("query", permissionDescriptor);
     }
 }
