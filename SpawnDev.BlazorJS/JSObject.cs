@@ -123,6 +123,23 @@ namespace SpawnDev.BlazorJS
             return true;
         }
         /// <summary>
+        /// Returns true if the referenced JS object's constructor.name == constructorName
+        /// </summary>
+        /// <param name="constructorName"></param>
+        /// <returns></returns>
+        /// <exception cref="ObjectDisposedException"></exception>
+        public bool JSRefIs(string constructorName)
+        {
+            if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
+            return JSInterop.InstanceOf(JSRef, null) == constructorName;
+        }
+        /// <summary>
+        /// Returns true if the referenced JS object's constructor.name == type(T).Name
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool JSRefIs<T>() => JSRefIs(typeof(T).Name);
+        /// <summary>
         /// If this object's constructor.name == constructorName, sets value to the value of this object as type T and returns true, otherwise returns false
         /// </summary>
         /// <typeparam name="T"></typeparam>
