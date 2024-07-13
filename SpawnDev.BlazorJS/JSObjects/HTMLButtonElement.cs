@@ -24,11 +24,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A boolean value indicating whether or not the control is disabled, meaning that it does not accept any clicks.
         /// </summary>
-        public bool Disabled { get => JSRef.Get<bool>("disabled"); set => JSRef.Set("disabled", value); }
+        public bool Disabled { get => JSRef!.Get<bool>("disabled"); set => JSRef!.Set("disabled", value); }
         /// <summary>
         /// A NodeList that represents a list of label elements that are labels for this button.
         /// </summary>
-        public NodeList Labels => JSRef.Get<NodeList>("labels");
+        public NodeList Labels => JSRef!.Get<NodeList>("labels");
         /// <summary>
         /// A string indicating the behavior of the button. This is an enumerated attribute with the following possible values:<br />
         /// submit: The button submits the form. This is the default value if the attribute is not specified, or if it is dynamically changed to an empty or invalid value.<br />
@@ -36,7 +36,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// button: The button does nothing.<br />
         /// menu: The button displays a menu. (experimental)
         /// </summary>
-        public string Type { get => JSRef.Get<string>("type"); set => JSRef.Set("type", value); }
+        public string Type { get => JSRef!.Get<string>("type"); set => JSRef!.Set("type", value); }
         #endregion
     }
 }

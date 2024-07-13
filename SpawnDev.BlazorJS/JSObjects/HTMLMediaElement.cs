@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public HTMLMediaElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// Constructor fro man ElementReference
+        /// Get an instance from an ElementReference
         /// </summary>
         /// <param name="elementReference"></param>
         public HTMLMediaElement(ElementReference elementReference) : base(elementReference) { }

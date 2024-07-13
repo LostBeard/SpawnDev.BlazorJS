@@ -9,6 +9,11 @@ namespace SpawnDev.BlazorJS.JSObjects {
     public class HTMLVideoElement : HTMLMediaElement
     {
         /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
+        public HTMLVideoElement(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
         /// Get an instance from an ElementReference
         /// </summary>
         /// <param name="elementReference"></param>
@@ -17,11 +22,6 @@ namespace SpawnDev.BlazorJS.JSObjects {
         /// Create a new instance of HTMLVideoElement
         /// </summary>
         public HTMLVideoElement() : base(JS.DocumentCreateElement("video")) { }
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
-        public HTMLVideoElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns an unsigned integer value indicating the intrinsic height of the resource in CSS pixels, or 0 if no media is available yet.
         /// </summary>

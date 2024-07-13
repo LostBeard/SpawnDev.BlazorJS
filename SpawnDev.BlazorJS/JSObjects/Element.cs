@@ -12,15 +12,15 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         #region Constructors
         /// <summary>
-        /// Creates a new Element from an ElementReference
-        /// </summary>
-        /// <param name="elRef"></param>
-        public Element(ElementReference elRef) : base(JS.ReturnMe<IJSInProcessObjectReference>(elRef)) { }
-        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
         public Element(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Creates a new Element from an ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public Element(ElementReference elementReference) : base(JS.ReturnMe<IJSInProcessObjectReference>(elementReference)) { }
         #endregion
 
         #region Methods

@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public HTMLFormElement(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// Constructor for ElementReference
+        /// Get an instance from an ElementReference
         /// </summary>
         /// <param name="elementReference"></param>
         public HTMLFormElement(ElementReference elementReference) : base(elementReference) { }
