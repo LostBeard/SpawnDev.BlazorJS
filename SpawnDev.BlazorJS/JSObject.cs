@@ -75,7 +75,7 @@ namespace SpawnDev.BlazorJS
         /// <exception cref="Exception"></exception>
         public T JSRefMove<T>()
         {
-            if (JSRef == null) throw new Exception("JSRefMove failed. Reference not set.");
+            if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
             var _ref = JSRef;
             JSRef = null;
             T ret;
@@ -96,41 +96,71 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public IJSInProcessObjectReference? JSRefMove()
         {
+            if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
             var _ref = JSRef;
             JSRef = null;
             Dispose();
             return _ref;
         }
         /// <summary>
-        /// Returns this JSObject as type T
+        /// If this object's constructor.name == constructorName, sets value to the value of this object as type T and returns true, otherwise returns false
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="constructorName">The constructor.name to test for</param>
+        /// <param name="value">return value that will be set if the constructor.name matches</param>
+        /// <param name="moveJSRef">If true, moves the JSRef (which disposes this wrapper) instead of copying it</param>
+        /// <returns>true if the constructor.name matched</returns>
+        /// <exception cref="ObjectDisposedException"></exception>
+        public bool JSRefIs<T>(string constructorName, out T value, bool moveJSRef = false)
+        {
+            if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
+            if (JSInterop.InstanceOf(JSRef, null) != constructorName)
+            {
+                value = default;
+                return false;
+            }
+            value = moveJSRef ? JSRefMove<T>() : JSRefCopy<T>();
+            return true;
+        }
+        /// <summary>
+        /// If this object's constructor.name == constructorName, sets value to the value of this object as type T and returns true, otherwise returns false
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">return value that will be set if the constructor.name matches</param>
+        /// <param name="moveJSRef">If true, moves the JSRef (which disposes this wrapper) instead of copying it</param>
+        /// <returns>true if the constructor.name matched</returns>
+        public bool JSRefIs<T>(out T value, bool moveJSRef = false) => JSRefIs(typeof(T).Name, out value, moveJSRef);
+        /// <summary>
+        /// Returns this JSObject as type T<br/>
+        /// - As of 2.3.8, this is a synonym for JSRefCopy&lt;T&gt;
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>T</returns>
-        public T JSRefAs<T>() => JSInterop.ReturnMe<T>(this);
+        public T JSRefAs<T>()
+        {
+            if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
+            return JSInterop.ReturnMe<T>(this);
+        }
         /// <summary>
-        /// If this object's constructor.name == constructorName, returns this object as type T, else returns default T
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="constructorName"></param>
-        /// <returns></returns>
-        public T JSRefIs<T>(string constructorName) => JSInterop.InstanceOf(JSRef, null).Equals(constructorName) ? JSInterop.ReturnMe<T>(JSRef) : default;
-        /// <summary>
-        /// If this object's constructor.name == typeof(T).Name, returns this object as type T, else returns default T
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public T JSRefIs<T>() => JSInterop.InstanceOf(JSRef, null).Equals(typeof(T).Name) ? JSInterop.ReturnMe<T>(JSRef) : default;
-        /// <summary>
-        /// Returns a new JSObject of type T using a copy of this JSObject's IJSInProcessObjectReference
+        /// Returns this JSObject as type T<br/>
+        /// - As of 2.3.8, this is a synonym for JSRefAs&lt;T&gt;
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>T</returns>
-        public T JSRefCopy<T>() where T : JSObject => JSInterop.ReturnMe<T>(this);
+        public T JSRefCopy<T>()
+        {
+            if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
+            return JSInterop.ReturnMe<T>(this);
+        }
         /// <summary>
         /// Returns a copy of this JSObject's JSRef, a IJSInProcessObjectReference
         /// </summary>
         /// <returns>IJSInProcessObjectReference</returns>
-        public IJSInProcessObjectReference JSRefCopy() => JSInterop.ReturnMe<IJSInProcessObjectReference>(this);
+        public IJSInProcessObjectReference JSRefCopy()
+        {
+            if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
+            return JSInterop.ReturnMe<IJSInProcessObjectReference>(this);
+        }
         /// <summary>
         /// Dispose resources
         /// </summary>

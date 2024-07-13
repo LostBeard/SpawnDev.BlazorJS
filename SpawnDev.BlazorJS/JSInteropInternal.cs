@@ -283,24 +283,24 @@ namespace SpawnDev.BlazorJS
             return _js.Invoke<bool>("JSInterop.__equals", obj1, obj2);
         }
 
-        internal static string TypeOf(object obj, object identifier)
+        internal static string? TypeOf(object? obj, object? identifier)
         {
-            return _js.Invoke<string>("JSInterop._typeof", obj, identifier);
+            return _js.Invoke<string?>("JSInterop._typeof", obj, identifier);
         }
 
-        internal static string InstanceOf(object obj, object identifier)
+        internal static string? InstanceOf(object? obj, object? identifier)
         {
-            return _js.Invoke<string>("JSInterop._instanceof", obj, identifier);
+            return _js.Invoke<string?>("JSInterop._instanceof", obj, identifier);
         }
 
-        internal static string GlobalTypeOf(object identifier)
+        internal static string? GlobalTypeOf(object? identifier)
         {
-            return _js.Invoke<string>("JSInterop._typeofGlobal", identifier);
+            return _js.Invoke<string?>("JSInterop._typeofGlobal", identifier);
         }
 
-        internal static string GlobalInstanceOf(object identifier)
+        internal static string? GlobalInstanceOf(object? identifier)
         {
-            return _js.Invoke<string>("JSInterop._instanceofGlobal", identifier);
+            return _js.Invoke<string?>("JSInterop._instanceofGlobal", identifier);
         }
 
         //internal static string TypeOf(object? obj, int identifier)
