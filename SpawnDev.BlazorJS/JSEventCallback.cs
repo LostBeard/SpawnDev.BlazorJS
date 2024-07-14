@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS
     // public JSEventCallback<MediaRecorderErrorEvent> OnError { get => new JSEventCallback<MediaRecorderErrorEvent>(o => AddEventListener("error", o), o => RemoveEventListener("error", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
     //
     // public JSEventCallback<Event> OnDeviceChange { get => new JSEventCallback<Event>(o => AddEventListener("devicechange", o), o => RemoveEventListener("devicechange", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+    // public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>("change", AddEventListener, RemoveEventListener); set { } }
     //
     // See SpawnDev.BlazorJS.JSObjects for example usage. JSEventCallback is now used extensively throughout JSObjects.
     //
