@@ -29,6 +29,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="data"></param>
         /// <param name="options"></param>
-        public VideoFrame(ArrayBuffer data, VideoFrameDataOptions options) : base(JS.New(nameof(VideoFrame), data, options)) { }
+        public VideoFrame(Union<ArrayBuffer, TypedArray, byte[], DataView> data, VideoFrameDataOptions options) : base(JS.New(nameof(VideoFrame), data, options)) { }
     }
 }

@@ -198,6 +198,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class XMLHttpRequest<TResponse> : XMLHttpRequest
     {
+        /// <summary>
+        /// Get the request response as type TResponse
+        /// </summary>
         public TResponse Response => JSRef!.Get<TResponse>("response");
     }
 }
