@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/USB/requestDevice#filters
+    /// </summary>
     public class USBRequestDeviceFilter
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
