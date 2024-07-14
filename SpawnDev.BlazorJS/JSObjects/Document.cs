@@ -5,7 +5,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The Document interface represents any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree.<br />
     /// https://developer.mozilla.org/en-US/docs/Web/API/Document<br />
-    /// TODO - finish implementation
     /// </summary>
     public class Document : Node
     {
@@ -46,6 +45,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public Task ExitFullscreen() => JSRef!.CallVoidAsync("exitFullscreen");
+        /// <summary>
+        /// Release the pointer lock.
+        /// </summary>
+        public void ExitPointerLock() => JSRef!.CallVoid("exitPointerLock");
+        /// <summary>
+        /// Remove the video from the floating picture-in-picture window back to its original container.
+        /// </summary>
+        /// <returns></returns>
+        public Task ExitPictureInPicture() => JSRef!.CallVoidAsync("exitPictureInPicture");
         /// <summary>
         /// The Document method querySelectorAll() returns a static (not live) NodeList representing a list of the document's elements that match the specified group of selectors.
         /// </summary>
@@ -112,7 +120,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Window.getSelection() method returns a Selection object representing the range of text selected by the user or the current position of the caret.
         /// </summary>
         /// <returns></returns>
-        public Selection GetSelection() => JSRef!.Call<Selection>("getSelection");
+        public Selection? GetSelection() => JSRef!.Call<Selection?>("getSelection");
         #endregion
 
         #region Properties
@@ -121,13 +129,25 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Element? ActiveElement => JSRef!.Get<Element?>("activeElement");
         /// <summary>
-        /// The head read-only property of the Document interface returns the head element of the current document.
-        /// </summary>
-        public HTMLHeadElement? Head => JSRef!.Get<HTMLHeadElement?>("head");
-        /// <summary>
         /// The Document.body property represents the body or frameset node of the current document, or null if no such element exists.
         /// </summary>
         public HTMLBodyElement? Body => JSRef!.Get<HTMLBodyElement?>("body");
+        /// <summary>
+        /// Returns the number of child elements of the current document.
+        /// </summary>
+        public int ChildElementCount => JSRef!.Get<int>("childElementCount");
+        /// <summary>
+        /// Returns the child elements of the current document.
+        /// </summary>
+        public HTMLCollection Children => JSRef!.Get<HTMLCollection>("children");
+        /// <summary>
+        /// Returns the Content-Type from the MIME Header of the current document.
+        /// </summary>
+        public string ContentType => JSRef!.Get<string>("contentType");
+        /// <summary>
+        /// Returns the script element whose script is currently being processed and isn't a JavaScript module.
+        /// </summary>
+        public HTMLScriptElement? CurrentScript => JSRef!.Get<HTMLScriptElement?>("currentScript");
         /// <summary>
         /// The Document property cookie lets you read and write cookies associated with the document. It serves as a getter and setter for the actual values of the cookies.
         /// </summary>
@@ -153,9 +173,29 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string DocumentURI => JSRef!.Get<string>("documentURI");
         /// <summary>
+        /// Returns an HTMLCollection of the embedded embed elements in the document.
+        /// </summary>
+        public HTMLCollection? Embeds => JSRef!.Get<HTMLCollection?>("embeds");
+        /// <summary>
+        /// Returns the first child element of the current document.
+        /// </summary>
+        public Element? FirstElementChild => JSRef!.Get<Element?>("firstElementChild");
+        /// <summary>
+        /// Returns an HTMLCollection of the form elements in the document.
+        /// </summary>
+        public HTMLCollection? Forms => JSRef!.Get<HTMLCollection?>("forms");
+        /// <summary>
         /// The Document.fullscreenElement read-only property returns the Element that is currently being presented in fullscreen mode in this document, or null if fullscreen mode is not currently in use.
         /// </summary>
         public Element? FullscreenElement => JSRef!.Get<Element?>("fullscreenElement");
+        /// <summary>
+        /// Returns the head element of the current document.
+        /// </summary>
+        public HTMLHeadElement? Head => JSRef!.Get<HTMLHeadElement?>("head");
+        /// <summary>
+        /// Returns an HTMLCollection of the images in the document.
+        /// </summary>
+        public HTMLCollection? Images => JSRef!.Get<HTMLCollection?>("images");
         /// <summary>
         /// The read-only fullscreenEnabled property on the Document interface indicates whether or not fullscreen mode is available.
         /// </summary>
@@ -168,6 +208,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Document.lastElementChild read-only property returns the document's last child Element, or null if there are no child elements.
         /// </summary>
         public Element? LastElementChild => JSRef!.Get<Element?>("lastElementChild");
+        /// <summary>
+        /// Returns an HTMLCollection of the hyperlinks in the document.
+        /// </summary>
+        public HTMLCollection? Links => JSRef!.Get<HTMLCollection?>("links");
+        /// <summary>
+        /// Returns an HTMLCollection of the available plugins.
+        /// </summary>
+        public HTMLCollection? Plugins => JSRef!.Get<HTMLCollection?>("plugins");
+        /// <summary>
+        /// Returns an HTMLCollection of the script elements in the document.
+        /// </summary>
+        public HTMLCollection? Scripts => JSRef!.Get<HTMLCollection?>("scripts");
+        /// <summary>
+        /// Returns a reference to the Element that scrolls the document.
+        /// </summary>
+        public Element? ScrollingElement => JSRef!.Get<Element?>("scrollingElement");
         /// <summary>
         /// The Document.location read-only property returns a Location object, which contains information about the URL of the document and provides methods for changing that URL and loading another URL.
         /// </summary>
@@ -208,10 +264,26 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Document.visibilityState read-only property returns the visibility of the document. It can be used to check whether the document is in the background or in a minimized window, or is otherwise not visible to the user.
         /// </summary>
         public string VisibilityState => JSRef!.Get<string>("visibilityState");
+        /// <summary>
+        /// Returns the document location as a string.
+        /// </summary>
+        public string URL => JSRef!.Get<string>("URL");
         #endregion
 
         #region Events
-        // TODO - event callback types need to be checked/added
+        // https://developer.mozilla.org/en-US/docs/Web/API/Document#events
+        /// <summary>
+        /// The prerenderingchange event is fired on a prerendered document when it is activated (i.e. the user views the page).
+        /// </summary>
+        public JSEventCallback<Event> OnPrerenderingChange { get => new JSEventCallback<Event>("prerenderingchange", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// The securitypolicyviolation event is fired when a Content Security Policy is violated.
+        /// </summary>
+        public JSEventCallback<SecurityPolicyViolationEvent> OnSecurityPolicyViolation { get => new JSEventCallback<SecurityPolicyViolationEvent>("securitypolicyviolation", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// The visibilitychange event is fired at the document when the contents of its tab have become visible or have been hidden.
+        /// </summary>
+        public JSEventCallback<Event> OnVisibilityChange { get => new JSEventCallback<Event>("visibilitychange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The copy event fires when the user initiates a copy action through the browser's user interface.
         /// </summary>
@@ -221,9 +293,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<ClipboardEvent> OnCut { get => new JSEventCallback<ClipboardEvent>("cut", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (script defer src="…" and type="module") have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading.
+        /// The paste event fires when the user initiates a paste action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnDOMContentLoaded { get => new JSEventCallback<ClipboardEvent>("DOMContentLoaded", AddEventListener, RemoveEventListener); set { } }
+        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>("paste", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The fullscreenchange event is fired immediately after the browser switches into or out of fullscreen mode.
         /// </summary>
@@ -233,9 +305,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<Event> OnFullscreenError { get => new JSEventCallback<Event>("fullscreenerror", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// The paste event fires when the user initiates a paste action through the browser's user interface.
+        /// The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (script defer src="…" and type="module") have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>("paste", AddEventListener, RemoveEventListener); set { } }
+        public JSEventCallback<ClipboardEvent> OnDOMContentLoaded { get => new JSEventCallback<ClipboardEvent>("DOMContentLoaded", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// The readystatechange event is fired when the readyState attribute of a document has changed.
+        /// </summary>
+        public JSEventCallback<Event> OnReadyStateChange { get => new JSEventCallback<Event>("readystatechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The pointerlockchange event is fired when the pointer is locked/unlocked.
         /// </summary>
@@ -245,14 +321,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<Event> OnPointerLockError { get => new JSEventCallback<Event>("pointerlockerror", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// The prerenderingchange event is fired on a prerendered document when it is activated (i.e. the user views the page).
-        /// </summary>
-        public JSEventCallback<Event> OnPrerenderingChange { get => new JSEventCallback<Event>("prerenderingchange", AddEventListener, RemoveEventListener); set { } }
-        /// <summary>
-        /// The readystatechange event is fired when the readyState attribute of a document has changed.
-        /// </summary>
-        public JSEventCallback<Event> OnReadyStateChange { get => new JSEventCallback<Event>("readystatechange", AddEventListener, RemoveEventListener); set { } }
-        /// <summary>
         /// The scroll event fires when the document view has been scrolled. To detect when scrolling has completed, see the Document: scrollend event. For element scrolling, see Element: scroll event.
         /// </summary>
         public JSEventCallback<Event> OnScroll { get => new JSEventCallback<Event>("scroll", AddEventListener, RemoveEventListener); set { } }
@@ -261,17 +329,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<Event> OnScrollEnd { get => new JSEventCallback<Event>("scrollend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// The securitypolicyviolation event is fired when a Content Security Policy is violated.
-        /// </summary>
-        public JSEventCallback<SecurityPolicyViolationEvent> OnSecurityPolicyViolation { get => new JSEventCallback<SecurityPolicyViolationEvent>("securitypolicyviolation", AddEventListener, RemoveEventListener); set { } }
-        /// <summary>
         /// The selectionchange event of the Selection API is fired when the current Selection of a Document is changed.
         /// </summary>
         public JSEventCallback<Event> OnSelectionChange { get => new JSEventCallback<Event>("selectionchange", AddEventListener, RemoveEventListener); set { } }
-        /// <summary>
-        /// The visibilitychange event is fired at the document when the contents of its tab have become visible or have been hidden.
-        /// </summary>
-        public JSEventCallback<Event> OnVisibilityChange { get => new JSEventCallback<Event>("visibilitychange", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

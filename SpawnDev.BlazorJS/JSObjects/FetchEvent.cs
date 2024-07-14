@@ -19,7 +19,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string ClientId => JSRef!.Get<string>("clientId");
         /// <summary>
         /// A promise that is pending while the event has not been handled, and fulfilled once it has.<br />
-        /// IMPORTANT TODO: Deserialization of already fulfilled Promises needs to be tested to ensure it works correctly.
         /// </summary>
         public Promise Handled => JSRef!.Get<Promise>("handled");
         /// <summary>
