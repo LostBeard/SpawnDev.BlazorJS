@@ -73,11 +73,25 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public uint Width => JSRef!.Get<uint>("width");
         #endregion
+        /// <summary>
+        /// Creates an ImageData from a Uint8Array
+        /// </summary>
+        /// <param name="rgbaBytesUint8Array"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static ImageData FromUint8Array(Uint8Array rgbaBytesUint8Array, uint width, uint height)
         {
             using var rgbaBytesUint8ClampedArray = new Uint8ClampedArray(rgbaBytesUint8Array);
             return new ImageData(rgbaBytesUint8ClampedArray, width, height);
         }
+        /// <summary>
+        /// Creates an ImageData from a byte[]
+        /// </summary>
+        /// <param name="rgbaBytes"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static ImageData FromBytes(byte[] rgbaBytes, uint width, uint height)
         {
             using var rgbaBytesUint8Array = new Uint8Array(rgbaBytes);
