@@ -37,7 +37,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="scriptURL"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task<ServiceWorkerRegistration> Register(string scriptURL, ServiceWorkerRegistrationOptions? options = null) => options == null ? JSRef.CallAsync<ServiceWorkerRegistration>("register", scriptURL) : JSRef.CallAsync<ServiceWorkerRegistration>("register", scriptURL, options);
+        public Task<ServiceWorkerRegistration> Register(string scriptURL, ServiceWorkerRegistrationOptions? options = null) => options == null ? JSRef!.CallAsync<ServiceWorkerRegistration>("register", scriptURL) : JSRef!.CallAsync<ServiceWorkerRegistration>("register", scriptURL, options);
         #endregion
         #region Events
         /// <summary>

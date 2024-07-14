@@ -42,17 +42,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public ReadableStreamDefaultReader GetReader() => JSRef!.Call<ReadableStreamDefaultReader>("getReader");
-        //public Uint8Array? Read()
-        //{
-        //    Uint8Array? ret = null;
-        //    try
-        //    {
-        //        ret = JSRef.Call<Uint8Array>("read");
-        //    }
-        //    catch { }
-        //    return ret;
-        //}
-        //public AsyncIterator GetAsyncIterator() => JSRef!.Call<AsyncIterator>(Symbol.AsyncIterator);
-        //public void Destroy() => JSRef!.CallVoid("destroy");
     }
 }

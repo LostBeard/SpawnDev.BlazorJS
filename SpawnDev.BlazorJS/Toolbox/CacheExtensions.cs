@@ -127,8 +127,9 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var uint8Buffer = uint8.Buffer;
             using (var response = new Response(uint8Buffer))
             {
-                if (!string.IsNullOrEmpty(contentType)) response.HeaderSet("Content-Type", contentType);
-                response.HeaderSet("Content-Length", uint8Buffer.ByteLength.ToString());
+                using var header = response.Headers;
+                if (!string.IsNullOrEmpty(contentType)) header.Set("Content-Type", contentType);
+                header.Set("Content-Length", uint8Buffer.ByteLength.ToString());
                 return _this.Put(url, response);
             }
         }
@@ -143,8 +144,12 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using (var response = new Response(buffer))
             {
-                if (!string.IsNullOrEmpty(contentType)) response.HeaderSet("Content-Type", contentType);
-                response.HeaderSet("Content-Length", buffer.ByteLength.ToString());
+                using var header = response.Headers;
+                if (!string.IsNullOrEmpty(contentType))
+                {
+                    header.Set("Content-Type", contentType);
+                }
+                header.Set("Content-Length", buffer.ByteLength.ToString());
                 return _this.Put(url, response);
             }
         }
@@ -153,8 +158,9 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using (var response = new Response(buffer))
             {
-                if (!string.IsNullOrEmpty(contentType)) response.HeaderSet("Content-Type", contentType);
-                response.HeaderSet("Content-Length", buffer.Size.ToString());
+                using var header = response.Headers;
+                if (!string.IsNullOrEmpty(contentType)) header.Set("Content-Type", contentType);
+                header.Set("Content-Length", buffer.Size.ToString());
                 return _this.Put(url, response);
             }
         }

@@ -46,8 +46,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task<Dictionary<string, FileSystemHandle>> Entries()
         {
-            using var valuesIterator = JSRef.Call<AsyncIterator>("values");
-            var files = await valuesIterator.ToList<FileSystemHandle>();
+            using var valuesIterator = JSRef!.Call<AsyncIterator<FileSystemHandle>>("values");
+            var files = await valuesIterator.ToList();
             var typed = files.Select(o => o.ResolveType(true)).ToList();
             return typed.ToDictionary(o => o.Name, o => o);
         }
@@ -57,20 +57,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task<List<FileSystemHandle>> Values()
         {
-            using var valuesIterator = JSRef.Call<AsyncIterator>("values");
-            var files = await valuesIterator.ToList<FileSystemHandle>();
-            var typed = files.Select(o => o.ResolveType(true)).ToList();
-            return typed;
+            using var valuesIterator = JSRef!.Call<AsyncIterator<FileSystemHandle>>("values");
+            var files = await valuesIterator.ToList();
+            return files.Select(o => o.ResolveType(true)).ToList();
         }
         /// <summary>
         /// Returns a new async iterator containing the keys for each item in FileSystemDirectoryHandle.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<string>> Keys()
-        {
-            using var valuesIterator = JSRef.Call<AsyncIterator>("keys");
-            var keys = await valuesIterator.ToList<string>();
-            return keys;
-        }
+        public Task<List<string>> Keys() => JSRef!.Call<AsyncIterator<string>>("keys").UsingAsync(async o => await o.ToList());
     }
 }

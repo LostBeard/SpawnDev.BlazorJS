@@ -3,11 +3,22 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
+    /// <summary>
+    /// JsonConverterCollection enables presenting a collection of JsonConverters as a single converter
+    /// </summary>
     public class JsonConverterCollection : JsonConverterFactory
     {
         private List<JsonConverter> _converters = new List<JsonConverter>();
+        /// <summary>
+        /// ReadOnly list of JsonConverters
+        /// </summary>
         public IReadOnlyList<JsonConverter> JsonConverterFactories => _converters.AsReadOnly();
-        JsonConverter? GetJsonConverter(Type type)
+        /// <summary>
+        /// Returns the converter, if any, that can convert the specified type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public JsonConverter? GetJsonConverter(Type type)
         {
             foreach (var converter in _converters)
             {
@@ -15,7 +26,18 @@ namespace SpawnDev.BlazorJS.JsonConverters
             }
             return null;
         }
+        /// <summary>
+        /// Returns true if any of the converters in the collection can convert the given type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public override bool CanConvert(Type type) => GetJsonConverter(type) != null;
+        /// <summary>
+        /// Creates a converter for a specified type
+        /// </summary>
+        /// <param name="typeToConvert"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var converter = GetJsonConverter(typeToConvert);

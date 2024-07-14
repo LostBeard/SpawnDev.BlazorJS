@@ -439,7 +439,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemDirectoryHandle _this, string path, string data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable();
+            using var stream = await fileHandle!.CreateWritable();
             await stream.Write(data);
             stream.Close();
         }

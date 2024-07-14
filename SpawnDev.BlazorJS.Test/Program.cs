@@ -45,6 +45,8 @@ builder.Services.AddSingleton<ContextMenuService>();
 builder.Services.AddSingleton<JSObjectAnalyzer>();
 
 builder.Services.AddSingleton<CryptoService>();
+
+builder.Services.AddSingleton<FileSystemAPIService>();
 //
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -52,7 +54,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 #if DEBUG && true
 var host = await builder.Build().StartBackgroundServices();
 // 
-
+var fileSystemAPIService = host.Services.GetRequiredService<FileSystemAPIService>();
+await fileSystemAPIService.StorageManagerExample();
 
 await host.BlazorJSRunAsync();
 #else

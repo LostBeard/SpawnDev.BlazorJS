@@ -49,7 +49,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void ForEach(Action<string, string, URLSearchParams> callback)
         {
             using var cb = Callback.Create(callback);
-            JSRef.CallVoid("forEach", cb);
+            JSRef!.CallVoid("forEach", cb);
         }
         /// <summary>
         /// Allows iteration through all values contained in this object via a callback function.
@@ -59,7 +59,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void ForEach(Action<string, string, URLSearchParams> callback, object thisArg)
         {
             using var cb = Callback.Create(callback);
-            JSRef.CallVoid("forEach", cb, thisArg);
+            JSRef!.CallVoid("forEach", cb, thisArg);
         }
         /// <summary>
         /// Returns the first value associated with the given search parameter.

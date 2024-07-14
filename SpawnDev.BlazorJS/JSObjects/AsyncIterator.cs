@@ -52,6 +52,12 @@ namespace SpawnDev.BlazorJS.JSObjects
             }
             return ret;
         }
+        /// <summary>
+        /// Iterates all values and returns them as a .Net Array
+        /// </summary>
+        /// <typeparam name="TValue"></typeparam>
+        /// <returns></returns>
+        public async Task<TValue[]> ToArray<TValue>() => (await ToList<TValue>()).ToArray();
     }
     /// <summary>
     /// An AsyncIterator object is an object that conforms to the async iterator protocol by providing a next() method that returns a promise fulfilling to an iterator result object. The AsyncIterator.prototype object is a hidden global object that all built-in async iterators inherit from. It provides an @@asyncIterator method that returns the async iterator object itself, making the async iterator also async iterable.<br />
@@ -101,5 +107,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             }
             return ret;
         }
+        /// <summary>
+        /// Iterates all values and returns them as a .Net Array
+        /// </summary>
+        /// <returns></returns>
+        public async Task<TValue[]> ToArray() => (await ToList()).ToArray();
     }
 }

@@ -193,7 +193,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public static object? ImportFromIJSInprocessObjectReference(IJSInProcessObjectReference _ref, Type[] types)
         {
             var jsObject = new JSObject(_ref);
-            var jsTypeName = jsObject.JSRef!.PropertyIsUndefined("constructor") ? "" : jsObject.JSRef!.GetConstructorName()!;
+            var jsTypeName = jsObject.JSRef!.GetConstructorName()!;
             if (!string.IsNullOrEmpty(jsTypeName))
             {
                 if (jsTypeName == "Uint8Array")
@@ -223,12 +223,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
                         }
                     }
                 }
-                //var gg = types[0].Name;
-                // look for exact match 
-                //var baseType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
-                //var ggg = types.Select(o => o.IsGenericType ? o.GetGenericTypeDefinition() : o).ToArray();
-                //var typeNames2 = ggg.Select(o => o.Name).ToArray();
-                //var typeNames = types.Select(o => o.Name.Split("`")[0]).ToArray();
                 foreach(var o in types)
                 {
                     //if (o.IsValueType || !o.IsClass || o.IsInterface || o == typeof(string)) continue;

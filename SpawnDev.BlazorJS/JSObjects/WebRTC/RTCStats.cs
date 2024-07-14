@@ -29,10 +29,10 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         {
             switch (Type)
             {
-                case "candidate-pair": return JSRef.As<RTCIceCandidatePairStats>();
-                case "remote-candidate": return JSRef.As<RTCIceCandidateStats>();
-                case "local-candidate": return JSRef.As<RTCIceCandidateStats>();
-                case "transport": return JSRef.As<RTCTransportStats>();
+                case "candidate-pair": return JSRef!.As<RTCIceCandidatePairStats>();
+                case "remote-candidate": return JSRef!.As<RTCIceCandidateStats>();
+                case "local-candidate": return JSRef!.As<RTCIceCandidateStats>();
+                case "transport": return JSRef!.As<RTCTransportStats>();
                 case "certificate": return this;
                 case "codec": return this;
                 case "data-channel": return this;

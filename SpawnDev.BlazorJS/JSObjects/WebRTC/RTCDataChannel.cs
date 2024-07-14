@@ -144,32 +144,32 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <summary>
         /// Sent when the number of bytes of data in the outgoing data buffer falls below the value specified by bufferedAmountLowThreshold.
         /// </summary>
-        //public ActionCallback OnBufferedAmountLow { set { JSRef.Set("onbufferedamountlow", value); } }
-        public JSEventCallback<Event> OnBufferedAmountLow { get => new JSEventCallback<Event>(JSRef, "onbufferedamountlow"); set { } }
+        //public ActionCallback OnBufferedAmountLow { set { JSRef!.Set("onbufferedamountlow", value); } }
+        public JSEventCallback<Event> OnBufferedAmountLow { get => new JSEventCallback<Event>(JSRef!, "onbufferedamountlow"); set { } }
         /// <summary>
         /// Sent when the underlying data transport closes.
         /// </summary>
-        //public ActionCallback OnClose { set { JSRef.Set("onclose", value); } }
-        public JSEventCallback<Event> OnClose { get => new JSEventCallback<Event>(JSRef, "onclose"); set { } }
+        //public ActionCallback OnClose { set { JSRef!.Set("onclose", value); } }
+        public JSEventCallback<Event> OnClose { get => new JSEventCallback<Event>(JSRef!, "onclose"); set { } }
         /// <summary>
         /// Sent when the underlying data transport is about to start closing.<br/>
         /// Note supported on Firefox as of 2023-07-01
         /// </summary>
-        public JSEventCallback<Event> OnClosing { get => new JSEventCallback<Event>(JSRef, "onclosing"); set { } }
+        public JSEventCallback<Event> OnClosing { get => new JSEventCallback<Event>(JSRef!, "onclosing"); set { } }
         /// <summary>
         /// Sent when an error occurs on the data channel.
         /// </summary>
-        //public ActionCallback<RTCErrorEvent> OnError { set { JSRef.Set("onerror", value); } }
-        public JSEventCallback<RTCErrorEvent> OnError { get => new JSEventCallback<RTCErrorEvent>(JSRef, "onerror"); set { } }
+        //public ActionCallback<RTCErrorEvent> OnError { set { JSRef!.Set("onerror", value); } }
+        public JSEventCallback<RTCErrorEvent> OnError { get => new JSEventCallback<RTCErrorEvent>(JSRef!, "onerror"); set { } }
         /// <summary>
         /// Sent when a message has been received from the remote peer. The message contents can be found in the event's data property.
         /// </summary>
-        //public ActionCallback<MessageEvent> OnMessage { set { JSRef.Set("onmessage", value); } }
-        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>(JSRef, "onmessage"); set { } }
+        //public ActionCallback<MessageEvent> OnMessage { set { JSRef!.Set("onmessage", value); } }
+        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>(JSRef!, "onmessage"); set { } }
         /// <summary>
         /// Sent when the data channel is first opened, or when an existing data channel's underlying connection re-opens.
         /// </summary>
-        //public ActionCallback OnOpen { set { JSRef.Set("onopen", value); } }
-        public JSEventCallback<RTCDataChannelEvent> OnOpen { get => new JSEventCallback<RTCDataChannelEvent>(JSRef, "onopen"); set { } }
+        //public ActionCallback OnOpen { set { JSRef!.Set("onopen", value); } }
+        public JSEventCallback<RTCDataChannelEvent> OnOpen { get => new JSEventCallback<RTCDataChannelEvent>(JSRef!, "onopen"); set { } }
     }
 }

@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The devicePixelRatio of Window interface returns the ratio of the resolution in physical pixels to the resolution in CSS pixels for the current display device.
         /// </summary>
-        public double DevicePixelRatio { get { var tmp = JSRef.Get<double>("devicePixelRatio"); return tmp > 0d ? tmp : 1d; } }
+        public double DevicePixelRatio { get { var tmp = JSRef!.Get<double>("devicePixelRatio"); return tmp > 0d ? tmp : 1d; } }
         /// <summary>
         /// window.document returns a reference to the document contained in the window.
         /// </summary>
@@ -354,15 +354,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         public bool ShowDirectoryPickerSupported() => !JS.IsUndefined("showDirectoryPicker");
 
         public Task<FileSystemDirectoryHandle> ShowDirectoryPicker(ShowDirectoryPickerOptions? options = null) => options == null ?
-            JSRef.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker") :
-            JSRef.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker", options);
+            JSRef!.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker") :
+            JSRef!.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker", options);
 
         public Task<Array<FileSystemFileHandle>> ShowOpenFilePicker(ShowOpenFilePickerOptions? options = null) => options == null ?
-            JSRef.CallAsync<Array<FileSystemFileHandle>>("showOpenFilePicker") :
-            JSRef.CallAsync<Array<FileSystemFileHandle>>("showOpenFilePicker", options);
+            JSRef!.CallAsync<Array<FileSystemFileHandle>>("showOpenFilePicker") :
+            JSRef!.CallAsync<Array<FileSystemFileHandle>>("showOpenFilePicker", options);
 
         public Task<FileSystemFileHandle> ShowSaveFilePicker(ShowSaveFilePickerOptions? options = null) => options == null ?
-            JSRef.CallAsync<FileSystemFileHandle>("showSaveFilePicker") :
-            JSRef.CallAsync<FileSystemFileHandle>("showSaveFilePicker", options);
+            JSRef!.CallAsync<FileSystemFileHandle>("showSaveFilePicker") :
+            JSRef!.CallAsync<FileSystemFileHandle>("showSaveFilePicker", options);
     }
 }

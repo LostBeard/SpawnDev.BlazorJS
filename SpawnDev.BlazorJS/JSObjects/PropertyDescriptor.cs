@@ -14,9 +14,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public PropertyDescriptor(IJSInProcessObjectReference _ref) : base(_ref) { }
         public Function? Get => JSRef!.Get<Function?>("get");
         public Function? Set => JSRef!.Get<Function?>("set");
-        public bool HasGetter => !JSRef.PropertyIsUndefined("get");
-        public bool HasSetter => !JSRef.PropertyIsUndefined("set");
-        public bool HasValueProperty => !JSRef.PropertyIsUndefined("value");
+        public bool HasGetter => JSRef!.PropertyIsUndefined("get");
+        public bool HasSetter => JSRef!.PropertyIsUndefined("set");
+        public bool HasValueProperty => JSRef!.PropertyIsUndefined("value");
         public bool CanBeRead => HasGetter || HasValueProperty;
         public bool CanBeWritten => Writable == true && (HasSetter || HasValueProperty);
         /// <summary>

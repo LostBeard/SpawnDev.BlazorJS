@@ -61,7 +61,7 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         /// <param name="_ref"></param>
         /// <returns></returns>
-        public static string GetConstructorName(this IJSInProcessObjectReference _ref) => JSInterop.Get<string>(_ref, "constructor.name");
+        public static string? GetConstructorName(this IJSInProcessObjectReference _ref) => JSInterop.InstanceOf(_ref, null);
         public static List<string> GetPropertyNames(this IJSInProcessObjectReference _ref, bool hasOwnProperty = false) => JSInterop.GetPropertyNames(_ref, null, hasOwnProperty);
         /// <summary>
         /// Returns the typeof IJSInProcessObjectReference

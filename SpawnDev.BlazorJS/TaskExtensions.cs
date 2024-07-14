@@ -35,7 +35,7 @@ namespace SpawnDev.BlazorJS
         private static async ValueTask ConvertTaskObjectTypedValueTaskVoid(Task<object?> task) => await task;
         private static Dictionary<Type, MethodInfo?> ConvertTaskObjectTypedValueTaskCache = new Dictionary<Type, MethodInfo?>();
         private static MethodInfo? ConvertTaskObjectTypedValueTaskInfo { get; set; }
-        public static object RecastValueTask(this Task<object?> task, Type type)
+        public static object? RecastValueTask(this Task<object?> task, Type type)
         {
             if (type == typeof(void)) return ConvertTaskObjectTypedValueTaskVoid(task);
             if (!ConvertTaskObjectTypedValueTaskCache.TryGetValue(type, out MethodInfo? convertTaskObjectTyped))
@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS
                 convertTaskObjectTyped = ConvertTaskObjectTypedValueTaskInfo!.MakeGenericMethod(type);
                 ConvertTaskObjectTypedValueTaskCache[type] = convertTaskObjectTyped;
             }
-            return convertTaskObjectTyped.Invoke(null, new object?[] { task });
+            return convertTaskObjectTyped!.Invoke(null, new object?[] { task });
         }
     }
 }

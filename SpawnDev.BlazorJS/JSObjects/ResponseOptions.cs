@@ -23,6 +23,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Any headers you want to add to your response, contained within a Headers object or object literal of String key/value pairs (see HTTP headers for a reference).
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Headers? Headers { get; set; }
+        public Union<Dictionary<string, string>, Headers>? Headers { get; set; }
     }
 }

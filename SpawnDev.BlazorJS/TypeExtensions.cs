@@ -84,22 +84,25 @@ namespace SpawnDev.BlazorJS
             }
             return ret!;
         }
-
-        //public static Type FinalReturnType(this Type type) => type.IsAsync() ? type.AsyncReturnType() ?? typeof(void) : type;
         static Dictionary<Type, object?> TypeDefaultsCache { get; } = new Dictionary<Type, object?>();
         static object? GetDefault<T>() => default(T);
+        /// <summary>
+        /// Returns the default value of the specified type
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static object? GetDefaultValue(this Type t)
         {
             return t.IsValueType ? Activator.CreateInstance(t) : null;
         }
-        public static object? GetDefaultValueAlt(this Type t)
-        {
-            if (TypeDefaultsCache.TryGetValue(t, out var value)) return value;
-            var f = GetDefault<object>;
-            var ret = f.Method.GetGenericMethodDefinition().MakeGenericMethod(t).Invoke(null, null);
-            TypeDefaultsCache[t] = ret;
-            return ret;
-        }
+        //public static object? GetDefaultValueAlt(this Type t)
+        //{
+        //    if (TypeDefaultsCache.TryGetValue(t, out var value)) return value;
+        //    var f = GetDefault<object>;
+        //    var ret = f.Method.GetGenericMethodDefinition().MakeGenericMethod(t).Invoke(null, null);
+        //    TypeDefaultsCache[t] = ret;
+        //    return ret;
+        //}
         /// <summary>
         /// type == typeof(void)
         /// </summary>

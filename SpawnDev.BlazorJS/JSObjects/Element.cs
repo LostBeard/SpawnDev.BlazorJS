@@ -62,7 +62,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public bool CheckVisibility(CheckVisibilityOptions? options = null) => options == null ? JSRef.Call<bool>("checkVisibility") : JSRef.Call<bool>("checkVisibility", options);
+        public bool CheckVisibility(CheckVisibilityOptions? options = null) => options == null ? JSRef!.Call<bool>("checkVisibility") : JSRef!.Call<bool>("checkVisibility", options);
         /// <summary>
         /// Returns the size of an element and its position relative to the viewport.
         /// </summary>
