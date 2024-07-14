@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The MessageEvent interface represents a message received by a target object.<br />
+    /// The MessageEvent interface represents a message received by a target object.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent
     /// </summary>
     public class MessageEvent<TData> : MessageEvent
@@ -19,7 +19,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public TData Data => JSRef!.Get<TData>("data");
     }
     /// <summary>
-    /// The MessageEvent interface represents a message received by a target object.<br />
+    /// The MessageEvent interface represents a message received by a target object.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent
     /// </summary>
     public class MessageEvent : Event

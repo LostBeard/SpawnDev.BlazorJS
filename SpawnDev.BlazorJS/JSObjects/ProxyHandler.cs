@@ -9,11 +9,11 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         #region Apply
         /// <summary>
-        /// The handler.apply() method is a trap for the [[Call]] object internal method, which is used by operations such as function calls.<br />
-        /// target - The target callable object.<br />
-        /// thisArg - The this argument for the call.<br />
-        /// argumentsList - The list of arguments for the call.<br />
-        /// Returns:<br />
+        /// The handler.apply() method is a trap for the [[Call]] object internal method, which is used by operations such as function calls.<br/>
+        /// target - The target callable object.<br/>
+        /// thisArg - The this argument for the call.<br/>
+        /// argumentsList - The list of arguments for the call.<br/>
+        /// Returns:<br/>
         /// The apply() method can return any value.
         /// </summary>
         [JsonIgnore]
@@ -36,11 +36,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
         #region Get
         /// <summary>
-        /// The handler.get() method is a trap for the [[Get]] object internal method, which is used by operations such as property accessors.<br />
-        /// target - The target object.<br />
-        /// property - The name or Symbol of the property to get.<br />
-        /// receiver - Either the proxy or an object that inherits from the proxy.<br />
-        /// Returns:<br />
+        /// The handler.get() method is a trap for the [[Get]] object internal method, which is used by operations such as property accessors.<br/>
+        /// target - The target object.<br/>
+        /// property - The name or Symbol of the property to get.<br/>
+        /// receiver - Either the proxy or an object that inherits from the proxy.<br/>
+        /// Returns:<br/>
         /// The get() method can return any value.
         /// </summary>
         [JsonIgnore]
@@ -63,11 +63,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
         #region Construct
         /// <summary>
-        /// The handler.construct() method is a trap for the [[Construct]] object internal method, which is used by operations such as the new operator. In order for the new operation to be valid on the resulting Proxy object, the target used to initialize the proxy must itself be a valid constructor.<br />
-        /// target - The target object.<br />
-        /// argumentsList - The list of arguments for the constructor.<br />
-        /// newTarget - The constructor that was originally called.<br />
-        /// Returns:<br />
+        /// The handler.construct() method is a trap for the [[Construct]] object internal method, which is used by operations such as the new operator. In order for the new operation to be valid on the resulting Proxy object, the target used to initialize the proxy must itself be a valid constructor.<br/>
+        /// target - The target object.<br/>
+        /// argumentsList - The list of arguments for the constructor.<br/>
+        /// newTarget - The constructor that was originally called.<br/>
+        /// Returns:<br/>
         /// The construct method must return an object.
         /// </summary>
         [JsonIgnore]
@@ -90,12 +90,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
         #region Set
         /// <summary>
-        /// The handler.set() method is a trap for the [[Set]] object internal method, which is used by operations such as using property accessors to set a property's value.<br />
-        /// target - The target object.<br />
-        /// property - The name or Symbol of the property to set.<br />
-        /// value - The new value of the property to set.<br />
-        /// receiver - The object to which the assignment was originally directed. This is usually the proxy itself. But a set() handler can also be called indirectly, via the prototype chain or various other ways.<br />
-        /// Returns:<br />
+        /// The handler.set() method is a trap for the [[Set]] object internal method, which is used by operations such as using property accessors to set a property's value.<br/>
+        /// target - The target object.<br/>
+        /// property - The name or Symbol of the property to set.<br/>
+        /// value - The new value of the property to set.<br/>
+        /// receiver - The object to which the assignment was originally directed. This is usually the proxy itself. But a set() handler can also be called indirectly, via the prototype chain or various other ways.<br/>
+        /// Returns:<br/>
         /// The set() method should return a boolean value.
         /// </summary>
         [JsonIgnore]
@@ -118,10 +118,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
         #region Has
         /// <summary>
-        /// The handler.has() method is a trap for the [[HasProperty]] object internal method, which is used by operations such as the in operator.<br />
-        /// target - The target object.<br />
-        /// prop - The name or Symbol of the property to check for existence.<br />
-        /// Returns:<br />
+        /// The handler.has() method is a trap for the [[HasProperty]] object internal method, which is used by operations such as the in operator.<br/>
+        /// target - The target object.<br/>
+        /// prop - The name or Symbol of the property to check for existence.<br/>
+        /// Returns:<br/>
         /// The has() method must return a boolean value.
         /// </summary>
         [JsonIgnore]
@@ -144,9 +144,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
         #region OwnKeys
         /// <summary>
-        /// The handler.ownKeys() method is a trap for the [[OwnPropertyKeys]] object internal method, which is used by operations such as Object.keys(), Reflect.ownKeys(), etc.<br />
-        /// target - The target object.<br />
-        /// Returns:<br />
+        /// The handler.ownKeys() method is a trap for the [[OwnPropertyKeys]] object internal method, which is used by operations such as Object.keys(), Reflect.ownKeys(), etc.<br/>
+        /// target - The target object.<br/>
+        /// Returns:<br/>
         /// The ownKeys() method must return an enumerable object.
         /// </summary>
         [JsonIgnore]
@@ -169,10 +169,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
         #region DeleteProperty
         /// <summary>
-        /// The handler.DeleteProperty() method is a trap for the [[Delete]] object internal method, which is used by operations such as the delete operator.<br />
-        /// target - The target object.<br />
-        /// property - The name or Symbol of the property to delete.<br />
-        /// Returns:<br />
+        /// The handler.DeleteProperty() method is a trap for the [[Delete]] object internal method, which is used by operations such as the delete operator.<br/>
+        /// target - The target object.<br/>
+        /// property - The name or Symbol of the property to delete.<br/>
+        /// Returns:<br/>
         /// The DeleteProperty() method must return a boolean value indicating whether or not the property has been successfully deleted.
         /// </summary>
         [JsonIgnore]

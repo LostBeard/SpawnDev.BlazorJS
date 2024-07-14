@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The ServiceWorkerRegistration interface of the Service Worker API represents the service worker registration. You register a service worker to control one or more pages that share the same origin.<br />
+    /// The ServiceWorkerRegistration interface of the Service Worker API represents the service worker registration. You register a service worker to control one or more pages that share the same origin.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
     /// </summary>
     public class ServiceWorkerRegistration : EventTarget

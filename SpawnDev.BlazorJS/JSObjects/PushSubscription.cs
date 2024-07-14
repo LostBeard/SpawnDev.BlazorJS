@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The PushSubscription interface of the Push API provides a subscription's URL endpoint and allows unsubscribing from a push service.<br />
+    /// The PushSubscription interface of the Push API provides a subscription's URL endpoint and allows unsubscribing from a push service.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription
     /// </summary>
     public class PushSubscription : JSObject

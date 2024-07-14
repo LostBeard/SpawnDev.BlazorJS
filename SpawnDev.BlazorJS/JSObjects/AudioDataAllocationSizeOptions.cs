@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Options used for AudioData.AllocationSize()<br />
+    /// Options used for AudioData.AllocationSize()<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AudioData/allocationSize#options
     /// </summary>
     public class AudioDataAllocationSizeOptions

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The BarcodeDetector interface of the Barcode Detection API allows detection of linear and two dimensional barcodes in images.<br />
+    /// The BarcodeDetector interface of the Barcode Detection API allows detection of linear and two dimensional barcodes in images.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/BarcodeDetector
     /// </summary>
     public class BarcodeDetector : JSObject

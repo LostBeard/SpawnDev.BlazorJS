@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Options for IDBObjectStore.CreateIndex<br />
+    /// Options for IDBObjectStore.CreateIndex<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/IDBObjectStore/createIndex#options
     /// </summary>
     public class IDBObjectStoreCreateIndexOptions

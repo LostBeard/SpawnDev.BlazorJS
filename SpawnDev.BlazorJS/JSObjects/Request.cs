@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Request interface of the Fetch API represents a resource request.<br />
+    /// The Request interface of the Fetch API represents a resource request.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Request
     /// </summary>
     public class Request : JSObject

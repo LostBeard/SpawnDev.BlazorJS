@@ -3,7 +3,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The DocumentPictureInPicture interface of the Document Picture-in-Picture API is the entry point for creating and handling document picture-in-picture windows.<br />
+    /// The DocumentPictureInPicture interface of the Document Picture-in-Picture API is the entry point for creating and handling document picture-in-picture windows.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/DocumentPictureInPicture
     /// </summary>
     public class DocumentPictureInPicture : EventTarget

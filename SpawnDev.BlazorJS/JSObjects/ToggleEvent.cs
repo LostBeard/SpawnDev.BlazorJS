@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The ToggleEvent interface represents an event notifying the user when a popover element's state toggles between showing and hidden.<br />
+    /// The ToggleEvent interface represents an event notifying the user when a popover element's state toggles between showing and hidden.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/ToggleEvent
     /// </summary>
     public class ToggleEvent : Event

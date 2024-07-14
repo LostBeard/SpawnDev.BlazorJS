@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The WritableStreamDefaultWriter interface of the Streams API is the object returned by WritableStream.getWriter() and once created locks the writer to the WritableStream ensuring that no other streams can write to the underlying sink.<br />
+    /// The WritableStreamDefaultWriter interface of the Streams API is the object returned by WritableStream.getWriter() and once created locks the writer to the WritableStream ensuring that no other streams can write to the underlying sink.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/WritableStreamDefaultWriter
     /// </summary>
     public class WritableStreamDefaultWriter : JSObject

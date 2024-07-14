@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The InputDeviceInfo interface of the Media Capture and Streams API gives access to the capabilities of the input device that it represents.<br />
+    /// The InputDeviceInfo interface of the Media Capture and Streams API gives access to the capabilities of the input device that it represents.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/InputDeviceInfo
     /// </summary>
     public class InputDeviceInfo : MediaDeviceInfo

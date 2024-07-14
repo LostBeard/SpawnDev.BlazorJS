@@ -3,12 +3,12 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Credential interface of the Credential Management API provides information about an entity (usually a user) normally as a prerequisite to a trust decision.<br />
-    /// Credential objects may be of the following types:<br />
-    /// FederatedCredential<br />
-    /// IdentityCredential<br />
-    /// PasswordCredential<br />
-    /// PublicKeyCredential<br />
+    /// The Credential interface of the Credential Management API provides information about an entity (usually a user) normally as a prerequisite to a trust decision.<br/>
+    /// Credential objects may be of the following types:<br/>
+    /// FederatedCredential<br/>
+    /// IdentityCredential<br/>
+    /// PasswordCredential<br/>
+    /// PublicKeyCredential<br/>
     /// OTPCredential
     /// https://developer.mozilla.org/en-US/docs/Web/API/Credential
     /// </summary>

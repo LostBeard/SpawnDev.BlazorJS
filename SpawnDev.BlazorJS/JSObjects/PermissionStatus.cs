@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The PermissionStatus interface of the Permissions API provides the state of an object and an event handler for monitoring changes to said state.<br />
+    /// The PermissionStatus interface of the Permissions API provides the state of an object and an event handler for monitoring changes to said state.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/PermissionStatus
     /// </summary>
     public class PermissionStatus : EventTarget

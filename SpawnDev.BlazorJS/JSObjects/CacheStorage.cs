@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The CacheStorage interface represents the storage for Cache objects.<br />
+    /// The CacheStorage interface represents the storage for Cache objects.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage
     /// </summary>
     public class CacheStorage : JSObject

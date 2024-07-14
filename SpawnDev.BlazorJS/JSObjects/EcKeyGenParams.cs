@@ -15,9 +15,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("name")]
         public override string Name { get; set; }
         /// <summary>
-        /// A string representing the name of the elliptic curve to use. This may be any of the following names for NIST-approved curves:<br />
-        /// P-256<br />
-        /// P-384<br />
+        /// A string representing the name of the elliptic curve to use. This may be any of the following names for NIST-approved curves:<br/>
+        /// P-256<br/>
+        /// P-384<br/>
         /// P-521
         /// </summary>
         [JsonPropertyName("namedCurve")]

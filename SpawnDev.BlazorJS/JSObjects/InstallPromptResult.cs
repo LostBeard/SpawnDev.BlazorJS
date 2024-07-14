@@ -3,9 +3,9 @@
     public class InstallPromptResult
     {
         /// <summary>
-        /// A string indicating whether the user chose to install the app or not. It must be one of the following values:<br />
-        /// "accepted": The user installed the app.<br />
-        /// "dismissed": The user did not install the app.<br />
+        /// A string indicating whether the user chose to install the app or not. It must be one of the following values:<br/>
+        /// "accepted": The user installed the app.<br/>
+        /// "dismissed": The user did not install the app.<br/>
         /// </summary>
         public string Outcome { get; set; } = "";
         /// <summary>

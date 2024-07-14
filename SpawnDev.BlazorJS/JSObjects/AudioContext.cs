@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode.<br />
+    /// The AudioContext interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
     /// </summary>
     public class AudioContext : BaseAudioContext
@@ -29,7 +29,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public MediaStreamAudioSourceNode CreateMediaStreamSource(MediaStream mediaStream) => JSRef!.Call<MediaStreamAudioSourceNode>("createMediaStreamSource", mediaStream);
         /// <summary>
-        /// The close() method of the AudioContext Interface closes the audio context, releasing any system audio resources that it uses.<br />
+        /// The close() method of the AudioContext Interface closes the audio context, releasing any system audio resources that it uses.<br/>
         /// This function does not automatically release all AudioContext-created objects, unless other references have been released as well; however, it will forcibly release any system audio resources that might prevent additional AudioContexts from being created and used, suspend the progression of audio time in the audio context, and stop processing audio data. The returned Promise resolves when all AudioContext-creation-blocking resources have been released. This method throws an INVALID_STATE_ERR exception if called on an OfflineAudioContext.
         /// </summary>
         /// <returns></returns>

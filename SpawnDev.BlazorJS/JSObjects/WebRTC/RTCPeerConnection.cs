@@ -5,7 +5,7 @@ using System.Text;
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     /// <summary>
-    /// The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It provides methods to connect to a remote peer, maintain and monitor the connection, and close the connection once it's no longer needed.<br />
+    /// The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It provides methods to connect to a remote peer, maintain and monitor the connection, and close the connection once it's no longer needed.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection
     /// </summary>
     public class RTCPeerConnection : EventTarget
@@ -242,9 +242,9 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         public JSEventCallback<RTCDataChannelEvent> OnDataChannel { get => new JSEventCallback<RTCDataChannelEvent>(JSRef, "ondatachannel"); set { } }
         /// <summary>
-        /// An icecandidate event is sent to an RTCPeerConnection when:<br />
-        /// - An RTCIceCandidate has been identified and added to the local peer by a call to RTCPeerConnection.setLocalDescription(),<br />
-        /// - Every RTCIceCandidate correlated with a particular username fragment and password combination (a generation) has been so identified and added, and<br />
+        /// An icecandidate event is sent to an RTCPeerConnection when:<br/>
+        /// - An RTCIceCandidate has been identified and added to the local peer by a call to RTCPeerConnection.setLocalDescription(),<br/>
+        /// - Every RTCIceCandidate correlated with a particular username fragment and password combination (a generation) has been so identified and added, and<br/>
         /// - All ICE gathering on all transports is complete.
         /// </summary>
         public JSEventCallback<RTCPeerConnectionEvent> OnIceCandidate { get => new JSEventCallback<RTCPeerConnectionEvent>(JSRef, "onicecandidate"); set { } }

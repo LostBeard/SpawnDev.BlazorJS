@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The AuthenticatorAttestationResponse interface of the Web Authentication API is the result of a WebAuthn credential registration. It contains information about the credential that the server needs to perform WebAuthn assertions, such as its credential ID and public key.<br />
+    /// The AuthenticatorAttestationResponse interface of the Web Authentication API is the result of a WebAuthn credential registration. It contains information about the credential that the server needs to perform WebAuthn assertions, such as its credential ID and public key.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AuthenticatorAttestationResponse
     /// </summary>
     public class AuthenticatorAttestationResponse : AuthenticatorResponse

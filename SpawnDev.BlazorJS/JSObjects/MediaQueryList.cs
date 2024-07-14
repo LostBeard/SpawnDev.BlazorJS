@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// A MediaQueryList object stores information on a media query applied to a document, with support for both immediate and event-driven matching against the state of the document.<br />
+    /// A MediaQueryList object stores information on a media query applied to a document, with support for both immediate and event-driven matching against the state of the document.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MediaQueryList
     /// </summary>
     public class MediaQueryList : EventTarget

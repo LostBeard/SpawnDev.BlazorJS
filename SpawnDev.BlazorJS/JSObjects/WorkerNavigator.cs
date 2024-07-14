@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The WorkerNavigator interface represents a subset of the Navigator interface allowed to be accessed from a Worker<br />
+    /// The WorkerNavigator interface represents a subset of the Navigator interface allowed to be accessed from a Worker<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/WorkerNavigator
     /// </summary>
     public class WorkerNavigator : JSObject
@@ -18,17 +18,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public WorkerNavigator(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// Always returns 'Mozilla', in any browser. This property is kept only for compatibility purposes.<br />
+        /// Always returns 'Mozilla', in any browser. This property is kept only for compatibility purposes.<br/>
         /// Deprecated
         /// </summary>
         public string AppCodeName => JSRef!.Get<string>("appCodeName");
         /// <summary>
-        /// Returns the official name of the browser. Do not rely on this property to return the correct value.<br />
+        /// Returns the official name of the browser. Do not rely on this property to return the correct value.<br/>
         /// Deprecated
         /// </summary>
         public string AppName => JSRef!.Get<string>("appName");
         /// <summary>
-        /// Returns the version of the browser as a string. Do not rely on this property to return the correct value.<br />
+        /// Returns the version of the browser as a string. Do not rely on this property to return the correct value.<br/>
         /// Deprecated
         /// </summary>
         public string AppVersion => JSRef!.Get<string>("appVersion");
@@ -69,12 +69,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Permissions? Permissions => JSRef!.Get<Permissions?>("permissions");
         /// <summary>
-        /// Returns a string representing the platform of the browser. Do not rely on this property to return the correct value.<br />
+        /// Returns a string representing the platform of the browser. Do not rely on this property to return the correct value.<br/>
         /// Deprecated
         /// </summary>
         public string? Platform => JSRef!.Get<string?>("platform");
         /// <summary>
-        /// Always returns 'Gecko', on any browser. This property is kept only for compatibility purposes.<br />
+        /// Always returns 'Gecko', on any browser. This property is kept only for compatibility purposes.<br/>
         /// Deprecated
         /// </summary>
         public string? Product => JSRef!.Get<string?>("product");

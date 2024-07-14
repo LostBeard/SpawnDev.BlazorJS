@@ -275,11 +275,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="query">A key or IDBKeyRange to use as the cursor's range. If nothing is passed, this will default to a key range that selects all the records in this object store.</param>
         /// <param name="direction">
-        /// A string telling the cursor which direction to travel. The default is next. Valid values are:<br />
-        /// "next" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the increasing order of keys.<br />
-        /// "nextunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the increasing order of keys.<br />
-        /// "prev" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the decreasing order of keys.<br />
-        /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br />
+        /// A string telling the cursor which direction to travel. The default is next. Valid values are:<br/>
+        /// "next" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the increasing order of keys.<br/>
+        /// "nextunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the increasing order of keys.<br/>
+        /// "prev" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the decreasing order of keys.<br/>
+        /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br/>
         /// </param>
         /// <returns></returns>
         public IDBRequest<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>> OpenCursor(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? query, string direction) => JSRef!.Call<IDBRequest<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>>>("openCursor", query, direction);
@@ -288,11 +288,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="query">A key or IDBKeyRange to be queried. If a single valid key is passed, this will default to a range containing only that key. If nothing is passed, this will default to a key range that selects all the records in this object store.</param>
         /// <param name="direction">
-        /// A string telling the cursor which direction to travel. The default is next. Valid values are:<br />
-        /// "next" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the increasing order of keys.<br />
-        /// "nextunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the increasing order of keys.<br />
-        /// "prev" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the decreasing order of keys.<br />
-        /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br />
+        /// A string telling the cursor which direction to travel. The default is next. Valid values are:<br/>
+        /// "next" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the increasing order of keys.<br/>
+        /// "nextunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the increasing order of keys.<br/>
+        /// "prev" - The cursor is opened at the start of the store; then, the cursor returns all records, even duplicates, in the decreasing order of keys.<br/>
+        /// "prevunique" - The cursor is opened at the start of the store; then, the cursor returns all records, that are not duplicates, in the decreasing order of keys.<br/>
         /// </param>
         /// <returns>Task&lt;IDBCursorWithValue&gt;</returns>
         public Task<IDBCursorWithValue<TPrimaryKey, TPrimaryKey, TValue>> OpenCursorAsync(Union<IDBKeyRange<TPrimaryKey>, TPrimaryKey>? query, string direction) => OpenCursor(query, direction).WaitAsync();

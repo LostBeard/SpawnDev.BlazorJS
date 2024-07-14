@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     /// <summary>
-    /// The RTCStatsReport interface of the WebRTC API provides a statistics report for a RTCPeerConnection, RTCRtpSender, or RTCRtpReceiver.<br />
-    /// https://developer.mozilla.org/en-US/docs/Web/API/RTCStatsReport<br />
+    /// The RTCStatsReport interface of the WebRTC API provides a statistics report for a RTCPeerConnection, RTCRtpSender, or RTCRtpReceiver.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/RTCStatsReport<br/>
     /// TODO - verify return values
     /// </summary>
     public class RTCStatsReport : JSObject

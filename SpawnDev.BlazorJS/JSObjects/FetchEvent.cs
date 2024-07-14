@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// This is the event type for fetch events dispatched on the service worker global scope. It contains information about the fetch, including the request and how the receiver will treat the response. It provides the event.respondWith() method, which allows us to provide a response to this fetch.<br />
+    /// This is the event type for fetch events dispatched on the service worker global scope. It contains information about the fetch, including the request and how the receiver will treat the response. It provides the event.respondWith() method, which allows us to provide a response to this fetch.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
     /// </summary>
     public class FetchEvent : ExtendableEvent
@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string ClientId => JSRef!.Get<string>("clientId");
         /// <summary>
-        /// A promise that is pending while the event has not been handled, and fulfilled once it has.<br />
+        /// A promise that is pending while the event has not been handled, and fulfilled once it has.<br/>
         /// </summary>
         public Promise Handled => JSRef!.Get<Promise>("handled");
         /// <summary>

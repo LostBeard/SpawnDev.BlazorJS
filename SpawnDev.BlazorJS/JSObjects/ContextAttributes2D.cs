@@ -23,8 +23,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? WillReadFrequently { get; set; } = null;
         /// <summary>
-        /// Specifies the color space of the rendering context. Possible values are:<br />
-        /// "srgb" selects the sRGB color space. This is the default value.<br />
+        /// Specifies the color space of the rendering context. Possible values are:<br/>
+        /// "srgb" selects the sRGB color space. This is the default value.<br/>
         /// "display-p3" selects the display-p3 color space.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

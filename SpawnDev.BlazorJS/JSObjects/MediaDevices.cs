@@ -4,7 +4,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The MediaDevices interface provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data.<br />
+    /// The MediaDevices interface provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices
     /// </summary>
     public class MediaDevices : EventTarget

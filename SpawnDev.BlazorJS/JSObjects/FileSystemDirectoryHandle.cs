@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The FileSystemDirectoryHandle interface of the File System API provides a handle to a file system directory.<br />
+    /// The FileSystemDirectoryHandle interface of the File System API provides a handle to a file system directory.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryHandle
     /// </summary>
     public class FileSystemDirectoryHandle : FileSystemHandle

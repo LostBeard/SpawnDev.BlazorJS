@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The TextMetrics interface represents the dimensions of a piece of text in the canvas; a TextMetrics instance can be retrieved using the CanvasRenderingContext2D.measureText() method.<br />
-    /// https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics<br />
+    /// The TextMetrics interface represents the dimensions of a piece of text in the canvas; a TextMetrics instance can be retrieved using the CanvasRenderingContext2D.measureText() method.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics<br/>
     /// TODO - finish
     /// </summary>
     public class TextMetrics : JSObject

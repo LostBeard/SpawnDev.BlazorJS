@@ -4,7 +4,7 @@ using SpawnDev.BlazorJS.JsonConverters;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Function object provides methods for functions. In JavaScript, every function is actually a Function object.<br />
+    /// The Function object provides methods for functions. In JavaScript, every function is actually a Function object.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
     /// </summary>
     public class Function : JSObject

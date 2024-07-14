@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The MutationRecord is a read-only interface that represents an individual DOM mutation observed by a MutationObserver. It is the object inside the array passed to the callback of a MutationObserver.<br />
+    /// The MutationRecord is a read-only interface that represents an individual DOM mutation observed by a MutationObserver. It is the object inside the array passed to the callback of a MutationObserver.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MutationRecord
     /// </summary>
     public class MutationRecord : JSObject
@@ -30,9 +30,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Node? NextSibling => JSRef!.Get<Node?>("nextSibling");
         /// <summary>
-        /// The value depends on the MutationRecord.type:<br />
-        /// For attributes, it is the value of the changed attribute before the change.<br />
-        /// For characterData, it is the data of the changed node before the change.<br />
+        /// The value depends on the MutationRecord.type:<br/>
+        /// For attributes, it is the value of the changed attribute before the change.<br/>
+        /// For characterData, it is the data of the changed node before the change.<br/>
         /// For childList, it is null.
         /// </summary>
         public string? OldValue => JSRef!.Get<string?>("oldValue");
@@ -45,9 +45,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public NodeList RemovedNodes => JSRef!.Get<NodeList>("removedNodes");
         /// <summary>
-        /// The node the mutation affected, depending on the MutationRecord.type.<br />
-        /// For attributes, it is the element whose attribute changed.<br />
-        /// For characterData, it is the CharacterData node.<br />
+        /// The node the mutation affected, depending on the MutationRecord.type.<br/>
+        /// For attributes, it is the element whose attribute changed.<br/>
+        /// For characterData, it is the CharacterData node.<br/>
         /// For childList, it is the node whose children changed.
         /// </summary>
         public Node Target => JSRef!.Get<Node>("target");

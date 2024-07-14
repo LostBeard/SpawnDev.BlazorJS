@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The TransformStream interface of the Streams API represents a concrete implementation of the pipe chain transform stream concept.<br />
+    /// The TransformStream interface of the Streams API represents a concrete implementation of the pipe chain transform stream concept.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/TransformStream
     /// </summary>
     public class TransformStream : JSObject

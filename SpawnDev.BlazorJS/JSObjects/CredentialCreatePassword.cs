@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Options for CredentialsContainer.Create()<br /> 
+    /// Options for CredentialsContainer.Create()<br/> 
     /// https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#password_object_structure
     /// </summary>
     public class CredentialCreatePassword

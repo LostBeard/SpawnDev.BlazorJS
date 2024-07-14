@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Implemented by the video element, the HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.<br />
+    /// Implemented by the video element, the HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement
     /// </summary>
     public class HTMLVideoElement : HTMLMediaElement
@@ -56,10 +56,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="callback"></param>
         public void RequestVideoFrameCallback(ActionCallback<double> callback) => JSRef!.CallVoid("requestVideoFrameCallback", callback);
         /// <summary>
-        /// This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience regarding what content is loaded before the video is played. It may have one of the following values:<br />
-        /// none: Indicates that the video should not be preloaded.<br />
-        /// metadata: Indicates that only video metadata (e.g. length) is fetched.<br />
-        /// auto: Indicates that the whole video file can be downloaded, even if the user is not expected to use it.<br />
+        /// This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience regarding what content is loaded before the video is played. It may have one of the following values:<br/>
+        /// none: Indicates that the video should not be preloaded.<br/>
+        /// metadata: Indicates that only video metadata (e.g. length) is fetched.<br/>
+        /// auto: Indicates that the whole video file can be downloaded, even if the user is not expected to use it.<br/>
         /// empty string: Synonym of the auto value.
         /// </summary>
         public string Preload { get => JSRef!.Get<string>("preload"); set => JSRef!.Set("preload", value); }

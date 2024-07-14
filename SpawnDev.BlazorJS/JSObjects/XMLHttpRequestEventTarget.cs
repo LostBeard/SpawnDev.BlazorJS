@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// XMLHttpRequestEventTarget is the interface that describes the event handlers shared on XMLHttpRequest and XMLHttpRequestUpload.<br />
+    /// XMLHttpRequestEventTarget is the interface that describes the event handlers shared on XMLHttpRequest and XMLHttpRequestUpload.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequestEventTarget
     /// </summary>
     public class XMLHttpRequestEventTarget : EventTarget

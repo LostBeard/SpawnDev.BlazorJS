@@ -68,9 +68,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public AbortSignal? Signal { get; set; }
         /// <summary>
-        /// Specifies the priority of the fetch request relative to other requests of the same type. Must be one of the following strings:<br />
-        /// high - A high priority fetch request relative to other requests of the same type.<br />
-        /// low  - A low priority fetch request relative to other requests of the same type.<br />
+        /// Specifies the priority of the fetch request relative to other requests of the same type. Must be one of the following strings:<br/>
+        /// high - A high priority fetch request relative to other requests of the same type.<br/>
+        /// low  - A low priority fetch request relative to other requests of the same type.<br/>
         /// auto - Automatically determine the priority of the fetch request relative to other requests of the same type (default).
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

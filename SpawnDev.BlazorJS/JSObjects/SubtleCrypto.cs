@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Crypto.subtle read-only property returns a SubtleCrypto which can then be used to perform low-level cryptographic operations.<br />
-    /// https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto<br />
+    /// The Crypto.subtle read-only property returns a SubtleCrypto which can then be used to perform low-level cryptographic operations.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto<br/>
     /// </summary>
     public class SubtleCrypto : JSObject
     {
@@ -55,7 +55,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<T> ExportKey<T>(string format, CryptoKey key) => JSRef!.CallAsync<T>("exportKey", format, key);
         /// <summary>
-        /// Export key in SubjectPublicKeyInfo format.<br />
+        /// Export key in SubjectPublicKeyInfo format.<br/>
         /// You can use this format to import or export RSA or Elliptic Curve public keys.
         /// </summary>
         /// <param name="key"></param>
@@ -68,14 +68,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<ArrayBuffer> ExportKeyPkcs8(CryptoKey key) => JSRef!.CallAsync<ArrayBuffer>("exportKey", "pkcs8", key);
         /// <summary>
-        /// You can use this format to import or export AES or HMAC secret keys, or Elliptic Curve public keys.<br />
+        /// You can use this format to import or export AES or HMAC secret keys, or Elliptic Curve public keys.<br/>
         /// In this format the key is supplied as an ArrayBuffer containing the raw bytes for the key.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         public Task<ArrayBuffer> ExportKeyRaw(CryptoKey key) => JSRef!.CallAsync<ArrayBuffer>("exportKey", "raw", key);
         /// <summary>
-        /// You can use JSON Web Key format to import or export RSA or Elliptic Curve public or private keys, as well as AES and HMAC secret keys.<br />
+        /// You can use JSON Web Key format to import or export RSA or Elliptic Curve public or private keys, as well as AES and HMAC secret keys.<br/>
         /// JSON Web Key format is defined in RFC 7517. It describes a way to represent public, private, and secret keys as JSON objects.
         /// </summary>
         /// <param name="key"></param>
@@ -85,10 +85,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Use the generateKey() method of the SubtleCrypto interface to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         /// </summary>
         /// <param name="algorithm">
-        /// An object defining the type of key to generate and providing extra algorithm-specific parameters.<br />
-        /// For RSASSA-PKCS1-v1_5, RSA-PSS, or RSA-OAEP: pass an RsaHashedKeyGenParams object.<br />
-        /// For ECDSA or ECDH: pass an EcKeyGenParams object.<br />
-        /// For HMAC: pass an HmacKeyGenParams object.<br />
+        /// An object defining the type of key to generate and providing extra algorithm-specific parameters.<br/>
+        /// For RSASSA-PKCS1-v1_5, RSA-PSS, or RSA-OAEP: pass an RsaHashedKeyGenParams object.<br/>
+        /// For ECDSA or ECDH: pass an EcKeyGenParams object.<br/>
+        /// For HMAC: pass an HmacKeyGenParams object.<br/>
         /// For AES-CTR, AES-CBC, AES-GCM, or AES-KW: pass an AesKeyGenParams object.
         /// </param>
         /// <param name="extractable">A boolean value indicating whether it will be possible to export the key using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().</param>
@@ -117,7 +117,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<T> ImportKey<T>(string format, Union<ArrayBuffer, TypedArray, DataView, byte[], JSObject> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) where T : CryptoKeyBase => JSRef!.CallAsync<T>("importKey", format, keyData, algorithm, extractable, keyUsages);
         /// <summary>
-        /// The sign() method of the SubtleCrypto interface generates a digital signature.<br />
+        /// The sign() method of the SubtleCrypto interface generates a digital signature.<br/>
         /// It takes as its arguments a key to sign with, some algorithm-specific parameters, and the data to sign. It returns a Promise which will be fulfilled with the signature.
         /// </summary>
         /// <param name="algorithm">A string or object that specifies the signature algorithm to use and its parameters</param>
@@ -126,7 +126,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>A Promise that fulfills with an ArrayBuffer containing the signature.</returns>
         public Task<ArrayBuffer> Sign(Union<CryptoSignParams, string> algorithm, CryptoKey key, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<ArrayBuffer>("sign", algorithm, key, data);
         /// <summary>
-        /// The verify() method of the SubtleCrypto interface verifies a digital signature.<br />
+        /// The verify() method of the SubtleCrypto interface verifies a digital signature.<br/>
         /// It takes as its arguments a key to verify the signature with, some algorithm-specific parameters, the signature, and the original signed data.It returns a Promise which will be fulfilled with a boolean value indicating whether the signature is valid.
         /// </summary>
         /// <param name="algorithm">A string or object defining the algorithm to use, and for some algorithm choices, some extra parameters. The values given for the extra parameters must match those passed into the corresponding sign() call.</param>

@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// A DOMRect describes the size and position of a rectangle.<br />
-    /// The type of box represented by the DOMRect is specified by the method or property that returned it. For example, Range.getBoundingClientRect() specifies the rectangle that bounds the content of the range using such objects.<br />
+    /// A DOMRect describes the size and position of a rectangle.<br/>
+    /// The type of box represented by the DOMRect is specified by the method or property that returned it. For example, Range.getBoundingClientRect() specifies the rectangle that bounds the content of the range using such objects.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/DOMRect
     /// </summary>
     public class DOMRect : DOMRectReadOnly

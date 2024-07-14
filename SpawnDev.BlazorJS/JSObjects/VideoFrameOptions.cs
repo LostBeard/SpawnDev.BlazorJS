@@ -18,8 +18,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         public double Timestamp { get; set; }
 
         /// <summary>
-        /// A string, describing how the user agent should behave when dealing with alpha channels. The default value is "keep".<br />
-        /// "keep": Indicates that the user agent should preserve alpha channel data. <br />
+        /// A string, describing how the user agent should behave when dealing with alpha channels. The default value is "keep".<br/>
+        /// "keep": Indicates that the user agent should preserve alpha channel data. <br/>
         /// "discard": Indicates that the user agent should ignore or remove alpha channel data.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

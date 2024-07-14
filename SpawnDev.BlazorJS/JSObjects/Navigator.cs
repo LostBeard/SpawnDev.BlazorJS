@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities.<br />
+    /// The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Navigator
     /// </summary>
     public class Navigator : JSObject
@@ -142,47 +142,47 @@ namespace SpawnDev.BlazorJS.JSObjects
         public WindowControlsOverlay? WindowControlsOverlay => JSRef!.Get<WindowControlsOverlay?>("windowControlsOverlay");
         //public XRSystem Xr => JSRef!.Get<XRSystem>("xr");
         /// <summary>
-        /// Always returns 'Mozilla', in any browser. This property is kept only for compatibility purposes.<br />
+        /// Always returns 'Mozilla', in any browser. This property is kept only for compatibility purposes.<br/>
         /// Deprecated
         /// </summary>
         public string AppCodeName => JSRef!.Get<string>("appCodeName");
         /// <summary>
-        /// Returns the official name of the browser. Do not rely on this property to return the correct value.<br />
+        /// Returns the official name of the browser. Do not rely on this property to return the correct value.<br/>
         /// Deprecated
         /// </summary>
         public string AppName => JSRef!.Get<string>("appName");
         /// <summary>
-        /// Returns the version of the browser as a string. Do not rely on this property to return the correct value.<br />
+        /// Returns the version of the browser as a string. Do not rely on this property to return the correct value.<br/>
         /// Deprecated
         /// </summary>
         public string AppVersion => JSRef!.Get<string>("appVersion");
         /// <summary>
-        /// Reports the value of the user's do-not-track preference. When this value is "1", your website or application should not track the user.<br />
+        /// Reports the value of the user's do-not-track preference. When this value is "1", your website or application should not track the user.<br/>
         /// Deprecated
         /// </summary>
         public bool? DoNotTrack => JSRef!.Get<bool?>("doNotTrack");
         /// <summary>
-        /// Returns a string representing the platform of the browser. Do not rely on this property to return the correct value.<br />
+        /// Returns a string representing the platform of the browser. Do not rely on this property to return the correct value.<br/>
         /// Deprecated
         /// </summary>
         public string? Platform => JSRef!.Get<string?>("platform");
         /// <summary>
-        /// Always returns 'Gecko', on any browser. This property is kept only for compatibility purposes.<br />
+        /// Always returns 'Gecko', on any browser. This property is kept only for compatibility purposes.<br/>
         /// Deprecated
         /// </summary>
         public string? Product => JSRef!.Get<string?>("product");
         /// <summary>
-        /// Returns either the string '20030107', or '"20100101'.<br />
+        /// Returns either the string '20030107', or '"20100101'.<br/>
         /// Deprecated
         /// </summary>
         public string? ProductSub => JSRef!.Get<string?>("productSub");
         /// <summary>
-        /// Returns either the empty string, 'Apple Computer Inc.', or 'Google Inc.'.<br />
+        /// Returns either the empty string, 'Apple Computer Inc.', or 'Google Inc.'.<br/>
         /// Deprecated
         /// </summary>
         public string? Vendor => JSRef!.Get<string?>("vendor");
         /// <summary>
-        /// Always returns the empty string.<br />
+        /// Always returns the empty string.<br/>
         /// Deprecated
         /// </summary>
         public string? VendorSub => JSRef!.Get<string?>("vendorSub");
@@ -224,7 +224,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="url">A string containing the URL of the handler. This URL must include %s, as a placeholder that will be replaced with the escaped URL to be handled.</param>
         public void RegisterProtocolHandler(string scheme, string url) => JSRef!.CallVoid("registerProtocolHandler", scheme, url);
         /// <summary>
-        /// Returns a Promise for a MediaKeySystemAccess object.<br />
+        /// Returns a Promise for a MediaKeySystemAccess object.<br/>
         /// https://developer.mozilla.org/en-US/docs/Web/API/Navigator/requestMediaKeySystemAccess
         /// </summary>
         /// <param name="keySystem">A string identifying the key system. For example com.example.somesystem or org.w3.clearkey.</param>

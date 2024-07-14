@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The DocumentTimeline interface of the Web Animations API represents animation timelines, including the default document timeline (accessed via Document.timeline).<br />
+    /// The DocumentTimeline interface of the Web Animations API represents animation timelines, including the default document timeline (accessed via Document.timeline).<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/DocumentTimeline
     /// </summary>
     public class DocumentTimeline : AnimationTimeline

@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     /// <summary>
-    /// The RTCIceCandidate interface—part of the WebRTC API—represents a candidate Interactive Connectivity Establishment (ICE) configuration which may be used to establish an RTCPeerConnection.<br />
-    /// An ICE candidate describes the protocols and routing needed for WebRTC to be able to communicate with a remote device. When starting a WebRTC peer connection, typically a number of candidates are proposed by each end of the connection, until they mutually agree upon one which describes the connection they decide will be best. WebRTC then uses that candidate's details to initiate the connection.<br />
+    /// The RTCIceCandidate interface—part of the WebRTC API—represents a candidate Interactive Connectivity Establishment (ICE) configuration which may be used to establish an RTCPeerConnection.<br/>
+    /// An ICE candidate describes the protocols and routing needed for WebRTC to be able to communicate with a remote device. When starting a WebRTC peer connection, typically a number of candidates are proposed by each end of the connection, until they mutually agree upon one which describes the connection they decide will be best. WebRTC then uses that candidate's details to initiate the connection.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/RTCIceCandidate
     /// </summary>
     public class RTCIceCandidate : JSObject

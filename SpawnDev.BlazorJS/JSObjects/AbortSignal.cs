@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The AbortSignal interface represents a signal object that allows you to communicate with a DOM request (such as a fetch request) and abort it if required via an AbortController object.<br />
+    /// The AbortSignal interface represents a signal object that allows you to communicate with a DOM request (such as a fetch request) and abort it if required via an AbortController object.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
     /// </summary>
     public class AbortSignal : EventTarget
@@ -20,13 +20,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public bool Aborted => JSRef!.Get<bool>("aborted");
         /// <summary>
-        /// A JavaScript value providing the abort reason, once the signal has aborted.<br />
+        /// A JavaScript value providing the abort reason, once the signal has aborted.<br/>
         /// </summary>
         /// <typeparam name="T">Type to read the property reason as</typeparam>
         /// <returns></returns>
         public T GetReason<T>() => JSRef!.Get<T>("reason");
         /// <summary>
-        /// A JavaScript value providing the abort reason, once the signal has aborted.<br />
+        /// A JavaScript value providing the abort reason, once the signal has aborted.<br/>
         /// </summary>
         public JSObject? Reason => JSRef!.Get<JSObject?>("reason");
         #endregion

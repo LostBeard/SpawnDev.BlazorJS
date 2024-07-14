@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Screen interface represents a screen, usually the one on which the current window is being rendered, and is obtained using window.screen.<br />
+    /// The Screen interface represents a screen, usually the one on which the current window is being rendered, and is obtained using window.screen.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Screen
     /// </summary>
     public class Screen : EventTarget

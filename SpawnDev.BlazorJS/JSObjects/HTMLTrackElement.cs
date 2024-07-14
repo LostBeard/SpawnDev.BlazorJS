@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The HTMLTrackElement interface represents an HTML track element within the DOM.<br />
+    /// The HTMLTrackElement interface represents an HTML track element within the DOM.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLTrackElement
     /// </summary>
     public class HTMLTrackElement : HTMLElement

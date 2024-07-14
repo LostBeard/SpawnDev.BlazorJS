@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The GPUQueue interface of the WebGPU API controls execution of encoded commands on the GPU.<br />
+    /// The GPUQueue interface of the WebGPU API controls execution of encoded commands on the GPU.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/GPUQueue
     /// </summary>
     public class GPUQueue : JSObject

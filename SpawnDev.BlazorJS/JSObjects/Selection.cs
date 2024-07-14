@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// A Selection object represents the range of text selected by the user or the current position of the caret. To obtain a Selection object for examination or manipulation, call window.getSelection().<br />
-    /// https://developer.mozilla.org/en-US/docs/Web/API/Selection<br />
+    /// A Selection object represents the range of text selected by the user or the current position of the caret. To obtain a Selection object for examination or manipulation, call window.getSelection().<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Selection<br/>
     /// TODO - finish
     /// </summary>
     public class Selection : JSObject

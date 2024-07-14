@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The HTMLInputElement interface provides special properties and methods for manipulating the options, layout, and presentation of input elements.<br />
+    /// The HTMLInputElement interface provides special properties and methods for manipulating the options, layout, and presentation of input elements.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement
     /// </summary>
     public class HTMLInputElement : HTMLElement

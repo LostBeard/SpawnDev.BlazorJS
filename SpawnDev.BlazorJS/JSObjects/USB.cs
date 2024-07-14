@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The USB interface of the WebUSB API provides attributes and methods for finding and connecting USB devices from a web page.<br />
+    /// The USB interface of the WebUSB API provides attributes and methods for finding and connecting USB devices from a web page.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/USB
     /// </summary>
     public class USB : EventTarget

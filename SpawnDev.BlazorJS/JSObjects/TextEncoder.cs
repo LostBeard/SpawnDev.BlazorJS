@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The TextEncoder interface takes a stream of code points as input and emits a stream of UTF-8 bytes.<br />
+    /// The TextEncoder interface takes a stream of code points as input and emits a stream of UTF-8 bytes.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder
     /// </summary>
     public class TextEncoder : JSObject

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The InkPresenter interface of the Ink API provides the ability to instruct the OS-level compositor to render ink strokes between pointer event dispatches.<br />
+    /// The InkPresenter interface of the Ink API provides the ability to instruct the OS-level compositor to render ink strokes between pointer event dispatches.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/InkPresenter
     /// </summary>
     public class InkPresenter : JSObject

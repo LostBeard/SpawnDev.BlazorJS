@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     /// <summary>
-    /// Describes one server which may be used by the ICE agent; these are typically STUN and/or TURN servers. If this isn't specified, the connection attempt will be made with no STUN or TURN server available, which limits the connection to local peers.<br />
+    /// Describes one server which may be used by the ICE agent; these are typically STUN and/or TURN servers. If this isn't specified, the connection attempt will be made with no STUN or TURN server available, which limits the connection to local peers.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/RTCPeerConnection#iceservers
     /// </summary>
     public class RTCIceServer

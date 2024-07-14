@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The AnimationTimeline interface of the Web Animations API represents the timeline of an animation.<br />
+    /// The AnimationTimeline interface of the Web Animations API represents the timeline of an animation.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AnimationTimeline
     /// </summary>
     public class AnimationTimeline : JSObject

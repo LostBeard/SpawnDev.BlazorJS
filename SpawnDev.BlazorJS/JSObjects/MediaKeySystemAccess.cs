@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The MediaKeySystemAccess interface of the Encrypted Media Extensions API provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess() method.<br />
+    /// The MediaKeySystemAccess interface of the Encrypted Media Extensions API provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess() method.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MediaKeySystemAccess
     /// </summary>
     public class MediaKeySystemAccess : JSObject

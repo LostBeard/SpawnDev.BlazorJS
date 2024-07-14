@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The MIDIPort interface of the Web MIDI API represents a MIDI input or output port.<br />
+    /// The MIDIPort interface of the Web MIDI API represents a MIDI input or output port.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MIDIPort
     /// </summary>
     public class MIDIPort : EventTarget

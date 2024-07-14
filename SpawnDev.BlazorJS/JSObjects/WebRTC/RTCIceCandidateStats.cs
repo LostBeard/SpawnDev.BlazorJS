@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     /// <summary>
-    /// The RTCIceCandidateStats dictionary of the WebRTC API is used to report statistics related to an RTCIceCandidate.<br />
+    /// The RTCIceCandidateStats dictionary of the WebRTC API is used to report statistics related to an RTCIceCandidate.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/RTCIceCandidateStats
     /// </summary>
     public class RTCIceCandidateStats : RTCStats

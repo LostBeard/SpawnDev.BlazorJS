@@ -1,7 +1,7 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Options for CredentialsContainer.Get()<br />
+    /// Options for CredentialsContainer.Get()<br/>
     /// CredentialsContainer.Get() will return a Promise that resolves with an OTPCredential object instance.
     /// https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#otp_object_structure
     /// </summary>

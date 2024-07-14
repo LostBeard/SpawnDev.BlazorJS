@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Returned in array from BarcodeDetector.Detect()<br />
+    /// Returned in array from BarcodeDetector.Detect()<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/BarcodeDetector/detect
     /// </summary>
     public class DetectedBarcode : JSObject

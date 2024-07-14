@@ -1065,7 +1065,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         class CallBackInfo
         {
             /// <summary>
-            /// AddEventListener call count - RemoveEventListener call count<br />
+            /// AddEventListener call count - RemoveEventListener call count<br/>
             /// Callback will be disposed when RefCount == 0
             /// </summary>
             public int RefCount { get; set; }

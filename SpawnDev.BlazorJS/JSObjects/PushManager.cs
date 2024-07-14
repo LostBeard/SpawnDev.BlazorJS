@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The PushManager interface of the Push API provides a way to receive notifications from third-party servers as well as request URLs for push notifications.<br />
+    /// The PushManager interface of the Push API provides a way to receive notifications from third-party servers as well as request URLs for push notifications.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/PushManager
     /// </summary>
     public class PushManager : JSObject

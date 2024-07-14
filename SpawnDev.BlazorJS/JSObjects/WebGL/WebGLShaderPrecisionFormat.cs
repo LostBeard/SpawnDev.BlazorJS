@@ -1,7 +1,7 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The WebGLShaderPrecisionFormat interface is part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getShaderPrecisionFormat() method.<br />
+    /// The WebGLShaderPrecisionFormat interface is part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getShaderPrecisionFormat() method.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/WebGLShaderPrecisionFormat
     /// </summary>
     public class WebGLShaderPrecisionFormat

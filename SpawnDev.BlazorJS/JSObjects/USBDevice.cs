@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The USBDevice interface of the WebUSB API provides access to metadata about a paired USB device and methods for control<br />
-    /// https://developer.mozilla.org/en-US/docs/Web/API/USBDevice<br />
+    /// The USBDevice interface of the WebUSB API provides access to metadata about a paired USB device and methods for control<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/USBDevice<br/>
     /// TODO - finish interface
     /// </summary>
     public class USBDevice : JSObject

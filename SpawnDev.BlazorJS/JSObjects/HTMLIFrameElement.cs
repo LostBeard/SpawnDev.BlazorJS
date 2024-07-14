@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The HTMLIFrameElement interface provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements.<br />
+    /// The HTMLIFrameElement interface provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement
     /// </summary>
     public class HTMLIFrameElement : HTMLElement

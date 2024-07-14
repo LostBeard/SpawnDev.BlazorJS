@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The DOMStringList interface is a legacy type returned by some APIs and represents a non-modifiable list of strings (DOMString). Modern APIs use Array objects (in WebIDL: sequence DOMString) instead.<br />
+    /// The DOMStringList interface is a legacy type returned by some APIs and represents a non-modifiable list of strings (DOMString). Modern APIs use Array objects (in WebIDL: sequence DOMString) instead.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/DOMStringList
     /// </summary>
     public class DOMStringList : JSObject

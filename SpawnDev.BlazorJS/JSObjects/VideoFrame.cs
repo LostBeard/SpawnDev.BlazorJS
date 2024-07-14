@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The VideoFrame interface of the Web Codecs API represents a frame of a video.<br />
+    /// The VideoFrame interface of the Web Codecs API represents a frame of a video.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame
     /// </summary>
     public class VideoFrame : JSObject

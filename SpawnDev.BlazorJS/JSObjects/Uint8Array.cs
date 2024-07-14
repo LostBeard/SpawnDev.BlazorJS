@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Uint8Array typed array represents an array of 8-bit unsigned integers. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).<br />
+    /// The Uint8Array typed array represents an array of 8-bit unsigned integers. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array
     /// </summary>
     public class Uint8Array : TypedArray<byte>

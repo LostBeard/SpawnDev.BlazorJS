@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The CryptoKeyPair dictionary of the Web Crypto API represents a key pair for an asymmetric cryptography algorithm, also known as a public-key algorithm.<br />
+    /// The CryptoKeyPair dictionary of the Web Crypto API represents a key pair for an asymmetric cryptography algorithm, also known as a public-key algorithm.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair
     /// </summary>
     public class CryptoKeyPair : CryptoKeyBase

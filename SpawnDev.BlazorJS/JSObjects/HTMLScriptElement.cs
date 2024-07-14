@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// HTML script elements expose the HTMLScriptElement interface, which provides special properties and methods for manipulating the behavior and execution of script elements (beyond the inherited HTMLElement interface).<br />
+    /// HTML script elements expose the HTMLScriptElement interface, which provides special properties and methods for manipulating the behavior and execution of script elements (beyond the inherited HTMLElement interface).<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement
     /// </summary>
     public class HTMLScriptElement : HTMLElement
@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="elementReference"></param>
         public HTMLScriptElement(ElementReference elementReference) : base(elementReference) { }
         /// <summary>
-        /// Shortcut method for document.createElement('script')<br />
+        /// Shortcut method for document.createElement('script')<br/>
         /// Non-standard implementation
         /// </summary>
         public HTMLScriptElement() : base(JS.DocumentCreateElement("script")) { }
@@ -39,16 +39,16 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Properties
         /// <summary>
-        /// If the async attribute is present, then the script will be executed asynchronously as soon as it downloads.<br />
-        /// If the async attribute is absent but the defer attribute is present, then the script is executed when the page has finished parsing.<br />
-        /// If neither attribute is present, then the script is fetched and executed immediately, blocking further parsing of the page.<br />
+        /// If the async attribute is present, then the script will be executed asynchronously as soon as it downloads.<br/>
+        /// If the async attribute is absent but the defer attribute is present, then the script is executed when the page has finished parsing.<br/>
+        /// If neither attribute is present, then the script is fetched and executed immediately, blocking further parsing of the page.<br/>
         /// The defer attribute may be specified with the async attribute, so legacy browsers that only support defer (and not async) fall back to the defer behavior instead of the default blocking behavior.
         /// </summary>
         public bool Defer { get => JSRef!.Get<bool>("defer"); set => JSRef!.Set("defer", value); }
         /// <summary>
-        /// If the async attribute is present, then the script will be executed asynchronously as soon as it downloads.<br />
-        /// If the async attribute is absent but the defer attribute is present, then the script is executed when the page has finished parsing.<br />
-        /// If neither attribute is present, then the script is fetched and executed immediately, blocking further parsing of the page.<br />
+        /// If the async attribute is present, then the script will be executed asynchronously as soon as it downloads.<br/>
+        /// If the async attribute is absent but the defer attribute is present, then the script is executed when the page has finished parsing.<br/>
+        /// If neither attribute is present, then the script is fetched and executed immediately, blocking further parsing of the page.<br/>
         /// The defer attribute may be specified with the async attribute, so legacy browsers that only support defer (and not async) fall back to the defer behavior instead of the default blocking behavior.
         /// </summary>
         public bool Async { get => JSRef!.Get<bool>("async"); set => JSRef!.Set("async", value); }
@@ -84,7 +84,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Methods
         /// <summary>
-        /// Returns a task that will fulfill when the script load, or error event ar called<br />
+        /// Returns a task that will fulfill when the script load, or error event ar called<br/>
         /// Non-standard implementation
         /// </summary>
         /// <returns></returns>

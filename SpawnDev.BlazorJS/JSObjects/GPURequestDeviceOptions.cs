@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// RequestDevice options<br />
+    /// RequestDevice options<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/GPUAdapter/requestDevice
     /// </summary>
     public class GPURequestDeviceOptions

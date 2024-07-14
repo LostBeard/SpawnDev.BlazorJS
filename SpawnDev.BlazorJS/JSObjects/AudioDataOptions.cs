@@ -9,14 +9,14 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class AudioDataOptions
     {
         /// <summary>
-        /// One of:<br />
-        /// "u8"<br />
-        /// "s16"<br />
-        /// "s32"<br />
-        /// "f32"<br />
-        /// "u8-planar"<br />
-        /// "s16-planar"<br />
-        /// "s32-planar"<br />
+        /// One of:<br/>
+        /// "u8"<br/>
+        /// "s16"<br/>
+        /// "s32"<br/>
+        /// "f32"<br/>
+        /// "u8-planar"<br/>
+        /// "s16-planar"<br/>
+        /// "s32-planar"<br/>
         /// "f32-planar"
         /// </summary>
         public string Format { get; set; }

@@ -1,7 +1,7 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// A number representing one or more buttons. For more than one button pressed simultaneously, the values are combined (e.g., 3 is primary + secondary).<br />
+    /// A number representing one or more buttons. For more than one button pressed simultaneously, the values are combined (e.g., 3 is primary + secondary).<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons#value
     /// </summary>
     [Flags]

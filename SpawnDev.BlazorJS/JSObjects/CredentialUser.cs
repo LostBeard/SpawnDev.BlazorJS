@@ -1,7 +1,7 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// An object describing the user account for which the credential is generated.<br />
+    /// An object describing the user account for which the credential is generated.<br/>
     /// Used for property CredentialCreatePublicKey.User
     /// https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#user
     /// </summary>
@@ -12,7 +12,7 @@
         /// </summary>
         public string DisplayName { get; set; } = "";
         /// <summary>
-        /// An ArrayBuffer, TypedArray, or DataView representing a unique ID for the user account. This value has a maximum length of 64 bytes, and is not intended to be displayed to the user.<br />
+        /// An ArrayBuffer, TypedArray, or DataView representing a unique ID for the user account. This value has a maximum length of 64 bytes, and is not intended to be displayed to the user.<br/>
         /// A unique user id of type BufferSource. This value cannot exceed 64 bytes.
         /// </summary>
         public Union<ArrayBuffer, Uint8Array, DataView, byte[]> Id { get; set; }

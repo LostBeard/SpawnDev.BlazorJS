@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The PromiseRejectionEvent interface represents events which are sent to the global script context when JavaScript Promises are rejected. These events are particularly useful for telemetry and debugging purposes.<br />
+    /// The PromiseRejectionEvent interface represents events which are sent to the global script context when JavaScript Promises are rejected. These events are particularly useful for telemetry and debugging purposes.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/PromiseRejectionEvent
     /// </summary>
     public class PromiseRejectionEvent : Event

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The DOM Node interface is an abstract base class upon which many other DOM API objects are based, thus letting those object types to be used similarly and often interchangeably. As an abstract class, there is no such thing as a plain Node object. All objects that implement Node functionality are based on one of its subclasses. Most notable are Document, Element, and DocumentFragment.<br />
+    /// The DOM Node interface is an abstract base class upon which many other DOM API objects are based, thus letting those object types to be used similarly and often interchangeably. As an abstract class, there is no such thing as a plain Node object. All objects that implement Node functionality are based on one of its subclasses. Most notable are Document, Element, and DocumentFragment.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Node
     /// </summary>
     public class Node : EventTarget
@@ -147,8 +147,8 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Methods
         /// <summary>
-        /// The appendChild() method of the Node interface adds a node to the end of the list of children of a specified parent node.<br />
-        /// If the given child is a DocumentFragment, the entire contents of the DocumentFragment are moved into the child list of the specified parent node.<br />
+        /// The appendChild() method of the Node interface adds a node to the end of the list of children of a specified parent node.<br/>
+        /// If the given child is a DocumentFragment, the entire contents of the DocumentFragment are moved into the child list of the specified parent node.<br/>
         /// Note: If the given child is a reference to an existing node in the document, appendChild() moves it from its current position to the new position.
         /// Note: Unlike this method, the Element.append() method supports multiple arguments and appending strings. You can prefer using it if your node is an element.
         /// </summary>
@@ -157,7 +157,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>appendChild() returns the newly appended node, or if the child is a DocumentFragment, the emptied fragment.</returns>
         public TNode AppendChild<TNode>(TNode node) where TNode : Node => JSRef!.Call<TNode>("appendChild", node);
         /// <summary>
-        /// The cloneNode() method of the Node interface returns a duplicate of the node on which this method was called. Its parameter controls if the subtree contained in a node is also cloned or not.<br />
+        /// The cloneNode() method of the Node interface returns a duplicate of the node on which this method was called. Its parameter controls if the subtree contained in a node is also cloned or not.<br/>
         /// </summary>
         /// <returns></returns>
         public Node CloneNode() => JSRef!.Call<Node>("cloneNode");
@@ -174,7 +174,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public TNode CloneNode<TNode>() where TNode : Node => JSRef!.Call<TNode>("cloneNode");
         /// <summary>
-        /// The cloneNode() method of the Node interface returns a duplicate of the node on which this method was called. Its parameter controls if the subtree contained in a node is also cloned or not.<br />
+        /// The cloneNode() method of the Node interface returns a duplicate of the node on which this method was called. Its parameter controls if the subtree contained in a node is also cloned or not.<br/>
         /// </summary>
         /// <typeparam name="TNode"></typeparam>
         /// <param name="deep"></param>
@@ -241,7 +241,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public TNode RemoveChild<TNode>(TNode child) where TNode : Node => JSRef!.Call<TNode>("removeChild", child);
         /// <summary>
-        /// The replaceChild() method of the Node interface replaces a child node within the given (parent) node.<br />
+        /// The replaceChild() method of the Node interface replaces a child node within the given (parent) node.<br/>
         /// </summary>
         /// <typeparam name="TNode"></typeparam>
         /// <param name="newChild">The new node to replace oldChild.</param>

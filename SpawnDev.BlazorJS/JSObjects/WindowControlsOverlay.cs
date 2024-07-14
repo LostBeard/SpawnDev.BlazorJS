@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The WindowControlsOverlay interface of the Window Controls Overlay API exposes information about the geometry of the title bar area in desktop Progressive Web Apps, and an event to know whenever it changes. This interface is accessible from Navigator.windowControlsOverlay.<br />
+    /// The WindowControlsOverlay interface of the Window Controls Overlay API exposes information about the geometry of the title bar area in desktop Progressive Web Apps, and an event to know whenever it changes. This interface is accessible from Navigator.windowControlsOverlay.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/WindowControlsOverlay
     /// </summary>
     public class WindowControlsOverlay : EventTarget

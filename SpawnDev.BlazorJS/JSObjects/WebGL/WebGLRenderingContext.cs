@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The WebGLRenderingContext interface provides an interface to the OpenGL ES 2.0 graphics rendering context for the drawing surface of an HTML canvas element.<br />
-    /// https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext<br />
+    /// The WebGLRenderingContext interface provides an interface to the OpenGL ES 2.0 graphics rendering context for the drawing surface of an HTML canvas element.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext<br/>
     /// https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.14.9
     /// </summary>
     public partial class WebGLRenderingContext : JSObject

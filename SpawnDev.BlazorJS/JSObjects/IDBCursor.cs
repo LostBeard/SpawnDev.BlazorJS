@@ -3,9 +3,9 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The IDBCursor interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a database.<br />
-    /// The cursor has a source that indicates which index or object store it is iterating over. It has a position within the range, and moves in a direction that is increasing or decreasing in the order of record keys. The cursor enables an application to asynchronously process all the records in the cursor's range.<br />
-    /// You can have an unlimited number of cursors at the same time. You always get the same IDBCursor object representing a given cursor. Operations are performed on the underlying index or object store.<br />
+    /// The IDBCursor interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a database.<br/>
+    /// The cursor has a source that indicates which index or object store it is iterating over. It has a position within the range, and moves in a direction that is increasing or decreasing in the order of record keys. The cursor enables an application to asynchronously process all the records in the cursor's range.<br/>
+    /// You can have an unlimited number of cursors at the same time. You always get the same IDBCursor object representing a given cursor. Operations are performed on the underlying index or object store.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/IDBCursor
     /// </summary>
     public class IDBCursor<TKey, TPrimaryKey, TValue> : JSObject
@@ -84,7 +84,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public void Continue() => JSRef!.CallVoid("continue");
         /// <summary>
-        /// Advances the cursor to the next position along its direction, to the item whose key matches the optional key parameter.<br />
+        /// Advances the cursor to the next position along its direction, to the item whose key matches the optional key parameter.<br/>
         /// </summary>
         /// <returns>returns true if there is data</returns>
         public async Task<bool> ContinueAsync()

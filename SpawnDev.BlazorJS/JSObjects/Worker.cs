@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Worker interface of the Web Workers API represents a background task that can be created via script, which can send messages back to its creator.<br />
+    /// The Worker interface of the Web Workers API represents a background task that can be created via script, which can send messages back to its creator.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Worker
     /// </summary>
     public class Worker : EventTarget, IMessagePort

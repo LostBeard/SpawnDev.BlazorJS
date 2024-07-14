@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The ClipboardEvent interface of the Clipboard API represents events providing information related to modification of the clipboard, that is cut, copy, and paste events.<br />
+    /// The ClipboardEvent interface of the Clipboard API represents events providing information related to modification of the clipboard, that is cut, copy, and paste events.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent
     /// </summary>
     public class ClipboardEvent : Event

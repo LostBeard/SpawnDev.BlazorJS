@@ -14,7 +14,7 @@
         /// </summary>
         public string Kind { get; set; }
         /// <summary>
-        /// Returns a string describing this device (for example "External USB Webcam").<br />
+        /// Returns a string describing this device (for example "External USB Webcam").<br/>
         /// Note: For security reasons, the label field is always blank unless an active media stream exists or the user has granted persistent permission for media device access. The set of device labels could otherwise be used as part of a fingerprinting mechanism to identify a user.
         /// </summary>
         public string Label { get; set; }

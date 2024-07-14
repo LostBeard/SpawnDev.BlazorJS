@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations.<br />
+    /// The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
     /// </summary>
     public class Array : JSObject
@@ -201,17 +201,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// Zero-based index at which to start extraction, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
         /// </param>
         /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
-        /// - If end &lt; -array.length, 0 is used.<br />
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
+        /// - If end &lt; -array.length, 0 is used.<br/>
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public Array<T> Slice<T>() => JSRef!.Call<Array<T>>("slice");
@@ -220,17 +220,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// Zero-based index at which to start extraction, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
         /// </param>
         /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
-        /// - If end &lt; -array.length, 0 is used.<br />
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
+        /// - If end &lt; -array.length, 0 is used.<br/>
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public Array<T> Slice<T>(int start) => JSRef!.Call<Array<T>>("slice", start);
@@ -239,17 +239,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// Zero-based index at which to start extraction, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
         /// </param>
         /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
-        /// - If end &lt; -array.length, 0 is used.<br />
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
+        /// - If end &lt; -array.length, 0 is used.<br/>
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public Array<T> Slice<T>(int start, int end) => JSRef!.Call<Array<T>>("slice", start, end);
@@ -258,17 +258,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// Zero-based index at which to start extraction, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
         /// </param>
         /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
-        /// - If end &lt; -array.length, 0 is used.<br />
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
+        /// - If end &lt; -array.length, 0 is used.<br/>
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public virtual Array Slice() => JSRef!.Call<Array>("slice");
@@ -277,17 +277,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// Zero-based index at which to start extraction, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
         /// </param>
         /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
-        /// - If end &lt; -array.length, 0 is used.<br />
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
+        /// - If end &lt; -array.length, 0 is used.<br/>
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public virtual Array Slice(int start) => JSRef!.Call<Array>("slice", start);
@@ -296,17 +296,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// Zero-based index at which to start extraction, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
         /// </param>
         /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
-        /// - If end &lt; -array.length, 0 is used.<br />
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
+        /// - If end &lt; -array.length, 0 is used.<br/>
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public virtual Array Slice(int start, int end) => JSRef!.Call<Array>("slice", start, end);
@@ -337,11 +337,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Adds and/or removes elements from an array.
         /// </summary>
         /// <param name="start">
-        /// Zero-based index at which to start changing the array, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length, 0 is used.<br />
-        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
-        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// Zero-based index at which to start changing the array, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length, 0 is used.<br/>
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br/>
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br/>
         /// </param>
         /// <returns></returns>
         public virtual Array Splice(int start) => JSRef!.Call<Array>("splice", start);
@@ -349,15 +349,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Adds and/or removes elements from an array.
         /// </summary>
         /// <param name="start">
-        /// Zero-based index at which to start changing the array, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length, 0 is used.<br />
-        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
-        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// Zero-based index at which to start changing the array, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length, 0 is used.<br/>
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br/>
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br/>
         /// </param>
         /// <param name="deleteCount">
         /// An integer indicating the number of elements in the array to remove from start.<rb />
-        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br/>
         /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
         /// </param>
         /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
@@ -367,15 +367,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Adds and/or removes elements from an array.
         /// </summary>
         /// <param name="start">
-        /// Zero-based index at which to start changing the array, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length, 0 is used.<br />
-        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
-        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// Zero-based index at which to start changing the array, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length, 0 is used.<br/>
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br/>
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br/>
         /// </param>
         /// <param name="deleteCount">
         /// An integer indicating the number of elements in the array to remove from start.<rb />
-        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br/>
         /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
         /// </param>
         /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
@@ -385,11 +385,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Adds and/or removes elements from an array.
         /// </summary>
         /// <param name="start">
-        /// Zero-based index at which to start changing the array, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length, 0 is used.<br />
-        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
-        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// Zero-based index at which to start changing the array, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length, 0 is used.<br/>
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br/>
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br/>
         /// </param>
         /// <returns></returns>
         public Array<T> Splice<T>(int start) => JSRef!.Call<Array<T>>("splice", start);
@@ -397,15 +397,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Adds and/or removes elements from an array.
         /// </summary>
         /// <param name="start">
-        /// Zero-based index at which to start changing the array, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length, 0 is used.<br />
-        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
-        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// Zero-based index at which to start changing the array, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length, 0 is used.<br/>
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br/>
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br/>
         /// </param>
         /// <param name="deleteCount">
         /// An integer indicating the number of elements in the array to remove from start.<rb />
-        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br/>
         /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
         /// </param>
         /// <returns></returns>
@@ -414,15 +414,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Adds and/or removes elements from an array.
         /// </summary>
         /// <param name="start">
-        /// Zero-based index at which to start changing the array, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length, 0 is used.<br />
-        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
-        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// Zero-based index at which to start changing the array, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length, 0 is used.<br/>
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br/>
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br/>
         /// </param>
         /// <param name="deleteCount">
         /// An integer indicating the number of elements in the array to remove from start.<rb />
-        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br/>
         /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
         /// </param>
         /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
@@ -431,14 +431,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Sorts the elements of an array in place and returns the reference to the same array, now sorted. The default sort order is ascending, built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values.
         /// </summary>
         /// <param name="compareFn">
-        /// A function that determines the order of the elements. The function is called with the following arguments:<br />
-        /// a - The first element for comparison.<br />
-        /// b - The second element for comparison.<br />
-        /// It should return a number where:<br />
-        /// - A negative value indicates that a should come before b.<br />
-        /// - A positive value indicates that a should come after b.<br />
-        /// - Zero or NaN indicates that a and b are considered equal.<br />
-        /// To memorize this, remember that (a, b) => a - b sorts numbers in ascending order.<br />
+        /// A function that determines the order of the elements. The function is called with the following arguments:<br/>
+        /// a - The first element for comparison.<br/>
+        /// b - The second element for comparison.<br/>
+        /// It should return a number where:<br/>
+        /// - A negative value indicates that a should come before b.<br/>
+        /// - A positive value indicates that a should come after b.<br/>
+        /// - Zero or NaN indicates that a and b are considered equal.<br/>
+        /// To memorize this, remember that (a, b) => a - b sorts numbers in ascending order.<br/>
         /// If omitted, the array elements are converted to strings, then sorted according to each character's Unicode code point value.
         /// </param>
         /// <returns>This Array instance</returns>
@@ -450,7 +450,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
     }
     /// <summary>
-    /// The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations.<br />
+    /// The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
     /// </summary>
     public class Array<TArrayItem> : Array
@@ -605,17 +605,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// Zero-based index at which to start extraction, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
         /// </param>
         /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
-        /// - If end &lt; -array.length, 0 is used.<br />
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
+        /// - If end &lt; -array.length, 0 is used.<br/>
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public override Array<TArrayItem> Slice() => JSRef!.Call<Array<TArrayItem>>("slice");
@@ -624,17 +624,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// Zero-based index at which to start extraction, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
         /// </param>
         /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
-        /// - If end &lt; -array.length, 0 is used.<br />
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
+        /// - If end &lt; -array.length, 0 is used.<br/>
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public override Array<TArrayItem> Slice(int start) => JSRef!.Call<Array<TArrayItem>>("slice", start);
@@ -643,17 +643,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br />
+        /// Zero-based index at which to start extraction, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
         /// </param>
         /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br />
-        /// - If end &lt; -array.length, 0 is used.<br />
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br />
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br />
+        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
+        /// - If end &lt; -array.length, 0 is used.<br/>
+        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
+        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public override Array<TArrayItem> Slice(int start, int end) => JSRef!.Call<Array<TArrayItem>>("slice", start, end);
@@ -661,11 +661,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Adds and/or removes elements from an array.
         /// </summary>
         /// <param name="start">
-        /// Zero-based index at which to start changing the array, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length, 0 is used.<br />
-        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
-        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// Zero-based index at which to start changing the array, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length, 0 is used.<br/>
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br/>
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br/>
         /// </param>
         /// <returns></returns>
         public override Array<TArrayItem> Splice(int start) => JSRef!.Call<Array<TArrayItem>>("splice", start);
@@ -673,15 +673,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Adds and/or removes elements from an array.
         /// </summary>
         /// <param name="start">
-        /// Zero-based index at which to start changing the array, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length, 0 is used.<br />
-        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
-        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// Zero-based index at which to start changing the array, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length, 0 is used.<br/>
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br/>
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br/>
         /// </param>
         /// <param name="deleteCount">
         /// An integer indicating the number of elements in the array to remove from start.<rb />
-        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br/>
         /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
         /// </param>
         /// <returns></returns>
@@ -690,15 +690,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Adds and/or removes elements from an array.
         /// </summary>
         /// <param name="start">
-        /// Zero-based index at which to start changing the array, converted to an integer.<br />
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br />
-        /// - If start &lt; -array.length, 0 is used.<br />
-        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br />
-        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br />
+        /// Zero-based index at which to start changing the array, converted to an integer.<br/>
+        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
+        /// - If start &lt; -array.length, 0 is used.<br/>
+        /// - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided.<br/>
+        /// - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0.<br/>
         /// </param>
         /// <param name="deleteCount">
         /// An integer indicating the number of elements in the array to remove from start.<rb />
-        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br />
+        /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br/>
         /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
         /// </param>
         /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
@@ -717,14 +717,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Sorts the elements of an array in place and returns the reference to the same array, now sorted. The default sort order is ascending, built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values.
         /// </summary>
         /// <param name="compareFn">
-        /// A function that determines the order of the elements. The function is called with the following arguments:<br />
-        /// a - The first element for comparison.<br />
-        /// b - The second element for comparison.<br />
-        /// It should return a number where:<br />
-        /// - A negative value indicates that a should come before b.<br />
-        /// - A positive value indicates that a should come after b.<br />
-        /// - Zero or NaN indicates that a and b are considered equal.<br />
-        /// To memorize this, remember that (a, b) => a - b sorts numbers in ascending order.<br />
+        /// A function that determines the order of the elements. The function is called with the following arguments:<br/>
+        /// a - The first element for comparison.<br/>
+        /// b - The second element for comparison.<br/>
+        /// It should return a number where:<br/>
+        /// - A negative value indicates that a should come before b.<br/>
+        /// - A positive value indicates that a should come after b.<br/>
+        /// - Zero or NaN indicates that a and b are considered equal.<br/>
+        /// To memorize this, remember that (a, b) => a - b sorts numbers in ascending order.<br/>
         /// If omitted, the array elements are converted to strings, then sorted according to each character's Unicode code point value.
         /// </param>
         /// <returns>This Array instance</returns>

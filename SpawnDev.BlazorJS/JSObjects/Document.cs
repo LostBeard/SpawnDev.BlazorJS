@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Document interface represents any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree.<br />
-    /// https://developer.mozilla.org/en-US/docs/Web/API/Document<br />
+    /// The Document interface represents any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Document<br/>
     /// </summary>
     public class Document : Node
     {
@@ -99,9 +99,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public bool HasFocus() => JSRef!.Call<bool>("hasFocus");
         /// <summary>
-        /// The Document.open() method opens a document for writing.<br />
-        /// This does come with some side effects.For example:<br />
-        /// All event listeners currently registered on the document, nodes inside the document, or the document's window are removed.<br />
+        /// The Document.open() method opens a document for writing.<br/>
+        /// This does come with some side effects.For example:<br/>
+        /// All event listeners currently registered on the document, nodes inside the document, or the document's window are removed.<br/>
         /// All existing nodes are removed from the document.
         /// </summary>
         /// <returns></returns>

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The PushMessageData interface of the Push API provides methods which let you retrieve the push data sent by a server in various formats.<br />
+    /// The PushMessageData interface of the Push API provides methods which let you retrieve the push data sent by a server in various formats.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData
     /// </summary>
     public class PushMessageData : JSObject

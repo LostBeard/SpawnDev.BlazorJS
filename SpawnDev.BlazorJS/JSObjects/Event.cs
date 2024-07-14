@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Event interface represents an event which takes place on an EventTarget.<br />
+    /// The Event interface represents an event which takes place on an EventTarget.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Event
     /// </summary>
     public class Event : JSObject
@@ -78,7 +78,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public void PreventDefault() => JSRef!.CallVoid("preventDefault");
         /// <summary>
-        /// The stopImmediatePropagation() method of the Event interface prevents other listeners of the same event from being called.<br />
+        /// The stopImmediatePropagation() method of the Event interface prevents other listeners of the same event from being called.<br/>
         /// If several listeners are attached to the same element for the same event type, they are called in the order in which they were added. If stopImmediatePropagation() is invoked during one such call, no remaining listeners will be called, either on that element or any other element.
         /// </summary>
         public void StopImmediatePropagation() => JSRef!.CallVoid("stopImmediatePropagation");
@@ -89,7 +89,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
     }
     /// <summary>
-    /// The Event interface represents an event which takes place in the DOM.<br />
+    /// The Event interface represents an event which takes place in the DOM.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Event
     /// </summary>
     /// <typeparam name="TTarget"></typeparam>

@@ -8,9 +8,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class EncodingConfiguration
     {
         /// <summary>
-        /// The type of media being tested. This takes one of two values:<br />
-        /// record - Represents a configuration for recording of media, e.g. using MediaRecorder.<br />
-        /// webrtc - Represents a configuration meant to be transmitted over electronic means(e.g. using RTCPeerConnection). Note: Firefox uses transmission for this type, and webrtc does not work.<br />
+        /// The type of media being tested. This takes one of two values:<br/>
+        /// record - Represents a configuration for recording of media, e.g. using MediaRecorder.<br/>
+        /// webrtc - Represents a configuration meant to be transmitted over electronic means(e.g. using RTCPeerConnection). Note: Firefox uses transmission for this type, and webrtc does not work.<br/>
         /// transmission - Non-standard. The synonym of webrtc to be used in Firefox.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

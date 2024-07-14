@@ -1,7 +1,7 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// If used for CredentialsContainer.Create()<br />
+    /// If used for CredentialsContainer.Create()<br/>
     /// a PublicKeyCredential will be returned
     /// </summary>
     public class CredentialCreatePublicKeyOptions : CredentialCreateOptions

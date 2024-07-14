@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     //    public ProgressEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
     //}
     /// <summary>
-    /// The FileReader object lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read.<br />
+    /// The FileReader object lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileReader
     /// </summary>
     public class FileReader : EventTarget

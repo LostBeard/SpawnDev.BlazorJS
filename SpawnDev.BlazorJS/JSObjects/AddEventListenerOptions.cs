@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Once { get; set; } = null;
         /// <summary>
-        /// A boolean value that, if true, indicates that the function specified by listener will never call preventDefault(). If a passive listener does call preventDefault(), the user agent will do nothing other than generate a console warning.<br />
+        /// A boolean value that, if true, indicates that the function specified by listener will never call preventDefault(). If a passive listener does call preventDefault(), the user agent will do nothing other than generate a console warning.<br/>
         /// If this option is not specified it defaults to false – except that in browsers other than Safari, it defaults to true for wheel, mousewheel, touchstart and touchmove events. See Using passive listeners to learn more.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

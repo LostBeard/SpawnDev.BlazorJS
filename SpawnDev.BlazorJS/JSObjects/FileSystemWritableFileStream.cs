@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The FileSystemWritableFileStream interface of the File System API is a WritableStream object with additional convenience methods, which operates on a single file on disk. The interface is accessed through the FileSystemFileHandle.createWritable() method.<br />
+    /// The FileSystemWritableFileStream interface of the File System API is a WritableStream object with additional convenience methods, which operates on a single file on disk. The interface is accessed through the FileSystemFileHandle.createWritable() method.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemWritableFileStream
     /// </summary>
     public class FileSystemWritableFileStream : WritableStream

@@ -4,7 +4,7 @@ using System.Dynamic;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The FileSystemHandle interface of the File System API is an object which represents a file or directory entry. Multiple handles can represent the same entry. For the most part you do not work with FileSystemHandle directly but rather its child interfaces FileSystemFileHandle and FileSystemDirectoryHandle.<br />
+    /// The FileSystemHandle interface of the File System API is an object which represents a file or directory entry. Multiple handles can represent the same entry. For the most part you do not work with FileSystemHandle directly but rather its child interfaces FileSystemFileHandle and FileSystemDirectoryHandle.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemHandle
     /// </summary>
     public class FileSystemHandle : JSObject

@@ -4,7 +4,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
 
     /// <summary>
-    /// The MediaElementAudioSourceNode interface represents an audio source consisting of an HTML audio or video element. It is an AudioNode that acts as an audio source.<br />
+    /// The MediaElementAudioSourceNode interface represents an audio source consisting of an HTML audio or video element. It is an AudioNode that acts as an audio source.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MediaElementAudioSourceNode
     /// </summary>
     public class MediaElementAudioSourceNode : AudioNode

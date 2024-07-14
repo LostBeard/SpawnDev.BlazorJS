@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The FileSystemFileHandle interface of the File System API represents a handle to a file system entry. The interface is accessed through the window.showOpenFilePicker() method.<br />
+    /// The FileSystemFileHandle interface of the File System API represents a handle to a file system entry. The interface is accessed through the window.showOpenFilePicker() method.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle
     /// </summary>
     public class FileSystemFileHandle : FileSystemHandle
@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<FileSystemWritableFileStream> CreateWritable(FileSystemCreateWritableOptions options) => JSRef!.CallAsync<FileSystemWritableFileStream>("createWritable", options);
         /// <summary>
-        /// Returns the file's size<br />
+        /// Returns the file's size<br/>
         /// non-standard
         /// </summary>
         /// <returns></returns>
@@ -40,7 +40,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             return file.Size;
         }
         /// <summary>
-        /// Returns the file's last modified value<br />
+        /// Returns the file's last modified value<br/>
         /// non-standard
         /// </summary>
         /// <returns></returns>

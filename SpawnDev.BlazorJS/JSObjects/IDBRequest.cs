@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The IDBRequest interface of the IndexedDB API provides access to results of asynchronous requests to databases and database objects using event handler attributes. Each reading and writing operation on a database is done using a request.<br />
+    /// The IDBRequest interface of the IndexedDB API provides access to results of asynchronous requests to databases and database objects using event handler attributes. Each reading and writing operation on a database is done using a request.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/IDBRequest
     /// </summary>
     /// <typeparam name="TResult">The type to use for the Result property</typeparam>
@@ -19,11 +19,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public TResult Result => JSRef!.Get<TResult>("result");
         /// <summary>
-        /// if (ReadyState == "done" AND Error == null) returns Result as TResult<br />
-        /// if (ReadyState == "done" AND Error != null) throws Exception<br />
-        /// else<br />
-        /// On onsuccess returns Result as TResult<br />
-        /// On onerror throws Exception<br />
+        /// if (ReadyState == "done" AND Error == null) returns Result as TResult<br/>
+        /// if (ReadyState == "done" AND Error != null) throws Exception<br/>
+        /// else<br/>
+        /// On onsuccess returns Result as TResult<br/>
+        /// On onerror throws Exception<br/>
         /// </summary>
         /// <param name="disposeRequest">If true, this IDBRequest will be disposed after when the call completes</param>
         /// <returns>Task&lt;TResult&gt;</returns>
@@ -62,7 +62,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
     }
     /// <summary>
-    /// The IDBRequest interface of the IndexedDB API provides access to results of asynchronous requests to databases and database objects using event handler attributes. Each reading and writing operation on a database is done using a request.<br />
+    /// The IDBRequest interface of the IndexedDB API provides access to results of asynchronous requests to databases and database objects using event handler attributes. Each reading and writing operation on a database is done using a request.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/IDBRequest
     /// </summary>
     public class IDBRequest : EventTarget
@@ -107,11 +107,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         public JSEventCallback<Event> OnSuccess { get => new JSEventCallback<Event>("success", AddEventListener, RemoveEventListener); set { } }
         #endregion
         /// <summary>
-        /// if (ReadyState == "done" AND Error == null) returns CompletedTask<br />
-        /// if (ReadyState == "done" AND Error != null) throws Exception<br />
-        /// else<br />
-        /// On onsuccess returns CompletedTask<br />
-        /// On onerror throws Exception<br />
+        /// if (ReadyState == "done" AND Error == null) returns CompletedTask<br/>
+        /// if (ReadyState == "done" AND Error != null) throws Exception<br/>
+        /// else<br/>
+        /// On onsuccess returns CompletedTask<br/>
+        /// On onerror throws Exception<br/>
         /// </summary>
         /// <param name="disposeRequest">If true, this IDBRequest will be disposed after when the call completes</param>
         /// <returns>Task</returns>

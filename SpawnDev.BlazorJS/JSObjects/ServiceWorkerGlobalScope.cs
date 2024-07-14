@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The ServiceWorkerGlobalScope interface of the Service Worker API represents the global execution context of a service worker.<br />
+    /// The ServiceWorkerGlobalScope interface of the Service Worker API represents the global execution context of a service worker.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope
     /// </summary>
     public class ServiceWorkerGlobalScope : WorkerGlobalScope
@@ -29,7 +29,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
         #region methods
         /// <summary>
-        /// The ServiceWorkerGlobalScope.skipWaiting() method of the ServiceWorkerGlobalScope forces the waiting service worker to become the active service worker<br />
+        /// The ServiceWorkerGlobalScope.skipWaiting() method of the ServiceWorkerGlobalScope forces the waiting service worker to become the active service worker<br/>
         /// Use this method with Clients.claim() to ensure that updates to the underlying service worker take effect immediately for both the current client and all other active
         /// </summary>
         /// <returns></returns>

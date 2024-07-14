@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The HID interface provides methods for connecting to HID devices, listing attached HID devices and event handlers for connected HID devices.<br />
+    /// The HID interface provides methods for connecting to HID devices, listing attached HID devices and event handlers for connected HID devices.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/HID
     /// </summary>
     public class HID : EventTarget

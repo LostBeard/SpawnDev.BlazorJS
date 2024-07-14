@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The ReadableStreamDefaultController interface of the Streams API represents a controller allowing control of a ReadableStream's state and internal queue. Default controllers are for streams that are not byte streams.<br />
+    /// The ReadableStreamDefaultController interface of the Streams API represents a controller allowing control of a ReadableStream's state and internal queue. Default controllers are for streams that are not byte streams.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultController
     /// </summary>
     public class ReadableStreamDefaultController : JSObject

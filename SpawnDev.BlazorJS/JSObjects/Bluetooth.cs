@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Bluetooth interface of the Web Bluetooth API provides methods to query Bluetooth availability and request access to devices.<br />
+    /// The Bluetooth interface of the Web Bluetooth API provides methods to query Bluetooth availability and request access to devices.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Bluetooth
     /// </summary>
     public class Bluetooth : EventTarget

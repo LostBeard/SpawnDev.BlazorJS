@@ -9,12 +9,12 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class MediaStreamTrack : EventTarget
     {
         /// <summary>
-        /// A Boolean whose value of true if the track is enabled, that is allowed to render the media source stream; or false if it is disabled, that is not rendering the media source stream but silence and blackness. If the track has been disconnected, this value can be changed but has no more effect.<br />
+        /// A Boolean whose value of true if the track is enabled, that is allowed to render the media source stream; or false if it is disabled, that is not rendering the media source stream but silence and blackness. If the track has been disconnected, this value can be changed but has no more effect.<br/>
         /// Note: You can implement standard "mute" functionality by setting enabled to false. The muted property refers to a condition in which there's no media because of a technical issue.
         /// </summary>
         public bool Enabled { get => JSRef!.Get<bool>("enabled"); set => JSRef!.Set("enabled", value); }
         /// <summary>
-        /// Returns a Boolean value indicating whether the track is unable to provide media data due to a technical issue.<br />
+        /// Returns a Boolean value indicating whether the track is unable to provide media data due to a technical issue.<br/>
         /// Note: You can implement standard "mute" functionality by setting enabled to false, and unmute the media by setting it back to true again.
         /// </summary>
         public bool Muted => JSRef!.Get<bool>("muted");
@@ -35,8 +35,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string Label => JSRef!.Get<string>("label");
         /// <summary>
-        /// Returns an enumerated string giving the status of the track. This will be one of the following values:<br />
-        /// "live" which indicates that an input is connected and does its best-effort in providing real-time data. In that case, the output of data can be switched on or off using the enabled attribute.<br />
+        /// Returns an enumerated string giving the status of the track. This will be one of the following values:<br/>
+        /// "live" which indicates that an input is connected and does its best-effort in providing real-time data. In that case, the output of data can be switched on or off using the enabled attribute.<br/>
         /// "ended" which indicates that the input is not giving any more data and will never provide new data.
         /// </summary>
         public string ReadyState => JSRef!.Get<string>("readyState");

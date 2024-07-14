@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The HTMLButtonElement interface provides properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating button elements.<br />
+    /// The HTMLButtonElement interface provides properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating button elements.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement
     /// </summary>
     public class HTMLButtonElement : HTMLElement
@@ -40,10 +40,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public NodeList Labels => JSRef!.Get<NodeList>("labels");
         /// <summary>
-        /// A string indicating the behavior of the button. This is an enumerated attribute with the following possible values:<br />
-        /// submit: The button submits the form. This is the default value if the attribute is not specified, or if it is dynamically changed to an empty or invalid value.<br />
-        /// reset: The button resets the form.<br />
-        /// button: The button does nothing.<br />
+        /// A string indicating the behavior of the button. This is an enumerated attribute with the following possible values:<br/>
+        /// submit: The button submits the form. This is the default value if the attribute is not specified, or if it is dynamically changed to an empty or invalid value.<br/>
+        /// reset: The button resets the form.<br/>
+        /// button: The button does nothing.<br/>
         /// menu: The button displays a menu. (experimental)
         /// </summary>
         public string Type { get => JSRef!.Get<string>("type"); set => JSRef!.Set("type", value); }

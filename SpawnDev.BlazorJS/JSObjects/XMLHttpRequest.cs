@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// XMLHttpRequest (XHR) objects are used to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing.<br />
+    /// XMLHttpRequest (XHR) objects are used to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
     /// </summary>
     public class XMLHttpRequest : XMLHttpRequestEventTarget
@@ -74,13 +74,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public bool WithCredentials { get => JSRef!.Get<bool>("withCredentials"); set => JSRef!.Set("withCredentials", value); }
         /// <summary>
-        /// Specifies the type of the response. Possible values: <br />
-        /// "" - An empty responseType string is the same as "text", the default type.<br />
-        /// "arraybuffer" - The response is a JavaScript ArrayBuffer containing binary data.<br />
-        /// "blob" - The response is a Blob object containing the binary data.<br />
-        /// "document" - The response is an HTML Document or XML XMLDocument, as appropriate based on the MIME type of the received data. See HTML in XMLHttpRequest to learn more about using XHR to fetch HTML content.<br />
-        /// "json"  - The response is a JavaScript object created by parsing the contents of received data as JSON.<br />
-        /// "text" - The response is a text in a string.<br />
+        /// Specifies the type of the response. Possible values: <br/>
+        /// "" - An empty responseType string is the same as "text", the default type.<br/>
+        /// "arraybuffer" - The response is a JavaScript ArrayBuffer containing binary data.<br/>
+        /// "blob" - The response is a Blob object containing the binary data.<br/>
+        /// "document" - The response is an HTML Document or XML XMLDocument, as appropriate based on the MIME type of the received data. See HTML in XMLHttpRequest to learn more about using XHR to fetch HTML content.<br/>
+        /// "json"  - The response is a JavaScript object created by parsing the contents of received data as JSON.<br/>
+        /// "text" - The response is a text in a string.<br/>
         /// </summary>
         public string ResponseType { get => JSRef!.Get<string>("responseType"); set => JSRef!.Set("responseType", value); }
         #endregion
@@ -110,8 +110,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="password">The optional password to use for authentication purposes; by default, this is the null value.</param>
         public void Open(string method, string url, bool async = true, string? user = null, string? password = null) => JSRef!.CallVoid("open", method, url, async, user, password);
         /// <summary>
-        /// The XMLHttpRequest method overrideMimeType() specifies a MIME type other than the one provided by the server to be used instead when interpreting the data being transferred in a request. <br />
-        /// This may be used, for example, to force a stream to be treated and parsed as "text/xml", even if the server does not report it as such.<br />
+        /// The XMLHttpRequest method overrideMimeType() specifies a MIME type other than the one provided by the server to be used instead when interpreting the data being transferred in a request. <br/>
+        /// This may be used, for example, to force a stream to be treated and parsed as "text/xml", even if the server does not report it as such.<br/>
         /// This method must be called before calling send().
         /// </summary>
         /// <param name="mimeType"></param>
@@ -193,7 +193,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
     }
     /// <summary>
-    /// XMLHttpRequest (XHR) objects are used to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing.<br />
+    /// XMLHttpRequest (XHR) objects are used to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
     /// </summary>
     public class XMLHttpRequest<TResponse> : XMLHttpRequest

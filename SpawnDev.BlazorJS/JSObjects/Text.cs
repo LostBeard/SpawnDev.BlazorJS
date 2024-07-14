@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Text interface represents a text node in a DOM tree.<br />
+    /// The Text interface represents a text node in a DOM tree.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Text
     /// </summary>
     public class Text : CharacterData

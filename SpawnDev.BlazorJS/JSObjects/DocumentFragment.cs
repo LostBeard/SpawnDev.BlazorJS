@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The DocumentFragment interface represents a minimal document object that has no parent.<br />
+    /// The DocumentFragment interface represents a minimal document object that has no parent.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment
     /// </summary>
     public class DocumentFragment : Node

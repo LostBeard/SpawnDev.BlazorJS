@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Clients interface provides access to Client objects. Access it via self.clients within a service worker.<br />
+    /// The Clients interface provides access to Client objects. Access it via self.clients within a service worker.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Clients
     /// </summary>
     public class Clients : JSObject

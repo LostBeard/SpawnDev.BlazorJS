@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The BatteryManager interface of the Battery Status API provides information about the system's battery charge level. The navigator.getBattery() method returns a promise that resolves with a BatteryManager interface.<br />
+    /// The BatteryManager interface of the Battery Status API provides information about the system's battery charge level. The navigator.getBattery() method returns a promise that resolves with a BatteryManager interface.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/BatteryManager
     /// </summary>
     public class BatteryManager : EventTarget

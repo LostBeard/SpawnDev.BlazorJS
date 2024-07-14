@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// An object that sets options for the Permissions.query operation consisting of a comma-separated list of name-value pairs.<br />
+    /// An object that sets options for the Permissions.query operation consisting of a comma-separated list of name-value pairs.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Permissions/query
     /// </summary>
     public class PermissionDescriptor

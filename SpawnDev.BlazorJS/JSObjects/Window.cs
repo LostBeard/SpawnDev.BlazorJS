@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Window interface represents a window containing a DOM document; the document property points to the DOM document loaded in that window.<br />
+    /// The Window interface represents a window containing a DOM document; the document property points to the DOM document loaded in that window.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Window
     /// </summary>
     public class Window : EventTarget
@@ -100,7 +100,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public int PageYOffset => JSRef!.Get<int>("pageYOffset");
         /// <summary>
-        /// The Window.parent property is a reference to the parent of the current window or subframe<br />
+        /// The Window.parent property is a reference to the parent of the current window or subframe<br/>
         /// If a window does not have a parent, its parent property is a reference to itself.
         /// </summary>
         public Element Parent => JSRef!.Get<Element>("parent");
@@ -345,7 +345,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<PromiseRejectionEvent> OnUnhandledRejection { get => new JSEventCallback<PromiseRejectionEvent>("unhandledrejection", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// The unload event is fired when the document or a child resource is being unloaded.<br />
+        /// The unload event is fired when the document or a child resource is being unloaded.<br/>
         /// Warning: Developers should avoid using this event.
         /// </summary>
         public JSEventCallback<Event> OnUnload { get => new JSEventCallback<Event>("unload", AddEventListener, RemoveEventListener); set { } }

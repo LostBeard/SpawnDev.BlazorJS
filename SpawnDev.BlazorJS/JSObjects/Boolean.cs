@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Boolean object represents a truth value: true or false.<br />
+    /// The Boolean object represents a truth value: true or false.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean
     /// </summary>
     public class Boolean : JSObject

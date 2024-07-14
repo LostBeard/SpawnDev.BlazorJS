@@ -4,7 +4,7 @@ using System.Collections;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// NodeList objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as document.querySelectorAll().<br />
+    /// NodeList objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as document.querySelectorAll().<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/NodeList
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -104,7 +104,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Array<T> Values() => JSRef!.Call<Array<T>>("values");
     }
     /// <summary>
-    /// NodeList objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as document.querySelectorAll().<br />
+    /// NodeList objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as document.querySelectorAll().<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/NodeList
     /// </summary>
     public class NodeList : JSObject, IEnumerable<Node>

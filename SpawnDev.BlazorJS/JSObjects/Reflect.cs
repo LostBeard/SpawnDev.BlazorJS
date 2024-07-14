@@ -128,10 +128,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Reflect.ownKeys() static method returns an array of the target object's own property keys.
         /// </summary>
         /// <param name="target">The target object from which to get the own keys.</param>
-        /// <returns>An Array of the target object's own property keys, including strings and symbols. For most objects, the array will be in the order of:<br />
-        /// 1. Non-negative integer indexes in increasing numeric order(but as strings)<br />
-        /// 2. Other string keys in the order of property creation<br />
-        /// 3. Symbol keys in the order of property creation.<br />
+        /// <returns>An Array of the target object's own property keys, including strings and symbols. For most objects, the array will be in the order of:<br/>
+        /// 1. Non-negative integer indexes in increasing numeric order(but as strings)<br/>
+        /// 2. Other string keys in the order of property creation<br/>
+        /// 3. Symbol keys in the order of property creation.<br/>
         /// An untyped Array is returned because the array can contain strings and symbols.
         /// </returns>
         public static Array OwnKeys(Union<JSObject, IJSInProcessObjectReference> target) => JS.Call<Array>("Reflect.ownKeys", target);

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The AbortController interface represents a controller object that allows you to abort one or more Web requests as and when desired.<br />
+    /// The AbortController interface represents a controller object that allows you to abort one or more Web requests as and when desired.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AbortController
     /// </summary>
     public class AbortController : JSObject

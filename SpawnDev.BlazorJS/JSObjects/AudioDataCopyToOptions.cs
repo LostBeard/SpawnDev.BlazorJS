@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Options used fpr AudioData.CopyTo()<br />
+    /// Options used fpr AudioData.CopyTo()<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AudioData/copyTo#options
     /// </summary>
     public class AudioDataCopyToOptions

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The AudioNode interface is a generic interface for representing an audio processing module.<br />
+    /// The AudioNode interface is a generic interface for representing an audio processing module.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AudioNode
     /// </summary>
     public class AudioNode : EventTarget

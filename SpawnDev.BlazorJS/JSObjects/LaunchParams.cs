@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The LaunchParams interface of the Launch Handler API is used when implementing custom launch navigation handling in a PWA. When window.launchQueue.setConsumer() is invoked to set up the launch navigation handling functionality, the callback function inside setConsumer() is passed a LaunchParams object instance.<br />
+    /// The LaunchParams interface of the Launch Handler API is used when implementing custom launch navigation handling in a PWA. When window.launchQueue.setConsumer() is invoked to set up the launch navigation handling functionality, the callback function inside setConsumer() is passed a LaunchParams object instance.<br/>
     /// Such custom navigation handling is initiated via Window.launchQueue when a PWA has been launched with a launch_handler client_mode value of focus-existing, navigate-new, or navigate-existing
     /// </summary>
     public class LaunchParams : JSObject

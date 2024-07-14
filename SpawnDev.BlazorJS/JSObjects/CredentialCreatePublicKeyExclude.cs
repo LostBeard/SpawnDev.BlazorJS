@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Options for CredentialCreatePublicKey.ExcludeCredentials<br />
+    /// Options for CredentialCreatePublicKey.ExcludeCredentials<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#excludecredentials
     /// </summary>
     public class CredentialCreatePublicKeyExclude

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The CSSRule interface represents a single CSS rule. There are several types of rules which inherit properties from CSSRule.<br />
+    /// The CSSRule interface represents a single CSS rule. There are several types of rules which inherit properties from CSSRule.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/CSSRule
     /// </summary>
     public class CSSRule : JSObject

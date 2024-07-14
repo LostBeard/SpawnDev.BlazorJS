@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Broadcast Channel API allows basic communication between browsing contexts (that is, windows, tabs, frames, or iframes) and workers on the same origin.<br />
+    /// The Broadcast Channel API allows basic communication between browsing contexts (that is, windows, tabs, frames, or iframes) and workers on the same origin.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel
     /// </summary>
     public class BroadcastChannel : EventTarget, IMessagePortSimple

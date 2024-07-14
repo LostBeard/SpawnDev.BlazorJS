@@ -4,7 +4,7 @@ using System.Text;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Blob object represents a blob, which is a file-like object of immutable, raw data; they can be read as text or binary data, or converted into a ReadableStream so its methods can be used for processing the data.<br />
+    /// The Blob object represents a blob, which is a file-like object of immutable, raw data; they can be read as text or binary data, or converted into a ReadableStream so its methods can be used for processing the data.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Blob
     /// </summary>
     public class Blob : JSObject

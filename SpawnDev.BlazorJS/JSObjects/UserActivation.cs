@@ -3,8 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The UserActivation interface allows querying information about a window's user activation state. <br />
-    /// https://developer.mozilla.org/en-US/docs/Web/API/UserActivation<br />
+    /// The UserActivation interface allows querying information about a window's user activation state. <br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/UserActivation<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/Security/User_activation
     /// </summary>
     public class UserActivation : JSObject

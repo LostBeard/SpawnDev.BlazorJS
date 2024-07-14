@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     /// <summary>
-    /// The RTCIceCandidatePairStats dictionary of the WebRTC API is used to report statistics that provide insight into the quality and performance of an RTCPeerConnection while connected and configured as described by the specified pair of ICE candidates.<br />
+    /// The RTCIceCandidatePairStats dictionary of the WebRTC API is used to report statistics that provide insight into the quality and performance of an RTCPeerConnection while connected and configured as described by the specified pair of ICE candidates.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/RTCIceCandidatePairStats
     /// </summary>
     public class RTCIceCandidatePairStats : RTCStats

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Performance interface provides access to performance-related information for the current page.<br />
+    /// The Performance interface provides access to performance-related information for the current page.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Performance
     /// </summary>
     public class Performance : EventTarget

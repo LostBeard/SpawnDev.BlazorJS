@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The SyncEvent interface of the Background Synchronization API represents a sync action that is dispatched on the ServiceWorkerGlobalScope of a ServiceWorker.<br />
+    /// The SyncEvent interface of the Background Synchronization API represents a sync action that is dispatched on the ServiceWorkerGlobalScope of a ServiceWorker.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/SyncEvent
     /// </summary>
     public class SyncEvent : ExtendableEvent

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The ArrayBuffer object is used to represent a generic raw binary data buffer.<br />
+    /// The ArrayBuffer object is used to represent a generic raw binary data buffer.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
     /// </summary>
     public class ArrayBuffer : JSObject

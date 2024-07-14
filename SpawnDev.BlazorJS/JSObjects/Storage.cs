@@ -4,7 +4,7 @@ using System.Text.Json;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Storage interface of the Web Storage API provides access to a particular domain's session or local storage. It allows, for example, the addition, modification, or deletion of stored data items.<br />
+    /// The Storage interface of the Web Storage API provides access to a particular domain's session or local storage. It allows, for example, the addition, modification, or deletion of stored data items.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Storage
     /// </summary>
     public class Storage : JSObject

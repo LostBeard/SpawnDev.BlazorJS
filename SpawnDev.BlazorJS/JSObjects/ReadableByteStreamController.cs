@@ -19,7 +19,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public ReadableStreamBYOBRequest? ByobRequest => JSRef!.Get<ReadableStreamBYOBRequest?>("byobRequest");
         /// <summary>
-        /// Returns the desired size required to fill the stream's internal queue.<br />
+        /// Returns the desired size required to fill the stream's internal queue.<br/>
         /// Note that this can be negative if the queue is over-full.
         /// </summary>
         public int DesiredSize => JSRef!.Get<int>("desiredSize");

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Comment interface represents textual notations within markup; although it is generally not visually shown, such comments are available to be read in the source view.<br />
+    /// The Comment interface represents textual notations within markup; although it is generally not visually shown, such comments are available to be read in the source view.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Comment
     /// </summary>
     public class Comment : CharacterData

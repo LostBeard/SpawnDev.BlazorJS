@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The HTMLElement interface represents any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it.<br />
+    /// The HTMLElement interface represents any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
     /// </summary>
     public class HTMLElement : Element

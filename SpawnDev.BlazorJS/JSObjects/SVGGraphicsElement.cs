@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The SVGGraphicsElement interface represents SVG elements whose primary purpose is to directly render graphics into a group.<br />
+    /// The SVGGraphicsElement interface represents SVG elements whose primary purpose is to directly render graphics into a group.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/SVGGraphicsElement
     /// </summary>
     public class SVGGraphicsElement : SVGElement

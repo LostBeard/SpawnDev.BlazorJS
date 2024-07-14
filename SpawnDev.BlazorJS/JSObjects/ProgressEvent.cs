@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The progress event is fired periodically as the FileReader reads data.<br />
+    /// The progress event is fired periodically as the FileReader reads data.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileReader/progress_event
     /// </summary>
     public class ProgressEvent : Event

@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The AuthenticatorAssertionResponse interface of the Web Authentication API contains a digital signature from the private key of a particular WebAuthn credential. The relying party's server can verify this signature to authenticate a user, for example when they sign in.<br />
+    /// The AuthenticatorAssertionResponse interface of the Web Authentication API contains a digital signature from the private key of a particular WebAuthn credential. The relying party's server can verify this signature to authenticate a user, for example when they sign in.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AuthenticatorAssertionResponse
     /// </summary>
     public class AuthenticatorAssertionResponse : AuthenticatorResponse

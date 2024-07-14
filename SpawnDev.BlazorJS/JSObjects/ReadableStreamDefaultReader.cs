@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The ReadableStreamDefaultReader interface of the Streams API represents a default reader that can be used to read stream data supplied from a network (such as a fetch request).<br />
+    /// The ReadableStreamDefaultReader interface of the Streams API represents a default reader that can be used to read stream data supplied from a network (such as a fetch request).<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader
     /// </summary>
     public class ReadableStreamDefaultReader : JSObject

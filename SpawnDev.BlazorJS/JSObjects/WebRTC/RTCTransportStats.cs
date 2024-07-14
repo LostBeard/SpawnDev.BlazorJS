@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     /// <summary>
-    /// The RTCTransportStats dictionary of the WebRTC API provides information about the transport (RTCDtlsTransport and its underlying RTCIceTransport) used by a particular candidate pair.<br />
+    /// The RTCTransportStats dictionary of the WebRTC API provides information about the transport (RTCDtlsTransport and its underlying RTCIceTransport) used by a particular candidate pair.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/RTCTransportStats
     /// </summary>
     public class RTCTransportStats : RTCStats

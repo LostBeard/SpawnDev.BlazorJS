@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Element is the most general base class from which all element objects (i.e. objects that represent elements) in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element.<br />
+    /// Element is the most general base class from which all element objects (i.e. objects that represent elements) in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Element
     /// </summary>
     public class Element : Node
@@ -120,7 +120,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public void Remove() => JSRef!.CallVoid("remove");
         /// <summary>
-        /// The Element.attachShadow() method attaches a shadow DOM tree to the specified element and returns a reference to its ShadowRoot.<br />
+        /// The Element.attachShadow() method attaches a shadow DOM tree to the specified element and returns a reference to its ShadowRoot.<br/>
         /// Note that you can't attach a shadow root to every type of element. There are some that can't have a shadow DOM for security reasons (for example a element).
         /// </summary>
         /// <param name="options"></param>
@@ -130,7 +130,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Properties
         /// <summary>
-        /// The Element.shadowRoot read-only property represents the shadow root hosted by the element.<br />
+        /// The Element.shadowRoot read-only property represents the shadow root hosted by the element.<br/>
         /// Use Element.attachShadow() to add a shadow root to an existing element.
         /// </summary>
         public ShadowRoot ShadowRoot => JSRef!.Get<ShadowRoot>("shadowRoot");

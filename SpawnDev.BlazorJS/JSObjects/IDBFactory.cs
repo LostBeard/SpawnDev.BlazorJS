@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The IDBFactory interface of the IndexedDB API lets applications asynchronously access the indexed databases. The object that implements the interface is window.indexedDB. You open — that is, create and access — and delete a database with this object, and not directly with IDBFactory.<br />
+    /// The IDBFactory interface of the IndexedDB API lets applications asynchronously access the indexed databases. The object that implements the interface is window.indexedDB. You open — that is, create and access — and delete a database with this object, and not directly with IDBFactory.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/IDBFactory
     /// </summary>
     public class IDBFactory : JSObject
@@ -133,14 +133,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<List<IDBDatabaseInfo>> Databases() => JSRef!.CallAsync<List<IDBDatabaseInfo>>("databases");
         /// <summary>
-        /// The cmp() method of the IDBFactory interface compares two values as keys to determine equality and ordering for IndexedDB operations, such as storing and iterating.<br />
+        /// The cmp() method of the IDBFactory interface compares two values as keys to determine equality and ordering for IndexedDB operations, such as storing and iterating.<br/>
         /// 
         /// </summary>
         /// <param name="first">The first key to compare.</param>
         /// <param name="second">The second key to compare.</param>
-        /// <returns>An integer that indicates the result of the comparison:<br />
-        /// -1 - 1st key is less than the 2nd key<br />
-        ///  0 - 1st key is equal to the 2nd key<br />
+        /// <returns>An integer that indicates the result of the comparison:<br/>
+        /// -1 - 1st key is less than the 2nd key<br/>
+        ///  0 - 1st key is equal to the 2nd key<br/>
         ///  1 - 1st key is greater than the 2nd key
         /// </returns>
         public int Cmp<TKey>(TKey first, TKey second) => JSRef!.Call<int>("cmp", first, second);

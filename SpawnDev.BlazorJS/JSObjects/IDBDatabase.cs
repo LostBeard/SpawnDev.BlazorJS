@@ -3,9 +3,9 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The IDBDatabase interface of the IndexedDB API provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database.<br />
-    /// https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase<br />
-    /// W3C spec:<br />
+    /// The IDBDatabase interface of the IndexedDB API provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase<br/>
+    /// W3C spec:<br/>
     /// https://w3c.github.io/IndexedDB/#introduction
     /// </summary>
     public class IDBDatabase : EventTarget

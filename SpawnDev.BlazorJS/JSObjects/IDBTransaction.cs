@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The IDBTransaction interface of the IndexedDB API provides a static, asynchronous transaction on a database using event handler attributes. All reading and writing of data is done within transactions. You use IDBDatabase to start transactions, IDBTransaction to set the mode of the transaction (e.g. is it readonly or readwrite), and you access an IDBObjectStore to make a request. You can also use an IDBTransaction object to abort transactions.<br />
+    /// The IDBTransaction interface of the IndexedDB API provides a static, asynchronous transaction on a database using event handler attributes. All reading and writing of data is done within transactions. You use IDBDatabase to start transactions, IDBTransaction to set the mode of the transaction (e.g. is it readonly or readwrite), and you access an IDBObjectStore to make a request. You can also use an IDBTransaction object to abort transactions.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction
     /// </summary>
     public class IDBTransaction : EventTarget
@@ -19,11 +19,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public IDBDatabase Db => JSRef!.Get<IDBDatabase>("db");
         /// <summary>
-        /// Returns the durability hint the transaction was created with.<br />
-        /// Any of the following literal strings:<br />
-        /// "strict"<br />
-        /// "relaxed"<br />
-        /// "default"<br />
+        /// Returns the durability hint the transaction was created with.<br/>
+        /// Any of the following literal strings:<br/>
+        /// "strict"<br/>
+        /// "relaxed"<br/>
+        /// "default"<br/>
         /// </summary>
         public string Durability => JSRef!.Get<string>("durability");
         /// <summary>
@@ -31,11 +31,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public DOMException? Error => JSRef!.Get<DOMException?>("error");
         /// <summary>
-        /// An string defining the mode for isolating access to data in the current object stores: A string defining the mode for isolating access to data in the current object stores.<br />
-        /// The following values are available:<br />
-        /// "readonly" - Allows data to be read but not changed.<br />
-        /// "readwrite" - Allows reading and writing of data in existing data stores to be changed.<br />
-        /// "versionchange" - Allows any operation, including ones that delete and create object stores and indexes. This mode is for updating the version number of transactions if the need is detected when calling IDBFactory.open(). Transactions of this mode cannot run concurrently with other transactions. Transactions in this mode are known as upgrade transactions.<br />
+        /// An string defining the mode for isolating access to data in the current object stores: A string defining the mode for isolating access to data in the current object stores.<br/>
+        /// The following values are available:<br/>
+        /// "readonly" - Allows data to be read but not changed.<br/>
+        /// "readwrite" - Allows reading and writing of data in existing data stores to be changed.<br/>
+        /// "versionchange" - Allows any operation, including ones that delete and create object stores and indexes. This mode is for updating the version number of transactions if the need is detected when calling IDBFactory.open(). Transactions of this mode cannot run concurrently with other transactions. Transactions in this mode are known as upgrade transactions.<br/>
         /// </summary>
         public string Mode => JSRef!.Get<string>("mode");
         /// <summary>

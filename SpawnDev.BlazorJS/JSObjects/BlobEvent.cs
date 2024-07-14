@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The BlobEvent interface represents events associated with a Blob. These blobs are typically, but not necessarily, associated with media content.<br />
+    /// The BlobEvent interface represents events associated with a Blob. These blobs are typically, but not necessarily, associated with media content.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/BlobEvent
     /// </summary>
     public class BlobEvent : Event

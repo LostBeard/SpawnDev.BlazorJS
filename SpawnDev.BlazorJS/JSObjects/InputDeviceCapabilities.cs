@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// https://developer.mozilla.org/en-US/docs/Web/API/InputDeviceCapabilities<br />
+    /// https://developer.mozilla.org/en-US/docs/Web/API/InputDeviceCapabilities<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/InputDeviceCapabilities
     /// </summary>
     public class InputDeviceCapabilities : JSObject
