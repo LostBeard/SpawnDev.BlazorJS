@@ -44,27 +44,79 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a new async iterator of a given object's own enumerable property [key, value] pairs.
         /// </summary>
         /// <returns></returns>
-        public async Task<Dictionary<string, FileSystemHandle>> Entries()
+        public AsyncIterator<(string, FileSystemHandle)> Entries() => JSRef!.Call<AsyncIterator<(string, FileSystemHandle)>>("entries");
+        /// <summary>
+        /// Returns Entries as a Dictionary
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Dictionary<string, FileSystemHandle>> EntriesDictionary() => (await EntriesList()).ToDictionary(o => o.Item1, o => o.Item2);
+        /// <summary>
+        /// Returns Entries as a List<br/>
+        /// FileSystemHandle types are resolved to FileSystemFileHandle, or FileSystemDirectoryHandle depending on their type
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<(string, FileSystemHandle)>> EntriesList()
         {
-            using var valuesIterator = JSRef!.Call<AsyncIterator<FileSystemHandle>>("values");
-            var files = await valuesIterator.ToList();
-            var typed = files.Select(o => o.ResolveType(true)).ToList();
-            return typed.ToDictionary(o => o.Name, o => o);
+            using var entries = Entries();
+            var files = await entries.ToList();
+            for (var i = 0; i < files.Count; i++)
+            {
+                var kvp = files[i];
+                kvp.Item2 = kvp.Item2.ResolveType(true);
+            }
+            return files;
+        }
+        /// <summary>
+        /// Returns a new async iterator of a given object's own enumerable property [key, value] pairs.
+        /// </summary>
+        /// <returns></returns>
+        public async IAsyncEnumerable<(string, FileSystemHandle)> EntriesEnumerable()
+        {
+            using var entries = Entries();
+            var files = entries.ToAsyncEnumerable();
+            await foreach (var kvp in files)
+            {
+                yield return (kvp.Item1, kvp.Item2.ResolveType(true));
+            }
         }
         /// <summary>
         /// Returns a new async iterator containing the values for each index in the FileSystemDirectoryHandle object.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<FileSystemHandle>> Values()
+        public async IAsyncEnumerable<FileSystemHandle> ValuesEnumerable()
         {
-            using var valuesIterator = JSRef!.Call<AsyncIterator<FileSystemHandle>>("values");
-            var files = await valuesIterator.ToList();
-            return files.Select(o => o.ResolveType(true)).ToList();
+            using var entries = Values();
+            var files = entries.ToAsyncEnumerable();
+            await foreach (var kvp in files)
+            {
+                yield return kvp.ResolveType(true);
+            }
         }
         /// <summary>
         /// Returns a new async iterator containing the keys for each item in FileSystemDirectoryHandle.
         /// </summary>
         /// <returns></returns>
-        public Task<List<string>> Keys() => JSRef!.Call<AsyncIterator<string>>("keys").UsingAsync(async o => await o.ToList());
+        public IAsyncEnumerable<string> KeysEnumerable() => Keys().ToAsyncEnumerable();
+        /// <summary>
+        /// Returns a new async iterator containing the values for each index in the FileSystemDirectoryHandle object.
+        /// </summary>
+        /// <returns></returns>
+        public AsyncIterator<FileSystemHandle> Values() => JSRef!.Call<AsyncIterator<FileSystemHandle>>("values");
+        /// <summary>
+        /// Returns Values as a List<br/>
+        /// FileSystemHandle types are resolved to FileSystemFileHandle, or FileSystemDirectoryHandle depending on their type
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<FileSystemHandle>> ValuesList() => Values().UsingAsync(async o => (await o.ToList()).Select(o => o.ResolveType(true)).ToList());
+        /// <summary>
+        /// Returns a new async iterator containing the keys for each item in FileSystemDirectoryHandle.
+        /// </summary>
+        /// <returns></returns>
+        public AsyncIterator<string> Keys() => JSRef!.Call<AsyncIterator<string>>("keys");
+        /// <summary>
+        /// Returns a new async iterator containing the keys for each item in FileSystemDirectoryHandle.
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<string>> KeysList() => JSRef!.Call<AsyncIterator<string>>("keys").UsingAsync(async o => await o.ToList());
     }
 }
