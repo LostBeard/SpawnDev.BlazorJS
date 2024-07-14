@@ -17,7 +17,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task<List<FileSystemDirectoryHandle>> GetPathDirectoryHandles(this FileSystemDirectoryHandle _this, string path)
         {
             using var dir = await _this.GetPathDirectoryHandle(path, false);
-            var values = await dir!.Values();
+            var values = await dir!.ValuesList();
             var files = values.Where(o => o is FileSystemFileHandle).Select(o => (FileSystemFileHandle)o).ToArray();
             files.DisposeAll();
             var dirs = values.Where(o => o is FileSystemDirectoryHandle).Select(o => (FileSystemDirectoryHandle)o).ToList();
@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public static async Task<List<FileSystemDirectoryHandle>> GetPathDirectoryHandles(this FileSystemDirectoryHandle _this)
         {
-            var values = await _this!.Values();
+            var values = await _this!.ValuesList();
             var files = values.Where(o => o is FileSystemFileHandle).Select(o => (FileSystemFileHandle)o).ToArray();
             files.DisposeAll();
             var dirs = values.Where(o => o is FileSystemDirectoryHandle).Select(o => (FileSystemDirectoryHandle)o).ToList();
@@ -45,7 +45,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task<List<FileSystemFileHandle>> GetPathFileHandles(this FileSystemDirectoryHandle _this, string path)
         {
             using var dir = await _this.GetPathDirectoryHandle(path, false);
-            var values = await dir!.Values();
+            var values = await dir!.ValuesList();
             var files = values.Where(o => o is FileSystemFileHandle).Select(o => (FileSystemFileHandle)o).ToList();
             var dirs = values.Where(o => o is FileSystemDirectoryHandle).Select(o => (FileSystemDirectoryHandle)o).ToArray();
             dirs.DisposeAll();
@@ -58,7 +58,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public static async Task<List<FileSystemFileHandle>> GetPathFileHandles(this FileSystemDirectoryHandle _this)
         {
-            var values = await _this!.Values();
+            var values = await _this!.ValuesList();
             var files = values.Where(o => o is FileSystemFileHandle).Select(o => (FileSystemFileHandle)o).ToList();
             var dirs = values.Where(o => o is FileSystemDirectoryHandle).Select(o => (FileSystemDirectoryHandle)o).ToArray();
             dirs.DisposeAll();
@@ -73,7 +73,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task<List<string>> GetPathDirectories(this FileSystemDirectoryHandle _this, string path)
         {
             using var dir = await _this.GetPathDirectoryHandle(path, false);
-            var values = await dir!.Values();
+            var values = await dir!.ValuesList();
             var dirs = values.Where(o => o is FileSystemDirectoryHandle).Select(o => (FileSystemDirectoryHandle)o);
             var ret = dirs.Select(o => o.Name).ToList();
             values.ToArray().DisposeAll();
@@ -86,7 +86,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public static async Task<List<string>> GetPathDirectories(this FileSystemDirectoryHandle _this)
         {
-            var values = await _this!.Values();
+            var values = await _this!.ValuesList();
             var dirs = values.Where(o => o is FileSystemDirectoryHandle).Select(o => (FileSystemDirectoryHandle)o);
             var ret = dirs.Select(o => o.Name).ToList();
             values.ToArray().DisposeAll();
@@ -101,7 +101,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task<List<string>> GetPathFiles(this FileSystemDirectoryHandle _this, string path)
         {
             using var dir = await _this.GetPathDirectoryHandle(path, false);
-            var values = await dir!.Values();
+            var values = await dir!.ValuesList();
             var files = values.Where(o => o is FileSystemFileHandle).Select(o => (FileSystemFileHandle)o);
             var ret = files.Select(o => o.Name).ToList();
             values.ToArray().DisposeAll();
@@ -114,7 +114,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public static async Task<List<string>> GetPathFiles(this FileSystemDirectoryHandle _this)
         {
-            var values = await _this!.Values();
+            var values = await _this!.ValuesList();
             var files = values.Where(o => o is FileSystemFileHandle).Select(o => (FileSystemFileHandle)o);
             var ret = files.Select(o => o.Name).ToList();
             values.ToArray().DisposeAll();

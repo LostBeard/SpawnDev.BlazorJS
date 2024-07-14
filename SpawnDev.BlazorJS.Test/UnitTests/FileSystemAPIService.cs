@@ -32,13 +32,8 @@ namespace SpawnDev.BlazorJS.Test.UnitTests
             vegFileStream.Close();
             // list dir contents
             JS.Set("_storageDir", storageDir);
-            var entries = await storageDir.Entries();
-            var f = entries.Values.FirstOrDefault();
-            var b = f.GetType().Name;
-
-            JS.Set("_tmp", entries);
-            JS.Log("_tmp", entries);
-            var nmt = true;
+            var entries = await storageDir.ValuesList();
+            
         }
     }
 }
