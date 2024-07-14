@@ -54,7 +54,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An object representing the color space of the VideoFrame
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public VideoFrameColorSpace? ColorSpace { get; set; }
+        public VideoColorSpaceOptions? ColorSpace { get; set; }
         /// <summary>
         /// An array of ArrayBuffers that VideoFrame will detach and take ownership of. If the array contains the ArrayBuffer backing data, VideoFrame will use that buffer directly instead of copying from it.
         /// </summary>

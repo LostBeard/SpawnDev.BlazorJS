@@ -9,7 +9,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class USBDevice : JSObject
     {
-
         #region Constructors
         /// <summary>
         /// Deserialization constructor
