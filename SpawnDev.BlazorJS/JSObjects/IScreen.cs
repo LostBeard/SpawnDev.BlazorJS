@@ -1,5 +1,7 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects {
-    public interface IScreen {
+﻿namespace SpawnDev.BlazorJS.JSObjects
+{
+    public interface IScreen
+    {
         int AvailHeight { get; }
         int AvailLeft { get; }
         int AvailTop { get; }

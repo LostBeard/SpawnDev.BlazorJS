@@ -3,14 +3,6 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// An options object containing settings for the response, including the status code, status text, and headers. This is the same as the options parameter of the Response() constructor.
-    /// https://developer.mozilla.org/en-US/docs/Web/API/Response/json_static#options
-    /// </summary>
-    public class ResponseJsonOptions
-    {
-
-    }
-    /// <summary>
     /// The Response interface of the Fetch API represents the response to a request.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/Response
     /// </summary>
