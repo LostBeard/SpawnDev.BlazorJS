@@ -70,5 +70,38 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a VideoColorSpace object.
         /// </summary>
         public VideoColorSpace ColorSpace => JSRef!.Get<VideoColorSpace>("colorSpace");
+        /// <summary>
+        /// Returns the number of bytes required to hold the VideoFrame as filtered by options passed into the method.
+        /// </summary>
+        /// <returns></returns>
+        public int AllocationSize() => JSRef!.Call<int>("allocationSize");
+        /// <summary>
+        /// Returns the number of bytes required to hold the VideoFrame as filtered by options passed into the method.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public int AllocationSize(AllocationSizeOptions options) => JSRef!.Call<int>("allocationSize", options);
+        /// <summary>
+        /// Copies the contents of the VideoFrame to an ArrayBuffer.
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <returns></returns>
+        public int CopyTo(Union<ArrayBuffer, TypedArray, byte[], DataView> destination) => JSRef!.Call<int>("copyTo", destination);
+        /// <summary>
+        /// Copies the contents of the VideoFrame to an ArrayBuffer.
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public int CopyTo(Union<ArrayBuffer, TypedArray, byte[], DataView> destination, VideoFrameCopyOptions options) => JSRef!.Call<int>("copyTo", destination, options);
+        /// <summary>
+        /// Clears all states and releases the reference to the media resource.
+        /// </summary>
+        /// <returns></returns>
+        public VideoFrame Clone() => JSRef!.Call<VideoFrame>("clone");
+        /// <summary>
+        /// Clears all states and releases the reference to the media resource.
+        /// </summary>
+        public void Close() => JSRef!.CallVoid("close");
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Describes a video plane layout for a VideoFrame
+    /// Describes a video plane layout for a VideoFrame<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame/VideoFrame#layout
     /// </summary>
     public class VideoFrameLayout
