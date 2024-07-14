@@ -488,7 +488,6 @@ namespace SpawnDev.BlazorJS
         #endregion
     }
     // *******************************************************************
-
     public abstract class EventCallbackBase
     {
         public Action<Callback> On { get; private set; }
@@ -522,7 +521,6 @@ namespace SpawnDev.BlazorJS
             Off = (o) => jsRef.Set(propertyName, null);
         }
     }
-
     public class AttachedEventInfoBase
     {
         public int RefCount { get; set; }
