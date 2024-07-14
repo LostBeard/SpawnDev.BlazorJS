@@ -1,7 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Diagnostics.Metrics;
-using System.Numerics;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {

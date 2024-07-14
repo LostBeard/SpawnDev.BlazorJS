@@ -188,6 +188,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string? VendorSub => JSRef!.Get<string?>("vendorSub");
         #endregion
         #region Methods
+        /// <summary>
+        /// returns an array of Gamepad objects, one for each gamepad connected to the device.
+        /// </summary>
+        /// <returns></returns>
         public Gamepad[] GetGamepads() => JSRef!.Call<Gamepad[]>("getGamepads");
         // New
         /// <summary>

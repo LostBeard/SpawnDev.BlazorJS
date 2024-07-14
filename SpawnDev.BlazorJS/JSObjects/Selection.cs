@@ -10,6 +10,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class Selection : JSObject
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Selection(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 

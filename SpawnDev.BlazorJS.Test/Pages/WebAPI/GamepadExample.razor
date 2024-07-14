@@ -1,0 +1,70 @@
+﻿@page "/GamepadExample"
+@implements IDisposable
+@using System.Timers
+@using Timer = System.Timers.Timer
+
+<h3>Gamepad API</h3>
+
+<div>
+    @if (gamepads != null)
+    {
+        foreach (var gamepad in gamepads)
+        {
+            if (gamepad == null) continue;
+            <GamepadView Gamepad="gamepad"></GamepadView>
+        }
+    }
+</div>
+
+@code {
+    [Inject]
+    BlazorJSRuntime JS { get; set; }
+    Window? window = null;
+    Navigator? navigator = null;
+    Timer? pollTimer = null;
+    Gamepad[]? gamepads = null;
+
+    protected override void OnInitialized()
+    {
+        if (navigator == null)
+        {
+            navigator = JS.Get<Navigator>("navigator");
+            window = JS.Get<Window>("window");
+            window.OnGamepadConnected += Window_OnGamepadConnected;
+            window.OnGamepadDisconnected += Window_OnGamepadDisconnected;
+            pollTimer = new Timer();
+            pollTimer.Elapsed += PollTimer_Elapsed;
+            pollTimer.Interval = 100;
+            pollTimer.Enabled = true;
+            UpdateGamepadData();
+        }
+    }
+    void UpdateGamepadData()
+    {
+        gamepads = navigator!.GetGamepads();
+        StateHasChanged();
+    }
+    void PollTimer_Elapsed(object? sender, ElapsedEventArgs e)
+    {
+        UpdateGamepadData();
+    }
+    void Window_OnGamepadConnected(GamepadEvent gamepadEvent)
+    {
+        UpdateGamepadData();
+    }
+    void Window_OnGamepadDisconnected(GamepadEvent gamepadEvent)
+    {
+        UpdateGamepadData();
+    }
+    public void Dispose()
+    {
+        pollTimer?.Dispose();
+        if (window != null)
+        {
+            window.OnGamepadConnected -= Window_OnGamepadConnected;
+            window.OnGamepadDisconnected -= Window_OnGamepadDisconnected;
+            window.Dispose();
+        }
+        navigator?.Dispose();
+    }
+}
