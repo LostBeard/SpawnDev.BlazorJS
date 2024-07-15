@@ -331,15 +331,19 @@ public void IJSObjectInterfaceTest() {
 Over 300 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfaces are designed to match thte Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
 
 ## HTMLVideoElement
-From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement):  
-> Implemented by the \<video> element, the HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.
 
+Example using SpawnDev.BlazorJS.JSObjects.HTMLVideoElement  
+
+From HTMLVideoElementExample.cs  
 ```cs
 @page "/HTMLVideoElementExample"
 @implements IDisposable
 
 <div>
-    <video controls autoplay muted @ref=videoElRef></video>
+    <video style="width: 640px; height: 480px;" controls autoplay muted @ref=videoElRef></video>
+</div>
+<div>
+    Source: @videoName
 </div>
 <div>
     Duration: @duration.ToString()
@@ -347,6 +351,15 @@ From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/
 <div>
     Metadata: @metadata
 </div>
+<div>
+    @foreach (var video in videos)
+    {
+        <button onclick="@(() => SetSource(video.Key, video.Value))">@video.Key</button>
+    }
+</div>
+<pre>
+    @((MarkupString)log)
+</pre>
 
 @code {
     [Inject]
@@ -354,26 +367,51 @@ From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/
     ElementReference? videoElRef;
     HTMLVideoElement? videoEl = null;
     TimeSpan duration = TimeSpan.Zero;
+    string videoName = "";
     string metadata = "";
-
+    string log = "";
+    Dictionary<string, string> videos = new Dictionary<string, string>
+    {
+        { "Elephants Dream", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" },
+        { "Big Buck Bunny", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { "Tears Of Steel", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" },
+        { "Sintel", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" },
+        { "None", "" },
+    };
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
             videoEl = (HTMLVideoElement)videoElRef!;
             videoEl.OnLoadedMetadata += VideoEl_OnLoadedMetadata;
-            videoEl.OnDurationChange += VideoEl_OnDurationChange;
-            videoEl.Src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+            videoEl.OnAbort += VideoEl_OnAbort;
+            videoEl.OnError += VideoEl_OnError;
         }
     }
-    void VideoEl_OnDurationChange()
+    void SetSource(string name, string source)
     {
-        duration = TimeSpan.FromSeconds(videoEl!.Duration ?? 0);
+        if (videoEl == null) return; 
+        Log($"SetSource: {name}");
+        videoName = name;
+        videoEl.Src = source;
         StateHasChanged();
     }
     void VideoEl_OnLoadedMetadata()
     {
+        Log("VideoEl_OnLoadedMetadata");
         metadata = $"{videoEl!.VideoWidth}x{videoEl!.VideoHeight}";
+        duration = TimeSpan.FromSeconds(videoEl!.Duration ?? 0);
+        StateHasChanged();
+    }
+    void VideoEl_OnError()
+    {
+        Log("VideoEl_OnError");
+    }
+    void VideoEl_OnAbort()
+    {
+        Log("VideoEl_OnAbort");
+        metadata = $"{videoEl!.VideoWidth}x{videoEl!.VideoHeight}";
+        duration = TimeSpan.FromSeconds(videoEl!.Duration ?? 0);
         StateHasChanged();
     }
     public void Dispose()
@@ -381,10 +419,15 @@ From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/
         if (videoEl != null)
         {
             videoEl.OnLoadedMetadata -= VideoEl_OnLoadedMetadata;
-            videoEl.OnDurationChange -= VideoEl_OnDurationChange;
+            videoEl.OnAbort -= VideoEl_OnAbort;
+            videoEl.OnError -= VideoEl_OnError;
             videoEl.Dispose();
             videoEl = null;
         }
+    }
+    void Log(string message)
+    {
+        log += $"{message}<br/>";
     }
 }
 ```

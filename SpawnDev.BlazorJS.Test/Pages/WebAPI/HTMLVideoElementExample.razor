@@ -2,7 +2,10 @@
 @implements IDisposable
 
 <div>
-    <video controls autoplay muted @ref=videoElRef></video>
+    <video style="width: 640px; height: 480px;" controls autoplay muted @ref=videoElRef></video>
+</div>
+<div>
+    Source: @videoName
 </div>
 <div>
     Duration: @duration.ToString()
@@ -10,6 +13,15 @@
 <div>
     Metadata: @metadata
 </div>
+<div>
+    @foreach (var video in videos)
+    {
+        <button onclick="@(() => SetSource(video.Key, video.Value))">@video.Key</button>
+    }
+</div>
+<pre>
+    @((MarkupString)log)
+</pre>
 
 @code {
     [Inject]
@@ -17,20 +29,49 @@
     ElementReference? videoElRef;
     HTMLVideoElement? videoEl = null;
     TimeSpan duration = TimeSpan.Zero;
+    string videoName = "";
     string metadata = "";
-
+    string log = "";
+    Dictionary<string, string> videos = new Dictionary<string, string>
+    {
+        { "Elephants Dream", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" },
+        { "Big Buck Bunny", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { "Tears Of Steel", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" },
+        { "Sintel", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" },
+        { "None", "" },
+    };
     protected override void OnAfterRender(bool firstRender)
     {
-        JS.Log("- OnAfterRender", videoElRef, firstRender);
         if (firstRender)
         {
             videoEl = (HTMLVideoElement)videoElRef!;
             videoEl.OnLoadedMetadata += VideoEl_OnLoadedMetadata;
-            videoEl.Src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+            videoEl.OnAbort += VideoEl_OnAbort;
+            videoEl.OnError += VideoEl_OnError;
         }
+    }
+    void SetSource(string name, string source)
+    {
+        if (videoEl == null) return; 
+        Log($"SetSource: {name}");
+        videoName = name;
+        videoEl.Src = source;
+        StateHasChanged();
     }
     void VideoEl_OnLoadedMetadata()
     {
+        Log("VideoEl_OnLoadedMetadata");
+        metadata = $"{videoEl!.VideoWidth}x{videoEl!.VideoHeight}";
+        duration = TimeSpan.FromSeconds(videoEl!.Duration ?? 0);
+        StateHasChanged();
+    }
+    void VideoEl_OnError()
+    {
+        Log("VideoEl_OnError");
+    }
+    void VideoEl_OnAbort()
+    {
+        Log("VideoEl_OnAbort");
         metadata = $"{videoEl!.VideoWidth}x{videoEl!.VideoHeight}";
         duration = TimeSpan.FromSeconds(videoEl!.Duration ?? 0);
         StateHasChanged();
@@ -40,8 +81,14 @@
         if (videoEl != null)
         {
             videoEl.OnLoadedMetadata -= VideoEl_OnLoadedMetadata;
+            videoEl.OnAbort -= VideoEl_OnAbort;
+            videoEl.OnError -= VideoEl_OnError;
             videoEl.Dispose();
             videoEl = null;
         }
+    }
+    void Log(string message)
+    {
+        log += $"{message}<br/>";
     }
 }
