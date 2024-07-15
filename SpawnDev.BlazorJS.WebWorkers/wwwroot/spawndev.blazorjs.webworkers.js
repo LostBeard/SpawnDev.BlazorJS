@@ -33,6 +33,7 @@ if (browserExtension) indexHtml = 'index.html';
 var verboseWebWorkers = !!queryParams.verbose;
 var debugMode = !!queryParams.debugMode;
 var isServiceWorkerScope = globalThisTypeName == 'ServiceWorkerGlobalScope';
+var importServiceWorkerAssets = queryParams.importServiceWorkerAssets;
 
 var consoleLog = function () {
     if (!verboseWebWorkers) return;
@@ -60,6 +61,15 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
         _missedConnections.push(e.ports[0]);
     };
 } else if (globalThisTypeName == 'ServiceWorkerGlobalScope') {
+    if (importServiceWorkerAssets) {
+        if (importServiceWorkerAssets.indexOf('.js') !== -1) {
+            consoleLog('importing asset manifest', importServiceWorkerAssets);
+            importScripts(importServiceWorkerAssets);
+        } else {
+            consoleLog('importing asset manifest', 'service-worker-assets.js');
+            importScripts('service-worker-assets.js');
+        }
+    }
     // Starting Blazor requries using importScripts inside async functions
     // e.waitUntil is used during the install event to allow importScripts inside async functions
     // it is resolved after loading is complete

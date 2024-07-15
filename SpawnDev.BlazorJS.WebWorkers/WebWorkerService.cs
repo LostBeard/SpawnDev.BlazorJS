@@ -608,20 +608,6 @@ namespace SpawnDev.BlazorJS.WebWorkers
             await UpdateInstancesViaLocks();
         }
         /// <summary>
-        /// Registers ServiceWorkerConfig.ScriptURL as the service worker.<br/>
-        /// ServiceWorkerConfig.ScriptURL, by default, is "spawndev.blazorjs.webworkers.js"<br/>
-        /// </summary>
-        /// <returns></returns>
-        public async Task RegisterServiceWorker()
-        {
-            if (JS.WindowThis != null)
-            {
-                using var navigator = JS.WindowThis.Navigator;
-                using var serviceWorker = navigator.ServiceWorker;
-                using var registration = await serviceWorker.Register(ServiceWorkerConfig.ScriptURL, ServiceWorkerConfig.Options);
-            }
-        }
-        /// <summary>
         /// Registers scriptURL as the service worker.<br/>
         /// The service worker script should import "spawndev.blazorjs.webworkers.js" to function as expected<br/>
         /// </summary>
@@ -633,6 +619,47 @@ namespace SpawnDev.BlazorJS.WebWorkers
             ServiceWorkerConfig.ScriptURL = scriptURL;
             ServiceWorkerConfig.Options = options;
             return RegisterServiceWorker();
+        }
+        /// <summary>
+        /// Registers ServiceWorkerConfig.ScriptURL as the service worker.<br/>
+        /// ServiceWorkerConfig.ScriptURL, by default, is "spawndev.blazorjs.webworkers.js"<br/>
+        /// </summary>
+        /// <returns></returns>
+        public async Task RegisterServiceWorker()
+        {
+            if (JS.WindowThis != null)
+            {
+                if (string.IsNullOrEmpty(ServiceWorkerConfig.ScriptURL))
+                {
+                    ServiceWorkerConfig.ScriptURL = WebWorkerJSScript;
+                }
+                using var navigator = JS.WindowThis.Navigator;
+                using var serviceWorker = navigator.ServiceWorker;
+                var kvps = new Dictionary<string, string>();
+                if (ServiceWorkerConfig.ImportServiceWorkerAssets)
+                {
+                    if (!string.IsNullOrEmpty(ServiceWorkerConfig.ServiceWorkerAssetsManifest))
+                    {
+                        kvps.Add("importServiceWorkerAssets", ServiceWorkerConfig.ServiceWorkerAssetsManifest);
+                    }
+                    else
+                    {
+                        kvps.Add("importServiceWorkerAssets", "1");
+                    }
+                }
+                var workerUrl = ServiceWorkerConfig.ScriptURL;
+                workerUrl = new Uri(new Uri(AppBaseUri), workerUrl).ToString();
+                var queryStr = string.Join("&", kvps.Select(kvp => $"{HttpUtility.UrlEncode(kvp.Key)}={HttpUtility.UrlEncode(kvp.Value)}"));
+                if (workerUrl.Contains("?"))
+                {
+                    workerUrl += $"&{queryStr}";
+                }
+                else
+                {
+                    workerUrl += $"?{queryStr}";
+                }
+                using var registration = await serviceWorker.Register(workerUrl, ServiceWorkerConfig.Options);
+            }
         }
         /// <summary>
         /// Unregisters a registered service worker
