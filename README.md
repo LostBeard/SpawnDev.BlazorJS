@@ -334,27 +334,60 @@ Over 300 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfac
 From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement):  
 > Implemented by the \<video> element, the HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.
 
-```html
-<video @ref= >
-```
-
 ```cs
-[Inject] 
-BlazorJSRuntime JS { get; set; }
+@page "/HTMLVideoElementExample"
+@implements IDisposable
 
-ElementReference
+<div>
+    <video controls autoplay muted @ref=videoElRef></video>
+</div>
+<div>
+    Duration: @duration.ToString()
+</div>
+<div>
+    Metadata: @metadata
+</div>
 
-override void OnInitialized()
-{
-    using Storage localStorage = JS.Get<Storage>("localStorage");
-    localStorage.SetItem("myKey", "myValue");
-    var myValue = localStorage.GetItem("myKey");
-    // myValue == "myValue"
+@code {
+    [Inject]
+    BlazorJSRuntime JS { get; set; }
+    ElementReference? videoElRef;
+    HTMLVideoElement? videoEl = null;
+    TimeSpan duration = TimeSpan.Zero;
+    string metadata = "";
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            videoEl = (HTMLVideoElement)videoElRef!;
+            videoEl.OnLoadedMetadata += VideoEl_OnLoadedMetadata;
+            videoEl.OnDurationChange += VideoEl_OnDurationChange;
+            videoEl.Src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+        }
+    }
+    void VideoEl_OnDurationChange()
+    {
+        duration = TimeSpan.FromSeconds(videoEl!.Duration ?? 0);
+        StateHasChanged();
+    }
+    void VideoEl_OnLoadedMetadata()
+    {
+        metadata = $"{videoEl!.VideoWidth}x{videoEl!.VideoHeight}";
+        StateHasChanged();
+    }
+    public void Dispose()
+    {
+        if (videoEl != null)
+        {
+            videoEl.OnLoadedMetadata -= VideoEl_OnLoadedMetadata;
+            videoEl.OnDurationChange -= VideoEl_OnDurationChange;
+            videoEl.Dispose();
+            videoEl = null;
+        }
+    }
 }
 ```
-
-
-***Example coming soon***
 
 ## HTMLCanvasElement
 ***Example coming soon***

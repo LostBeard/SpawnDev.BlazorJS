@@ -1,14 +1,23 @@
 ﻿@page "/HTMLVideoElementExample"
 @implements IDisposable
 
-<video @ref=videoElRef></video>
+<div>
+    <video controls autoplay muted @ref=videoElRef></video>
+</div>
+<div>
+    Duration: @duration.ToString()
+</div>
+<div>
+    Metadata: @metadata
+</div>
 
 @code {
     [Inject]
     BlazorJSRuntime JS { get; set; }
-
     ElementReference? videoElRef;
     HTMLVideoElement? videoEl = null;
+    TimeSpan duration = TimeSpan.Zero;
+    string metadata = "";
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -17,17 +26,26 @@
         {
             videoEl = (HTMLVideoElement)videoElRef!;
             videoEl.OnLoadedMetadata += VideoEl_OnLoadedMetadata;
+            videoEl.OnDurationChange += VideoEl_OnDurationChange;
+            videoEl.Src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
         }
     }
-    void VideoEl_OnLoadedMetadata(Event e)
+    void VideoEl_OnDurationChange()
     {
-
+        duration = TimeSpan.FromSeconds(videoEl!.Duration ?? 0);
+        StateHasChanged();
+    }
+    void VideoEl_OnLoadedMetadata()
+    {
+        metadata = $"{videoEl!.VideoWidth}x{videoEl!.VideoHeight}";
+        StateHasChanged();
     }
     public void Dispose()
     {
         if (videoEl != null)
         {
             videoEl.OnLoadedMetadata -= VideoEl_OnLoadedMetadata;
+            videoEl.OnDurationChange -= VideoEl_OnDurationChange;
             videoEl.Dispose();
             videoEl = null;
         }
