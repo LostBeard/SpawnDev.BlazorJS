@@ -4,14 +4,14 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.3.8</Version>
+		<Version>2.4.0</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
 		<DebugType>Embedded</DebugType>
 		<Title>SpawnDev.BlazorJS</Title>
 		<Authors>LostBeard</Authors>
-		<Description>Full Blazor WebAssembly and Javascript interop. Access to all browser Web APIs. Create, access properties, call methods, and add/remove event handlers of Javascript objects the .Net way without writing Javascript.</Description>
+		<Description>Full Blazor WebAssembly and Javascript interop. Supports all browser Web APIs. Create, access properties, call methods, and add/remove event handlers of Javascript objects the .Net way without writing Javascript.</Description>
 		<PackageProjectUrl>https://github.com/LostBeard/SpawnDev.BlazorJS</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>

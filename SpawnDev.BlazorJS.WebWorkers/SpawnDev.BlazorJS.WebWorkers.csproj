@@ -4,7 +4,7 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.3.8</Version>
+		<Version>2.4.0</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
@@ -29,7 +29,7 @@
 		<Content Remove="build\**" />
 		<EmbeddedResource Remove="build\**" />
 		<None Remove="build\**" />
-		
+
 		<Compile Remove="buildcontent\**" />
 		<Content Remove="buildcontent\**" />
 		<EmbeddedResource Remove="buildcontent\**" />
@@ -39,7 +39,7 @@
 		<Content Remove="tasks\**" />
 		<EmbeddedResource Remove="tasks\**" />
 		<None Remove="tasks\**" />
-		
+
 		<Content Include="build\**">
 			<Pack>true</Pack>
 			<PackagePath>build</PackagePath>
@@ -52,19 +52,19 @@
 			<Pack>true</Pack>
 			<PackagePath>tasks</PackagePath>
 		</Content>
-		<Content Remove="wwwroot\interconnect.js" />
-		<_ContentIncludedByDefault Remove="wwwroot\interconnect.js" />
-		<None Include="Images\icon-128.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\README.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-		<None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
-		<None Include="wwwroot\interconnect.js" />
+		<None Include="Images\icon-128.png" Pack="true" PackagePath="\" />
+		<None Include="..\LICENSE.txt" Pack="true" PackagePath="\" />
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<!-- Added this so that this projects wwwroot folder contents will be located in the implementing projects wwwroot instead of wwwroot/SpawnDev.BlazorJS.WebWorkers/ -->
+		<!-- This allows loading the WebWorkers library as a service worker without requiring a separate serviceworker.js due to path restrictions and service workers -->
+		<StaticWebAssetBasePath Condition="$(StaticWebAssetBasePath) == ''">/</StaticWebAssetBasePath>
+	</PropertyGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.25" />
@@ -85,6 +85,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
 	</ItemGroup>
-
 
 </Project>
