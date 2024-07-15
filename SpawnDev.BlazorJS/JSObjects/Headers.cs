@@ -18,6 +18,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Headers() : base(JS.New(nameof(Headers))) { }
         /// <summary>
+        /// Creates a new Headers object.
+        /// </summary>
+        public Headers(Dictionary<string, string> init) : base(JS.New(nameof(Headers), init)) { }
+        /// <summary>
+        /// Creates a new Headers object.
+        /// </summary>
+        public Headers(Headers init) : base(JS.New(nameof(Headers), init)) { }
+        /// <summary>
+        /// Creates a new Headers object.
+        /// </summary>
+        public Headers(List<(string, string)> init) : base(JS.New(nameof(Headers), init)) { }
+        /// <summary>
         /// Appends a new value onto an existing header inside a Headers object, or adds the header if it does not already exist.
         /// </summary>
         /// <param name="name"></param>
@@ -41,6 +53,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public string Get(string name) => JSRef!.Call<string>("get", name);
         /// <summary>
+        /// Returns an array containing the values of all Set-Cookie headers associated with a response.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetSetCookie() => JSRef!.Call<List<string>>("getSetCookie");
+        /// <summary>
         /// Returns a boolean stating whether a Headers object contains a certain header.
         /// </summary>
         /// <param name="name"></param>
@@ -62,6 +79,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public List<string> Values() => JSRef!.Call<Iterator<string>>("values")!;
-
     }
 }
