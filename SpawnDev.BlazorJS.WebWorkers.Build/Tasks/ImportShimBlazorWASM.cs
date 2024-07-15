@@ -1,11 +1,5 @@
 ﻿using Microsoft.Build.Framework;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.RegularExpressions;
 
 namespace SpawnDev.BlazorJS.WebWorkers.Build.Tasks
 {

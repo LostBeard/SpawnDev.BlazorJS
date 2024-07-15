@@ -93,7 +93,7 @@ namespace SpawnDev.BlazorJS.WebWorkers.Build.Tasks
                 //
                 //js = Regex.Replace(js, @"(?<!globalThis\.)document\b", @"globalThis.document");
                 // ***************************************************************************************
-                // path fetch -> blazorFetch which will make al relative path fetches use globalThis.blazorConfig.blazorBaseURI as the base path
+                // path fetch -> blazorFetch which will make all relative path fetches use globalThis.blazorConfig.blazorBaseURI as the base path
                 //js = Regex.Replace(js, @"\bfetch\(", @"globalThis.blazorFetch(");
                 //js = Regex.Replace(js, @"\bglobalThis\.fetch\b", @"globalThis.blazorFetch");
                 // ***************************************************************************************
