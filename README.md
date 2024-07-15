@@ -318,7 +318,8 @@ public interface IWindow : IJSObject
 }
 
 // use your IJSObject interface to interact with the Javascript object
-public void IJSObjectInterfaceTest() {
+public void IJSObjectInterfaceTest() 
+{
     var w = JS.Get<IWindow>("window");
     var randName = Guid.NewGuid().ToString();
     // directly set the window.name property
