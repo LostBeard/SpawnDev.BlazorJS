@@ -27,6 +27,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "none" - The HTTP cache will not be used for the main script or its imports. All service worker script resources will be updated from the network.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? UpdateViaCache { get; set; } = "none";
+        public string? UpdateViaCache { get; set; }
     }
 }
