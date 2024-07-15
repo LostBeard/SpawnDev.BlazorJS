@@ -289,7 +289,8 @@ Pass async method callbacks to Javascript
 Under the hood, BlazorJS is returning a Promise to Javascript when the method is called
 
 ```cs
-async Task<string> SomeNetFnAsync(string input){
+async Task<string> SomeNetFnAsync(string input)
+{
     return $"Recvd: {input}";
 }
 
@@ -331,6 +332,9 @@ public void IJSObjectInterfaceTest() {
 Over 350 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfaces are designed to match thte Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
 
 ## HTMLVideoElement
+From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement):  
+> Implemented by the \<video> element, the HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.
+
 
 Example using SpawnDev.BlazorJS.JSObjects.HTMLVideoElement  
 
