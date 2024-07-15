@@ -93,11 +93,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
         /// <summary>
         /// The script location used for new worker instances
         /// </summary>
-        public string WebWorkerJSScript { get; } = "_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js";
+        public string WebWorkerJSScript { get; } = "spawndev.blazorjs.webworkers.js";
         /// <summary>
         /// The script used for instance interconnect shared worker instance (if used)
         /// </summary>
-        public string WebWorkerInterconnectJSScript { get; } = "_content/SpawnDev.BlazorJS.WebWorkers/interconnect.js";
+        public string WebWorkerInterconnectJSScript { get; } = "spawndev.blazorjs.webworkers.interconnect.js";
         /// <summary>
         /// The instance of BlazorJSRuntime this service uses
         /// </summary>
@@ -209,6 +209,11 @@ namespace SpawnDev.BlazorJS.WebWorkers
             {
                 ServiceWorkerConfig = IServiceCollectionExtensions.ServiceWorkerConfig;
             };
+            if (ServiceWorkerConfig == null) ServiceWorkerConfig = new ServiceWorkerConfig { Register = ServiceWorkerStartupRegistration.None };
+            if (string.IsNullOrEmpty(ServiceWorkerConfig.ScriptURL))
+            {
+                ServiceWorkerConfig.ScriptURL = WebWorkerJSScript;
+            }
             Local = new ServiceCallDispatcher(WebAssemblyServices);
             if (isTaskPoolWorker)
             {
@@ -603,9 +608,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
             await UpdateInstancesViaLocks();
         }
         /// <summary>
-        /// Registers the default 'service-worker.js' in the app's base path.<br />
-        /// 'service-worker.js' must import the web worker script like the example below<br />
-        /// importScripts('_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js');
+        /// Registers ServiceWorkerConfig.ScriptURL as the service worker.<br/>
+        /// ServiceWorkerConfig.ScriptURL, by default, is "spawndev.blazorjs.webworkers.js"<br/>
         /// </summary>
         /// <returns></returns>
         public async Task RegisterServiceWorker()
@@ -618,7 +622,8 @@ namespace SpawnDev.BlazorJS.WebWorkers
             }
         }
         /// <summary>
-        /// Registers the default 'service-worker.js' in the app's base path.<br />
+        /// Registers scriptURL as the service worker.<br/>
+        /// The service worker script should import "spawndev.blazorjs.webworkers.js" to function as expected<br/>
         /// </summary>
         /// <param name="scriptURL"></param>
         /// <param name="options"></param>

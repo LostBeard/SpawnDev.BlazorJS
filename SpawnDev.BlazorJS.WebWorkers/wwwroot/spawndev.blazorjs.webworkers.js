@@ -3,7 +3,8 @@
 // Todd Tanner
 // 2022 - 2023
 // SpawnDev.BlazorJS.WebWorkers
-// _content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js
+// spawndev.blazorjs.webworkers.js
+// Update 2024-07-15: this script will now be copied to the app wwwroot path instead of the rcl _content path (wwwroot/_content/SpawnDev.BlazorJS.WebWorkers/spawndev.blazorjs.webworkers.js)
 // this script loads a fake window and document environment
 // to enable loading the Blazor WASM app in a DedicatedWorkerGlobalScope, SharedWorkerGlobalScope or ServiceWorkerGlobalScope
 
@@ -92,6 +93,7 @@ if (globalThisTypeName == 'SharedWorkerGlobalScope') {
     self.addEventListener('push', handleMissedEvent);
     self.addEventListener('pushsubscriptionchange', handleMissedEvent);
     self.addEventListener('sync', handleMissedEvent);
+    // This method will be called by Blazor WASM when it starts up to collect missed events and handle them
     self.GetMissedServiceWorkerEvents = function () {
         holdEvents = false;
         var ret = missedServiceWorkerEventts;
@@ -121,9 +123,8 @@ consoleLog('documentBaseURI', documentBaseURI);
 function getAppURL(relativePath) {
     return new URL(relativePath, documentBaseURI).toString();
 }
-var webWorkersContent = getAppURL('_content/SpawnDev.BlazorJS.WebWorkers/');
 function getBWWURL(relativePath) {
-    return new URL(relativePath, webWorkersContent).toString();
+    return new URL(relativePath, documentBaseURI).toString();
 }
 consoleLog('spawndev.blazorjs.webworkers: loading fake window environment');
 // faux DOM and document environment
@@ -143,7 +144,7 @@ async function hasDynamicImport() {
         return false;
     }
     try {
-        await import(getBWWURL('empty.js'));
+        await import(getBWWURL('spawndev.blazorjs.webworkers.empty.js'));
         return true;
     } catch (e) {
         return false;
@@ -224,7 +225,7 @@ var initWebWorkerBlazor = async function () {
             if (!src) continue;
             if (src.includes('_framework/blazor.web.js')) {
                 if (overrideUnitedRuntime) {
-                    // blazor united comes with the wasm runtiem also
+                    // blazor united comes with the wasm runtime also
                     // if overrideUnitedRuntime == true, we will use the wasm runtime instead of the united runtime
                     src = src.replace('_framework/blazor.web.js', '_framework/blazor.webassembly.js');
                     scriptNode.attributes.src = src;
@@ -304,7 +305,7 @@ var initWebWorkerBlazor = async function () {
         return ret;
     }
     // this method patches 'dynamic import scripts' to work in an environment that does not support 'dynamic import scripts'
-    // it is designed for and tested agaisnt the Blazor WASM runtime.
+    // it is designed for and tested with the Blazor WASM runtime.
     // it may not work on other modules
     function fixModuleScript(jsStr, src) {
         // handle things that are automatically handled by import
@@ -347,12 +348,12 @@ var initWebWorkerBlazor = async function () {
         // export{Be as default,Fe as dotnet,We as exit};
         // below changes the above line to the below line changing the 'VAR as KEY' to 'KEY:VAR'
         // export{default:Be,dotnet:Fe,exit:We};
-        exportPatt = /([a-zA-Z0-9]+)\s+as\s+([a-zA-Z0-9]+)/g;
+        exportPatt = /([a-zA-Z0-9$_]+)\s+as\s+([a-zA-Z0-9$_]+)/g;
         jsStr = jsStr.replace(exportPatt, '$2:$1');
         // export { dotnet, exit, INTERNAL };
         exportPatt = /\bexport\b[ \t]*(\{[^}]+\})/g;
         jsStr = jsStr.replace(exportPatt, '_exportsOverride = Object.assign(_exportsOverride, $1)');
-        var modulize = `let _exportsOverride = {}; ${jsStr}; return _exportsOverride;`;
+        var modulize = `let _exportsOverride = {}; ${jsStr}; console.log("exported:", ` + scriptUrl + `, _exportsOverride); return _exportsOverride;`;
         return modulize;
     }
     async function initializeBlazor() {

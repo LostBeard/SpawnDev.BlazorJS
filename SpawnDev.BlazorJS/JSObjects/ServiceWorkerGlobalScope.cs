@@ -68,7 +68,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Triggered when a call to SyncManager.register is made from a service worker client page. The attempt to sync is made either immediately if the network is available or as soon as the network becomes available.
         /// </summary>
         public JSEventCallback<SyncEvent> OnSync { get => new JSEventCallback<SyncEvent>("sync", AddEventListener, RemoveEventListener); set { } }
-
+        /// <summary>
+        /// Occurs at periodic intervals, which were specified when registering a PeriodicSyncManager.
+        /// </summary>
         public JSEventCallback<PeriodicSyncEvent> OnPeriodicSync { get => new JSEventCallback<PeriodicSyncEvent>("periodicsync", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when a user closes a displayed notification.
