@@ -48,6 +48,7 @@
             videoEl.OnLoadedMetadata += VideoEl_OnLoadedMetadata;
             videoEl.OnAbort += VideoEl_OnAbort;
             videoEl.OnError += VideoEl_OnError;
+            videoEl.OnEmptied += VideoEl_OnEmptied;
         }
     }
     void SetSource(string name, string source)
@@ -68,6 +69,10 @@
     void VideoEl_OnError()
     {
         Log("VideoEl_OnError");
+    }
+    void VideoEl_OnEmptied()
+    {
+        Log("VideoEl_OnEmptied");
     }
     void VideoEl_OnAbort()
     {
