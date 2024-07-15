@@ -353,7 +353,7 @@ var initWebWorkerBlazor = async function () {
         // export { dotnet, exit, INTERNAL };
         exportPatt = /\bexport\b[ \t]*(\{[^}]+\})/g;
         jsStr = jsStr.replace(exportPatt, '_exportsOverride = Object.assign(_exportsOverride, $1)');
-        var modulize = `let _exportsOverride = {}; ${jsStr}; console.log("exported:", ` + scriptUrl + `, _exportsOverride); return _exportsOverride;`;
+        var modulize = `let _exportsOverride = {}; ${jsStr}; return _exportsOverride;`;
         return modulize;
     }
     async function initializeBlazor() {
