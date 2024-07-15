@@ -205,10 +205,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public JSEventCallback<Event> OnRateChange { get => new JSEventCallback<Event>(JSRef, "ratechange", "addEventListener", "removeEventListener"); set { } }
         /// <summary>
-        /// Fired when one or both of the videoWidth and videoHeight properties have just been updated.
-        /// </summary>
-        public JSEventCallback<Event> OnResize { get => new JSEventCallback<Event>(JSRef, "resize", "addEventListener", "removeEventListener"); set { } }
-        /// <summary>
         /// Fired when a seek operation completes.
         /// </summary>
         public JSEventCallback<Event> OnSeeked { get => new JSEventCallback<Event>(JSRef, "seeked", "addEventListener", "removeEventListener"); set { } }

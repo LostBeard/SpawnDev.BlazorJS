@@ -83,5 +83,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A string that reflects the height HTML attribute, which specifies the height of the display area, in CSS pixels.
         /// </summary>
         public string? Height { get => JSRef!.Get<string?>("height"); set => JSRef!.Set("height", value); }
+        /// <summary>
+        /// Fired when one or both of the videoWidth and videoHeight properties have just been updated.
+        /// </summary>
+        public JSEventCallback<Event> OnResize { get => new JSEventCallback<Event>("resize", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the HTMLVideoElement enters picture-in-picture mode successfully.
+        /// </summary>
+        public JSEventCallback<Event> OnEnterPictureInPicture { get => new JSEventCallback<Event>("enterpictureinpicture", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the HTMLVideoElement leaves picture-in-picture mode successfully.
+        /// </summary>
+        public JSEventCallback<Event> OnLeavePictureInPicture { get => new JSEventCallback<Event>("leavepictureinpicture", AddEventListener, RemoveEventListener); set { } }
     }
 }
