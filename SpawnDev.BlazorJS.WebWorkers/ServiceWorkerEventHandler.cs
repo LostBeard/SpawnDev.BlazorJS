@@ -5,17 +5,20 @@ namespace SpawnDev.BlazorJS.WebWorkers
 {
     public class ServiceWorkerEventHandler : IAsyncBackgroundService, IDisposable
     {
+        /// <summary>
+        /// Returns when the service is Ready
+        /// </summary>
+        public Task Ready => _Ready ??= InitAsync();
+        private Task? _Ready = null;
+
         protected BlazorJSRuntime JS;
         protected ServiceWorkerGlobalScope? ServiceWorkerThis = null;
-        public string InstanceId { get; private set; } = Guid.NewGuid().ToString();
-        
+    
         public ServiceWorkerEventHandler(BlazorJSRuntime js)
         {
             JS = js;
             ServiceWorkerThis = JS.ServiceWorkerThis;
         }
-        public Task Ready => _Ready != null ? _Ready : _Ready = InitAsync();
-        private Task? _Ready = null;
 
         async Task InitAsync()
         {
@@ -35,7 +38,10 @@ namespace SpawnDev.BlazorJS.WebWorkers
                 GetMissedServiceWorkerEvents();
             }
         }
-
+        /// <summary>
+        /// This method retrieves events that were fired while Blazor was still loading.<br/>
+        /// The events have been put on hold by calling their respondWith or respondWith methods
+        /// </summary>
         void GetMissedServiceWorkerEvents()
         {
             var missedEvents = JS.Call<JSObjects.Array>("GetMissedServiceWorkerEvents");
