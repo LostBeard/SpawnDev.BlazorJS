@@ -328,7 +328,7 @@ public void IJSObjectInterfaceTest() {
 ```
 
 # JSObjects
-Over 300 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfaces are designed to match thte Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
+Over 350 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfaces are designed to match thte Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
 
 ## HTMLVideoElement
 
@@ -586,7 +586,7 @@ public void JSObjectClassTest() {
 ```
 
 Use the extended functions of IJSInProcessObjectReference to work with Javascript objects or
-use the growing library of over 300 of the most common Javascript objects, including ones for 
+use the growing library of over 350 of the most common Javascript objects, including ones for 
 Window, Document, Storage (localStorage and sessionStorage), WebGL, WebRTC, and more in 
 SpawnDev.BlazorJS.JSObjects. JSObjects are wrappers around IJSInProcessObjectReference that 
 allow strongly typed use.
