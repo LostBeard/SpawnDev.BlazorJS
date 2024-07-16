@@ -37,7 +37,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<WindowClient> OpenWindow(string url) => JSRef!.CallAsync<WindowClient>("openWindow", url);
         /// <summary>
-        /// Allows an active service worker to set itself as the controller for all clients within its scope.
+        /// Allows an active service worker to set itself as the controller for all clients within its scope.<br/>
+        /// Usually called in the service worker 'activate' event
         /// </summary>
         /// <returns></returns>
         public Task Claim() => JSRef!.CallVoidAsync("claim");

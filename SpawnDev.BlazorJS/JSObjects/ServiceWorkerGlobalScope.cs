@@ -13,7 +13,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public ServiceWorkerGlobalScope(IJSInProcessObjectReference _ref) : base(_ref) { }
-        #region properties
+        #region Properties
         /// <summary>
         /// Contains the ServiceWorkerRegistration object that represents the service worker's registration.
         /// </summary>
@@ -27,15 +27,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public override ServiceWorkerGlobalScope Self => JSRef!.Get<ServiceWorkerGlobalScope>("self");
         #endregion
-        #region methods
+        #region Methods
         /// <summary>
         /// The ServiceWorkerGlobalScope.skipWaiting() method of the ServiceWorkerGlobalScope forces the waiting service worker to become the active service worker<br/>
-        /// Use this method with Clients.claim() to ensure that updates to the underlying service worker take effect immediately for both the current client and all other active
+        /// Use this method with Clients.claim() to ensure that updates to the underlying service worker take effect immediately for both the current client and all other active<br/>
+        /// Usually called in the service worker 'install' event
         /// </summary>
         /// <returns></returns>
         public Task SkipWaiting() => JSRef!.CallVoidAsync("skipWaiting");
         #endregion
-        #region events
+        #region Events
         /// <summary>
         /// Occurs when a ServiceWorkerRegistration acquires a new ServiceWorkerRegistration.active worker.
         /// </summary>
