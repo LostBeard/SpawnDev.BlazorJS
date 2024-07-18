@@ -3,16 +3,17 @@
     public partial class Callback
     {
         /// <summary>
-        /// A copy of the tracked Callbacks Dictionary keyed by the target method<br/>
+        /// A copy of the tracked Callbacks Dictionary keyed by the target method.<br/>
         /// The below methods are used for managing tracked callbacks:<br/>
         /// - AddRef - Returns a Callback for the given method and increments the Callback's reference count by 1.<br/>
         /// - RefGet - Returns a Callback for the given method. The Callback reference count is only incremented if the Callback is created. Optionally return null if the Callback does not already exist.<br/>
         /// - RefDel - Reduces the given methods reference count by 1 and returns the updated reference count. If the RefCount reaches 0 the Callback will be Disposed.<br/>
         /// - RefDispose - Forces the Callback to Dispose regardless of RefCount<br/>
         /// - GetRefCount - Returns the reference count for the given method<br/>
+        /// - IsTracked - Returns tru if the given method is being tracked<br/>
         /// Note: Only Callbacks created using Callback.RefAdd() and Callback.RefGet() are tracked<br/>
         /// </summary>
-        public static Dictionary<Delegate, Callback> TrackedCallbacks => _TrackedCallbacks.ToDictionary(o => o.Key, o => o.Value);
+        internal static Dictionary<Delegate, Callback> TrackedCallbacks => _TrackedCallbacks.ToDictionary(o => o.Key, o => o.Value);
         private static Dictionary<Delegate, Callback> _TrackedCallbacks { get; } = new Dictionary<Delegate, Callback>();
         static TCallback TrackCallback<TCallback>(Delegate callback, TCallback callbackJS) where TCallback : Callback
         {
@@ -633,6 +634,13 @@
             info.Dispose(true);
             return true;
         }
+        /// <summary>
+        /// Returns true of the Callback is being tracked<br/>
+        /// Note: Only Callbacks created using Callback.RefAdd() and Callback.RefGet() are tracked<br/>
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public static bool IsTracked(Delegate callback) => _TrackedCallbacks.ContainsKey(callback);
         // - GetRefCount
         /// <summary>
         /// Returns the reference count for the given method

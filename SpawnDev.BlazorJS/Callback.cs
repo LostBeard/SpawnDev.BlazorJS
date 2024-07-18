@@ -17,7 +17,7 @@ namespace SpawnDev.BlazorJS
         /// Calling Dispose will decrement the RefCount by 1 and the Callback will be disposed when the RefCount &lt;= 0
         /// </summary>
         [JsonIgnore]
-        public int RefCount
+        internal int RefCount
         {
             get => _ReferenceCount;
             set
