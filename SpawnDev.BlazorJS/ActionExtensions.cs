@@ -1,6 +1,6 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
 
-namespace SpawnDev.BlazorJS.JsonConverters
+namespace SpawnDev.BlazorJS
 {
     public static class ActionExtensions
     {

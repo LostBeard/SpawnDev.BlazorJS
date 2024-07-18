@@ -5,29 +5,34 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
-    public abstract class Callback : IDisposable
+    /// <summary>
+    /// Callback makes .Net methods callable from plain Javascript
+    /// </summary>
+    public abstract partial class Callback : IDisposable
     {
         static ulong CallbackIdCounter { get; set; } = 0;
         [JsonPropertyName("isDisposed")]
         public bool IsDisposed { get; private set; } = false;
+        [JsonInclude]
         [JsonPropertyName("_callback")]
-        public DotNetObjectReference<Callback> _callback { get; }
+        private DotNetObjectReference<Callback> _callback { get; }
+        [JsonInclude]
         [JsonPropertyName("_callbackId")]
-        public string _callbackId { get; private set; }
+        private string _callbackId { get; set; }
+        [JsonInclude]
         [JsonPropertyName("_paramTypes")]
-        public int[] _paramTypes { get; private set; } = new int[0];
+        private int[] _paramTypes { get; set; } = new int[0];
+        [JsonInclude]
         [JsonPropertyName("_returnVoid")]
-        public bool _returnVoid { get; private set; }
+        private bool _returnVoid { get; set; }
         protected bool once { get; private set; } = false;
-        [JsonIgnore]
-        public Type CallbackType { get; private set; }
         public Callback(bool once)
         {
             CallbackIdCounter = CallbackIdCounter == ulong.MaxValue ? 1 : CallbackIdCounter + 1;
             _callbackId = $"{CallbackIdCounter}";
-            CallbackType = this.GetType();
+            var callbackType = this.GetType();
             _callback = DotNetObjectReference.Create(this);
-            var methodInfo = CallbackType.GetMethod("Invoke");
+            var methodInfo = callbackType.GetMethod("Invoke");
             if (methodInfo != null)
             {
                 var paramInfos = methodInfo.GetParameters();
@@ -36,6 +41,7 @@ namespace SpawnDev.BlazorJS
                 {
                     var paramType = paramInfos[i].ParameterType;
                     var jsCallResultType = JSCallResultTypeHelperOverride.FromGenericForCallback(paramType);
+                    // _paramTypes will let JSInterop know how to prepare the parameters values for invocation
                     _paramTypes[i] = (int)jsCallResultType;
                 }
                 _returnVoid = methodInfo.ReturnType == typeof(void);
