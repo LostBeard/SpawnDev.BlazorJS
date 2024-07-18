@@ -9,7 +9,6 @@
         /// A List of the Callbacks in this group
         /// </summary>
         public List<Callback> Callbacks { get; } = new List<Callback>();
-
         /// <summary>
         /// Add a Callback the Callback List
         /// </summary>
@@ -21,7 +20,6 @@
             Callbacks.Add(wrapper);
             return wrapper;
         }
-
         /// <summary>
         /// Dispose all Callbacks and empty the Callback List
         /// </summary>
@@ -33,7 +31,6 @@
             }
             Callbacks.Clear();
         }
-
         /// <summary>
         /// Dispose all Callbacks and empty the Callback List
         /// </summary>
