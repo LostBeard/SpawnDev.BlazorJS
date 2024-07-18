@@ -218,6 +218,39 @@
             else info.RefCount++;
             return (AsyncActionCallback<T1, T2, T3, T4>)info;
         }
+        /// <summary>
+        /// Returns a Callback for the given method and increments the Callback's reference count by 1
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <returns>A Callback object</returns>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5> RefAdd<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, Task> callback)
+        {
+            if (!TrackedCallbacks.TryGetValue(callback, out Callback? info)) info = TrackCallback(callback, Callback.Create(callback));
+            else info.RefCount++;
+            return (AsyncActionCallback<T1, T2, T3, T4, T5>)info;
+        }
+        /// <summary>
+        /// Returns a Callback for the given method and increments the Callback's reference count by 1
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <returns>A Callback object</returns>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5, T6> RefAdd<T1, T2, T3, T4, T5, T6>(Func<T1, T2, T3, T4, T5, T6, Task> callback)
+        {
+            if (!TrackedCallbacks.TryGetValue(callback, out Callback? info)) info = TrackCallback(callback, Callback.Create(callback));
+            else info.RefCount++;
+            return (AsyncActionCallback<T1, T2, T3, T4, T5, T6>)info;
+        }
+        /// <summary>
+        /// Returns a Callback for the given method and increments the Callback's reference count by 1
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <returns>A Callback object</returns>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5, T6, T7> RefAdd<T1, T2, T3, T4, T5, T6, T7>(Func<T1, T2, T3, T4, T5, T6, T7, Task> callback)
+        {
+            if (!TrackedCallbacks.TryGetValue(callback, out Callback? info)) info = TrackCallback(callback, Callback.Create(callback));
+            else info.RefCount++;
+            return (AsyncActionCallback<T1, T2, T3, T4, T5, T6, T7>)info;
+        }
         // - RefGet
         /// <summary>
         /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
@@ -254,6 +287,27 @@
         /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
         /// <returns>A Callback object or null</returns>
         public static AsyncActionCallback<T1, T2, T3, T4>? RefGet<T1, T2, T3, T4>(Func<T1, T2, T3, T4, Task> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (AsyncActionCallback<T1, T2, T3, T4>)info! : (!allowCreate ? null : RefAdd(callback));
+        /// <summary>
+        /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
+        /// <returns>A Callback object or null</returns>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5>? RefGet<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, Task> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (AsyncActionCallback<T1, T2, T3, T4, T5>)info! : (!allowCreate ? null : RefAdd(callback));
+        /// <summary>
+        /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
+        /// <returns>A Callback object or null</returns>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5, T6>? RefGet<T1, T2, T3, T4, T5, T6>(Func<T1, T2, T3, T4, T5, T6, Task> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (AsyncActionCallback<T1, T2, T3, T4, T5, T6>)info! : (!allowCreate ? null : RefAdd(callback));
+        /// <summary>
+        /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
+        /// <returns>A Callback object or null</returns>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5, T6, T7>? RefGet<T1, T2, T3, T4, T5, T6, T7>(Func<T1, T2, T3, T4, T5, T6, T7, Task> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (AsyncActionCallback<T1, T2, T3, T4, T5, T6, T7>)info! : (!allowCreate ? null : RefAdd(callback));
         // FuncCallback
         // - RefAdd
         /// <summary>
@@ -311,6 +365,39 @@
             else info.RefCount++;
             return (FuncCallback<T1, T2, T3, T4, TResult>)info;
         }
+        /// <summary>
+        /// Returns a Callback for the given method and increments the Callback's reference count by 1
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <returns>A Callback object</returns>
+        public static FuncCallback<T1, T2, T3, T4, T5, TResult> RefAdd<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, TResult> callback)
+        {
+            if (!TrackedCallbacks.TryGetValue(callback, out Callback? info)) info = TrackCallback(callback, Callback.Create(callback));
+            else info.RefCount++;
+            return (FuncCallback<T1, T2, T3, T4, T5, TResult>)info;
+        }
+        /// <summary>
+        /// Returns a Callback for the given method and increments the Callback's reference count by 1
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <returns>A Callback object</returns>
+        public static FuncCallback<T1, T2, T3, T4, T5, T6, TResult> RefAdd<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> callback)
+        {
+            if (!TrackedCallbacks.TryGetValue(callback, out Callback? info)) info = TrackCallback(callback, Callback.Create(callback));
+            else info.RefCount++;
+            return (FuncCallback<T1, T2, T3, T4, T5, T6, TResult>)info;
+        }
+        /// <summary>
+        /// Returns a Callback for the given method and increments the Callback's reference count by 1
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <returns>A Callback object</returns>
+        public static FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult> RefAdd<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> callback)
+        {
+            if (!TrackedCallbacks.TryGetValue(callback, out Callback? info)) info = TrackCallback(callback, Callback.Create(callback));
+            else info.RefCount++;
+            return (FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>)info;
+        }
         // - RefGet
         /// <summary>
         /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
@@ -347,6 +434,27 @@
         /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
         /// <returns>A Callback object or null</returns>
         public static FuncCallback<T1, T2, T3, T4, TResult>? RefGet<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, TResult> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (FuncCallback<T1, T2, T3, T4, TResult>)info! : (!allowCreate ? null : RefAdd(callback));
+        /// <summary>
+        /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
+        /// <returns>A Callback object or null</returns>
+        public static FuncCallback<T1, T2, T3, T4, T5, TResult>? RefGet<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, TResult> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (FuncCallback<T1, T2, T3, T4, T5, TResult>)info! : (!allowCreate ? null : RefAdd(callback));
+        /// <summary>
+        /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
+        /// <returns>A Callback object or null</returns>
+        public static FuncCallback<T1, T2, T3, T4, T5, T6, TResult>? RefGet<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (FuncCallback<T1, T2, T3, T4, T5, T6, TResult>)info! : (!allowCreate ? null : RefAdd(callback));
+        /// <summary>
+        /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
+        /// <returns>A Callback object or null</returns>
+        public static FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>? RefGet<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>)info! : (!allowCreate ? null : RefAdd(callback));
         // AsyncFuncCallback
         // - RefAdd
         /// <summary>
@@ -404,6 +512,39 @@
             else info.RefCount++;
             return (AsyncFuncCallback<T1, T2, T3, T4, TResult>)info;
         }
+        /// <summary>
+        /// Returns a Callback for the given method and increments the Callback's reference count by 1
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <returns>A Callback object</returns>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, TResult> RefAdd<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, Task<TResult>> callback)
+        {
+            if (!TrackedCallbacks.TryGetValue(callback, out Callback? info)) info = TrackCallback(callback, Callback.Create(callback));
+            else info.RefCount++;
+            return (AsyncFuncCallback<T1, T2, T3, T4, T5, TResult>)info;
+        }
+        /// <summary>
+        /// Returns a Callback for the given method and increments the Callback's reference count by 1
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <returns>A Callback object</returns>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, T6, TResult> RefAdd<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, Task<TResult>> callback)
+        {
+            if (!TrackedCallbacks.TryGetValue(callback, out Callback? info)) info = TrackCallback(callback, Callback.Create(callback));
+            else info.RefCount++;
+            return (AsyncFuncCallback<T1, T2, T3, T4, T5, T6, TResult>)info;
+        }
+        /// <summary>
+        /// Returns a Callback for the given method and increments the Callback's reference count by 1
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <returns>A Callback object</returns>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult> RefAdd<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, Task<TResult>> callback)
+        {
+            if (!TrackedCallbacks.TryGetValue(callback, out Callback? info)) info = TrackCallback(callback, Callback.Create(callback));
+            else info.RefCount++;
+            return (AsyncFuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>)info;
+        }
         // - RefGet
         /// <summary>
         /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
@@ -440,6 +581,27 @@
         /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
         /// <returns>A Callback object or null</returns>
         public static AsyncFuncCallback<T1, T2, T3, T4, TResult>? RefGet<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, Task<TResult>> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (AsyncFuncCallback<T1, T2, T3, T4, TResult>)info! : (!allowCreate ? null : RefAdd(callback));
+        /// <summary>
+        /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
+        /// <returns>A Callback object or null</returns>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, TResult>? RefGet<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, Task<TResult>> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (AsyncFuncCallback<T1, T2, T3, T4, T5, TResult>)info! : (!allowCreate ? null : RefAdd(callback));
+        /// <summary>
+        /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
+        /// <returns>A Callback object or null</returns>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, T6, TResult>? RefGet<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, Task<TResult>> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (AsyncFuncCallback<T1, T2, T3, T4, T5, T6, TResult>)info! : (!allowCreate ? null : RefAdd(callback));
+        /// <summary>
+        /// Returns a Callback for the given method<br/>The Callback reference count is only incremented if the Callback is created
+        /// </summary>
+        /// <param name="callback">The method to return a Callback for</param>
+        /// <param name="allowCreate">If the callback does not already exist and true a new Callback will be created and returned, if false null will be returned</param>
+        /// <returns>A Callback object or null</returns>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>? RefGet<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, Task<TResult>> callback, bool allowCreate = true) => TrackedCallbacks.TryGetValue(callback, out Callback? info) ? (AsyncFuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>)info! : (!allowCreate ? null : RefAdd(callback));
         // All
         // - RefDel
         /// <summary>

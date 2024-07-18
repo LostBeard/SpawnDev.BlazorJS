@@ -123,6 +123,18 @@ namespace SpawnDev.BlazorJS
         /// Creates a new Callback instance from the given .Net method
         /// </summary>
         public static AsyncFuncCallback<T1, T2, T3, T4, TResult> Create<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, Task<TResult>> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new AsyncFuncCallback<T1, T2, T3, T4, TResult>(callback, false) : callbackGroup.Add(new AsyncFuncCallback<T1, T2, T3, T4, TResult>(callback, false));
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method
+        /// </summary>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, TResult> Create<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, Task<TResult>> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new AsyncFuncCallback<T1, T2, T3, T4, T5, TResult>(callback, false) : callbackGroup.Add(new AsyncFuncCallback<T1, T2, T3, T4, T5, TResult>(callback, false));
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method
+        /// </summary>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, T6, TResult> Create<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, Task<TResult>> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new AsyncFuncCallback<T1, T2, T3, T4, T5, T6, TResult>(callback, false) : callbackGroup.Add(new AsyncFuncCallback<T1, T2, T3, T4, T5, T6, TResult>(callback, false));
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method
+        /// </summary>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult> Create<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, Task<TResult>> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new AsyncFuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>(callback, false) : callbackGroup.Add(new AsyncFuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>(callback, false));
         // AsyncFuncCallback CreateOne
         /// <summary>
         /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
@@ -144,6 +156,18 @@ namespace SpawnDev.BlazorJS
         /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
         /// </summary>
         public static AsyncFuncCallback<T1, T2, T3, T4, TResult> CreateOne<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, Task<TResult>> callback) => new AsyncFuncCallback<T1, T2, T3, T4, TResult>(callback, true);
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
+        /// </summary>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, TResult> CreateOne<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, Task<TResult>> callback) => new AsyncFuncCallback<T1, T2, T3, T4, T5, TResult>(callback, true);
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
+        /// </summary>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, T6, TResult> CreateOne<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, Task<TResult>> callback) => new AsyncFuncCallback<T1, T2, T3, T4, T5, T6, TResult>(callback, true);
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
+        /// </summary>
+        public static AsyncFuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult> CreateOne<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, Task<TResult>> callback) => new AsyncFuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>(callback, true);
         // AsyncActionCallback Create
         /// <summary>
         /// Creates a new Callback instance from the given .Net method
@@ -165,6 +189,18 @@ namespace SpawnDev.BlazorJS
         /// Creates a new Callback instance from the given .Net method
         /// </summary>
         public static AsyncActionCallback<T1, T2, T3, T4> Create<T1, T2, T3, T4>(Func<T1, T2, T3, T4, Task> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new AsyncActionCallback<T1, T2, T3, T4>(callback, false) : callbackGroup.Add(new AsyncActionCallback<T1, T2, T3, T4>(callback, false));
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method
+        /// </summary>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5> Create<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, Task> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new AsyncActionCallback<T1, T2, T3, T4, T5>(callback, false) : callbackGroup.Add(new AsyncActionCallback<T1, T2, T3, T4, T5>(callback, false));
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method
+        /// </summary>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5, T6> Create<T1, T2, T3, T4, T5, T6>(Func<T1, T2, T3, T4, T5, T6, Task> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new AsyncActionCallback<T1, T2, T3, T4, T5, T6>(callback, false) : callbackGroup.Add(new AsyncActionCallback<T1, T2, T3, T4, T5, T6>(callback, false));
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method
+        /// </summary>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5, T6, T7> Create<T1, T2, T3, T4, T5, T6, T7>(Func<T1, T2, T3, T4, T5, T6, T7, Task> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new AsyncActionCallback<T1, T2, T3, T4, T5, T6, T7>(callback, false) : callbackGroup.Add(new AsyncActionCallback<T1, T2, T3, T4, T5, T6, T7>(callback, false));
         // AsyncActionCallback CreateOne
         /// <summary>
         /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
@@ -186,6 +222,18 @@ namespace SpawnDev.BlazorJS
         /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
         /// </summary>
         public static AsyncActionCallback<T1, T2, T3, T4> CreateOne<T1, T2, T3, T4>(Func<T1, T2, T3, T4, Task> callback) => new AsyncActionCallback<T1, T2, T3, T4>(callback, true);
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
+        /// </summary>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5> CreateOne<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, Task> callback) => new AsyncActionCallback<T1, T2, T3, T4, T5>(callback, true);
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
+        /// </summary>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5, T6> CreateOne<T1, T2, T3, T4, T5, T6>(Func<T1, T2, T3, T4, T5, T6, Task> callback) => new AsyncActionCallback<T1, T2, T3, T4, T5, T6>(callback, true);
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
+        /// </summary>
+        public static AsyncActionCallback<T1, T2, T3, T4, T5, T6, T7> CreateOne<T1, T2, T3, T4, T5, T6, T7>(Func<T1, T2, T3, T4, T5, T6, T7, Task> callback) => new AsyncActionCallback<T1, T2, T3, T4, T5, T6, T7>(callback, true);
         // FuncCallback Create
         /// <summary>
         /// Creates a new Callback instance from the given .Net method
@@ -207,6 +255,18 @@ namespace SpawnDev.BlazorJS
         /// Creates a new Callback instance from the given .Net method
         /// </summary>
         public static FuncCallback<T1, T2, T3, T4, TResult> Create<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, TResult> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new FuncCallback<T1, T2, T3, T4, TResult>(callback, false) : callbackGroup.Add(new FuncCallback<T1, T2, T3, T4, TResult>(callback, false));
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method
+        /// </summary>
+        public static FuncCallback<T1, T2, T3, T4, T5, TResult> Create<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, TResult> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new FuncCallback<T1, T2, T3, T4, T5, TResult>(callback, false) : callbackGroup.Add(new FuncCallback<T1, T2, T3, T4, T5, TResult>(callback, false));
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method
+        /// </summary>
+        public static FuncCallback<T1, T2, T3, T4, T5, T6, TResult> Create<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new FuncCallback<T1, T2, T3, T4, T5, T6, TResult>(callback, false) : callbackGroup.Add(new FuncCallback<T1, T2, T3, T4, T5, T6, TResult>(callback, false));
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method
+        /// </summary>
+        public static FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult> Create<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> callback, CallbackGroup? callbackGroup = null) => callbackGroup == null ? new FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>(callback, false) : callbackGroup.Add(new FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>(callback, false));
         // FuncCallback CreateOne
         /// <summary>
         /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
@@ -228,6 +288,18 @@ namespace SpawnDev.BlazorJS
         /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
         /// </summary>
         public static FuncCallback<T1, T2, T3, T4, TResult> CreateOne<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, TResult> callback) => new FuncCallback<T1, T2, T3, T4, TResult>(callback, true);
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
+        /// </summary>
+        public static FuncCallback<T1, T2, T3, T4, T5, TResult> CreateOne<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, TResult> callback) => new FuncCallback<T1, T2, T3, T4, T5, TResult>(callback, true);
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
+        /// </summary>
+        public static FuncCallback<T1, T2, T3, T4, T5, T6, TResult> CreateOne<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> callback) => new FuncCallback<T1, T2, T3, T4, T5, T6, TResult>(callback, true);
+        /// <summary>
+        /// Creates a new Callback instance from the given .Net method that will be disposed after the first call
+        /// </summary>
+        public static FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult> CreateOne<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> callback) => new FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>(callback, true);
         // ActionCallback Create
         /// <summary>
         /// Creates a new Callback instance from the given .Net method
