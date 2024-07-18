@@ -54,8 +54,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 #if DEBUG && true
 var host = await builder.Build().StartBackgroundServices();
 // 
-var fileSystemAPIService = host.Services.GetRequiredService<FileSystemAPIService>();
-await fileSystemAPIService.StorageManagerExample();
 
 await host.BlazorJSRunAsync();
 #else
