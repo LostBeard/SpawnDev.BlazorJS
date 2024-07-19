@@ -110,54 +110,78 @@ namespace SpawnDev.BlazorJS
                 fn.Dispose();
             }
         }
-        public static Callback? CallbackGet<TResult>(this Func<TResult> _this, bool allowCreate = false)
-        {
-            if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
-            if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
-            return ret;
-        }
-        public static Callback? CallbackGet<T0, TResult>(this Func<T0, TResult> _this, bool allowCreate = false)
-        {
-            if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
-            if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
-            return ret;
-        }
-        public static Callback? CallbackGet<T0, T1, TResult>(this Func<T0, T1, TResult> _this, bool allowCreate = false)
-        {
-            if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
-            if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
-            return ret;
-        }
-        public static Callback? CallbackGet<T0, T1, T2, TResult>(this Func<T0, T1, T2, TResult> _this, bool allowCreate = false)
-        {
-            if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
-            if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
-            return ret;
-        }
-        public static Callback? CallbackGet<T0, T1, T2, T3, TResult>(this Func<T0, T1, T2, T3, TResult> _this, bool allowCreate = false)
-        {
-            if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
-            if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
-            return ret;
-        }
-        public static Callback? CallbackGet<T0, T1, T2, T3, T4, TResult>(this Func<T0, T1, T2, T3, T4, TResult> _this, bool allowCreate = false)
-        {
-            if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
-            if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
-            return ret;
-        }
-        public static Callback? CallbackGet<T0, T1, T2, T3, T4, T5, TResult>(this Func<T0, T1, T2, T3, T4, T5, TResult> _this, bool allowCreate = false)
-        {
-            if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
-            if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
-            return ret;
-        }
-        public static Callback? CallbackGet<T0, T1, T2, T3, T4, T5, T6, TResult>(this Func<T0, T1, T2, T3, T4, T5, T6, TResult> _this, bool allowCreate = false)
-        {
-            if (_callbacks.TryGetValue(_this, out Callback? ret)) return ret;
-            if (allowCreate) _callbacks[_this] = ret = Callback.Create(_this);
-            return ret;
-        }
+        /// <summary>
+        /// Gets or creates a Callback attached to this method.<br/>
+        /// The attached Callback can be disposed using this.DisposeJS()
+        /// </summary>
+        /// <param name="_this">This method</param>
+        /// <param name="allowCreate">If true and the Callback does not already exist, it will be created</param>
+        /// <returns>A Callback or null</returns>
+        public static FuncCallback<TResult>? CallbackGet<TResult>(this Func<TResult> _this, bool allowCreate = false)
+            => (FuncCallback<TResult>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
+        /// <summary>
+        /// Gets or creates a Callback attached to this method.<br/>
+        /// The attached Callback can be disposed using this.DisposeJS()
+        /// </summary>
+        /// <param name="_this">This method</param>
+        /// <param name="allowCreate">If true and the Callback does not already exist, it will be created</param>
+        /// <returns>A Callback or null</returns>
+        public static FuncCallback<T0, TResult>? CallbackGet<T0, TResult>(this Func<T0, TResult> _this, bool allowCreate = false)
+            => (FuncCallback<T0, TResult>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
+        /// <summary>
+        /// Gets or creates a Callback attached to this method.<br/>
+        /// The attached Callback can be disposed using this.DisposeJS()
+        /// </summary>
+        /// <param name="_this">This method</param>
+        /// <param name="allowCreate">If true and the Callback does not already exist, it will be created</param>
+        /// <returns>A Callback or null</returns>
+        public static FuncCallback<T0, T1, TResult>? CallbackGet<T0, T1, TResult>(this Func<T0, T1, TResult> _this, bool allowCreate = false)
+            => (FuncCallback<T0, T1, TResult>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
+        /// <summary>
+        /// Gets or creates a Callback attached to this method.<br/>
+        /// The attached Callback can be disposed using this.DisposeJS()
+        /// </summary>
+        /// <param name="_this">This method</param>
+        /// <param name="allowCreate">If true and the Callback does not already exist, it will be created</param>
+        /// <returns>A Callback or null</returns>
+        public static FuncCallback<T0, T1, T2, TResult>? CallbackGet<T0, T1, T2, TResult>(this Func<T0, T1, T2, TResult> _this, bool allowCreate = false)
+            => (FuncCallback<T0, T1, T2, TResult>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
+        /// <summary>
+        /// Gets or creates a Callback attached to this method.<br/>
+        /// The attached Callback can be disposed using this.DisposeJS()
+        /// </summary>
+        /// <param name="_this">This method</param>
+        /// <param name="allowCreate">If true and the Callback does not already exist, it will be created</param>
+        /// <returns>A Callback or null</returns>
+        public static FuncCallback<T0, T1, T2, T3, TResult>? CallbackGet<T0, T1, T2, T3, TResult>(this Func<T0, T1, T2, T3, TResult> _this, bool allowCreate = false)
+            => (FuncCallback<T0, T1, T2, T3, TResult>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
+        /// <summary>
+        /// Gets or creates a Callback attached to this method.<br/>
+        /// The attached Callback can be disposed using this.DisposeJS()
+        /// </summary>
+        /// <param name="_this">This method</param>
+        /// <param name="allowCreate">If true and the Callback does not already exist, it will be created</param>
+        /// <returns>A Callback or null</returns>
+        public static FuncCallback<T0, T1, T2, T3, T4, TResult>? CallbackGet<T0, T1, T2, T3, T4, TResult>(this Func<T0, T1, T2, T3, T4, TResult> _this, bool allowCreate = false)
+            => (FuncCallback<T0, T1, T2, T3, T4, TResult>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
+        /// <summary>
+        /// Gets or creates a Callback attached to this method.<br/>
+        /// The attached Callback can be disposed using this.DisposeJS()
+        /// </summary>
+        /// <param name="_this">This method</param>
+        /// <param name="allowCreate">If true and the Callback does not already exist, it will be created</param>
+        /// <returns>A Callback or null</returns>
+        public static FuncCallback<T0, T1, T2, T3, T4, T5, TResult>? CallbackGet<T0, T1, T2, T3, T4, T5, TResult>(this Func<T0, T1, T2, T3, T4, T5, TResult> _this, bool allowCreate = false)
+            => (FuncCallback<T0, T1, T2, T3, T4, T5, TResult>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
+        /// <summary>
+        /// Gets or creates a Callback attached to this method.<br/>
+        /// The attached Callback can be disposed using this.DisposeJS()
+        /// </summary>
+        /// <param name="_this">This method</param>
+        /// <param name="allowCreate">If true and the Callback does not already exist, it will be created</param>
+        /// <returns>A Callback or null</returns>
+        public static FuncCallback<T0, T1, T2, T3, T4, T5, T6, TResult>? CallbackGet<T0, T1, T2, T3, T4, T5, T6, TResult>(this Func<T0, T1, T2, T3, T4, T5, T6, TResult> _this, bool allowCreate = false) 
+            => (FuncCallback<T0, T1, T2, T3, T4, T5, T6, TResult>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
         public static void CallbackSet<TResult>(this Func<TResult> _this, Callback callback) => _callbacks.Add(_this, callback);
         public static void CallbackSet<T0, TResult>(this Func<T0, TResult> _this, Callback callback) => _callbacks.Add(_this, callback);
         public static void CallbackSet<T0, T1, TResult>(this Func<T0, T1, TResult> _this, Callback callback) => _callbacks.Add(_this, callback);

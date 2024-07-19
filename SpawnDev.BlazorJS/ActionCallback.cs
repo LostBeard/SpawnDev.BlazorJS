@@ -7,11 +7,11 @@ namespace SpawnDev.BlazorJS
     /// </summary>
     public class ActionCallback : Callback
 {
-    /// <summary>
-    /// Implicitly converts a .Net method into a Callback
-    /// </summary>
-    /// <param name="callback">.Net target method</param>
-    public static implicit operator ActionCallback?(Action? callback) => callback == null ? null : new ActionCallback(callback);
+        /// <summary>
+        /// Implicitly converts a .Net method into a Callback
+        /// </summary>
+        /// <param name="callback">.Net target method</param>
+        public static implicit operator ActionCallback?(Action? callback) => callback == null ? null : callback.CallbackGet();
     Action __callback;
     /// <summary>
     /// Creates a new instance
