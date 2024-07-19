@@ -26,14 +26,14 @@ namespace SpawnDev.BlazorJS.JsonConverters
             var genericTypes = typeToConvert.GetGenericArguments();
             if (genericTypes.Length > 0)
             {
-                var covnerterType = typeof(TaskConverter<>).MakeGenericType(genericTypes);
-                JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
+                var converterType = typeof(TaskConverter<>).MakeGenericType(genericTypes);
+                JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
                 return converter;
             }
             else if (typeToConvert == typeof(Task))
             {
-                var covnerterType = typeof(TaskConverter);
-                JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
+                var converterType = typeof(TaskConverter);
+                JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
                 return converter;
             }
             return null;
@@ -82,8 +82,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
         }
         public override void Write(Utf8JsonWriter writer, Task<TResult> value, JsonSerializerOptions options)
         {
-            //var promise = value.PromiseGet(true);
-            var completed = value.IsCompleted;
             var promise = new Promise<TResult>(value);
             JsonSerializer.Serialize(writer, promise, options);
             //value.ContinueWith((t) => {

@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
-
     public class IJSObjectConverterFactory : JsonConverterFactory
     {
         public override bool CanConvert(Type type)
@@ -20,12 +19,11 @@ namespace SpawnDev.BlazorJS.JsonConverters
 
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
-            var covnerterType = typeof(IJSObjectConverter<>).MakeGenericType(new Type[] { typeToConvert });
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
+            var converterType = typeof(IJSObjectConverter<>).MakeGenericType(new Type[] { typeToConvert });
+            JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
             return converter;
         }
     }
-
     // https://github.com/dotnet/aspnetcore/blob/ccb861b89f62c445f175f6a3ca2142f93e7ce5db/src/Components/WebAssembly/JSInterop/src/WebAssemblyJSObjectReferenceJsonConverter.cs#L10
     // WebAssemblyJSObjectReferenceJsonConverter.cs
     public class IJSObjectConverter<TInterface> : JSInProcessObjectReferenceConverterBase<TInterface> where TInterface : class, IJSObject

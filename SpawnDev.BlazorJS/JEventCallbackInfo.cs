@@ -17,7 +17,6 @@
     }/// <summary>
      /// Container for a typed Callback Action pair
      /// </summary>
-     /// <typeparam name="T1"></typeparam>
     internal class JEventCallbackInfo<T1> : JSEventCallbackInfoBase
     {
         /// <summary>
@@ -33,8 +32,6 @@
     /// <summary>
     /// Container for a typed Callback Action pair
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
     internal class JEventCallbackInfo<T1, T2> : JSEventCallbackInfoBase
     {
         /// <summary>
@@ -50,9 +47,6 @@
     /// <summary>
     /// Container for a typed Callback Action pair
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
-    /// <typeparam name="T3"></typeparam>
     internal class JEventCallbackInfo<T1, T2, T3> : JSEventCallbackInfoBase
     {
         /// <summary>
@@ -68,10 +62,6 @@
     /// <summary>
     /// Container for a typed Callback Action pair
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
-    /// <typeparam name="T3"></typeparam>
-    /// <typeparam name="T4"></typeparam>
     internal class JEventCallbackInfo<T1, T2, T3, T4> : JSEventCallbackInfoBase
     {
         /// <summary>
@@ -92,11 +82,6 @@
     /// <summary>
     /// Container for a typed Callback Action pair
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
-    /// <typeparam name="T3"></typeparam>
-    /// <typeparam name="T4"></typeparam>
-    /// <typeparam name="T5"></typeparam>
     internal class JEventCallbackInfo<T1, T2, T3, T4, T5> : JSEventCallbackInfoBase
     {
         /// <summary>
@@ -117,12 +102,6 @@
     /// <summary>
     /// Container for a typed Callback Action pair
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
-    /// <typeparam name="T3"></typeparam>
-    /// <typeparam name="T4"></typeparam>
-    /// <typeparam name="T5"></typeparam>
-    /// <typeparam name="T6"></typeparam>
     internal class JEventCallbackInfo<T1, T2, T3, T4, T5, T6> : JSEventCallbackInfoBase
     {
         /// <summary>
@@ -143,13 +122,6 @@
     /// <summary>
     /// Container for a typed Callback Action pair
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
-    /// <typeparam name="T3"></typeparam>
-    /// <typeparam name="T4"></typeparam>
-    /// <typeparam name="T5"></typeparam>
-    /// <typeparam name="T6"></typeparam>
-    /// <typeparam name="T7"></typeparam>
     internal class JEventCallbackInfo<T1, T2, T3, T4, T5, T6, T7> : JSEventCallbackInfoBase
     {
         /// <summary>

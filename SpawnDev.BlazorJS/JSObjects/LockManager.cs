@@ -26,7 +26,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task Request(string lockName, Func<Lock, Task> callback)
         {
-            using var funcCallback = new FuncCallback<Lock, Task>(callback);
+            using var funcCallback = Callback.Create(callback);
             await JSRef!.CallVoidAsync("request", lockName, funcCallback);
         }
         /// <summary>
@@ -38,7 +38,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task<TResult> Request<TResult>(string lockName, Func<Lock, Task<TResult>> callback)
         {
-            using var funcCallback = new FuncCallback<Lock, Task<TResult>>(callback);
+            using var funcCallback = Callback.Create(callback);
             return await JSRef!.CallAsync<TResult>("request", lockName, funcCallback);
         }
         /// <summary>
@@ -49,7 +49,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task Request(string lockName, Func<Task> callback)
         {
-            using var funcCallback = new FuncCallback<Task>(callback);
+            using var funcCallback = Callback.Create(callback);
             await JSRef!.CallVoidAsync("request", lockName, funcCallback);
         }
         /// <summary>
@@ -60,7 +60,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task<TResult> Request<TResult>(string lockName, Func<Task<TResult>> callback)
         {
-            using var funcCallback = new FuncCallback<Task<TResult>>(callback);
+            using var funcCallback = Callback.Create(callback);
             return await JSRef!.CallAsync<TResult>("request", lockName, funcCallback);
         }
         /// <summary>
@@ -72,7 +72,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task Request(string lockName, LockRequestOptions options, Func<Lock?, Task> callback)
         {
-            using var funcCallback = new FuncCallback<Lock?, Task>(callback);
+            using var funcCallback = Callback.Create(callback);
             await JSRef!.CallVoidAsync("request", lockName, options, funcCallback);
         }
         /// <summary>
@@ -84,7 +84,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task<TResult> Request<TResult>(string lockName, LockRequestOptions options, Func<Lock?, Task<TResult>> callback)
         {
-            using var funcCallback = new FuncCallback<Lock, Task<TResult>>(callback);
+            using var funcCallback = Callback.Create(callback);
             return await JSRef!.CallAsync<TResult>("request", lockName, options, funcCallback);
         }
         /// <summary>
@@ -96,7 +96,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task Request(string lockName, LockRequestOptions options, Func<Task> callback)
         {
-            using var funcCallback = new FuncCallback<Task>(callback);
+            using var funcCallback = Callback.Create(callback);
             await JSRef!.CallVoidAsync("request", lockName, options, funcCallback);
         }
         /// <summary>
@@ -108,7 +108,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public async Task<TResult> Request<TResult>(string lockName, LockRequestOptions options, Func<Task<TResult>> callback)
         {
-            using var funcCallback = new FuncCallback<Task<TResult>>(callback);
+            using var funcCallback = Callback.Create(callback);
             return await JSRef!.CallAsync<TResult>("request", lockName, options, funcCallback);
         }
         #endregion

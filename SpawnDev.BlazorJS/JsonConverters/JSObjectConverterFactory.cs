@@ -14,8 +14,8 @@ namespace SpawnDev.BlazorJS.JsonConverters
 
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
-            var covnerterType = typeof(JSObjectConverter<>).MakeGenericType(new Type[] { typeToConvert });
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(covnerterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
+            var converterType = typeof(JSObjectConverter<>).MakeGenericType(new Type[] { typeToConvert });
+            JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, BindingFlags.Instance | BindingFlags.Public, binder: null, args: new object[] { }, culture: null)!;
             return converter;
         }
     }

@@ -59,33 +59,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             })));
         }
 
-        //public Promise() : base(NullRef)
-        //{
-        //    FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
-        //    {
-        //        ResolveFunc = resolveFunc;
-        //        RejectFunc = rejectFunc;
-        //    })));
-        //}
-
         public Promise(Action<Function, Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
         public Promise(Action<Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
-
-        //protected override void LosingReference()
-        //{
-        //    if (IsWrapperDisposed) return;
-        //    ResolveFunc?.Dispose();
-        //    ResolveFunc = null;
-        //    ResolveFunc?.Dispose();
-        //    ResolveFunc = null;
-        //}
-
-        //public void Resolve(TResult result) => ResolveFunc.CallVoid(null, result);
-        //public void Reject(object reason) => RejectFunc.CallVoid(null, reason);
-        //public void Reject() => RejectFunc.CallVoid();
-
-        //public Function? ResolveFunc { get; protected set; }
-        //public Function? RejectFunc { get; protected set; }
 
         public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
         public void Then(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);

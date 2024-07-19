@@ -137,7 +137,6 @@ namespace SpawnDev.BlazorJS
                 fn.Dispose();
             }
         }
-
         /// <summary>
         /// Disposes the attached Callback if one exists
         /// </summary>
@@ -298,8 +297,6 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static ActionCallback<T0, T1, T2, T3, T4, T5, T6>? CallbackGet<T0, T1, T2, T3, T4, T5, T6>(this Action<T0, T1, T2, T3, T4, T5, T6> _this, bool allowCreate = false) 
             => (ActionCallback<T0, T1, T2, T3, T4, T5, T6>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
-
-        #region Function
         /// <summary>
         /// Returns the attached Function or null
         /// </summary>
@@ -452,6 +449,5 @@ namespace SpawnDev.BlazorJS
                 function.Dispose();
             }
         }
-        #endregion
     }
 }
