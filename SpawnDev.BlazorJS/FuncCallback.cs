@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS
 {
@@ -11,7 +12,7 @@ namespace SpawnDev.BlazorJS
         /// Implicitly converts a .Net method into a Callback
         /// </summary>
         /// <param name="callback">.Net target method</param>
-        public static implicit operator FuncCallback<TResult>?(Func<TResult>? callback) => callback == null ? null : new FuncCallback<TResult>(callback);
+        public static implicit operator FuncCallback<TResult>?(Func<TResult>? callback) => callback == null ? null : callback.CallbackGet(true);
         Func<TResult> __callback;
         /// <summary>
         /// Creates a new instance
@@ -26,10 +27,11 @@ namespace SpawnDev.BlazorJS
         /// Javascript callable method
         /// </summary>
         [JSInvokable]
-        public TResult Invoke()
+        public object? Invoke()
         {
             if (once) Dispose();
-            return __callback();
+            var ret = __callback();
+            return ret is Task task ? new Promise(task) : ret;
         }
     }
     /// <summary>
@@ -41,7 +43,7 @@ namespace SpawnDev.BlazorJS
         /// Implicitly converts a .Net method into a Callback
         /// </summary>
         /// <param name="callback">.Net target method</param>
-        public static implicit operator FuncCallback<T1, TResult>?(Func<T1, TResult>? callback) => callback == null ? null : new FuncCallback<T1, TResult>(callback);
+        public static implicit operator FuncCallback<T1, TResult>?(Func<T1, TResult>? callback) => callback == null ? null : callback.CallbackGet(true);
         Func<T1, TResult> __callback;
         /// <summary>
         /// Creates a new instance
@@ -56,10 +58,11 @@ namespace SpawnDev.BlazorJS
         /// Javascript callable method
         /// </summary>
         [JSInvokable]
-        public TResult Invoke(T1 arg0)
+        public object? Invoke(T1 arg0)
         {
             if (once) Dispose();
-            return __callback(arg0);
+            var ret = __callback(arg0);
+            return ret is Task task ? new Promise(task) : ret;
         }
     }
     /// <summary>
@@ -71,7 +74,7 @@ namespace SpawnDev.BlazorJS
         /// Implicitly converts a .Net method into a Callback
         /// </summary>
         /// <param name="callback">.Net target method</param>
-        public static implicit operator FuncCallback<T1, T2, TResult>?(Func<T1, T2, TResult>? callback) => callback == null ? null : new FuncCallback<T1, T2, TResult>(callback);
+        public static implicit operator FuncCallback<T1, T2, TResult>?(Func<T1, T2, TResult>? callback) => callback == null ? null : callback.CallbackGet(true);
         Func<T1, T2, TResult> __callback;
         /// <summary>
         /// Creates a new instance
@@ -86,10 +89,11 @@ namespace SpawnDev.BlazorJS
         /// Javascript callable method
         /// </summary>
         [JSInvokable]
-        public TResult Invoke(T1 arg0, T2 arg1)
+        public object? Invoke(T1 arg0, T2 arg1)
         {
             if (once) Dispose();
-            return __callback(arg0, arg1);
+            var ret = __callback(arg0, arg1);
+            return ret is Task task ? new Promise(task) : ret;
         }
     }
     /// <summary>
@@ -101,7 +105,7 @@ namespace SpawnDev.BlazorJS
         /// Implicitly converts a .Net method into a Callback
         /// </summary>
         /// <param name="callback">.Net target method</param>
-        public static implicit operator FuncCallback<T1, T2, T3, TResult>?(Func<T1, T2, T3, TResult>? callback) => callback == null ? null : new FuncCallback<T1, T2, T3, TResult>(callback);
+        public static implicit operator FuncCallback<T1, T2, T3, TResult>?(Func<T1, T2, T3, TResult>? callback) => callback == null ? null : callback.CallbackGet(true);
         Func<T1, T2, T3, TResult> __callback;
         /// <summary>
         /// Creates a new instance
@@ -116,10 +120,11 @@ namespace SpawnDev.BlazorJS
         /// Javascript callable method
         /// </summary>
         [JSInvokable]
-        public TResult Invoke(T1 arg0, T2 arg1, T3 arg2)
+        public object? Invoke(T1 arg0, T2 arg1, T3 arg2)
         {
             if (once) Dispose();
-            return __callback(arg0, arg1, arg2);
+            var ret = __callback(arg0, arg1, arg2);
+            return ret is Task task ? new Promise(task) : ret;
         }
     }
     /// <summary>
@@ -131,7 +136,7 @@ namespace SpawnDev.BlazorJS
         /// Implicitly converts a .Net method into a Callback
         /// </summary>
         /// <param name="callback">.Net target method</param>
-        public static implicit operator FuncCallback<T1, T2, T3, T4, TResult>?(Func<T1, T2, T3, T4, TResult>? callback) => callback == null ? null : new FuncCallback<T1, T2, T3, T4, TResult>(callback);
+        public static implicit operator FuncCallback<T1, T2, T3, T4, TResult>?(Func<T1, T2, T3, T4, TResult>? callback) => callback == null ? null : callback.CallbackGet(true);
         Func<T1, T2, T3, T4, TResult> __callback;
         /// <summary>
         /// Creates a new instance
@@ -146,10 +151,11 @@ namespace SpawnDev.BlazorJS
         /// Javascript callable method
         /// </summary>
         [JSInvokable]
-        public TResult Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3)
+        public object? Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3)
         {
             if (once) Dispose();
-            return __callback(arg0, arg1, arg2, arg3);
+            var ret = __callback(arg0, arg1, arg2, arg3);
+            return ret is Task task ? new Promise(task) : ret;
         }
     }
     /// <summary>
@@ -161,7 +167,7 @@ namespace SpawnDev.BlazorJS
         /// Implicitly converts a .Net method into a Callback
         /// </summary>
         /// <param name="callback">.Net target method</param>
-        public static implicit operator FuncCallback<T1, T2, T3, T4, T5, TResult>?(Func<T1, T2, T3, T4, T5, TResult>? callback) => callback == null ? null : new FuncCallback<T1, T2, T3, T4, T5, TResult>(callback);
+        public static implicit operator FuncCallback<T1, T2, T3, T4, T5, TResult>?(Func<T1, T2, T3, T4, T5, TResult>? callback) => callback == null ? null : callback.CallbackGet(true);
         Func<T1, T2, T3, T4, T5, TResult> __callback;
         /// <summary>
         /// Creates a new instance
@@ -176,10 +182,11 @@ namespace SpawnDev.BlazorJS
         /// Javascript callable method
         /// </summary>
         [JSInvokable]
-        public TResult Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3, T5 arg4)
+        public object? Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3, T5 arg4)
         {
             if (once) Dispose();
-            return __callback(arg0, arg1, arg2, arg3, arg4);
+            var ret = __callback(arg0, arg1, arg2, arg3, arg4);
+            return ret is Task task ? new Promise(task) : ret;
         }
     }
     /// <summary>
@@ -191,7 +198,7 @@ namespace SpawnDev.BlazorJS
         /// Implicitly converts a .Net method into a Callback
         /// </summary>
         /// <param name="callback">.Net target method</param>
-        public static implicit operator FuncCallback<T1, T2, T3, T4, T5, T6, TResult>?(Func<T1, T2, T3, T4, T5, T6, TResult>? callback) => callback == null ? null : new FuncCallback<T1, T2, T3, T4, T5, T6, TResult>(callback);
+        public static implicit operator FuncCallback<T1, T2, T3, T4, T5, T6, TResult>?(Func<T1, T2, T3, T4, T5, T6, TResult>? callback) => callback == null ? null : callback.CallbackGet(true);
         Func<T1, T2, T3, T4, T5, T6, TResult> __callback;
         /// <summary>
         /// Creates a new instance
@@ -206,10 +213,11 @@ namespace SpawnDev.BlazorJS
         /// Javascript callable method
         /// </summary>
         [JSInvokable]
-        public TResult Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3, T5 arg4, T6 arg5)
+        public object? Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3, T5 arg4, T6 arg5)
         {
             if (once) Dispose();
-            return __callback(arg0, arg1, arg2, arg3, arg4, arg5);
+            var ret = __callback(arg0, arg1, arg2, arg3, arg4, arg5);
+            return ret is Task task ? new Promise(task) : ret;
         }
     }
     /// <summary>
@@ -221,7 +229,7 @@ namespace SpawnDev.BlazorJS
         /// Implicitly converts a .Net method into a Callback
         /// </summary>
         /// <param name="callback">.Net target method</param>
-        public static implicit operator FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>?(Func<T1, T2, T3, T4, T5, T6, T7, TResult>? callback) => callback == null ? null : new FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>(callback);
+        public static implicit operator FuncCallback<T1, T2, T3, T4, T5, T6, T7, TResult>?(Func<T1, T2, T3, T4, T5, T6, T7, TResult>? callback) => callback == null ? null : callback.CallbackGet(true);
         Func<T1, T2, T3, T4, T5, T6, T7, TResult> __callback;
         /// <summary>
         /// Creates a new instance
@@ -236,10 +244,11 @@ namespace SpawnDev.BlazorJS
         /// Javascript callable method
         /// </summary>
         [JSInvokable]
-        public TResult Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3, T5 arg4, T6 arg5, T7 arg6)
+        public object? Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3, T5 arg4, T6 arg5, T7 arg6)
         {
             if (once) Dispose();
-            return __callback(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            var ret = __callback(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            return ret is Task task ? new Promise(task) : ret;
         }
     }
 }

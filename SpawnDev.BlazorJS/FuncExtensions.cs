@@ -111,6 +111,95 @@ namespace SpawnDev.BlazorJS
             }
         }
         /// <summary>
+        /// Disposes the attached Callback if one exists
+        /// </summary>
+        public static void CallbackDispose<TResult>(this Func<TResult> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
+                _callbacks.Remove(_this);
+                callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Disposes the attached Callback if one exists
+        /// </summary>
+        public static void CallbackDispose<T0, TResult>(this Func<T0, TResult> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
+                _callbacks.Remove(_this);
+                callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Disposes the attached Callback if one exists
+        /// </summary>
+        public static void CallbackDispose<T0, T1, TResult>(this Func<T0, T1, TResult> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
+                _callbacks.Remove(_this);
+                callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Disposes the attached Callback if one exists
+        /// </summary>
+        public static void CallbackDispose<T0, T1, T2, TResult>(this Func<T0, T1, T2, TResult> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
+                _callbacks.Remove(_this);
+                callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Disposes the attached Callback if one exists
+        /// </summary>
+        public static void CallbackDispose<T0, T1, T2, T3, TResult>(this Func<T0, T1, T2, T3, TResult> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
+                _callbacks.Remove(_this);
+                callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Disposes the attached Callback if one exists
+        /// </summary>
+        public static void CallbackDispose<T0, T1, T2, T3, T4, TResult>(this Func<T0, T1, T2, T3, T4, TResult> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
+                _callbacks.Remove(_this);
+                callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Disposes the attached Callback if one exists
+        /// </summary>
+        public static void CallbackDispose<T0, T1, T2, T3, T4, T5, TResult>(this Func<T0, T1, T2, T3, T4, T5, TResult> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
+                _callbacks.Remove(_this);
+                callback.Dispose();
+            }
+        }
+        /// <summary>
+        /// Disposes the attached Callback if one exists
+        /// </summary>
+        public static void CallbackDispose<T0, T1, T2, T3, T4, T5, T6, TResult>(this Func<T0, T1, T2, T3, T4, T5, T6, TResult> _this)
+        {
+            if (_callbacks.TryGetValue(_this, out var callback))
+            {
+                _callbacks.Remove(_this);
+                callback.Dispose();
+            }
+        }
+
+        /// <summary>
         /// Gets or creates a Callback attached to this method.<br/>
         /// The attached Callback can be disposed using this.DisposeJS()
         /// </summary>
@@ -180,7 +269,7 @@ namespace SpawnDev.BlazorJS
         /// <param name="_this">This method</param>
         /// <param name="allowCreate">If true and the Callback does not already exist, it will be created</param>
         /// <returns>A Callback or null</returns>
-        public static FuncCallback<T0, T1, T2, T3, T4, T5, T6, TResult>? CallbackGet<T0, T1, T2, T3, T4, T5, T6, TResult>(this Func<T0, T1, T2, T3, T4, T5, T6, TResult> _this, bool allowCreate = false) 
+        public static FuncCallback<T0, T1, T2, T3, T4, T5, T6, TResult>? CallbackGet<T0, T1, T2, T3, T4, T5, T6, TResult>(this Func<T0, T1, T2, T3, T4, T5, T6, TResult> _this, bool allowCreate = false)
             => (FuncCallback<T0, T1, T2, T3, T4, T5, T6, TResult>?)(!_callbacks.TryGetValue(_this, out Callback? ret) && allowCreate ? _callbacks[_this] = ret = Callback.Create(_this) : ret);
         public static void CallbackSet<TResult>(this Func<TResult> _this, Callback callback) => _callbacks.Add(_this, callback);
         public static void CallbackSet<T0, TResult>(this Func<T0, TResult> _this, Callback callback) => _callbacks.Add(_this, callback);

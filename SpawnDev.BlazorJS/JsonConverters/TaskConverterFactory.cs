@@ -48,13 +48,20 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public override Task? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
             if (_ref == null) return null;
-            using var promise = new Promise(_ref);
-            return (Task)promise.ThenAsync();
+            var promise = new Promise(_ref);
+            var ret = (Task)promise.ThenAsync();
+            //ret.ContinueWith((t) => {
+            //    promise?.Dispose();
+            //});
+            return ret;
         }
         public override void Write(Utf8JsonWriter writer, Task value, JsonSerializerOptions options)
         {
-            using var promise = new Promise(value);
+            var promise = new Promise(value);
             JsonSerializer.Serialize(writer, promise, options);
+            //value.ContinueWith((t) => {
+            //    promise?.Dispose();
+            //});
         }
     }
     public class TaskConverter<TResult> : JSInProcessObjectReferenceConverterBase<Task<TResult>>
@@ -66,14 +73,22 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public override Task<TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
             if (_ref == null) return null;
-            using var promise = new Promise<TResult>(_ref);
-            return (Task<TResult>)promise.ThenAsync();
+            var promise = new Promise<TResult>(_ref);
+            var ret = (Task<TResult>)promise.ThenAsync();
+            //ret.ContinueWith((t) => {
+            //    promise?.Dispose();
+            //});
+            return ret;
         }
         public override void Write(Utf8JsonWriter writer, Task<TResult> value, JsonSerializerOptions options)
         {
             //var promise = value.PromiseGet(true);
-            using var promise = new Promise(value);
+            var completed = value.IsCompleted;
+            var promise = new Promise<TResult>(value);
             JsonSerializer.Serialize(writer, promise, options);
+            //value.ContinueWith((t) => {
+            //    promise?.Dispose();
+            //});
         }
     }
 }

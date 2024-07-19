@@ -26,12 +26,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// If the function returns a promise, then it will not be called again until that promise fulfills. (If the promise rejects, the stream will become errored.) This is mainly used in the case of pull sources, where the promise returned represents the process of acquiring a new chunk.Throwing an exception is treated the same as returning a rejected promise.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public AsyncActionCallback<ReadableStreamDefaultController>? Pull { get; set; }
+        public FuncCallback<ReadableStreamDefaultController, Task>? Pull { get; set; }
         /// <summary>
         /// This is a method, called immediately when the object is constructed. The contents of this method are defined by the developer, and should aim to get access to the stream source, and do anything else required to set up the stream functionality. If this process is to be done asynchronously, it can return a promise to signal success or failure. The controller parameter passed to this method is a ReadableStreamDefaultController or a ReadableStreamDefaultController, depending on the value of the type property. This can be used by the developer to control the stream during set up.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public AsyncActionCallback<ReadableStreamDefaultController>? Start { get; set; }
+        public FuncCallback<ReadableStreamDefaultController, Task>? Start { get; set; }
         /// <summary>
         /// This method, also defined by the developer, will be called if the app signals that the stream is to be cancelled (e.g. if ReadableStream.cancel() is called). The contents should do whatever is necessary to release access to the stream source. If this process is asynchronous, it can return a promise to signal success or failure. The reason parameter contains a string describing why the stream was cancelled.
         /// </summary>

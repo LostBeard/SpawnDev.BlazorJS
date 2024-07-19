@@ -33,6 +33,11 @@
     <script webworker-enabled>
         // example
         console.log('This script will run in all scopes including window and worker due to the webworker-enabled attribute');
+        function sleep(delay) {
+            return new Promise((resolve) => {
+                setTimeout(resolve, delay);
+            });
+        }
         // this object below is used in a unit test that tests Symbol.asyncIterator and the AsyncIterator JSObject
         // Example delayedResponses source:
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/asyncIterator
@@ -47,10 +52,30 @@
 
             async *[Symbol.asyncIterator]() {
                 for (const delay of this.delays) {
-                    await this.wait(delay);
+                    await sleep(delay);
                     yield `Delayed response for ${delay} milliseconds`;
                 }
             },
+        };
+        globalThis.returnsPromiseTest = async function () {
+            console.log('sleeping for 1 second');
+            await sleep(1000);
+            console.log('awake');
+            return 'hellow world';
+        };
+        globalThis.awaitPromiseTest = async function (promise) {
+            console.log('awaitPromiseTest waiting...', promise);
+            var value = await promise;
+            console.log('awaitPromiseTest done:', value);
+            return 'hellow world';
+        };
+        globalThis.awaitMethodResultPromiseTest = async function (method) {
+            console.log('awaitMethodResultPromiseTest calling...', method);
+            var promise = method('hello world');
+            console.log('awaitMethodResultPromiseTest waiting...', promise);
+            var value = await promise;
+            console.log('awaitMethodResultPromiseTest done:', value);
+            return 'hellow world';
         };
     </script>
     <!-- autostart is set to false to allow the app to detect SIMD support and load the apropriate build -->

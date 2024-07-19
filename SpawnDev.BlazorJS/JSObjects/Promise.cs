@@ -177,7 +177,15 @@ namespace SpawnDev.BlazorJS.JSObjects
                     }
                     else
                     {
-                        resolveFunc.CallVoid();
+                        if (t.GetType().IsGenericType)
+                        {
+                            var result = t.GetResult();
+                            resolveFunc.ApplyVoid(null, new object[] { result });
+                        }
+                        else
+                        {
+                            resolveFunc.CallVoid();
+                        }
                     }
                     resolveFunc.Dispose();
                     rejectFunc.Dispose();
@@ -203,7 +211,15 @@ namespace SpawnDev.BlazorJS.JSObjects
                     }
                     else
                     {
-                        resolveFunc.CallVoid();
+                        if (task.GetType().IsGenericType)
+                        {
+                            var result = task.GetResult();
+                            resolveFunc.ApplyVoid(null, new object[] { result });
+                        }
+                        else
+                        {
+                            resolveFunc.CallVoid();
+                        }
                     }
                     resolveFunc.Dispose();
                     rejectFunc.Dispose();

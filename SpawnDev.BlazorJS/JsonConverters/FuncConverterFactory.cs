@@ -27,6 +27,28 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             var baseType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
             var genericTypes = type.GetGenericArguments();
+
+            var returnType = genericTypes.Last();
+            if (returnType.IsTask())
+            {
+                if (returnType.AsyncReturnType() == typeof(void))
+                {
+                    // Async Action (Func that returns Task with no value)
+                    var nmt = true;
+                }
+                else
+                {
+                    // Async Func
+                    var nmt = true;
+
+                }
+            }
+            else
+            {
+                // Func
+                var nmt = true;
+
+            }
             if (SupportedGenericTypes.TryGetValue(baseType, out var converterBaseType))
             {
                 var converterType = type.IsGenericType ? converterBaseType.MakeGenericType(genericTypes) : converterBaseType;
@@ -36,124 +58,55 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return null;
         }
     }
-    public class FuncConverter<TResult> : JSInProcessObjectReferenceConverterBase<Func<TResult>>
-    {
-        public override Func<TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var fn = new Function(_ref);
-            var ret = fn.ToFunc<TResult>();
-            return ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Func<TResult> value, JsonSerializerOptions options)
-        {
-            var ret = value.CallbackGet(true);
-            JsonSerializer.Serialize(writer, ret, options);
-        }
-    }
-    public class FuncConverter<T0, TResult> : JSInProcessObjectReferenceConverterBase<Func<T0, TResult>>
-    {
-        public override Func<T0, TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var fn = new Function(_ref);
-            var ret = fn.ToFunc<T0, TResult>();
-            return ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Func<T0, TResult> value, JsonSerializerOptions options)
-        {
-            var ret = value.CallbackGet(true);
-            JsonSerializer.Serialize(writer, ret, options);
-        }
-    }
-    public class FuncConverter<T0, T1, TResult> : JSInProcessObjectReferenceConverterBase<Func<T0, T1, TResult>>
-    {
-        public override Func<T0, T1, TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var fn = new Function(_ref);
-            var ret = fn.ToFunc<T0, T1, TResult>();
-            return ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Func<T0, T1, TResult> value, JsonSerializerOptions options)
-        {
-            var ret = value.CallbackGet(true);
-            JsonSerializer.Serialize(writer, ret, options);
-        }
-    }
-    public class FuncConverter<T0, T1, T2, TResult> : JSInProcessObjectReferenceConverterBase<Func<T0, T1, T2, TResult>>
-    {
-        public override Func<T0, T1, T2, TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var fn = new Function(_ref);
-            var ret = fn.ToFunc<T0, T1, T2, TResult>();
-            return ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Func<T0, T1, T2, TResult> value, JsonSerializerOptions options)
-        {
-            var ret = value.CallbackGet(true);
-            JsonSerializer.Serialize(writer, ret, options);
-        }
-    }
-    public class FuncConverter<T0, T1, T2, T3, TResult> : JSInProcessObjectReferenceConverterBase<Func<T0, T1, T2, T3, TResult>>
-    {
-        public override Func<T0, T1, T2, T3, TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var fn = new Function(_ref);
-            var ret = fn.ToFunc<T0, T1, T2, T3, TResult>();
-            return ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Func<T0, T1, T2, T3, TResult> value, JsonSerializerOptions options)
-        {
-            var ret = value.CallbackGet(true);
-            JsonSerializer.Serialize(writer, ret, options);
-        }
-    }
-    public class FuncConverter<T0, T1, T2, T3, T4, TResult> : JSInProcessObjectReferenceConverterBase<Func<T0, T1, T2, T3, T4, TResult>>
-    {
-        public override Func<T0, T1, T2, T3, T4, TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var fn = new Function(_ref);
-            var ret = fn.ToFunc<T0, T1, T2, T3, T4, TResult>();
-            return ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Func<T0, T1, T2, T3, T4, TResult> value, JsonSerializerOptions options)
-        {
-            var ret = value.CallbackGet(true);
-            JsonSerializer.Serialize(writer, ret, options);
-        }
-    }
-    public class FuncConverter<T0, T1, T2, T3, T4, T5, TResult> : JSInProcessObjectReferenceConverterBase<Func<T0, T1, T2, T3, T4, T5, TResult>>
-    {
-        public override Func<T0, T1, T2, T3, T4, T5, TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var fn = new Function(_ref);
-            var ret = fn.ToFunc<T0, T1, T2, T3, T4, T5, TResult>();
-            return ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Func<T0, T1, T2, T3, T4, T5, TResult> value, JsonSerializerOptions options)
-        {
-            var ret = value.CallbackGet(true);
-            JsonSerializer.Serialize(writer, ret, options);
-        }
-    }
-    public class FuncConverter<T0, T1, T2, T3, T4, T5, T6, TResult> : JSInProcessObjectReferenceConverterBase<Func<T0, T1, T2, T3, T4, T5, T6, TResult>>
-    {
-        public override Func<T0, T1, T2, T3, T4, T5, T6, TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
-        {
-            if (_ref == null) return null;
-            var fn = new Function(_ref);
-            var ret = fn.ToFunc<T0, T1, T2, T3, T4, T5, T6, TResult>();
-            return ret;
-        }
-        public override void Write(Utf8JsonWriter writer, Func<T0, T1, T2, T3, T4, T5, T6, TResult> value, JsonSerializerOptions options)
-        {
-            var ret = value.CallbackGet(true);
-            JsonSerializer.Serialize(writer, ret, options);
-        }
-    }
+
+    // ***********************************************************
+
+    //public class AsyncActionConverter<T0> : JSInProcessObjectReferenceConverterBase<Func<T0, Task>>
+    //{
+    //    public override Func<T0, Task>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var fn = new Function(_ref);
+    //        var ret = fn.ToFunc<T0, Task>();
+    //        return ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Func<T0, Task> value, JsonSerializerOptions options)
+    //    {
+    //        var ret = value.CallbackGet(true);
+    //        JsonSerializer.Serialize(writer, ret, options);
+    //    }
+    //}
+
+    // ***********************************************************
+
+    //public class AsyncFuncConverter<TResult> : JSInProcessObjectReferenceConverterBase<Func<Task<TResult>>>
+    //{
+    //    public override Func<Task<TResult>>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var fn = new Function(_ref);
+    //        var ret = fn.ToFunc<Task<TResult>>();
+    //        return ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Func<Task<TResult>> value, JsonSerializerOptions options)
+    //    {
+    //        var ret = value.CallbackGet(true);
+    //        JsonSerializer.Serialize(writer, ret, options);
+    //    }
+    //}
+    //public class AsyncFuncConverter<T0, TResult> : JSInProcessObjectReferenceConverterBase<Func<T0, Task<TResult>>>
+    //{
+    //    public override Func<T0, Task<TResult>>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+    //    {
+    //        if (_ref == null) return null;
+    //        var fn = new Function(_ref);
+    //        var ret = fn.ToFunc<T0, Task<TResult>>();
+    //        return ret;
+    //    }
+    //    public override void Write(Utf8JsonWriter writer, Func<T0, Task<TResult>> value, JsonSerializerOptions options)
+    //    {
+    //        var ret = value.CallbackGet(true);
+    //        JsonSerializer.Serialize(writer, ret, options);
+    //    }
+    //}
 }
