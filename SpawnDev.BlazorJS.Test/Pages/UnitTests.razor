@@ -13,21 +13,20 @@
 <UnitTestsView TypeInstanceResolver="TestTypeResolver" TestAssemblies="Assemblies" TestTypes="Types"></UnitTestsView>
 
 @code {
+    [Inject]
+    BlazorJSRuntime JS { get; set; } = default!;
 
     [Inject]
-    BlazorJSRuntime JS { get; set; }
+    WebWorkerService WebWorkerService { get; set; } = default!;
 
     [Inject]
-    WebWorkerService WebWorkerService { get; set; }
+    AsyncCallDispatcherTest CallDispatcherBaseTestClass { get; set; } = default!;
 
     [Inject]
-    AsyncCallDispatcherTest CallDispatcherBaseTestClass { get; set; }
+    IMathsService MathService { get; set; } = default!;
 
     [Inject]
-    IMathsService MathService { get; set; }
-
-    [Inject]
-    IServiceCollection ServiceDescriptors { get; set; }
+    IServiceCollection ServiceDescriptors { get; set; } = default!;
 
     List<Assembly>? Assemblies = new List<Assembly>();
     List<Type>? Types = new List<Type>();
@@ -178,7 +177,7 @@
             await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(10000, cts.Token));
             Console.WriteLine($"Task Cancellation failed");
         }
-        catch (Exception ex)
+        catch
         {
             Console.WriteLine($"Success. The task was cancelled");
             return;
@@ -198,7 +197,7 @@
             await WebWorkerService.TaskPool.Run(() => ThisMethodWillGetCalledInAWorker(5000, cancelledToken));
             Console.WriteLine($"Task Cancellation failed");
         }
-        catch (Exception ex)
+        catch
         {
             Console.WriteLine($"Success. The task was cancelled");
             return;
@@ -269,9 +268,9 @@
         var testKey = "Message";
         // get value loaded in this context to compare to worker returned value
         var testValueWindow = await MathService.ReadAppSettingsValue(testKey);
-        // get worker and read the value fro mthat context
+        // get worker and read the value from that context
         using var worker = await WebWorkerService.GetWebWorker();
-        var mathService = worker.GetService<IMathsService>();
+        var mathService = worker!.GetService<IMathsService>();
         var testValueWorker = await mathService.ReadAppSettingsValue(testKey);
         // compare
         if (testValueWorker != testValueWindow) throw new Exception("Unexpected result");
@@ -286,7 +285,7 @@
             throw new Exception("Worker not supported by browser. Expected failure.");
         }
         using var worker = await WebWorkerService.GetWebWorker();
-        var mathService = worker.GetService<IMathsService>();
+        var mathService = worker!.GetService<IMathsService>();
         var strValueOrig = "apples";
         var dblValueOrig = Math.PI;
 
@@ -316,7 +315,7 @@
             throw new Exception("Worker not supported by browser. Expected failure.");
         }
         using var worker = await WebWorkerService.GetWebWorker();
-        var mathService = worker.GetService<IMathsService>();
+        var mathService = worker!.GetService<IMathsService>();
         var value1 = "apples";
         var value2 = 42;
         var value2ReadBack = await mathService.TestGenerics<string, int>(value1, value2);
@@ -331,7 +330,7 @@
             throw new Exception("Worker not supported by browser. Expected failure.");
         }
         using var worker = await WebWorkerService.GetWebWorker();
-        var mathService = worker.GetService<IMathsService>();
+        var mathService = worker!.GetService<IMathsService>();
         var randValue = Guid.NewGuid().ToString();
         await mathService.SetValueTest(randValue);
         var readBack = await mathService.GetValueTest();
@@ -347,8 +346,8 @@
         }
         using var workerA = await WebWorkerService.GetWebWorker();
         using var workerB = await WebWorkerService.GetWebWorker();
-        var mathServiceA = workerA.GetService<IMathsService>();
-        var mathServiceB = workerB.GetService<IMathsService>();
+        var mathServiceA = workerA!.GetService<IMathsService>();
+        var mathServiceB = workerB!.GetService<IMathsService>();
         var randValue = Guid.NewGuid().ToString();
         await mathServiceA.SetValueTest(randValue);
         var readBack = await mathServiceB.GetValueTest();
@@ -367,7 +366,7 @@
 
         using var worker = await WebWorkerService.GetSharedWebWorker();
 
-        var workerInstanceId = await worker.Run(() => JS.InstanceId);
+        var workerInstanceId = await worker!.Run(() => JS.InstanceId);
         Console.WriteLine($"thisInstanceId: {thisInstanceId}");
         Console.WriteLine($"workerInstanceId: {workerInstanceId}");
 
@@ -392,9 +391,9 @@
         using var workerA1 = await WebWorkerService.GetSharedWebWorker("workerA");
         using var workerA2 = await WebWorkerService.GetSharedWebWorker("workerA");
         using var workerB = await WebWorkerService.GetSharedWebWorker("workerB");
-        var mathServiceA1 = workerA1.GetService<IMathsService>();
-        var mathServiceA2 = workerA2.GetService<IMathsService>();
-        var mathServiceB = workerB.GetService<IMathsService>();
+        var mathServiceA1 = workerA1!.GetService<IMathsService>();
+        var mathServiceA2 = workerA2!.GetService<IMathsService>();
+        var mathServiceB = workerB!.GetService<IMathsService>();
         var valueSetWorkerA1 = Guid.NewGuid().ToString();
         await mathServiceA1.SetValueTest(valueSetWorkerA1);
         var valueGetWorkerB = await mathServiceB.GetValueTest();
@@ -475,13 +474,13 @@
             new string[] { "encrypt", "decrypt" }
         );
         var testString = "Hello Crypto!";
-        var encryptedText = await EncryptDataWithPublicKey(testString, keyPair.PublicKey);
-        var decryptedText = await DecryptDataWithPrivateKey(encryptedText, keyPair.PrivateKey);
+        var encryptedText = await EncryptDataWithPublicKey(testString, keyPair.PublicKey!);
+        var decryptedText = await DecryptDataWithPrivateKey(encryptedText, keyPair.PrivateKey!);
         if (testString != decryptedText) throw new Exception("Unexpected result");
 
         // Now test exporting and then importing the private key (for testing only)
         // export private key
-        var privateKey = await subtle.ExportKey<ArrayBuffer>("pkcs8", keyPair.PrivateKey);
+        var privateKey = await subtle.ExportKey<ArrayBuffer>("pkcs8", keyPair.PrivateKey!);
         // convert exported private key to a base64 string
         var stringPrivateKey = ArrayBufferToBase64(privateKey);
 
@@ -566,12 +565,12 @@
         // this method is for testing purposes only.
         var binaryString = JS.Call<JSObject>("atob", base64String);
         JS.Set("_binaryString", binaryString);
-        var length = binaryString.JSRef.Get<int>("length");
+        var length = binaryString.JSRef!.Get<int>("length");
         var arrayBuffer = new ArrayBuffer(length);
         var uint8Array = new Uint8Array(arrayBuffer);
         for (var i = 0; i < length; i++)
         {
-            uint8Array[i] = binaryString.JSRef.Call<byte>("charCodeAt", i);
+            uint8Array[i] = binaryString.JSRef!.Call<byte>("charCodeAt", i);
         }
         return arrayBuffer;
     }
@@ -580,7 +579,7 @@
     public async Task TestSymbolsAndAsyncIterator()
     {
         var obj = JS.Get<JSObject>("delayedResponses");
-        var asyncIterator = obj.JSRef.Call<AsyncIterator>(Symbol.AsyncIterator);
+        var asyncIterator = obj.JSRef!.Call<AsyncIterator>(Symbol.AsyncIterator);
         IteratorResult? result = await asyncIterator.Next();
         while (!result.Done)
         {
@@ -648,7 +647,7 @@
 
     // Returns -1 if not cancelled
     // This method will run for 10 seconds if not cancelled
-    private static async Task<long> CancellableMethod(double maxRunTimeMS, SharedCancellationToken token)
+    private static long CancellableMethod(double maxRunTimeMS, SharedCancellationToken token)
     {
         var startTime = DateTime.Now;
         var maxRunTime = TimeSpan.FromMilliseconds(maxRunTimeMS);
@@ -861,7 +860,7 @@
     [TestMethod]
     public void BigUint64ArrayTest()
     {
-        var values = new ulong[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
+        var values = new ulong[] { 0, 1, 2, 3, 1950062603343432523L, 5, 6, 7 };
         JS.Set("values", values);
         using var typedArray = new BigUint64Array(values);
         JS.Set("typedArray", typedArray);
@@ -878,7 +877,7 @@
     [TestMethod]
     public void BigInt64ArrayTest()
     {
-        var values = new long[] { 0, 1, 2, 3, 1950062603343432523l, 5, 6, 7 };
+        var values = new long[] { 0, 1, 2, 3, 1950062603343432523L, 5, 6, 7 };
         JS.Set("values", values);
         using var typedArray = new BigInt64Array(values);
         JS.Set("typedArray", typedArray);
@@ -939,11 +938,11 @@
 
         var bytes = typedArray.ToArray<byte>(32, 8);
         var bytesLong = BitConverter.GetBytes((long)values[4]!);
-        var bbb = true;
+
 
         var el4View = typedArray.SubArray(4, 5);
         var bytes2 = el4View.ReadBytes();
-        var nmt = true;
+
     }
 
     #endregion
@@ -1033,7 +1032,7 @@
         }
         return -1;
     }
-    private static async Task<long> WebWorkerAbortSignalTest(AbortSignal abortSignal)
+    private static long WebWorkerAbortSignalTest(AbortSignal abortSignal)
     {
         var startTime = DateTime.Now;
         var maxRunTime = TimeSpan.FromMilliseconds(5000);
@@ -1061,7 +1060,7 @@
         {
             TaskCompletionSource lockHandle2 = await locks.RequestHandle(lockName, 1000);
         }
-        catch (Exception ex)
+        catch
         {
             Console.WriteLine($"Success. Lock acquisition timed out as expected");
             // release lockHandle1
@@ -1090,7 +1089,7 @@
     }
 
 
-    private static async Task<long> WebWorkerLockManagerTest(AbortSignal abortSignal)
+    private static long WebWorkerLockManagerTest(AbortSignal abortSignal)
     {
         var startTime = DateTime.Now;
         var maxRunTime = TimeSpan.FromMilliseconds(5000);
@@ -1113,7 +1112,7 @@
         if (type != typeRB) throw new Exception("Failed");
     }
 
-    private static async Task<Type> WebWorkerTypeSerializationTest(Type type)
+    private static Type WebWorkerTypeSerializationTest(Type type)
     {
         Console.WriteLine($"Type recvd: {type.FullName}");
         return type;

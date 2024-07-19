@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CA2018: 'Buffer.BlockCopy' expects the number of bytes to be copied for the 'count' argument
+dotnet_diagnostic.CA2018.severity = none
