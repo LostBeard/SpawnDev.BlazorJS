@@ -255,11 +255,11 @@ origFunc.DisposeJS();
 
 # Callback
 
-The Callback object is used internally to support Action and Func serialization. It can be used for a bit more control over the lifetime of you callbacks. Pass methods to Javascript using the Callback.Create and Callback.CreateOne methods. These methods use type arguments to set the types expected for incoming arguments (if any) and the expected return type (if any.) async methods are passed as Promises.
+The Callback object is used to support Action and Func serialization. It can be used for a bit more control over the lifetime of you callbacks. Pass methods to Javascript using the Callback.Create and Callback.CreateOne methods. These methods use type arguments to set the types expected for incoming arguments (if any) and the expected return type (if any.) async methods are passed as Promises.
 
 Pass lambda callbacks to Javascript
 ```cs
-JS.Set("testCallback", Callback.Create<string>((strArg) => {
+JS.Set("testCallback", Callback.Create((string strArg) => {
     Console.WriteLine($"Javascript sent: {strArg}");
     // this prints "Hello callback!"
 }));
@@ -275,7 +275,7 @@ string SomeNetFn(string input){
     return $"Recvd: {input}";
 }
 
-JS.Set("someNetFn", Callback.CreateOne<string, string>(SomeNetFn));
+JS.Set("someNetFn", Callback.CreateOne(SomeNetFn));
 ```
 ```js
 // in Javascript
@@ -291,10 +291,11 @@ Under the hood, BlazorJS is returning a Promise to Javascript when the method is
 ```cs
 async Task<string> SomeNetFnAsync(string input)
 {
+    await Task.Delay(1000);
     return $"Recvd: {input}";
 }
 
-JS.Set("someNetFnAsync", Callback.CreateOne<string, string>(SomeNetFnAsync));
+JS.Set("someNetFnAsync", Callback.CreateOne(SomeNetFnAsync));
 ```
 ```js
 // in Javascript

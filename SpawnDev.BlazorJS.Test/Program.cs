@@ -53,41 +53,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 #if DEBUG && true
 var host = builder.Build();
-//// 
-async Task<string> tt(string fruit)
-{
-    JS.Log("1 tt called:", fruit);
-    await Task.Delay(5000);
-    JS.Log("2 tt called:", fruit);
-    return $"{fruit}: apples";
-};
-JS.Set("__tt", tt);
-//var gg = tt.CallbackGet();
-
-Task jjj = null;
-object hhh = jjj;
-if (hhh is Task lll)
-{
-    var bb = true;
-}
-
-
-var pp = await JS.CallAsync<string>("returnsPromiseTest");
-
-var hh = await JS.CallAsync<string>("awaitPromiseTest", Task.FromResult("woohoo"));
-
-
-//var h1 = await JS.CallAsync<string>("awaitMethodResultPromiseTest", tt);
-
-//JS.Set("__t1", Task.FromResult("hello"));
-
-//var t1 = JS.Get<Func<string, Promise<string>>?>("__tt");
-//var ret = t1!("World!");
-//var ggg = await ret.ThenAsync();
-
-//JS.Log(">>>", ret);
-
-await host.StartBackgroundServices();
+//
 
 await host.BlazorJSRunAsync();
 #else
