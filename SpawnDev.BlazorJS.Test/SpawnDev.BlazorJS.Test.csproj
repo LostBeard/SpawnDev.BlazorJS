@@ -17,19 +17,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj" />
-	</ItemGroup>
-
-	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<ProjectReference Include="..\SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj" />
-		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
-	</ItemGroup>
-	
-	<ItemGroup Condition=" '$(Configuration)' == 'Release' ">
-		<PackageReference Include="SpawnDev.BlazorJS" Version="2.4.5" />
+		<PackageReference Include="SpawnDev.Blazor.UnitTesting" Version="2.0.2" />
 		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.4.5" />
 	</ItemGroup>
-
 
 	<!-- SpawnDev.BlazorJS.WebWorkers config -->
 	<PropertyGroup>
@@ -40,6 +30,8 @@
 		- Build time patching gives better performance and works with stricter ContentSecurityPolicy rules
 		- false - patch at runtime (current default)
 		- true  - patch during build
+		!! NOTE - Not currently compatible with PWA using an asset manifest because some assets are modified and their hash is not currently updated.
+		          This will be fixed in a fututre release.
 		-->
 		<WebWorkerPatchFramework>true</WebWorkerPatchFramework>
 	</PropertyGroup>

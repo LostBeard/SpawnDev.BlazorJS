@@ -5,40 +5,17 @@ VisualStudioVersion = 17.5.33103.201
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.Test", "SpawnDev.BlazorJS.Test\SpawnDev.BlazorJS.Test.csproj", "{CEC868CE-CF85-423F-A566-CE875EF8AEAD}"
 	ProjectSection(ProjectDependencies) = postProject
-		{009C6655-B4D3-4D16-999F-858C1534BF39} = {009C6655-B4D3-4D16-999F-858C1534BF39}
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150} = {085BD3B9-2F11-4BD0-9072-217D2A3C9150}
-		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3} = {6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS", "SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj", "{085BD3B9-2F11-4BD0-9072-217D2A3C9150}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.WebWorkers", "SpawnDev.BlazorJS.WebWorkers\SpawnDev.BlazorJS.WebWorkers.csproj", "{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}"
-	ProjectSection(ProjectDependencies) = postProject
-		{009C6655-B4D3-4D16-999F-858C1534BF39} = {009C6655-B4D3-4D16-999F-858C1534BF39}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.Blazor.UnitTesting", "SpawnDev.Blazor.UnitTesting\SpawnDev.Blazor.UnitTesting.csproj", "{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.TestNet6", "SpawnDev.BlazorJS.TestNet6\SpawnDev.BlazorJS.TestNet6.csproj", "{945B0672-0BE5-4896-8AC3-AA555F949472}"
-	ProjectSection(ProjectDependencies) = postProject
-		{009C6655-B4D3-4D16-999F-858C1534BF39} = {009C6655-B4D3-4D16-999F-858C1534BF39}
-		{085BD3B9-2F11-4BD0-9072-217D2A3C9150} = {085BD3B9-2F11-4BD0-9072-217D2A3C9150}
-		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F} = {DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.TestNet7", "SpawnDev.BlazorJS.TestNet7\SpawnDev.BlazorJS.TestNet7.csproj", "{22080D27-878A-4BA7-8CF6-FC59D28386E5}"
-	ProjectSection(ProjectDependencies) = postProject
-		{009C6655-B4D3-4D16-999F-858C1534BF39} = {009C6655-B4D3-4D16-999F-858C1534BF39}
-		{085BD3B9-2F11-4BD0-9072-217D2A3C9150} = {085BD3B9-2F11-4BD0-9072-217D2A3C9150}
-		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F} = {DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.WebWorkers.Build", "SpawnDev.BlazorJS.WebWorkers.Build\SpawnDev.BlazorJS.WebWorkers.Build.csproj", "{009C6655-B4D3-4D16-999F-858C1534BF39}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DB2825E7-258E-4091-9940-03859A3CD4B5}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpawnDev.BlazorJS.Demo", "SpawnDev.BlazorJS.Demo\SpawnDev.BlazorJS.Demo.csproj", "{CAC3D541-0F24-4B07-8527-BDED4B574518}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,26 +31,10 @@ Global
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D4CCD8D-47E3-47CA-B583-08DAF6D911F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB0688A7-F3CC-45D3-B2A6-896D21DDFA6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{945B0672-0BE5-4896-8AC3-AA555F949472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{945B0672-0BE5-4896-8AC3-AA555F949472}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{945B0672-0BE5-4896-8AC3-AA555F949472}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{945B0672-0BE5-4896-8AC3-AA555F949472}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22080D27-878A-4BA7-8CF6-FC59D28386E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22080D27-878A-4BA7-8CF6-FC59D28386E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22080D27-878A-4BA7-8CF6-FC59D28386E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22080D27-878A-4BA7-8CF6-FC59D28386E5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{009C6655-B4D3-4D16-999F-858C1534BF39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{009C6655-B4D3-4D16-999F-858C1534BF39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{009C6655-B4D3-4D16-999F-858C1534BF39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{009C6655-B4D3-4D16-999F-858C1534BF39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAC3D541-0F24-4B07-8527-BDED4B574518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC3D541-0F24-4B07-8527-BDED4B574518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC3D541-0F24-4B07-8527-BDED4B574518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC3D541-0F24-4B07-8527-BDED4B574518}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
