@@ -7,7 +7,7 @@ using Array = SpawnDev.BlazorJS.JSObjects.Array;
 namespace SpawnDev.BlazorJS.Reflection
 {
     /// <summary>
-    /// Client and server implementation for remotely calling .Net methods using SimplePeer
+    /// Client and server implementation for remotely calling .Net methods
     /// </summary>
     public abstract class RemoteDispatcher : AsyncCallDispatcherSlim, IDisposable
     {
