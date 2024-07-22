@@ -24,7 +24,7 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 - Get and set Javascript object properties as well as access methods
 - Easily pass .Net methods to Javascript using JSEventCallback, Callback.Create or Callback.CreateOne methods
 - Easily wrap your Javascript objects for direct manipulation from Blazor (No javascript required!)
-- - Create a class that inherits from JSObject and define the methods, properties, events, and constructors.
+- - Create a class that inherits from [JSObject](#jsobject-base-class) and define the methods, properties, events, and constructors.
 - Supports [Promise](#promise), [Union](#union) method parameters, and passing [undefined](#undefined) to Javascript
 - Supports Tuple, ValueTuple serialization to and from a Javascript Array
 
