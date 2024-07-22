@@ -293,7 +293,7 @@ Recvd: Hello callback!
 ```
 
 # JSObjects
-Over 350 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfaces are designed to match the Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
+Over 350 Javascript types are ready to go in **SpawnDev.BlazorJS**. The classes are designed to match the Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
 
 ## HTMLVideoElement
 From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement):  
