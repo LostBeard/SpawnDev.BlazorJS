@@ -17,7 +17,7 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 - Supports all web browser [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
 - - If we missed anything, open an issue and it will be updated ASAP.
 - Supports all web browser Javascript data types
-- - Over 350 strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, Atomics, TypedArrays, and Promises allow direct interaction with Javascript
+- - Over 350 strongly typed [JSObject](#jsobjects) wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, Atomics, TypedArrays, and Promises allow direct interaction with Javascript
 - Use Javascript libraries in Blazor without writing any Javascript code
 - BlazorJSRuntime wraps the default JSRuntime adding additional functionality
 - Create new Javascript objects directly from Blazor
@@ -289,7 +289,7 @@ Recvd: Hello callback!
 ```
 
 # JSObjects
-Over 350 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfaces are designed to match thte Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
+Over 350 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfaces are designed to match the Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
 
 ## HTMLVideoElement
 From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement):  
