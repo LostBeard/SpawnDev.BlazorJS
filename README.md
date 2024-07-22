@@ -5,9 +5,7 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 
 **[SpawnDev.BlazorJS.WebWorkers](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers)** is now in a separate repo [here.](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers)
 
-[Documentation](https://lostbeard.github.io/blazorjs-docs/)  
-[Edit Documentation](https://github.com/LostBeard/blazorjs-docs)  
-[Demo](https://blazorjs.spawndev.com/)  
+[Live Demo](https://blazorjs.spawndev.com/)  
 
 ### Supported .Net Versions
 - Blazor WebAssembly .Net 6, 7, and 8 
