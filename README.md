@@ -14,17 +14,19 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 - - Tested VS Template: Blazor Web App (Interactive WebAssembly mode without prerendering)
 
 ### Features:
-- Full support for all [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API). If we missed anything, open an issue and it will be updated ASAP.
-- Over 350 strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, Atomics, TypedArrays, and Promises allow direct interaction with Javascript
+- Supports all web browser [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
+- - If we missed anything, open an issue and it will be updated ASAP.
+- Supports all web browser Javascript data types
+- - Over 350 strongly typed JSObject wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, Atomics, TypedArrays, and Promises allow direct interaction with Javascript
 - Use Javascript libraries in Blazor without writing any Javascript code
 - BlazorJSRuntime wraps the default JSRuntime adding additional functionality
 - Create new Javascript objects directly from Blazor
 - Get and set Javascript object properties as well as access methods
 - Easily pass .Net methods to Javascript using JSEventCallback, Callback.Create or Callback.CreateOne methods
-- 2 options for wrapping your Javascript objects for direct manipulation from Blazor (No javascript required!)
-- - Create a class that inherits JSObject and defines the methods, properties, events, and constructors of your Javascript object (best option)
-- - Create an interface that implements IJSObject and defines the methods and properties of your Javascript object (more limited than JSObject option)
-- Supports Promises, Union method parameters, passing undefined to Javascript, and more
+- Easily wrap your Javascript objects for direct manipulation from Blazor (No javascript required!)
+- - Create a class that inherits from JSObject and define the methods, properties, events, and constructors.
+- Supports [Promise](#promise), [Union](#union) method parameters, and passing [undefined](#undefined) to Javascript
+- Supports Tuple, ValueTuple serialization to and from a Javascript Array
 
 # Issues and Feature requests
 I'm here to help. If you find a bug or missing properties, methods, or Javascript objects please submit an issue [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. I will help as soon as possible.
@@ -286,38 +288,12 @@ await someNetFnAsync('Hello callback!');
 Recvd: Hello callback!
 ```
 
-# IJSObject Interface
-SpawnDev.BlazorJS can now wrap Javascript objects using interfaces. Just like objects derived from the JSObject class, IJSObject interfaces internally use IJSInProcessObjectReference to wrap a Javascript object for direct manipulation and can be passed to and from Javascript. The main difference is IJSObjects use DispatchProxy to implement the desired interface at runtime instead of requiring a type that inherits JSObject. Currently SpawnDev.BlazorJS does not provide any interfaces for Javascript objects or APIs but interfaces are simple to set up.
-
-IJSObject Example
-```cs
-// create an interface for your Javascript object that implements IJSObject
-public interface IWindow : IJSObject 
-{
-    string Name { get; set; }
-    void Alert(string msg = "");
-    // ...
-}
-
-// use your IJSObject interface to interact with the Javascript object
-public void IJSObjectInterfaceTest() 
-{
-    var w = JS.Get<IWindow>("window");
-    var randName = Guid.NewGuid().ToString();
-    // directly set the window.name property
-    w.Name = randName;
-    // verify the read back
-    if (w.Name != randName) throw new Exception("Interface property set/get failed");
-}
-```
-
 # JSObjects
 Over 350 Javascript types are ready to go in **SpawnDev.BlazorJS**. The interfaces are designed to match thte Javascript [Web API interfaces](https://developer.mozilla.org/en-US/docs/Web/API#interfaces) as closely as possible. Below are some examples.
 
 ## HTMLVideoElement
 From [HTMLVideoElement on MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement):  
 > Implemented by the \<video> element, the HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.
-
 
 Example using SpawnDev.BlazorJS.JSObjects.HTMLVideoElement  
 
@@ -549,7 +525,7 @@ From [Atomics on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Re
 
 JSObjects are wrappers around IJSInProcessReference objects that can be passed to and from Javascript and allow strongly typed access to the underlying object.
 
-JSObject type wrapper example (same as the IJSObject interface example above but with JSObject)
+JSObject type wrapper example
 ```cs
 // create a class for your Javascript object that inherits from JSObject
 public class Window : JSObject 
