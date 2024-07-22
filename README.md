@@ -148,14 +148,14 @@ IJSInProcessObjectReference worker = JS.New("Worker", myWorkerScript);
 
 # JSEventCallback
 
-Now used extensively throughout the JSObject collection, JSEventCallback allows a clean .Net style way to add and remove .Net callbacks for Javascript events.
+Used throughout the JSObject collection, JSEventCallback allows a clean .Net style way to add and remove .Net callbacks for Javascript events.
 
 With JSEventCallback the operands += and -= can be used to attach and detach .Net callbacks to Javascript events. All reference handling is done automatically when events are added and removed.
 
 Example taken from the Window JSObject class which inherits from EventTarget.
 ```cs
 // This is how JSEventCallback is implemented in the Window class
-public JSEventCallback<StorageEvent> OnStorage { get => new JSEventCallback<StorageEvent>(o => AddEventListener("storage", o), o => RemoveEventListener("storage", o)); set { /** set MUST BE HERE TO ENABLE += -= operands **/ } }
+public JSEventCallback<StorageEvent> OnStorage { get => new JSEventCallback<StorageEvent>("storage", AddEventListener, RemoveEventListener); set { } }
 ```
 
 Example event attach detach
@@ -174,10 +174,14 @@ void DetachEventHandlersExample()
     // IMPORTANT - detaching is important for preventing resource leaks. .Net references are only released when the reference count reaches zero (same number of -= as += used)
     window.OnStorage -= Window_OnStorage;
 }
+void Window_OnStorage(StorageEvent storageEvent)
+{
+    Console.WriteLine($"StorageEvent");
+}
 ```
 
 ### JSEventCallback arguments are optional
-Methods attached using JSEventCallbacks are strongly typed, and like Javascript, all arguments are optional. This will improve performance as unused variables will not be brought into Blazor during the event.
+Methods attached using JSEventCallbacks are strongly typed and, like Javascript, all arguments are optional. This can improve performance as unused variables will not be brought into Blazor during the event.
 
 Example event attach detach (from above) without using any callback arguments.
 ```cs
