@@ -3,11 +3,7 @@
 
 Full Blazor WebAssembly and Javascript interop. Create, access properties, call methods, and add/remove event handlers of any Javascript objects the .Net way without writing Javascript.  
 
-# NuGet
-| Package | Description |
-|---------|-------------|
-|**[SpawnDev.BlazorJS](https://github.com/LostBeard/SpawnDev.BlazorJS)** <br /> [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS)| Full Blazor WebAssembly Javascript interop | 
-|**[SpawnDev.BlazorJS.WebWorkers](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers)** <br /> [![NuGet version](https://badge.fury.io/nu/SpawnDev.BlazorJS.WebWorkers.svg)](https://www.nuget.org/packages/SpawnDev.BlazorJS.WebWorkers)| Blazor WASM WebWorkers, SharedWebWorkers, and ServiceWorker |
+**[SpawnDev.BlazorJS.WebWorkers](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers)** is now in a separate repo [here.](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers)
 
 [Documentation](https://lostbeard.github.io/blazorjs-docs/)  
 [Edit Documentation](https://github.com/LostBeard/blazorjs-docs)  
