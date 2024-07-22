@@ -11,17 +11,13 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 
 [Documentation](https://lostbeard.github.io/blazorjs-docs/)  
 [Edit Documentation](https://github.com/LostBeard/blazorjs-docs)  
-[Live Demo](https://blazorjs.spawndev.com/)  
+[Demo](https://blazorjs.spawndev.com/)  
 
 ### Supported .Net Versions
 - Blazor WebAssembly .Net 6, 7, and 8 
 - - Tested VS Template: Blazor WebAssembly Standalone App
 - Blazor United .Net 8 (in WebAssembly project only) 
 - - Tested VS Template: Blazor Web App (Auto or WebAssembly interactive mode)
-
-For more information about Blazor types:  
-[Blazor: versions, benefits and when to use it
-](https://www.c-sharpcorner.com/article/blazor-versions-benefits-and-when-to-use-it/)
 
 ### Features:
 - Full support for all [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API). If you find anything in the Web API we have missed, open an issue and it will be updated ASAP.
@@ -620,7 +616,7 @@ window.Alert("Hello!");
 SpawnDev.BlazorJS.JSObjects.Promise - is a JSObject wrapper for the Javascript Promise class.
 Promises can be created in .Net to wrap async methods or Tasks. They are essentially Javascript's version of Task.
 
-Create Promise from lambda
+Create Promise from lambda method
 ```cs
 var promise = new Promise(async () => {
     await Task.Delay(5000);
@@ -628,7 +624,7 @@ var promise = new Promise(async () => {
 // pass to Javascript api
 
 ```
-Create Promise from lambda with return value
+Create Promise from lambda method with return value
 ```cs
 var promise = new Promise<string>(async () => {
     await Task.Delay(5000);
@@ -677,18 +673,24 @@ Instead of this (simple but not as reusable)
 var audio = JS.New("Audio", "https://some_audio_online");
 audio.CallVoid("play");
 ```
+
 You can do this...  
-Create a custom JSObject wrapper
+Create a custom Audio JSObject wrapper (Example only. Already exists.)
 ```cs
 public class Audio : JSObject
 {
+    // deserialization constructor
     public Audio(IJSInProcessObjectReference _ref) : base(_ref) { }
+    
+    // constructor that accepts a string url
     public Audio(string url) : base(JS.New("Audio", url)) { }
+    
+    // method decalaration
     public void Play() => JSRef.CallVoid("play");
 }
 ```
 
-Then use your new object
+Then use the Audio JSObject
 ```cs
 var audio = new Audio("https://some_audio_online");
 audio.Play();
