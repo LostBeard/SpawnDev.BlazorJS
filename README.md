@@ -631,7 +631,7 @@ Create Promise from Task
 var taskSource = new TaskCompletionSource<string>();
 var promise = new Promise<string>(taskSource.Task);
 // pass to Javascript api
-...
+
 // then later resolve
 taskSource.TrySetResult("Hello world!");
 ```
