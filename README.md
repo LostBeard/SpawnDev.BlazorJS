@@ -779,7 +779,7 @@ IJSInProcessObjectReference does not dispose of interop resources with a finaliz
 IDisposable objects returned from a WebWorker or SharedWorker service are automatically disposed after the data has been sent to the calling thread.
 
 # Support for You
-Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers/issues) on GitHub. Create a new discussion to show off your projects and post your ideas. We are always here to help.
+Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. Create a new [discussion](https://github.com/LostBeard/SpawnDev.BlazorJS/discussions) to show off your projects and post your ideas. We are always here to help.
 
 # Support for Us
 Sponsor us via Github Sponsors to give us more time to work on SpawnDev.BlazorJS.WebWorkers and other open source projects. Or buy us a cup of coffee via Paypal. All support is greatly appreciated! ♥
