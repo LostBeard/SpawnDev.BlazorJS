@@ -778,18 +778,16 @@ IJSInProcessObjectReference does not dispose of interop resources with a finaliz
 
 IDisposable objects returned from a WebWorker or SharedWorker service are automatically disposed after the data has been sent to the calling thread.
 
-# Support
+# Support for You
+Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers/issues) on GitHub. Create a new discussion to show off your projects and post your ideas. We are always here to help.
 
-Consider sponsoring me to give me more time to work on SpawnDev.BlazorJS and other open source projects.
-[Sponsor](https://github.com/sponsors/LostBeard)
+# Support for Us
+Sponsor us via Github Sponsors to give us more time to work on SpawnDev.BlazorJS.WebWorkers and other open source projects. Or buy us a cup of coffee via Paypal. All support is greatly appreciated! ♥
 
-[SpawnDev Discord](https://discord.gg/UkGfHtRdSt)
+![GitHub Sponsor](https://img.shields.io/github/sponsors/LostBeard?label=Sponsor&logo=GitHub&color=%23fe8e86)   [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7QTATH4UGGY9U)
 
-Buy me a coffee 
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=7QTATH4UGGY9U)
-
-Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub.
+# Thanks
+Thank you to everyone who has helped support SpawnDev.BlazorJS and related projects financially, by filing issues, and by improving the code. Every little contribution helps!
 
 # Demos
 BlazorJS and WebWorkers Demo  
