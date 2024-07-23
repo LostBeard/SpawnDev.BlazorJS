@@ -784,7 +784,7 @@ Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/iss
 # Support for Us
 Sponsor us via Github Sponsors to give us more time to work on SpawnDev.BlazorJS.WebWorkers and other open source projects. Or buy us a cup of coffee via Paypal. All support is greatly appreciated! ♥
 
-[![GitHub Sponsor](https://img.shields.io/github/sponsors/<username>?label=Sponsor&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/LostBeard)
+[![GitHub Sponsor](https://img.shields.io/github/sponsors/LostBeard?label=Sponsor&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/LostBeard)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7QTATH4UGGY9U)
 
 # Thanks
