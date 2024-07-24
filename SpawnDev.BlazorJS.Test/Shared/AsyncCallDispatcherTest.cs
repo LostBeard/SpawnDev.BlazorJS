@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.Reflection
+﻿using SpawnDev.BlazorJS.WebWorkers;
+
+namespace SpawnDev.BlazorJS.Test
 {
     public interface IAsyncCallDispatcherTest
     {
