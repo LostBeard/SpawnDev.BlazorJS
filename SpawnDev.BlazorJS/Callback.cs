@@ -48,8 +48,6 @@ namespace SpawnDev.BlazorJS
         /// If true the Callback will be disposed after the first call
         /// </summary>
         protected bool once { get; private set; } = false;
-        [JsonInclude]
-        protected bool _isAsync { get; private set; } = false;
         /// <summary>
         /// Create a new instance
         /// </summary>
@@ -73,7 +71,6 @@ namespace SpawnDev.BlazorJS
                     _paramTypes[i] = (int)jsCallResultType;
                 }
                 _returnVoid = methodInfo.ReturnType == typeof(void);
-                _isAsync = methodInfo.ReturnType.IsAsync();
             }
             this.once = once;
         }

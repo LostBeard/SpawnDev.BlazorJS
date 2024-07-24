@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 
 namespace SpawnDev.BlazorJS
