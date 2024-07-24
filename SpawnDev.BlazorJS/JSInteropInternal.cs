@@ -1,7 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
-using System.Data;
 
 namespace SpawnDev.BlazorJS
 {

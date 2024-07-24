@@ -6,32 +6,6 @@ using System.Text.Json;
 
 namespace SpawnDev.BlazorJS
 {
-    // unnecessary
-    internal enum StartupState
-    {
-        None,
-        ShouldStart,
-    }
-    /// <summary>
-    /// IAsyncServices have a Ready Task property that completes successfully when the service is ready for use.<br/>
-    /// </summary>
-    public interface IAsyncService
-    {
-        /// <summary>
-        /// Completes successfully when asynchronous initialization has completed
-        /// </summary>
-        Task Ready { get; }
-    }
-    /// <summary>
-    /// IBackgroundServices are started at app startup by default
-    /// or started based on GlobalScope settings when registered and the current global scope<br/>
-    /// </summary>
-    public interface IBackgroundService { }
-    /// <summary>
-    /// IAsyncBackgroundServices are IAsyncServices started at app startup by default
-    /// or started based on GlobalScope settings when registered and the current global scope<br/>
-    /// </summary>
-    public interface IAsyncBackgroundService : IBackgroundService, IAsyncService { }
     /// <summary>
     /// SpawnDev.BlazorJS IServiceCollection extension methods
     /// </summary>

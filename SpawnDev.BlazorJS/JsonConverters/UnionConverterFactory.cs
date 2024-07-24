@@ -1,7 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using System.Collections;
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Array = SpawnDev.BlazorJS.JSObjects.Array;
