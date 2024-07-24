@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// An audio track consists of a stream of audio samples, each sample representing a captured moment of sound. An AudioData object is a representation of such a sample. Working alongside the interfaces of the Insertable Streams API, you can break a stream into individual AudioData objects with MediaStreamTrackProcessor, or construct an audio track from a stream of frames with MediaStreamTrackGenerator.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/AudioData
     /// </summary>
+    [Transferable]
     public class AudioData : JSObject
     {
         /// <summary>

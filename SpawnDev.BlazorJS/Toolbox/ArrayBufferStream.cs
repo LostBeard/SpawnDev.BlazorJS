@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
+    /// <summary>
+    /// Provides access to an ArrayBuffer as a Stream
+    /// </summary>
     public class ArrayBufferStream : Stream
     {
         public override bool CanRead => Source != null;

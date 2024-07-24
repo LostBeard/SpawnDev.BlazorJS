@@ -7,6 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// TransformStream is a transferable object.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/TransformStream
     /// </summary>
+    [Transferable]
     public class TransformStream : JSObject
     {
         /// <summary>

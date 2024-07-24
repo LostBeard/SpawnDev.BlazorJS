@@ -6,6 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The WritableStream interface of the Streams API provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/WritableStream
     /// </summary>
+    [Transferable]
     public class WritableStream : JSObject
     {
         /// <summary>

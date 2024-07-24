@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace SpawnDev.BlazorJS
 {
@@ -25,11 +24,6 @@ namespace SpawnDev.BlazorJS
         public bool ImplementsIBackgroundService { get; private set; }
         public bool ImplementsIAsyncBackgroundService { get; private set; }
         public bool CurrentScopeAutoStart { get; private set; }
-        //public List<(Type, object?)> DependencyTypes { get; private set; }
-        //public int DependencyOrder { get; set; } = -1;
-        //public Type? DependencyOfType { get; set; }
-        //public bool InitAsyncCalled { get; set; }
-        //public ConstructorInfo? ConstructorInfo { get; private set; }
         public object? GetService(IServiceProvider serviceProvider)
         {
             object? service = null;
@@ -86,11 +80,7 @@ namespace SpawnDev.BlazorJS
             ServiceAutoStartScope = serviceAutoStartScope;
             ImplementsIAsyncBackgroundService = isIAsyncBackgroundService;
             ImplementsIBackgroundService = isIBackgroundService;
-            CurrentScopeAutoStart = shouldStart;// ? StartupState.ShouldStart : StartupState.None;
-            // Find the constructor and required services
-            //GetBestConstructor(serviceCollection, ImplementationType, out var constructorInfo, out var requiredServices);
-            //DependencyTypes = requiredServices;
-            //ConstructorInfo = constructorInfo;
+            CurrentScopeAutoStart = shouldStart;
         }
     }
 }

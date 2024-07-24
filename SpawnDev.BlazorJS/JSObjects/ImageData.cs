@@ -7,6 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// It is created using the ImageData() constructor or creator methods on the CanvasRenderingContext2D object associated with a canvas: createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData().<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/ImageData
     /// </summary>
+    [Transferable]
     public class ImageData : JSObject
     {
         #region Constructors
