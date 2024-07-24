@@ -21,25 +21,55 @@ namespace SpawnDev.BlazorJS
         public static BlazorJSRuntime JS { get; internal set; }
         internal static JsonSerializerOptions? RuntimeJsonSerializerOptions { get; private set; }
         /// <summary>
-        /// If the globalThis is Window instance, WindowThis will refer be that window instance
+        /// globalThis JSObject instance
+        /// </summary>
+        public JSObject GlobalThis { get; private set; }
+        /// <summary>
+        /// If the globalThis is a Window, WindowThis will refer to globalThis, otherwise null.
         /// </summary>
         public Window? WindowThis { get; private set; } = null;
+        /// <summary>
+        /// If the globalThis is a DedicatedWorkerGlobalScope, DedicateWorkerThis will refer to globalThis, otherwise null.
+        /// </summary>
         public DedicatedWorkerGlobalScope? DedicateWorkerThis { get; private set; } = null;
+        /// <summary>
+        /// If the globalThis is a SharedWorkerGlobalScope, SharedWorkerThis will refer to globalThis, otherwise null.
+        /// </summary>
         public SharedWorkerGlobalScope? SharedWorkerThis { get; private set; } = null;
+        /// <summary>
+        /// If the globalThis is a ServiceWorkerGlobalScope, ServiceWorkerThis will refer to globalThis, otherwise null.
+        /// </summary>
         public ServiceWorkerGlobalScope? ServiceWorkerThis { get; private set; } = null;
         /// <summary>
         /// globalThis.constructor?.name ?? ""
         /// </summary>
         public string GlobalThisTypeName { get; private set; } = "";
-        public JSObject GlobalThis { get; private set; }
+        /// <summary>
+        /// Returns true if globalThis is a Window
+        /// </summary>
         public bool IsWindow => GlobalThis is Window;
+        /// <summary>
+        /// Returns true if globalThis is a DedicatedWorkerGlobalScope, SharedWorkerGlobalScope, or a ServiceWorkerGlobalScope
+        /// </summary>
         public bool IsWorker => IsDedicatedWorkerGlobalScope || IsSharedWorkerGlobalScope || IsServiceWorkerGlobalScope;
+        /// <summary>
+        /// Returns true if globalThis is a DedicatedWorkerGlobalScope
+        /// </summary>
         public bool IsDedicatedWorkerGlobalScope => GlobalThis is DedicatedWorkerGlobalScope;
+        /// <summary>
+        /// Returns true if globalThis is a SharedWorkerGlobalScope
+        /// </summary>
         public bool IsSharedWorkerGlobalScope => GlobalThis is SharedWorkerGlobalScope;
+        /// <summary>
+        /// Returns true if globalThis is a ServiceWorkerGlobalScope
+        /// </summary>
         public bool IsServiceWorkerGlobalScope => GlobalThis is ServiceWorkerGlobalScope;
+        /// <summary>
+        /// GlobalScope enum
+        /// </summary>
         public GlobalScope GlobalScope { get; private set; } = GlobalScope.None;
         /// <summary>
-        /// A new Guid instance id generated when the app starts
+        /// A new instance id generated when the app starts
         /// </summary>
         public string InstanceId { get; }
         Performance? Performance { get; }
@@ -197,19 +227,27 @@ namespace SpawnDev.BlazorJS
             }
             return false;
         }
-
+        /// <summary>
+        /// The Environment version
+        /// </summary>
         public string EnvironmentVersion { get; } = Environment.Version.ToString();
+        /// <summary>
+        /// The .Net version
+        /// </summary>
         public string FrameworkVersion { get; } = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Replace(".NET", "", StringComparison.OrdinalIgnoreCase).Trim();
+        /// <summary>
+        /// Returns the Informational version of the BlazorJSRuntime Assembly
+        /// </summary>
         public string InformationalVersion { get; } = typeof(JSObject).Assembly.GetAssemblyInformationalVersion();
         /// <summary>
         /// Returns the Assembly File Version of the SpawnDev.BlazorJS
         /// </summary>
         public string FileVersion { get; } = typeof(JSObject).Assembly.GetAssemblyFileVersion();
-
-        public void DisposeCallback(string callbackerID) => JSInterop.DisposeCallbacker(callbackerID);
-
-        //public AsyncIterator? GetAsyncIterator(IJSInProcessObjectReference targetObject) => targetObject.Get<AsyncIterator?>("Symbol.asyncIterator");
-
+        /// <summary>
+        /// Internal dispose callback method
+        /// </summary>
+        /// <param name="callbackID"></param>
+        internal void DisposeCallback(string callbackID) => JSInterop.DisposeCallbacker(callbackID);
         /// <summary>
         /// Load a non-module script if a specified global var is not defined.
         /// </summary>
