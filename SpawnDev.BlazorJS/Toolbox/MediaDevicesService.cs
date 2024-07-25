@@ -1,6 +1,6 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
 
-namespace SpawnDev.BlazorJS.SpeerNet
+namespace SpawnDev.BlazorJS.Toolbox
 {
     /// <summary>
     /// Provides access to navigator.mediaDevices
@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS.SpeerNet
         /// <summary>
         /// navigator.mediaDevices
         /// </summary>
-        public MediaDevices MediaDevices { get; private set; }
+        public MediaDevices? MediaDevices { get; private set; }
         /// <summary>
         /// Current list of MediaDeviceInfo
         /// </summary>
@@ -60,12 +60,28 @@ namespace SpawnDev.BlazorJS.SpeerNet
         /// Returns true if a device has been seen without an empty label
         /// </summary>
         public bool DevicesSeenUnhidden { get; private set; } = false;
+        /// <summary>
+        /// An event related to a MediaDeviceInfo
+        /// </summary>
+        /// <param name="mediaDeviceInfo"></param>
         public delegate void MediaDeviceInfoEvent(MediaDeviceInfo mediaDeviceInfo);
-        public event MediaDeviceInfoEvent OnMediaDeviceFound;
-        public event MediaDeviceInfoEvent OnMediaDeviceLost;
-        public delegate void DeviceInfosChangedDelegate();
-        public event DeviceInfosChangedDelegate OnDeviceInfosChanged;
+        /// <summary>
+        /// Occurs when a MediaDeviceInfo has been removed
+        /// </summary>
+        public event MediaDeviceInfoEvent OnMediaDeviceFound = default!;
+        /// <summary>
+        /// Occurs when a MediaDeviceInfo has been added
+        /// </summary>
+        public event MediaDeviceInfoEvent OnMediaDeviceLost = default!;
+        /// <summary>
+        /// Occurs when the DeviceInfos, or an object it contains, has been modified
+        /// </summary>
+        public event Action OnDeviceInfosChanged = default!;
         private BlazorJSRuntime JS;
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="js"></param>
         public MediaDevicesService(BlazorJSRuntime js)
         {
             JS = js;
@@ -132,7 +148,7 @@ namespace SpawnDev.BlazorJS.SpeerNet
         /// Returns a list of supported known audio types using MediaRecorder.IsTypeSupported
         /// </summary>
         public List<string> MediaRecorderAudioFormats => _MediaRecorderAudioFormats.Value;
-        public Lazy<List<string>> _MediaRecorderAudioVideoFormats = new Lazy<List<string>>(() =>
+        private Lazy<List<string>> _MediaRecorderAudioVideoFormats = new Lazy<List<string>>(() =>
         {
             var supportAudioVideoFormats = new List<string>();
             foreach (var videoType in VideoTypes)
@@ -182,7 +198,7 @@ namespace SpawnDev.BlazorJS.SpeerNet
         /// <returns></returns>
         public async Task<bool> UpdateDeviceList(bool allowAsk = false, bool video = true, bool audio = true)
         {
-            if (!MediaShareSupported) return false;
+            if (MediaDevices == null) return false;
             var areDevicesHidden = await MediaDevices.AreDevicesHidden();
             try
             {
@@ -220,6 +236,7 @@ namespace SpawnDev.BlazorJS.SpeerNet
         }
         private async Task _UpdateDeviceList()
         {
+            if (MediaDevices == null) return;
             var oldDeviceInfos = DeviceInfos;
             var oldDeviceIds = DeviceInfos.Select(o => o.DeviceId).ToList();
             var newDeviceInfos = (await MediaDevices.EnumerateDevices()).Where(o => !string.IsNullOrEmpty(o.DeviceId) && !string.IsNullOrEmpty(o.Label)).ToList();
