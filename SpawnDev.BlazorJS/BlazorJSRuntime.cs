@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace SpawnDev.BlazorJS
@@ -141,7 +142,9 @@ namespace SpawnDev.BlazorJS
         }
         internal BlazorJSRuntime()
         {
-            InstanceId = Guid.NewGuid().ToString();
+            var id = Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
+            var chunkSize = 4;
+            InstanceId = string.Join("-", Enumerable.Range(0, id.Length / chunkSize).Select(i => id.Substring(i * chunkSize, chunkSize)));
             if (IsUndefined("globalThis.constructor") && !IsUndefined("window"))
             {
                 // this happens in Firefox context scripts. They are running in a Window global scope
