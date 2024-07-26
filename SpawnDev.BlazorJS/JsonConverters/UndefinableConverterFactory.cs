@@ -4,15 +4,23 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
+    /// <summary>
+    /// Undefinable JsonConverter factory
+    /// </summary>
     public class UndefinableConverterFactory : JsonConverterFactory
     {
+        /// <summary>
+        /// Returns true if the type can be converted
+        /// </summary>
         public override bool CanConvert(Type typeToConvert)
         {
             if (typeToConvert.IsGenericType && typeToConvert.GetGenericTypeDefinition() == typeof(Undefinable<>)) return true;
             if (typeToConvert == typeof(Undefinable)) return true;
             return false;
         }
-
+        /// <summary>
+        /// Returns a new JsonConverter
+        /// </summary>
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
 
@@ -30,19 +38,22 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return null;
         }
     }
-
+    /// <summary>
+    /// Undefinable JsonConverter
+    /// </summary>
     public class UndefinableConverter<T> : JsonConverter<Undefinable<T>>
     {
-        public override bool CanConvert(Type typeToConvert)
-        {
-            var ret = typeToConvert.IsGenericType && typeToConvert.GetGenericTypeDefinition() == typeof(Undefinable<>);
-            return ret;
-        }
+        /// <summary>
+        /// Reads the type value from the Json reader
+        /// </summary>
         public override Undefinable<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = JsonSerializer.Deserialize<T?>(ref reader, options);
             return new Undefinable<T>(value);
         }
+        /// <summary>
+        /// Writes the type value to the Json reader
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, Undefinable<T> value, JsonSerializerOptions options)
         {
             if (value == null || value.IsUndefined)
@@ -52,20 +63,25 @@ namespace SpawnDev.BlazorJS.JsonConverters
             }
             else
             {
-                JsonSerializer.Serialize(writer, (T)value.Value, options);
+                JsonSerializer.Serialize(writer, (T)value.Value!, options);
             }
         }
     }
+    /// <summary>
+    /// Undefinable JsonConverter
+    /// </summary>
     public class UndefinableConverter : JsonConverter<Undefinable>
     {
-        public override bool CanConvert(Type typeToConvert)
-        {
-            return typeToConvert == typeof(Undefinable);
-        }
+        /// <summary>
+        /// Reads the type value from the Json reader
+        /// </summary>
         public override Undefinable Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             throw new Exception("Deserialization of type Undefinable is not supported. It is designed for use as a method parameter type.");
         }
+        /// <summary>
+        /// Writes the type value to the Json reader
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, Undefinable value, JsonSerializerOptions options)
         {
             if (value == null || value.IsUndefined)

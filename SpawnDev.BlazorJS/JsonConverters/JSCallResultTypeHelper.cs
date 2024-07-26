@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         static Dictionary<Type, MethodInfo> FromGenericTypedCache = new Dictionary<Type, MethodInfo>();
         static MethodInfo GetFromGenericTyped(Type type)
         {
-            MethodInfo result;
+            MethodInfo? result;
             if (FromGenericTypedCache.TryGetValue(type, out result)) return result;
             if (FromGenericMethodInfo == null)
             {

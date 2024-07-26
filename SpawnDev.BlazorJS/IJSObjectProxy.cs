@@ -36,7 +36,7 @@ namespace SpawnDev.BlazorJS
                 }).ToList();
                 _GetInterfaceInfo = infos.FirstOrDefault();
             }
-            var methodInfoTyped = _GetInterfaceInfo.MakeGenericMethod(type);
+            var methodInfoTyped = _GetInterfaceInfo!.MakeGenericMethod(type);
             GetInterfaceCache[type] = methodInfoTyped;
             return methodInfoTyped;
         }
@@ -45,7 +45,7 @@ namespace SpawnDev.BlazorJS
         {
             var mi = GetGetInterfaceGeneric(interfaceType);
             var ret = mi.Invoke(null, new object[] { _ref });
-            return ret;
+            return ret!;
         }
 #endif
 

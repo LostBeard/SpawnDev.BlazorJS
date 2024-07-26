@@ -5,18 +5,21 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
+    /// <summary>
+    /// IJSObject JsonConverter factory
+    /// </summary>
     public class IJSObjectConverterFactory : JsonConverterFactory
     {
+        /// <summary>
+        /// Returns true if the type can be converted
+        /// </summary>
         public override bool CanConvert(Type type)
-        {
-            return CanConvertType(type);
-        }
-
-        public static bool CanConvertType(Type type)
         {
             return typeof(IJSObject).IsAssignableFrom(type);
         }
-
+        /// <summary>
+        /// Creates a JsonConverter instance
+        /// </summary>
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var converterType = typeof(IJSObjectConverter<>).MakeGenericType(new Type[] { typeToConvert });
@@ -24,18 +27,21 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return converter;
         }
     }
-    // https://github.com/dotnet/aspnetcore/blob/ccb861b89f62c445f175f6a3ca2142f93e7ce5db/src/Components/WebAssembly/JSInterop/src/WebAssemblyJSObjectReferenceJsonConverter.cs#L10
-    // WebAssemblyJSObjectReferenceJsonConverter.cs
+    /// <summary>
+    /// IJSObject JsonConverter
+    /// </summary>
     public class IJSObjectConverter<TInterface> : JSInProcessObjectReferenceConverterBase<TInterface> where TInterface : class, IJSObject
     {
-        public override bool CanConvert(Type type)
-        {
-            return typeof(TInterface).IsAssignableFrom(type);
-        }
+        /// <summary>
+        /// Converts an IJSInProcessObjectReference to the target type
+        /// </summary>
         public override TInterface? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
             return _ref == null ? null : IJSObjectProxy.GetInterface<TInterface>(_ref);
         }
+        /// <summary>
+        /// Writes value to Json stream
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options)
         {
             var obj = value as IJSObjectProxy;

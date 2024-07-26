@@ -4,41 +4,30 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
+    /// <summary>
+    /// HybridObject JsonConverter factory
+    /// </summary>
     public class HybridObjectConverterFactory : JsonConverterFactory
     {
         JsonSerializerOptions Options;
+        /// <summary>
+        /// New instance constructor
+        /// </summary>
         public HybridObjectConverterFactory(JsonSerializerOptions options)
         {
             Options = options;
         }
-        
-        // this converter is for converting class types that would normally be passed as JSON but has special property types that need to be loaded individually to work
+        /// <summary>
+        /// Returns true if the type can be converted
+        /// </summary>
         public override bool CanConvert(Type typeToConvert)
         {
             var ret = CanConvert(typeToConvert, false);
-#if DEBUG && false
-            Console.WriteLine($"HybridObjectConverterFactory.CanConvert(typeToConvert: {typeToConvert.Name} {ret})");
-#endif
             return ret;
         }
         Dictionary<Type, bool?> CanConvertAnswers = new Dictionary<Type, bool?>();
         bool CanConvert(Type typeToConvert, bool internalCall)
         {
-#if DEBUG && false
-            if (typeToConvert.Name == "TestClass")
-            {
-                var nmtt = true;
-
-            }
-            if (!internalCall)
-            {
-                Console.WriteLine($"HybridObjectConverterFactory.CanConvert(typeToConvert: {typeToConvert.Name})");
-                if ("SharedCancellationTokenSource" == typeToConvert.Name)
-                {
-                    var nmtt = true;
-                }
-            }
-#endif
             if (CanConvertAnswers.TryGetValue(typeToConvert, out var canConvertCached))
             {
                 return canConvertCached ?? false;
@@ -78,7 +67,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             CanConvertAnswers[typeToConvert] = true;
             return true;
         }
-
+        /// <summary>
+        /// Creates a JsonConverter instance
+        /// </summary>
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var converterType = typeof(HybridObjectConverter<>).MakeGenericType(typeToConvert);
@@ -89,15 +80,20 @@ namespace SpawnDev.BlazorJS.JsonConverters
     /// <summary>
     /// HybridObjectConverter allows deserializing of classes that have IJSInProcessObjectReference based properties
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class HybridObjectConverter<T> : JSInProcessObjectReferenceConverterBase<T> where T : class
     {
         List<ClassMemberJsonInfo>? classProps = null;
         JsonSerializerOptions Options;
+        /// <summary>
+        /// New instance constructor
+        /// </summary>
         public HybridObjectConverter(JsonSerializerOptions options)
         {
             Options = options;
         }
+        /// <summary>
+        /// Converts an IJSInProcessObjectReference to the target type
+        /// </summary>
         public override T? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
             if (_ref == null) return default(T);
@@ -134,6 +130,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             }
             return tmpRet;
         }
+        /// <summary>
+        /// Writes value to Json stream
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
             classProps ??= typeof(T).GetTypeJsonProperties();

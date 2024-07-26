@@ -16,8 +16,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
         /// <summary>
         /// Returns the converter, if any, that can convert the specified type
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public JsonConverter? GetJsonConverter(Type type)
         {
             foreach (var converter in _converters)
@@ -29,15 +27,10 @@ namespace SpawnDev.BlazorJS.JsonConverters
         /// <summary>
         /// Returns true if any of the converters in the collection can convert the given type
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public override bool CanConvert(Type type) => GetJsonConverter(type) != null;
         /// <summary>
         /// Creates a converter for a specified type
         /// </summary>
-        /// <param name="typeToConvert"></param>
-        /// <param name="options"></param>
-        /// <returns></returns>
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var converter = GetJsonConverter(typeToConvert);
@@ -54,8 +47,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
         /// <summary>
         /// Add new json converter or converter factory
         /// </summary>
-        /// <param name="jsonConverter"></param>
-        /// <exception cref="Exception"></exception>
         public void Add(JsonConverter jsonConverter)
         {
             if (Locked) throw new Exception("Collection is locked. JsonConverters cannot be added.");

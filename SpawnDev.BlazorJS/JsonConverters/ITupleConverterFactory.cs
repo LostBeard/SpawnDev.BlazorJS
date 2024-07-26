@@ -5,6 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
+    /// <summary>
+    /// ITuple JsonConverter factory
+    /// </summary>
     public class ITupleConverterFactory : JsonConverterFactory
     {
         static List<Type> SupportedGenericTypes = new List<Type> {
@@ -23,6 +26,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             { typeof(Tuple<,,,,,>) },
             { typeof(Tuple<,,,,,,>) },
         };
+        /// <summary>
+        /// Returns true if the type can be converted
+        /// </summary>
         public override bool CanConvert(Type typeToConvert)
         {
             // ValueType is a value type and may be wrapped in Nullable<> if it is nullable(?)
@@ -32,9 +38,11 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 typeToConvert = typeToConvert.GenericTypeArguments[0];
                 genericType = typeToConvert.IsGenericType ? typeToConvert.GetGenericTypeDefinition() : null;
             }
-            var ret = SupportedGenericTypes.Contains(genericType);
-            return ret;
+            return genericType != null && SupportedGenericTypes.Contains(genericType);
         }
+        /// <summary>
+        /// Creates a JsonConverter instance
+        /// </summary>
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var isNullable = false;
@@ -48,6 +56,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return new ITupleConverter(typeToConvert, genericType!, isNullable);
         }
     }
+    /// <summary>
+    /// ITuple JsonConverter
+    /// </summary>
     public class ITupleConverter : JSInProcessObjectReferenceConverterBase<object?>
     {
         Type ValueTupleType;
@@ -55,6 +66,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
         Type[] GenericTypes;
         bool IsNullable;
         object? defaultValue;
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public ITupleConverter(Type typeToConvert, Type valueTypeGenericType, bool isNullable)
         {
             ValueTupleType = typeToConvert;
@@ -63,6 +77,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             GenericTypes = ValueTupleType.GenericTypeArguments;
             defaultValue = ValueTupleType.GetDefaultValue();
         }
+        /// <summary>
+        /// Converts an IJSInProcessObjectReference to the target type
+        /// </summary>
         public override object? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
             if (_ref == null)
@@ -78,6 +95,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             var ret = Activator.CreateInstance(ValueTupleType, list)!;
             return ret;
         }
+        /// <summary>
+        /// Writes value to Json stream
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, object? value, JsonSerializerOptions options)
         {
             if (value != null && value is ITuple tuple)
@@ -91,7 +111,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
             }
             else
             {
-                JsonSerializer.Serialize(writer, null, options);
+                JsonSerializer.Serialize(writer, (object?)null, options);
             }
         }
     }

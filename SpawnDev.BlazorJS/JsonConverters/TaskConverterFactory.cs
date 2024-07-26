@@ -6,8 +6,14 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
+    /// <summary>
+    /// Task JsonConverter factory
+    /// </summary>
     public class TaskConverterFactory : JsonConverterFactory
     {
+        /// <summary>
+        /// Returns true if the type can be converted
+        /// </summary>
         public override bool CanConvert(Type type)
         {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
@@ -20,7 +26,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             }
             return false;
         }
-
+        /// <summary>
+        /// Returns a new JsonConverter
+        /// </summary>
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var genericTypes = typeToConvert.GetGenericArguments();
@@ -39,12 +47,14 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return null;
         }
     }
+    /// <summary>
+    /// Task JsonConverter
+    /// </summary>
     public class TaskConverter : JSInProcessObjectReferenceConverterBase<Task>
     {
-        public override bool CanConvert(Type type)
-        {
-            return type == typeof(Task);
-        }
+        /// <summary>
+        /// Converts an IJSInProcessObjectReference to the target type
+        /// </summary>
         public override Task? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
             if (_ref == null) return null;
@@ -55,6 +65,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             //});
             return ret;
         }
+        /// <summary>
+        /// Writes value to Json stream
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, Task value, JsonSerializerOptions options)
         {
             var promise = new Promise(value);
@@ -64,12 +77,14 @@ namespace SpawnDev.BlazorJS.JsonConverters
             //});
         }
     }
+    /// <summary>
+    /// Task&lt;TResult> JsonConverter
+    /// </summary>
     public class TaskConverter<TResult> : JSInProcessObjectReferenceConverterBase<Task<TResult>>
     {
-        public override bool CanConvert(Type type)
-        {
-            return type.GetGenericTypeDefinition() == typeof(Task<>);
-        }
+        /// <summary>
+        /// Converts an IJSInProcessObjectReference to the target type
+        /// </summary>
         public override Task<TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
             if (_ref == null) return null;
@@ -80,6 +95,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             //});
             return ret;
         }
+        /// <summary>
+        /// Writes value to Json stream
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, Task<TResult> value, JsonSerializerOptions options)
         {
             var promise = new Promise<TResult>(value);

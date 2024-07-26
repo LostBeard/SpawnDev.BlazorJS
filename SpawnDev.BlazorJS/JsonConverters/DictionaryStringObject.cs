@@ -3,16 +3,27 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JsonConverters
 {
+    /// <summary>
+    /// Type of Dictionary&lt;string, object?>
+    /// </summary>
     [JsonConverter(typeof(DictionaryStringObjectJsonConverter))]
     public class DictionaryStringObject : Dictionary<string, object?> { }
+    /// <summary>
+    /// DictionaryStringObject JsonConverter
+    /// </summary>
     public class DictionaryStringObjectJsonConverter : JsonConverter<DictionaryStringObject>
     {
+        /// <summary>
+        /// Returns true if this converter can convert the specified type
+        /// </summary>
         public override bool CanConvert(Type typeToConvert)
         {
             var ret = typeToConvert == typeof(DictionaryStringObject);
             return ret;
         }
-
+        /// <summary>
+        /// Reads the type value from the Json reader
+        /// </summary>
         public override DictionaryStringObject? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType == JsonTokenType.Null)
@@ -44,12 +55,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
             }
             return ret;
         }
-
+        /// <summary>
+        /// Writes value to Json stream
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, DictionaryStringObject? value, JsonSerializerOptions options)
         {
             JsonSerializer.Serialize(writer, (IDictionary<string, object?>?)value, options);
         }
-
         private object? ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             switch (reader.TokenType)

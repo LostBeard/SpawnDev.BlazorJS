@@ -8,11 +8,17 @@ namespace SpawnDev.BlazorJS.JsonConverters
     /// </summary>
     public class EnumStringConverter : JsonConverter<EnumString?>
     {
+        /// <summary>
+        /// Returns true if the type can be converted
+        /// </summary>
         public override bool CanConvert(Type typeToConvert)
         {
             var baseType = typeToConvert.IsGenericType ? typeToConvert.GetGenericTypeDefinition() : typeToConvert;
             return baseType == typeof(EnumString<>);
         }
+        /// <summary>
+        /// Reads the type value from the Json reader
+        /// </summary>
         public override EnumString? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var v = JsonSerializer.Deserialize<string?>(ref reader);
@@ -21,6 +27,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
             ret.String = v;
             return ret;
         }
+        /// <summary>
+        /// Writes the type value to the Json reader
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, EnumString? value, JsonSerializerOptions options)
         {
             JsonSerializer.Serialize(writer, value == null ? null : value.String);
