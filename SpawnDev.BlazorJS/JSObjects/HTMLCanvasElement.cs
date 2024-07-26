@@ -123,14 +123,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void DownloadAsImage(string fileName, bool appendToBody = false)
         {
             var dataUrl = ToDataURL();
-            using (var link = JS.DocumentCreateElement("a"))
-            {
-                link.CallVoid("setAttribute", "download", fileName);
-                link.CallVoid("setAttribute", "href", dataUrl.Replace("image/png", "image/octet-stream"));
-                if (appendToBody) JS.DocumentBodyAppendChild(link);
-                link.CallVoid("click");
-                if (appendToBody) link.CallVoid("remove");
-            }
+            using var link = JS.DocumentCreateElement<HTMLAnchorElement>("a");
+            link.SetAttribute("download", fileName);
+            link.SetAttribute("href", dataUrl.Replace("image/png", "image/octet-stream"));
+            if (appendToBody) JS.DocumentBodyAppendChild(link);
+            link.Click();
+            if (appendToBody) link.Remove();
         }
 
         public static string Color4ToHexString(byte r, byte g, byte b, byte a)

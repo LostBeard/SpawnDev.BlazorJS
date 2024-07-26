@@ -14,12 +14,14 @@ namespace SpawnDev.BlazorJS
     /// </summary>
     public partial class BlazorJSRuntime
     {
+        static Lazy<Type> _WebAssemblyJSObjectReferenceType =new Lazy<Type>(() => typeof(Microsoft.JSInterop.WebAssembly.WebAssemblyJSRuntime).Assembly.GetType("Microsoft.JSInterop.WebAssembly.WebAssemblyJSObjectReference")!);
+        internal static Type WebAssemblyJSObjectReferenceType => _WebAssemblyJSObjectReferenceType.Value;
         internal static JsonConverterCollection RuntimeJsonConverters { get; private set; } = new JsonConverterCollection();
         internal static readonly IJSInProcessRuntime _js;
         /// <summary>
         /// BlazorJSRuntime provides access to the Javascript environment in a Blazor WebAssembly application
         /// </summary>
-        public static BlazorJSRuntime JS { get; internal set; }
+        public static BlazorJSRuntime JS { get; internal set; } = default!;
         internal static JsonSerializerOptions? RuntimeJsonSerializerOptions { get; private set; }
         /// <summary>
         /// globalThis JSObject instance
@@ -73,6 +75,14 @@ namespace SpawnDev.BlazorJS
         /// A new instance id generated when the app starts
         /// </summary>
         public string InstanceId { get; }
+        /// <summary>
+        /// Time elapsed until BlazorJSRuntime is initialized.
+        /// </summary>
+        public double StartUpTime { get; private set; }
+        /// <summary>
+        /// Time elapsed until all background services have been started. Before page load.
+        /// </summary>
+        public double ReadyTime { get; internal set; }
         Performance? Performance { get; }
         /// <summary>
         /// The crossOriginIsolated read-only property returns a boolean value that indicates whether the website is in a cross-origin isolation state. A website is in a cross-origin isolated state, when the response header Cross-Origin-Opener-Policy has the value same-origin and the Cross-Origin-Embedder-Policy header has the value require-corp or credentialless
@@ -99,61 +109,17 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new JSObjectReferenceListConverterFactory(RuntimeJsonSerializerOptions));
             RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory(RuntimeJsonSerializerOptions));
         }
-
         /// <summary>
         /// Returns true if the current GlobalScope flag is set in supplied scope var.<br />
         /// Always returns false for GlobalScope enum flags Default, and None.
         /// </summary>
-        /// <param name="scope"></param>
-        /// <returns></returns>
         public bool IsScope(GlobalScope scope) => (GlobalScope & scope) != 0;
-        public bool IfScope(GlobalScope scope, Action method)
-        {
-            if ((GlobalScope & scope) == 0) return false;
-            method.Invoke();
-            return true;
-        }
-        static Type WebAssemblyJSObjectReferenceType = typeof(Microsoft.JSInterop.WebAssembly.WebAssemblyJSRuntime).Assembly.GetType("Microsoft.JSInterop.WebAssembly.WebAssemblyJSObjectReference")!;
-        /// <summary>
-        /// Create an IJSInProcessObjectReference instance from an jsObjectId acquired from DotNet.createObjectReference(obj).__jsObjectId in Javascript.
-        /// </summary>
-        /// <param name="jsObjectId"></param>
-        /// <returns></returns>
-        public IJSInProcessObjectReference CreateIJSInProcessObjectReference(long jsObjectId)
-        {
-            return (IJSInProcessObjectReference)Activator.CreateInstance(WebAssemblyJSObjectReferenceType, _js, jsObjectId)!;
-        }
-        /// <summary>
-        /// Create a JSObject instance from an jsObjectId acquired from DotNet.createObjectReference(obj).__jsObjectId in Javascript.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="jsObjectId"></param>
-        /// <returns></returns>
-        public T CreateJSObject<T>(long jsObjectId) where T : JSObject
-        {
-            var _ref = (IJSInProcessObjectReference)Activator.CreateInstance(WebAssemblyJSObjectReferenceType, _js, jsObjectId)!;
-            return (T)Activator.CreateInstance(typeof(T), _ref)!;
-        }
-        public async Task<bool> IfScopeAsync(GlobalScope scope, Func<Task> method)
-        {
-            if ((GlobalScope & scope) == 0) return false;
-            await method.Invoke();
-            return true;
-        }
         internal BlazorJSRuntime()
         {
             var id = Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
             var chunkSize = 4;
             InstanceId = string.Join("-", Enumerable.Range(0, id.Length / chunkSize).Select(i => id.Substring(i * chunkSize, chunkSize)));
-            if (IsUndefined("globalThis.constructor") && !IsUndefined("window"))
-            {
-                // this happens in Firefox context scripts. They are running in a Window global scope
-                // globalThis is not a Window but has a window object
-            }
-            else
-            {
-                GlobalThisTypeName = Get<string>("globalThis.constructor.name");
-            }
+            GlobalThisTypeName = ConstructorName() ?? "";
             GlobalScope = GlobalScope.None;
             switch (GlobalThisTypeName)
             {
@@ -194,29 +160,15 @@ namespace SpawnDev.BlazorJS
                     StartUpTime = Performance?.Now() ?? 0;
                     break;
             }
-
-#if DEBUG && true
-            Log("JS.GlobalThisTypeName", GlobalThisTypeName, StartUpTime);
-            Set("JSInterop.debugLevel", 1);
-            if (IsWindow)
-            {
-                Log($"IsStandalone: {IsDisplayModeStandalone()}");
-            }
-#endif
         }
-        /// <summary>
-        /// Time elapsed until BlazorJSRuntime is initialized.
-        /// </summary>
-        public double StartUpTime { get; private set; }
-        /// <summary>
-        /// Time elapsed until all background services have been started. Before page load.
-        /// </summary>
-        public double ReadyTime { get; internal set; }
         internal void SetReady()
         {
             RuntimeJsonConverters.Lock();
             ReadyTime = Performance?.Now() ?? 0;
         }
+        /// <summary>
+        /// Returns window.MatchMedia("(display-mode: standalone)").Matches
+        /// </summary>
         public bool IsDisplayModeStandalone()
         {
             if (WindowThis != null)
@@ -231,68 +183,42 @@ namespace SpawnDev.BlazorJS
             return false;
         }
         /// <summary>
-        /// The Environment version
+        /// Returns the Environment version
         /// </summary>
         public string EnvironmentVersion { get; } = Environment.Version.ToString();
         /// <summary>
-        /// The .Net version
+        /// Returns the .Net runtime version
         /// </summary>
         public string FrameworkVersion { get; } = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Replace(".NET", "", StringComparison.OrdinalIgnoreCase).Trim();
         /// <summary>
-        /// Returns the Informational version of the BlazorJSRuntime Assembly
+        /// Returns the BlazorJSRuntime assembly informational version
         /// </summary>
         public string InformationalVersion { get; } = typeof(JSObject).Assembly.GetAssemblyInformationalVersion();
         /// <summary>
-        /// Returns the Assembly File Version of the SpawnDev.BlazorJS
+        /// Returns the BlazorJSRuntime assembly file version
         /// </summary>
         public string FileVersion { get; } = typeof(JSObject).Assembly.GetAssemblyFileVersion();
         /// <summary>
-        /// Internal dispose callback method
+        /// Load the given script by adding a document head script element if the specified global var is not defined.
         /// </summary>
-        /// <param name="callbackID"></param>
-        internal void DisposeCallback(string callbackID) => JSInterop.DisposeCallbacker(callbackID);
+        public async Task LoadScript(string src, string? ifThisGlobalVarIsUndefined = null)
+        {
+            if (!string.IsNullOrEmpty(ifThisGlobalVarIsUndefined) && !IsUndefined(ifThisGlobalVarIsUndefined)) return;
+            await LoadScript(src);
+        }
         /// <summary>
-        /// Load a non-module script if a specified global var is not defined.
+        /// Load the given script by adding a document head script element
         /// </summary>
-        /// <param name="src"></param>
-        /// <param name="ifThisGlobalVarIsUndefined"></param>
-        /// <returns></returns>
-        public Task<bool> LoadScript(string src, string? ifThisGlobalVarIsUndefined = null)
+        public async Task LoadScript(string src)
         {
-            var t = new TaskCompletionSource<bool>();
-            if (!string.IsNullOrEmpty(ifThisGlobalVarIsUndefined) && !IsUndefined(ifThisGlobalVarIsUndefined))
-            {
-                t.TrySetResult(true);
-            }
-            else
-            {
-                LoadScript(src, (r) => t.TrySetResult(r));
-            }
-            return t.Task;
+            using var script = new HTMLScriptElement();
+            script.Src = src;
+            DocumentHeadAppendChild(script);
+            await script.OnLoadAsync();
         }
-        public void LoadScript(string src, Action<bool> callback)
-        {
-            Action<bool> cb = callback;
-            using (var script = DocumentCreateElement("script"))
-            {
-                if (cb != null)
-                {
-                    CallbackGroup callbacks = new CallbackGroup();
-                    script.Set("onload", callbacks.Add(Callback.Create(() =>
-                    {
-                        callbacks.Dispose();
-                        cb.Invoke(true);
-                    })));
-                    script.Set("onerror", callbacks.Add(Callback.Create(() =>
-                    {
-                        callbacks.Dispose();
-                        cb.Invoke(false);
-                    })));
-                }
-                script.Set("src", src);
-                DocumentHeadAppendChild(script);
-            }
-        }
+        /// <summary>
+        /// Loads the specified scripts
+        /// </summary>
         public async Task LoadScripts(string[] sources)
         {
             var tasks = new List<Task>();
@@ -304,25 +230,31 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
         /// <returns>Returns a promise which fulfills to a module namespace object: an object containing all exports from moduleName.</returns>
-        public async Task<ModuleNamespaceObject?> Import(string moduleName)
-        {
-            var jsRef = await _js.InvokeAsync<IJSInProcessObjectReference?>("import", moduleName);
-            return jsRef == null ? null : new ModuleNamespaceObject(jsRef);
-        }
-        // window
-        public IJSInProcessObjectReference GetWindow() => Get<IJSInProcessObjectReference>("window");
-        public T GetWindow<T>() where T : JSObject => Get<T>("window");
-        // document
-        public IJSInProcessObjectReference GetDocument() => Get<IJSInProcessObjectReference>("document");
-        public T GetDocument<T>() where T : JSObject => Get<T>("document");
-        // document.head
-        public IJSInProcessObjectReference GetDocumentHead() => Get<IJSInProcessObjectReference>("document.head");
-        public T GetDocumentHead<T>() where T : JSObject => Get<T>("document.head");
-        // document.body
-        public IJSInProcessObjectReference GetDocumentBody() => Get<IJSInProcessObjectReference>("document.body");
-        public T GetDocumentBody<T>() where T : JSObject => Get<T>("document.body");
-        public void DocumentHeadAppendChild(IJSInProcessObjectReference element) => CallVoid("document.head.appendChild", element);
-        public void DocumentBodyAppendChild(IJSInProcessObjectReference element) => CallVoid("document.body.appendChild", element);
+        public Task<ModuleNamespaceObject?> Import(string moduleName) => CallAsync<ModuleNamespaceObject?>("import", moduleName);
+        /// <summary>
+        /// Returns the window object or null
+        /// </summary>
+        public Window? GetWindow() => Get<Window?>("window");
+        /// <summary>
+        /// Returns the document object or null
+        /// </summary>
+        public Document? GetDocument() => Get<Document?>("document");
+        /// <summary>
+        /// Returns the document.head object or null
+        /// </summary>
+        public HTMLHeadElement? GetDocumentHead() => Get<HTMLHeadElement?>("document.head");
+        /// <summary>
+        /// Returns the document.body object or null
+        /// </summary>
+        public HTMLBodyElement? GetDocumentBody() => Get<HTMLBodyElement?>("document.body");
+        /// <summary>
+        /// Calls document.head.appendChild(element)
+        /// </summary>
+        public void DocumentHeadAppendChild(Element element) => CallVoid("document.head.appendChild", element);
+        /// <summary>
+        /// Calls document.body.appendChild(element)
+        /// </summary>
+        public void DocumentBodyAppendChild(Element element) => CallVoid("document.body.appendChild", element);
         /// <summary>
         /// document.createElement shortcut method
         /// </summary>
@@ -332,48 +264,111 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// document.createElement shortcut method
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="elementType"></param>
-        /// <returns></returns>
-        public T DocumentCreateElement<T>(string elementType) where T : JSObject => Call<T>("document.createElement", elementType);
+        public T DocumentCreateElement<T>(string elementType) where T : Element => Call<T>("document.createElement", elementType);
         /// <summary>
-        /// Passes both values to Javascript and tests for equality there
+        /// (re-)imports the object from Javascript as the specified type
         /// </summary>
-        /// <param name="obj1"></param>
-        /// <param name="obj2"></param>
-        /// <returns></returns>
-        public bool JSEquals(object? obj1, object? obj2) => JSInterop.IsEqual(obj1, obj2);
-        public T ReturnMe<T>(object? obj) => JSInterop.ReturnMe<T>(obj);
-        public T ReturnMe<T>(T obj) => JSInterop.ReturnMe<T>(obj);
-        public object? ReturnMe(Type type, object? obj) => JSInterop.ReturnMe(type, obj);
-        public JSObject FromElementReference(ElementReference elementRef) => ReturnMe<JSObject>(elementRef);
+        /// <typeparam name="T">return type</typeparam>
+        /// <param name="obj">the object to re-import from Javascript</param>
+        /// <returns>The object as type T</returns>
+        public T ReturnMe<T>(object? obj) => obj == null ? default! : BlazorJSInterop.ObjectGet<T>(obj);
+        /// <summary>
+        /// (re-)imports the object from Javascript as the specified type
+        /// </summary>
+        /// <typeparam name="T">return type</typeparam>
+        /// <param name="obj">the object to re-import from Javascript</param>
+        /// <returns>The object as type T</returns>
+        public T ReturnMe<T>(T obj) => obj == null ? default! : BlazorJSInterop.ObjectGet<T>(obj);
+        /// <summary>
+        /// (re-)imports the object from Javascript as the specified type
+        /// </summary>
+        /// <param name="returnType"></param>
+        /// <param name="obj">the object to re-import from Javascript</param>
+        /// <returns>The object as type returnType</returns>
+        public object? ReturnMe(Type returnType, object? obj) => BlazorJSInterop.ObjectGet(returnType, obj);
+        /// <summary>
+        /// Returns the ElementReference as an IJSInProcessObjectReference
+        /// </summary>
         public IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);
-        public T FromElementReference<T>(ElementReference elementRef) where T : JSObject => (T)Activator.CreateInstance(typeof(T), ReturnMe<IJSInProcessObjectReference>(elementRef));
-        public IJSInProcessObjectReference NewApply(string className, object?[]? args = null) => JSInterop.ReturnNew<IJSInProcessObjectReference>(className, args);
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public IJSInProcessObjectReference NewApply(string className, object?[]? args = null) => BlazorJSInterop.GlobalPropertyNew<IJSInProcessObjectReference>(className, args);
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className) => NewApply(className);
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0) => NewApply(className, new object?[] { arg0 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0, object? arg1) => NewApply(className, new object?[] { arg0, arg1 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2) => NewApply(className, new object?[] { arg0, arg1, arg2 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
         public IJSInProcessObjectReference New(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => NewApply(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-        // bool IsUndefined(JSObject obj, object? identifier = null) => JSInterop.TypeOf(obj, identifier) == "undefined";
-        public bool IsUndefined(string identifier) => JSInterop.GlobalTypeOf(identifier) == "undefined";
-        //public string TypeOf(JSObject obj, object? identifier = null) => JSInterop.TypeOf(obj, identifier);
-        //public string TypeOf(JSObject obj, int identifier) => JSInterop.TypeOf(obj, identifier);
-        public string TypeOf(string identifier) => JSInterop.GlobalTypeOf(identifier);
-
-        public string TypeOf(JSObject obj) => JSInterop.TypeOf(obj, null);
-
+        /// <summary>
+        /// Writes the data to the console using console.log
+        /// </summary>
         public void Log(params object?[] args) => CallApplyVoid("console.log", args);
+        /// <summary>
+        /// Writes the data to the console using console.error
+        /// </summary>
+        public void LogError(params object?[] args) => CallApplyVoid("console.error", args);
+        /// <summary>
+        /// Writes the data to the console using console.warn
+        /// </summary>
+        public void LogWarn(params object?[] args) => CallApplyVoid("console.warn", args);
+        /// <summary>
+        /// Calls fetch
+        /// </summary>
         public Task<Response> Fetch(Request resource) => JS.CallAsync<Response>("fetch", resource);
+        /// <summary>
+        /// Calls fetch
+        /// </summary>
         public Task<Response> Fetch(string resource) => JS.CallAsync<Response>("fetch", resource);
+        /// <summary>
+        /// Calls fetch
+        /// </summary>
         public Task<Response> Fetch(string resource, FetchOptions options) => JS.CallAsync<Response>("fetch", resource, options);
+        /// <summary>
+        /// Calls setTimeout
+        /// </summary>
         public void SetTimeout(Action callback, int msDelay) => JS.CallVoid("setTimeout", Callback.CreateOne(callback), msDelay);
+        /// <summary>
+        /// Calls setTimeout
+        /// </summary>
         public void SetTimeout(Callback callback, int msDelay) => JS.CallVoid("setTimeout", callback, msDelay);
     }
 }

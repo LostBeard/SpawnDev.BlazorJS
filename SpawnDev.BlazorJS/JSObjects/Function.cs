@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public int Length => JSRef!.Get<int>("length");
 
-        public T NewApply<T>(object?[]? args = null) => JSInterop.ReturnNew<T>(JSRef, args);
+        public T NewApply<T>(object?[]? args = null) => BlazorJSInterop.ObjectNew<T>(JSRef!, args);
         public T New<T>() => NewApply<T>();
         public T New<T>(object arg0) => NewApply<T>(new object[] { arg0 });
         public T New<T>(object arg0, object arg1) => NewApply<T>(new object[] { arg0, arg1 });

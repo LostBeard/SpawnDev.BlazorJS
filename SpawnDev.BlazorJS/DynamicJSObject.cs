@@ -28,7 +28,7 @@ namespace SpawnDev.BlazorJS
         public override IEnumerable<string> GetDynamicMemberNames()
         {
             //Console.WriteLine("GetDynamicMemberNames");
-            var keys = JSObjectRef.JSRef!.GetPropertyNames();
+            var keys = JSObjectRef.JSRef!.Keys();
             return keys;
         }
         // method invoke

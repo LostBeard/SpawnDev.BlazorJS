@@ -85,7 +85,7 @@ namespace SpawnDev.BlazorJS
             }
             else
             {
-                ret = JSInterop.ReturnMe<T>(_ref);
+                ret = _ref!.As<T>();
             }
             Dispose();
             return ret;
@@ -114,9 +114,9 @@ namespace SpawnDev.BlazorJS
         public bool JSRefIs<T>(string constructorName, out T value, bool moveJSRef = false)
         {
             if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
-            if (JSInterop.InstanceOf(JSRef, null) != constructorName)
+            if (JSRef?.ConstructorName() != constructorName)
             {
-                value = default;
+                value = default!;
                 return false;
             }
             value = moveJSRef ? JSRefMove<T>() : JSRefCopy<T>();
@@ -131,7 +131,7 @@ namespace SpawnDev.BlazorJS
         public bool JSRefIs(string constructorName)
         {
             if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
-            return JSInterop.InstanceOf(JSRef, null) == constructorName;
+            return JSRef?.ConstructorName() == constructorName;
         }
         /// <summary>
         /// Returns true if the referenced JS object's constructor.name == type(T).Name
@@ -156,7 +156,7 @@ namespace SpawnDev.BlazorJS
         public T JSRefAs<T>()
         {
             if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
-            return JSInterop.ReturnMe<T>(this);
+            return JSRef!.As<T>();
         }
         /// <summary>
         /// Returns this JSObject as type T<br/>
@@ -167,7 +167,7 @@ namespace SpawnDev.BlazorJS
         public T JSRefCopy<T>()
         {
             if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
-            return JSInterop.ReturnMe<T>(this);
+            return JSRef!.As<T>();
         }
         /// <summary>
         /// Returns a copy of this JSObject's JSRef, a IJSInProcessObjectReference
@@ -176,7 +176,7 @@ namespace SpawnDev.BlazorJS
         public IJSInProcessObjectReference JSRefCopy()
         {
             if (IsWrapperDisposed) throw new ObjectDisposedException(nameof(JSRef));
-            return JSInterop.ReturnMe<IJSInProcessObjectReference>(this);
+            return JSRef!.As<IJSInProcessObjectReference>();
         }
         /// <summary>
         /// Dispose resources

@@ -192,7 +192,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public static object? ImportFromIJSInprocessObjectReference(IJSInProcessObjectReference _ref, Type[] types)
         {
             var jsObject = new JSObject(_ref);
-            var jsTypeName = jsObject.JSRef!.GetConstructorName()!;
+            var jsTypeName = jsObject.JSRef!.ConstructorName()!;
             if (!string.IsNullOrEmpty(jsTypeName))
             {
                 if (jsTypeName == "Uint8Array")
@@ -248,7 +248,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 }
             }
             var isArray = Array.IsArray(jsObject);
-            var typeOf = isArray ? "array" : jsObject.JSRef!.PropertyType();
+            var typeOf = isArray ? "array" : jsObject.JSRef!.TypeOf();
             switch (typeOf)
             {
                 case "string":

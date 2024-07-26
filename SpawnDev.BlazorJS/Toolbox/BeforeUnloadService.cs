@@ -19,8 +19,8 @@ namespace SpawnDev.BlazorJS.Toolbox
             JS = js;
             if (!JS.IsWindow) return;
             BeforeUnloadCallback = new FuncCallback<BeforeUnloadEvent, string?>(Window_OnBeforeUnload);
-            using var window = JS.GetWindow<Window>();
-            window.AddEventListener("beforeunload", BeforeUnloadCallback);
+            using var window = JS.GetWindow();
+            window!.AddEventListener("beforeunload", BeforeUnloadCallback);
         }
         string? Window_OnBeforeUnload(BeforeUnloadEvent e)
         {

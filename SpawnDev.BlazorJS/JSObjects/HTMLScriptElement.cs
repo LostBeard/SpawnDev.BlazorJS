@@ -91,13 +91,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         public async Task OnLoadAsync()
         {
             var taskCompletionSource = new TaskCompletionSource();
-            Action<Event>? onLoad = null;
-            Action<Event>? onError = null;
-            onLoad = new Action<Event>((e) =>
+            Action? onLoad = null;
+            Action? onError = null;
+            onLoad = new Action(() =>
             {
                 taskCompletionSource.TrySetResult();
             });
-            onError = new Action<Event>((e) =>
+            onError = new Action(() =>
             {
                 taskCompletionSource.TrySetException(new Exception("Script load failed"));
             });

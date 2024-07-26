@@ -108,7 +108,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         // non-standard implementation to prevent need to polyfill when used
         public async Task<string> QueryPermission(bool writePermission = false)
         {
-            if (JSRef!.PropertyType("queryPermission") == "undefined")
+            if (JSRef!.IsUndefined("queryPermission"))
             {
                 return PERMISSION_GRANTED;
             }
@@ -117,7 +117,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public async Task<string> RequestPermission(bool writePermission = false)
         {
-            if (JSRef!.PropertyType("requestPermission") == "undefined")
+            if (JSRef!.IsUndefined("requestPermission"))
             {
                 return PERMISSION_GRANTED;
             }

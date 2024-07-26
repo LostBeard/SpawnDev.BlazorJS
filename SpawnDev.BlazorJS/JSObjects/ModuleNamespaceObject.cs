@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a list of exported property names
         /// </summary>
         /// <returns></returns>
-        public List<string> GetExportNames() => JSRef!.GetPropertyNames();
+        public List<string> GetExportNames() => JSRef!.Keys();
         /// <summary>
         /// Returns the exported property as type T
         /// </summary>

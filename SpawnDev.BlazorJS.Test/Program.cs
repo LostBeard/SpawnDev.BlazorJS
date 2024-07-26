@@ -41,7 +41,7 @@ builder.Services.AddSingleton<TooltipService>();
 builder.Services.AddSingleton<ContextMenuService>();
 
 // App service
-builder.Services.AddSingleton<JSObjectAnalyzer>();
+//builder.Services.AddSingleton<JSObjectAnalyzer>();
 
 builder.Services.AddSingleton<CryptoService>();
 
