@@ -38,6 +38,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string GroupId => JSRef!.Get<string>("groupId");
         /// <summary>
+        /// Facing mode
+        /// </summary>
+        public EnumString<VideoFacingModeEnum>? Facing => JSRef!.Get<EnumString<VideoFacingModeEnum>>("facing");
+        /// <summary>
         /// Returns a JSON representation of the MediaDeviceInfo object.
         /// </summary>
         /// <returns></returns>
