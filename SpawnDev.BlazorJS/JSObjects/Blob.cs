@@ -160,7 +160,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Task<string> ToDataURLAsync()
         {
             var fr = new FileReader();
-            var tcs = new TaskCompletionSource<string?>();
+            var tcs = new TaskCompletionSource<string>();
             Action<ProgressEvent>? load = null;
             load = new Action<ProgressEvent>((evt) =>
             {
@@ -173,8 +173,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 {
                     tcs.TrySetException(new Exception("Failed"));
                 }
-                fr.OnLoad -= load;
-                fr.OnLoadEnd -= load;
+                fr.OnLoad -= load!;
+                fr.OnLoadEnd -= load!;
                 evt.Dispose();
                 fr.Dispose();
             });

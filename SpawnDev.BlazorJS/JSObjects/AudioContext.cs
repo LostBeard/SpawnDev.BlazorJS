@@ -35,7 +35,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task Close() => JSRef!.CallVoidAsync("close");
         /// <summary>
-        /// The createMediaElementSource() method of the AudioContext Interface is used to create a new MediaElementAudioSourceNode object, given an existing HTML <audio> or <video> element, the audio from which can then be played and manipulated.
+        /// The createMediaElementSource() method of the AudioContext Interface is used to create a new MediaElementAudioSourceNode object, given an existing HTML audio or video element, the audio from which can then be played and manipulated.
         /// </summary>
         /// <param name="mediaElement"></param>
         /// <returns></returns>

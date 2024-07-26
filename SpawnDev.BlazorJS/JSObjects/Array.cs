@@ -13,12 +13,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns first or default
         /// </summary>
         /// <returns></returns>
-        public T FirstOrDefault<T>() => Length > 0 ? GetItem<T>(0) : default(T);
+        public T FirstOrDefault<T>() => Length > 0 ? GetItem<T>(0) : default(T)!;
         /// <summary>
         /// Returns last or default
         /// </summary>
         /// <returns></returns>
-        public T LastOrDefault<T>() => Length > 0 ? GetItem<T>(Length - 1) : default(T);
+        public T LastOrDefault<T>() => Length > 0 ? GetItem<T>(Length - 1) : default(T)!;
         /// <summary>
         /// Returns the array as a .Net List
         /// </summary>
@@ -200,19 +200,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Extracts a section of the calling array and returns a new array.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br/>
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
-        /// - If start &gt;= array.length, nothing is extracted.
-        /// </param>
-        /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
-        /// - If end &lt; -array.length, 0 is used.<br/>
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
-        /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public Array<T> Slice<T>() => JSRef!.Call<Array<T>>("slice");
         /// <summary>
@@ -224,13 +211,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
         /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
-        /// </param>
-        /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
-        /// - If end &lt; -array.length, 0 is used.<br/>
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public Array<T> Slice<T>(int start) => JSRef!.Call<Array<T>>("slice", start);
@@ -256,45 +236,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Extracts a section of the calling array and returns a new array.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br/>
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
-        /// - If start &gt;= array.length, nothing is extracted.
-        /// </param>
-        /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
-        /// - If end &lt; -array.length, 0 is used.<br/>
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
-        /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public virtual Array Slice() => JSRef!.Call<Array>("slice");
         /// <summary>
         /// Extracts a section of the calling array and returns a new array.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="start">
         /// Zero-based index at which to start extraction, converted to an integer.<br/>
         /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
         /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
-        /// </param>
-        /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
-        /// - If end &lt; -array.length, 0 is used.<br/>
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public virtual Array Slice(int start) => JSRef!.Call<Array>("slice", start);
         /// <summary>
         /// Extracts a section of the calling array and returns a new array.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="start">
         /// Zero-based index at which to start extraction, converted to an integer.<br/>
         /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
@@ -360,7 +317,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0.<br/>
         /// - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
         /// </param>
-        /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
         /// <returns></returns>
         public virtual Array Splice(int start, int deleteCount) => JSRef!.Call<Array>("splice", start, deleteCount);
         /// <summary>
@@ -469,12 +425,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns first or default
         /// </summary>
         /// <returns></returns>
-        public TArrayItem FirstOrDefault() => Length > 0 ? At(0) : default(TArrayItem);
+        public TArrayItem FirstOrDefault() => Length > 0 ? At(0) : default(TArrayItem)!;
         /// <summary>
         /// Returns last or default
         /// </summary>
         /// <returns></returns>
-        public TArrayItem LastOrDefault() => Length > 0 ? At(Length - 1) : default(TArrayItem);
+        public TArrayItem LastOrDefault() => Length > 0 ? At(Length - 1) : default(TArrayItem)!;
         /// <summary>
         /// Returns the array as a .Net List
         /// </summary>
@@ -603,45 +559,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Extracts a section of the calling array and returns a new array.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="start">
-        /// Zero-based index at which to start extraction, converted to an integer.<br/>
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
-        /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
-        /// - If start &gt;= array.length, nothing is extracted.
-        /// </param>
-        /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
-        /// - If end &lt; -array.length, 0 is used.<br/>
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
-        /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public override Array<TArrayItem> Slice() => JSRef!.Call<Array<TArrayItem>>("slice");
         /// <summary>
         /// Extracts a section of the calling array and returns a new array.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="start">
         /// Zero-based index at which to start extraction, converted to an integer.<br/>
         /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>
         /// - If start &lt; -array.length or start is omitted, 0 is used.<br/>
         /// - If start &gt;= array.length, nothing is extracted.
-        /// </param>
-        /// <param name="end">
-        /// Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end.<br/>
-        /// - Negative index counts back from the end of the array — if -array.length &lt;= end &lt; 0, end + array.length is used.<br/>
-        /// - If end &lt; -array.length, 0 is used.<br/>
-        /// - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted.<br/>
-        /// - If end implies a position before or at the position that start implies, nothing is extracted.<br/>
         /// </param>
         /// <returns>A new array containing the extracted elements.</returns>
         public override Array<TArrayItem> Slice(int start) => JSRef!.Call<Array<TArrayItem>>("slice", start);
         /// <summary>
         /// Extracts a section of the calling array and returns a new array.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="start">
         /// Zero-based index at which to start extraction, converted to an integer.<br/>
         /// - Negative index counts back from the end of the array — if -array.length &lt;= start &lt; 0, start + array.length is used.<br/>

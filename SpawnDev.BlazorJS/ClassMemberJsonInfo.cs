@@ -4,6 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+    /// <summary>
+    /// Determines information used for Json serialization for a specified type
+    /// </summary>
     public class ClassMemberJsonInfo
     {
         public object? DefaultValue { get; private set; }

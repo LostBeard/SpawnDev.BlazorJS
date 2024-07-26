@@ -19,11 +19,17 @@ namespace SpawnDev.BlazorJS.JsonConverters
             { typeof(Action<,,,,,>), typeof(ActionConverter<,,,,,>) },
             { typeof(Action<,,,,,,>), typeof(ActionConverter<,,,,,,>) },
         };
+        /// <summary>
+        /// Returns true if this converter can convert the specified type
+        /// </summary>
         public override bool CanConvert(Type type)
         {
             var baseType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
             return SupportedGenericTypes.ContainsKey(baseType);
         }
+        /// <summary>
+        /// Returns a new converter instance
+        /// </summary>
         public override JsonConverter? CreateConverter(Type type, JsonSerializerOptions options)
         {
             var baseType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
