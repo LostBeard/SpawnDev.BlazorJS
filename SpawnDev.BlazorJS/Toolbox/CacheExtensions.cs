@@ -22,7 +22,6 @@ namespace SpawnDev.BlazorJS.Toolbox
             tmp.DisposeAll();
             return ret;
         }
-
         static BlazorJSRuntime JS => BlazorJSRuntime.JS;
         static string _HostName = "";
         static string HostName
@@ -38,8 +37,19 @@ namespace SpawnDev.BlazorJS.Toolbox
                 return _HostName;
             }
         }
-
+        /// <summary>
+        /// Returns a list of all directories fro ma reursive search
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
         public static Task<List<string>> GetAllDirectories(this Cache _this) => _this.GetDirectories("/", true);
+        /// <summary>
+        /// Returns all directories from the specified path, optionally recursive
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="inFolder"></param>
+        /// <param name="recursive"></param>
+        /// <returns></returns>
         public static async Task<List<string>> GetDirectories(this Cache _this, string inFolder = "/", bool recursive = false)
         {
             var ret = await _this.GetAllHostFiles(HostName, true);
