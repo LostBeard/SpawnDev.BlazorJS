@@ -126,6 +126,9 @@
         }
         // returns any
         GlobalPropertyCall(key, args) {
+            switch (key) {
+                case 'import': return import(args[0]);
+            }
             return this.ObjectPropertyCall(globalThis, key, args);
         }
         // returns any

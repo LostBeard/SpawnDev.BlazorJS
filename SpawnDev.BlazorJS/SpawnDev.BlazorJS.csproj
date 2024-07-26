@@ -4,7 +4,7 @@
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.5.0</Version>
+		<Version>2.5.1</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
@@ -19,6 +19,12 @@
 		<RepositoryUrl>https://github.com/LostBeard/SpawnDev.BlazorJS.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Blazor;BlazorWebAssembly;Javascript</PackageTags>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<!-- Added this so that this projects wwwroot folder contents will be located in the implementing projects wwwroot instead of wwwroot/SpawnDev.BlazorJS/ -->
+		<!-- This allows supporting dynamic import calls without modification from inside the js interop script -->
+		<StaticWebAssetBasePath Condition="$(StaticWebAssetBasePath) == ''">/</StaticWebAssetBasePath>
 	</PropertyGroup>
 
 	<ItemGroup>
