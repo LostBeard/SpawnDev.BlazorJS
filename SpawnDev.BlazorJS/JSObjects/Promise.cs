@@ -207,14 +207,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void Then<TResult>(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
         public void ThenCatch<TResult, TError>(ActionCallback<TResult> thenCallback, ActionCallback<TError> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
 
-
         /// <summary>
         /// Handles converting a value from a Promise catch event into an exception.<br/>
         /// These are usually of the type `Error`, but can be anything
         /// </summary>
-        internal static Exception UnknownErrorToException(Error? error)
+        internal static JSException UnknownErrorToException(Error? error)
         {
-            Exception? ex = null;
+            JSException? ex = null;
             if (error != null)
             {
                 var typeofError = error.JSRef!.TypeOf();
@@ -223,30 +222,41 @@ namespace SpawnDev.BlazorJS.JSObjects
                     case "string":
                         {
                             var message = error.JSRefAs<string>();
-                            ex = new Exception(message);
+                            ex = new JSException(message);
                             break;
                         }
                     case "object":
                         {
                             string? message = null;
-                            if (error.JSRef!.TypeOf("toString") == "function")
+                            var cNames = error.JSRef!.ConstructorNames();
+                            if (cNames.Contains("Error"))
                             {
-                                message = error.ToString();
+                                ex = error.ToException();
                             }
-                            if (string.IsNullOrEmpty(message))
+                            else
                             {
-                                message = error.Message;
-                            }
-                            if (!string.IsNullOrEmpty(message))
-                            {
-                                ex = new Exception(message);
+                                if (error.JSRef!.TypeOf("toString") == "function")
+                                {
+                                    message = error.ToString();
+                                }
+                                if (string.IsNullOrEmpty(message))
+                                {
+                                    message = error.Message;
+                                }
+                                if (!string.IsNullOrEmpty(message))
+                                {
+                                    ex = new JSException(message, cNames.FirstOrDefault());
+                                }
                             }
                             break;
                         }
                 }
-
             }
-            ex ??= new Exception("Unknown error");
+            if (ex == null)
+            {
+                // fallback
+                ex = new JSException("Unknown error");
+            }
             return ex;
         }
 

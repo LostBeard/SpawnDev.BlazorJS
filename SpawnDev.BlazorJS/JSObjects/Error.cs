@@ -3,11 +3,61 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
+    /// A .Net exception that represents a Javascript Error and makes the Error information available if needed
+    /// </summary>
+    public class JSException : Exception
+    {
+        /// <summary>
+        /// Returns the error message
+        /// </summary>
+        public override string Message => _Message.Value;
+        /// <summary>
+        /// Returns the Error type name
+        /// </summary>
+        public string Name => _Name.Value;
+        /// <summary>
+        /// Returns the Error toString() value
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => _ToString.Value;
+        private Lazy<string> _Message;
+        private Lazy<string> _Name;
+        private Lazy<string> _ToString;
+        /// <summary>
+        /// The Javascript Error this exception represents
+        /// </summary>
+        public Error? Error { get; private set; }
+        /// <summary>
+        /// Creates a new Exception to represent a Javascript Error
+        /// </summary>
+        public JSException(Error error) : base()
+        {
+            Error = error;
+            _Message = new Lazy<string>(() => Error.Message ?? "");
+            _Name = new Lazy<string>(() => Error.Name ?? "");
+            _ToString = new Lazy<string>(() => Error.JSRef!.IsUndefined("toString") ? base.ToString() : Error.ToString() ?? base.ToString());
+        }
+        /// <summary>
+        /// Creates a new Exception to represent a Javascript Error
+        /// </summary>
+        public JSException(string message, string? name = null) : base()
+        {
+            _Message = new Lazy<string>(message);
+            _Name = new Lazy<string>(() => name ?? "");
+            _ToString = new Lazy<string>(string.IsNullOrEmpty(name) ? $"{message}" : $"{name}: {message}");
+        }
+    }
+    /// <summary>
     /// Error objects are thrown when runtime errors occur. The Error object can also be used as a base object for user-defined exceptions. See below for standard built-in error types.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
     /// </summary>
     public class Error : JSObject
     {
+        /// <summary>
+        /// Creates a new .Net exception to represent the error
+        /// </summary>
+        /// <returns></returns>
+        public virtual JSException ToException() => new JSException(this);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -74,10 +124,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public override string ToString() => JSRef!.Call<string>("toString");
-        /// <summary>
-        /// Returns the error prototype.name<br/>
-        /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/name
-        /// </summary>
-        public string? ProtoTypeName => Reflect.GetPrototypeOf(this)?.Using(o => o?.JSRef!.Get<string?>("name"));
     }
 }
