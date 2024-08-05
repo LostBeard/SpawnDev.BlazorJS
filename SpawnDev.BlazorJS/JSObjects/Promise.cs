@@ -2,11 +2,23 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The Promise object represents the eventual completion (or failure) of an asynchronous operation and its resulting value.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+    /// </summary>
     public class Promise<TResult> : JSObject
     {
+        /// <summary>
+        /// Explicit conversion from a Task&lt;TResult> to a Promise&lt;TResult>
+        /// </summary>
         public static explicit operator Promise<TResult>(Task<TResult> t) => new Promise<TResult>(t);
+        /// <summary>
+        /// Explicit conversion from a Func&lt;Task&lt;TResult>> to a Promise&lt;TResult>
+        /// </summary>
         public static explicit operator Promise<TResult>(Func<Task<TResult>> t) => new Promise<TResult>(t);
-
+        /// <summary>
+        /// The Promise() constructor creates Promise objects.
+        /// </summary>
         public Promise(Func<Task<TResult>> task) : base(default!)
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
@@ -30,7 +42,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 });
             })));
         }
-
+        /// <summary>
+        /// The Promise() constructor creates Promise objects.
+        /// </summary>
         public Promise(Task<TResult> task) : base(default!)
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
@@ -54,22 +68,39 @@ namespace SpawnDev.BlazorJS.JSObjects
                 });
             })));
         }
-
+        /// <summary>
+        /// The Promise() constructor creates Promise objects.
+        /// </summary>
         public Promise(Action<Function, Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
+        /// <summary>
+        /// The Promise() constructor creates Promise objects.
+        /// </summary>
         public Promise(Action<Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
-
-        public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
-        public void Then(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
-        public void Then<TCatch>(ActionCallback<TResult> thenCallback, ActionCallback<TCatch> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
-
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
         public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
-
+        /// <summary>
+        /// Set the methods for the Promise onFulfilled and onRejected events
+        /// </summary>
+        public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        /// <summary>
+        /// Set the methods for the Promise onFulfilled and onRejected events
+        /// </summary>
+        public void Then(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        /// <summary>
+        /// Set the methods for the Promise onFulfilled and onRejected events
+        /// </summary>
+        public void ThenCatch<TCatch>(ActionCallback<TResult> thenCallback, ActionCallback<TCatch> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        /// <summary>
+        /// Asynchronously wait for a Promise to complete
+        /// </summary>
         public Task<TResult> ThenAsync(int timeoutMS = 0)
         {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            Then(callbacks.Add(Callback.Create<TResult>((result) =>
+            ThenCatch(callbacks.Add(Callback.Create<TResult>((result) =>
             {
                 if (t.TrySetResult(result))
                 {
@@ -96,11 +127,14 @@ namespace SpawnDev.BlazorJS.JSObjects
             cancellationTokenSource?.CancelAfter(timeoutMS);
             return t.Task;
         }
+        /// <summary>
+        /// Asynchronously wait for a Promise to complete
+        /// </summary>
         public Task<TResult> ThenAsync(CancellationToken cancellationToken)
         {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
-            Then(callbacks.Add(Callback.Create<TResult>((result) =>
+            ThenCatch(callbacks.Add(Callback.Create<TResult>((result) =>
             {
                 if (t.TrySetResult(result))
                 {
@@ -127,12 +161,23 @@ namespace SpawnDev.BlazorJS.JSObjects
             return t.Task;
         }
     }
-
+    /// <summary>
+    /// The Promise object represents the eventual completion (or failure) of an asynchronous operation and its resulting value.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+    /// </summary>
     public class Promise : JSObject
     {
+        /// <summary>
+        /// Explicit conversion from a Task to a Promise
+        /// </summary>
         public static explicit operator Promise(Task t) => new Promise(t);
-        public static explicit operator Promise(Func<Task> t) => new Promise(t);
-
+        /// <summary>
+        /// Explicit conversion from a Func&lt;Task> to a Promise
+        /// </summary>
+        public static explicit operator Promise(Func<Task> fn) => new Promise(fn);
+        /// <summary>
+        /// The Promise() constructor creates Promise objects.
+        /// </summary>
         public Promise(Func<Task> task) : base(default!)
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
@@ -164,7 +209,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 });
             })));
         }
-
+        /// <summary>
+        /// The Promise() constructor creates Promise objects.
+        /// </summary>
         public Promise(Task task) : base(default!)
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
@@ -196,24 +243,44 @@ namespace SpawnDev.BlazorJS.JSObjects
                 });
             })));
         }
-
+        /// <summary>
+        /// The Promise() constructor creates Promise objects.
+        /// </summary>
         public Promise(Action<Function, Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
+        /// <summary>
+        /// The Promise() constructor creates Promise objects.
+        /// </summary>
         public Promise(Action<Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
-
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
         public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
-
-        public void ThenCatch<TError>(ActionCallback thenCallback, ActionCallback<TError> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        /// <summary>
+        /// Set the methods for the Promise onFulfilled and onRejected events
+        /// </summary>
+        public void ThenCatch<TCatch>(ActionCallback thenCallback, ActionCallback<TCatch> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        /// <summary>
+        /// Set the methods for the Promise onFulfilled and onRejected events
+        /// </summary>
         public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        /// <summary>
+        /// Set the methods for the Promise onFulfilled and onRejected events
+        /// </summary>
         public void Then<TResult>(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
-        public void ThenCatch<TResult, TError>(ActionCallback<TResult> thenCallback, ActionCallback<TError> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
-
+        /// <summary>
+        /// Set the methods for the Promise onFulfilled and onRejected events
+        /// </summary>
+        public void ThenCatch<TResult, TCatch>(ActionCallback<TResult> thenCallback, ActionCallback<TCatch> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
         /// <summary>
         /// Handles converting a value from a Promise catch event into an exception.<br/>
-        /// These are usually of the type `Error`, but can be anything
+        /// These are usually of the type `Error`, but can be anything<br/>
+        /// The error object is tested here to create JSException that can represent it in a useful manner
         /// </summary>
         internal static JSException UnknownErrorToException(Error? error)
         {
             JSException? ex = null;
+            string? errorName = null;
+            string? errorMessage = null;
             if (error != null)
             {
                 var typeofError = error.JSRef!.TypeOf();
@@ -221,45 +288,31 @@ namespace SpawnDev.BlazorJS.JSObjects
                 {
                     case "string":
                         {
-                            var message = error.JSRefAs<string>();
-                            ex = new JSException(message);
+                            errorMessage = error.JSRefAs<string>();
                             break;
                         }
                     case "object":
                         {
-                            string? message = null;
                             var cNames = error.JSRef!.ConstructorNames();
+                            errorName = cNames.FirstOrDefault();
                             if (cNames.Contains("Error"))
                             {
                                 ex = error.ToException();
                             }
                             else
                             {
-                                if (error.JSRef!.TypeOf("toString") == "function")
-                                {
-                                    message = error.ToString();
-                                }
-                                if (string.IsNullOrEmpty(message))
-                                {
-                                    message = error.Message;
-                                }
-                                if (!string.IsNullOrEmpty(message))
-                                {
-                                    ex = new JSException(message, cNames.FirstOrDefault());
-                                }
+                                errorMessage = error.Message;
                             }
                             break;
                         }
                 }
             }
-            if (ex == null)
-            {
-                // fallback
-                ex = new JSException("Unknown error");
-            }
+            ex ??= new JSException(!string.IsNullOrEmpty(errorMessage) ? errorMessage : "Unknown error", errorName);
             return ex;
         }
-
+        /// <summary>
+        /// Asynchronously wait for a Promise to complete
+        /// </summary>
         public Task ThenAsync(int timeoutMS = 0)
         {
             var t = new TaskCompletionSource();
@@ -292,7 +345,9 @@ namespace SpawnDev.BlazorJS.JSObjects
             cancellationTokenSource?.CancelAfter(timeoutMS);
             return t.Task;
         }
-
+        /// <summary>
+        /// Asynchronously wait for a Promise to complete
+        /// </summary>
         public Task ThenCatchAsync<TCatch>(int timeoutMS = 0)
         {
             var t = new TaskCompletionSource();
@@ -324,6 +379,9 @@ namespace SpawnDev.BlazorJS.JSObjects
             cancellationTokenSource?.CancelAfter(timeoutMS);
             return t.Task;
         }
+        /// <summary>
+        /// Asynchronously wait for a Promise to complete
+        /// </summary>
         public Task<TResult> ThenAsync<TResult>(int timeoutMS = 0)
         {
             var t = new TaskCompletionSource<TResult>();
@@ -356,6 +414,9 @@ namespace SpawnDev.BlazorJS.JSObjects
             cancellationTokenSource?.CancelAfter(timeoutMS);
             return t.Task;
         }
+        /// <summary>
+        /// Asynchronously wait for a Promise to complete
+        /// </summary>
         public Task ThenAsync(CancellationToken cancellationToken)
         {
             var t = new TaskCompletionSource();
@@ -386,6 +447,9 @@ namespace SpawnDev.BlazorJS.JSObjects
             }
             return t.Task;
         }
+        /// <summary>
+        /// Asynchronously wait for a Promise to complete
+        /// </summary>
         public Task<TResult> ThenAsync<TResult>(CancellationToken cancellationToken)
         {
             var t = new TaskCompletionSource<TResult>();
