@@ -15,12 +15,10 @@ JS.Log($"InstanceId: {JS.InstanceId}");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-#if DEBUG && true
-var host = builder.Build();
-await host.StartBackgroundServices();
-//
+var host = await builder.Build().StartBackgroundServices();
+
+#if DEBUG
+
+#endif
 
 await host.BlazorJSRunAsync();
-#endif
-// build and Init using BlazorJSRunAsync (instead of RunAsync)
-await builder.Build().BlazorJSRunAsync();

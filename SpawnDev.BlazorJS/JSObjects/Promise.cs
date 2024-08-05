@@ -272,45 +272,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public void ThenCatch<TResult, TCatch>(ActionCallback<TResult> thenCallback, ActionCallback<TCatch> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
         /// <summary>
-        /// Handles converting a value from a Promise catch event into an exception.<br/>
-        /// These are usually of the type `Error`, but can be anything<br/>
-        /// The error object is tested here to create JSException that can represent it in a useful manner
-        /// </summary>
-        internal static JSException UnknownErrorToException(Error? error)
-        {
-            JSException? ex = null;
-            string? errorName = null;
-            string? errorMessage = null;
-            if (error != null)
-            {
-                var typeofError = error.JSRef!.TypeOf();
-                switch (typeofError)
-                {
-                    case "string":
-                        {
-                            errorMessage = error.JSRefAs<string>();
-                            break;
-                        }
-                    case "object":
-                        {
-                            var cNames = error.JSRef!.ConstructorNames();
-                            errorName = cNames.FirstOrDefault();
-                            if (cNames.Contains("Error"))
-                            {
-                                ex = error.ToException();
-                            }
-                            else
-                            {
-                                errorMessage = error.Message;
-                            }
-                            break;
-                        }
-                }
-            }
-            ex ??= new JSException(!string.IsNullOrEmpty(errorMessage) ? errorMessage : "Unknown error", errorName);
-            return ex;
-        }
-        /// <summary>
         /// Asynchronously wait for a Promise to complete
         /// </summary>
         public Task ThenAsync(int timeoutMS = 0)
@@ -479,6 +440,45 @@ namespace SpawnDev.BlazorJS.JSObjects
                 });
             }
             return t.Task;
+        }
+        /// <summary>
+        /// Handles converting a value from a Promise catch event into an exception.<br/>
+        /// These are usually of the type `Error`, but can be anything<br/>
+        /// The error object is tested here to create JSException that can represent it in a useful manner
+        /// </summary>
+        internal static JSException UnknownErrorToException(Error? error)
+        {
+            JSException? ex = null;
+            string? errorName = null;
+            string? errorMessage = null;
+            if (error != null)
+            {
+                var typeofError = error.JSRef!.TypeOf();
+                switch (typeofError)
+                {
+                    case "string":
+                        {
+                            errorMessage = error.JSRefAs<string>();
+                            break;
+                        }
+                    case "object":
+                        {
+                            var cNames = error.JSRef!.ConstructorNames();
+                            errorName = cNames.FirstOrDefault();
+                            if (cNames.Contains("Error"))
+                            {
+                                ex = error.ToException();
+                            }
+                            else
+                            {
+                                errorMessage = error.Message;
+                            }
+                            break;
+                        }
+                }
+            }
+            ex ??= new JSException(!string.IsNullOrEmpty(errorMessage) ? errorMessage : "Unknown error", errorName);
+            return ex;
         }
     }
 }
