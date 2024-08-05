@@ -46,7 +46,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Creates a new BigUint64Array object.
         /// </summary>
         /// <param name="array"></param>
-        public BigUint64Array(ulong[] array) : base(NullRef!)
+        public BigUint64Array(ulong[] array) : base(default!)
         {
             var myByteArray = new byte[array.Length * sizeof(ulong)];
             System.Buffer.BlockCopy(array, 0, myByteArray, 0, array.Length * sizeof(ulong));

@@ -21,7 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.5.0" />
+		<PackageReference Include="SpawnDev.BlazorJS.WebWorkers" Version="2.5.1" />
 	</ItemGroup>
 
 	<!-- SpawnDev.BlazorJS.WebWorkers config -->

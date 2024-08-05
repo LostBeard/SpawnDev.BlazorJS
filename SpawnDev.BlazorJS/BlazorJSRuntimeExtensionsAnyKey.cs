@@ -18,6 +18,10 @@
         /// </summary>
         public static string? ConstructorName(this BlazorJSRuntime _this, object key) => BlazorJSInterop.GlobalPropertyConstructorName(key);
         /// <summary>
+        /// Returns a string[] containing the constructor.name property for each unique entry in the prototype chain
+        /// </summary>
+        public static string[] ConstructorNames(this BlazorJSRuntime _this, object key) => BlazorJSInterop.GlobalPropertyConstructorNames(key);
+        /// <summary>
         /// Returns the target's property string keys<br/>
         /// non-string keys are ignored
         /// </summary>

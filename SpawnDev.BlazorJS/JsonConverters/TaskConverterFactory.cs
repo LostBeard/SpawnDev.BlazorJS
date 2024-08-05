@@ -55,15 +55,12 @@ namespace SpawnDev.BlazorJS.JsonConverters
         /// <summary>
         /// Converts an IJSInProcessObjectReference to the target type
         /// </summary>
-        public override Task? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+        public override async Task? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            if (_ref == null) return null;
-            var promise = new Promise(_ref);
-            var ret = (Task)promise.ThenAsync();
-            //ret.ContinueWith((t) => {
-            //    promise?.Dispose();
-            //});
-            return ret;
+            // _ref should never be null here as there are null handlers that run before this call
+            if (_ref == null) throw new NullReferenceException("TaskConverterFactory: null cannot be converted to type Task");
+            using var promise = new Promise(_ref);
+            await promise.ThenAsync();
         }
         /// <summary>
         /// Writes value to Json stream
@@ -72,9 +69,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             var promise = new Promise(value);
             JsonSerializer.Serialize(writer, promise, options);
-            //value.ContinueWith((t) => {
-            //    promise?.Dispose();
-            //});
+            // wait to dispose the Promise until completed
+            // alterative is to not ContinueWith and let GC clean it up
+            value.ContinueWith(t => promise.Dispose());
         }
     }
     /// <summary>
@@ -85,14 +82,12 @@ namespace SpawnDev.BlazorJS.JsonConverters
         /// <summary>
         /// Converts an IJSInProcessObjectReference to the target type
         /// </summary>
-        public override Task<TResult>? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
+        public override async Task<TResult> FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref)
         {
-            if (_ref == null) return null;
-            var promise = new Promise<TResult>(_ref);
-            var ret = (Task<TResult>)promise.ThenAsync();
-            //ret.ContinueWith((t) => {
-            //    promise?.Dispose();
-            //});
+            // _ref should never be null here as there are null handlers that run before this call
+            if (_ref == null) throw new NullReferenceException("TaskConverterFactory: null cannot be converted to type Task");
+            using var promise = new Promise<TResult>(_ref);
+            var ret = await promise.ThenAsync();
             return ret;
         }
         /// <summary>
@@ -102,9 +97,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             var promise = new Promise<TResult>(value);
             JsonSerializer.Serialize(writer, promise, options);
-            //value.ContinueWith((t) => {
-            //    promise?.Dispose();
-            //});
+            // wait to dispose the Promise until completed
+            // alterative is to not ContinueWith and let GC clean it up
+            value.ContinueWith(t => promise.Dispose());
         }
     }
 }

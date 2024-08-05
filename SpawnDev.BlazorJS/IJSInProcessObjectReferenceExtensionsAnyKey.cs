@@ -20,6 +20,10 @@ namespace SpawnDev.BlazorJS.IJSInProcessObjectReferenceAnyKey
         /// </summary>
         public static string? ConstructorName(this IJSInProcessObjectReference _ref, object key) => BlazorJSInterop.ObjectPropertyConstructorName(_ref, key);
         /// <summary>
+        /// Returns a string[] containing the constructor.name property for each unique entry in the prototype chain
+        /// </summary>
+        public static string[] ConstructorNames(this IJSInProcessObjectReference _ref, object key) => BlazorJSInterop.ObjectPropertyConstructorNames(_ref, key);
+        /// <summary>
         /// Returns the target's property string keys<br/>
         /// non-string keys are ignored
         /// </summary>

@@ -74,5 +74,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public override string ToString() => JSRef!.Call<string>("toString");
+        /// <summary>
+        /// Returns the error prototype.name<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/name
+        /// </summary>
+        public string? ProtoTypeName => Reflect.GetPrototypeOf(this)?.Using(o => o?.JSRef!.Get<string?>("name"));
     }
 }

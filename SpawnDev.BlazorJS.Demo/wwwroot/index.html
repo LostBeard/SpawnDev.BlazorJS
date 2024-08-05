@@ -10,6 +10,40 @@
     <link rel="stylesheet" href="css/app.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link href="SpawnDev.BlazorJS.Demo.styles.css" rel="stylesheet" />
+    <script webworker-enabled>
+        function Sleep(timeout) {
+            return new Promise(r => {
+                setTimeout(r, timeout);
+            });
+        }
+        async function WillFail() {
+            console.log('> WillFail');
+            await Sleep(2000);
+            var b = gg();
+            return b;
+        }
+        function NotAsync() {
+            console.log('> NotAsync');
+            return null;
+        }
+        async function WaitForIt(task) {
+            console.log('> WaitForIt', task);
+            var ret = await task;
+            console.log('> WaitForIt', ret);
+        }
+
+
+        function getProtoChain(o) {
+            const ans = []
+            let t = o
+            while (1) {
+                t = Object.getPrototypeOf(t)
+                if (!t) break;
+                ans.push(t?.constructor?.name)
+            }
+            return ans
+        }
+    </script>
 </head>
 
 <body>

@@ -24,6 +24,12 @@
             var { target } = this.pathObjectInfo(obj, key);
             return target?.constructor?.name;
         }
+        // returns string[]
+        ObjectPropertyConstructorNames(obj, key) {
+            if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
+            var { target } = this.pathObjectInfo(obj, key);
+            return this.ObjectConstructorNames(target);
+        }
         // returns any
         ObjectPropertyCall(obj, key, args) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
@@ -121,8 +127,16 @@
             return this.ObjectPropertyConstructorName(globalThis, key);
         }
         // returns string or null
+        GlobalPropertyConstructorNames(key) {
+            return this.ObjectPropertyConstructorNames(globalThis, key);
+        }
+        // returns string or null
         GlobalConstructorName() {
             return this.ObjectConstructorName(globalThis);
+        }
+        // returns string[]
+        GlobalConstructorNames() {
+            return this.ObjectConstructorNames(globalThis);
         }
         // returns any
         GlobalPropertyCall(key, args) {
@@ -177,6 +191,20 @@
         // returns string or null
         ObjectConstructorName(obj) {
             return obj?.constructor?.name;
+        }
+        // returns string[]
+        ObjectConstructorNames(obj) {
+            const constructorNames = [];
+            if (obj === void 0 || obj === null) return constructorNames;
+            let o = obj;
+            while (1) {
+                o = Object.getPrototypeOf(o);
+                let cName = o?.constructor?.name;
+                if (!cName) break;
+                if (constructorNames.indexOf(cName) !== -1) continue;
+                constructorNames.push(cName);
+            }
+            return constructorNames;
         }
         // returns any
         ObjectCall(obj, args) {

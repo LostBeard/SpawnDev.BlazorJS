@@ -7,12 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         public static explicit operator Promise<TResult>(Task<TResult> t) => new Promise<TResult>(t);
         public static explicit operator Promise<TResult>(Func<Task<TResult>> t) => new Promise<TResult>(t);
 
-        public Promise(Func<Task<TResult>> task) : base(NullRef)
+        public Promise(Func<Task<TResult>> task) : base(default!)
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
             {
-                //ResolveFunc = resolveFunc;
-                //RejectFunc = rejectFunc;
                 task().ContinueWith(t =>
                 {
                     if (t.IsFaulted)
@@ -33,12 +31,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             })));
         }
 
-        public Promise(Task<TResult> task) : base(NullRef)
+        public Promise(Task<TResult> task) : base(default!)
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
             {
-                //ResolveFunc = resolveFunc;
-                //RejectFunc = rejectFunc;
                 task.ContinueWith(t =>
                 {
                     if (t.IsFaulted)
@@ -64,6 +60,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
         public void Then(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
+        public void Then<TCatch>(ActionCallback<TResult> thenCallback, ActionCallback<TCatch> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
 
         public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
 
@@ -79,9 +76,10 @@ namespace SpawnDev.BlazorJS.JSObjects
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            })), callbacks.Add(Callback.Create(() =>
+            })), callbacks.Add(Callback.Create((Error? error) =>
             {
-                if (t.TrySetException(new Exception("Unknown error")))
+                var ex = Promise.UnknownErrorToException(error);
+                if (t.TrySetException(ex))
                 {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
@@ -108,9 +106,10 @@ namespace SpawnDev.BlazorJS.JSObjects
                 {
                     callbacks.Dispose();
                 }
-            })), callbacks.Add(Callback.Create(() =>
+            })), callbacks.Add(Callback.Create((Error? error) =>
             {
-                if (t.TrySetException(new Exception("Unknown error")))
+                var ex = Promise.UnknownErrorToException(error);
+                if (t.TrySetException(ex))
                 {
                     callbacks.Dispose();
                 }
@@ -134,12 +133,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         public static explicit operator Promise(Task t) => new Promise(t);
         public static explicit operator Promise(Func<Task> t) => new Promise(t);
 
-        public Promise(Func<Task> task) : base(NullRef)
+        public Promise(Func<Task> task) : base(default!)
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
             {
-                //ResolveFunc = resolveFunc;
-                //RejectFunc = rejectFunc;
                 task().ContinueWith(t =>
                 {
                     if (t.IsFaulted)
@@ -168,12 +165,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             })));
         }
 
-        public Promise(Task task) : base(NullRef)
+        public Promise(Task task) : base(default!)
         {
             FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
             {
-                //ResolveFunc = resolveFunc;
-                //RejectFunc = rejectFunc;
                 task.ContinueWith(t =>
                 {
                     if (t.IsFaulted)
@@ -202,55 +197,77 @@ namespace SpawnDev.BlazorJS.JSObjects
             })));
         }
 
-        //public Promise() : base(NullRef)
-        //{
-        //    FromReference(JS.New("Promise", Callback.CreateOne((Function resolveFunc, Function rejectFunc) =>
-        //    {
-        //        ResolveFunc = resolveFunc;
-        //        RejectFunc = rejectFunc;
-        //    })));
-        //}
-
         public Promise(Action<Function, Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
         public Promise(Action<Function> executor) : base(JS.New("Promise", Callback.CreateOne(executor))) { }
 
         public Promise(IJSInProcessObjectReference _ref) : base(_ref) { }
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    ResolveFunc = null;
-        //    RejectFunc = null;
-        //    base.Dispose(disposing);
-        //}
-
-        //public Function? ResolveFunc { get; protected set; }
-        //public Function? RejectFunc { get; protected set; }
 
         public void ThenCatch<TError>(ActionCallback thenCallback, ActionCallback<TError> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
         public void Then(ActionCallback thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
         public void Then<TResult>(ActionCallback<TResult> thenCallback, ActionCallback catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
         public void ThenCatch<TResult, TError>(ActionCallback<TResult> thenCallback, ActionCallback<TError> catchCallback) => JSRef!.CallVoid("then", thenCallback, catchCallback);
 
-        //public void Resolve(object? value) => ResolveFunc.CallVoid(null, value);
-        //public void Resolve() => ResolveFunc.CallVoid();
-        //public void Reject() => RejectFunc.CallVoid();
-        //public void Reject(object? reason) => RejectFunc.CallVoid(null, reason);
+
+        /// <summary>
+        /// Handles converting a value from a Promise catch event into an exception.<br/>
+        /// These are usually of the type `Error`, but can be anything
+        /// </summary>
+        internal static Exception UnknownErrorToException(Error? error)
+        {
+            Exception? ex = null;
+            if (error != null)
+            {
+                var typeofError = error.JSRef!.TypeOf();
+                switch (typeofError)
+                {
+                    case "string":
+                        {
+                            var message = error.JSRefAs<string>();
+                            ex = new Exception(message);
+                            break;
+                        }
+                    case "object":
+                        {
+                            var errorName = error.ProtoTypeName;
+                            string? message;
+                            if (!string.IsNullOrEmpty(errorName) && !error.JSRef!.IsUndefined("toString") && !error.JSRef!.IsUndefined("message"))
+                            {
+                                // appears to be an Error object
+                                message = error.ToString();
+                            }
+                            else
+                            {
+                                message = error.Message;
+                            }
+                            if (!string.IsNullOrEmpty(message))
+                            {
+                                ex = new Exception(message);
+                            }
+                            break;
+                        }
+                }
+
+            }
+            ex ??= new Exception("Unknown error");
+            return ex;
+        }
 
         public Task ThenAsync(int timeoutMS = 0)
         {
             var t = new TaskCompletionSource();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            Then(callbacks.Add(Callback.Create(() =>
+            ThenCatch(callbacks.Add(Callback.Create(() =>
             {
                 if (t.TrySetResult())
                 {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            })), callbacks.Add(Callback.Create(() =>
+            })), callbacks.Add(Callback.Create((Error? error) =>
             {
-                if (t.TrySetException(new Exception("Unknown error")))
+                var ex = UnknownErrorToException(error);
+                if (t.TrySetException(ex))
                 {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
@@ -266,14 +283,6 @@ namespace SpawnDev.BlazorJS.JSObjects
             });
             cancellationTokenSource?.CancelAfter(timeoutMS);
             return t.Task;
-        }
-        public class PromiseCatchException<T> : Exception
-        {
-            public T CatchValue { get; init; }
-            public PromiseCatchException(T catchValue)
-            {
-                CatchValue = catchValue;
-            }
         }
 
         public Task ThenCatchAsync<TCatch>(int timeoutMS = 0)
@@ -312,16 +321,17 @@ namespace SpawnDev.BlazorJS.JSObjects
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
             var cancellationTokenSource = timeoutMS > 0 ? new CancellationTokenSource() : null;
-            Then(callbacks.Add(Callback.Create<TResult>((result) =>
+            ThenCatch(callbacks.Add(Callback.Create<TResult>((result) =>
             {
                 if (t.TrySetResult(result))
                 {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
                 }
-            })), callbacks.Add(Callback.Create(() =>
+            })), callbacks.Add(Callback.Create((Error? error) =>
             {
-                if (t.TrySetException(new Exception("Unknown error")))
+                var ex = Promise.UnknownErrorToException(error);
+                if (t.TrySetException(ex))
                 {
                     cancellationTokenSource?.Dispose();
                     callbacks.Dispose();
@@ -342,15 +352,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             var t = new TaskCompletionSource();
             var callbacks = new CallbackGroup();
-            Then(callbacks.Add(Callback.Create(() =>
+            ThenCatch(callbacks.Add(Callback.Create(() =>
             {
                 if (t.TrySetResult())
                 {
                     callbacks.Dispose();
                 }
-            })), callbacks.Add(Callback.Create(() =>
+            })), callbacks.Add(Callback.Create((Error? error) =>
             {
-                if (t.TrySetException(new Exception("Unknown error")))
+                var ex = Promise.UnknownErrorToException(error);
+                if (t.TrySetException(ex))
                 {
                     callbacks.Dispose();
                 }
@@ -371,15 +382,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             var t = new TaskCompletionSource<TResult>();
             var callbacks = new CallbackGroup();
-            Then(callbacks.Add(Callback.Create<TResult>((result) =>
+            ThenCatch(callbacks.Add(Callback.Create<TResult>((result) =>
             {
                 if (t.TrySetResult(result))
                 {
                     callbacks.Dispose();
                 }
-            })), callbacks.Add(Callback.Create(() =>
+            })), callbacks.Add(Callback.Create((Error? error) =>
             {
-                if (t.TrySetException(new Exception("Unknown error")))
+                var ex = Promise.UnknownErrorToException(error);
+                if (t.TrySetException(ex))
                 {
                     callbacks.Dispose();
                 }

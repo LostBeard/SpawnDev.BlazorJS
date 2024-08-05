@@ -17,6 +17,10 @@
         /// </summary>
         public string? ConstructorName() => BlazorJSInterop.GlobalConstructorName();
         /// <summary>
+        /// Returns a string[] containing the constructor.name property for each unique entry in the prototype chain
+        /// </summary>
+        public string[] ConstructorNames() => BlazorJSInterop.GlobalConstructorNames();
+        /// <summary>
         /// Returns full ? target === obj2 : target == obj2
         /// </summary>
         public bool JSEquals(string key, object? obj2, bool full = false) => BlazorJSInterop.GlobalPropertyEquals(key, obj2, full);
@@ -28,6 +32,10 @@
         /// Returns the constructor?.name of the target
         /// </summary>
         public string? ConstructorName(string key) => BlazorJSInterop.GlobalPropertyConstructorName(key);
+        /// <summary>
+        /// Returns a string[] containing the constructor.name property for each unique entry in the prototype chain
+        /// </summary>
+        public string[] ConstructorNames(string key) => BlazorJSInterop.GlobalPropertyConstructorNames(key);
         /// <summary>
         /// Returns the target's property string keys<br/>
         /// non-string keys are ignored

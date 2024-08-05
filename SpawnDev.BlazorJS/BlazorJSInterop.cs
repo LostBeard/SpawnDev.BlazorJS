@@ -26,9 +26,17 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         public static string? GlobalPropertyConstructorName(object key) => invoke<string?>(nameof(GlobalPropertyConstructorName), key);
         /// <summary>
+        /// Returns a string[] containing the constructor.name property for each unique entry in the prototype chain
+        /// </summary>
+        public static string[] GlobalPropertyConstructorNames(object key) => invoke<string[]>(nameof(GlobalPropertyConstructorNames), key);
+        /// <summary>
         /// Returns target?.constructor?.name
         /// </summary>
         public static string? GlobalConstructorName() => invoke<string?>(nameof(GlobalConstructorName));
+        /// <summary>
+        /// Returns a string[] containing the constructor.name property for each unique entry in the prototype chain
+        /// </summary>
+        public static string[] GlobalConstructorNames() => invoke<string[]>(nameof(GlobalConstructorNames));
         /// <summary>
         /// Equivalent to JSRuntime.Invoke, except here the args are an array
         /// </summary>
@@ -98,6 +106,10 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         public static string? ObjectPropertyConstructorName(object obj, object key) => invoke<string?>(nameof(ObjectPropertyConstructorName), obj, key);
         /// <summary>
+        /// Returns a string[] containing the constructor.name property for each unique entry in the prototype chain
+        /// </summary>
+        public static string[] ObjectPropertyConstructorNames(object obj, object key) => invoke<string[]>(nameof(ObjectPropertyConstructorNames), obj, key);
+        /// <summary>
         /// Calls the target function
         /// </summary>
         public static T ObjectPropertyCall<T>(object obj, object key, object?[]? args) => invoke<T>(nameof(ObjectPropertyCall), obj, key, args);
@@ -160,6 +172,10 @@ namespace SpawnDev.BlazorJS
         /// Returns target?.constructor?.name
         /// </summary>
         public static string? ObjectConstructorName(object obj) => invoke<string?>(nameof(ObjectConstructorName), obj);
+        /// <summary>
+        /// Returns a string[] containing the constructor.name property for each unique entry in the prototype chain
+        /// </summary>
+        public static string[] ObjectConstructorNames(object obj) => invoke<string[]>(nameof(ObjectConstructorNames), obj);
         /// <summary>
         /// Calls the target function
         /// </summary>

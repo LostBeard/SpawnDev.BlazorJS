@@ -23,14 +23,13 @@ namespace SpawnDev.BlazorJS
     public class JSObject : IDisposable
     {
         /// <summary>
-        /// This event is for diagnostics purposes and will liekly be removed in future releases
+        /// This event is for diagnostics purposes and will likely be removed in future releases
         /// </summary>
 #if DEBUG
         public static Action<JSObject>? OnJSObjectCreated { get; set; }
         public static bool UndisposedHandleVerboseMode { get; set; } = false;
 #endif
         protected static BlazorJSRuntime JS => BlazorJSRuntime.JS;
-        public static IJSInProcessObjectReference? NullRef { get; } = null;
         public static JSInProcessObjectReferenceUndefined? UndefinedRef { get; } = new JSInProcessObjectReferenceUndefined();
         [JsonIgnore]
         public bool IsJSRefUndefined { get; private set; } = false;

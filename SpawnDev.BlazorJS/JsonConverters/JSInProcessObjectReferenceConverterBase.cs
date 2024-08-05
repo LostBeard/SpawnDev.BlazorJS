@@ -27,10 +27,19 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             var _ref = JsonSerializer.Deserialize<IJSInProcessObjectReference>(ref reader, options);
             if (_ref == null) return default!;
-            return (T)(FromIJSInProcessObjectReference(_ref) ?? default!);
+            return (T)(FromIJSInProcessObjectReference(_ref) ?? default(T))!;
         }
         /// <summary>
-        /// Converts an IJSInProcessObjectReference to the target type
+        /// If the IJSInProcessObjectReference may be null, use this method instead of FromIJSInProcessObjectReference
+        /// </summary>
+        public T? FromIJSInProcessObjectReferenceSafe(IJSInProcessObjectReference? _ref)
+        {
+            if (_ref == null) return default!;
+            return (T)(FromIJSInProcessObjectReference(_ref) ?? default(T))!;
+        }
+        /// <summary>
+        /// Converts an IJSInProcessObjectReference to the target type<br/>
+        /// _ref should not be null
         /// </summary>
         public abstract object? FromIJSInProcessObjectReference(IJSInProcessObjectReference? _ref);
     }

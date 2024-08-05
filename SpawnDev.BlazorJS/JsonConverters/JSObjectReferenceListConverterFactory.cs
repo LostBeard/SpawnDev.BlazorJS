@@ -80,7 +80,8 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 var ret = new T[array.Length];
                 for (var i = 0; i < ret.Length; i++)
                 {
-                    ret[i] = (T)ElementConverter.FromIJSInProcessObjectReference(array[i])!;
+                    var jsref = array[i];
+                    ret[i] = (T)(jsref == null ? default(T) : ElementConverter.FromIJSInProcessObjectReference(jsref))!;
                 }
                 return ret.ToList();
             }

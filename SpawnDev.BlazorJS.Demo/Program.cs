@@ -18,6 +18,41 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 var host = builder.Build();
 await host.StartBackgroundServices();
 
+var tcs = new TaskCompletionSource<string>();
+tcs.TrySetResult("Woohoo!");
+try
+{
+    var tmp = JS.CallVoidAsync("WaitForIt", Task.FromResult("apples"));
+    await Task.Delay(1000);
+    tcs.TrySetResult("Woohoo!");
+    await tmp;
+    var ok = true;
+}
+catch (Exception ex)
+{
+    var nmt = true;
+}
+
+try
+{
+    var tmp = await JS.CallAsync<string?>("WillFail");
+    var ok = true;
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"ERROR-->: {ex.Message}");
+}
+
+try
+{
+    var tmp = JS.Call<Task<string?>?>("NotAsync");
+    var ok = true;
+}
+catch (Exception ex)
+{
+    var nmt = true;
+}
+
 
 using var caches = new CacheStorage();
 var DefaultCache = await caches.Open("default");
