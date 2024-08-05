@@ -228,14 +228,12 @@ namespace SpawnDev.BlazorJS.JSObjects
                         }
                     case "object":
                         {
-                            var errorName = error.ProtoTypeName;
-                            string? message;
-                            if (!string.IsNullOrEmpty(errorName) && !error.JSRef!.IsUndefined("toString") && !error.JSRef!.IsUndefined("message"))
+                            string? message = null;
+                            if (error.JSRef!.TypeOf("toString") == "function")
                             {
-                                // appears to be an Error object
                                 message = error.ToString();
                             }
-                            else
+                            if (string.IsNullOrEmpty(message))
                             {
                                 message = error.Message;
                             }
