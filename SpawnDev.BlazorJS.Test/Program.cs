@@ -52,10 +52,11 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 #if DEBUG && true
 var host = builder.Build();
+await host.StartBackgroundServices();
 //
 
 await host.BlazorJSRunAsync();
-#else
+#endif
 // build and Init using BlazorJSRunAsync (instead of RunAsync)
 await builder.Build().BlazorJSRunAsync();
-#endif
+
