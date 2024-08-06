@@ -358,23 +358,36 @@
             var parent = rootObject;
             var target;
             var propertyName;
-            //if (path === null || path === void (0)) {
-            //    // undefined and null can actually be property keys but that fact is ignored here atm
-            //    target = parent;
-            //    parent = null;
-            //} else
             if (typeof path === 'string' && typeof parent[path] === 'undefined') {
                 var parts = path.split('.');
                 propertyName = parts[parts.length - 1];
+                var part;
+                var parentNotFound = false;
                 for (var i = 0; i < parts.length - 1; i++) {
-                    parent = parent[parts[i]];
+                    part = parts[i];
+                    if (part[part.length - 1] === '?') {
+                        // ? null conditonal found
+                        // if parent does not exist allow undefined/null parent instead of throwing exception
+                        part = part.substring(0, part.length - 1);
+                        parent = parent[part];
+                        if (parent === void 0 || parent === null) {
+                            parentNotFound = true;
+                            break;
+                        }
+                    }
+                    else {
+                        parent = parent[part];
+                    }
                 }
-                target = parent[propertyName];
+                if (!parentNotFound) {
+                    target = parent[propertyName];
+                }
             }
             else {
                 propertyName = path;
                 target = parent[propertyName];
             }
+            var parentExists = !!parent;
             var targetType = typeof target;
             var exists = targetType !== 'undefined' || (parent && propertyName in parent);
             return {
@@ -383,6 +396,7 @@
                 target,         // may be undefined if it does not currently exist
                 targetType,     // will always be a string of the target type (Ex. 'undefined', 'object', 'string', 'number')
                 exists,         // will always be a bool value (true or false)
+                parentExists,   // will always be a bool value (true or false)
             };
         }
     }
