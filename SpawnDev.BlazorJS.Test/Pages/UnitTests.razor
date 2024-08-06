@@ -49,6 +49,45 @@
     }
 
     [TestMethod]
+    public void NullConditionalTest()
+    {
+        // Version 2.5.4 added support for null conditionals (?) in string based keys for JS interop calls
+        // Ex:
+        // var value = JS.Get<bool?>("__test?.config2?.visible");
+        // In the above line value will be null (default for bool?) if __test or __test.config2 are null or undefined
+
+        // set a global var to use for testing
+        JS.Set("__test", new { name = "something", config = new { visible = true } });
+
+        // test reading existing property without null conditional
+        var isUndefined1 = JS.Get<bool>("__test.config.visible");
+        if (!isUndefined1) throw new Exception("Failed");
+
+        // test reading existing property with null conditional
+        var isUndefined2 = JS.Get<bool>("__test.config?.visible");
+        if (!isUndefined2) throw new Exception("Failed");
+
+        // test reading non-existing property with null conditional
+        var isUndefined3 = JS.Get<bool>("__test.config2?.visible");
+        if (isUndefined3) throw new Exception("Failed");
+
+        // test reading non-existing property with null conditional
+        var isUndefined4 = JS.Get<bool>("__test1?.config2.visible1");
+        if (isUndefined4) throw new Exception("Failed");
+
+        // test reading non-existing property with null conditional
+        var isUndefined5 = JS.Get<bool?>("__test.config2?.visible");
+        if (isUndefined5 != null) throw new Exception("Failed");
+
+        // test reading non-existing property with null conditional
+        var isUndefined6 = JS.Get<bool?>("__test1?.config2.visible1");
+        if (isUndefined6 != null) throw new Exception("Failed");
+
+        JS.Delete("__test");
+    }
+
+
+    [TestMethod]
     public async Task TaskPoolFullTest()
     {
         if (!WebWorkerService.WebWorkerSupported)
