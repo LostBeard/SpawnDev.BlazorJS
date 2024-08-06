@@ -19,6 +19,13 @@ var host = await builder.Build().StartBackgroundServices();
 
 #if DEBUG
 
+JS.Set("__test", new { name = "something", config = new { visible = true } });
+
+var isUndefined1 = JS.Get<bool>("__test.config.visible");
+var isUndefined2 = JS.Get<bool>("__test.config?.visible");
+var isUndefined3 = JS.Get<bool>("__test.config2?.visible");
+var isUndefined4 = JS.Get<bool>("__test1?.config2.visible1");
+var nmt = true;
 #endif
 
 await host.BlazorJSRunAsync();
