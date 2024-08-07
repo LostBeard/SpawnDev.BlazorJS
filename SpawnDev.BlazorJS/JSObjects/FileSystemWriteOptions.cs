@@ -2,6 +2,10 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// Options used when calling FileSystemWritableFileStream.Write()<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemWritableFileStream/write#data
+    /// </summary>
     public class FileSystemWriteOptions
     {
         /// <summary>

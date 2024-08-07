@@ -3,11 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
-    public enum GamepadHapticActuatorType
-    {
-        [JsonPropertyName("vibration")]
-        Vibration,
-    }
     /// <summary>
     /// The GamepadHapticActuator interface of the Gamepad API represents hardware in the controller designed to provide haptic feedback to the user (if available), most commonly vibration hardware.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/GamepadHapticActuator

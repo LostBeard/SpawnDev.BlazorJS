@@ -1,7 +1,8 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The GeolocationCoordinates interface represents the position and altitude of the device on Earth, as well as the accuracy with which these properties are calculated.
+    /// The GeolocationCoordinates interface represents the position and altitude of the device on Earth, as well as the accuracy with which these properties are calculated.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates
     /// </summary>
     public class GeolocationCoordinates
     {

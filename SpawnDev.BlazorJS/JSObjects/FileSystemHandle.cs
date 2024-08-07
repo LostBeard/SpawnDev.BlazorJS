@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Dynamic;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {

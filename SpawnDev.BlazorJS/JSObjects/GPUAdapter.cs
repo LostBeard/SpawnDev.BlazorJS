@@ -2,6 +2,10 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The GPUAdapter interface of the WebGPU API represents a GPU adapter. From this you can request a GPUDevice, adapter info, features, and limits.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUAdapter
+    /// </summary>
     public class GPUAdapter : JSObject
     {
         #region Constructors
