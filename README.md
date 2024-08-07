@@ -27,7 +27,7 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
   - Create a class that inherits from [JSObject](#jsobject-base-class) and define the methods, properties, events, and constructors.
 - Supports [Promise](#promise), [Union](#union) method parameters, and passing [undefined](#undefined) to Javascript
 - Supports Tuple, ValueTuple serialization to and from a Javascript Array
-- Supports [null conditional](#null_conditional) in JS interop calls 
+- Supports [null conditional](#null-conditional) in JS interop calls 
 
 # Issues and Feature requests
 I'm here to help. If you find a bug or missing properties, methods, or Javascript objects please submit an issue [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. I will help as soon as possible.
@@ -36,7 +36,7 @@ I'm here to help. If you find a bug or missing properties, methods, or Javascrip
 Getting started. Using BlazorJS requires 2 changes to your Program.cs.
 - Add the BlazorJSRuntime service with builder.Services.AddBlazorJSRuntime()
 - Initialize BlazorJSRuntime by calling builder.Build().BlazorJSRunAsync() instead of builder.Build().RunAsync()
-- Supports [null conditional](#null_conditional) in JS interop calls 
+- Supports [null conditional](#null-conditional) in JS interop calls 
 
 ```cs
 // ... other usings
