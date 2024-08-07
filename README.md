@@ -9,24 +9,25 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 
 ### Supported .Net Versions
 - Blazor WebAssembly .Net 6, 7, and 8 
-- - Tested VS Template: Blazor WebAssembly Standalone App
+  - Tested VS Template: Blazor WebAssembly Standalone App
 - Blazor United .Net 8 (in WebAssembly project only) 
-- - Tested VS Template: Blazor Web App (Interactive WebAssembly mode without prerendering)
+  - Tested VS Template: Blazor Web App (Interactive WebAssembly mode without prerendering)
 
 ### Features:
 - Supports all web browser [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
-- - If we missed anything, open an issue and it will be updated ASAP.
+  - If we missed anything, open an issue and it will be updated ASAP.
 - Supports all web browser Javascript data types
-- - Over 350 strongly typed [JSObject](#jsobjects) wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, Atomics, TypedArrays, and Promises allow direct interaction with Javascript
+  - Over 350 strongly typed [JSObject](#jsobjects) wrappers ([listed here](https://blazorjs.spawndev.com/JSObjectTypeInfo)) included in BlazorJS including DOM, Crypto, WebGL, WebRTC, Atomics, TypedArrays, and Promises allow direct interaction with Javascript
 - Use Javascript libraries in Blazor without writing any Javascript code
 - BlazorJSRuntime wraps the default JSRuntime adding additional functionality
 - Create new Javascript objects directly from Blazor
 - Get and set Javascript object properties as well as access methods
 - Easily pass .Net methods to Javascript using JSEventCallback, Callback.Create or Callback.CreateOne methods
 - Easily wrap your Javascript objects for direct manipulation from Blazor (No javascript required!)
-- - Create a class that inherits from [JSObject](#jsobject-base-class) and define the methods, properties, events, and constructors.
+  - Create a class that inherits from [JSObject](#jsobject-base-class) and define the methods, properties, events, and constructors.
 - Supports [Promise](#promise), [Union](#union) method parameters, and passing [undefined](#undefined) to Javascript
 - Supports Tuple, ValueTuple serialization to and from a Javascript Array
+- Supports [null conditional](#null_conditional) in JS interop calls 
 
 # Issues and Feature requests
 I'm here to help. If you find a bug or missing properties, methods, or Javascript objects please submit an issue [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. I will help as soon as possible.
@@ -35,6 +36,7 @@ I'm here to help. If you find a bug or missing properties, methods, or Javascrip
 Getting started. Using BlazorJS requires 2 changes to your Program.cs.
 - Add the BlazorJSRuntime service with builder.Services.AddBlazorJSRuntime()
 - Initialize BlazorJSRuntime by calling builder.Build().BlazorJSRunAsync() instead of builder.Build().RunAsync()
+- Supports [null conditional](#null_conditional) in JS interop calls 
 
 ```cs
 // ... other usings
@@ -99,6 +101,27 @@ var total = JS.Call<int>("AddNum", 20, 22);
 // total == 42 here
 ```
 
+Use synchronous BlazorJSRuntime calls for asynchronous Javascript methods.
+```js
+// Javascript
+async function AddNum(num1, num2){
+    return num1 + num2;
+}
+```
+
+```cs
+// C#
+var total = await JS.Call<Task<int>>("AddNum", 20, 22);
+// total == 42 here
+```
+
+```cs
+// C#
+var totalPromise = JS.Call<Promise<int>>("AddNum", 20, 22);
+var total = await totalPromise.ThenAsync();
+// total == 42 here
+```
+
 Use asynchronous BlazorJSRuntime calls for asynchronous Javascript methods.
 ```js
 // Javascript
@@ -128,6 +151,33 @@ function AddNum(num1, num2){
 var total = await JS.CallAsync<int>("AddNum", 20, 22);
 // total == 42 here
 ```
+
+## NULL Conditional
+The BlazorJSRuntime now supports [null conditionals](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/member-access-operators#null-conditional-operators--and-) for property string keys in interop calls.
+
+Example  
+```js
+// Javascript
+var fruit = { 
+    name: 'apple',
+    color: 'red'
+};
+```
+
+The below call would throw an error because fruit.options does not exist, and therefore we cannot access a property of it.
+```cs
+// C#
+var size = JS.Call<int?>("fruit.options.size");
+// never gets here due to error because `fruit.options` does not exist
+```
+
+Using a null conditional prevents the error and allows `fruit.options` to not exist  
+```cs
+// C#
+var size = JS.Call<int?>("fruit.options?.size");
+// size == null here
+```
+
 
 # IJSInProcessObjectReference extended
 
