@@ -164,7 +164,7 @@ var fruit = {
 };
 ```
 
-The below `JS.Get` would throw an error because fruit.options does not exist, and therefore we cannot access a property of it.
+The below `JS.Get` would throw an error because `fruit.options` does not exist, and therefore we cannot access a property of it.
 ```cs
 // C#
 var size = JS.Get<int?>("fruit.options.size");
