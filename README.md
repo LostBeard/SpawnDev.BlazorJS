@@ -153,7 +153,7 @@ var total = await JS.CallAsync<int>("AddNum", 20, 22);
 ```
 
 ## NULL Conditional
-The BlazorJSRuntime now supports [null conditionals](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/member-access-operators#null-conditional-operators--and-) for property string keys in interop calls.
+The BlazorJSRuntime now supports [null conditionals](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/member-access-operators#null-conditional-operators--and-) for property string keys.
 
 Example  
 ```js
@@ -164,17 +164,17 @@ var fruit = {
 };
 ```
 
-The below call would throw an error because fruit.options does not exist, and therefore we cannot access a property of it.
+The below `JS.Get` would throw an error because fruit.options does not exist, and therefore we cannot access a property of it.
 ```cs
 // C#
-var size = JS.Call<int?>("fruit.options.size");
+var size = JS.Get<int?>("fruit.options.size");
 // never gets here due to error because `fruit.options` does not exist
 ```
 
-Using a null conditional prevents the error and allows `fruit.options` to not exist  
+Using a null conditional (the `?` in `fruit.options?.size`) prevents the error by allowing `fruit.options` to not exist (null or undefined.)
 ```cs
 // C#
-var size = JS.Call<int?>("fruit.options?.size");
+var size = JS.Get<int?>("fruit.options?.size");
 // size == null here
 ```
 
