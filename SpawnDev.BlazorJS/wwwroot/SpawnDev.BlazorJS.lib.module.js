@@ -9,43 +9,45 @@
         // returns bool
         ObjectPropertyEquals(obj, key, obj2, full) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target } = this.pathObjectInfo(obj, key);
+            var { target, shortCircuit } = this.pathObjectInfo(obj, key);
             return full ? target === obj2 : target == obj2;
         }
         // returns string
         ObjectPropertyTypeOf(obj, key) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target } = this.pathObjectInfo(obj, key);
+            var { target, shortCircuit } = this.pathObjectInfo(obj, key);
             return typeof target;
         }
-        // returns string or null
+        // returns string or undefined
         ObjectPropertyConstructorName(obj, key) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target } = this.pathObjectInfo(obj, key);
+            var { target, shortCircuit } = this.pathObjectInfo(obj, key);
             return target?.constructor?.name;
         }
         // returns string[]
         ObjectPropertyConstructorNames(obj, key) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target } = this.pathObjectInfo(obj, key);
+            var { target, shortCircuit } = this.pathObjectInfo(obj, key);
             return this.ObjectConstructorNames(target);
         }
         // returns any
         ObjectPropertyCall(obj, key, args) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target, parent } = this.pathObjectInfo(obj, key);
+            var { target, parent, shortCircuit } = this.pathObjectInfo(obj, key);
+            if (shortCircuit) return;
             return target.apply(parent, args);
         }
         // returns any
         ObjectPropertyNew(obj, key, args) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target } = this.pathObjectInfo(obj, key);
+            var { target, shortCircuit } = this.pathObjectInfo(obj, key);
+            if (shortCircuit) return;
             return args ? new target(...args) : new target();
         }
         // returns string[]
         ObjectPropertyKeys(obj, key, hasOwnProperty) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target } = this.pathObjectInfo(obj, key);
+            var { target, shortCircuit } = this.pathObjectInfo(obj, key);
             var keys = [];
             if (hasOwnProperty && target.hasOwnProperty) {
                 for (var k in target) {
@@ -77,14 +79,14 @@
         // returns bool
         ObjectPropertyInstanceOf(obj, key, type) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target } = this.pathObjectInfo(obj, key);
+            var { target, shortCircuit } = this.pathObjectInfo(obj, key);
             return target instanceof type;
         }
-        // returns the value of the property
+        // returns any - the value of the property
         ObjectPropertyGet(obj, key) {
             var ret = null;
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target, parent, targetType } = this.pathObjectInfo(obj, key);
+            var { target, parent, targetType, shortCircuit } = this.pathObjectInfo(obj, key);
             if (targetType === "function") {
                 ret = target.bind(parent);
             } else {
@@ -95,20 +97,22 @@
         // returns undefined
         ObjectPropertySet(obj, key, value) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { parent, propertyName } = this.pathObjectInfo(obj, key);
-            if (!parent) return true;
+            var { parent, propertyName, shortCircuit } = this.pathObjectInfo(obj, key);
+            if (shortCircuit) return;
             parent[propertyName] = value;
         }
         // returns bool
         ObjectPropertyDelete(obj, key) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { parent, propertyName } = this.pathObjectInfo(obj, key);
+            var { parent, propertyName, shortCircuit } = this.pathObjectInfo(obj, key);
+            if (shortCircuit) return true;
             return delete parent[propertyName];
         }
         // returns bool
         ObjectPropertyIn(obj, key) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target } = this.pathObjectInfo(obj, key);
+            var { target, shortCircuit } = this.pathObjectInfo(obj, key);
+            if (shortCircuit) return false;
             return key in target;
         }
         // *****************************************************
@@ -358,11 +362,11 @@
             var parent = rootObject;
             var target;
             var propertyName;
+            var shortCircuit = false;
             if (typeof path === 'string' && typeof parent[path] === 'undefined') {
                 var parts = path.split('.');
                 propertyName = parts[parts.length - 1];
                 var part;
-                var parentNotFound = false;
                 for (var i = 0; i < parts.length - 1; i++) {
                     part = parts[i];
                     if (part[part.length - 1] === '?') {
@@ -371,7 +375,7 @@
                         part = part.substring(0, part.length - 1);
                         parent = parent[part];
                         if (parent === void 0 || parent === null) {
-                            parentNotFound = true;
+                            shortCircuit = true;
                             break;
                         }
                     }
@@ -379,7 +383,7 @@
                         parent = parent[part];
                     }
                 }
-                if (!parentNotFound) {
+                if (!shortCircuit) {
                     target = parent[propertyName];
                 }
             }
@@ -387,16 +391,17 @@
                 propertyName = path;
                 target = parent[propertyName];
             }
-            var parentExists = !!parent;
+            var parentExists = parent !== vid 0 && parent !== null;
             var targetType = typeof target;
             var exists = targetType !== 'undefined' || (parent && propertyName in parent);
             return {
-                parent,         // may be null even if target exists (Ex. if no path was given)
-                propertyName,   // any or null; may be null even if target exists (Ex. if no path was given)
-                target,         // may be undefined if it does not currently exist
-                targetType,     // will always be a string of the target type (Ex. 'undefined', 'object', 'string', 'number')
-                exists,         // will always be a bool value (true or false)
-                parentExists,   // will always be a bool value (true or false)
+                parent,         // any - may be null/undefined even if target exists (Ex. if no path was given)
+                propertyName,   // any
+                target,         // any
+                targetType,     // string - the target type (Ex. 'undefined', 'object', 'string', 'number')
+                exists,         // bool - true if the target exists (can exist and be undefined)
+                parentExists,   // bool
+                shortCircuit,   // bool - true if the pathfinding short circuited (null conditional)
             };
         }
     }
