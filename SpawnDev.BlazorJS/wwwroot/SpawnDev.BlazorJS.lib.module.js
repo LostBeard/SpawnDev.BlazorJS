@@ -401,7 +401,7 @@
                 targetType,     // string - the target type (Ex. 'undefined', 'object', 'string', 'number')
                 exists,         // bool - true if the target exists (can exist and be undefined)
                 parentExists,   // bool
-                shortCircuit,   // bool - true if the pathfinding short circuited (null conditional)
+                shortCircuit,   // bool - true if the pathfinding short circuited (null-conditional)
             };
         }
     }
