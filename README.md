@@ -175,7 +175,7 @@ Using a null conditional (the `?` in `fruit.options?.size`) prevents the error b
 ```cs
 // C#
 var size = JS.Get<int?>("fruit.options?.size");
-// size == null here
+// size == null here (default value for int?)
 ```
 
 
