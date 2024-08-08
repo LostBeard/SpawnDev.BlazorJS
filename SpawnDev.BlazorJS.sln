@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33103.201
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.Test", "SpawnDev.BlazorJS.Test\SpawnDev.BlazorJS.Test.csproj", "{CEC868CE-CF85-423F-A566-CE875EF8AEAD}"
-	ProjectSection(ProjectDependencies) = postProject
-		{085BD3B9-2F11-4BD0-9072-217D2A3C9150} = {085BD3B9-2F11-4BD0-9072-217D2A3C9150}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS", "SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj", "{085BD3B9-2F11-4BD0-9072-217D2A3C9150}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DB2825E7-258E-4091-9940-03859A3CD4B5}"
@@ -25,10 +20,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CEC868CE-CF85-423F-A566-CE875EF8AEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEC868CE-CF85-423F-A566-CE875EF8AEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEC868CE-CF85-423F-A566-CE875EF8AEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEC868CE-CF85-423F-A566-CE875EF8AEAD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{085BD3B9-2F11-4BD0-9072-217D2A3C9150}.Release|Any CPU.ActiveCfg = Release|Any CPU
