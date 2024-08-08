@@ -391,7 +391,7 @@
                 propertyName = path;
                 target = parent[propertyName];
             }
-            var parentExists = parent !== vid 0 && parent !== null;
+            var parentExists = parent !== void 0 && parent !== null;
             var targetType = typeof target;
             var exists = targetType !== 'undefined' || (parent && propertyName in parent);
             return {
