@@ -54,34 +54,42 @@
         // Version 2.5.4 added support for null conditionals (?) in string based keys for JS interop calls
         // Ex:
         // var value = JS.Get<bool?>("__test?.config2?.visible");
-        // In the above line value will be null (default for bool?) if __test or __test.config2 are null or undefined
+        // var value = JS.Call<bool?>("__test?.config2?.visible");
+        // In the above lines, value will be null (default for bool?) if __test or __test.config2 are null or undefined
 
         // set a global var to use for testing
         JS.Set("__test", new { name = "something", config = new { visible = true } });
 
-        // test reading existing property without null conditional
-        var isUndefined1 = JS.Get<bool>("__test.config.visible");
-        if (!isUndefined1) throw new Exception("Failed");
+        // JS.Get without null-conditional
+        var testVar1 = JS.Get<bool>("__test.config.visible");
+        if (!testVar1) throw new Exception("Failed");
 
-        // test reading existing property with null conditional
-        var isUndefined2 = JS.Get<bool>("__test.config?.visible");
-        if (!isUndefined2) throw new Exception("Failed");
+        // JS.Get with null-conditional
+        var testVar2 = JS.Get<bool>("__test.config?.visible");
+        if (!testVar2) throw new Exception("Failed");
 
-        // test reading non-existing property with null conditional
-        var isUndefined3 = JS.Get<bool>("__test.config2?.visible");
-        if (isUndefined3) throw new Exception("Failed");
+        // JS.Get with null-conditional
+        var testVar3 = JS.Get<bool>("__test.config2?.visible");
+        if (testVar3) throw new Exception("Failed");
 
-        // test reading non-existing property with null conditional
-        var isUndefined4 = JS.Get<bool>("__test1?.config2.visible1");
-        if (isUndefined4) throw new Exception("Failed");
+        // JS.Get with null-conditional
+        var testVar4 = JS.Get<bool>("__test1?.config2.visible1");
+        if (testVar4) throw new Exception("Failed");
 
-        // test reading non-existing property with null conditional
-        var isUndefined5 = JS.Get<bool?>("__test.config2?.visible");
-        if (isUndefined5 != null) throw new Exception("Failed");
+        // JS.Get with null-conditional
+        var testVar5 = JS.Get<bool?>("__test.config2?.visible");
+        if (testVar5 != null) throw new Exception("Failed");
 
-        // test reading non-existing property with null conditional
-        var isUndefined6 = JS.Get<bool?>("__test1?.config2.visible1");
-        if (isUndefined6 != null) throw new Exception("Failed");
+        // JS.Get with null-conditional
+        var testVar6 = JS.Get<bool?>("__test1?.config2.visible1");
+        if (testVar6 != null) throw new Exception("Failed");
+
+        // JS.Call with null-conditional
+        var testVar7 = JS.Call<bool?>("__test1?.config2.visible1");
+        if (testVar7 != null) throw new Exception("Failed");
+
+        // JS.Set with null-conditional
+        JS.Set("__test1?.config2.visible1", true);
 
         JS.Delete("__test");
     }
