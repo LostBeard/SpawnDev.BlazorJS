@@ -86,8 +86,8 @@
         ObjectPropertyGet(obj, key) {
             var ret = null;
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target, parent, targetType, shortCircuit } = this.pathObjectInfo(obj, key);
-            if (targetType === "function") {
+            var { target, parent, shortCircuit } = this.pathObjectInfo(obj, key);
+            if (typeof target === "function") {
                 ret = target.bind(parent);
             } else {
                 ret = target;
@@ -198,12 +198,13 @@
         }
         // returns string[]
         ObjectConstructorNames(obj) {
-            const constructorNames = [];
+            var constructorNames = [];
             if (obj === void 0 || obj === null) return constructorNames;
-            let o = obj;
+            var o = obj;
+            var cName;
             while (1) {
                 o = Object.getPrototypeOf(o);
-                let cName = o?.constructor?.name;
+                cName = o?.constructor?.name;
                 if (!cName) break;
                 if (constructorNames.indexOf(cName) !== -1) continue;
                 constructorNames.push(cName);
@@ -284,7 +285,7 @@
         // ************ Internal Methods ************
         // ****************************************
         createJSObjectReference(o) {
-            let mustWrap = this.createJSObjectReferenceMustWrapType(o);
+            var mustWrap = this.createJSObjectReferenceMustWrapType(o);
             if (mustWrap) o = this.wrapJSObject(o);
             return DotNet.createJSObjectReference(o);
         }
@@ -329,8 +330,8 @@
                 case DotNet.JSCallResultType.JSStreamReference:
                     {
                         // TODO test and fix if needed
-                        const n = DotNet.createJSStreamReference(value);
-                        const r = JSON.stringify(n);
+                        var n = DotNet.createJSStreamReference(value);
+                        var r = JSON.stringify(n);
                         return BINDING.js_string_to_mono_string(r)
                     }
                 case DotNet.JSCallResultType.JSVoidResult:
@@ -363,7 +364,7 @@
             var target;
             var propertyName;
             var shortCircuit = false;
-            if (typeof path === 'string' && typeof parent[path] === 'undefined') {
+            if (typeof path === 'string' && !(path in parent)) {
                 var parts = path.split('.');
                 propertyName = parts[parts.length - 1];
                 var part;
@@ -391,17 +392,11 @@
                 propertyName = path;
                 target = parent[propertyName];
             }
-            var parentExists = parent !== void 0 && parent !== null;
-            var targetType = typeof target;
-            var exists = targetType !== 'undefined' || (parent && propertyName in parent);
             return {
-                parent,         // any - may be null/undefined even if target exists (Ex. if no path was given)
+                shortCircuit,   // bool - true if the pathfinding short circuited due to a null-conditional
+                parent,         // any - only null or undefined if short circuited due to a null-conditional
                 propertyName,   // any
                 target,         // any
-                targetType,     // string - the target type (Ex. 'undefined', 'object', 'string', 'number')
-                exists,         // bool - true if the target exists (can exist and be undefined)
-                parentExists,   // bool
-                shortCircuit,   // bool - true if the pathfinding short circuited (null-conditional)
             };
         }
     }
@@ -432,8 +427,6 @@
                         if (!value._returnVoid) return ret;
                     } catch (ex) {
                         console.error('Callback invokeMethod error:', args, ret, ex);
-                        //value.isDisposed = true;
-                        //blazorJSInterop.disposeCallback(callbackId);
                     }
                 };
                 blazorJSInterop.callbacks[callbackId] = callback;
