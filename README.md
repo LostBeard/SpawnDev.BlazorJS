@@ -8,7 +8,7 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 [Live Demo](https://blazorjs.spawndev.com/)  
 
 ### Supported .Net Versions
-- Blazor WebAssembly .Net 6, 7, and 8 
+- Blazor WebAssembly .Net 6, 7, 8, and 9
   - Tested VS Template: Blazor WebAssembly Standalone App
 - Blazor United .Net 8 (in WebAssembly project only) 
   - Tested VS Template: Blazor Web App (Interactive WebAssembly mode without prerendering)
