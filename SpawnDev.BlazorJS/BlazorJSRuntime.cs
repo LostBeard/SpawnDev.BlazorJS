@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -14,7 +15,7 @@ namespace SpawnDev.BlazorJS
     /// </summary>
     public partial class BlazorJSRuntime
     {
-        static Lazy<Type> _WebAssemblyJSObjectReferenceType =new Lazy<Type>(() => typeof(Microsoft.JSInterop.WebAssembly.WebAssemblyJSRuntime).Assembly.GetType("Microsoft.JSInterop.WebAssembly.WebAssemblyJSObjectReference")!);
+        static Lazy<Type> _WebAssemblyJSObjectReferenceType = new Lazy<Type>(() => typeof(Microsoft.JSInterop.WebAssembly.WebAssemblyJSRuntime).Assembly.GetType("Microsoft.JSInterop.WebAssembly.WebAssemblyJSObjectReference")!);
         internal static Type WebAssemblyJSObjectReferenceType => _WebAssemblyJSObjectReferenceType.Value;
         internal static JsonConverterCollection RuntimeJsonConverters { get; private set; } = new JsonConverterCollection();
         internal static readonly IJSInProcessRuntime _js;
@@ -90,8 +91,13 @@ namespace SpawnDev.BlazorJS
         public bool CrossOriginIsolated => JS.Get<bool>("crossOriginIsolated");
         static BlazorJSRuntime()
         {
-            _js = (IJSInProcessRuntime)typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime")!.GetField("Instance", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
-            RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(_js, null)!;
+            var defaultWebAssemblyJSRuntimeType = typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime");
+            if (defaultWebAssemblyJSRuntimeType == null) FatalError("DefaultWebAssemblyJSRuntime Type is null");
+            var instanceField = defaultWebAssemblyJSRuntimeType.GetField("Instance", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+            if (instanceField == null) FatalError("DefaultWebAssemblyJSRuntime.Instance FieldInfo is null");
+            _js = (IJSInProcessRuntime)instanceField.GetValue(null)!;
+            if (_js == null) FatalError("JSRuntime is null");
+            RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!.GetValue(_js, null)!;
             RuntimeJsonSerializerOptions.Converters.Add(new TypeJsonConverter());
             RuntimeJsonSerializerOptions.Converters.Add(new ITupleConverterFactory());
             RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
@@ -109,6 +115,8 @@ namespace SpawnDev.BlazorJS
             RuntimeJsonSerializerOptions.Converters.Add(new JSObjectReferenceListConverterFactory(RuntimeJsonSerializerOptions));
             RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory(RuntimeJsonSerializerOptions));
         }
+        [DoesNotReturn]
+        static void FatalError(string msg) => throw new NullReferenceException($"SpawnDev.BlazorJSRuntime fatal error: {msg}");
         /// <summary>
         /// Returns true if the current GlobalScope flag is set in supplied scope var.<br />
         /// Always returns false for GlobalScope enum flags Default, and None.
