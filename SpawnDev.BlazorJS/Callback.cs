@@ -34,16 +34,16 @@ namespace SpawnDev.BlazorJS
         public bool IsDisposed { get; private set; } = false;
         [JsonInclude]
         [JsonPropertyName("_callback")]
-        private DotNetObjectReference<Callback> _callback { get; }
+        public DotNetObjectReference<Callback> _callback { get; }
         [JsonInclude]
         [JsonPropertyName("_callbackId")]
-        private string _callbackId { get; set; }
+        public string _callbackId { get; private set; }
         [JsonInclude]
         [JsonPropertyName("_paramTypes")]
-        private int[] _paramTypes { get; set; } = new int[0];
+        public int[] _paramTypes { get; private set; } = new int[0];
         [JsonInclude]
         [JsonPropertyName("_returnVoid")]
-        private bool _returnVoid { get; set; }
+        public bool _returnVoid { get; private set; }
         /// <summary>
         /// If true the Callback will be disposed after the first call
         /// </summary>
