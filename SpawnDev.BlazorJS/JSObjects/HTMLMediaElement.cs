@@ -146,91 +146,91 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the resource was not fully loaded, but not as the result of an error.
         /// </summary>
-        public JSEventCallback<Event> OnAbort { get => new JSEventCallback<Event>("abort", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnAbort { get => new ActionEvent<Event>("abort", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user agent can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
         /// </summary>
-        public JSEventCallback<Event> OnCanPlay { get => new JSEventCallback<Event>("canplay", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnCanPlay { get => new ActionEvent<Event>("canplay", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user agent can play the media, and estimates that enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
         /// </summary>
-        public JSEventCallback<Event> OnCanPlayThrough { get => new JSEventCallback<Event>("canplaythrough", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnCanPlayThrough { get => new ActionEvent<Event>("canplaythrough", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the duration property has been updated.
         /// </summary>
-        public JSEventCallback<Event> OnDurationChange { get => new JSEventCallback<Event>("durationchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnDurationChange { get => new ActionEvent<Event>("durationchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the media has become empty; for example, when the media has already been loaded (or partially loaded), and the HTMLMediaElement.load() method is called to reload it.
         /// </summary>
-        public JSEventCallback<Event> OnEmptied { get => new JSEventCallback<Event>("emptied", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnEmptied { get => new ActionEvent<Event>("emptied", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the media encounters some initialization data indicating it is encrypted.
         /// </summary>
-        public JSEventCallback<MediaEncryptedEvent> OnEncrypted { get => new JSEventCallback<MediaEncryptedEvent>("encrypted", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MediaEncryptedEvent> OnEncrypted { get => new ActionEvent<MediaEncryptedEvent>("encrypted", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when playback stops when end of the media (audio or video) is reached or because no further data is available.
         /// </summary>
-        public JSEventCallback<Event> OnEnded { get => new JSEventCallback<Event>("ended", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnEnded { get => new ActionEvent<Event>("ended", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the first frame of the media has finished loading.
         /// </summary>
-        public JSEventCallback<Event> OnLoadedData { get => new JSEventCallback<Event>("loadeddata", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnLoadedData { get => new ActionEvent<Event>("loadeddata", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the metadata has been loaded.
         /// </summary>
-        public JSEventCallback<Event> OnLoadedMetadata { get => new JSEventCallback<Event>("loadedmetadata", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnLoadedMetadata { get => new ActionEvent<Event>("loadedmetadata", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the browser has started to load a resource.
         /// </summary>
-        public JSEventCallback<Event> OnLoadStart { get => new JSEventCallback<Event>("loadstart", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnLoadStart { get => new ActionEvent<Event>("loadstart", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a request to pause play is handled and the activity has entered its paused state, most commonly occurring when the media's HTMLMediaElement.pause() method is called.
         /// </summary>
-        public JSEventCallback<Event> OnPause { get => new JSEventCallback<Event>("pause", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnPause { get => new ActionEvent<Event>("pause", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the paused property is changed from true to false, as a result of the HTMLMediaElement.play() method, or the autoplay attribute.
         /// </summary>
-        public JSEventCallback<Event> OnPlay { get => new JSEventCallback<Event>("play", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnPlay { get => new ActionEvent<Event>("play", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when playback is ready to start after having been paused or delayed due to lack of data.
         /// </summary>
-        public JSEventCallback<Event> OnPlaying { get => new JSEventCallback<Event>("playing", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnPlaying { get => new ActionEvent<Event>("playing", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired periodically as the browser loads a resource.
         /// </summary>
-        public JSEventCallback<Event> OnProgress { get => new JSEventCallback<Event>("progress", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnProgress { get => new ActionEvent<Event>("progress", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the playback rate has changed.
         /// </summary>
-        public JSEventCallback<Event> OnRateChange { get => new JSEventCallback<Event>("ratechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnRateChange { get => new ActionEvent<Event>("ratechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a seek operation completes.
         /// </summary>
-        public JSEventCallback<Event> OnSeeked { get => new JSEventCallback<Event>("seeked", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnSeeked { get => new ActionEvent<Event>("seeked", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a seek operation begins.
         /// </summary>
-        public JSEventCallback<Event> OnSeeking { get => new JSEventCallback<Event>("seeking", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnSeeking { get => new ActionEvent<Event>("seeking", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
         /// </summary>
-        public JSEventCallback<Event> OnStalled { get => new JSEventCallback<Event>("stalled", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnStalled { get => new ActionEvent<Event>("stalled", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the media data loading has been suspended.
         /// </summary>
-        public JSEventCallback<Event> OnSuspend { get => new JSEventCallback<Event>("suspend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnSuspend { get => new ActionEvent<Event>("suspend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the time indicated by the currentTime property has been updated.
         /// </summary>
-        public JSEventCallback<Event> OnTimeUpdate { get => new JSEventCallback<Event>("timeupdate", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnTimeUpdate { get => new ActionEvent<Event>("timeupdate", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the volume has changed.
         /// </summary>
-        public JSEventCallback<Event> OnVolumeChange { get => new JSEventCallback<Event>("volumechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnVolumeChange { get => new ActionEvent<Event>("volumechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when playback has stopped because of a temporary lack of data.
         /// </summary>
-        public JSEventCallback<Event> OnWaiting { get => new JSEventCallback<Event>("waiting", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnWaiting { get => new ActionEvent<Event>("waiting", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

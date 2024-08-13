@@ -42,7 +42,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Invoked when the asynchronous operations the signal is communicating with is/are aborted. Also available via the onabort property.
         /// </summary>
-        public JSEventCallback<Event> OnAbort { get => new JSEventCallback<Event>("abort", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnAbort { get => new ActionEvent<Event>("abort", AddEventListener, RemoveEventListener); set { } }
         #endregion
 
         #region Static Methods

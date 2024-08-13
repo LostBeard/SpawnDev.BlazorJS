@@ -43,11 +43,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Occurs when the document's associated ServiceWorkerRegistration acquires a new active worker.
         /// </summary>
-        public JSEventCallback<Event> OnControllerChange { get => new JSEventCallback<Event>("controllerchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnControllerChange { get => new ActionEvent<Event>("controllerchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when incoming messages are received by the ServiceWorkerContainer object (e.g. via a MessagePort.postMessage() call).
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MessageEvent> OnMessage { get => new ActionEvent<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

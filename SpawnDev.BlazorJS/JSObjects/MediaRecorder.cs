@@ -78,26 +78,26 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fires periodically each time timeslice milliseconds of media have been recorded (or when the entire media has been recorded, if timeslice wasn't specified). The event, of type BlobEvent, contains the recorded media in its data property.
         /// </summary>
-        public JSEventCallback<BlobEvent> OnDataAvailable { get => new JSEventCallback<BlobEvent>("dataavailable", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<BlobEvent> OnDataAvailable { get => new ActionEvent<BlobEvent>("dataavailable", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when there are fatal errors that stop recording. The received event is based on the MediaRecorderErrorEvent interface, whose error property contains a DOMException that describes the actual error that occurred.
         /// </summary>
-        public JSEventCallback<MediaRecorderErrorEvent> OnError { get => new JSEventCallback<MediaRecorderErrorEvent>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MediaRecorderErrorEvent> OnError { get => new ActionEvent<MediaRecorderErrorEvent>("error", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when media recording is paused.
         /// </summary>
-        public JSEventCallback<Event> OnPause { get => new JSEventCallback<Event>("pause", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnPause { get => new ActionEvent<Event>("pause", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when media recording resumes after being paused.
         /// </summary>
-        public JSEventCallback<Event> OnResume { get => new JSEventCallback<Event>("resume", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnResume { get => new ActionEvent<Event>("resume", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when media recording starts.
         /// </summary>
-        public JSEventCallback<Event> OnStart { get => new JSEventCallback<Event>("start", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnStart { get => new ActionEvent<Event>("start", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when media recording ends, either when the MediaStream ends, or after the MediaRecorder.stop() method is called.
         /// </summary>
-        public JSEventCallback<Event> OnStop { get => new JSEventCallback<Event>("stop", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnStop { get => new ActionEvent<Event>("stop", AddEventListener, RemoveEventListener); set { } }
     }
 }

@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a media input or output device is attached to or removed from the user's computer.
         /// </summary>
-        public JSEventCallback<Event> OnDeviceChange { get => new JSEventCallback<Event>("devicechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnDeviceChange { get => new ActionEvent<Event>("devicechange", AddEventListener, RemoveEventListener); set { } }
         // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia
         /// <summary>
         /// Prompts the user to select a display or portion of a display (such as a window) to capture as a MediaStream for sharing or recording purposes. Returns a promise that resolves to a MediaStream.

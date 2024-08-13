@@ -25,11 +25,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a message arrives on the channel. Also available via the onmessage property.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MessageEvent> OnMessage { get => new ActionEvent<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a message arrives that can't be deserialized. Also available via the onmessageerror property.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessageError { get => new JSEventCallback<MessageEvent>("messageerror", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MessageEvent> OnMessageError { get => new ActionEvent<MessageEvent>("messageerror", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The BroadcastChannel.close() terminates the connection to the underlying channel, allowing the object to be garbage collected. This is a necessary step to perform as there is no other way for a browser to know that this channel is not needed anymore.
         /// </summary>

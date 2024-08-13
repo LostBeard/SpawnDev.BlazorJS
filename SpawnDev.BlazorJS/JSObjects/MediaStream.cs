@@ -43,11 +43,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The addtrack event is fired when a new MediaStreamTrack object has been added to a MediaStream.
         /// </summary>
-        public JSEventCallback<MediaStreamTrackEvent> OnAddTrack { get => new JSEventCallback<MediaStreamTrackEvent>("addtrack", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MediaStreamTrackEvent> OnAddTrack { get => new ActionEvent<MediaStreamTrackEvent>("addtrack", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The removetrack event is fired when a new MediaStreamTrack object has been removed from a MediaStream.
         /// </summary>
-        public JSEventCallback<MediaStreamTrackEvent> OnRemoveTrack { get => new JSEventCallback<MediaStreamTrackEvent>("removetrack", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MediaStreamTrackEvent> OnRemoveTrack { get => new ActionEvent<MediaStreamTrackEvent>("removetrack", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Removes the MediaStreamTrack given as argument. If the track is not part of the MediaStream object, nothing happens.
         /// </summary>

@@ -100,11 +100,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when an error caused a request to fail.
         /// </summary>
-        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnError { get => new ActionEvent<Event>("error", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an IDBRequest succeeds.
         /// </summary>
-        public JSEventCallback<Event> OnSuccess { get => new JSEventCallback<Event>("success", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnSuccess { get => new ActionEvent<Event>("success", AddEventListener, RemoveEventListener); set { } }
         #endregion
         /// <summary>
         /// if (ReadyState == "done" AND Error == null) returns CompletedTask<br/>

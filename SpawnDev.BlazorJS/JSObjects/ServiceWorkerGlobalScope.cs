@@ -40,47 +40,47 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Occurs when a ServiceWorkerRegistration acquires a new ServiceWorkerRegistration.active worker.
         /// </summary>
-        public JSEventCallback<ExtendableEvent> OnActivate { get => new JSEventCallback<ExtendableEvent>("activate", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ExtendableEvent> OnActivate { get => new ActionEvent<ExtendableEvent>("activate", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when a fetch() is called.
         /// </summary>
-        public JSEventCallback<FetchEvent> OnFetch { get => new JSEventCallback<FetchEvent>("fetch", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<FetchEvent> OnFetch { get => new ActionEvent<FetchEvent>("fetch", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when a ServiceWorkerRegistration acquires a new ServiceWorkerRegistration.installing worker.
         /// </summary>
-        public JSEventCallback<ExtendableEvent> OnInstall { get => new JSEventCallback<ExtendableEvent>("install", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ExtendableEvent> OnInstall { get => new ActionEvent<ExtendableEvent>("install", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when incoming messages are received. Controlled pages can use the MessagePort.postMessage() method to send messages to service workers.
         /// </summary>
-        public JSEventCallback<ExtendableMessageEvent> OnMessage { get => new JSEventCallback<ExtendableMessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ExtendableMessageEvent> OnMessage { get => new ActionEvent<ExtendableMessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when incoming messages can't be deserialized.
         /// </summary>
-        public JSEventCallback<ExtendableMessageEvent> OnMessageError { get => new JSEventCallback<ExtendableMessageEvent>("messageerror", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ExtendableMessageEvent> OnMessageError { get => new ActionEvent<ExtendableMessageEvent>("messageerror", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when a server push notification is received.
         /// </summary>
-        public JSEventCallback<PushEvent> OnPush { get => new JSEventCallback<PushEvent>("push", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PushEvent> OnPush { get => new ActionEvent<PushEvent>("push", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when a push subscription has been invalidated, or is about to be invalidated (e.g. when a push service sets an expiration time).
         /// </summary>
-        public JSEventCallback<Event> OnPushSubscriptionChange { get => new JSEventCallback<Event>("pushsubscriptionchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnPushSubscriptionChange { get => new ActionEvent<Event>("pushsubscriptionchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Triggered when a call to SyncManager.register is made from a service worker client page. The attempt to sync is made either immediately if the network is available or as soon as the network becomes available.
         /// </summary>
-        public JSEventCallback<SyncEvent> OnSync { get => new JSEventCallback<SyncEvent>("sync", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SyncEvent> OnSync { get => new ActionEvent<SyncEvent>("sync", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs at periodic intervals, which were specified when registering a PeriodicSyncManager.
         /// </summary>
-        public JSEventCallback<PeriodicSyncEvent> OnPeriodicSync { get => new JSEventCallback<PeriodicSyncEvent>("periodicsync", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PeriodicSyncEvent> OnPeriodicSync { get => new ActionEvent<PeriodicSyncEvent>("periodicsync", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when a user closes a displayed notification.
         /// </summary>
-        public JSEventCallback<NotificationEvent> OnNotificationClose { get => new JSEventCallback<NotificationEvent>("notificationclose", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<NotificationEvent> OnNotificationClose { get => new ActionEvent<NotificationEvent>("notificationclose", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Occurs when a user clicks on a displayed notification.
         /// </summary>
-        public JSEventCallback<NotificationEvent> OnNotificationClick { get => new JSEventCallback<NotificationEvent>("notificationclick", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<NotificationEvent> OnNotificationClick { get => new ActionEvent<NotificationEvent>("notificationclick", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

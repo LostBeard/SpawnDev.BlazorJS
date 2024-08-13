@@ -31,6 +31,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fires when an error occurs in the shared worker.
         /// </summary>
-        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnError { get => new ActionEvent<Event>("error", AddEventListener, RemoveEventListener); set { } }
     }
 }

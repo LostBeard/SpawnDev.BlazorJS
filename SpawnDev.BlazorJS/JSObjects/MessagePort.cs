@@ -22,12 +22,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a MessagePort object receives a message that can't be deserialized.
         /// </summary>
-        JSEventCallback<MessageEvent> OnMessageError { get; set; }
+        ActionEvent<MessageEvent> OnMessageError { get; set; }
         /// <summary>
         /// Fired when a MessagePort object receives a message.
         /// Start() must be called to start receiving messages when using addEventListener instead of assigning onmessage.
         /// </summary>
-        JSEventCallback<MessageEvent> OnMessage { get; set; }
+        ActionEvent<MessageEvent> OnMessage { get; set; }
         /// <summary>
         /// Sends a message from the port, and optionally, transfers ownership of objects to other browsing contexts.
         /// </summary>
@@ -52,11 +52,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fired when a MessagePort object receives a message.
         /// Start() must be called to start receiving messages when using addEventListener instead of assigning onmessage.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MessageEvent> OnMessage { get => new ActionEvent<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a MessagePort object receives a message that can't be deserialized.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessageError { get => new JSEventCallback<MessageEvent>("messageerror", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MessageEvent> OnMessageError { get => new ActionEvent<MessageEvent>("messageerror", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Starts the sending of messages queued on the port (only needed when using EventTarget.addEventListener; it is implied when using onmessage).
         /// </summary>

@@ -86,14 +86,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when one or both of the videoWidth and videoHeight properties have just been updated.
         /// </summary>
-        public JSEventCallback<Event> OnResize { get => new JSEventCallback<Event>("resize", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnResize { get => new ActionEvent<Event>("resize", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the HTMLVideoElement enters picture-in-picture mode successfully.
         /// </summary>
-        public JSEventCallback<Event> OnEnterPictureInPicture { get => new JSEventCallback<Event>("enterpictureinpicture", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnEnterPictureInPicture { get => new ActionEvent<Event>("enterpictureinpicture", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the HTMLVideoElement leaves picture-in-picture mode successfully.
         /// </summary>
-        public JSEventCallback<Event> OnLeavePictureInPicture { get => new JSEventCallback<Event>("leavepictureinpicture", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnLeavePictureInPicture { get => new ActionEvent<Event>("leavepictureinpicture", AddEventListener, RemoveEventListener); set { } }
     }
 }

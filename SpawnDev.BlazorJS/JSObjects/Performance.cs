@@ -46,7 +46,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The resourcetimingbufferfull event is fired when the browser's resource timing buffer is full.
         /// </summary>
-        public JSEventCallback<Event> OnResourceTimingBufferFull { get => new JSEventCallback<Event>("resourcetimingbufferfull", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnResourceTimingBufferFull { get => new ActionEvent<Event>("resourcetimingbufferfull", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

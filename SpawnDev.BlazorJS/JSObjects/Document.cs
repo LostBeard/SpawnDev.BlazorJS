@@ -275,63 +275,63 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The prerenderingchange event is fired on a prerendered document when it is activated (i.e. the user views the page).
         /// </summary>
-        public JSEventCallback<Event> OnPrerenderingChange { get => new JSEventCallback<Event>("prerenderingchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnPrerenderingChange { get => new ActionEvent<Event>("prerenderingchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The securitypolicyviolation event is fired when a Content Security Policy is violated.
         /// </summary>
-        public JSEventCallback<SecurityPolicyViolationEvent> OnSecurityPolicyViolation { get => new JSEventCallback<SecurityPolicyViolationEvent>("securitypolicyviolation", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SecurityPolicyViolationEvent> OnSecurityPolicyViolation { get => new ActionEvent<SecurityPolicyViolationEvent>("securitypolicyviolation", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The visibilitychange event is fired at the document when the contents of its tab have become visible or have been hidden.
         /// </summary>
-        public JSEventCallback<Event> OnVisibilityChange { get => new JSEventCallback<Event>("visibilitychange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnVisibilityChange { get => new ActionEvent<Event>("visibilitychange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The copy event fires when the user initiates a copy action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCopy { get => new JSEventCallback<ClipboardEvent>("copy", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ClipboardEvent> OnCopy { get => new ActionEvent<ClipboardEvent>("copy", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The cut event fires when the user initiates a cut action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCut { get => new JSEventCallback<ClipboardEvent>("cut", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ClipboardEvent> OnCut { get => new ActionEvent<ClipboardEvent>("cut", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The paste event fires when the user initiates a paste action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>("paste", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ClipboardEvent> OnPaste { get => new ActionEvent<ClipboardEvent>("paste", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The fullscreenchange event is fired immediately after the browser switches into or out of fullscreen mode.
         /// </summary>
-        public JSEventCallback<Event> OnFullscreenChange { get => new JSEventCallback<Event>("fullscreenchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnFullscreenChange { get => new ActionEvent<Event>("fullscreenchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The fullscreenerror event is fired when the browser cannot switch to fullscreen mode.
         /// </summary>
-        public JSEventCallback<Event> OnFullscreenError { get => new JSEventCallback<Event>("fullscreenerror", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnFullscreenError { get => new ActionEvent<Event>("fullscreenerror", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (script defer src="…" and type="module") have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnDOMContentLoaded { get => new JSEventCallback<ClipboardEvent>("DOMContentLoaded", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ClipboardEvent> OnDOMContentLoaded { get => new ActionEvent<ClipboardEvent>("DOMContentLoaded", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The readystatechange event is fired when the readyState attribute of a document has changed.
         /// </summary>
-        public JSEventCallback<Event> OnReadyStateChange { get => new JSEventCallback<Event>("readystatechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnReadyStateChange { get => new ActionEvent<Event>("readystatechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The pointerlockchange event is fired when the pointer is locked/unlocked.
         /// </summary>
-        public JSEventCallback<Event> OnPointerLockChange { get => new JSEventCallback<Event>("pointerlockchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnPointerLockChange { get => new ActionEvent<Event>("pointerlockchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The pointerlockerror event is fired when locking the pointer failed (for technical reasons or because the permission was denied).
         /// </summary>
-        public JSEventCallback<Event> OnPointerLockError { get => new JSEventCallback<Event>("pointerlockerror", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnPointerLockError { get => new ActionEvent<Event>("pointerlockerror", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The scroll event fires when the document view has been scrolled. To detect when scrolling has completed, see the Document: scrollend event. For element scrolling, see Element: scroll event.
         /// </summary>
-        public JSEventCallback<Event> OnScroll { get => new JSEventCallback<Event>("scroll", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnScroll { get => new ActionEvent<Event>("scroll", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The scrollend event fires when the document view has completed scrolling. Scrolling is considered completed when the scroll position has no more pending updates and the user has completed their gesture.
         /// </summary>
-        public JSEventCallback<Event> OnScrollEnd { get => new JSEventCallback<Event>("scrollend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnScrollEnd { get => new ActionEvent<Event>("scrollend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The selectionchange event of the Selection API is fired when the current Selection of a Document is changed.
         /// </summary>
-        public JSEventCallback<Event> OnSelectionChange { get => new JSEventCallback<Event>("selectionchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnSelectionChange { get => new ActionEvent<Event>("selectionchange", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

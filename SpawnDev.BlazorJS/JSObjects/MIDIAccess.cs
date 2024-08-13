@@ -38,7 +38,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Called whenever a new MIDI port is added or an existing port changes state.
         /// </summary>
-        public JSEventCallback<MIDIConnectionEvent> OnStateChange { get => new JSEventCallback<MIDIConnectionEvent>("statechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MIDIConnectionEvent> OnStateChange { get => new ActionEvent<MIDIConnectionEvent>("statechange", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

@@ -29,6 +29,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The change event of the PermissionStatus interface fires whenever the PermissionStatus.state property changes.
         /// </summary>
-        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>("change", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnChange { get => new ActionEvent<Event>("change", AddEventListener, RemoveEventListener); set { } }
     }
 }

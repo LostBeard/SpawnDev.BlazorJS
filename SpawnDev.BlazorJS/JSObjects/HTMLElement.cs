@@ -167,58 +167,58 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired for input and dialog elements when the user cancels the currently open dialog by closing it with the Esc key.
         /// </summary>
-        public JSEventCallback<Event> OnCancel { get => new JSEventCallback<Event>("cancel", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnCancel { get => new ActionEvent<Event>("cancel", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired for input, select, and textarea elements when the user modifies the element's value. 
         /// </summary>
-        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>("change", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnChange { get => new ActionEvent<Event>("change", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired on an element when a resource failed to load, or can't be used. 
         /// </summary>
-        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnError { get => new ActionEvent<Event>("error", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires for elements containing a resource when the resource has successfully loaded.
         /// </summary>
-        public JSEventCallback<Event> OnLoad { get => new JSEventCallback<Event>("load", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnLoad { get => new ActionEvent<Event>("load", AddEventListener, RemoveEventListener); set { } }
         #region Drag & drop events
         /// <summary>
         /// Fired every few hundred milliseconds as an element or text selection is being dragged by the user.
         /// </summary>
-        public JSEventCallback<DragEvent> OnDrag { get => new JSEventCallback<DragEvent>("drag", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<DragEvent> OnDrag { get => new ActionEvent<DragEvent>("drag", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a drag operation ends (by releasing a mouse button or hitting the escape key).
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragEnd { get => new JSEventCallback<DragEvent>("dragend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<DragEvent> OnDragEnd { get => new ActionEvent<DragEvent>("dragend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a dragged element or text selection enters a valid drop target. 
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragEnter { get => new JSEventCallback<DragEvent>("dragenter", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<DragEvent> OnDragEnter { get => new ActionEvent<DragEvent>("dragenter", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a dragged element or text selection leaves a valid drop target.
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragLeave { get => new JSEventCallback<DragEvent>("dragleave", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<DragEvent> OnDragLeave { get => new ActionEvent<DragEvent>("dragleave", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an element or text selection is being dragged over a valid drop target (every few hundred milliseconds).
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragOver { get => new JSEventCallback<DragEvent>("dragover", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<DragEvent> OnDragOver { get => new ActionEvent<DragEvent>("dragover", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user starts dragging an element or text selection.
         /// </summary>
-        public JSEventCallback<DragEvent> OnDragStart { get => new JSEventCallback<DragEvent>("dragstart", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<DragEvent> OnDragStart { get => new ActionEvent<DragEvent>("dragstart", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an element or text selection is dropped on a valid drop target. 
         /// </summary>
-        public JSEventCallback<DragEvent> OnDrop { get => new JSEventCallback<DragEvent>("drop", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<DragEvent> OnDrop { get => new ActionEvent<DragEvent>("drop", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #region Popover events
         /// <summary>
         /// Fired when the element is a popover, before it is hidden or shown.
         /// </summary>
-        public JSEventCallback<ToggleEvent> OnBeforeToggle { get => new JSEventCallback<ToggleEvent>("beforetoggle", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ToggleEvent> OnBeforeToggle { get => new ActionEvent<ToggleEvent>("beforetoggle", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the element is a popover, just after it is hidden or shown.
         /// </summary>
-        public JSEventCallback<ToggleEvent> OnToggle { get => new JSEventCallback<ToggleEvent>("toggle", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ToggleEvent> OnToggle { get => new ActionEvent<ToggleEvent>("toggle", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #endregion
     }

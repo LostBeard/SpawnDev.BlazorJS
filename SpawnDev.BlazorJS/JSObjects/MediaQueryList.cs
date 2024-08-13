@@ -24,6 +24,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Sent to the MediaQueryList when the result of running the media query against the document changes. For example, if the media query is (min-width: 400px), the change event is fired any time the width of the document's viewport changes such that its width moves across the 400px boundary in either direction.
         /// </summary>
-        public JSEventCallback<MediaQueryListEvent> OnChange { get => new JSEventCallback<MediaQueryListEvent>("change", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MediaQueryListEvent> OnChange { get => new ActionEvent<MediaQueryListEvent>("change", AddEventListener, RemoveEventListener); set { } }
     }
 }

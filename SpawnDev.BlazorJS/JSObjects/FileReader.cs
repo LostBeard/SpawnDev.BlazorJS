@@ -45,27 +45,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a read has been aborted, for example because the program called FileReader.abort().
         /// </summary>
-        public JSEventCallback<ProgressEvent> OnAbort { get => new JSEventCallback<ProgressEvent>("abort", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ProgressEvent> OnAbort { get => new ActionEvent<ProgressEvent>("abort", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the read failed due to an error.
         /// </summary>
-        public JSEventCallback<ProgressEvent> OnError { get => new JSEventCallback<ProgressEvent>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ProgressEvent> OnError { get => new ActionEvent<ProgressEvent>("error", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a read has completed successfully.
         /// </summary>
-        public JSEventCallback<ProgressEvent> OnLoad { get => new JSEventCallback<ProgressEvent>("load", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ProgressEvent> OnLoad { get => new ActionEvent<ProgressEvent>("load", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a read has started.
         /// </summary>
-        public JSEventCallback<ProgressEvent> OnLoadStart { get => new JSEventCallback<ProgressEvent>("loadstart", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ProgressEvent> OnLoadStart { get => new ActionEvent<ProgressEvent>("loadstart", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a read has completed, successfully or not.
         /// </summary>
-        public JSEventCallback<ProgressEvent> OnLoadEnd { get => new JSEventCallback<ProgressEvent>("loadend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ProgressEvent> OnLoadEnd { get => new ActionEvent<ProgressEvent>("loadend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired periodically as data is read.
         /// </summary>
-        public JSEventCallback<ProgressEvent> OnProgress { get => new JSEventCallback<ProgressEvent>("progress", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ProgressEvent> OnProgress { get => new ActionEvent<ProgressEvent>("progress", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Starts reading the contents of the specified Blob, once finished, the result attribute contains a data: URL representing the file's data.
         /// </summary>

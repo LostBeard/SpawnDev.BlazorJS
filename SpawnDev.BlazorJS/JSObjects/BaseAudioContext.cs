@@ -23,6 +23,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A statechange event is fired at a BaseAudioContext object when its state member changes.
         /// </summary>
-        public JSEventCallback<Event> OnStateChange { get => new JSEventCallback<Event>("statechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnStateChange { get => new ActionEvent<Event>("statechange", AddEventListener, RemoveEventListener); set { } }
     }
 }

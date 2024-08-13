@@ -25,10 +25,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the window's current screen changes in some way — for example available width or height, or orientation.
         /// </summary>
-        public JSEventCallback<Event> OnCurrentScreenChange { get => new JSEventCallback<Event>("currentscreenchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnCurrentScreenChange { get => new ActionEvent<Event>("currentscreenchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when screens are connected to or disconnected from the system.
         /// </summary>
-        public JSEventCallback<Event> OnScreenChange { get => new JSEventCallback<Event>("screenchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnScreenChange { get => new ActionEvent<Event>("screenchange", AddEventListener, RemoveEventListener); set { } }
     }
 }

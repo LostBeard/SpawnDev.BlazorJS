@@ -116,19 +116,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a connection with a WebSocket is closed. Also available via the onclose property
         /// </summary>
-        public JSEventCallback<CloseEvent> OnClose { get => new JSEventCallback<CloseEvent>("close", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<CloseEvent> OnClose { get => new ActionEvent<CloseEvent>("close", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a connection with a WebSocket has been closed because of an error, such as when some data couldn't be sent. Also available via the onerror property.
         /// </summary>
-        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnError { get => new ActionEvent<Event>("error", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when data is received through a WebSocket. Also available via the onmessage property.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MessageEvent> OnMessage { get => new ActionEvent<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a connection with a WebSocket is opened. Also available via the onopen property.
         /// </summary>
-        public JSEventCallback<Event> OnOpen { get => new JSEventCallback<Event>("open", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnOpen { get => new ActionEvent<Event>("open", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

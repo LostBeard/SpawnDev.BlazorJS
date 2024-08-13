@@ -33,11 +33,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The connect event of the USB interface is fired whenever a paired device is connected.
         /// </summary>
-        public JSEventCallback<USBConnectionEvent> OnConnect { get => new JSEventCallback<USBConnectionEvent>("connect", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<USBConnectionEvent> OnConnect { get => new ActionEvent<USBConnectionEvent>("connect", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The disconnect event of the USB interface is fired whenever a paired device is disconnected.
         /// </summary>
-        public JSEventCallback<USBConnectionEvent> OnDisconnect { get => new JSEventCallback<USBConnectionEvent>("disconnect", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<USBConnectionEvent> OnDisconnect { get => new ActionEvent<USBConnectionEvent>("disconnect", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

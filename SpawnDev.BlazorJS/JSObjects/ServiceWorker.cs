@@ -39,10 +39,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when ServiceWorker.state changes.
         /// </summary>
-        public JSEventCallback<Event> OnStateChange { get => new JSEventCallback<Event>("statechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnStateChange { get => new ActionEvent<Event>("statechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an error happens inside the ServiceWorker object.
         /// </summary>
-        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnError { get => new ActionEvent<Event>("error", AddEventListener, RemoveEventListener); set { } }
     }
 }

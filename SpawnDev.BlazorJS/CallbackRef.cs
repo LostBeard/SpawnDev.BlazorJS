@@ -13,7 +13,7 @@
         /// - RefDel - Reduces the given methods reference count by 1 and returns the updated reference count. If the RefCount reaches 0 the Callback will be Disposed.<br/>
         /// - RefDispose - Forces the Callback to Dispose regardless of RefCount<br/>
         /// - GetRefCount - Returns the reference count for the given method<br/>
-        /// - IsTracked - Returns tru if the given method is being tracked<br/>
+        /// - IsTracked - Returns true if the given method is being tracked<br/>
         /// Note: Only Callbacks created using Callback.RefAdd() and Callback.RefGet() are tracked<br/>
         /// </summary>
         internal Dictionary<Delegate, Callback> TrackedCallbacks => _TrackedCallbacks.ToDictionary(o => o.Key, o => o.Value);

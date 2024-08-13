@@ -39,19 +39,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the battery charging state (the charging property) is updated.
         /// </summary>
-        public JSEventCallback<Event> OnChargingChange { get => new JSEventCallback<Event>("chargingchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnChargingChange { get => new ActionEvent<Event>("chargingchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the battery charging time (the chargingTime property) is updated.
         /// </summary>
-        public JSEventCallback<Event> OnChargingTimeChange { get => new JSEventCallback<Event>("chargingtimechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnChargingTimeChange { get => new ActionEvent<Event>("chargingtimechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the battery discharging time (the dischargingTime property) is updated.
         /// </summary>
-        public JSEventCallback<Event> OnDischargingTimeChange { get => new JSEventCallback<Event>("dischargingtimechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnDischargingTimeChange { get => new ActionEvent<Event>("dischargingtimechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the battery level (the level property) is updated.
         /// </summary>
-        public JSEventCallback<Event> OnLevelChange { get => new JSEventCallback<Event>("levelchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnLevelChange { get => new ActionEvent<Event>("levelchange", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

@@ -34,11 +34,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An event fired when a port has been connected to the device.
         /// </summary>
-        public JSEventCallback<Event> OnConnect { get => new JSEventCallback<Event>("connect", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnConnect { get => new ActionEvent<Event>("connect", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// An event fired when a port has been disconnected from the device.
         /// </summary>
-        public JSEventCallback<Event> OnDisconnect { get => new JSEventCallback<Event>("disconnect", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnDisconnect { get => new ActionEvent<Event>("disconnect", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

@@ -234,43 +234,43 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         public Task<RTCStatsReport> GetStats(MediaStreamTrack? selector = null) => JSRef!.CallAsync<RTCStatsReport>("getStats", selector);
         // TODO ... 
         // unless there is a compatibility issue ...
-        // switch to JSEventCallback with AddEventListener instead of using property assigning which limits usage more... 
+        // switch to ActionEvent with AddEventListener instead of using property assigning which limits usage more... 
         // however, a lot of these events should only be handled by a single event handler but that should be up to the consuming code
-        public JSEventCallback<Event> OnConnectionStateChange { get => new JSEventCallback<Event>(JSRef, "onconnectionstatechange"); set { } }
+        public ActionEvent<Event> OnConnectionStateChange { get => new ActionEvent<Event>("onconnectionstatechange", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// A datachannel event is sent to an RTCPeerConnection instance when an RTCDataChannel has been added to the connection, as a result of the remote peer calling RTCPeerConnection.createDataChannel().
         /// </summary>
-        public JSEventCallback<RTCDataChannelEvent> OnDataChannel { get => new JSEventCallback<RTCDataChannelEvent>(JSRef, "ondatachannel"); set { } }
+        public ActionEvent<RTCDataChannelEvent> OnDataChannel { get => new ActionEvent<RTCDataChannelEvent>("ondatachannel", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// An icecandidate event is sent to an RTCPeerConnection when:<br/>
         /// - An RTCIceCandidate has been identified and added to the local peer by a call to RTCPeerConnection.setLocalDescription(),<br/>
         /// - Every RTCIceCandidate correlated with a particular username fragment and password combination (a generation) has been so identified and added, and<br/>
         /// - All ICE gathering on all transports is complete.
         /// </summary>
-        public JSEventCallback<RTCPeerConnectionEvent> OnIceCandidate { get => new JSEventCallback<RTCPeerConnectionEvent>(JSRef, "onicecandidate"); set { } }
+        public ActionEvent<RTCPeerConnectionEvent> OnIceCandidate { get => new ActionEvent<RTCPeerConnectionEvent>("onicecandidate", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// The WebRTC API event icecandidateerror is sent to an RTCPeerConnection if an error occurs while performing ICE negotiations through a STUN or TURN server. The event object is of type RTCPeerConnectionIceErrorEvent, and contains information describing the error in some amount of detail.
         /// </summary>
-        public JSEventCallback<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { get => new JSEventCallback<RTCPeerConnectionIceErrorEvent>(JSRef, "onicecandidateerror"); set { } }
+        public ActionEvent<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { get => new ActionEvent<RTCPeerConnectionIceErrorEvent>("onicecandidateerror", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// An iceconnectionstatechange event is sent to an RTCPeerConnection object each time the ICE connection state changes during the negotiation process. The new ICE connection state is available in the object's iceConnectionState property.
         /// </summary>
-        public JSEventCallback<Event> OnIceConnectionStateChange { get => new JSEventCallback<Event>(JSRef, "oniceconnectionstatechange"); set { } }
+        public ActionEvent<Event> OnIceConnectionStateChange { get => new ActionEvent<Event>("oniceconnectionstatechange", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// The icegatheringstatechange event is sent to the onicegatheringstatechange event handler on an RTCPeerConnection when the state of the ICE candidate gathering process changes. This signifies that the value of the connection's iceGatheringState property has changed.
         /// </summary>
-        public JSEventCallback<Event> OnIceGatheringStateChange { get => new JSEventCallback<Event>(JSRef, "onicegatheringstatechange"); set { } }
+        public ActionEvent<Event> OnIceGatheringStateChange { get => new ActionEvent<Event>("onicegatheringstatechange", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// A negotiationneeded event is sent to the RTCPeerConnection when negotiation of the connection through the signaling channel is required. This occurs both during the initial setup of the connection as well as any time a change to the communication environment requires reconfiguring the connection.
         /// </summary>
-        public JSEventCallback<Event> OnNegotiationNeeded { get => new JSEventCallback<Event>(JSRef, "onnegotiationneeded"); set { } }
+        public ActionEvent<Event> OnNegotiationNeeded { get => new ActionEvent<Event>("onnegotiationneeded", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// A signalingstatechange event is sent to an RTCPeerConnection to notify it that its signaling state, as indicated by the signalingState property, has changed.
         /// </summary>
-        public JSEventCallback<Event> OnSignalingStateChange { get => new JSEventCallback<Event>(JSRef, "onsignalingstatechange"); set { } }
+        public ActionEvent<Event> OnSignalingStateChange { get => new ActionEvent<Event>("onsignalingstatechange", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// The track event is sent to the ontrack event handler on RTCPeerConnections after a new track has been added to an RTCRtpReceiver which is part of the connection.
         /// </summary>
-        public JSEventCallback<RTCTrackEvent> OnTrack { get => new JSEventCallback<RTCTrackEvent>(JSRef, "ontrack"); set { } }
+        public ActionEvent<RTCTrackEvent> OnTrack { get => new ActionEvent<RTCTrackEvent>("ontrack", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
     }
 }

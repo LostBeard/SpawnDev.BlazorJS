@@ -22,7 +22,7 @@ Full Blazor WebAssembly and Javascript interop. Create, access properties, call 
 - BlazorJSRuntime wraps the default JSRuntime adding additional functionality
 - Create new Javascript objects directly from Blazor
 - Get and set Javascript object properties as well as access methods
-- Easily pass .Net methods to Javascript using JSEventCallback, Callback.Create or Callback.CreateOne methods
+- Easily pass .Net methods to Javascript using ActionEvent, Callback.Create or Callback.CreateOne methods
 - Easily wrap your Javascript objects for direct manipulation from Blazor (No javascript required!)
   - Create a class that inherits from [JSObject](#jsobject-base-class) and define the methods, properties, events, and constructors.
 - Supports [Promise](#promise), [Union](#union) method parameters, and passing [undefined](#undefined) to Javascript
@@ -198,16 +198,16 @@ Create a new Javascript object
 IJSInProcessObjectReference worker = JS.New("Worker", myWorkerScript);
 ```
 
-# JSEventCallback
+# ActionEvent
 
-Used throughout the JSObject collection, JSEventCallback allows a clean .Net style way to add and remove .Net callbacks for Javascript events.
+Used throughout the JSObject collection, ActionEvent allows a clean .Net style way to add and remove .Net callbacks for Javascript events.
 
-With JSEventCallback the operands += and -= can be used to attach and detach .Net callbacks to Javascript events. All reference handling is done automatically when events are added and removed.
+With ActionEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events. All reference handling is done automatically when events are added and removed.
 
 Example taken from the Window JSObject class which inherits from EventTarget.
 ```cs
-// This is how JSEventCallback is implemented in the Window class
-public JSEventCallback<StorageEvent> OnStorage { get => new JSEventCallback<StorageEvent>("storage", AddEventListener, RemoveEventListener); set { } }
+// This is how ActionEvent is implemented in the Window class
+public ActionEvent<StorageEvent> OnStorage { get => new ActionEvent<StorageEvent>("storage", AddEventListener, RemoveEventListener); set { } }
 ```
 
 Example event attach detach
@@ -232,7 +232,7 @@ void Window_OnStorage(StorageEvent storageEvent)
 }
 ```
 
-### JSEventCallback arguments are optional
+### ActionEvent arguments are optional
 Methods attached using JSEventCallbacks are strongly typed and, like Javascript, all arguments are optional. This can improve performance as unused variables will not be brought into Blazor during the event.
 
 Example event attach detach (from above) without using any callback arguments.
@@ -253,6 +253,33 @@ void Window_OnStorage()
     Console.WriteLine($"StorageEvent");
 }
 ```
+### ActionEvent.On() and ActionEvent.Off()
+ActionEvent has additional methods for attaching event handlers; `On` and `Off`. These methods provide support attaching event handlers with alternative parameter types.
+
+Or use the `On` and `Off` methods:
+```cs
+void AttachEventHandlersExample()
+{
+    using var window = JS.Get<Window>("window");
+    window.OnStorage.On(Window_OnStorage);
+}
+void DetachEventHandlersExample()
+{
+    using var window = JS.Get<Window>("window");
+    window.OnStorage.Off(Window_OnStorage);
+}
+// The method below is not using the optional StorageEvent argument
+void Window_OnStorage()
+{
+    Console.WriteLine($"StorageEvent");
+}
+```
+
+### Event handler parameters
+Parameters of event handlers may be omitted if not required.
+
+# FuncEvent 
+FuncEvent works just like ActionEvent but, as the name indicates, works with `Func` methods instead of `Action` methods to allow returning a value.
 
 # Action and Func serialization
 BlazorJS supports serialization of both Func and Action types. Internally the BlazorJS.Callback object is used. Serialized and deserialized Action and Func objects must call their DisposeJS() extension method to dispose the auto created and associated Callback and/or Function objects.

@@ -176,200 +176,200 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fires on any element with content-visibility: auto set on it when it starts or stops being relevant to the user and skipping its contents.
         /// </summary>
-        public JSEventCallback<ContentVisibilityAutoStateChangeEvent> OnContentVisibilityAutoStateChange { get => new JSEventCallback<ContentVisibilityAutoStateChangeEvent>("contentvisibilityautostatechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ContentVisibilityAutoStateChangeEvent> OnContentVisibilityAutoStateChange { get => new ActionEvent<ContentVisibilityAutoStateChangeEvent>("contentvisibilityautostatechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the document view or an element has been scrolled.
         /// </summary>
-        public JSEventCallback<Event> OnScroll { get => new JSEventCallback<Event>("scroll", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnScroll { get => new ActionEvent<Event>("scroll", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when the document view has completed scrolling.
         /// </summary>
-        public JSEventCallback<Event> OnScrollEnd { get => new JSEventCallback<Event>("scrollend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnScrollEnd { get => new ActionEvent<Event>("scrollend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user rotates a wheel button on a pointing device (typically a mouse).
         /// </summary>
-        public JSEventCallback<WheelEvent> OnWheel { get => new JSEventCallback<WheelEvent>("wheel", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<WheelEvent> OnWheel { get => new ActionEvent<WheelEvent>("wheel", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when the value of an input, select, or textarea element has been changed as a direct result of a user action (such as typing in a textbox or checking a checkbox).
         /// </summary>
-        public JSEventCallback<InputEvent> OnInput { get => new JSEventCallback<InputEvent>("input", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<InputEvent> OnInput { get => new ActionEvent<InputEvent>("input", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when the value of an input or textarea element is about to be modified.
         /// </summary>
-        public JSEventCallback<InputEvent> OnBeforeInput { get => new JSEventCallback<InputEvent>("beforeinput", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<InputEvent> OnBeforeInput { get => new ActionEvent<InputEvent>("beforeinput", AddEventListener, RemoveEventListener); set { } }
         #region Fullscreen events
         /// <summary>
         /// Sent to an Element when it transitions into or out of fullscreen mode.
         /// </summary>
-        public JSEventCallback<Event> OnFullscreenChange { get => new JSEventCallback<Event>("fullscreenchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnFullscreenChange { get => new ActionEvent<Event>("fullscreenchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Sent to an Element if an error occurs while attempting to switch it into or out of fullscreen mode.
         /// </summary>
-        public JSEventCallback<Event> OnFullscreenError { get => new JSEventCallback<Event>("fullscreenerror", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnFullscreenError { get => new ActionEvent<Event>("fullscreenerror", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #region Clipboard events
         /// <summary>
         /// Fires when the user initiates a copy action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCopy { get => new JSEventCallback<ClipboardEvent>("copy", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ClipboardEvent> OnCopy { get => new ActionEvent<ClipboardEvent>("copy", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user has initiated a "cut" action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnCut { get => new JSEventCallback<ClipboardEvent>("cut", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ClipboardEvent> OnCut { get => new ActionEvent<ClipboardEvent>("cut", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when the user initiates a paste action through the browser's user interface.
         /// </summary>
-        public JSEventCallback<ClipboardEvent> OnPaste { get => new JSEventCallback<ClipboardEvent>("paste", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<ClipboardEvent> OnPaste { get => new ActionEvent<ClipboardEvent>("paste", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #region Mouse events
         /// <summary>
         /// Fired when a non-primary pointing device button (e.g., any mouse button other than the left button) has been pressed and released on an element.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnAuxClick { get => new JSEventCallback<PointerEvent>("auxclick", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnAuxClick { get => new ActionEvent<PointerEvent>("auxclick", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device button (e.g., a mouse's primary button) is pressed and released on a single element.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnClick { get => new JSEventCallback<PointerEvent>("click", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnClick { get => new ActionEvent<PointerEvent>("click", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the user attempts to open a context menu.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnContextMenu { get => new JSEventCallback<PointerEvent>("contextmenu", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnContextMenu { get => new ActionEvent<PointerEvent>("contextmenu", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device button (e.g., a mouse's primary button) is clicked twice on a single element.
         /// </summary>
-        public JSEventCallback<MouseEvent> OnDblClick { get => new JSEventCallback<MouseEvent>("dblclick", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MouseEvent> OnDblClick { get => new ActionEvent<MouseEvent>("dblclick", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device button is pressed on an element.
         /// </summary>
-        public JSEventCallback<MouseEvent> OnMouseDown { get => new JSEventCallback<MouseEvent>("mousedown", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MouseEvent> OnMouseDown { get => new ActionEvent<MouseEvent>("mousedown", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device (usually a mouse) is moved over the element that has the listener attached.
         /// </summary>
-        public JSEventCallback<MouseEvent> OnMouseEnter { get => new JSEventCallback<MouseEvent>("mouseenter", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MouseEvent> OnMouseEnter { get => new ActionEvent<MouseEvent>("mouseenter", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the pointer of a pointing device (usually a mouse) is moved out of an element that has the listener attached to it.
         /// </summary>
-        public JSEventCallback<MouseEvent> OnMouseLeave { get => new JSEventCallback<MouseEvent>("mouseleave", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MouseEvent> OnMouseLeave { get => new ActionEvent<MouseEvent>("mouseleave", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device (usually a mouse) is moved while over an element.
         /// </summary>
-        public JSEventCallback<MouseEvent> OnMouseMove { get => new JSEventCallback<MouseEvent>("mousemove", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MouseEvent> OnMouseMove { get => new ActionEvent<MouseEvent>("mousemove", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device (usually a mouse) is moved off the element to which the listener is attached or off one of its children.
         /// </summary>
-        public JSEventCallback<MouseEvent> OnMouseOut { get => new JSEventCallback<MouseEvent>("mouseout", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MouseEvent> OnMouseOut { get => new ActionEvent<MouseEvent>("mouseout", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device is moved onto the element to which the listener is attached or onto one of its children.
         /// </summary>
-        public JSEventCallback<MouseEvent> OnMouseOver { get => new JSEventCallback<MouseEvent>("mouseover", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MouseEvent> OnMouseOver { get => new ActionEvent<MouseEvent>("mouseover", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointing device button is released on an element.
         /// </summary>
-        public JSEventCallback<MouseEvent> OnMouseUp { get => new JSEventCallback<MouseEvent>("mouseup", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MouseEvent> OnMouseUp { get => new ActionEvent<MouseEvent>("mouseup", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #region Focus events
         /// <summary>
         /// Fired when an element has lost focus.
         /// </summary>
-        public JSEventCallback<FocusEvent> OnBlur { get => new JSEventCallback<FocusEvent>("blur", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<FocusEvent> OnBlur { get => new ActionEvent<FocusEvent>("blur", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an element has gained focus.
         /// </summary>
-        public JSEventCallback<FocusEvent> OnFocus { get => new JSEventCallback<FocusEvent>("focus", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<FocusEvent> OnFocus { get => new ActionEvent<FocusEvent>("focus", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an element has gained focus, after focus.
         /// </summary>
-        public JSEventCallback<FocusEvent> OnFocusIn { get => new JSEventCallback<FocusEvent>("focusin", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<FocusEvent> OnFocusIn { get => new ActionEvent<FocusEvent>("focusin", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an element has lost focus, after blur.
         /// </summary>
-        public JSEventCallback<FocusEvent> OnFocusOut { get => new JSEventCallback<FocusEvent>("focusout", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<FocusEvent> OnFocusOut { get => new ActionEvent<FocusEvent>("focusout", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #region Keyboard events
         /// <summary>
         /// The keydown event is fired when a key is pressed.
         /// </summary>
-        public JSEventCallback<KeyboardEvent> OnKeyDown { get => new JSEventCallback<KeyboardEvent>("keydown", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<KeyboardEvent> OnKeyDown { get => new ActionEvent<KeyboardEvent>("keydown", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The keyup event is fired when a key is released.
         /// </summary>
-        public JSEventCallback<KeyboardEvent> OnKeyUp { get => new JSEventCallback<KeyboardEvent>("keyup", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<KeyboardEvent> OnKeyUp { get => new ActionEvent<KeyboardEvent>("keyup", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #region Pointer events
         /// <summary>
         /// Fired when an element captures a pointer using setPointerCapture().
         /// </summary>
-        public JSEventCallback<PointerEvent> OnGotPointerCapture { get => new JSEventCallback<PointerEvent>("gotpointercapture", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnGotPointerCapture { get => new ActionEvent<PointerEvent>("gotpointercapture", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a captured pointer is released.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnLostPointerCapture { get => new JSEventCallback<PointerEvent>("lostpointercapture", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnLostPointerCapture { get => new ActionEvent<PointerEvent>("lostpointercapture", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer event is canceled.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnPointerCancel { get => new JSEventCallback<PointerEvent>("pointercancel", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerCancel { get => new ActionEvent<PointerEvent>("pointercancel", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer becomes active.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnPointerDown { get => new JSEventCallback<PointerEvent>("pointerdown", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerDown { get => new ActionEvent<PointerEvent>("pointerdown", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer is moved into the hit test boundaries of an element or one of its descendants.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnPointerCenter { get => new JSEventCallback<PointerEvent>("pointercenter", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerCenter { get => new ActionEvent<PointerEvent>("pointercenter", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer is moved out of the hit test boundaries of an element.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnPointerLeave { get => new JSEventCallback<PointerEvent>("pointerleave", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerLeave { get => new ActionEvent<PointerEvent>("pointerleave", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer changes coordinates.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnPointerMove { get => new JSEventCallback<PointerEvent>("pointermove", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerMove { get => new ActionEvent<PointerEvent>("pointermove", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer is moved out of the hit test boundaries of an element (among other reasons).
         /// </summary>
-        public JSEventCallback<PointerEvent> OnPointerOut { get => new JSEventCallback<PointerEvent>("pointerout", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerOut { get => new ActionEvent<PointerEvent>("pointerout", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer is moved into an element's hit test boundaries.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnPointerOver { get => new JSEventCallback<PointerEvent>("pointerover", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerOver { get => new ActionEvent<PointerEvent>("pointerover", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer changes any properties that don't fire pointerdown or pointerup events.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnPointerRawUpdate { get => new JSEventCallback<PointerEvent>("pointerrawupdate", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerRawUpdate { get => new ActionEvent<PointerEvent>("pointerrawupdate", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer is no longer active.
         /// </summary>
-        public JSEventCallback<PointerEvent> OnPointerUp { get => new JSEventCallback<PointerEvent>("pointerup", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerUp { get => new ActionEvent<PointerEvent>("pointerup", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #region Touch events
         /// <summary>
         /// Fired when digits move during a touch gesture.
         /// </summary>
-        public JSEventCallback<GestureEvent> OnGestureChange { get => new JSEventCallback<GestureEvent>("gesturechange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<GestureEvent> OnGestureChange { get => new ActionEvent<GestureEvent>("gesturechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when there are no longer multiple fingers contacting the touch surface, thus ending the gesture.
         /// </summary>
-        public JSEventCallback<GestureEvent> OnGestureEnd { get => new JSEventCallback<GestureEvent>("gestureend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<GestureEvent> OnGestureEnd { get => new ActionEvent<GestureEvent>("gestureend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when multiple fingers contact the touch surface, thus starting a new gesture.
         /// </summary>
-        public JSEventCallback<GestureEvent> OnGestureStart { get => new JSEventCallback<GestureEvent>("gesturestart", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<GestureEvent> OnGestureStart { get => new ActionEvent<GestureEvent>("gesturestart", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when one or more touch points have been disrupted in an implementation-specific manner (for example, too many touch points are created).
         /// </summary>
-        public JSEventCallback<TouchEvent> OnTouchCancel { get => new JSEventCallback<TouchEvent>("touchcancel", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<TouchEvent> OnTouchCancel { get => new ActionEvent<TouchEvent>("touchcancel", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when one or more touch points are removed from the touch surface.
         /// </summary>
-        public JSEventCallback<TouchEvent> OnTouchEnd { get => new JSEventCallback<TouchEvent>("touchend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<TouchEvent> OnTouchEnd { get => new ActionEvent<TouchEvent>("touchend", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when one or more touch points are moved along the touch surface.
         /// </summary>
-        public JSEventCallback<TouchEvent> OnTouchMove { get => new JSEventCallback<TouchEvent>("touchmove", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<TouchEvent> OnTouchMove { get => new ActionEvent<TouchEvent>("touchmove", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when one or more touch points are placed on the touch surface.
         /// </summary>
-        public JSEventCallback<TouchEvent> OnTouchStart { get => new JSEventCallback<TouchEvent>("touchstart", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<TouchEvent> OnTouchStart { get => new ActionEvent<TouchEvent>("touchstart", AddEventListener, RemoveEventListener); set { } }
         #endregion
         #endregion
     }

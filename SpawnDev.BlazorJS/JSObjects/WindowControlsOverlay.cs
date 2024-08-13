@@ -35,7 +35,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The geometrychange event is fired when the position, size, or visibility of a Progressive Web App's title bar area changes
         /// </summary>
-        public JSEventCallback<WindowControlsOverlayGeometryChangeEvent> OnGeometryChange { get => new JSEventCallback<WindowControlsOverlayGeometryChangeEvent>("geometrychange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<WindowControlsOverlayGeometryChangeEvent> OnGeometryChange { get => new ActionEvent<WindowControlsOverlayGeometryChangeEvent>("geometrychange", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

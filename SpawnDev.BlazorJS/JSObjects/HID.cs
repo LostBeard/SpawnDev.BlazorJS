@@ -32,11 +32,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when an HID device is connected.
         /// </summary>
-        public JSEventCallback<HIDConnectionEvent> OnConnect { get => new JSEventCallback<HIDConnectionEvent>("connect", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<HIDConnectionEvent> OnConnect { get => new ActionEvent<HIDConnectionEvent>("connect", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when an HID device is disconnected.
         /// </summary>
-        public JSEventCallback<HIDConnectionEvent> OnDisconnect { get => new JSEventCallback<HIDConnectionEvent>("disconnect", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<HIDConnectionEvent> OnDisconnect { get => new ActionEvent<HIDConnectionEvent>("disconnect", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

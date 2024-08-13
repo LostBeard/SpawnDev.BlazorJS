@@ -57,10 +57,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired on a specific screen when it changes in some way — width or height, available width or height, color depth, or orientation.
         /// </summary>
-        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>("change", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnChange { get => new ActionEvent<Event>("change", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fires when the screen orientation changes.
         /// </summary>
-        public JSEventCallback<Event> OnOrientationChange { get => new JSEventCallback<Event>("orientationchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnOrientationChange { get => new ActionEvent<Event>("orientationchange", AddEventListener, RemoveEventListener); set { } }
     }
 }

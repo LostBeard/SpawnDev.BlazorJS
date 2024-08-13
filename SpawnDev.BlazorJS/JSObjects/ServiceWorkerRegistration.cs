@@ -85,7 +85,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The updatefound event of the ServiceWorkerRegistration interface is fired any time the ServiceWorkerRegistration.installing property acquires a new service worker.
         /// </summary>
-        public JSEventCallback<Event> OnUpdateFound { get => new JSEventCallback<Event>("updatefound", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnUpdateFound { get => new ActionEvent<Event>("updatefound", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

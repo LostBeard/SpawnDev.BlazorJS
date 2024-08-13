@@ -65,15 +65,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An event fired when the IndexedDB transaction is aborted. Also available via the onabort property; this event bubbles to IDBDatabase.
         /// </summary>
-        public JSEventCallback<Event> OnAbort { get => new JSEventCallback<Event>("abort", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnAbort { get => new ActionEvent<Event>("abort", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// An event fired when the transaction successfully completes. Also available via the oncomplete property.
         /// </summary>
-        public JSEventCallback<Event> OnComplete { get => new JSEventCallback<Event>("complete", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnComplete { get => new ActionEvent<Event>("complete", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// An event fired when a request returns an error and the event bubbles up to the connection object (IDBDatabase). Also available via the onerror property.
         /// </summary>
-        public JSEventCallback<Event> OnError { get => new JSEventCallback<Event>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnError { get => new ActionEvent<Event>("error", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

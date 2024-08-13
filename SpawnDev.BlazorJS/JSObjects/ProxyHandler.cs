@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("apply")]
         [JsonInclude]
-        private FuncCallback<JSObject, JSObject, Array<JSObject?>, object?>? ApplyCallback => _ApplyCallback;
+        public FuncCallback<JSObject, JSObject, Array<JSObject?>, object?>? ApplyCallback => _ApplyCallback;
         private Func<JSObject, JSObject, Array<JSObject?>, object?>? _Apply = null;
         private FuncCallback<JSObject, JSObject, Array<JSObject?>, object?>? _ApplyCallback = null;
         #endregion
@@ -57,7 +57,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("get")]
         [JsonInclude]
-        private FuncCallback<JSObject, JSObject, JSObject, object?>? GetCallback => _GetCallback;
+        public FuncCallback<JSObject, JSObject, JSObject, object?>? GetCallback => _GetCallback;
         private Func<JSObject, JSObject, JSObject, object?>? _Get = null;
         private FuncCallback<JSObject, JSObject, JSObject, object?>? _GetCallback = null;
         #endregion
@@ -84,7 +84,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("construct")]
         [JsonInclude]
-        private FuncCallback<JSObject, Array<JSObject?>, JSObject, object?>? ConstructCallback => _ConstructCallback;
+        public FuncCallback<JSObject, Array<JSObject?>, JSObject, object?>? ConstructCallback => _ConstructCallback;
         private Func<JSObject, Array<JSObject?>, JSObject, object?>? _Construct = null;
         private FuncCallback<JSObject, Array<JSObject?>, JSObject, object?>? _ConstructCallback = null;
         #endregion
@@ -112,7 +112,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("set")]
         [JsonInclude]
-        private FuncCallback<JSObject, JSObject, JSObject, bool>? SetCallback => _SetCallback;
+        public FuncCallback<JSObject, JSObject, JSObject, bool>? SetCallback => _SetCallback;
         private Func<JSObject, JSObject, JSObject, bool>? _Set = null;
         private FuncCallback<JSObject, JSObject, JSObject, bool>? _SetCallback = null;
         #endregion
@@ -138,7 +138,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("has")]
         [JsonInclude]
-        private FuncCallback<JSObject, JSObject, bool>? HasCallback => _HasCallback;
+        public FuncCallback<JSObject, JSObject, bool>? HasCallback => _HasCallback;
         private Func<JSObject, JSObject, bool>? _Has = null;
         private FuncCallback<JSObject, JSObject, bool>? _HasCallback = null;
         #endregion
@@ -163,7 +163,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("ownKeys")]
         [JsonInclude]
-        private FuncCallback<JSObject, IEnumerable<Union<Symbol, string>>>? OwnKeysCallback => _OwnKeysCallback;
+        public FuncCallback<JSObject, IEnumerable<Union<Symbol, string>>>? OwnKeysCallback => _OwnKeysCallback;
         private Func<JSObject, IEnumerable<Union<Symbol, string>>>? _OwnKeys = null;
         private FuncCallback<JSObject, IEnumerable<Union<Symbol, string>>>? _OwnKeysCallback = null;
         #endregion
@@ -189,7 +189,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("deleteProperty")]
         [JsonInclude]
-        private FuncCallback<JSObject, JSObject, bool>? DeletePropertyCallback => _DeletePropertyCallback;
+        public FuncCallback<JSObject, JSObject, bool>? DeletePropertyCallback => _DeletePropertyCallback;
         private Func<JSObject, JSObject, bool>? _DeleteProperty = null;
         private FuncCallback<JSObject, JSObject, bool>? _DeletePropertyCallback = null;
         #endregion

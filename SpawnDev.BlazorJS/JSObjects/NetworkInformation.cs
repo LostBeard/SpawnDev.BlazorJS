@@ -39,7 +39,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The change event fires when connection information changes, and the event is received by the NetworkInformation object.
         /// </summary>
-        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>("change", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnChange { get => new ActionEvent<Event>("change", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

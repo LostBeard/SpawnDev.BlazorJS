@@ -51,11 +51,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the visual viewport is resized. Also available via the onresize property.
         /// </summary>
-        public JSEventCallback<Event> OnResize { get => new JSEventCallback<Event>("resize", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnResize { get => new ActionEvent<Event>("resize", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when the visual viewport is scrolled. Also available via the onscroll property.
         /// </summary>
-        public JSEventCallback<Event> OnScroll { get => new JSEventCallback<Event>("scroll", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnScroll { get => new ActionEvent<Event>("scroll", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 

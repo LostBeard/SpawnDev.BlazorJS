@@ -16,10 +16,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The IDBVersionChangeEvent interface of the IndexedDB API indicates that the version of the database has changed, as the result of an onupgradeneeded event handler function.
         /// </summary>
-        public JSEventCallback<IDBVersionChangeEvent> OnBlocked { get => new JSEventCallback<IDBVersionChangeEvent>("blocked", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<IDBVersionChangeEvent> OnBlocked { get => new ActionEvent<IDBVersionChangeEvent>("blocked", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The upgradeneeded event is fired when an attempt was made to open a database with a version number higher than its current version.
         /// </summary>
-        public JSEventCallback<IDBVersionChangeEvent> OnUpgradeNeeded { get => new JSEventCallback<IDBVersionChangeEvent>("upgradeneeded", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<IDBVersionChangeEvent> OnUpgradeNeeded { get => new ActionEvent<IDBVersionChangeEvent>("upgradeneeded", AddEventListener, RemoveEventListener); set { } }
     }
 }

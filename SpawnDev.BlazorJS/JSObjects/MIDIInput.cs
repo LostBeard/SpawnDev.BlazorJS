@@ -19,6 +19,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the current port receives a MIDI message.
         /// </summary>
-        public JSEventCallback<MIDIMessageEvent> OnMIDIMessage { get => new JSEventCallback<MIDIMessageEvent>("midimessage", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MIDIMessageEvent> OnMIDIMessage { get => new ActionEvent<MIDIMessageEvent>("midimessage", AddEventListener, RemoveEventListener); set { } }
     }
 }
