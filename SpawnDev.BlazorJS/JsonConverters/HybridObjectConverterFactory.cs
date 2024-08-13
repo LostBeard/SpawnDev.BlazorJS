@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -84,12 +85,19 @@ namespace SpawnDev.BlazorJS.JsonConverters
     {
         List<ClassMemberJsonInfo>? classProps = null;
         JsonSerializerOptions Options;
+        ConstructorInfo? JsonConstructor => _JsonConstructor.Value;
+        Lazy<ConstructorInfo?> _JsonConstructor;
         /// <summary>
         /// New instance constructor
         /// </summary>
         public HybridObjectConverter(JsonSerializerOptions options)
         {
             Options = options;
+            _JsonConstructor = new Lazy<ConstructorInfo?>(() =>
+            {
+                var constructorMemberInfos = typeof(T).GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                return constructorMemberInfos.FirstOrDefault(o => o.GetCustomAttribute<JsonConstructorAttribute>() != null);
+            });
         }
         /// <summary>
         /// Converts an IJSInProcessObjectReference to the target type
@@ -98,8 +106,16 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             if (_ref == null) return default(T);
             classProps ??= typeof(T).GetTypeJsonProperties();
-            // create an instance using the json constructor
-            var tmpRet = JsonSerializer.Deserialize<T>("{}")!;// (T)Activator.CreateInstance(typeof(T))!;
+            // create an instance using the json constructor (if found)
+            T tmpRet;
+            if (JsonConstructor != null)
+            {
+                tmpRet = (T)JsonConstructor.Invoke(null);
+            }
+            else
+            {
+                tmpRet = (T)Activator.CreateInstance(typeof(T), true)!;
+            }
             foreach (var prop in classProps)
             {
                 var propertyInfo = prop.PropertyInfo;
