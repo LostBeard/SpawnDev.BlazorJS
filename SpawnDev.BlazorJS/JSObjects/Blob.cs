@@ -18,79 +18,44 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
         /// </summary>
         /// <param name="buffers"></param>
-        public Blob(ArrayBuffer[] buffers) : base(JS.New(nameof(Blob), buffers)) { }
+        /// <param name="options"></param>
+        public Blob(IEnumerable<ArrayBuffer> buffers, BlobOptions? options = null) : base(options == null ? JS.New(nameof(Blob), buffers) :JS.New(nameof(Blob), buffers, options)) { }
         /// <summary>
         /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
         /// </summary>
         /// <param name="buffers"></param>
         /// <param name="options"></param>
-        public Blob(ArrayBuffer[] buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
-        /// <summary>
-        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
-        /// </summary>
-        /// <param name="buffers"></param>
-        /// <param name="options"></param>
-        public Blob(IEnumerable<string> buffers, BlobOptions options) : base(JS.New(nameof(Blob), buffers, options)) { }
-        /// <summary>
-        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
-        /// </summary>
-        /// <param name="buffers"></param>
-        public Blob(IEnumerable<string> buffers) : base(JS.New(nameof(Blob), buffers)) { }
-        /// <summary>
-        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
-        /// </summary>
-        /// <param name="blobs"></param>
-        public Blob(Blob[] blobs) : base(JS.New(nameof(Blob), blobs)) { }
+        public Blob(IEnumerable<string> buffers, BlobOptions? options = null) : base(options == null ? JS.New(nameof(Blob), buffers) : JS.New(nameof(Blob), buffers, options)) { }
         /// <summary>
         /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
         /// </summary>
         /// <param name="blobs"></param>
         /// <param name="options"></param>
-        public Blob(Blob[] blobs, BlobOptions options) : base(JS.New(nameof(Blob), blobs, options)) { }
-        /// <summary>
-        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
-        /// </summary>
-        /// <param name="blobs"></param>
-        public Blob(byte[][] blobs) : base(JS.New(nameof(Blob), blobs)) { }
+        public Blob(IEnumerable<Blob> blobs, BlobOptions? options = null) : base(options == null ? JS.New(nameof(Blob), blobs) : JS.New(nameof(Blob), blobs, options)) { }
         /// <summary>
         /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
         /// </summary>
         /// <param name="blobs"></param>
         /// <param name="options"></param>
-        public Blob(byte[][] blobs, BlobOptions options) : base(JS.New(nameof(Blob), blobs, options)) { }
-        /// <summary>
-        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
-        /// </summary>
-        /// <param name="typedArrays"></param>
-        public Blob(TypedArray[] typedArrays) : base(JS.New(nameof(Blob), typedArrays)) { }
+        public Blob(IEnumerable<byte[]> blobs, BlobOptions? options = null) : base(options == null ? JS.New(nameof(Blob), blobs) : JS.New(nameof(Blob), blobs, options)) { }
         /// <summary>
         /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
         /// </summary>
         /// <param name="typedArrays"></param>
         /// <param name="options"></param>
-        public Blob(TypedArray[] typedArrays, BlobOptions options) : base(JS.New(nameof(Blob), typedArrays, options)) { }
-        /// <summary>
-        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
-        /// </summary>
-        /// <param name="dataViews"></param>
-        public Blob(DataView[] dataViews) : base(JS.New(nameof(Blob), dataViews)) { }
+        public Blob(IEnumerable<TypedArray> typedArrays, BlobOptions? options = null) : base(options == null ? JS.New(nameof(Blob), typedArrays) : JS.New(nameof(Blob), typedArrays, options)) { }
         /// <summary>
         /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
         /// </summary>
         /// <param name="dataViews"></param>
         /// <param name="options"></param>
-        public Blob(DataView[] dataViews, BlobOptions options) : base(JS.New(nameof(Blob), dataViews, options)) { }
-        /// <summary>
-        /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
-        /// </summary>
-        /// <param name="dataViews"></param>
-        public Blob(Union<ArrayBuffer, TypedArray, DataView, Blob, string>[] dataViews) : base(JS.New(nameof(Blob), dataViews)) { }
+        public Blob(IEnumerable<DataView> dataViews, BlobOptions? options = null) : base(options == null ? JS.New(nameof(Blob), dataViews) : JS.New(nameof(Blob), dataViews, options)) { }
         /// <summary>
         /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
         /// </summary>
         /// <param name="dataViews"></param>
         /// <param name="options"></param>
-        public Blob(Union<ArrayBuffer, TypedArray, DataView, Blob, string>[] dataViews, BlobOptions options) : base(JS.New(nameof(Blob), dataViews, options)) { }
+        public Blob(IEnumerable<Union<ArrayBuffer, TypedArray, DataView, Blob, string>> data, BlobOptions? options = null) : base(options == null ? JS.New(nameof(Blob), data) : JS.New(nameof(Blob), data, options)) { }
         /// <summary>
         /// The size, in bytes, of the data contained in the Blob object.
         /// </summary>
