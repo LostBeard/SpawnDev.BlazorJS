@@ -46,7 +46,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             await stream.Write(data);
             stream.Close();
         }
-        public static async Task WriteJSON(this FileSystemFileHandle _this, string filename, object data, JsonSerializerOptions? jsonSerializerOptions = null)
+        public static async Task WriteJSON(this FileSystemFileHandle _this, object data, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             var json = JsonSerializer.Serialize(data, jsonSerializerOptions);
             using var stream = await _this!.CreateWritable();
@@ -106,32 +106,32 @@ namespace SpawnDev.BlazorJS.Toolbox
         }
         #endregion
 
-        public static async Task<T> ReadJSON<T>(this FileSystemFileHandle _this, string filename, JsonSerializerOptions? jsonSerializerOptions = null)
+        public static async Task<T> ReadJSON<T>(this FileSystemFileHandle _this, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             using var file = await _this!.GetFile();
             var ret = await file.Text();
             var obj = JsonSerializer.Deserialize<T>(ret, jsonSerializerOptions);
             return obj;
         }
-        public static async Task<string> ReadText(this FileSystemFileHandle _this, string filename)
+        public static async Task<string> ReadText(this FileSystemFileHandle _this)
         {
             using var file = await _this!.GetFile();
             var ret = await file.Text();
             return ret;
         }
-        public static async Task<byte[]> ReadBytes(this FileSystemFileHandle _this, string filename)
+        public static async Task<byte[]> ReadBytes(this FileSystemFileHandle _this)
         {
             using var file = await _this!.GetFile();
             using var ret = await file.ArrayBuffer();
             return ret.ReadBytes();
         }
-        public static async Task<ArrayBuffer> ReadArrayBuffer(this FileSystemFileHandle _this, string filename)
+        public static async Task<ArrayBuffer> ReadArrayBuffer(this FileSystemFileHandle _this)
         {
             using var file = await _this!.GetFile();
             var ret = await file.ArrayBuffer();
             return ret;
         }
-        public static async Task<JSObjects.File> ReadFile(this FileSystemFileHandle _this, string filename)
+        public static async Task<JSObjects.File> ReadFile(this FileSystemFileHandle _this)
         {
             var file = await _this!.GetFile();
             return file;

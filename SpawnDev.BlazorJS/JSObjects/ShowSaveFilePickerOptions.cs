@@ -20,6 +20,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An Array of allowed file types to save. Each item is an object with the following options:
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<ShowOpenFilePickerType>? Types { get; set; }
+        public List<FilePickerType>? Types { get; set; }
     }
 }
