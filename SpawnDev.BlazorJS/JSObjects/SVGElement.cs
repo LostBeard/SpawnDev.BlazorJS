@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -13,5 +14,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public SVGElement(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Creates a new SVGElement from an ElementReference
+        /// </summary>
+        /// <param name="elementReference"></param>
+        public SVGElement(ElementReference elementReference) : base(JS.ReturnMe<IJSInProcessObjectReference>(elementReference)) { }
     }
 }

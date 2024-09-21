@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -37,9 +38,56 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// In an HTML document, the document.createElement() method creates the HTML element specified by tagName, or an HTMLUnknownElement if tagName isn't recognized.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tagName"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public T CreateElement<T>(string tagName, ElementCreationOptions options) where T : Element => JSRef!.Call<T>("createElement", tagName, options);
+        /// <summary>
+        /// In an HTML document, the document.createElement() method creates the HTML element specified by tagName, or an HTMLUnknownElement if tagName isn't recognized.
+        /// </summary>
         /// <param name="tagName"></param>
         /// <returns></returns>
-        public IJSInProcessObjectReference CreateElement(string tagName) => JSRef!.Call<IJSInProcessObjectReference>("createElement", tagName);
+        public Element CreateElement(string tagName) => JSRef!.Call<Element>("createElement", tagName);
+        /// <summary>
+        /// In an HTML document, the document.createElement() method creates the HTML element specified by tagName, or an HTMLUnknownElement if tagName isn't recognized.
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Element CreateElement(string tagName, ElementCreationOptions options) => JSRef!.Call<Element>("createElement", tagName, options);
+        /// <summary>
+        /// Creates a new element with the given tag name and namespace URI.
+        /// </summary>
+        /// <typeparam name="TElement">Return element as type TElement</typeparam>
+        /// <param name="namespaceURI">A string that specifies the namespace URI to associate with the element. The namespaceURI property of the created element is initialized with the value of namespaceURI. See Valid Namespace URIs.</param>
+        /// <param name="qualifiedName">A string that specifies the type of element to be created. The nodeName property of the created element is initialized with the value of qualifiedName.</param>
+        /// <param name="options">An optional ElementCreationOptions object containing a single property named is, whose value is the tag name for a custom element previously defined using customElements.define()</param>
+        /// <returns>TElement</returns>
+        public TElement CreateElementNS<TElement>(string namespaceURI, string qualifiedName, ElementCreationOptions options) where TElement : Element => JSRef!.Call<TElement>("createElementNS", namespaceURI, qualifiedName, options);
+        /// <summary>
+        /// Creates a new element with the given tag name and namespace URI.
+        /// </summary>
+        /// <param name="namespaceURI">A string that specifies the namespace URI to associate with the element. The namespaceURI property of the created element is initialized with the value of namespaceURI. See Valid Namespace URIs.</param>
+        /// <param name="qualifiedName">A string that specifies the type of element to be created. The nodeName property of the created element is initialized with the value of qualifiedName.</param>
+        /// <param name="options">An optional ElementCreationOptions object containing a single property named is, whose value is the tag name for a custom element previously defined using customElements.define()</param>
+        /// <returns>TElement</returns>
+        public Element CreateElementNS(string namespaceURI, string qualifiedName, ElementCreationOptions options) => JSRef!.Call<Element>("createElementNS", namespaceURI, qualifiedName, options);
+        /// <summary>
+        /// Creates a new element with the given tag name and namespace URI.
+        /// </summary>
+        /// <typeparam name="TElement">Return element as type TElement</typeparam>
+        /// <param name="namespaceURI">A string that specifies the namespace URI to associate with the element. The namespaceURI property of the created element is initialized with the value of namespaceURI. See Valid Namespace URIs.</param>
+        /// <param name="qualifiedName">A string that specifies the type of element to be created. The nodeName property of the created element is initialized with the value of qualifiedName.</param>
+        /// <returns>TElement</returns>
+        public TElement CreateElementNS<TElement>(string namespaceURI, string qualifiedName) where TElement : Element => JSRef!.Call<TElement>("createElementNS", namespaceURI, qualifiedName);
+        /// <summary>
+        /// Creates a new element with the given tag name and namespace URI.
+        /// </summary>
+        /// <param name="namespaceURI">A string that specifies the namespace URI to associate with the element. The namespaceURI property of the created element is initialized with the value of namespaceURI. See Valid Namespace URIs.</param>
+        /// <param name="qualifiedName">A string that specifies the type of element to be created. The nodeName property of the created element is initialized with the value of qualifiedName.</param>
+        /// <returns>TElement</returns>
+        public Element CreateElementNS(string namespaceURI, string qualifiedName) => JSRef!.Call<Element>("createElementNS", namespaceURI, qualifiedName);
         /// <summary>
         /// The Document method exitFullscreen() requests that the element on this document which is currently being presented in fullscreen mode be taken out of fullscreen mode, restoring the previous state of the screen. This usually reverses the effects of a previous call to Element.requestFullscreen().
         /// </summary>
