@@ -94,9 +94,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store. Runs in a separate thread.
         /// </summary>
         /// <param name="storeNames">The names of object stores that are in the scope of the new transaction, declared as an array of strings. Specify only the object stores that you need to access. If you need to access only one object store, you can specify its name as a string. Therefore the following lines are equivalent:</param>
-        /// <param name="readWrite">If true, "readwrite" mode will be used. Otherwise "read mode will be used."</param>
+        /// <param name="readWrite">If true, "readwrite" mode will be used. Otherwise "readonly mode will be used."</param>
         /// <returns>IDBTransaction</returns>
-        public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, bool readWrite) => JSRef!.Call<IDBTransaction>("transaction", storeNames, readWrite ? "readwrite" : "read");
+        public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, bool readWrite) => JSRef!.Call<IDBTransaction>("transaction", storeNames, readWrite ? "readwrite" : "readonly");
         /// <summary>
         /// Immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store. Runs in a separate thread.
         /// </summary>
@@ -114,9 +114,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store. Runs in a separate thread.
         /// </summary>
         /// <param name="storeNames">The names of object stores that are in the scope of the new transaction, declared as an array of strings. Specify only the object stores that you need to access. If you need to access only one object store, you can specify its name as a string. Therefore the following lines are equivalent:</param>
-        /// <param name="readWrite">If true, "readwrite" mode will be used. Otherwise "read mode will be used."</param>
+        /// <param name="readWrite">If true, "readwrite" mode will be used. Otherwise "readonly mode will be used."</param>
         /// <param name="options">Additional options</param>
         /// <returns>IDBTransaction</returns>
-        public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, bool readWrite, IDBDatabaseTransactionOptions options) => JSRef!.Call<IDBTransaction>("transaction", storeNames, readWrite ? "readwrite" : "read", options);
+        public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, bool readWrite, IDBDatabaseTransactionOptions options) => JSRef!.Call<IDBTransaction>("transaction", storeNames, readWrite ? "readwrite" : "readonly", options);
     }
 }
