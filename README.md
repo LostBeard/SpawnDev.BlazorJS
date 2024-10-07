@@ -1,7 +1,7 @@
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
-Full Blazor WebAssembly and Javascript interop. Create, access properties, call methods, and add/remove event handlers of any Javascript objects the .Net way without writing Javascript.  
+Full Blazor WebAssembly and Javascript interop. Create Javascript objects, access properties, call methods, and add/remove event handlers of any Javascript objects the .Net way without writing Javascript.  
 
 **[SpawnDev.BlazorJS.WebWorkers](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers)** is now in a separate repo [here.](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers)
 
