@@ -233,7 +233,7 @@ void Window_OnStorage(StorageEvent storageEvent)
 ```
 
 ### ActionEvent arguments are optional
-Methods attached using JSEventCallbacks are strongly typed and, like Javascript, all arguments are optional. This can improve performance as unused variables will not be brought into Blazor during the event.
+Methods attached using ActionEvents are strongly typed and, like Javascript, all arguments are optional. This can improve performance as unused variables will not be brought into Blazor during the event.
 
 Example event attach detach (from above) without using any callback arguments.
 ```cs
