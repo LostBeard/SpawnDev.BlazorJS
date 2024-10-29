@@ -28,6 +28,14 @@
         /// </summary>
         ServiceWorker = 8,
         /// <summary>
+        /// Server global scope
+        /// </summary>
+        Server = 16,
+        /// <summary>
+        /// Unknown global scope
+        /// </summary>
+        Unknown = 32,
+        /// <summary>
         /// DedicatedWorker and SharedWorker global scopes
         /// </summary>
         DedicatedAndSharedWorkers = DedicatedWorker | SharedWorker,
@@ -36,9 +44,13 @@
         /// </summary>
         AllWorkers = DedicatedWorker | SharedWorker | ServiceWorker,
         /// <summary>
+        /// All browser scopes
+        /// </summary>
+        AllBrowser = Window | DedicatedWorker | SharedWorker | ServiceWorker,
+        /// <summary>
         /// All scopes
         /// </summary>
-        All = Window | DedicatedWorker | SharedWorker | ServiceWorker,
+        All = Window | DedicatedWorker | SharedWorker | ServiceWorker | Server,
         /// <summary>
         /// If service implements IBackgroundService, auto start is disabled. It will be started normally when first injected.<br />
         /// If service implements IAsyncBackgroundService, an exception is thrown because the InitAsync will not be called.

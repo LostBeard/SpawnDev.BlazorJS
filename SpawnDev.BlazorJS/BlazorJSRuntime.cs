@@ -134,9 +134,9 @@ namespace SpawnDev.BlazorJS
             var id = Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
             var chunkSize = 4;
             InstanceId = string.Join("-", Enumerable.Range(0, id.Length / chunkSize).Select(i => id.Substring(i * chunkSize, chunkSize)));
-            GlobalScope = GlobalScope.None;
             if (IsBrowser)
             {
+                GlobalScope = GlobalScope.Unknown;
                 GlobalThisTypeName = ConstructorName() ?? "";
                 switch (GlobalThisTypeName)
                 {
@@ -177,6 +177,10 @@ namespace SpawnDev.BlazorJS
                         StartUpTime = Performance?.Now() ?? 0;
                         break;
                 }
+            }
+            else
+            {
+                GlobalScope = GlobalScope.Server;
             }
         }
         internal void SetReady()

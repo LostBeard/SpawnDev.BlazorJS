@@ -103,6 +103,40 @@ namespace SpawnDev.BlazorJS
             await Task.WhenAll(asyncServiceReadyTasks);
             return _this;
         }
+        /// <summary>
+        /// Services implementing IBackgroundService or IAsyncBackgroundService will be started
+        /// Services implementing IAsyncBackgroundService will have their IAsyncBackgroundService.Ready Task property awaited in parallel<br/>
+        /// Singletons registered with an auto start GlobalScope that matches the current scope will be started<br/>
+        /// Background services must be careful to not take too long in their InitAsync methods as other services are waiting to init and the app is waiting to start
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
+        public static async Task StartBackgroundServices(this IServiceProvider _this)
+        {
+            var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
+            if (webAssemblyServices.Started) return;
+            webAssemblyServices.Started = true;
+            webAssemblyServices.Services = _this;
+            var JS = _this.GetRequiredService<BlazorJSRuntime>();
+            var serviceCollection = _this.GetRequiredService<IServiceCollection>();
+            webAssemblyServices.ServiceInformation = serviceCollection!.Select(o => new ServiceInformation(o, JS.GlobalScope, serviceCollection!)).ToList();
+            var shouldStartInfos = webAssemblyServices.ServiceInformation.Where(o => o.CurrentScopeAutoStart).ToList();
+            var services = new List<object>();
+            foreach (var shouldStartInfo in shouldStartInfos)
+            {
+                var service = shouldStartInfo.GetService(_this)!;
+                services.Add(service);
+            }
+            var asyncServiceReadyTasks = new List<Task>();
+            foreach (var service in services)
+            {
+                if (service is IAsyncBackgroundService asyncBackgroundService)
+                {
+                    asyncServiceReadyTasks.Add(asyncBackgroundService.Ready);
+                }
+            }
+            await Task.WhenAll(asyncServiceReadyTasks);
+        }
 
         /// <summary>
         /// Returns the service of the given service type.<br/>

@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS
     public class WebAssemblyServices : IWebAssemblyServices
     {
         public IServiceProvider Services { get; internal set; }
-        public WebAssemblyHost Host { get; internal set; }
+        public WebAssemblyHost? Host { get; internal set; }
         public bool Started { get; internal set; }
         public List<ServiceInformation> ServiceInformation { get; internal set; } = new List<ServiceInformation>();
         public Dictionary<Type, GlobalScope> AutoStartModes { get; private set; } = new Dictionary<Type, GlobalScope>();
