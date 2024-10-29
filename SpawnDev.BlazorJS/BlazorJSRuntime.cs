@@ -86,34 +86,41 @@ namespace SpawnDev.BlazorJS
         public double ReadyTime { get; internal set; }
         Performance? Performance { get; }
         /// <summary>
+        /// Returns true if running in a browser
+        /// </summary>
+        public bool IsBrowser => OperatingSystem.IsBrowser();
+        /// <summary>
         /// The crossOriginIsolated read-only property returns a boolean value that indicates whether the website is in a cross-origin isolation state. A website is in a cross-origin isolated state, when the response header Cross-Origin-Opener-Policy has the value same-origin and the Cross-Origin-Embedder-Policy header has the value require-corp or credentialless
         /// </summary>
         public bool CrossOriginIsolated => JS.Get<bool>("crossOriginIsolated");
         static BlazorJSRuntime()
         {
-            var defaultWebAssemblyJSRuntimeType = typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime");
-            if (defaultWebAssemblyJSRuntimeType == null) FatalError("DefaultWebAssemblyJSRuntime Type is null");
-            var instanceField = defaultWebAssemblyJSRuntimeType.GetField("Instance", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-            if (instanceField == null) FatalError("DefaultWebAssemblyJSRuntime.Instance FieldInfo is null");
-            _js = (IJSInProcessRuntime)instanceField.GetValue(null)!;
-            if (_js == null) FatalError("JSRuntime is null");
-            RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!.GetValue(_js, null)!;
-            RuntimeJsonSerializerOptions.Converters.Add(new TypeJsonConverter());
-            RuntimeJsonSerializerOptions.Converters.Add(new ITupleConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
-            RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new TaskConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(new BigIntegerConverter());
-            RuntimeJsonSerializerOptions.Converters.Add(new DynamicJSObjectConverterFactory());
-            RuntimeJsonSerializerOptions.Converters.Add(RuntimeJsonConverters);
-            RuntimeJsonSerializerOptions.Converters.Add(new JSObjectReferenceArrayConverterFactory(RuntimeJsonSerializerOptions));
-            RuntimeJsonSerializerOptions.Converters.Add(new JSObjectReferenceListConverterFactory(RuntimeJsonSerializerOptions));
-            RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory(RuntimeJsonSerializerOptions));
+            if (OperatingSystem.IsBrowser())
+            {
+                var defaultWebAssemblyJSRuntimeType = typeof(WebAssemblyHost).Assembly.GetType("Microsoft.AspNetCore.Components.WebAssembly.Services.DefaultWebAssemblyJSRuntime");
+                if (defaultWebAssemblyJSRuntimeType == null) FatalError("DefaultWebAssemblyJSRuntime Type is null");
+                var instanceField = defaultWebAssemblyJSRuntimeType.GetField("Instance", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+                if (instanceField == null) FatalError("DefaultWebAssemblyJSRuntime.Instance FieldInfo is null");
+                _js = (IJSInProcessRuntime)instanceField.GetValue(null)!;
+                if (_js == null) FatalError("JSRuntime is null");
+                RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!.GetValue(_js, null)!;
+                RuntimeJsonSerializerOptions.Converters.Add(new TypeJsonConverter());
+                RuntimeJsonSerializerOptions.Converters.Add(new ITupleConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
+                RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new TaskConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(new BigIntegerConverter());
+                RuntimeJsonSerializerOptions.Converters.Add(new DynamicJSObjectConverterFactory());
+                RuntimeJsonSerializerOptions.Converters.Add(RuntimeJsonConverters);
+                RuntimeJsonSerializerOptions.Converters.Add(new JSObjectReferenceArrayConverterFactory(RuntimeJsonSerializerOptions));
+                RuntimeJsonSerializerOptions.Converters.Add(new JSObjectReferenceListConverterFactory(RuntimeJsonSerializerOptions));
+                RuntimeJsonSerializerOptions.Converters.Add(new HybridObjectConverterFactory(RuntimeJsonSerializerOptions));
+            }
         }
         [DoesNotReturn]
         static void FatalError(string msg) => throw new NullReferenceException($"SpawnDev.BlazorJSRuntime fatal error: {msg}");
@@ -127,46 +134,49 @@ namespace SpawnDev.BlazorJS
             var id = Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
             var chunkSize = 4;
             InstanceId = string.Join("-", Enumerable.Range(0, id.Length / chunkSize).Select(i => id.Substring(i * chunkSize, chunkSize)));
-            GlobalThisTypeName = ConstructorName() ?? "";
             GlobalScope = GlobalScope.None;
-            switch (GlobalThisTypeName)
+            if (IsBrowser)
             {
-                case nameof(Window):
-                    // In Firefox extension content mode window !== globalThis, but globalThis.constructor.name is patched to say 'Window' (instead of 'undefined')
-                    WindowThis = Get<Window>("window");
-                    GlobalThis = Get<Window>("globalThis");
-                    //WindowThis = Get<Window>("globalThis");
-                    //GlobalThis = WindowThis;
-                    GlobalScope = GlobalScope.Window;
-                    Performance = WindowThis.Performance;
-                    StartUpTime = Performance.Now();
-                    break;
-                case nameof(DedicatedWorkerGlobalScope):
-                    DedicateWorkerThis = Get<DedicatedWorkerGlobalScope>("globalThis");
-                    GlobalThis = DedicateWorkerThis;
-                    GlobalScope = GlobalScope.DedicatedWorker;
-                    Performance = DedicateWorkerThis.Performance;
-                    StartUpTime = Performance.Now();
-                    break;
-                case nameof(SharedWorkerGlobalScope):
-                    SharedWorkerThis = Get<SharedWorkerGlobalScope>("globalThis");
-                    GlobalThis = SharedWorkerThis;
-                    GlobalScope = GlobalScope.SharedWorker;
-                    Performance = SharedWorkerThis.Performance;
-                    StartUpTime = Performance.Now();
-                    break;
-                case nameof(ServiceWorkerGlobalScope):
-                    ServiceWorkerThis = Get<ServiceWorkerGlobalScope>("globalThis");
-                    GlobalThis = ServiceWorkerThis;
-                    GlobalScope = GlobalScope.ServiceWorker;
-                    Performance = ServiceWorkerThis.Performance;
-                    StartUpTime = Performance.Now();
-                    break;
-                default:
-                    GlobalThis = Get<JSObject>("globalThis");
-                    Performance = Get<Performance?>("performance");
-                    StartUpTime = Performance?.Now() ?? 0;
-                    break;
+                GlobalThisTypeName = ConstructorName() ?? "";
+                switch (GlobalThisTypeName)
+                {
+                    case nameof(Window):
+                        // In Firefox extension content mode window !== globalThis, but globalThis.constructor.name is patched to say 'Window' (instead of 'undefined')
+                        WindowThis = Get<Window>("window");
+                        GlobalThis = Get<Window>("globalThis");
+                        //WindowThis = Get<Window>("globalThis");
+                        //GlobalThis = WindowThis;
+                        GlobalScope = GlobalScope.Window;
+                        Performance = WindowThis.Performance;
+                        StartUpTime = Performance.Now();
+                        break;
+                    case nameof(DedicatedWorkerGlobalScope):
+                        DedicateWorkerThis = Get<DedicatedWorkerGlobalScope>("globalThis");
+                        GlobalThis = DedicateWorkerThis;
+                        GlobalScope = GlobalScope.DedicatedWorker;
+                        Performance = DedicateWorkerThis.Performance;
+                        StartUpTime = Performance.Now();
+                        break;
+                    case nameof(SharedWorkerGlobalScope):
+                        SharedWorkerThis = Get<SharedWorkerGlobalScope>("globalThis");
+                        GlobalThis = SharedWorkerThis;
+                        GlobalScope = GlobalScope.SharedWorker;
+                        Performance = SharedWorkerThis.Performance;
+                        StartUpTime = Performance.Now();
+                        break;
+                    case nameof(ServiceWorkerGlobalScope):
+                        ServiceWorkerThis = Get<ServiceWorkerGlobalScope>("globalThis");
+                        GlobalThis = ServiceWorkerThis;
+                        GlobalScope = GlobalScope.ServiceWorker;
+                        Performance = ServiceWorkerThis.Performance;
+                        StartUpTime = Performance.Now();
+                        break;
+                    default:
+                        GlobalThis = Get<JSObject>("globalThis");
+                        Performance = Get<Performance?>("performance");
+                        StartUpTime = Performance?.Now() ?? 0;
+                        break;
+                }
             }
         }
         internal void SetReady()
