@@ -820,11 +820,11 @@ var isUndefined = JS.IsUndefined("_undefinedWindow");
 # Blazor Web App compatibility
 .Net 8 introduced a new hosting model that allows mixing [Blazor server render mode](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-modes?view=aspnetcore-8.0#interactive-server-side-rendering-interactive-ssr) and [Blazor WebAssembly render mode](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-modes?view=aspnetcore-8.0#client-side-rendering-csr). [Prerendering](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-modes?view=aspnetcore-8.0#prerendering) was also added to improve initial rendering times. "Prerendering is the process of initially rendering page content on the server without enabling event handlers for rendered controls." 
 
-One of the primary goals of SpawnDev.BlazorJS is to give [Web API](https://developer.mozilla.org/en-US/docs/Web/API) access to Blazor WebAssembly that mirrors Javascript's own Web API. This includes calling conventions. For example, a call that is synchronous in Javascript is synchronous in Blazor, an asynchronous call is asynchronous. To provide that, SpawnDev.BlazorJS requires access to Micorosft's IJSInProcessRuntime and IJSInProcessRuntime is only available in Blazor WebAssembly.
+One of the primary goals of SpawnDev.BlazorJS is to give [Web API](https://developer.mozilla.org/en-US/docs/Web/API) access to Blazor WebAssembly that mirrors Javascript's own Web API. This includes calling conventions. For example, a call that is synchronous in Javascript is synchronous in Blazor, an asynchronous call is asynchronous. To provide that, SpawnDev.BlazorJS requires access to Microsoft's IJSInProcessRuntime and IJSInProcessRuntime is only available in Blazor WebAssembly.
 
 
 ## Compatible ```Blazor Web App``` options:  
-Prerendering is not compatible with SpawnDev.BlazorJS because it runs on the server. So we need to let Blazor know that SpawnDev.BlazorJS components must be rendered only with WebAssembly. How this is done depends on your project settings.
+As of version 2.5.11 the BlazorJSRuntime service can be registered on the server the same way it is on the client. Support for this was enabled to allow prerendering if needed. While it can be registered on the server, the BlazorJSRuntime is not functional unless running in WebAssembly. A component that uses `BlazorJSRuntime` can use the service property `IsBrowser` or `OperatingSystem.IsBrowser()` to determine if the code is running in a browser. To give components a functional BlazorJSRuntime, let Blazor know that those components must be rendered with WebAssembly. How this is done depends on your project settings.
 
 ### ```Interactive render mode``` - ```Auto (Server and WebAssembly)``` or ```WebAssembly```  
 
@@ -835,13 +835,13 @@ In the Server project ```App.razor```:
     <Routes />
 ```
 
-In WebAssembly pages and components that require SpawnDev.BlazorJS:  
+In WebAssembly pages and components that require SpawnDev.BlazorJS (prerender optional):  
 ```cs
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 ```
   
 ### ```Interactivity location``` - ```Global```   
-In the Server project ```App.razor```:  
+In the Server project ```App.razor``` (prerender optional):  
 ```html
     <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)"  />
 ```
