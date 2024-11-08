@@ -155,9 +155,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="wrapAlgo"></param>
         /// <returns></returns>
         public Task<ArrayBuffer> WrapKey(string format, CryptoKey key, CryptoKey wrappingKey, EncryptParams wrapAlgo) => JSRef!.CallAsync<ArrayBuffer>("wrapKey", format, key, wrappingKey, wrapAlgo);
-
-
-        // ECDH - https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/deriveKey#ecdh_2
         /// <summary>
         /// The deriveKey() method of the SubtleCrypto interface can be used to derive a secret key from a master key.<br/>
         /// It takes as arguments some initial key material, the derivation algorithm to use, and the desired properties for the key to derive. It returns a Promise which will be fulfilled with a CryptoKey object representing the new key.<br/>
@@ -193,6 +190,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         /// <returns></returns>
         public Task<CryptoKey> DeriveKey(KeyDeriveParams algorithm, CryptoKey baseKey, Union<HmacKeyGenParams, AesKeyGenParams, HkdfParams, Pbkdf2Params> derivedKeyAlgorithm, bool extractable, string[] keyUsages) => JSRef!.CallAsync<CryptoKey>("deriveKey", algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+        /// <summary>
+        /// The deriveBits() method of the SubtleCrypto interface can be used to derive an array of bits from a base key.<br/>
+        /// It takes as its arguments the base key, the derivation algorithm to use, and the length of the bits to derive. It returns a Promise which will be fulfilled with an ArrayBuffer containing the derived bits.<br/>
+        /// This method is very similar to SubtleCrypto.deriveKey(), except that deriveKey() returns a CryptoKey object rather than an ArrayBuffer. Essentially deriveKey() is composed of deriveBits() followed by importKey().<br/>
+        /// This function supports the same derivation algorithms as deriveKey(): ECDH, HKDF, PBKDF2, and X25519. See Supported algorithms for some more detail on these algorithms.
+        /// </summary>
+        /// <param name="algorithm">An object defining the derivation algorithm to use.<br/>
+        /// To use ECDH, pass an EcdhKeyDeriveParams object.<br/>
+        /// To use HKDF, pass an HkdfParams object.<br/>
+        /// To use PBKDF2, pass a Pbkdf2Params object.<br/>
+        /// To use X25519, pass an EcdhKeyDeriveParams object, specifying the string X25519 as the name property.
+        /// </param>
+        /// <param name="baseKey">A CryptoKey representing the input to the derivation algorithm. If algorithm is ECDH, this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().</param>
+        /// <param name="length">A number representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.</param>
+        /// <returns>A Promise that fulfills with an ArrayBuffer containing the derived bits.</returns>
+        public Task<ArrayBuffer> DeriveBits(KeyDeriveParams algorithm, CryptoKey baseKey, int length) => JSRef!.CallAsync<ArrayBuffer>("deriveBits", algorithm, baseKey, length);
         #endregion
     }
 }
