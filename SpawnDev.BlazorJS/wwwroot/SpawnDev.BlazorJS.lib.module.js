@@ -272,17 +272,22 @@
             if (this.callbacks[callbackId]) delete this.callbacks[callbackId];
         }
         // ****************************************
-        // ************ Invoke Method ************
+        // ************ Invoke Method *************
         // ****************************************
-        // the below method is the only Javascript method that the C# BlazorJSRuntime will call.
+        // the below 2 methods are the only Javascript methods that the C# BlazorJSRuntime will call.
         // it is used to call other Javascript BlazorJSInterop methods and prepare the return value for C#
         Invoke(fnName, args, returnType) {
             var ret = this[fnName](...args);
             if (returnType === void 0 || returnType === null) return;
             return this.serializeToDotNet(ret, returnType);
         }
+        async InvokeAsync(fnName, args, returnType) {
+            var ret = await this[fnName](...args);
+            if (returnType === void 0 || returnType === null) return;
+            return this.serializeToDotNet(ret, returnType);
+        }
         // ****************************************
-        // ************ Internal Methods ************
+        // ************ Internal Methods **********
         // ****************************************
         createJSObjectReference(o) {
             var mustWrap = this.createJSObjectReferenceMustWrapType(o);

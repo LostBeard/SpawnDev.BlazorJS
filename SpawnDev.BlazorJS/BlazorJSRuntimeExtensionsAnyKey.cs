@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.BlazorJSRuntimeAnyKey
+﻿using SpawnDev.BlazorJS.Internal;
+
+namespace SpawnDev.BlazorJS.BlazorJSRuntimeAnyKey
 {
     /// <summary>
     /// Adds methods to BlazorJSRuntime that allow any object as a key

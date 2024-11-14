@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.Internal;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JsonConverters;
+using SpawnDev.BlazorJS.RemoteJSRuntime;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
@@ -48,11 +50,13 @@ namespace SpawnDev.BlazorJS
             {
                 _this.AddSingleton<IWebAssemblyServices>(WebAssemblyServices.GetExtension(_this, true)!);
             }
-            BlazorJSRuntime.JS ??= new BlazorJSRuntime();
-            if (!_this.Any(o => o.ServiceType == typeof(BlazorJSRuntime)))
+            if (!_this.Any(o => o.ServiceType == typeof(BlazorJSRuntime)) && BlazorJSRuntime.JS == null)
             {
-                _this.AddSingleton<BlazorJSRuntime>(BlazorJSRuntime.JS);
+                var JS = new BlazorJSRuntime();
+                _this.AddSingleton<BlazorJSRuntime>(JS);
             }
+            // BlazorJSRuntimeAsync service
+            _this.AddScoped<BlazorJSRuntimeAsync>();
             return _this;
         }
         /// <summary>
@@ -68,6 +72,29 @@ namespace SpawnDev.BlazorJS
             return _this;
         }
         /// <summary>
+        /// Adds the BlazorJSRuntime scoped service.
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddBlazorJSRuntimeScoped(this IServiceCollection _this)
+        {
+            if (!_this.Any(o => o.ServiceType == typeof(IServiceCollection)))
+            {
+                _this.AddSingleton<IServiceCollection>(_this);
+            }
+            if (!_this.Any(o => o.ServiceType == typeof(IWebAssemblyServices)))
+            {
+                _this.AddSingleton<IWebAssemblyServices>(WebAssemblyServices.GetExtension(_this, true)!);
+            }
+            if (!_this.Any(o => o.ServiceType == typeof(BlazorJSRuntime)))
+            {
+                _this.AddScoped<BlazorJSRuntime>(sp => new BlazorJSRuntime(sp.GetRequiredService<IJSRuntime>()));
+            }
+            // BlazorJSRuntimeAsync service
+            _this.AddScoped<BlazorJSRuntimeAsync>();
+            return _this;
+        }
+        /// <summary>
         /// Services implementing IBackgroundService or IAsyncBackgroundService will be started
         /// Services implementing IAsyncBackgroundService will have their IAsyncBackgroundService.Ready Task property awaited in parallel<br/>
         /// Singletons registered with an auto start GlobalScope that matches the current scope will be started<br/>
@@ -79,28 +106,7 @@ namespace SpawnDev.BlazorJS
         {
             var webAssemblyServices = (WebAssemblyServices)_this.Services.GetRequiredService<IWebAssemblyServices>();
             if (webAssemblyServices.Started) return _this;
-            webAssemblyServices.Started = true;
-            webAssemblyServices.Host = _this;
-            webAssemblyServices.Services = _this.Services;
-            var JS = _this.Services.GetRequiredService<BlazorJSRuntime>();
-            var serviceCollection = _this.Services.GetRequiredService<IServiceCollection>();
-            webAssemblyServices.ServiceInformation = serviceCollection!.Select(o => new ServiceInformation(o, JS.GlobalScope, serviceCollection!)).ToList();
-            var shouldStartInfos = webAssemblyServices.ServiceInformation.Where(o => o.CurrentScopeAutoStart).ToList();
-            var services = new List<object>();
-            foreach (var shouldStartInfo in shouldStartInfos)
-            {
-                var service = shouldStartInfo.GetService(_this.Services)!;
-                services.Add(service);
-            }
-            var asyncServiceReadyTasks = new List<Task>();
-            foreach (var service in services)
-            {
-                if (service is IAsyncBackgroundService asyncBackgroundService)
-                {
-                    asyncServiceReadyTasks.Add(asyncBackgroundService.Ready);
-                }
-            }
-            await Task.WhenAll(asyncServiceReadyTasks);
+            await _this.Services.StartBackgroundServices();
             return _this;
         }
         /// <summary>

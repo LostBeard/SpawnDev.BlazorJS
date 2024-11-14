@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.Internal;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
 using System.Diagnostics.CodeAnalysis;
@@ -18,7 +19,8 @@ namespace SpawnDev.BlazorJS
         static Lazy<Type> _WebAssemblyJSObjectReferenceType = new Lazy<Type>(() => typeof(Microsoft.JSInterop.WebAssembly.WebAssemblyJSRuntime).Assembly.GetType("Microsoft.JSInterop.WebAssembly.WebAssemblyJSObjectReference")!);
         internal static Type WebAssemblyJSObjectReferenceType => _WebAssemblyJSObjectReferenceType.Value;
         internal static JsonConverterCollection RuntimeJsonConverters { get; private set; } = new JsonConverterCollection();
-        internal static readonly IJSInProcessRuntime _js;
+        internal static IJSInProcessRuntime JSRuntime;
+        internal static IJSRuntime AsyncJSRuntime;
         /// <summary>
         /// BlazorJSRuntime provides access to the Javascript environment in a Blazor WebAssembly application
         /// </summary>
@@ -75,7 +77,7 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// A new instance id generated when the app starts
         /// </summary>
-        public string InstanceId { get; }
+        public string InstanceId { get; private set; }
         /// <summary>
         /// Time elapsed until BlazorJSRuntime is initialized.
         /// </summary>
@@ -84,7 +86,7 @@ namespace SpawnDev.BlazorJS
         /// Time elapsed until all background services have been started. Before page load.
         /// </summary>
         public double ReadyTime { get; internal set; }
-        Performance? Performance { get; }
+        Performance? Performance { get; set; }
         /// <summary>
         /// Returns true if running in a browser
         /// </summary>
@@ -101,9 +103,10 @@ namespace SpawnDev.BlazorJS
                 if (defaultWebAssemblyJSRuntimeType == null) FatalError("DefaultWebAssemblyJSRuntime Type is null");
                 var instanceField = defaultWebAssemblyJSRuntimeType.GetField("Instance", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
                 if (instanceField == null) FatalError("DefaultWebAssemblyJSRuntime.Instance FieldInfo is null");
-                _js = (IJSInProcessRuntime)instanceField.GetValue(null)!;
-                if (_js == null) FatalError("JSRuntime is null");
-                RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!.GetValue(_js, null)!;
+                JSRuntime = (IJSInProcessRuntime)instanceField.GetValue(null)!;
+                if (JSRuntime == null) FatalError("IJSInProcessRuntime instance not found");
+                AsyncJSRuntime = (IJSRuntime)JSRuntime;
+                RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!.GetValue(JSRuntime, null)!;
                 RuntimeJsonSerializerOptions.Converters.Add(new TypeJsonConverter());
                 RuntimeJsonSerializerOptions.Converters.Add(new ITupleConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new UnionConverterFactory());
@@ -129,8 +132,22 @@ namespace SpawnDev.BlazorJS
         /// Always returns false for GlobalScope enum flags Default, and None.
         /// </summary>
         public bool IsScope(GlobalScope scope) => (GlobalScope & scope) != 0;
+        public BlazorJSRuntime(IJSRuntime jsr)
+        {
+            AsyncJSRuntime ??= jsr;
+            JSRuntime ??= jsr as IJSInProcessRuntime;
+            Init();
+        }
         internal BlazorJSRuntime()
         {
+            Init();
+        }
+        void Init()
+        {
+            if (OperatingSystem.IsBrowser())
+            {
+                JS ??= this;
+            }
             var id = Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
             var chunkSize = 4;
             InstanceId = string.Join("-", Enumerable.Range(0, id.Length / chunkSize).Select(i => id.Substring(i * chunkSize, chunkSize)));
@@ -144,8 +161,6 @@ namespace SpawnDev.BlazorJS
                         // In Firefox extension content mode window !== globalThis, but globalThis.constructor.name is patched to say 'Window' (instead of 'undefined')
                         WindowThis = Get<Window>("window");
                         GlobalThis = Get<Window>("globalThis");
-                        //WindowThis = Get<Window>("globalThis");
-                        //GlobalThis = WindowThis;
                         GlobalScope = GlobalScope.Window;
                         Performance = WindowThis.Performance;
                         StartUpTime = Performance.Now();
@@ -182,6 +197,10 @@ namespace SpawnDev.BlazorJS
             {
                 GlobalScope = GlobalScope.Server;
             }
+#if DEBUG
+            Console.WriteLine($"{GlobalScope} _jsAsync == null: {(AsyncJSRuntime == null)}");
+            Console.WriteLine($"{GlobalScope} _js == null: {(JSRuntime == null)}");
+#endif
         }
         internal void SetReady()
         {

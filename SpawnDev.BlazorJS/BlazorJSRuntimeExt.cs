@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS
+﻿using SpawnDev.BlazorJS.Internal;
+
+namespace SpawnDev.BlazorJS
 {
     public partial class BlazorJSRuntime
     {

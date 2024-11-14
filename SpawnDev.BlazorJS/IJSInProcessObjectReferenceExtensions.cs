@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using Microsoft.JSInterop.Implementation;
+using SpawnDev.BlazorJS.Internal;
 using System.Reflection;
 
 namespace SpawnDev.BlazorJS
@@ -9,8 +10,6 @@ namespace SpawnDev.BlazorJS
     /// </summary>
     public static class IJSInProcessObjectReferenceExtensions
     {
-        static PropertyInfo JSObjectReferenceIdProp => _JSObjectReferenceIdProp.Value;
-        static Lazy<PropertyInfo> _JSObjectReferenceIdProp = new Lazy<PropertyInfo>(typeof(JSObjectReference).GetProperty("Id", BindingFlags.NonPublic | BindingFlags.Instance)!);
         /// <summary>
         /// Returns the constructor.name of the property
         /// </summary>
@@ -41,10 +40,6 @@ namespace SpawnDev.BlazorJS
         /// Returns a new copy of the IJSInProcessObjectReference
         /// </summary>
         public static IJSInProcessObjectReference CreateCopy(this IJSInProcessObjectReference _ref) => BlazorJSInterop.ObjectGet<IJSInProcessObjectReference>(_ref);
-        /// <summary>
-        /// Returns the Id property value of the IJSInProcessObjectReference
-        /// </summary>
-        public static long JSRefId(this IJSInProcessObjectReference _ref) => (long)JSObjectReferenceIdProp!.GetValue(_ref)!;
         /// <summary>
         /// Returns full ? target === obj2 : target == obj2
         /// </summary>

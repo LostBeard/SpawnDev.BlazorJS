@@ -38,9 +38,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="data">An ArrayBuffer, a TypedArray, or a DataView containing the data to be decrypted (also known as ciphertext).</param>
         /// <returns></returns>
         public Task<ArrayBuffer> Decrypt(EncryptParams algorithm, CryptoKey key, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<ArrayBuffer>("decrypt", algorithm, key, data);
-        //public void DeriveBits() => JSRef!.CallVoid("deriveBits");
-        //public void DeriveKey() => JSRef!.CallVoid("deriveKey");
-        //public void Digest() => JSRef!.CallVoid("digest");
         /// <summary>
         /// The encrypt() method of the SubtleCrypto interface encrypts data. It takes as its arguments a key to encrypt with, some algorithm-specific parameters, and the data to encrypt(also known as "plaintext"). It returns a Promise which will be fulfilled with the encrypted data(also known as "ciphertext").
         /// </summary>

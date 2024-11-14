@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS
             get
             {
 #if NET8_0_OR_GREATER
-                    return ServiceDescriptor.IsKeyedService ? ServiceDescriptor.KeyedImplementationInstance : null;
+                return ServiceDescriptor.IsKeyedService ? ServiceDescriptor.KeyedImplementationInstance : null;
 #else
                 return ServiceDescriptor.ImplementationInstance;
 #endif
@@ -53,12 +53,12 @@ namespace SpawnDev.BlazorJS
             ServiceDescriptor = serviceDescriptor;
             ServiceType = ServiceDescriptor.ServiceType;
 #if NET8_0_OR_GREATER
-                IsKeyedService = ServiceDescriptor.IsKeyedService;
-                if (ServiceDescriptor.IsKeyedService)
-                {
-                    ServiceKey = ServiceDescriptor.ServiceKey;
-                    ImplementationType = ServiceDescriptor.KeyedImplementationType ?? (ServiceDescriptor.KeyedImplementationInstance != null ? ServiceDescriptor.KeyedImplementationInstance.GetType() : ServiceDescriptor.ServiceType);
-                }
+            IsKeyedService = ServiceDescriptor.IsKeyedService;
+            if (ServiceDescriptor.IsKeyedService)
+            {
+                ServiceKey = ServiceDescriptor.ServiceKey;
+                ImplementationType = ServiceDescriptor.KeyedImplementationType ?? (ServiceDescriptor.KeyedImplementationInstance != null ? ServiceDescriptor.KeyedImplementationInstance.GetType() : ServiceDescriptor.ServiceType);
+            }
 #endif
             if (ImplementationType == null)
             {
@@ -76,7 +76,17 @@ namespace SpawnDev.BlazorJS
             {
                 serviceAutoStartScope = serviceAutoStartScopeSet.Value;
             }
-            var shouldStart = (currentGlobalScope & serviceAutoStartScope) != 0;
+            var lifetimeCanAutoStart = false;
+            if (OperatingSystem.IsBrowser())
+            {
+                // in the browser scoped and singleton have the same lifespan
+                lifetimeCanAutoStart = ServiceDescriptor.Lifetime == ServiceLifetime.Singleton || ServiceDescriptor.Lifetime == ServiceLifetime.Scoped;
+            }
+            else
+            {
+                lifetimeCanAutoStart = ServiceDescriptor.Lifetime == ServiceLifetime.Singleton;
+            }
+            var shouldStart = lifetimeCanAutoStart && (currentGlobalScope & serviceAutoStartScope) != 0;
             ServiceAutoStartScope = serviceAutoStartScope;
             ImplementsIAsyncBackgroundService = isIAsyncBackgroundService;
             ImplementsIBackgroundService = isIBackgroundService;

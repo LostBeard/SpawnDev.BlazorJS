@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JsonConverters;
 
-namespace SpawnDev.BlazorJS
+namespace SpawnDev.BlazorJS.Internal
 {
     /// <summary>
     /// Low level Javascript interop used by SpawnDev.BlazorJS<br/>
@@ -9,7 +9,7 @@ namespace SpawnDev.BlazorJS
     /// </summary>
     public static class BlazorJSInterop
     {
-        static IJSInProcessRuntime _js { get; } = BlazorJSRuntime._js;
+        static IJSInProcessRuntime _js { get; } = BlazorJSRuntime.JSRuntime;
         #region Global Property methods
         /// <summary>
         /// Returns full ? target === obj2 : target == obj2

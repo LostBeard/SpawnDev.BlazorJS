@@ -12,7 +12,6 @@ namespace SpawnDev.BlazorJS
         /// Returns a List of ClassMemberJsonInfo for properties and fields that may be included during serialization and deserialization
         /// </summary>
         /// <param name="t"></param>
-        /// <param name="jsonNamingPolicy"></param>
         /// <returns></returns>
         public static List<ClassMemberJsonInfo> GetTypeJsonProperties(this Type t)
         {
