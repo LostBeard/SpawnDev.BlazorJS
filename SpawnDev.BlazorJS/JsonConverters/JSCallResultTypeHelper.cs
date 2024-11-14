@@ -72,7 +72,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         {
             var returnType = typeof(TResult);
             var resultTypeOrig = FromGenericOrig(returnType);
-            if (resultTypeOrig == JSCallResultType.Default && BlazorJSRuntime.RuntimeJsonSerializerOptions != null)
+            if (resultTypeOrig != JSCallResultType.JSObjectReference && BlazorJSRuntime.RuntimeJsonSerializerOptions != null)
             {
                 var jsonConverter = BlazorJSRuntime.RuntimeJsonSerializerOptions.GetConverter(returnType);
                 if (jsonConverter is IJSInProcessObjectReferenceConverter)
