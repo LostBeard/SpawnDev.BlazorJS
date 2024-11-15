@@ -65,6 +65,19 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime
         /// <returns></returns>
         public static Task<IJSObjectReference> NewAsync(this IJSRuntime _ref, string key, params object?[]? args) => _ref.GetInterop().GlobalPropertyNew<IJSObjectReference>(key, args);
         /// <summary>
+        /// Creates a new Object instance
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
+        public static Task<IJSObjectReference> NewAsync(this IJSRuntime _ref) => _ref.GetInterop().GlobalPropertyNew<IJSObjectReference>("Object", null);
+        /// <summary>
+        /// Creates a new Object instance
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
+        public static Task<T> NewAsync<T>(this IJSRuntime _ref) => _ref.GetInterop().GlobalPropertyNew<T>("Object", null);
+        /// <summary>
         /// Call a global method
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -132,5 +145,13 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime
         /// <param name="key"></param>
         /// <returns></returns>
         public static async Task<bool> IsUndefinedAsync(this IJSRuntime _ref, string key) => await _ref.TypeOfAsync(key) == "undefined";
+        /// <summary>
+        /// Returns the specified object as type T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_ref"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static Task<T> ReturnAs<T>(this IJSRuntime _ref, object? obj) => _ref.GetInterop().ObjectGet<T>(obj);
     }
 }

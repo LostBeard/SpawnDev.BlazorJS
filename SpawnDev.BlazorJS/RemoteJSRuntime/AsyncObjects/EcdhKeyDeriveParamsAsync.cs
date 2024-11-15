@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class EcdhKeyDeriveParamsAsync : KeyDeriveParams
     {
         /// <summary>
