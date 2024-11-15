@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.RemoteJSRuntime
 {
-    [JsonConverter(typeof(JSObjectAsyncConverter<JSObjectAsync>))]
+    [JsonConverter(typeof(JSObjectAsyncConverterFactory))]
     public class JSObjectAsync : IAsyncDisposable
     {
         public IJSObjectReference JSRef { get; protected set; }

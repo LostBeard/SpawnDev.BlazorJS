@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
     /// The ArrayBuffer object is used to represent a generic raw binary data buffer.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
     /// </summary>
-    [JsonConverter(typeof(JSObjectAsyncConverter<ArrayBufferAsync>))]
+    [JsonConverter(typeof(JSObjectAsyncConverterFactory))]
     public class ArrayBufferAsync : JSObjectAsync
     {
         /// <summary>

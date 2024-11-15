@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
     /// <summary>
     /// Base class for CryptoKeyPair and CryptoKey
     /// </summary>
-    [JsonConverter(typeof(JSObjectAsyncConverter<CryptoKeyBaseAsync>))]
+    [JsonConverter(typeof(JSObjectAsyncConverterFactory))]
     public class CryptoKeyBaseAsync : JSObjectAsync
     {
         /// <summary>

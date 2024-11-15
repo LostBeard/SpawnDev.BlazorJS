@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
     /// The CryptoKeyPair dictionary of the Web Crypto API represents a key pair for an asymmetric cryptography algorithm, also known as a public-key algorithm.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair
     /// </summary>
-    [JsonConverter(typeof(JSObjectAsyncConverter<CryptoKeyPairAsync>))]
+    [JsonConverter(typeof(JSObjectAsyncConverterFactory))]
     public class CryptoKeyPairAsync : CryptoKeyBaseAsync
     {
         /// <summary>

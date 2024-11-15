@@ -9,8 +9,8 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
     /// The CryptoKey interface of the Web Crypto API represents a cryptographic key obtained from one of the SubtleCrypto methods generateKey(), deriveKey(), importKey(), or unwrapKey().<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/CryptoKey
     /// </summary>
-    [JsonConverter(typeof(JSObjectAsyncConverter<CryptoKeyAsync>))]
-    public class CryptoKeyAsync : CryptoKeyBaseAsync
+    [JsonConverter(typeof(JSObjectAsyncConverterFactory))]
+    public class CryptoKeyAsync : JSObjectAsync
     {
         /// <summary>
         /// Deserialization constructor
@@ -32,6 +32,6 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// <summary>
         /// An Array of strings, indicating what can be done with the key. Possible values for array elements are "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", and "unwrapKey".
         /// </summary>
-        public Task<string[]> Usages => JSRef!.GetAsync<string[]>("usages");
+        public Task<string[]> Get_Usages => JSRef!.GetAsync<string[]>("usages");
     }
 }

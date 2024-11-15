@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
     /// The Uint8Array typed array represents an array of 8-bit unsigned integers. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array
     /// </summary>
-    [JsonConverter(typeof(JSObjectAsyncConverter<Uint8ArrayAsync>))]
+    [JsonConverter(typeof(JSObjectAsyncConverterFactory))]
     public class Uint8ArrayAsync : TypedArrayAsync
     {
         /// <summary>
