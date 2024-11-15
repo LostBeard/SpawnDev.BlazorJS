@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.RemoteJSRuntime;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -19,16 +20,29 @@ namespace SpawnDev.BlazorJS.JsonConverters
             Options = options;
         }
         /// <summary>
+        /// If true the converter is disabled
+        /// </summary>
+        public static bool Disable { get; set; }
+        /// <summary>
+        /// If true, the covnerter will log Types it converts
+        /// </summary>
+        public static bool Verbose { get; set; }
+        /// <summary>
         /// Returns true if the type can be converted
         /// </summary>
         public override bool CanConvert(Type typeToConvert)
         {
             var ret = CanConvert(typeToConvert, false);
+            if (ret)
+            {
+                var nmt = true;
+            }
             return ret;
         }
         Dictionary<Type, bool?> CanConvertAnswers = new Dictionary<Type, bool?>();
         bool CanConvert(Type typeToConvert, bool internalCall)
         {
+            if (Disable) return false;
             if (CanConvertAnswers.TryGetValue(typeToConvert, out var canConvertCached))
             {
                 return canConvertCached ?? false;
@@ -39,6 +53,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
             if (typeToConvert.IsInterface) goto CanConvertFalse;
             if (typeToConvert.IsArray) goto CanConvertFalse;
             if (typeToConvert.IsAbstract) goto CanConvertFalse;
+            if (typeof(JSObjectAsync).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
             if (typeof(JSObject).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
             if (typeof(IJSObjectProxy).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
             if (typeof(Callback).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
@@ -46,6 +61,10 @@ namespace SpawnDev.BlazorJS.JsonConverters
             var baseType = typeToConvert.IsGenericType ? typeToConvert.GetGenericTypeDefinition() : typeToConvert;
             if (baseType == typeof(List<>)) goto CanConvertFalse;
             if (baseType == typeof(Dictionary<,>)) goto CanConvertFalse;
+            // false if Type has JsonConverterAttribute
+            var jsonConverter = typeToConvert.GetCustomAttribute<JsonConverterAttribute>();
+            if (jsonConverter != null && jsonConverter.ConverterType != typeof(HybridObjectConverterFactory)) goto CanConvertFalse;
+            // check properties
             var classProps = typeToConvert.GetTypeJsonProperties();// typeToConvert.GetProperties(BindingFlags.Instance);
             var propertyTypes = classProps.Select(o => o.PropertyInfo?.PropertyType ?? o.FieldInfo?.FieldType).Distinct().ToList();
             foreach (var pType in propertyTypes)
@@ -66,6 +85,10 @@ namespace SpawnDev.BlazorJS.JsonConverters
             return false;
         CanConvertTrue:
             CanConvertAnswers[typeToConvert] = true;
+            if (Verbose)
+            {
+                Console.WriteLine($"HybridObjectConverterFactory: {typeToConvert.FullName}");
+            }
             return true;
         }
         /// <summary>
