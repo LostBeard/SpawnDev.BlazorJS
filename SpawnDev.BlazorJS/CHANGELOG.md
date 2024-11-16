@@ -1,6 +1,19 @@
 # Changelog
 
 
+## [2.5.17] - 2024-11-15
+
+### Changed
+- Fixed JsonConverterAttribute with HybridConverter and HybridConverterFactory not working (Ex: SharedCancellationTokenSource)
+
+
+## [2.5.16] - 2024-11-15
+
+### Changed
+- Changed HybridConverterFactory to not convert JSObjectAsync types or types with JsonConverterAttributes.
+- Updated JSObjectConverterFactory and JSObjectAsync classes that use it.
+
+
 ## [2.5.15] - 2024-11-15
 
 ### Changed

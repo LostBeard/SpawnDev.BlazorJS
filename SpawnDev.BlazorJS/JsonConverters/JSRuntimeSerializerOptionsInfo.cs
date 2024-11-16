@@ -19,45 +19,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
             JSRuntime = jsRuntime;
             JsonSerializerOptions = (JsonSerializerOptions)jsRuntimeJsonSerializerOptionsProp.GetValue(jsRuntime)!;
         }
-
-        /// <summary>
-        /// By default all callback args are passed as JSCallResultType.Default
-        /// The return value from this method tells the JSInterop.serializeToDotNet method that we want to pre-serialize to the format returned before the default serialization (json)
-        /// </summary>
-        /// <param name="returnType"></param>
-        /// <returns></returns>
-        //public JSCallResultType FromGenericForCallback(Type returnType)
-        //{
-        //    var ret = JSCallResultType.Default;
-        //    var jsonConverter = JsonSerializerOptions.GetConverter(returnType);
-        //    if (jsonConverter is IJSInProcessObjectReferenceConverter)
-        //    {
-        //        ret = JSCallResultType.JSObjectReference;
-        //    }
-        //    else
-        //    {
-        //        ret = FromGenericOrig(returnType);
-        //    }
-        //    return ret == JSCallResultType.Default ? ret : ret + OverrideFlag;
-        //}
-
-        //public JSCallResultType FromGenericForCallback<TResult>()
-        //{
-        //    var returnType = typeof(TResult);
-        //    var ret = JSCallResultType.Default;
-        //    var jsonConverter = JsonSerializerOptions.GetConverter(returnType);
-        //    if (jsonConverter is IJSInProcessObjectReferenceConverter)
-        //    {
-        //        ret = JSCallResultType.JSObjectReference;
-        //    }
-        //    else
-        //    {
-        //        ret = FromGenericOrig(returnType);
-        //    }
-        //    return ret == JSCallResultType.Default ? ret : ret + OverrideFlag;
-        //}
-
-
         /// <summary>
         /// FromGeneric returns the value from the original FromGeneric method unless the default is json and IJSInprocessObjectReference is desired instead
         /// </summary>
@@ -65,57 +26,36 @@ namespace SpawnDev.BlazorJS.JsonConverters
         /// <returns></returns>
         public JSCallResultType FromGeneric(Type returnType)
         {
-            var resultTypeOrig = FromGenericOrig(returnType);
-            if (resultTypeOrig != JSCallResultType.JSObjectReference)
+            var resultType = FromGenericOrig(returnType);
+            if (resultType != JSCallResultType.JSObjectReference)
             {
                 var jsonConverter = JsonSerializerOptions.GetConverter(returnType);
                 if (jsonConverter is IJSObjectAsyncConverter || jsonConverter is IJSInProcessObjectReferenceConverter)
                 {
-                    resultTypeOrig = JSCallResultType.JSObjectReference + OverrideFlag;
+                    resultType = JSCallResultType.JSObjectReference + OverrideFlag;
                 }
             }
-            return resultTypeOrig;
+            return resultType;
         }
-
-        public JSCallResultType FromGeneric<TResult>()
-        {
-            var returnType = typeof(TResult);
-            var resultTypeOrig = FromGenericOrig(returnType);
-            if (resultTypeOrig != JSCallResultType.JSObjectReference)
-            {
-                var jsonConverter = JsonSerializerOptions.GetConverter(returnType);
-                if (jsonConverter is IJSObjectAsyncConverter || jsonConverter is IJSInProcessObjectReferenceConverter)
-                {
-                    resultTypeOrig = JSCallResultType.JSObjectReference + OverrideFlag;
-                }
-            }
-            return resultTypeOrig;
-        }
-
+        /// <summary>
+        /// FromGeneric returns the value from the original FromGeneric method unless the default is json and IJSInprocessObjectReference is desired instead
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
+        public JSCallResultType FromGeneric<TResult>() => FromGeneric(typeof(TResult));
         private static MethodInfo? FromGenericMethodInfo = null;
         static Dictionary<Type, MethodInfo> FromGenericTypedCache = new Dictionary<Type, MethodInfo>();
         static MethodInfo GetFromGenericTyped(Type type)
         {
-            MethodInfo? result;
-            if (FromGenericTypedCache.TryGetValue(type, out result)) return result;
-            if (FromGenericMethodInfo == null)
-            {
-                FromGenericMethodInfo = typeof(JSCallResultType).Assembly.GetType("Microsoft.JSInterop.JSCallResultTypeHelper")!.GetMethod("FromGeneric", BindingFlags.Public | BindingFlags.Static);
-            }
+            if (FromGenericTypedCache.TryGetValue(type, out var result)) return result;
+            FromGenericMethodInfo ??= typeof(JSCallResultType).Assembly.GetType("Microsoft.JSInterop.JSCallResultTypeHelper")!.GetMethod("FromGeneric", BindingFlags.Public | BindingFlags.Static);
             result = FromGenericMethodInfo!.MakeGenericMethod(type);
             FromGenericTypedCache[type] = result;
             return result;
         }
-
         static JSCallResultType FromGenericOrig(Type resultType)
         {
             var fromGenericTyped = GetFromGenericTyped(resultType);
-            return (JSCallResultType)fromGenericTyped.Invoke(null, null)!;
-        }
-
-        static JSCallResultType FromGenericOrig<TResult>()
-        {
-            var fromGenericTyped = GetFromGenericTyped(typeof(TResult));
             return (JSCallResultType)fromGenericTyped.Invoke(null, null)!;
         }
     }

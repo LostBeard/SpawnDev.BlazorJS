@@ -4,7 +4,7 @@ using SpawnDev.BlazorJS.Internal;
 namespace SpawnDev.BlazorJS.RemoteJSRuntime
 {
     /// <summary>
-    /// A scoped extended version of IJSRuntime
+    /// An alternative to IJSRuntime
     /// </summary>
     public class BlazorJSRuntimeAsync
     {

@@ -55,8 +55,6 @@ namespace SpawnDev.BlazorJS
                 var JS = new BlazorJSRuntime();
                 _this.AddSingleton<BlazorJSRuntime>(JS);
             }
-            // BlazorJSRuntimeAsync service
-            _this.AddScoped<BlazorJSRuntimeAsync>();
             return _this;
         }
         /// <summary>
@@ -90,8 +88,6 @@ namespace SpawnDev.BlazorJS
             {
                 _this.AddScoped<BlazorJSRuntime>(sp => new BlazorJSRuntime(sp.GetRequiredService<IJSRuntime>()));
             }
-            // BlazorJSRuntimeAsync service
-            _this.AddScoped<BlazorJSRuntimeAsync>();
             return _this;
         }
         /// <summary>

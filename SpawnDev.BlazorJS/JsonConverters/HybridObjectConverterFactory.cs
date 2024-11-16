@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
         /// </summary>
         public static bool Disable { get; set; }
         /// <summary>
-        /// If true, the covnerter will log Types it converts
+        /// If true, the converter will log Types it converts
         /// </summary>
         public static bool Verbose { get; set; }
         /// <summary>
@@ -33,10 +33,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public override bool CanConvert(Type typeToConvert)
         {
             var ret = CanConvert(typeToConvert, false);
-            if (ret)
-            {
-                var nmt = true;
-            }
             return ret;
         }
         Dictionary<Type, bool?> CanConvertAnswers = new Dictionary<Type, bool?>();
@@ -58,12 +54,28 @@ namespace SpawnDev.BlazorJS.JsonConverters
             if (typeof(IJSObjectProxy).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
             if (typeof(Callback).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
             if (typeToConvert.IsAsync()) goto CanConvertFalse;
-            var baseType = typeToConvert.IsGenericType ? typeToConvert.GetGenericTypeDefinition() : typeToConvert;
-            if (baseType == typeof(List<>)) goto CanConvertFalse;
-            if (baseType == typeof(Dictionary<,>)) goto CanConvertFalse;
-            // false if Type has JsonConverterAttribute
+            if (typeToConvert.IsGenericType)
+            {
+                var baseType = typeToConvert.GetGenericTypeDefinition();
+                if (baseType == typeof(List<>)) goto CanConvertFalse;
+                if (baseType == typeof(Dictionary<,>)) goto CanConvertFalse;
+            }
+            // Check if the class has a JsonConverterAttribute
             var jsonConverter = typeToConvert.GetCustomAttribute<JsonConverterAttribute>();
-            if (jsonConverter != null && jsonConverter.ConverterType != typeof(HybridObjectConverterFactory)) goto CanConvertFalse;
+            if (jsonConverter != null)
+            {
+                if (jsonConverter.ConverterType == typeof(HybridObjectConverterFactory))
+                {
+                    goto CanConvertTrue;
+                }
+                if (typeToConvert.IsGenericType)
+                {
+                    var jsonConverterBaseType = jsonConverter.ConverterType?.GetGenericTypeDefinition();
+                    if (jsonConverterBaseType == typeof(HybridObjectConverter<>)) goto CanConvertTrue;
+                }
+                // this will not be used
+                goto CanConvertFalse;
+            }
             // check properties
             var classProps = typeToConvert.GetTypeJsonProperties();// typeToConvert.GetProperties(BindingFlags.Instance);
             var propertyTypes = classProps.Select(o => o.PropertyInfo?.PropertyType ?? o.FieldInfo?.FieldType).Distinct().ToList();
@@ -97,12 +109,13 @@ namespace SpawnDev.BlazorJS.JsonConverters
         public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var converterType = typeof(HybridObjectConverter<>).MakeGenericType(typeToConvert);
-            JsonConverter converter = (JsonConverter)Activator.CreateInstance(converterType, options)!;
+            var converter = (JsonConverter)Activator.CreateInstance(converterType, options)!;
             return converter;
         }
     }
     /// <summary>
-    /// HybridObjectConverter allows deserializing of classes that have IJSInProcessObjectReference based properties
+    /// HybridObjectConverter allows deserializing of classes that have IJSInProcessObjectReference based properties<br/>
+    /// Use HybridObjectConverterFactory if using JsonConverterAttribute on a class
     /// </summary>
     public class HybridObjectConverter<T> : JSInProcessObjectReferenceConverterBase<T> where T : class
     {
