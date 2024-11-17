@@ -2,6 +2,7 @@
     class BlazorJSInterop {
         constructor() {
             this.callbacks = {};
+            this.asyncCallbacks = {};
         }
         // *************************************************
         // ************ Object Property Methods ************
@@ -271,6 +272,9 @@
         DisposeCallback(callbackId) {
             if (this.callbacks[callbackId]) delete this.callbacks[callbackId];
         }
+        DisposeCallbackAsync(callbackAsyncId) {
+            if (this.asyncCallbacks[callbackAsyncId]) delete this.asyncCallbacks[callbackAsyncId];
+        }
         // ****************************************
         // ************ Invoke Method *************
         // ****************************************
@@ -410,11 +414,11 @@
     DotNet.attachReviver(function (key, value) {
         if (value && typeof value === 'object') {
             if ('_callbackId' in value) {
-                var callbackId = value._callbackId;
-                var callback = blazorJSInterop.callbacks[callbackId];
+                var _callbackId = value._callbackId;
+                var callback = blazorJSInterop.callbacks[_callbackId];
                 if (callback) return callback;
                 callback = function fn() {
-                    if (callback !== blazorJSInterop.callbacks[callbackId]) {
+                    if (callback !== blazorJSInterop.callbacks[_callbackId]) {
                         console.warn('Disposed callback called.');
                         return;
                     }
@@ -434,7 +438,36 @@
                         console.error('Callback invokeMethod error:', args, ret, ex);
                     }
                 };
-                blazorJSInterop.callbacks[callbackId] = callback;
+                blazorJSInterop.callbacks[_callbackId] = callback;
+                return callback;
+            }
+            else if ('_callbackAsyncId' in value) {
+                var _callbackId = value._callbackAsyncId;
+                var callback = blazorJSInterop.asyncCallbacks[_callbackId];
+                if (callback) return callback;
+                callback = function fn() {
+                    if (callback !== blazorJSInterop.asyncCallbacks[_callbackId]) {
+                        console.warn('Disposed callback called.');
+                        return;
+                    }
+                    var ret = null;
+                    var args = ["InvokeAsync"];
+                    var paramTypes = value._paramTypes;
+                    for (var i = 0; i < paramTypes.length; i++) {
+                        var v = i < arguments.length ? arguments[i] : null;
+                        var jsCallResultType = paramTypes[i];
+                        v = blazorJSInterop.serializeToDotNet(v, jsCallResultType);
+                        args.push(v);
+                    }
+                    try {
+                        // call async invoke
+                        ret = value._callback.invokeMethodAsync.apply(value._callback, args);
+                        if (!value._returnVoid) return ret;
+                    } catch (ex) {
+                        console.error('Callback invokeMethod error:', args, ret, ex);
+                    }
+                };
+                blazorJSInterop.asyncCallbacks[_callbackId] = callback;
                 return callback;
             }
             else if ('__wrappedJSObject' in value) {

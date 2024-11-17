@@ -19,6 +19,20 @@ namespace SpawnDev.BlazorJS.JsonConverters
             JSRuntime = jsRuntime;
             JsonSerializerOptions = (JsonSerializerOptions)jsRuntimeJsonSerializerOptionsProp.GetValue(jsRuntime)!;
         }
+        public JSCallResultType FromGenericForCallback(Type returnType)
+        {
+            var ret = JSCallResultType.Default;
+            var jsonConverter = JsonSerializerOptions.GetConverter(returnType);
+            if (jsonConverter is IJSObjectAsyncConverter || jsonConverter is IJSInProcessObjectReferenceConverter)
+            {
+                ret = JSCallResultType.JSObjectReference;
+            }
+            else
+            {
+                ret = FromGenericOrig(returnType);
+            }
+            return ret == JSCallResultType.Default ? ret : ret + OverrideFlag;
+        }
         /// <summary>
         /// FromGeneric returns the value from the original FromGeneric method unless the default is json and IJSInprocessObjectReference is desired instead
         /// </summary>

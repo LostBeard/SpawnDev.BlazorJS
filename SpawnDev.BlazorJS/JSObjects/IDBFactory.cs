@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
-{
+{    
     /// <summary>
     /// The IDBFactory interface of the IndexedDB API lets applications asynchronously access the indexed databases. The object that implements the interface is window.indexedDB. You open — that is, create and access — and delete a database with this object, and not directly with IDBFactory.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/IDBFactory
