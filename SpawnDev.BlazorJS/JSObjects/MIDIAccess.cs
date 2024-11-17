@@ -6,6 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The MIDIAccess interface of the Web MIDI API provides methods for listing MIDI input and output devices, and obtaining access to those devices.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MIDIAccess
     /// </summary>
+    [Transferable]
     public class MIDIAccess : EventTarget
     {
         #region Constructors
