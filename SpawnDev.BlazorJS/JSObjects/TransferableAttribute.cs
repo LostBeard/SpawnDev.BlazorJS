@@ -9,5 +9,11 @@
     /// https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class TransferableAttribute : Attribute { }
+    public class TransferableAttribute : Attribute 
+    { 
+        /// <summary>
+        /// If true, an object of this type must be transferred when used with PostMessage (Ex. OffscreenCanvas)
+        /// </summary>
+        public bool TransferRequired { get; init; }
+    }
 }
