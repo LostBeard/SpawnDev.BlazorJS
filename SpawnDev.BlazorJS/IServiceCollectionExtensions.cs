@@ -208,11 +208,33 @@ namespace SpawnDev.BlazorJS
 
         public static ServiceDescriptor? GetServiceDescriptor(this IServiceProvider _this, Type type)
         {
-            //var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
-            //var serviceInfo = webAssemblyServices.GetServiceInfo(type, null);
-            //return serviceInfo?.ServiceDescriptor;
             var descriptors = _this.GetRequiredService<IServiceCollection>();
             return descriptors.FirstOrDefault(o => o.ServiceType == type);
+        }
+
+        public static ServiceDescriptor? FindKeyedServiceDescriptor(this IServiceCollection _this, Type? type, object key, bool strict = false)
+        {
+            ServiceDescriptor? services = null;
+            if (type == null) return services;
+#if NET8_0_OR_GREATER
+            services = _this.FirstOrDefault(o => o.IsKeyedService && Object.Equals(o.ServiceKey, key) && o.ServiceType == type);
+            if (services != null || strict) return services;
+            services = _this.FirstOrDefault(o => o.IsKeyedService && Object.Equals(o.ServiceKey, key) && o.ImplementationType == type);
+            if (services != null) return services;
+            services = _this.FirstOrDefault(o => o.IsKeyedService && Object.Equals(o.ServiceKey, key) && o.ServiceType.IsAssignableFrom(type));
+#endif
+            return services;
+        }
+
+        public static ServiceDescriptor? FindServiceDescriptor(this IServiceCollection _this, Type? type, bool strict = false)
+        {
+            if (type == null) return null;
+            var services = _this.FirstOrDefault(o => o.ServiceType == type);
+            if (services != null || strict) return services;
+            services = _this.FirstOrDefault(o => o.ImplementationType == type);
+            if (services != null) return services;
+            services = _this.FirstOrDefault(o => o.ServiceType.IsAssignableFrom(type));
+            return services;
         }
 
         /// <summary>

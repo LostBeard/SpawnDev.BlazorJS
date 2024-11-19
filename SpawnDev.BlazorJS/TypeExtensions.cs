@@ -155,7 +155,7 @@ namespace SpawnDev.BlazorJS
             return string.IsNullOrEmpty(type.FullName) ? type.Name : type.FullName;
         }
         /// <summary>
-        /// Returns the most descriptive name for this Type fallign back to less descriptive if needed.<br />
+        /// Returns the most descriptive name for this Type falling back to less descriptive if needed.<br />
         /// AssemblyQualifiedName, FullName, then Name
         /// </summary>
         /// <param name="type"></param>
