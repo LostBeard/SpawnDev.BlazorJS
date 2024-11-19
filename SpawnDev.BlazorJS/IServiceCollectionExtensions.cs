@@ -139,7 +139,14 @@ namespace SpawnDev.BlazorJS
             }
             await Task.WhenAll(asyncServiceReadyTasks);
         }
-
+        /// <summary>
+        /// Returns the service of the given service type.<br/>
+        /// If the service is implements IAsyncBackgroundService, IAsyncBackgroundService.Ready will be awaited.
+        /// </summary>
+        public static async Task<TService?> GetServiceAsync<TService>(this IServiceProvider _this)
+        {
+            return (TService?)await _this.GetServiceAsync(typeof(TService));
+        }
         /// <summary>
         /// Returns the service of the given service type.<br/>
         /// If the service is implements IAsyncBackgroundService, IAsyncBackgroundService.Ready will be awaited.
@@ -149,21 +156,54 @@ namespace SpawnDev.BlazorJS
         /// <returns></returns>
         public static async Task<object?> GetServiceAsync(this IServiceProvider _this, Type type)
         {
-            //var webAssemblyServices = (WebAssemblyServices)_this.GetRequiredService<IWebAssemblyServices>();
-            //var serviceInfo = webAssemblyServices.GetServiceInfo(type, null);
-            //if (serviceInfo == null)
-            //{
-            //    return null;
-            //}
-            //var serviceCollection = _this.GetRequiredService<IServiceCollection>();
-            //await InitServiceAsync(serviceCollection, _this, serviceInfo, null, true);
-            //return _this.GetService(type);
             var service = _this.GetService(type);
             if (service is IAsyncBackgroundService asyncBackgroundService)
             {
                 await asyncBackgroundService.Ready;
             }
             return service;
+        }
+        /// <summary>
+        /// Returns the service of the given service type.<br/>
+        /// If the service is implements IAsyncBackgroundService, IAsyncBackgroundService.Ready will be awaited.
+        /// </summary>
+        public static async Task<object?> GetServiceAsync(this IServiceProvider _this, Type type, object key)
+        {
+#if NET8_0_OR_GREATER
+            try
+            {
+                var service = _this.GetRequiredKeyedService(type, key);
+                if (service is IAsyncBackgroundService asyncBackgroundService)
+                {
+                    await asyncBackgroundService.Ready;
+                }
+                return service;
+            }
+            catch { }
+#endif
+            return null;
+        }
+        public static object? GetService(this IServiceProvider _this, Type type, object key)
+        {
+#if NET8_0_OR_GREATER
+            try
+            {
+                return _this.GetRequiredKeyedService(type, key);
+            }
+            catch { }
+#endif
+            return null;
+        }
+        public static TService? GetService<TService>(this IServiceProvider _this, object key)
+        {
+#if NET8_0_OR_GREATER
+            try
+            {
+                return (TService?)_this.GetRequiredKeyedService(typeof(TService), key);
+            }
+            catch { }
+#endif
+            return default;
         }
 
         public static ServiceDescriptor? GetServiceDescriptor(this IServiceProvider _this, Type type)
@@ -175,11 +215,6 @@ namespace SpawnDev.BlazorJS
             return descriptors.FirstOrDefault(o => o.ServiceType == type);
         }
 
-        public static async Task<T?> GetServiceAsync<T>(this IServiceProvider _this) where T : class
-        {
-            return (T?)await _this.GetServiceAsync(typeof(T));
-        }
-
         /// <summary>
         /// Returns all ServiceDescriptors for services registered with the given service type<br/>
         /// Type can be the type or the implementing type
@@ -187,9 +222,9 @@ namespace SpawnDev.BlazorJS
         /// <param name="_this"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static List<ServiceDescriptor>? FindServiceDescriptors(this IServiceCollection _this, Type? type)
+        public static List<ServiceDescriptor> FindServiceDescriptors(this IServiceCollection _this, Type? type)
         {
-            if (type == null) return null;
+            if (type == null) return new List<ServiceDescriptor>();
             var services = _this.Where(o => o.ServiceType == type).ToList();
             if (services.Count > 0) return services;
             services = _this.Where(o => o.ImplementationType == type).ToList();
@@ -197,7 +232,28 @@ namespace SpawnDev.BlazorJS
             services = _this.Where(o => o.ServiceType.IsAssignableFrom(type)).ToList();
             return services;
         }
-
+        public static List<ServiceDescriptor> FindServiceDescriptors<TService>(this IServiceCollection _this, object key)
+        {
+            return _this.FindServiceDescriptors(typeof(TService), key);
+        }
+        public static List<ServiceDescriptor> FindServiceDescriptors(this IServiceCollection _this, Type type, object key)
+        {
+#if NET8_0_OR_GREATER
+            if (type == null) return new List<ServiceDescriptor>();
+            var services = _this.Where(o => o.ServiceType == type && Object.Equals(o.ServiceKey, key)).ToList();
+            if (services.Count > 0) return services;
+            services = _this.Where(o => o.ImplementationType == type && Object.Equals(o.ServiceKey, key)).ToList();
+            if (services.Count > 0) return services;
+            services = _this.Where(o => o.ServiceType.IsAssignableFrom(type) && Object.Equals(o.ServiceKey, key)).ToList();
+            return services;
+#else
+            return new List<ServiceDescriptor>();
+#endif
+        }
+        public static async Task<TService?> FindServiceAsync<TService>(this IServiceProvider _this)
+        {
+            return (TService?)await _this.FindServiceAsync(typeof(TService));
+        }
         public static async Task<object?> FindServiceAsync(this IServiceProvider _this, Type? serviceType)
         {
             if (serviceType == null) return null;
@@ -205,6 +261,18 @@ namespace SpawnDev.BlazorJS
             if (serviceCollection == null) return await _this.GetServiceAsync(serviceType);
             var info = serviceCollection.FindServiceDescriptors(serviceType)!.FirstOrDefault();
             return await _this.GetServiceAsync(info == null ? serviceType : info.ServiceType);
+        }
+        public static async Task<TService?> FindServiceAsync<TService>(this IServiceProvider _this, object key)
+        {
+            return (TService?)await _this.FindServiceAsync(typeof(TService), key);
+        }
+        public static async Task<object?> FindServiceAsync(this IServiceProvider _this, Type serviceType, object key)
+        {
+            if (serviceType == null) return null;
+            var serviceCollection = _this.GetService<IServiceCollection>();
+            if (serviceCollection == null) return await _this.GetServiceAsync(serviceType, key);
+            var info = serviceCollection.FindServiceDescriptors(serviceType, key)!.FirstOrDefault();
+            return await _this.GetServiceAsync(info == null ? serviceType : info.ServiceType, key);
         }
 
         /// <summary>
