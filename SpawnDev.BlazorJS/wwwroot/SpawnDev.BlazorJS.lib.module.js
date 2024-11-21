@@ -112,9 +112,9 @@
         // returns bool
         ObjectPropertyIn(obj, key) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
-            var { target, shortCircuit } = this.pathObjectInfo(obj, key);
+            var { parent, shortCircuit } = this.pathObjectInfo(obj, key);
             if (shortCircuit) return false;
-            return key in target;
+            return key in parent;
         }
         // *****************************************************
         // ************ globalThis Property Methods ************
