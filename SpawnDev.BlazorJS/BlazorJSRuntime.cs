@@ -154,7 +154,7 @@ namespace SpawnDev.BlazorJS
             InstanceId = string.Join("-", Enumerable.Range(0, id.Length / chunkSize).Select(i => id.Substring(i * chunkSize, chunkSize)));
             if (IsBrowser)
             {
-                _CrossOriginIsolated ??= new Lazy<bool?>(JS.Get<bool?>("crossOriginIsolated"));
+                _CrossOriginIsolated ??= new Lazy<bool?>(() => JS.Get<bool?>("crossOriginIsolated"));
                 GlobalScope = GlobalScope.Unknown;
                 GlobalThisTypeName = ConstructorName() ?? "";
                 switch (GlobalThisTypeName)
