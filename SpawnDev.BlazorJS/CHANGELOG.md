@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.5.21] - 2024-11-21
+
+### Added
+- Added Supported static property to OffscreenCanvas, BigInt64Array, and BigUintArray
+- Added StorageManager.Supported property
+- Added SharedArrayBuffer.Supported property
+
+### Changed
+- Changed Navigator.HardwareConcurrency return value from int to int?
+- Changed BlazorJSRuntime.CrossOriginIsolated property from bool to boo…
+- Changed Window.CrossOriginIsolated property from bool to bool?
+- Simplified static property calls in AbortSignal
+
+### Fixed
+- Fixed BigInt equality check using Equals override
+
 
 ## [2.5.17] - 2024-11-15
 
