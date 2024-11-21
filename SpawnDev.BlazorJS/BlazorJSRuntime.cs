@@ -333,6 +333,56 @@ namespace SpawnDev.BlazorJS
         /// Returns the ElementReference as an IJSInProcessObjectReference
         /// </summary>
         public IJSInProcessObjectReference ToJSRef(ElementReference elementRef) => ReturnMe<IJSInProcessObjectReference>(elementRef);
+        #region New generic
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T NewApply<T>(string className, object?[]? args = null) => BlazorJSInterop.GlobalPropertyNew<T>(className, args);
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className) => NewApply<T>(className);
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0) => NewApply<T>(className, new object?[] { arg0 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0, object? arg1) => NewApply<T>(className, new object?[] { arg0, arg1 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0, object? arg1, object? arg2) => NewApply<T>(className, new object?[] { arg0, arg1, arg2 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0, object? arg1, object? arg2, object? arg3) => NewApply<T>(className, new object?[] { arg0, arg1, arg2, arg3 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4) => NewApply<T>(className, new object?[] { arg0, arg1, arg2, arg3, arg4 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5) => NewApply<T>(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6) => NewApply<T>(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7) => NewApply<T>(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8) => NewApply<T>(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
+        /// <summary>
+        /// Creates a new instance of the specified class
+        /// </summary>
+        public T New<T>(string className, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => NewApply<T>(className, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        #endregion
         /// <summary>
         /// Creates a new instance of the specified class
         /// </summary>
