@@ -52,9 +52,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public GPU? Gpu => JSRef!.Get<GPU?>("gpu");
         /// <summary>
-        /// Returns the number of logical processor cores available.
+        /// Returns the number of logical processor cores available, or null if the browser does not support this property
         /// </summary>
-        public int HardwareConcurrency => JSRef!.Get<int>("hardwareConcurrency");
+        public int? HardwareConcurrency => JSRef!.Get<int?>("hardwareConcurrency");
         /// <summary>
         /// Returns an HID object providing methods for connecting to HID devices, listing attached HID devices, and event handlers for connected HID devices.
         /// </summary>
