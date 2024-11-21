@@ -143,7 +143,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a boolean value that indicates whether the website is in a cross-origin isolation state.
         /// </summary>
-        public bool CrossOriginIsolated => JSRef!.Get<bool>("crossOriginIsolated");
+        public bool? CrossOriginIsolated => JSRef!.Get<bool?>("crossOriginIsolated");
         /// <summary>
         /// Returns the browser crypto object.
         /// </summary>
@@ -151,7 +151,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a boolean that indicates whether the current document was loaded inside a credentialless iframe. See IFrame credentialless for more details.
         /// </summary>
-        public bool Credentialless => JSRef!.Get<bool>("credentialless");
+        public bool? Credentialless => JSRef!.Get<bool?>("credentialless");
         /// <summary>
         /// Returns a reference to the document Picture-in-Picture window for the current document context.
         /// </summary>
