@@ -9,11 +9,11 @@ namespace SpawnDev.BlazorJS.JSObjects
     [Transferable(TransferRequired = true)]
     public class OffscreenCanvas : EventTarget
     {
-        #region Constructors
         /// <summary>
         /// Returns true if OffscreenCanvas appears to be supported
         /// </summary>
         public static bool Supported => BlazorJSRuntime.JS?.IsUndefined("OffscreenCanvas") == false;
+        #region Constructors
         /// <summary>
         /// The OffscreenCanvas() constructor returns a newly instantiated OffscreenCanvas object.
         /// </summary>
