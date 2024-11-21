@@ -11,6 +11,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         #region Constructors
         /// <summary>
+        /// Returns true if OffscreenCanvas appears to be supported
+        /// </summary>
+        public static bool Supported => BlazorJSRuntime.JS?.IsUndefined("OffscreenCanvas") == false;
+        /// <summary>
         /// The OffscreenCanvas() constructor returns a newly instantiated OffscreenCanvas object.
         /// </summary>
         /// <param name="width"></param>

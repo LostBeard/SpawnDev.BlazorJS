@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class BigInt64Array : TypedArray<long>
     {
         /// <summary>
+        /// Returns true if BigInt64Array appears to be supported
+        /// </summary>
+        public static bool Supported => BlazorJSRuntime.JS?.Get<int>("BigInt64Array?.BYTES_PER_ELEMENT") > 0;
+        /// <summary>
         /// Returns a copy of the Javascript typed array as a .Net array
         /// </summary>
         /// <param name="values"></param>
