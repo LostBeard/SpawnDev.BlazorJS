@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class StorageManager : JSObject
     {
         /// <summary>
+        /// Returns true if OffscreenCanvas appears to be supported
+        /// </summary>
+        public static bool Supported => BlazorJSRuntime.JS?.IsUndefined("navigator.storage") == false;
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
