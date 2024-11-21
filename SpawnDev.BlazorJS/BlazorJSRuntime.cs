@@ -94,7 +94,8 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// The crossOriginIsolated read-only property returns a boolean value that indicates whether the website is in a cross-origin isolation state. A website is in a cross-origin isolated state, when the response header Cross-Origin-Opener-Policy has the value same-origin and the Cross-Origin-Embedder-Policy header has the value require-corp or credentialless
         /// </summary>
-        public bool CrossOriginIsolated => JS.Get<bool>("crossOriginIsolated");
+        public bool? CrossOriginIsolated => _CrossOriginIsolated?.Value;
+        private Lazy<bool?>? _CrossOriginIsolated = null;
         static BlazorJSRuntime()
         {
             if (OperatingSystem.IsBrowser())
@@ -153,6 +154,7 @@ namespace SpawnDev.BlazorJS
             InstanceId = string.Join("-", Enumerable.Range(0, id.Length / chunkSize).Select(i => id.Substring(i * chunkSize, chunkSize)));
             if (IsBrowser)
             {
+                _CrossOriginIsolated ??= new Lazy<bool?>(JS.Get<bool?>("crossOriginIsolated"));
                 GlobalScope = GlobalScope.Unknown;
                 GlobalThisTypeName = ConstructorName() ?? "";
                 switch (GlobalThisTypeName)
