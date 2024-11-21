@@ -50,19 +50,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The AbortSignal.abort() static method returns an AbortSignal that is already set as aborted (and which does not trigger an abort event).
         /// </summary>
         /// <returns></returns>
-        public static AbortSignal Abort() => JS.Call<AbortSignal>($"{nameof(AbortSignal)}.abort");
+        public static AbortSignal Abort() => JS.Call<AbortSignal>("AbortSignal.abort");
         /// <summary>
         /// The AbortSignal.abort() static method returns an AbortSignal that is already set as aborted (and which does not trigger an abort event).
         /// </summary>
         /// <param name="reason">The reason why the operation was aborted, which can be any JavaScript value. If not specified, the reason is set to "AbortError" DOMException.</param>
         /// <returns></returns>
-        public static AbortSignal Abort(object reason) => JS.Call<AbortSignal>($"{nameof(AbortSignal)}.abort", reason);
+        public static AbortSignal Abort(object reason) => JS.Call<AbortSignal>("AbortSignal.abort", reason);
         /// <summary>
         /// The AbortSignal.timeout() static method returns an AbortSignal that will automatically abort after a specified time.
         /// </summary>
         /// <param name="time">The "active" time in milliseconds before the returned AbortSignal will abort.</param>
         /// <returns>An AbortSignal.</returns>
-        public static AbortSignal Timeout(float time) => JS.Call<AbortSignal>($"{nameof(AbortSignal)}.timeout", time);
+        public static AbortSignal Timeout(float time) => JS.Call<AbortSignal>("AbortSignal.timeout", time);
         /// <summary>
         /// Returns an AbortSignal that aborts when any of the given abort signals abort.
         /// </summary>
@@ -72,7 +72,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// - Already aborted, if any of the abort signals given is already aborted. The returned AbortSignal's reason will be already set to the reason of the first abort signal that was already aborted.<br/>
         /// - Asynchronously aborted, when any abort signal in iterable aborts. The reason will be set to the reason of the first abort signal that is aborted.
         /// </returns>
-        public static AbortSignal Any(Array<AbortSignal> signals) => JS.Call<AbortSignal>($"{nameof(AbortSignal)}.any", signals);
+        public static AbortSignal Any(Array<AbortSignal> signals) => JS.Call<AbortSignal>("AbortSignal.any", signals);
         #endregion
     }
 }
