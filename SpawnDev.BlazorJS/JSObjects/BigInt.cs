@@ -8,6 +8,15 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class BigInt<T> where T : struct
     {
+        public override bool Equals(object? obj)
+        {
+            if (obj is null) return false;
+            if (obj is BigInt<T> bigInt)
+            {
+                return Value.Equals(bigInt.Value);
+            }
+            return base.Equals(obj);
+        }
         /// <summary>
         /// Implicit conversion to T?
         /// </summary>
