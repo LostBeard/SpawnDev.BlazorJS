@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class SharedArrayBuffer : JSObject
     {
         /// <summary>
+        /// Returns true if SharedArrayBuffer appears to be supported
+        /// </summary>
+        public static bool Supported => BlazorJSRuntime.JS?.IsUndefined("SharedArrayBuffer") == false;
+        /// <summary>
         /// The size, in bytes, of the array. This is established when the array is constructed and can only be changed using the SharedArrayBuffer.prototype.grow() method if the SharedArrayBuffer is growable.
         /// </summary>
         public long ByteLength => JSRef!.Get<long>("byteLength");
