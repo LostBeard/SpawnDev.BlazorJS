@@ -1,5 +1,19 @@
 # Changelog
 
+
+## [2.5.22] - 2024-11-25
+
+### Added
+- Updated EnumStringConverter to support use on Enum types.
+- Added AudioParam JSObject
+- Added instance Connect and Disconnect methods to AudioNode
+- Added generic BlazorJSRuntime.New
+
+### Fixed
+- Fixed HybridObjectConverterFactory.CanConvert bug due to missing IsGe…
+- Fixed BlazorJSInterop.ObjectPropertyIn
+
+
 ## [2.5.21] - 2024-11-21
 
 ### Added
