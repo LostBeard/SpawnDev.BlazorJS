@@ -40,7 +40,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// non-standard method returns the typeof this.data
         /// returns "String", "Blob", or "ArrayBuffer" (could also return "Object", "Boolean", "Number", other?)
         /// </summary>
-        public string TypeOfData => JSRef!.PropertyInstanceOf("data");
+        public string? TypeOfData => JSRef!.ConstructorName("data");
         /// <summary>
         /// non-standard method
         /// </summary>
