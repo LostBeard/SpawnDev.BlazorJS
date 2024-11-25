@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS
     /// Flags are not supported at this time
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [JsonConverter(typeof(EnumStringConverter))]
+    [JsonConverter(typeof(EnumStringConverterFactory))]
     public class EnumString<T> : EnumString where T : struct, Enum
     {
         private T? _Enum { get; set; }
