@@ -6,6 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The ChannelCountMode, in conjuction with the node’s channelCount and channelInterpretation values, is used to determine the computedNumberOfChannels that controls how inputs to a node are to be mixed. The computedNumberOfChannels is determined as shown below. See § 4 Channel Up-Mixing and Down-Mixing for more information on how mixing is to be done.<br/>
     /// https://www.w3.org/TR/webaudio/#enumdef-channelcountmode
     /// </summary>
+    [JsonConverter(typeof(JsonConverters.EnumStringConverterFactory))]
     public enum ChannelCountMode
     {
         /// <summary>
