@@ -38,59 +38,67 @@ namespace SpawnDev.BlazorJS.JsonConverters
         Dictionary<Type, bool?> CanConvertAnswers = new Dictionary<Type, bool?>();
         bool CanConvert(Type typeToConvert, bool internalCall)
         {
-            if (Disable) return false;
-            if (CanConvertAnswers.TryGetValue(typeToConvert, out var canConvertCached))
+            try
             {
-                return canConvertCached ?? false;
-            }
-            CanConvertAnswers[typeToConvert] = null;
-            if (typeToConvert.IsValueType) goto CanConvertFalse;
-            if (!typeToConvert.IsClass) goto CanConvertFalse;
-            if (typeToConvert.IsInterface) goto CanConvertFalse;
-            if (typeToConvert.IsArray) goto CanConvertFalse;
-            if (typeToConvert.IsAbstract) goto CanConvertFalse;
-            if (typeof(JSObjectAsync).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
-            if (typeof(JSObject).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
-            if (typeof(IJSObjectProxy).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
-            if (typeof(Callback).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
-            if (typeToConvert.IsAsync()) goto CanConvertFalse;
-            if (typeToConvert.IsGenericType)
-            {
-                var baseType = typeToConvert.GetGenericTypeDefinition();
-                if (baseType == typeof(List<>)) goto CanConvertFalse;
-                if (baseType == typeof(Dictionary<,>)) goto CanConvertFalse;
-            }
-            // Check if the class has a JsonConverterAttribute
-            var jsonConverter = typeToConvert.GetCustomAttribute<JsonConverterAttribute>();
-            if (jsonConverter != null)
-            {
-                if (jsonConverter.ConverterType == typeof(HybridObjectConverterFactory))
+                if (Disable) return false;
+                if (CanConvertAnswers.TryGetValue(typeToConvert, out var canConvertCached))
                 {
-                    goto CanConvertTrue;
+                    return canConvertCached ?? false;
                 }
+                CanConvertAnswers[typeToConvert] = null;
+                if (typeToConvert.IsEnum) goto CanConvertFalse;
+                if (typeToConvert.IsValueType) goto CanConvertFalse;
+                if (!typeToConvert.IsClass) goto CanConvertFalse;
+                if (typeToConvert.IsInterface) goto CanConvertFalse;
+                if (typeToConvert.IsArray) goto CanConvertFalse;
+                if (typeToConvert.IsAbstract) goto CanConvertFalse;
+                if (typeof(JSObjectAsync).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
+                if (typeof(JSObject).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
+                if (typeof(IJSObjectProxy).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
+                if (typeof(Callback).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
+                if (typeToConvert.IsAsync()) goto CanConvertFalse;
                 if (typeToConvert.IsGenericType)
                 {
-                    var jsonConverterBaseType = jsonConverter.ConverterType?.GetGenericTypeDefinition();
-                    if (jsonConverterBaseType == typeof(HybridObjectConverter<>)) goto CanConvertTrue;
+                    var baseType = typeToConvert.GetGenericTypeDefinition();
+                    if (baseType == typeof(List<>)) goto CanConvertFalse;
+                    if (baseType == typeof(Dictionary<,>)) goto CanConvertFalse;
                 }
-                // this will not be used
-                goto CanConvertFalse;
+                // Check if the class has a JsonConverterAttribute
+                var jsonConverter = typeToConvert.GetCustomAttribute<JsonConverterAttribute>();
+                if (jsonConverter != null && jsonConverter.ConverterType != null)
+                {
+                    if (jsonConverter.ConverterType == typeof(HybridObjectConverterFactory))
+                    {
+                        goto CanConvertTrue;
+                    }
+                    if (jsonConverter.ConverterType.IsGenericType)
+                    {
+                        var jsonConverterBaseType = jsonConverter.ConverterType.GetGenericTypeDefinition();
+                        if (jsonConverterBaseType == typeof(HybridObjectConverter<>)) goto CanConvertTrue;
+                    }
+                    // this will not be used
+                    goto CanConvertFalse;
+                }
+                // check properties
+                var classProps = typeToConvert.GetTypeJsonProperties();// typeToConvert.GetProperties(BindingFlags.Instance);
+                var propertyTypes = classProps.Select(o => o.PropertyInfo?.PropertyType ?? o.FieldInfo?.FieldType).Distinct().ToList();
+                foreach (var pType in propertyTypes)
+                {
+                    if (pType!.IsValueType || !typeToConvert.IsClass) continue;
+                    var perInstanceRequired = Options.TypeDeserializationRequiresPerInstance(pType);
+                    if (perInstanceRequired)
+                    {
+                        goto CanConvertTrue;
+                    }
+                    else if (CanConvert(pType, true))
+                    {
+                        goto CanConvertTrue;
+                    }
+                }
             }
-            // check properties
-            var classProps = typeToConvert.GetTypeJsonProperties();// typeToConvert.GetProperties(BindingFlags.Instance);
-            var propertyTypes = classProps.Select(o => o.PropertyInfo?.PropertyType ?? o.FieldInfo?.FieldType).Distinct().ToList();
-            foreach (var pType in propertyTypes)
+            catch (Exception ex)
             {
-                if (pType!.IsValueType || !typeToConvert.IsClass) continue;
-                var perInstanceRequired = Options.TypeDeserializationRequiresPerInstance(pType);
-                if (perInstanceRequired)
-                {
-                    goto CanConvertTrue;
-                }
-                else if (CanConvert(pType, true))
-                {
-                    goto CanConvertTrue;
-                }
+                var nmt = true;
             }
         CanConvertFalse:
             CanConvertAnswers[typeToConvert] = false;
