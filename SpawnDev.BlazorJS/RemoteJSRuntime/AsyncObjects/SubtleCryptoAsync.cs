@@ -429,7 +429,47 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// <param name="signature">A ArrayBuffer containing the signature to verify.</param>
         /// <param name="data">A ArrayBuffer containing the data whose signature is to be verified.</param>
         /// <returns>A Promise that fulfills with a boolean value: true if the signature is valid, false otherwise.</returns>
+        public Task<bool> Verify(CryptoSignParams algorithm, CryptoKeyAsync key, Uint8ArrayAsync signature, byte[] data) => JSR.CallAsync<bool>("crypto.subtle.verify", algorithm, key, signature, data);
+        /// <summary>
+        /// The verify() method of the SubtleCrypto interface verifies a digital signature.<br/>
+        /// It takes as its arguments a key to verify the signature with, some algorithm-specific parameters, the signature, and the original signed data.It returns a Promise which will be fulfilled with a boolean value indicating whether the signature is valid.
+        /// </summary>
+        /// <param name="algorithm">A string or object defining the algorithm to use, and for some algorithm choices, some extra parameters. The values given for the extra parameters must match those passed into the corresponding sign() call.</param>
+        /// <param name="key">A CryptoKey containing the key that will be used to verify the signature. It is the secret key for a symmetric algorithm and the public key for a public-key system.</param>
+        /// <param name="signature">A ArrayBuffer containing the signature to verify.</param>
+        /// <param name="data">A ArrayBuffer containing the data whose signature is to be verified.</param>
+        /// <returns>A Promise that fulfills with a boolean value: true if the signature is valid, false otherwise.</returns>
+        public Task<bool> Verify(CryptoSignParams algorithm, CryptoKeyAsync key, byte[] signature, byte[] data) => JSR.CallAsync<bool>("crypto.subtle.verify", algorithm, key, signature, data);
+        /// <summary>
+        /// The verify() method of the SubtleCrypto interface verifies a digital signature.<br/>
+        /// It takes as its arguments a key to verify the signature with, some algorithm-specific parameters, the signature, and the original signed data.It returns a Promise which will be fulfilled with a boolean value indicating whether the signature is valid.
+        /// </summary>
+        /// <param name="algorithm">A string or object defining the algorithm to use, and for some algorithm choices, some extra parameters. The values given for the extra parameters must match those passed into the corresponding sign() call.</param>
+        /// <param name="key">A CryptoKey containing the key that will be used to verify the signature. It is the secret key for a symmetric algorithm and the public key for a public-key system.</param>
+        /// <param name="signature">A ArrayBuffer containing the signature to verify.</param>
+        /// <param name="data">A ArrayBuffer containing the data whose signature is to be verified.</param>
+        /// <returns>A Promise that fulfills with a boolean value: true if the signature is valid, false otherwise.</returns>
         public Task<bool> Verify(string algorithm, CryptoKeyAsync key, ArrayBufferAsync signature, byte[] data) => JSR.CallAsync<bool>("crypto.subtle.verify", algorithm, key, signature, data);
+        /// <summary>
+        /// The verify() method of the SubtleCrypto interface verifies a digital signature.<br/>
+        /// It takes as its arguments a key to verify the signature with, some algorithm-specific parameters, the signature, and the original signed data.It returns a Promise which will be fulfilled with a boolean value indicating whether the signature is valid.
+        /// </summary>
+        /// <param name="algorithm">A string or object defining the algorithm to use, and for some algorithm choices, some extra parameters. The values given for the extra parameters must match those passed into the corresponding sign() call.</param>
+        /// <param name="key">A CryptoKey containing the key that will be used to verify the signature. It is the secret key for a symmetric algorithm and the public key for a public-key system.</param>
+        /// <param name="signature">A ArrayBuffer containing the signature to verify.</param>
+        /// <param name="data">A ArrayBuffer containing the data whose signature is to be verified.</param>
+        /// <returns>A Promise that fulfills with a boolean value: true if the signature is valid, false otherwise.</returns>
+        public Task<bool> Verify(string algorithm, CryptoKeyAsync key, Uint8ArrayAsync signature, byte[] data) => JSR.CallAsync<bool>("crypto.subtle.verify", algorithm, key, signature, data);
+        /// <summary>
+        /// The verify() method of the SubtleCrypto interface verifies a digital signature.<br/>
+        /// It takes as its arguments a key to verify the signature with, some algorithm-specific parameters, the signature, and the original signed data.It returns a Promise which will be fulfilled with a boolean value indicating whether the signature is valid.
+        /// </summary>
+        /// <param name="algorithm">A string or object defining the algorithm to use, and for some algorithm choices, some extra parameters. The values given for the extra parameters must match those passed into the corresponding sign() call.</param>
+        /// <param name="key">A CryptoKey containing the key that will be used to verify the signature. It is the secret key for a symmetric algorithm and the public key for a public-key system.</param>
+        /// <param name="signature">A ArrayBuffer containing the signature to verify.</param>
+        /// <param name="data">A ArrayBuffer containing the data whose signature is to be verified.</param>
+        /// <returns>A Promise that fulfills with a boolean value: true if the signature is valid, false otherwise.</returns>
+        public Task<bool> Verify(string algorithm, CryptoKeyAsync key, byte[] signature, byte[] data) => JSR.CallAsync<bool>("crypto.subtle.verify", algorithm, key, signature, data);
         /// <summary>
         /// The wrapKey() method of the SubtleCrypto interface "wraps" a key. This means that it exports the key in an external, portable format, then encrypts the exported key. Wrapping a key helps protect it in untrusted environments, such as inside an otherwise unprotected data store or in transmission over an unprotected network.
         /// </summary>

@@ -158,7 +158,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="algorithm">A string or object that specifies the signature algorithm to use and its parameters</param>
         /// <param name="key">A CryptoKey object containing the key to be used for signing. If algorithm identifies a public-key cryptosystem, this is the private key.</param>
-        /// <param name="data">An ArrayBuffer, a TypedArray or a DataView object containing the data to be signed.</param>
+        /// <param name="data">An ArrayBuffer, a TypedArray, byte array or a DataView object containing the data to be signed.</param>
         /// <returns>A Promise that fulfills with an ArrayBuffer containing the signature.</returns>
         public Task<ArrayBuffer> Sign(Union<CryptoSignParams, string> algorithm, CryptoKey key, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<ArrayBuffer>("sign", algorithm, key, data);
         /// <summary>
@@ -167,10 +167,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="algorithm">A string or object defining the algorithm to use, and for some algorithm choices, some extra parameters. The values given for the extra parameters must match those passed into the corresponding sign() call.</param>
         /// <param name="key">A CryptoKey containing the key that will be used to verify the signature. It is the secret key for a symmetric algorithm and the public key for a public-key system.</param>
-        /// <param name="signature">A ArrayBuffer containing the signature to verify.</param>
-        /// <param name="data">A ArrayBuffer containing the data whose signature is to be verified.</param>
+        /// <param name="signature">An ArrayBuffer, a TypedArray, byte array or a DataView object containing the signature to verify.</param>
+        /// <param name="data">An ArrayBuffer, a TypedArray, byte array or a DataView object containing the data whose signature is to be verified.</param>
         /// <returns>A Promise that fulfills with a boolean value: true if the signature is valid, false otherwise.</returns>
-        public Task<bool> Verify(Union<CryptoSignParams, string> algorithm, CryptoKey key, ArrayBuffer signature, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<bool>("verify", algorithm, key, signature, data);
+        public Task<bool> Verify(Union<CryptoSignParams, string> algorithm, CryptoKey key, Union<ArrayBuffer, TypedArray, DataView, byte[]> signature, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<bool>("verify", algorithm, key, signature, data);
         /// <summary>
         /// The unwrapKey() method of the SubtleCrypto interface "unwraps" a key. This means that it takes as its input a key that has been exported and then encrypted (also called "wrapped"). It decrypts the key and then imports it, returning a CryptoKey object that can be used in the Web Crypto API.
         /// </summary>
