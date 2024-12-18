@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// </summary>
         public static async Task<ArrayBufferAsync> New(IJSRuntime jsr, byte[] data)
         {
-            await using var uint8Array = await jsr.ReturnAs<Uint8ArrayAsync>(data);
+            await using var uint8Array = await Uint8ArrayAsync.New(jsr, data);
             var arrayBuffer =  await uint8Array.Get_Buffer();
             return arrayBuffer!;
         }

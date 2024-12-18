@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// <summary>
         /// Creates a new instance
         /// </summary>
-        public static Task<Uint8ArrayAsync> New(IJSRuntime jsr, byte[] data) => jsr.ReturnAs<Uint8ArrayAsync>(data);
+        public static Task<Uint8ArrayAsync> New(IJSRuntime jsr, byte[] data) => jsr.NewAsync<Uint8ArrayAsync>("Uint8Array", data);
         /// <summary>
         /// Creates a new instance
         /// </summary>
