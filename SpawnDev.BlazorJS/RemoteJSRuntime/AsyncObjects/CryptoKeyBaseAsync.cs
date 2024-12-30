@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
 {
     /// <summary>
-    /// Base class for CryptoKeyPair and CryptoKey
+    /// Base class for CryptoKeyPairAsync and CryptoKeyAsync
     /// </summary>
     [JsonConverter(typeof(JSObjectAsyncConverterFactory))]
     public class CryptoKeyBaseAsync : JSObjectAsync

@@ -10,7 +10,7 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
     /// https://developer.mozilla.org/en-US/docs/Web/API/CryptoKey
     /// </summary>
     [JsonConverter(typeof(JSObjectAsyncConverterFactory))]
-    public class CryptoKeyAsync : JSObjectAsync
+    public class CryptoKeyAsync : CryptoKeyBaseAsync
     {
         /// <summary>
         /// Deserialization constructor
