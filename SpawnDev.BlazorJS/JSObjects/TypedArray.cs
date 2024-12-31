@@ -80,6 +80,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns>A Span of type TElement</returns>
         public Iterator<TElement> Values() => JSRef!.Call<Iterator<TElement>>("values");
+        /// <summary>
+        /// Fills all the elements of an array from a start index to an end index with a static value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public virtual TypedArray Fill(TElement value) => JSRef!.Call<TypedArray>("fill", value);
+        /// <summary>
+        /// Fills all the elements of an array from a start index to an end index with a static value.
+        /// </summary>
+        /// <param name="value"></param>
+        public virtual void FillVoid(TElement value) => JSRef!.CallVoid("fill", value);
     }
     /// <summary>
     /// A TypedArray object describes an array-like view of an underlying binary data buffer. There is no global property named TypedArray, nor is there a directly visible TypedArray constructor. Instead, there are a number of different global properties, whose values are typed array constructors for specific element types, listed below. On the following pages you will find common properties and methods that can be used with any typed array containing elements of any type.<br/>

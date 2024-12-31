@@ -37,5 +37,11 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// </summary>
         /// <returns></returns>
         public override Task<byte[]> ReadBytes() => JSRef.As<byte[]>();
+        /// <summary>
+        /// Fills all the elements of an array from a start index to an end index with a static value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Task FillVoid(byte value) => JSRef!.CallVoidAsync("fill", value);
     }
 }

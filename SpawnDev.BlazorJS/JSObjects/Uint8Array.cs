@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -168,5 +169,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="data"></param>
         /// <param name="byteOffset"></param>
         public override void WriteBytes(byte[] data, long byteOffset = 0) => Set(data, byteOffset);
+        /// <summary>
+        /// Fills all the elements of an array from a start index to an end index with a static value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public override Uint8Array Fill(byte value) => JSRef!.Call<Uint8Array>("fill", value);
     }
 }
