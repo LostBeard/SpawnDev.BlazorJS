@@ -40,5 +40,16 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// Returns the offset (in bytes) of the typed array from the start of its ArrayBuffer.
         /// </summary>
         public Task<long> Get_ByteOffset() => JSRef!.GetAsync<long>("byteOffset");
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
+        public Task Set(TypedArrayAsync typedArray) => JSRef!.CallVoidAsync("set", typedArray);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="typedArray"></param>
+        /// <param name="targetOffset"></param>
+        public Task Set(TypedArrayAsync typedArray, long targetOffset) => JSRef!.CallVoidAsync("set", typedArray, targetOffset);
     }
 }

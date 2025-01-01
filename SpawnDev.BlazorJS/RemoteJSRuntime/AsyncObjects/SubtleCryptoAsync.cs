@@ -35,6 +35,21 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// <returns>A Promise that fulfills with an ArrayBuffer containing the plaintext.</returns>
         public Task<ArrayBufferAsync> Decrypt(EncryptParams algorithm, CryptoKeyAsync key, byte[] data) => JSR.CallAsync<ArrayBufferAsync>("crypto.subtle.decrypt", algorithm, key, data);
         /// <summary>
+        /// The decrypt() method of the SubtleCrypto interface decrypts some encrypted data. It takes as arguments a key to decrypt with, some optional extra parameters, and the data to decrypt (also known as "ciphertext"). It returns a Promise which will be fulfilled with the decrypted data (also known as "plaintext").<br/>
+        /// </summary>
+        /// <param name="algorithm">
+        /// An object specifying the algorithm to be used and any extra parameters if required:<br/>
+        /// - To use RSA-OAEP, pass an RsaOaepParams object.<br/>
+        /// - To use AES-CTR, pass an AesCtrParams object.<br/>
+        /// - To use AES-CBC, pass an AesCbcParams object.<br/>
+        /// - To use AES-GCM, pass an AesGcmParams object.<br/>
+        /// - To use AES-KW, pass an AesKwParams object.
+        /// </param>
+        /// <param name="key">A CryptoKey containing the key to be used for decryption. If using RSA-OAEP, this is the privateKey property of the CryptoKeyPair object.</param>
+        /// <param name="data">An ArrayBuffer, a TypedArray, or a DataView containing the data to be decrypted (also known as ciphertext).</param>
+        /// <returns>A Promise that fulfills with an ArrayBuffer containing the plaintext.</returns>
+        public Task<ArrayBufferAsync> Decrypt(EncryptParams algorithm, CryptoKeyAsync key, Uint8ArrayAsync data) => JSR.CallAsync<ArrayBufferAsync>("crypto.subtle.decrypt", algorithm, key, data);
+        /// <summary>
         /// The deriveBits() method of the SubtleCrypto interface can be used to derive an array of bits from a base key.<br/>
         /// It takes as its arguments the base key, the derivation algorithm to use, and the length of the bits to derive. It returns a Promise which will be fulfilled with an ArrayBuffer containing the derived bits.<br/>
         /// This method is very similar to SubtleCrypto.deriveKey(), except that deriveKey() returns a CryptoKey object rather than an ArrayBuffer. Essentially deriveKey() is composed of deriveBits() followed by importKey().<br/>
@@ -218,6 +233,21 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// <param name="data">An ArrayBuffer, a TypedArray, or a DataView containing the data to be encrypted (also known as the plaintext).</param>
         /// <returns>A Promise that fulfills with an ArrayBuffer containing the "ciphertext".</returns>
         public Task<ArrayBufferAsync> Encrypt(EncryptParams algorithm, CryptoKeyAsync key, byte[] data) => JSR.CallAsync<ArrayBufferAsync>("crypto.subtle.encrypt", algorithm, key, data);
+        /// <summary>
+        /// The encrypt() method of the SubtleCrypto interface encrypts data. It takes as its arguments a key to encrypt with, some algorithm-specific parameters, and the data to encrypt(also known as "plaintext"). It returns a Promise which will be fulfilled with the encrypted data(also known as "ciphertext").
+        /// </summary>
+        /// <param name="algorithm">
+        /// An object specifying the algorithm to be used and any extra parameters if required:<br/>
+        /// - To use RSA-OAEP, pass an RsaOaepParams object.<br/>
+        /// - To use AES-CTR, pass an AesCtrParams object.<br/>
+        /// - To use AES-CBC, pass an AesCbcParams object.<br/>
+        /// - To use AES-GCM, pass an AesGcmParams object.<br/>
+        /// - To use AES-KW, pass an AesKwParams object.
+        /// </param>
+        /// <param name="key">A CryptoKey containing the key to be used for encryption.</param>
+        /// <param name="data">An ArrayBuffer, a TypedArray, or a DataView containing the data to be encrypted (also known as the plaintext).</param>
+        /// <returns>A Promise that fulfills with an ArrayBuffer containing the "ciphertext".</returns>
+        public Task<ArrayBufferAsync> Encrypt(EncryptParams algorithm, CryptoKeyAsync key, Uint8ArrayAsync data) => JSR.CallAsync<ArrayBufferAsync>("crypto.subtle.encrypt", algorithm, key, data);
         /// <summary>
         /// The exportKey() method of the SubtleCrypto interface exports a key: that is, it takes as input a CryptoKey object and gives you the key in an external, portable format.
         /// To export a key, the key must have CryptoKey.extractable set to true.

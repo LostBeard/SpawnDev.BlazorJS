@@ -26,6 +26,10 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// <param name="jsRef"></param>
         public ArrayBufferAsync(IJSObjectReference jsRef) : base(jsRef) { }
         /// <summary>
+        /// Returns the byte length of the array buffer
+        /// </summary>
+        public Task<long> Get_ByteLength() => JSRef!.GetAsync<long>("byteLength");
+        /// <summary>
         /// Returns the array buffer as a byte array
         /// </summary>
         /// <returns></returns>
