@@ -275,6 +275,12 @@ namespace SpawnDev.BlazorJS
         /// <returns>Returns a promise which fulfills to a module namespace object: an object containing all exports from moduleName.</returns>
         public Task<ModuleNamespaceObject?> Import(string moduleName) => CallAsync<ModuleNamespaceObject?>("import", moduleName);
         /// <summary>
+        /// The import() syntax, commonly called dynamic import, is a function-like expression that allows loading an ECMAScript module asynchronously and dynamically into a potentially non-module environment.
+        /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
+        /// <returns>Returns a promise which fulfills to type T</returns>
+        /// </summary>
+        public Task<T> Import<T>(string moduleName) => CallAsync<T>("import", moduleName);
+        /// <summary>
         /// Returns the window object or null
         /// </summary>
         public Window? GetWindow() => Get<Window?>("window");

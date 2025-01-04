@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="contextAttributes"></param>
         /// <returns></returns>
-        public CanvasRenderingContext2D Get2DContext(ContextAttributes2D? contextAttributes = null)
+        public CanvasRenderingContext2D Get2DContext(CanvasRenderingContext2DSettings? contextAttributes = null)
         {
             if (contextAttributes == null) return JSRef!.Call<CanvasRenderingContext2D>("getContext", "2d");
             return JSRef!.Call<CanvasRenderingContext2D>("getContext", "2d", contextAttributes);

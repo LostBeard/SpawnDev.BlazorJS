@@ -5,7 +5,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// Options used when calling Canvas.Get2DContext or OffscreenCanvas.Get2DContext
     /// </summary>
-    public class ContextAttributes2D
+    public class CanvasRenderingContext2DSettings
     {
         /// <summary>
         /// A boolean value that indicates if the canvas contains an alpha channel. If set to false, the browser now knows that the backdrop is always opaque, which can speed up drawing of transparent content and images.
