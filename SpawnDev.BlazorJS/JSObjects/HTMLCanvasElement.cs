@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.IJSInProcessObjectReferenceAnyKey;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -111,7 +112,96 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="encoderOptions"></param>
         /// <returns></returns>
         public string ToDataURL(string type, float encoderOptions) => JSRef!.Call<string>("toDataURL", type, encoderOptions);
-
+        /// <summary>
+        /// The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent.<br/>
+        /// The desired file format and image quality may be specified. If the file format is not specified, or if the given format is not supported, then the data will be exported as image/png. Browsers are required to support image/png; many will support additional formats including image/jpeg and image/webp.<br/>
+        /// The created image will have a resolution of 96dpi for file formats that support encoding resolution metadata.
+        /// </summary>
+        /// <param name="callback">A callback function with the resulting Blob object as a single argument. null may be passed if the image cannot be created for any reason.</param>
+        public void ToBlob(ActionCallback<Blob?> callback) => JSRef!.CallVoid("toBlob", callback);
+        /// <summary>
+        /// The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent.<br/>
+        /// The desired file format and image quality may be specified. If the file format is not specified, or if the given format is not supported, then the data will be exported as image/png. Browsers are required to support image/png; many will support additional formats including image/jpeg and image/webp.<br/>
+        /// The created image will have a resolution of 96dpi for file formats that support encoding resolution metadata.
+        /// </summary>
+        /// <param name="callback">A callback function with the resulting Blob object as a single argument. null may be passed if the image cannot be created for any reason.</param>
+        /// <param name="type">A string indicating the image format. The default type is image/png; that type is also used if the given type isn't supported.</param>
+        public void ToBlob(ActionCallback<Blob?> callback, string type) => JSRef!.CallVoid("toBlob", callback, type);
+        /// <summary>
+        /// The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent.<br/>
+        /// The desired file format and image quality may be specified. If the file format is not specified, or if the given format is not supported, then the data will be exported as image/png. Browsers are required to support image/png; many will support additional formats including image/jpeg and image/webp.<br/>
+        /// The created image will have a resolution of 96dpi for file formats that support encoding resolution metadata.
+        /// </summary>
+        /// <param name="callback">A callback function with the resulting Blob object as a single argument. null may be passed if the image cannot be created for any reason.</param>
+        /// <param name="type">A string indicating the image format. The default type is image/png; that type is also used if the given type isn't supported.</param>
+        /// <param name="quality">A Number between 0 and 1 indicating the image quality to be used when creating images using file formats that support lossy compression (such as image/jpeg or image/webp). A user agent will use its default quality value if this option is not specified, or if the number is outside the allowed range.</param>
+        public void ToBlob(ActionCallback<Blob?> callback, string type, float quality) => JSRef!.CallVoid("toBlob", callback, type, quality);
+        /// <summary>
+        /// The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent.<br/>
+        /// </summary>
+        /// <returns>The resulting blob</returns>
+        public async Task<Blob> ToBlobAsync()
+        {
+            var tcs = new TaskCompletionSource<Blob>();
+            using var callback = new ActionCallback<Blob?>((blob) =>
+            {
+                if (blob == null)
+                {
+                    tcs.TrySetException(new Exception("Failed"));
+                }
+                else
+                {
+                    tcs.TrySetResult(blob);
+                }
+            });
+            ToBlob(callback!);
+            return await tcs.Task;
+        }
+        /// <summary>
+        /// The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent.<br/>
+        /// </summary>
+        /// <param name="type">A string indicating the image format. The default type is image/png; that type is also used if the given type isn't supported.</param>
+        /// <returns>The resulting blob</returns>
+        public async Task<Blob> ToBlobAsync(string type)
+        {
+            var tcs = new TaskCompletionSource<Blob>();
+            using var callback = new ActionCallback<Blob?>((blob) =>
+            {
+                if (blob == null)
+                {
+                    tcs.TrySetException(new Exception("Failed"));
+                }
+                else
+                {
+                    tcs.TrySetResult(blob);
+                }
+            });
+            ToBlob(callback!, type);
+            return await tcs.Task;
+        }
+        /// <summary>
+        /// The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent.<br/>
+        /// </summary>
+        /// <param name="type">A string indicating the image format. The default type is image/png; that type is also used if the given type isn't supported.</param>
+        /// <param name="quality">A Number between 0 and 1 indicating the image quality to be used when creating images using file formats that support lossy compression (such as image/jpeg or image/webp). A user agent will use its default quality value if this option is not specified, or if the number is outside the allowed range.</param>
+        /// <returns>The resulting blob</returns>
+        public async Task<Blob> ToBlobAsync(string type, float quality)
+        {
+            var tcs = new TaskCompletionSource<Blob>();
+            using var callback = new ActionCallback<Blob?>((blob) =>
+            {
+                if (blob == null)
+                {
+                    tcs.TrySetException(new Exception("Failed"));
+                }
+                else
+                {
+                    tcs.TrySetResult(blob);
+                }
+            });
+            ToBlob(callback!, type, quality);
+            return await tcs.Task;
+        }
         /// <summary>
         /// The HTMLCanvasElement.transferControlToOffscreen() method transfers control to an OffscreenCanvas object, either on the main thread or on a worker.
         /// </summary>
