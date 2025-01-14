@@ -60,6 +60,25 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Methods
         /// <summary>
+        /// Returns a drawing context on the canvas, or null if the context identifier is not supported, or the canvas has already been set to a different context mode.
+        /// </summary>
+        /// <typeparam name="TContext">The context type to return</typeparam>
+        /// <param name="contextType">A string containing the context identifier defining the drawing context associated to the canvas.</param>
+        /// <param name="contextAttributes"></param>
+        /// <returns></returns>
+        public TContext? GetContext<TContext>(string contextType, object? contextAttributes = null) where TContext : JSObject =>
+            contextAttributes == null ? JSRef!.Call<TContext?>("getContext", contextType) : JSRef!.Call<TContext?>("getContext", contextType, contextAttributes);
+        /// <summary>
+        /// Calls canvas.getContext("bitmaprenderer"), leading to the creation of a ImageBitmapRenderingContextSettings object.
+        /// </summary>
+        /// <param name="contextAttributes">optional context settings</param>
+        /// <returns></returns>
+        public ImageBitmapRenderingContext GetImageBitmapRenderingContext(ImageBitmapRenderingContextSettings? contextAttributes = null)
+        {
+            if (contextAttributes == null) return JSRef!.Call<ImageBitmapRenderingContext>("getContext", "bitmaprenderer");
+            return JSRef!.Call<ImageBitmapRenderingContext>("getContext", "bitmaprenderer", contextAttributes);
+        }
+        /// <summary>
         /// Calls canvas.getContext("2d"), leading to the creation of a CanvasRenderingContext2D object representing a two-dimensional rendering context.
         /// </summary>
         /// <param name="contextAttributes"></param>
