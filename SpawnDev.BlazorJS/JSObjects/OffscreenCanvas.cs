@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -89,7 +90,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options">An object with the following properties: type and quality</param>
         /// <returns></returns>
-        public Task<Blob> ConvertToBlob(object options) => JSRef!.CallAsync<Blob>("convertToBlob", options);
+        public Task<Blob> ConvertToBlob(ConvertToBlobOptions options) => JSRef!.CallAsync<Blob>("convertToBlob", options);
         /// <summary>
         /// Creates an ImageBitmap object from the most recently rendered image of the OffscreenCanvas. See the API description for important notes on managing this ImageBitmap.
         /// </summary>
