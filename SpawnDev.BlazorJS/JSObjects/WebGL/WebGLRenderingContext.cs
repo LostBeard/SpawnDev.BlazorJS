@@ -1,8 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System;
-using System.Diagnostics.Metrics;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
