@@ -141,11 +141,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="index">Zero-based index of the typed array element to be returned, converted to an integer. Negative index counts back from the end of the typed array — if index &lt; 0, index + array.length is accessed.</param>
         /// <returns>The element in the typed array matching the given index. Always returns undefined if index &lt; -array.length or index &gt;= array.length without attempting to access the corresponding property.</returns>
         public override ulong At(long index) => JSRef!.Call<BigInt<ulong>>("at", index);
-        /// <summary>
-        /// Gets or sets the element at the given index
-        /// </summary>
-        /// <param name="i">the index of the element to get or set</param>
-        /// <returns>The value of the element at the given index if getting</returns>
+        /// <inheritdoc />
         public override ulong this[long i]
         {
             get => JSRef!.Get<BigInt<ulong>>(i);

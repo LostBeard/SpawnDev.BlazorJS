@@ -48,6 +48,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public NodeList QuerySelectorAll(string selector) => JSRef!.Call<NodeList>("querySelectorAll", selector);
         /// <summary>
+        /// Returns a NodeList of all the Element nodes within the DocumentFragment that match the specified selectors.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public NodeList<T> QuerySelectorAll<T>(string selector) where T : Node => JSRef!.Call<NodeList<T>>("querySelectorAll", selector);
+        /// <summary>
         /// Returns the first Element node within the DocumentFragment, in document order, that matches the specified selectors.
         /// </summary>
         /// <param name="selector"></param>

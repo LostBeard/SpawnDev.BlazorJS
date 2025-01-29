@@ -133,7 +133,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Element.shadowRoot read-only property represents the shadow root hosted by the element.<br/>
         /// Use Element.attachShadow() to add a shadow root to an existing element.
         /// </summary>
-        public ShadowRoot ShadowRoot => JSRef!.Get<ShadowRoot>("shadowRoot");
+        public ShadowRoot? ShadowRoot => JSRef!.Get<ShadowRoot?>("shadowRoot");
         /// <summary>
         /// Returns a DOMTokenList containing the list of class attributes.
         /// </summary>
