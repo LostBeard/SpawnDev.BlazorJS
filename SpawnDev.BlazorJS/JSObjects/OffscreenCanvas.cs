@@ -103,10 +103,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Fired if the user agent detects that the backing storage associated with a CanvasRenderingContext2D context is lost. 
         /// </summary>
         public ActionEvent<Event> OnContextLost { get => new ActionEvent<Event>("contextlost", AddEventListener, RemoveEventListener); set { } }
+
         /// <summary>
         /// Fired if the user agent restores the backing storage for a CanvasRenderingContext2D.
         /// </summary>
         public ActionEvent<Event> OnContextRestored { get => new ActionEvent<Event>("contextrestored", AddEventListener, RemoveEventListener); set { } }
+
+        /// <summary>
+        /// Fired if the user agent restores the rendering context
+        /// </summary>
+        public ActionEvent<WebGLContextEvent> OnWebGLContextRestored { get => new ActionEvent<WebGLContextEvent>("webglcontextrestored", AddEventListener, RemoveEventListener); set { } }
+
+        /// <summary>
+        /// Fired if the user agent detects that the backing rendering context is lost. 
+        /// </summary>
+        public ActionEvent<WebGLContextEvent> OnWebGLContextLost { get => new ActionEvent<WebGLContextEvent>("webglcontextlost", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }

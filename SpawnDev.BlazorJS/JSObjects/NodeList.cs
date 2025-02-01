@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T Item(int index) => JSRef!.Get<T>(index);
+        public T Item(int index) => JSRef!.Call<T>("item", index);
         /// <summary>
         /// The number of nodes in the NodeList.
         /// </summary>
@@ -47,7 +47,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [System.Runtime.CompilerServices.IndexerName("ElementAt")]
         public T this[int index]
         {
-            get => Item(index);
+            get => JSRef!.Get<T>(index);
         }
         /// <summary>
         /// Returns the list as a list
@@ -91,7 +91,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Node Item(int index) => JSRef!.Get<Node>(index);
+        public Node Item(int index) => JSRef!.Call<Node>("item", index);
         /// <summary>
         /// The number of nodes in the NodeList.
         /// </summary>
@@ -124,7 +124,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         [System.Runtime.CompilerServices.IndexerName("ElementAt")]
         public Node this[int index]
         {
-            get => Item(index);
+            get => JSRef!.Get<Node>(index);
         }
         /// <summary>
         /// Returns the list as a list

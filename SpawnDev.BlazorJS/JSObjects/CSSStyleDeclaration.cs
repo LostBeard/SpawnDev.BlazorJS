@@ -57,5 +57,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="property"></param>
         /// <returns></returns>
         public string GetPropertyPriority(string property) => JSRef!.Call<string>("getPropertyPriority", property);
+        /// <summary>
+        /// Get, set, or remove a CSS property from the declaration block.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        [System.Runtime.CompilerServices.IndexerName("ElementAt")]
+        public string? this[string propertyName]
+        {
+            get => GetPropertyValue(propertyName);
+            set
+            {
+                if (value == null)
+                    RemoveProperty(propertyName);
+                else
+                    SetProperty(propertyName, value);
+            }
+        }
     }
 }

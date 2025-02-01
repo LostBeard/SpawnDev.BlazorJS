@@ -16,16 +16,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an item in the list by its index, or null if the index is out-of-bounds.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="index"></param>
         /// <returns></returns>
-        public T Item<T>(int index) where T : CSSStyleSheet => JSRef!.Get<T>(index);
-        /// <summary>
-        /// Returns an item in the list by its index, or null if the index is out-of-bounds.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public CSSStyleSheet Item(int index) => JSRef!.Get<CSSStyleSheet>(index);
+        public CSSStyleSheet Item(int index) => JSRef!.Call<CSSStyleSheet>("item", index);
         /// <summary>
         /// The number of nodes in the StyleSheetList.
         /// </summary>
@@ -38,10 +31,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         [System.Runtime.CompilerServices.IndexerName("ElementAt")]
         public CSSStyleSheet this[int index]
         {
-            get => Item(index);
+            get => JSRef!.Get<CSSStyleSheet>(index);
         }
         /// <summary>
-        /// Returns the list as a list
+        /// Returns as a list
         /// </summary>
         /// <returns></returns>
         public List<CSSStyleSheet> ToList()
@@ -54,7 +47,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             return ret;
         }
         /// <summary>
-        /// Returns the list as a list
+        /// Returns as an array
         /// </summary>
         /// <returns></returns>
         public CSSStyleSheet[] ToArray() => ToList().ToArray();

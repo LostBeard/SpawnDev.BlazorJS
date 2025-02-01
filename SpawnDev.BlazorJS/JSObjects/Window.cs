@@ -188,21 +188,94 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public long SetTimeout(Callback callback, double delay) => JSRef!.Call<long>("setTimeout", callback, delay);
         /// <summary>
+        /// Schedules a function to execute in a given amount of time.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="delay"></param>
+        /// <returns></returns>
+        public long SetTimeout(Action callback, double delay) => JSRef!.Call<long>("setTimeout", ActionCallback.CreateOne(callback), delay);
+        /// <summary>
         /// Cancels the delayed execution set using setTimeout().
         /// </summary>
         /// <param name="requestId"></param>
         public void ClearTimeout(long requestId) => JSRef!.CallVoid("clearTimeout", requestId);
         /// <summary>
-        /// Tells the browser that an animation is in progress, requesting that the browser schedule a repaint of the window for the next animation frame
+        /// The window.requestAnimationFrame() method tells the browser you wish to perform an animation. It requests the browser to call a user-supplied callback function before the next repaint.
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
         public long RequestAnimationFrame(ActionCallback<double> callback) => JSRef!.Call<long>("requestAnimationFrame", callback);
         /// <summary>
+        /// The window.requestAnimationFrame() method tells the browser you wish to perform an animation. It requests the browser to call a user-supplied callback function before the next repaint.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public long RequestAnimationFrame(Action<double> callback) => JSRef!.Call<long>("requestAnimationFrame", Callback.CreateOne(callback));
+        /// <summary>
         /// Enables you to cancel a callback previously scheduled with Window.requestAnimationFrame.
         /// </summary>
         /// <param name="requestId"></param>
         public void CancelAnimationFrame(long requestId) => JSRef!.CallVoid("cancelAnimationFrame", requestId);
+        /// <summary>
+        /// The window.requestIdleCallback() method queues a function to be called during a browser's idle periods. This enables developers to perform background and low priority work on the main event loop, without impacting latency-critical events such as animation and input response. Functions are generally called in first-in-first-out order; however, callbacks which have a timeout specified may be called out-of-order if necessary in order to run them before the timeout elapses.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public long RequestIdleCallback(ActionCallback<IdleDeadline> callback) => JSRef!.Call<long>("requestIdleCallback", callback);
+        /// <summary>
+        /// The window.requestIdleCallback() method queues a function to be called during a browser's idle periods. This enables developers to perform background and low priority work on the main event loop, without impacting latency-critical events such as animation and input response. Functions are generally called in first-in-first-out order; however, callbacks which have a timeout specified may be called out-of-order if necessary in order to run them before the timeout elapses.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public long RequestIdleCallback(Action<IdleDeadline> callback) => JSRef!.Call<long>("requestIdleCallback", Callback.CreateOne(callback));
+        /// <summary>
+        /// Enables you to cancel a callback previously scheduled with Window.requestIdleCallback.
+        /// </summary>
+        /// <param name="handle">The ID value returned by window.requestIdleCallback() when the callback was established.</param>
+        public void CancelIdleCallback(long handle) => JSRef!.CallVoid("cancelIdleCallback", handle);
+        /// <summary>
+        /// Closes the current window.
+        /// </summary>
+        public void Close() => JSRef!.CallVoid("close");
+        /// <summary>
+        /// window.confirm() instructs the browser to display a dialog with an optional message, and to wait until the user either confirms or cancels the dialog.
+        /// </summary>
+        /// <returns>A boolean indicating whether OK (true) or Cancel (false) was selected. If a browser is ignoring in-page dialogs, then the returned value is always false.</returns>
+        public bool Confirm() => JSRef!.Call<bool>("confirm");
+        /// <summary>
+        /// window.confirm() instructs the browser to display a dialog with an optional message, and to wait until the user either confirms or cancels the dialog.
+        /// </summary>
+        /// <param name="message">A string you want to display in the confirmation dialog.</param>
+        /// <returns>A boolean indicating whether OK (true) or Cancel (false) was selected. If a browser is ignoring in-page dialogs, then the returned value is always false.</returns>
+        public bool Confirm(string message) => JSRef!.Call<bool>("confirm", message);
+        /// <summary>
+        /// Calls fetch
+        /// </summary>
+        public Task<Response> Fetch(Request resource) => JS.CallAsync<Response>("fetch", resource);
+        /// <summary>
+        /// Calls fetch
+        /// </summary>
+        public Task<Response> Fetch(string resource) => JS.CallAsync<Response>("fetch", resource);
+        /// <summary>
+        /// Calls fetch
+        /// </summary>
+        public Task<Response> Fetch(string resource, FetchOptions options) => JS.CallAsync<Response>("fetch", resource, options);
+        /// <summary>
+        /// Makes a request to bring the window to the front. It may fail due to user settings and the window isn't guaranteed to be frontmost before this method returns.
+        /// </summary>
+        public void Focus() => JSRef!.CallVoid("focus");
+        /// <summary>
+        /// Gets computed style for the specified element. Computed style indicates the computed values of all CSS properties of the element.
+        /// </summary>
+        /// <param name="element">The Element for which to get the computed style.</param>
+        /// <param name="pseudoElement">A string specifying the pseudo-element to match. Omitted (or null) for real elements.</param>
+        /// <returns>A live CSSStyleDeclaration object, which updates automatically when the element's styles are changed.</returns>
+        public CSSStyleDeclaration GetComputedStyle(Element element, string? pseudoElement = null) => JSRef!.Call<CSSStyleDeclaration>("getComputedStyle", element, pseudoElement);
+        /// <summary>
+        /// The getSelection() method of the Window interface returns the Selection object associated with the window's document, representing the range of text selected by the user or the current position of the caret.
+        /// </summary>
+        /// <returns>A Selection object, or null if the associated document has no browsing context (for example, the window is an <iframe> that is not attached to a document).</returns>
+        public Selection? GetSelection() => JSRef!.Call<Selection?>("getSelection");
         /// <summary>
         /// Experimental state. Not supported in most browsers. (Works in Chrome)
         /// </summary>
@@ -214,6 +287,47 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="mode"></param>
         /// <returns></returns>
         public MediaQueryList MatchMedia(string mode) => JSRef!.Call<MediaQueryList>("matchMedia", mode);
+        /// <summary>
+        /// The window.postMessage() method safely enables cross-origin communication between Window objects; e.g., between a page and a pop-up that it spawned, or between a page and an iframe embedded within it.
+        /// </summary>
+        /// <param name="message">Data to be dispatched to the other window. The data is serialized using the structured clone algorithm. This means you can pass a broad variety of data objects safely to the destination window without having to serialize them yourself.</param>
+        /// <param name="targetOrigin">Specifies the origin the recipient window must have in order to receive the event. In order for the event to be dispatched, the origin must match exactly (including scheme, hostname, and port). If omitted, then defaults to the origin that is calling the method. This mechanism provides control over where messages are sent; for example, if postMessage() was used to transmit a password, it would be absolutely critical that this argument be a URI whose origin is the same as the intended receiver of the message containing the password, to prevent interception of the password by a malicious third party. * may also be provided, which means the message can be dispatched to a listener with any origin.</param>
+        /// <param name="transfer">An optional array of transferable objects to transfer ownership of. The ownership of these objects is given to the destination side and they are no longer usable on the sending side. These transferable objects should be attached to the message; otherwise they would be moved but not actually accessible on the receiving end.</param>
+        public void PostMessage(object message, string targetOrigin, object[] transfer) => JSRef!.CallVoid("postMessage", message, targetOrigin, transfer);
+        /// <summary>
+        /// The window.postMessage() method safely enables cross-origin communication between Window objects; e.g., between a page and a pop-up that it spawned, or between a page and an iframe embedded within it.
+        /// </summary>
+        /// <param name="message">Data to be dispatched to the other window. The data is serialized using the structured clone algorithm. This means you can pass a broad variety of data objects safely to the destination window without having to serialize them yourself.</param>
+        /// <param name="targetOrigin">Specifies the origin the recipient window must have in order to receive the event. In order for the event to be dispatched, the origin must match exactly (including scheme, hostname, and port). If omitted, then defaults to the origin that is calling the method. This mechanism provides control over where messages are sent; for example, if postMessage() was used to transmit a password, it would be absolutely critical that this argument be a URI whose origin is the same as the intended receiver of the message containing the password, to prevent interception of the password by a malicious third party. * may also be provided, which means the message can be dispatched to a listener with any origin.</param>
+        public void PostMessage(object message, string targetOrigin) => JSRef!.CallVoid("postMessage", message, targetOrigin);
+        /// <summary>
+        /// The window.postMessage() method safely enables cross-origin communication between Window objects; e.g., between a page and a pop-up that it spawned, or between a page and an iframe embedded within it.
+        /// </summary>
+        /// <param name="message">Data to be dispatched to the other window. The data is serialized using the structured clone algorithm. This means you can pass a broad variety of data objects safely to the destination window without having to serialize them yourself.</param>
+        public void PostMessage(object message) => JSRef!.CallVoid("postMessage", message);
+        /// <summary>
+        /// window.prompt() instructs the browser to display a dialog with an optional message prompting the user to input some text, and to wait until the user either submits the text or cancels the dialog.
+        /// </summary>
+        /// <returns>A string containing the text entered by the user, or null.</returns>
+        public string? Prompt() => JSRef!.Call<string>("prompt");
+        /// <summary>
+        /// window.prompt() instructs the browser to display a dialog with an optional message prompting the user to input some text, and to wait until the user either submits the text or cancels the dialog.
+        /// </summary>
+        /// <param name="message">A string of text to display to the user. Can be omitted if there is nothing to show in the prompt window.</param>
+        /// <returns>A string containing the text entered by the user, or null.</returns>
+        public string? Prompt(string message) => JSRef!.Call<string>("prompt", message);
+        /// <summary>
+        /// window.prompt() instructs the browser to display a dialog with an optional message prompting the user to input some text, and to wait until the user either submits the text or cancels the dialog.
+        /// </summary>
+        /// <param name="message">A string of text to display to the user. Can be omitted if there is nothing to show in the prompt window.</param>
+        /// <param name="defaultValue">A string containing the default value displayed in the text input field.</param>
+        /// <returns>A string containing the text entered by the user, or null.</returns>
+        public string? Prompt(string message, string defaultValue) => JSRef!.Call<string>("prompt", message, defaultValue);
+        /// <summary>
+        /// The queueMicrotask() method of the Window interface queues a microtask to be executed at a safe time prior to control returning to the browser's event loop.
+        /// </summary>
+        /// <param name="callback">A function to be executed when the browser engine determines it is safe to call your code. Enqueued microtasks are executed after all pending tasks have completed but before yielding control to the browser's event loop.</param>
+        public void QueueMicrotask(Action callback) => JSRef!.CallVoid("queueMicrotask", ActionCallback.CreateOne(callback));
         #endregion
         #region Events
         /// <summary>
