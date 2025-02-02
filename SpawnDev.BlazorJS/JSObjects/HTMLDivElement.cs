@@ -30,5 +30,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="elementReference"></param>
         public HTMLDivElement(ElementReference elementReference) : base(elementReference) { }
+        #endregion
     }
 }

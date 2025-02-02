@@ -163,6 +163,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public float ScrollTop { get => JSRef!.Get<float>("scrollTop"); set => JSRef!.Set("scrollTop", value); }
         /// <summary>
+        /// Returns a string with the name of the tag for the given element.
+        /// </summary>
+        public string TagName => JSRef!.Get<string>("tagName");
+        /// <summary>
         /// Returns a number representing the inner height of the element.
         /// </summary>
         public float ClientHeight => JSRef!.Get<float>("clientHeight");
