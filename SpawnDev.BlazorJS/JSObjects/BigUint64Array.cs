@@ -23,6 +23,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="values"></param>
         public static explicit operator BigUint64Array?(ulong[]? values) => values == null ? null : new BigUint64Array(values);
         /// <summary>
+        /// The TypedArray.from() static method creates a new typed array from an array-like or iterable object. This method is nearly the same as Array.from().
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static BigUint64Array From(IEnumerable<BigInt<ulong>> values) => JS.Call<BigUint64Array>($"{nameof(BigUint64Array)}.from", values);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

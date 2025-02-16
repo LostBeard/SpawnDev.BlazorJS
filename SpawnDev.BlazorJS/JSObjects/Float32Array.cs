@@ -19,6 +19,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="values"></param>
         public static explicit operator Float32Array?(float[]? values) => values == null ? null : new Float32Array(values);
         /// <summary>
+        /// The TypedArray.from() static method creates a new typed array from an array-like or iterable object. This method is nearly the same as Array.from().
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static Float32Array From(IEnumerable<float> values) => JS.Call<Float32Array>($"{nameof(Float32Array)}.from", values);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

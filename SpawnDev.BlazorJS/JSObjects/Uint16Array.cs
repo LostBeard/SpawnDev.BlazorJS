@@ -19,6 +19,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="values"></param>
         public static explicit operator Uint16Array?(ushort[]? values) => values == null ? null : new Uint16Array(values);
         /// <summary>
+        /// The TypedArray.from() static method creates a new typed array from an array-like or iterable object. This method is nearly the same as Array.from().
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static Uint16Array From(IEnumerable<ushort> values) => JS.Call<Uint16Array>($"{nameof(Uint16Array)}.from", values);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>

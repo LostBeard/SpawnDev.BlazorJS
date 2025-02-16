@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components.Web.Virtualization;
+using Microsoft.JSInterop;
 using System.Runtime.InteropServices;
 
 namespace SpawnDev.BlazorJS.JSObjects

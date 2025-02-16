@@ -2,12 +2,13 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The CanvasGradient interface represents an opaque object describing a gradient. It is returned by the methods CanvasRenderingContext2D.createLinearGradient(), CanvasRenderingContext2D.createConicGradient() or CanvasRenderingContext2D.createRadialGradient().
+    /// https://developer.mozilla.org/en-US/docs/Web/API/CanvasGradient
+    /// </summary>
     public class CanvasGradient : JSObject
     {
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
+        /// <inheritdoc/>
         public CanvasGradient(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// The CanvasGradient.addColorStop() method of the Canvas 2D API adds a new color stop, defined by an offset and a color, to a given canvas gradient.

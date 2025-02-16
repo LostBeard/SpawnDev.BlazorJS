@@ -1,4 +1,6 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.BlazorJSRuntimeAnyKey;
+using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -18,6 +20,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         public static explicit operator Int8Array?(sbyte[]? values) => values == null ? null : new Int8Array(values);
+        /// <summary>
+        /// The TypedArray.from() static method creates a new typed array from an array-like or iterable object. This method is nearly the same as Array.from().
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static Int8Array From(IEnumerable<sbyte> values) => JS.Call<Int8Array>($"{nameof(Int8Array)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>

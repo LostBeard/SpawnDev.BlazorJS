@@ -24,6 +24,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         public static explicit operator Uint8Array?(ArrayBuffer? values) => values == null ? null : new Uint8Array(values);
+        /// <summary>
+        /// The TypedArray.from() static method creates a new typed array from an array-like or iterable object. This method is nearly the same as Array.from().
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static Uint8Array From(IEnumerable<byte> values) => JS.ReturnMe<Uint8Array>(values);
         #region Constructors
         /// <summary>
         /// Deserialization constructor
