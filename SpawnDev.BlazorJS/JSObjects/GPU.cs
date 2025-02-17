@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class GPU : JSObject
     {
         #region Constructors
+        /// <inheritdoc/>
         public GPU(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 

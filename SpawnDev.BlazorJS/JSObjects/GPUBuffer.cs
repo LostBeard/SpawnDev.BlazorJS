@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace SpawnDev.BlazorJS.JSObjects.WebGPU
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The GPUBuffer interface of the WebGPU API represents a block of memory that can be used to store raw data to use in GPU operations.<br/>

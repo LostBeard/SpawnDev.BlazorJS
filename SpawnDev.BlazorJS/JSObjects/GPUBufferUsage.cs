@@ -1,4 +1,4 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects.WebGPU
+﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// WebGPU usage flags<br/>
