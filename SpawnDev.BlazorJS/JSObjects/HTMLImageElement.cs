@@ -159,6 +159,22 @@ namespace SpawnDev.BlazorJS.JSObjects
             if (crossOrigin != null) image.CrossOrigin = crossOrigin;
             image.Src = src;
         }
-
+        /// <summary>
+        /// Returns the Image as a Blob<br/>
+        /// May throw an exception if the image is "tainted" by CORS issues.
+        /// Non-standard method. 
+        /// </summary>
+        /// <param name="options">An object with the following properties: type and quality</param>
+        /// <returns>A Promise returning a Blob object representing the image.</returns>
+        public async Task<Blob> ConvertToBlob(ConvertToBlobOptions? options = null)
+        {
+            using var canvas = new OffscreenCanvas(Width, Height);
+            using var ctx = canvas.Get2DContext();
+            ctx.DrawImage(this);
+            if (options == null)
+                return await canvas.ConvertToBlob();
+            else
+                return await canvas.ConvertToBlob(options);
+        }
     }
 }
