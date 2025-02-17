@@ -4,6 +4,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The Float16Array typed array represents an array of 16-bit floating point numbers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0 unless initialization data is explicitly provided. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).<br/>
+    /// NOTE - As of 2025-02-17 this feature has narrow support and should be tested for before using.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float16Array
     /// </summary>
     public class Float16Array : TypedArray<Half>
