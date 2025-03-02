@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Contains a list of all the local files available on the data transfer. If the drag operation doesn't involve dragging files, this property is an empty list.
         /// </summary>
-        public Array<File>? Files => JSRef!.Get<Array<File>?>("files");
+        public FileList? Files => JSRef!.Get<FileList?>("files");
         /// <summary>
         /// Gets the type of drag-and-drop operation currently selected or sets the operation to a new type. The value must be none, copy, link or move
         /// </summary>

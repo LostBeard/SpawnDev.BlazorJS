@@ -13,6 +13,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public DataTransferItemList(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Indexer property
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        [System.Runtime.CompilerServices.IndexerName("ElementAt")]
         public DataTransferItem this[int index]
         {
             get => JSRef!.Get<DataTransferItem>(index);
@@ -44,6 +50,47 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="index"></param>
         public void Clear(int index) => JSRef!.CallVoid("clear", index);
-
+        #region Enumerable like
+        /// <summary>
+        /// Indexer property
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public DataTransferItem Item(int index) => JSRef!.Get<DataTransferItem>(index);
+        /// <summary>
+        /// Returns first or default
+        /// </summary>
+        /// <returns></returns>
+        public DataTransferItem? FirstOrDefault() => Length > 0 ? Item(0) : null;
+        /// <summary>
+        /// Returns last or default
+        /// </summary>
+        /// <returns></returns>
+        public DataTransferItem? LastOrDefault() => Length > 0 ? Item(Length - 1) : null;
+        /// <summary>
+        /// Returns the array as a .Net Array
+        /// </summary>
+        /// <returns></returns>
+        public DataTransferItem[] ToArray() => Enumerable.Range(0, Length).Select(Item).ToArray();
+        /// <summary>
+        /// Returns the array as a .Net Array
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public DataTransferItem[] ToArray(int start, int count) => Enumerable.Range(start, count).Select(Item).ToArray();
+        /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <returns></returns>
+        public List<DataTransferItem> ToList() => Enumerable.Range(0, Length).Select(Item).ToList();
+        /// <summary>
+        /// Returns the array as a .Net List
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<DataTransferItem> ToList(int start, int count) => Enumerable.Range(start, count).Select(Item).ToList();
+        #endregion
     }
 }

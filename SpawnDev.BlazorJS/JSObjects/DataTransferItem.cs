@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.IJSInProcessObjectReferenceAnyKey;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -8,10 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class DataTransferItem : JSObject
     {
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
+        /// <inheritdoc />
         public DataTransferItem(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// The kind of drag data item, string or file.
@@ -36,5 +34,31 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public string? GetAsString() => JSRef!.Call<string?>("getAsString");
+        private bool HasGetAsEntry => !JSRef!.IsUndefined("getAsEntry");
+        private bool HasWebkitGetAsEntry => !JSRef!.IsUndefined("webkitGetAsEntry");
+        /// <summary>
+        /// Returns a FileSystemEntry object if the drag data item is a file or directory, or null otherwise.<br/>
+        /// webkitGetAsEntry is used if it is found, getAsEntry is used if it is found, otherwise null is returned.
+        /// </summary>
+        /// <returns>A FileSystemDirectoryEntry, a FileSystemFileEntry, a FileSystemEntry, or null</returns>
+        public FileSystemEntry? GetAsEntry()
+        {
+            FileSystemEntry? ret = null;
+            if (HasWebkitGetAsEntry)
+            {
+                ret = JSRef!.Call<FileSystemEntry?>("webkitGetAsEntry");
+            }
+            else if (HasGetAsEntry)
+            {
+                ret = JSRef!.Call<FileSystemEntry?>("getAsEntry");
+            }
+            if (ret != null)
+            {
+                var className = ret.JSRef!.ConstructorName();
+                if (className == nameof(FileSystemDirectoryEntry)) ret = ret.JSRefMove<FileSystemDirectoryEntry>();
+                else if (className == nameof(FileSystemFileEntry)) ret = ret.JSRefMove<FileSystemFileEntry>();
+            }
+            return ret;
+        }
     }
 }

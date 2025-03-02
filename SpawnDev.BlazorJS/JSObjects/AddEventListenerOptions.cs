@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// An object that specifies characteristics about the event listener
+    /// An object that specifies characteristics about the event listener<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options
     /// </summary>
     public class AddEventListenerOptions
     {
