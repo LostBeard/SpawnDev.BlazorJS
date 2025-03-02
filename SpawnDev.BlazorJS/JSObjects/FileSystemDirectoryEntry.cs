@@ -5,6 +5,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The FileSystemDirectoryEntry interface of the File and Directory Entries API represents a directory in a file system. It provides methods which make it possible to access and manipulate the files in a directory, as well as to access the entries within the directory.<br/>
+    /// NOTE: Chrome calls this class DirectoryEntry, while Firefox calls it FileSystemDirectoryEntry<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry
     /// </summary>
     public class FileSystemDirectoryEntry : FileSystemEntry

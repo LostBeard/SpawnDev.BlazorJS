@@ -54,9 +54,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             }
             if (ret != null)
             {
-                var className = ret.JSRef!.ConstructorName();
-                if (className == nameof(FileSystemDirectoryEntry)) ret = ret.JSRefMove<FileSystemDirectoryEntry>();
-                else if (className == nameof(FileSystemFileEntry)) ret = ret.JSRefMove<FileSystemFileEntry>();
+                if (ret.IsDirectory) ret = ret.JSRefMove<FileSystemDirectoryEntry>();
+                else if (ret.IsFile) ret = ret.JSRefMove<FileSystemFileEntry>();
             }
             return ret;
         }

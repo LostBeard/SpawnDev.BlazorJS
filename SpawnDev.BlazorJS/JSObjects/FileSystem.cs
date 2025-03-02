@@ -5,6 +5,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The File and Directory Entries API interface FileSystem is used to represent a file system. These objects can be obtained from the filesystem property on any file system entry. Some browsers offer additional APIs to create and manage file systems, such as Chrome's requestFileSystem() method.<br/>
     /// This interface will not grant you access to the users' filesystem. Instead, you will have a "virtual drive" within the browser sandbox if you want to gain access to the users' file system, you need to invoke the user, for example by installing a Chrome extension. The relevant Chrome API can be found here.<br/>
+    /// NOTE: Chrome calls this class DOMFileSystem, while Firefox calls it FileSystem<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileSystem
     /// </summary>
     public class FileSystem : JSObject
