@@ -27,8 +27,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a FileSystemFileHandle if the dragged item is a file, or a FileSystemDirectoryHandle if the dragged item is a directory.
         /// </summary>
-        /// <returns></returns>
-        public FileSystemHandle? GetAsFileSystemHandle() => JSRef!.Call<FileSystemHandle?>("getAsFileSystemHandle");
+        /// <returns>Returns a FileSystemFileHandle, a FileSystemDirectoryHandle, or null</returns>
+        public async Task<FileSystemHandle?> GetAsFileSystemHandle()
+        {
+            if (!HasGetAsFileSystemHandle) return null;
+            var ret = await JSRef!.CallAsync<FileSystemHandle?>("getAsFileSystemHandle");
+            return ret == null ? null : ret.ResolveType(true);
+        }
         /// <summary>
         /// Invokes the specified callback with the drag data item string as its argument.
         /// </summary>
@@ -36,6 +41,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string? GetAsString() => JSRef!.Call<string?>("getAsString");
         private bool HasGetAsEntry => !JSRef!.IsUndefined("getAsEntry");
         private bool HasWebkitGetAsEntry => !JSRef!.IsUndefined("webkitGetAsEntry");
+        private bool HasGetAsFileSystemHandle => !JSRef!.IsUndefined("getAsFileSystemHandle");
         /// <summary>
         /// Returns a FileSystemEntry object if the drag data item is a file or directory, or null otherwise.<br/>
         /// webkitGetAsEntry is used if it is found, getAsEntry is used if it is found, otherwise null is returned.
