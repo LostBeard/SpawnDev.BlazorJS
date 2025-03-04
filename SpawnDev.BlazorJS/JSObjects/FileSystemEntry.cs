@@ -53,5 +53,36 @@ namespace SpawnDev.BlazorJS.JSObjects
             GetParent(successCallback, errorCallback);
             return await tcs.Task;
         }
+        /// <summary>
+        /// Returns a FileSystemDirectoryEntry if IsDirectory, FileSystemFileEntry if IsFile, else FileSystemEntry
+        /// </summary>
+        /// <param name="moveJSRef">If true, the IJSInProcessReference from this JSObject is moved to the new type instead of copied</param>
+        /// <returns></returns>
+        public FileSystemEntry ResolveType(bool moveJSRef = false)
+        {
+            if (IsDirectory)
+            {
+                return moveJSRef ? JSRefMove<FileSystemDirectoryEntry>() : JSRefCopy<FileSystemDirectoryEntry>();
+            }
+            else if (IsFile)
+            {
+                return moveJSRef ? JSRefMove<FileSystemFileEntry>() : JSRefCopy<FileSystemFileEntry>();
+            }
+            else
+            {
+                return moveJSRef ? JSRefMove<FileSystemEntry>() : JSRefCopy<FileSystemEntry>();
+            }
+        }
+        /// <summary>
+        /// Returns a FileSystemDirectoryEntry JSObject for this entry if this entry IsDirectory
+        /// </summary>
+        /// <returns></returns>
+        public FileSystemDirectoryEntry? ToFileSystemDirectoryEntry(bool moveJSRef = false) => IsDirectory ? (moveJSRef ? JSRefMove<FileSystemDirectoryEntry>() : JSRefCopy<FileSystemDirectoryEntry>()) : null;
+        /// <summary>
+        /// Returns a FileSystemFileEntry JSObject for this entry if this entry IsFile
+        /// </summary>
+        /// <param name="moveJSRef"></param>
+        /// <returns></returns>
+        public FileSystemFileEntry? ToFileSystemFileEntry(bool moveJSRef = false) => IsFile ? (moveJSRef ? JSRefMove<FileSystemFileEntry>() : JSRefCopy<FileSystemFileEntry>()) : null;
     }
 }
