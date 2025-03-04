@@ -39,9 +39,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public string? GetAsString() => JSRef!.Call<string?>("getAsString");
-        private bool HasGetAsEntry => !JSRef!.IsUndefined("getAsEntry");
-        private bool HasWebkitGetAsEntry => !JSRef!.IsUndefined("webkitGetAsEntry");
-        private bool HasGetAsFileSystemHandle => !JSRef!.IsUndefined("getAsFileSystemHandle");
+        /// <summary>
+        /// Returns true if the method exists, otherwise false.
+        /// </summary>
+        public bool HasGetAsEntry => !JSRef!.IsUndefined("getAsEntry");
+        /// <summary>
+        /// Returns true if the method exists, otherwise false.
+        /// </summary>
+        public bool HasWebkitGetAsEntry => !JSRef!.IsUndefined("webkitGetAsEntry");
+        /// <summary>
+        /// Returns true if the method exists, otherwise false.
+        /// </summary>
+        public bool HasGetAsFileSystemHandle => !JSRef!.IsUndefined("getAsFileSystemHandle");
         /// <summary>
         /// Returns a FileSystemEntry object if the drag data item is a file or directory, or null otherwise.<br/>
         /// webkitGetAsEntry is used if it is found, getAsEntry is used if it is found, otherwise null is returned.
