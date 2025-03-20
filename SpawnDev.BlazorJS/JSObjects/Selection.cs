@@ -26,9 +26,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a number representing the offset of the selection's anchor within the anchorNode. If anchorNode is a text node, this is the number of characters within anchorNode preceding the anchor. If anchorNode is an element, this is the number of child nodes of the anchorNode preceding the anchor.
         /// </summary>
         public int AnchorOffset => JSRef!.Get<int>("anchorOffset");
+        /// <summary>
+        /// 
+        /// </summary>
         public Node BaseNode => JSRef!.Get<Node>("baseNode");
+        /// <summary>
+        /// 
+        /// </summary>
         public int BaseOffset => JSRef!.Get<int>("baseOffset");
+        /// <summary>
+        /// 
+        /// </summary>
         public Node ExtentNode => JSRef!.Get<Node>("extentNode");
+        /// <summary>
+        /// 
+        /// </summary>
         public int ExtentOffset => JSRef!.Get<int>("extentOffset");
         /// <summary>
         /// Returns the Node in which the selection ends. Can return null if selection never existed in the document (for example, in an iframe that was never clicked on).
