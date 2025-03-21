@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// Options used when creating a new MediaRecorder
+    /// </summary>
     public class MediaRecorderOptions
     {
         /// <summary>

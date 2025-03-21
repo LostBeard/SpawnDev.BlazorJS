@@ -371,7 +371,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The getSelection() method of the Window interface returns the Selection object associated with the window's document, representing the range of text selected by the user or the current position of the caret.
         /// </summary>
-        /// <returns>A Selection object, or null if the associated document has no browsing context (for example, the window is an <iframe> that is not attached to a document).</returns>
+        /// <returns>A Selection object, or null if the associated document has no browsing context (for example, the window is an iframe that is not attached to a document).</returns>
         public Selection? GetSelection() => JSRef!.Call<Selection?>("getSelection");
         /// <summary>
         /// Experimental state. Not supported in most browsers. (Works in Chrome)
@@ -607,17 +607,32 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public ActionEvent<Event> OnUnload { get => new ActionEvent<Event>("unload", AddEventListener, RemoveEventListener); set { } }
         #endregion
-
+        /// <summary>
+        /// Returns true if showDirectoryPicker is found
+        /// </summary>
+        /// <returns></returns>
         public bool ShowDirectoryPickerSupported() => !JS.IsUndefined("showDirectoryPicker");
-
+        /// <summary>
+        /// The showDirectoryPicker() method of the Window interface displays a directory picker which allows the user to select a directory.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public Task<FileSystemDirectoryHandle> ShowDirectoryPicker(ShowDirectoryPickerOptions? options = null) => options == null ?
             JSRef!.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker") :
             JSRef!.CallAsync<FileSystemDirectoryHandle>("showDirectoryPicker", options);
-
+        /// <summary>
+        /// The showOpenFilePicker() method of the Window interface shows a file picker that allows a user to select a file or multiple files and returns a handle for the file(s).
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public Task<Array<FileSystemFileHandle>> ShowOpenFilePicker(ShowOpenFilePickerOptions? options = null) => options == null ?
             JSRef!.CallAsync<Array<FileSystemFileHandle>>("showOpenFilePicker") :
             JSRef!.CallAsync<Array<FileSystemFileHandle>>("showOpenFilePicker", options);
-
+        /// <summary>
+        /// The showSaveFilePicker() method of the Window interface shows a file picker that allows a user to save a file. Either by selecting an existing file, or entering a name for a new file.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public Task<FileSystemFileHandle> ShowSaveFilePicker(ShowSaveFilePickerOptions? options = null) => options == null ?
             JSRef!.CallAsync<FileSystemFileHandle>("showSaveFilePicker") :
             JSRef!.CallAsync<FileSystemFileHandle>("showSaveFilePicker", options);

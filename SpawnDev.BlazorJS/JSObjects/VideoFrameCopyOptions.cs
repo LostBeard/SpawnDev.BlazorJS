@@ -12,11 +12,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The rectangle of pixels to copy from the VideoFrame.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public VideoFrameRect Rect { get; set; }
+        public VideoFrameRect? Rect { get; set; }
         /// <summary>
         /// A list containing the layout for each plane
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<VideoFrameLayout> Layout { get; set; }
+        public List<VideoFrameLayout>? Layout { get; set; }
     }
 }
