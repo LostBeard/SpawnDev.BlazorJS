@@ -1,4 +1,10 @@
 ﻿using Microsoft.JSInterop;
+using Microsoft.VisualBasic;
+using Microsoft.Win32;
+using System.Drawing;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -195,10 +201,34 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public long SetTimeout(Action callback, double delay) => JSRef!.Call<long>("setTimeout", ActionCallback.CreateOne(callback), delay);
         /// <summary>
+        /// The setInterval() method of the Window interface repeatedly calls a function or executes a code snippet, with a fixed time delay between each call.<br/>
+        /// This method returns an interval ID which uniquely identifies the interval, so you can remove it later by calling clearInterval().
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="delay"></param>
+        /// <returns></returns>
+        public long SetInterval(Callback callback, double delay) => JSRef!.Call<long>("setInterval", callback, delay);
+        /// <summary>
+        /// Cancels the delayed execution set using setInterval().
+        /// </summary>
+        /// <param name="requestId"></param>
+        public void ClearInterval(long requestId) => JSRef!.CallVoid("clearInterval", requestId);
+        /// <summary>
         /// Cancels the delayed execution set using setTimeout().
         /// </summary>
         /// <param name="requestId"></param>
         public void ClearTimeout(long requestId) => JSRef!.CallVoid("clearTimeout", requestId);
+        /// <summary>
+        /// The createImageBitmap() method of the Window interface creates a bitmap from a given source, optionally cropped to contain only a portion of that source. It accepts a variety of different image sources, and returns a Promise which resolves to an ImageBitmap.
+        /// </summary>
+        /// <param name="image">An image source</param>
+        /// <param name="sx">The x coordinate of the reference point of the rectangle from which the ImageBitmap will be extracted.</param>
+        /// <param name="sy">The y coordinate of the reference point of the rectangle from which the ImageBitmap will be extracted.</param>
+        /// <param name="sw">The width of the rectangle from which the ImageBitmap will be extracted. This value can be negative.</param>
+        /// <param name="sh">The height of the rectangle from which the ImageBitmap will be extracted. This value can be negative.</param>
+        /// <param name="options">An object that sets options for the image's extraction.</param>
+        /// <returns>A Promise which resolves to an ImageBitmap object containing bitmap data from the given rectangle.</returns>
+        public Task<ImageBitmap> CreateImageBitmap(Union<HTMLImageElement, SVGImageElement, HTMLVideoElement, HTMLCanvasElement, Blob, ImageData, OffscreenCanvas, VideoFrame> image, int sx, int sy, int sw, int sh, ImageBitmapOptions options) => JSRef!.CallAsync<ImageBitmap>("createImageBitmap", image, sx, sy, sw, sh, options);
         /// <summary>
         /// The window.requestAnimationFrame() method tells the browser you wish to perform an animation. It requests the browser to call a user-supplied callback function before the next repaint.
         /// </summary>
@@ -222,6 +252,73 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="callback"></param>
         /// <returns></returns>
         public long RequestIdleCallback(ActionCallback<IdleDeadline> callback) => JSRef!.Call<long>("requestIdleCallback", callback);
+        /// <summary>
+        /// The Window.resizeBy() method resizes the current window by a specified amount.
+        /// </summary>
+        /// <param name="deltaX">The number of pixels to grow the window horizontally.</param>
+        /// <param name="deltaY">The number of pixels to grow the window vertically.</param>
+        public void ResizeBy(int deltaX, int deltaY) => JSRef!.CallVoid("resizeBy", deltaX, deltaY);
+        /// <summary>
+        /// The Window.resizeTo() method dynamically resizes the window.
+        /// </summary>
+        /// <param name="width">An integer representing the new outerWidth in pixels (including scroll bars, title bars, etc.).</param>
+        /// <param name="height">An integer value representing the new outerHeight in pixels (including scroll bars, title bars, etc.).</param>
+        public void ResizeTo(int width, int height) => JSRef!.CallVoid("resizeTo", width, height);
+        /// <summary>
+        /// The Window.scroll() method scrolls the window to a particular place in the document.
+        /// </summary>
+        /// <param name="xCoord">The pixel along the horizontal axis of the document that you want displayed in the upper left.</param>
+        /// <param name="yCoord">The pixel along the vertical axis of the document that you want displayed in the upper left.</param>
+        public void Scroll(int xCoord, int yCoord) => JSRef!.CallVoid("scroll", xCoord, yCoord);
+        /// <summary>
+        /// The Window.scroll() method scrolls the window to a particular place in the document.
+        /// </summary>
+        /// <param name="options">Scroll options</param>
+        public void Scroll(ScrollOptions options) => JSRef!.CallVoid("scroll", options);
+        /// <summary>
+        /// The Window.scrollBy() method scrolls the document in the window by the given amount.
+        /// </summary>
+        /// <param name="options"></param>
+        public void ScrollBy(ScrollOptions options) => JSRef!.CallVoid("scrollBy", options);
+        /// <summary>
+        /// The Window.scrollBy() method scrolls the document in the window by the given amount.
+        /// </summary>
+        /// <param name="xCoord">The horizontal pixel value that you want to scroll by.</param>
+        /// <param name="yCoord">The vertical pixel value that you want to scroll by.</param>
+        public void ScrollBy(int xCoord, int yCoord) => JSRef!.CallVoid("scrollBy", xCoord, yCoord);
+        /// <summary>
+        /// Window.scrollTo() scrolls to a particular set of coordinates in the document.
+        /// </summary>
+        /// <param name="options"></param>
+        public void ScrollTo(ScrollOptions options) => JSRef!.CallVoid("scrollTo", options);
+        /// <summary>
+        /// The window.stop() stops further resource loading in the current browsing context, equivalent to the stop button in the browser.<br/>
+        /// Because of how scripts are executed, this method cannot interrupt its parent document's loading, but it will stop its images, new windows, and other still-loading objects.
+        /// </summary>
+        public void Stop() => JSRef!.CallVoid("stop");
+        /// <summary>
+        /// The structuredClone() method of the Window interface creates a deep clone of a given value using the structured clone algorithm.<br/>
+        /// The method also allows transferable objects in the original value to be transferred rather than cloned to the new object. Transferred objects are detached from the original object and attached to the new object; they are no longer accessible in the original object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The object to be cloned. This can be any structured-cloneable type.</param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public T StructuredClone<T>(object value, StructuredCloneOptions options) => JSRef!.Call<T>("structuredClone", value, options);
+        /// <summary>
+        /// The structuredClone() method of the Window interface creates a deep clone of a given value using the structured clone algorithm.<br/>
+        /// The method also allows transferable objects in the original value to be transferred rather than cloned to the new object. Transferred objects are detached from the original object and attached to the new object; they are no longer accessible in the original object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The object to be cloned. This can be any structured-cloneable type.</param>
+        /// <returns></returns>
+        public T StructuredClone<T>(object value) => JSRef!.Call<T>("structuredClone", value);
+        /// <summary>
+        /// Window.scrollTo() scrolls to a particular set of coordinates in the document.
+        /// </summary>
+        /// <param name="xCoord">The pixel along the horizontal axis of the document that you want displayed in the upper left.</param>
+        /// <param name="yCoord">The pixel along the vertical axis of the document that you want displayed in the upper left.</param>
+        public void ScrollTo(int xCoord, int yCoord) => JSRef!.CallVoid("scrollTo", xCoord, yCoord);
         /// <summary>
         /// The window.requestIdleCallback() method queues a function to be called during a browser's idle periods. This enables developers to perform background and low priority work on the main event loop, without impacting latency-critical events such as animation and input response. Functions are generally called in first-in-first-out order; however, callbacks which have a timeout specified may be called out-of-order if necessary in order to run them before the timeout elapses.
         /// </summary>
@@ -288,6 +385,48 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public MediaQueryList MatchMedia(string mode) => JSRef!.Call<MediaQueryList>("matchMedia", mode);
         /// <summary>
+        /// The moveBy() method of the Window interface moves the current window by a specified amount.<br/>
+        /// Note: This function moves the window relative to its current location. In contrast, window.moveTo() moves the window to an absolute location.
+        /// </summary>
+        /// <param name="deltaX">The amount of pixels to move the window horizontally. Positive values are to the right, while negative values are to the left.</param>
+        /// <param name="deltaY">The amount of pixels to move the window vertically. Positive values are down, while negative values are up.</param>
+        public void MoveBy(int deltaX, int deltaY) => JSRef!.CallVoid("moveBy", deltaX, deltaY);
+        /// <summary>
+        /// The moveTo() method of the Window interface moves the current window to the specified coordinates.<br/>
+        /// Note: This function moves the window to an absolute location. In contrast, window.moveBy() moves the window relative to its current location.
+        /// </summary>
+        /// <param name="x">The horizontal coordinate to be moved to.</param>
+        /// <param name="y">The vertical coordinate to be moved to.</param>
+        public void MoveTo(int x, int y) => JSRef!.CallVoid("moveTo", x, y);
+        /// <summary>
+        /// The open() method of the Window interface loads a specified resource into a new or existing browsing context (that is, a tab, a window, or an iframe) under a specified name.
+        /// </summary>
+        /// <param name="url">A string indicating the URL or path of the resource to be loaded. If an empty string ("") is specified or this parameter is omitted, a blank page is opened into the targeted browsing context.</param>
+        /// <param name="target">A string, without whitespace, specifying the name of the browsing context the resource is being loaded into. If the name doesn't identify an existing context, a new context is created and given the specified name. The special target keywords, _self, _blank (default), _parent, _top, and _unfencedTop can also be used. _unfencedTop is only relevant to fenced frames.</param>
+        /// <param name="windowFeatures">
+        /// A string containing a comma-separated list of window features in the form name=value. Boolean values can be set to true using one of: name, name=yes, name=true, or name=n where n is any non-zero integer. These features include options such as the window's default size and position, whether or not to open a minimal popup window, and so forth.
+        /// </param>
+        /// <returns>If the browser successfully opens the new browsing context, a WindowProxy object is returned. The returned reference can be used to access properties and methods of the new context as long as it complies with the same-origin policy security requirements.</returns>
+        public Window? Open(string url, string target, string windowFeatures) => JSRef!.Call<Window?>("open", url, target, windowFeatures);
+        /// <summary>
+        /// The open() method of the Window interface loads a specified resource into a new or existing browsing context (that is, a tab, a window, or an iframe) under a specified name.
+        /// </summary>
+        /// <param name="url">A string indicating the URL or path of the resource to be loaded. If an empty string ("") is specified or this parameter is omitted, a blank page is opened into the targeted browsing context.</param>
+        /// <param name="target">A string, without whitespace, specifying the name of the browsing context the resource is being loaded into. If the name doesn't identify an existing context, a new context is created and given the specified name. The special target keywords, _self, _blank (default), _parent, _top, and _unfencedTop can also be used. _unfencedTop is only relevant to fenced frames.</param>
+        /// <returns>If the browser successfully opens the new browsing context, a WindowProxy object is returned. The returned reference can be used to access properties and methods of the new context as long as it complies with the same-origin policy security requirements.</returns>
+        public Window? Open(string url, string target) => JSRef!.Call<Window?>("open", url, target);
+        /// <summary>
+        /// The open() method of the Window interface loads a specified resource into a new or existing browsing context (that is, a tab, a window, or an iframe) under a specified name.
+        /// </summary>
+        /// <param name="url">A string indicating the URL or path of the resource to be loaded. If an empty string ("") is specified or this parameter is omitted, a blank page is opened into the targeted browsing context.</param>
+        /// <returns>If the browser successfully opens the new browsing context, a WindowProxy object is returned. The returned reference can be used to access properties and methods of the new context as long as it complies with the same-origin policy security requirements.</returns>
+        public Window? Open(string url) => JSRef!.Call<Window?>("open", url);
+        /// <summary>
+        /// The open() method of the Window interface loads a specified resource into a new or existing browsing context (that is, a tab, a window, or an iframe) under a specified name.
+        /// </summary>
+        /// <returns>If the browser successfully opens the new browsing context, a WindowProxy object is returned. The returned reference can be used to access properties and methods of the new context as long as it complies with the same-origin policy security requirements.</returns>
+        public Window? Open() => JSRef!.Call<Window?>("open");
+        /// <summary>
         /// The window.postMessage() method safely enables cross-origin communication between Window objects; e.g., between a page and a pop-up that it spawned, or between a page and an iframe embedded within it.
         /// </summary>
         /// <param name="message">Data to be dispatched to the other window. The data is serialized using the structured clone algorithm. This means you can pass a broad variety of data objects safely to the destination window without having to serialize them yourself.</param>
@@ -305,6 +444,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="message">Data to be dispatched to the other window. The data is serialized using the structured clone algorithm. This means you can pass a broad variety of data objects safely to the destination window without having to serialize them yourself.</param>
         public void PostMessage(object message) => JSRef!.CallVoid("postMessage", message);
+        /// <summary>
+        /// Opens the print dialog to print the current document.
+        /// </summary>
+        public void Print() => JSRef!.CallVoid("print");
         /// <summary>
         /// window.prompt() instructs the browser to display a dialog with an optional message prompting the user to input some text, and to wait until the user either submits the text or cancels the dialog.
         /// </summary>
