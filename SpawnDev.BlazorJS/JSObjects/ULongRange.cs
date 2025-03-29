@@ -19,5 +19,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("min")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public uint? Min { get; set; }
+        /// <summary>
+        /// The step value for this property.
+        /// </summary>
+        [JsonPropertyName("step")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public uint? Step { get; set; }
     }
 }

@@ -151,5 +151,8 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? Sharpness { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public EnumString<WhiteBalanceModeEnum>? WhiteBalanceMode { get; set; }
     }
 }

@@ -9,6 +9,26 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class MediaTrackConstraints
     {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public EnumString<WhiteBalanceModeEnum>[]? WhiteBalanceMode { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ConstrainDouble? Sharpness { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ConstrainDouble? Saturation { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ConstrainDouble? ExposureCompensation { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ConstrainDouble? Contrast { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ConstrainDouble? ColorTemperature { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ConstrainDouble? Brightness { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ConstrainULong? Width { get; set; }
