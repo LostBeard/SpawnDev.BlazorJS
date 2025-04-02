@@ -44,8 +44,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Checks if a given Request is a key in any of the Cache objects that the CacheStorage object tracks, and returns a Promise that resolves to that match.
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task<Response?> Match(Request request, CacheMatchOptions options) => JSRef!.CallAsync<Response?>("match", request, options);
+        /// <summary>
+        /// Checks if a given Request is a key in any of the Cache objects that the CacheStorage object tracks, and returns a Promise that resolves to that match.
+        /// </summary>
+        /// <param name="request"></param>
         /// <returns></returns>
         public Task<Response?> Match(string request) => JSRef!.CallAsync<Response?>("match", request);
+        /// <summary>
+        /// Checks if a given Request is a key in any of the Cache objects that the CacheStorage object tracks, and returns a Promise that resolves to that match.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Task<Response?> Match(Request request) => JSRef!.CallAsync<Response?>("match", request);
         /// <summary>
         /// Returns a Promise that resolves to the Cache object matching the cacheName (a new cache is created if it doesn't already exist.)
         /// </summary>
