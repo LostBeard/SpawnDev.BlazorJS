@@ -20,6 +20,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public T GetData<T>() => JSRef!.Get<T>("data");
         /// <summary>
+        /// Returns the data as a JSObject, whcih can represent any data type.
+        /// </summary>
+        public JSObject? Data => JSRef!.Get<JSObject?>("data");
+        /// <summary>
         /// Returns the origin of the Client that sent the message.
         /// </summary>
         public string Origin => JSRef!.Get<string>("origin");
