@@ -31,7 +31,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<Array<Client>> MatchAll(ClientsMatchAllOptions options) => JSRef!.CallAsync<Array<Client>>("matchAll", options);
         /// <summary>
-        /// Opens a new browser window for a given URL and returns a Promise for the new WindowClient.
+        /// The openWindow() method of the Clients interface creates a new top level browsing context and loads a given URL. If the calling script doesn't have permission to show popups, openWindow() will throw an InvalidAccessError.<br/>
+        /// In Firefox, the method is allowed to show popups only when called as the result of a notification click event.<br/>
+        /// In Chrome for Android, the method may instead open the URL in an existing browsing context provided by a standalone web app previously added to the user's home screen. As of recently, this also works on Chrome for Windows.
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
