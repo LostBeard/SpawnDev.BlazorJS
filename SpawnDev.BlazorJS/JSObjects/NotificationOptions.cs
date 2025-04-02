@@ -2,13 +2,39 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// Notification direction
+    /// </summary>
+    public enum NotificationDirection
+    {
+        /// <summary>
+        /// Auto
+        /// </summary>
+        [JsonPropertyName("auto")]
+        Auto,
+        /// <summary>
+        /// Left to right
+        /// </summary>
+        [JsonPropertyName("ltr")]
+        LeftToRight,
+        /// <summary>
+        /// Right to left
+        /// </summary>
+        [JsonPropertyName("rtl")]
+        RightToLeft,
+    }
+    /// <summary>
+    /// Notification creation options<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification#options<br/>
+    /// https://www.w3.org/TR/2015/REC-notifications-20151022/#api
+    /// </summary>
     public class NotificationOptions
     {
         /// <summary>
         /// The direction in which to display the notification. It defaults to auto, which just adopts the browser's language setting behavior, but you can override that behavior by setting values of ltr and rtl (although most browsers seem to ignore these settings.)
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? Dir { get; set; } = null;
+        public EnumString<NotificationDirection>? Dir { get; set; } = null;
         /// <summary>
         /// The notification's language, as specified using a string representing a language tag according to RFC 5646: Tags for Identifying Languages (also known as BCP 47). See the Sitepoint ISO 2 letter language codes page for a simple reference.
         /// </summary>
@@ -67,12 +93,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Appropriate responses are built using event.action within the notificationclick event.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<object>? Actions { get; set; } = null;
+        public List<NotificationAction>? Actions { get; set; } = null;
         /// <summary>
         /// A boolean value specifying whether the notification is silent (no sounds or vibrations issued), regardless of the device settings. The default is false, which means it won't be silent.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Silent { get; set; } = null;
-
+        /// <summary>
+        /// A timestamp, given as Unix time in milliseconds, representing the time associated with the notification. This could be in the past when a notification is used for a message that couldn't immediately be delivered because the device was offline, or in the future for a meeting that is about to start.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public EpochDateTime? Timestamp { get; set; } = null;
     }
 }
