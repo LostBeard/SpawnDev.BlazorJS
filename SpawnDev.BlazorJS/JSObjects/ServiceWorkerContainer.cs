@@ -30,7 +30,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns all ServiceWorkerRegistration objects associated with a ServiceWorkerContainer in an array. The method returns a Promise that resolves to an array of ServiceWorkerRegistration.
         /// </summary>
         /// <returns></returns>
-        public Task<ServiceWorkerRegistration> GetRegistration() => JSRef!.CallAsync<ServiceWorkerRegistration>("getRegistration");
+        public Task<ServiceWorkerRegistration[]> GetRegistrations() => JSRef!.CallAsync<ServiceWorkerRegistration[]>("getRegistrations");
+        /// <summary>
+        /// Gets a ServiceWorkerRegistration object whose scope matches the provided document URL. The method returns a Promise that resolves to a ServiceWorkerRegistration or undefined.
+        /// </summary>
+        /// <returns></returns>
+        public Task<ServiceWorkerRegistration?> GetRegistration() => JSRef!.CallAsync<ServiceWorkerRegistration?>("getRegistration");
+        /// <summary>
+        /// Explicitly starts the flow of messages being dispatched from a service worker to pages under its control (e.g. sent via Client.postMessage()). This can be used to react to sent messages earlier, even before that page's content has finished loading.
+        /// </summary>
+        public void StartMessages() => JSRef!.CallVoid("startMessages");
+        /// <summary>
+        /// Gets a ServiceWorkerRegistration object whose scope matches the provided document URL. The method returns a Promise that resolves to a ServiceWorkerRegistration or undefined.
+        /// </summary>
+        /// <param name="clientUrl"></param>
+        /// <returns></returns>
+        public Task<ServiceWorkerRegistration?> GetRegistration(string clientUrl) => JSRef!.CallAsync<ServiceWorkerRegistration?>("getRegistration", clientUrl);
         /// <summary>
         /// Creates or updates a ServiceWorkerRegistration for the given scriptURL.
         /// </summary>
@@ -48,6 +63,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Occurs when incoming messages are received by the ServiceWorkerContainer object (e.g. via a MessagePort.postMessage() call).
         /// </summary>
         public ActionEvent<MessageEvent> OnMessage { get => new ActionEvent<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when incoming messages can not deserialized by the ServiceWorkerContainer object (e.g. via a MessagePort.postMessage() call).
+        /// </summary>
+        public ActionEvent<MessageEvent> OnMessageError { get => new ActionEvent<MessageEvent>("messageerror", AddEventListener, RemoveEventListener); set { } }
         #endregion
     }
 }
