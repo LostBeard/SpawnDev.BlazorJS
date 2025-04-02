@@ -64,6 +64,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string? Body => JSRef!.Get<string?>("body");
         /// <summary>
+        /// Returns a structured clone of the notification's data.
+        /// </summary>
+        public JSObject? Data => JSRef!.Get<JSObject?>("data");
+        /// <summary>
+        /// Returns a structured clone of the notification's data as type T 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T DataAs<T>() => JSRef!.Get<T>("data");
+        /// <summary>
         /// The text direction of the notification as specified in the constructor's options parameter.
         /// </summary>
         public EnumString<NotificationDirection> Dir => JSRef!.Get<EnumString<NotificationDirection>>("dir");
