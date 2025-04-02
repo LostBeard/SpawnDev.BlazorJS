@@ -9,10 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class ServiceWorkerRegistration : EventTarget
     {
         #region Constructors
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
+        /// <inheritdoc/>
         public ServiceWorkerRegistration(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
         #region Properties
@@ -20,6 +17,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a service worker whose state is activating or activated. This is initially set to null. An active worker will control a Client if the client's URL falls within the scope of the registration (the scope option set when ServiceWorkerContainer.register is first called.)
         /// </summary>
         public ServiceWorker? Active => JSRef!.Get<ServiceWorker?>("active");
+        /// <summary>
+        /// Returns a reference to a BackgroundFetchManager object, which manages background fetch operations.
+        /// </summary>
+        public BackgroundFetchManager? BackgroundFetch => JSRef!.Get<BackgroundFetchManager?>("backgroundFetch");
+        /// <summary>
+        /// Returns the instance of NavigationPreloadManager associated with the current service worker registration.
+        /// </summary>
+        public NavigationPreloadManager NavigationPreload => JSRef!.Get<NavigationPreloadManager>("vavigationPreload");
         /// <summary>
         /// Returns a service worker whose state is installing. This is initially set to null.
         /// </summary>
@@ -44,6 +49,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a string indicating what is the cache strategy to use when updating the service worker scripts. It can be one of the following: imports, all, or none.
         /// </summary>
         public string UpdateViaCache => JSRef!.Get<string>("updateViaCache");
+        /// <summary>
+        /// Returns a string representing a URL that defines a service worker's registration scope; that is, the range of URLs the service worker can control.
+        /// </summary>
+        public string Scope => JSRef!.Get<string>("scope");
         #endregion
         #region Methods
         /// <summary>
