@@ -27,21 +27,29 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Notification(string title, NotificationOptions options) : base(JS.New(nameof(Notification), title, options)) { }
         #region Static Methods
         /// <summary>
-        /// A string representing the current permission to display notifications. Possible values are:
-        /// <b>denied</b>: the user refuses to have notifications displayed.
-        /// <b>granted</b>: the user accepts having notifications displayed.
-        /// <b>default</b>: the user choice is unknown and therefore the browser will act as if the value were denied.
+        /// A string representing the current permission to display notifications. Possible values are:<br/>
+        /// <b>denied</b>: the user refuses to have notifications displayed.<br/>
+        /// <b>granted</b>: the user accepts having notifications displayed.<br/>
+        /// <b>default</b>: the user choice is unknown and therefore the browser will act as if the value were denied.<br/>
+        /// <b>null</b>: unsupported (non-spec)
         /// </summary>
-        public static string Permission => JS.Get<string>("Notification.permission");
+        public static string? Permission => JS.Get<string?>("Notification?.permission");
+        /// <summary>
+        /// The maximum number of actions supported by the device and the User Agent<br/>
+        /// or null if Notification is unsupported. (non-spec)
+        /// </summary>
+        public static int? MaxActions => JS.Get<int?>("Notification?.maxActions");
         /// <summary>
         /// returns true is Notification is defined
         /// </summary>
-        public static bool IsSupported => !JS.IsUndefined("Notification");
+        public static bool IsSupported => _IsSupported ??= !JS.IsUndefined("Notification");
+        private static bool? _IsSupported = null;
         /// <summary>
-        /// Requests permission from the user to display notifications.
+        /// Requests permission from the user to display notifications.<br/>
+        /// Returns null if Notification is unsupported. (non-spec)
         /// </summary>
         /// <returns></returns>
-        public static Task<string> RequestPermission() => JS.CallAsync<string>("Notification.requestPermission");
+        public static Task<string?> RequestPermission() => !IsSupported ? Task.FromResult<string?>(null) : JS.CallAsync<string?>("Notification.requestPermission");
         #endregion
         /// <summary>
         /// The actions array of the notification as specified in the constructor's options parameter.

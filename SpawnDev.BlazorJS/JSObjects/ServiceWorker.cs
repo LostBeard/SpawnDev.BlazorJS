@@ -4,6 +4,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The ServiceWorker interface of the Service Worker API provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object.<br/>
+    /// The ServiceWorker object is not exposed to DedicatedWorkerGlobalScope and SharedWorkerGlobalScope.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker
     /// </summary>
     public class ServiceWorker : EventTarget
@@ -14,7 +15,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public ServiceWorker(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// Returns the state of the service worker. It returns one of the following values: parsed, installing, installed, activating, activated, or redundant.
+        /// Returns the state of the service worker. It returns one of the following values:<br/>
+        /// parsed<br/>
+        /// installing<br/>
+        /// installed<br/>
+        /// activating<br/>
+        /// activated<br/>
+        /// redundant<br/>
         /// </summary>
         public string State => JSRef!.Get<string>("state");
         /// <summary>
