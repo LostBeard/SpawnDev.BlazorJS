@@ -102,7 +102,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Programmatically closes a notification instance.
         /// </summary>
-        public void CLose() => JSRef!.CallVoid("close");
+        public void Close() => JSRef!.CallVoid("close");
         /// <summary>
         /// Fires when the user clicks the notification.
         /// </summary>
