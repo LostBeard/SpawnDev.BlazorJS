@@ -254,7 +254,6 @@ namespace SpawnDev.BlazorJS.Toolbox
             {
                 OnMediaDeviceFound?.Invoke(item);
             }
-            oldDeviceInfos.ToArray().DisposeAll();
             var changed = lostDevices.Count > 0 || foundDevices.Count > 0;
             if (changed)
             {
