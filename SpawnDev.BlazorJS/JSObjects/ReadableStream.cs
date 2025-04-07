@@ -1,4 +1,6 @@
 ﻿using Microsoft.JSInterop;
+using System.IO.Pipelines;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -43,5 +45,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public ReadableStreamDefaultReader GetReader() => JSRef!.Call<ReadableStreamDefaultReader>("getReader");
+        /// <summary>
+        /// The pipeTo() method of the ReadableStream interface pipes the current ReadableStream to a given WritableStream and returns a Promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.<br/>
+        /// Piping a stream will generally lock it for the duration of the pipe, preventing other readers from locking it.<br/>
+        /// </summary>
+        /// <param name="destination">A WritableStream that acts as the final destination for the ReadableStream.</param>
+        /// <returns>A Promise that resolves when the piping process has completed.</returns>
+        public Task PipeTo(WritableStream destination) => JSRef!.CallVoidAsync("pipeTo", destination);
+        /// <summary>
+        /// The pipeTo() method of the ReadableStream interface pipes the current ReadableStream to a given WritableStream and returns a Promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.<br/>
+        /// Piping a stream will generally lock it for the duration of the pipe, preventing other readers from locking it.<br/>
+        /// </summary>
+        /// <param name="destination">A WritableStream that acts as the final destination for the ReadableStream.</param>
+        /// <param name="options">PipeToOptions</param>
+        /// <returns>A Promise that resolves when the piping process has completed.</returns>
+        public Task PipeTo(WritableStream destination, PipeToOptions options) => JSRef!.CallVoidAsync("pipeTo", destination, options);
     }
 }
