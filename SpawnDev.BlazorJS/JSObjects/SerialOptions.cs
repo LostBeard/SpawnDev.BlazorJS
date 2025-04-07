@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using System.Text.Json.Serialization;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// Serial port open options
@@ -14,22 +16,27 @@
         /// <summary>
         /// An unsigned long integer indicating the size of the read and write buffers that are to be established. If not passed, defaults to 255.
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? BufferSize { get; set; }
         /// <summary>
         /// An integer value of 7 or 8 indicating the number of data bits per frame. If not passed, defaults to 8.
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? DataBits { get; set; }
         /// <summary>
         /// The flow control type, either "none" or "hardware". The default value is "none".
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public EnumString<FlowControlType>? FlowControl { get; set; }
         /// <summary>
         /// The parity mode, either "none", "even", or "odd". The default value is "none".
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public EnumString<ParityType>? Parity { get; set; }
         /// <summary>
         /// The number of stop bits at the end of a frame. Either 1 or 2.
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? StopBits { get; set; }
     }
 }
