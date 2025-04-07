@@ -48,7 +48,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task Open(SerialOptions options) => JSRef!.CallVoidAsync("open");
+        public Task Open(SerialOptions options) => JSRef!.CallVoidAsync("open", options);
         /// <summary>
         /// The setSignals() method of the SerialPort interface sets control signals on the port and returns a Promise that resolves when they are set.
         /// </summary>
