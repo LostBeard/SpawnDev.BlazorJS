@@ -64,7 +64,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Occurs when a push subscription has been invalidated, or is about to be invalidated (e.g. when a push service sets an expiration time).
         /// </summary>
-        public ActionEvent<Event> OnPushSubscriptionChange { get => new ActionEvent<Event>("pushsubscriptionchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PushSubscriptionChangeEvent> OnPushSubscriptionChange { get => new ActionEvent<PushSubscriptionChangeEvent>("pushsubscriptionchange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Triggered when a call to SyncManager.register is made from a service worker client page. The attempt to sync is made either immediately if the network is available or as soon as the network becomes available.
         /// </summary>
