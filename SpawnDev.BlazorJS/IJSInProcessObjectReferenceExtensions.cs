@@ -153,6 +153,14 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         public static Task<T> GetAsync<T>(this IJSInProcessObjectReference _ref, long key) => BlazorJSInterop.ObjectPropertyGet<Task<T>>(_ref, key);
         /// <summary>
+        /// Get an async property
+        /// </summary>
+        public static Task GetVoidAsync(this IJSInProcessObjectReference _ref, string key) => BlazorJSInterop.ObjectPropertyGet<Task>(_ref, key);
+        /// <summary>
+        /// Get an async property
+        /// </summary>
+        public static Task GetVoidAsync(this IJSInProcessObjectReference _ref, long key) => BlazorJSInterop.ObjectPropertyGet<Task>(_ref, key);
+        /// <summary>
         /// Call the target method
         /// </summary>
         public static T CallApply<T>(this IJSInProcessObjectReference _ref, string key, object?[]? args = null) => BlazorJSInterop.ObjectPropertyCall<T>(_ref, key, args);
