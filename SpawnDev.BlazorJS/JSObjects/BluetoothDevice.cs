@@ -32,15 +32,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task WatchAdvertisements(WatchAdvertisementsOptions? options = null) => options == null ? JSRef!.CallVoidAsync("watchAdvertisements") : JSRef!.CallVoidAsync("watchAdvertisements", options);
+        //public Task WatchAdvertisements(WatchAdvertisementsOptions? options = null) => options == null ? JSRef!.CallVoidAsync("watchAdvertisements") : JSRef!.CallVoidAsync("watchAdvertisements", options);
         /// <summary>
         /// 
         /// </summary>
-        public ActionEvent<GATTServerDisconnectedEvent> OnGATTServerDisconnected { get => new ActionEvent<GATTServerDisconnectedEvent>("gattserverdisconnected", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnGATTServerDisconnected { get => new ActionEvent<Event>("gattserverdisconnected", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// 
         /// https://googlechrome.github.io/samples/web-bluetooth/watch-advertisements.html
         /// </summary>
-        public ActionEvent<BluetoothAdvertisingEvent> OnAdvertisementReceived { get => new ActionEvent<BluetoothAdvertisingEvent>("advertisementreceived", AddEventListener, RemoveEventListener); set { } }
+        //public ActionEvent<BluetoothAdvertisingEvent> OnAdvertisementReceived { get => new ActionEvent<BluetoothAdvertisingEvent>("advertisementreceived", AddEventListener, RemoveEventListener); set { } }
     }
 }

@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the properties of this characteristic.
         /// </summary>
-        public JSObject Properties => JSRef!.Get<JSObject>("properties");
+        public BluetoothCharacteristicProperties Properties => JSRef!.Get<BluetoothCharacteristicProperties>("properties");
         /// <summary>
         /// The currently cached characteristic value. This value gets updated when the value of the characteristic is read or updated via a notification or indication.
         /// </summary>

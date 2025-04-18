@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Causes the script execution environment to connect to this.device.
         /// </summary>
         /// <returns></returns>
-        public Task<BluetoothDevice> Connect() => JSRef!.CallAsync<BluetoothDevice>("connect");
+        public Task<BluetoothRemoteGATTServer> Connect() => JSRef!.CallAsync<BluetoothRemoteGATTServer>("connect");
         /// <summary>
         /// Causes the script execution environment to disconnect from this.device.
         /// </summary>
