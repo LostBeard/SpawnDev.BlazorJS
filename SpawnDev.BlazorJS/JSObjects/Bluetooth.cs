@@ -1,10 +1,12 @@
 ﻿using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The Bluetooth interface of the Web Bluetooth API provides methods to query Bluetooth availability and request access to devices.<br/>
-    /// https://developer.mozilla.org/en-US/docs/Web/API/Bluetooth
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Bluetooth<br/>
+    /// https://webbluetoothcg.github.io/web-bluetooth/
     /// </summary>
     public class Bluetooth : EventTarget
     {
@@ -27,6 +29,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public Task<BluetoothDevice> RequestDevice() => JSRef!.CallAsync<BluetoothDevice>("requestDevice");
+        /// <summary>
+        /// Returns a Promise to a BluetoothDevice object with the specified options.
+        /// </summary>
+        /// <returns></returns>
+        public Task<BluetoothDevice> RequestDevice(BluetoothDeviceOptions options) => JSRef!.CallAsync<BluetoothDevice>("requestDevice", options);
         /// <summary>
         /// Returns a Promise that resolves to an array of BluetoothDevices this origin is allowed to access. Permission is obtained via previous calls to Bluetooth.requestDevice().
         /// </summary>
