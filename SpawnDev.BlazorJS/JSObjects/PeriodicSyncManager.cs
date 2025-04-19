@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="tag">The unique String descriptor for the specific background sync.</param>
         /// <returns></returns>
-        public Task Unregister(string tag) => JSRef!.CallVoidAsync("register", tag);
+        public Task Unregister(string tag) => JSRef!.CallVoidAsync("unregister", tag);
         /// <summary>
         /// The getTags() method of the PeriodicSyncManager interface returns a Promise that resolves with a list of String objects representing the tags that are currently registered for periodic syncing.
         /// </summary>
