@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The SyncManager interface of the Background Synchronization API provides an interface for registering and listing sync registrations.
         /// </summary>
-        /// <param name="tag"></param>
+        /// <param name="tag">An identifier for this synchronization event. This will be the value of the tag property of the SyncEvent that gets passed into the service worker's sync event handler.</param>
         /// <returns></returns>
         public Task Register(string tag) =>  JSRef!.CallVoidAsync("register", tag);
         /// <summary>
