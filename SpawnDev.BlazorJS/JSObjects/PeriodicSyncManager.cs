@@ -8,10 +8,27 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class PeriodicSyncManager : JSObject
     {
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
+        /// <inheritdoc/>
         public PeriodicSyncManager(IJSInProcessObjectReference _ref) : base(_ref) { }
+        #region Methods
+        /// <summary>
+        /// The register() method of the PeriodicSyncManager interface registers a periodic sync request with the browser with the specified tag and options. It returns a Promise that resolves when the registration completes.
+        /// </summary>
+        /// <param name="tag">A unique String identifier.</param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task Register(string tag, PeriodicSyncOptions? options = null) => options == null ? JSRef!.CallVoidAsync("register", tag) : JSRef!.CallVoidAsync("register", tag, options);
+        /// <summary>
+        /// The unregister() method of the PeriodicSyncManager interface unregisters the periodic sync request corresponding to the specified tag and returns a Promise that resolves when unregistration completes.
+        /// </summary>
+        /// <param name="tag">The unique String descriptor for the specific background sync.</param>
+        /// <returns></returns>
+        public Task Unregister(string tag) => JSRef!.CallVoidAsync("register", tag);
+        /// <summary>
+        /// The getTags() method of the PeriodicSyncManager interface returns a Promise that resolves with a list of String objects representing the tags that are currently registered for periodic syncing.
+        /// </summary>
+        /// <returns></returns>
+        public Task<string[]> GetTags() => JSRef!.CallAsync<string[]>("getTags");
+        #endregion
     }
 }
