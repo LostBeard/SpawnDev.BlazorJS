@@ -12,5 +12,9 @@
         /// 3 - TIMEOUT<br/>
         /// </summary>
         public ushort Code { get; set; }
+        /// <summary>
+        /// Returns a human-readable string describing the details of the error. Specifications note that this is primarily intended for debugging use and not to be shown directly in a user interface.
+        /// </summary>
+        public string? Message { get; set; }
     }
 }
