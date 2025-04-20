@@ -3,9 +3,9 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// GetCurrentPosition options
+    /// Geolocation options
     /// </summary>
-    public class GetCurrentPositionOptions
+    public class GeolocationOptions
     {
         /// <summary>
         /// A positive long value indicating the maximum age in milliseconds of a possible cached position that is acceptable to return. If set to 0, it means that the device cannot use a cached position and must attempt to retrieve the real current position. If set to Infinity the device must return a cached position regardless of its age. Default: 0
@@ -23,4 +23,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? EnableHighAccuracy { get; set; }
     }
+    /// <summary>
+    /// GetCurrentPosition options
+    /// </summary>
+    [Obsolete("Use GeolocationOptions instead")]
+    public class GetCurrentPositionOptions : GeolocationOptions { }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -22,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Removes the particular handler previously installed using watchPosition().
         /// </summary>
-        public void ClearWatch(int id) => JSRef!.CallVoid("clearWatch");
+        public void ClearWatch(int id) => JSRef!.CallVoid("clearWatch", id);
         /// <summary>
         /// Determines the device's current location and gives back a GeolocationPosition object with the data.
         /// </summary>
@@ -40,14 +41,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="success"></param>
         /// <param name="error"></param>
         /// <param name="options"></param>
-        public void GetCurrentPosition(ActionCallback<GeolocationPosition> success, ActionCallback<GeolocationPositionError> error, GetCurrentPositionOptions options) => JSRef!.CallVoid("getCurrentPosition", success, error, options);
+        public void GetCurrentPosition(ActionCallback<GeolocationPosition> success, ActionCallback<GeolocationPositionError> error, GeolocationOptions options) => JSRef!.CallVoid("getCurrentPosition", success, error, options);
         /// <summary>
         /// Determines the device's current location and gives back a GeolocationPosition object with the data.
         /// </summary>
         /// <param name="success"></param>
         /// <param name="error"></param>
         /// <param name="options"></param>
-        public void GetCurrentPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError>? error = null, GetCurrentPositionOptions? options = null)
+        public void GetCurrentPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError>? error = null, GeolocationOptions? options = null)
         {
             ActionCallback<GeolocationPositionError>? onError = null;
             ActionCallback<GeolocationPosition>? onSuccess = null;
@@ -84,7 +85,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public async Task<GeolocationPosition> GetCurrentPositionAsync(GetCurrentPositionOptions? options = null)
+        public async Task<GeolocationPosition> GetCurrentPositionAsync(GeolocationOptions? options = null)
         {
             var tcs = new TaskCompletionSource<GeolocationPosition>();
             ActionCallback<GeolocationPositionError>? onError = null;
@@ -137,10 +138,28 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="error"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public int WatchPosition(ActionCallback<GeolocationPosition> success, ActionCallback<GeolocationPositionError> error, GetCurrentPositionOptions options) => JSRef!.Call<int>("watchPosition", success, error, options);
-        #endregion
-
-        #region Events
+        public int WatchPosition(ActionCallback<GeolocationPosition> success, ActionCallback<GeolocationPositionError> error, GeolocationOptions options) => JSRef!.Call<int>("watchPosition", success, error, options);
+        /// <summary>
+        /// Start watching the device position
+        /// </summary>
+        /// <param name="success"></param>
+        /// <param name="error"></param>
+        /// <param name="options"></param>
+        /// <returns>A GeolocationWatchHandle that can be used to start and stop the watch.</returns>
+        public GeolocationWatchHandle WatchPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError>? error = null, GeolocationOptions? options = null)
+        {
+            var ret = new GeolocationWatchHandle(this.JSRefAs<Geolocation>(), success, error, options);
+            try
+            {
+                ret.Start();
+            }
+            catch
+            {
+                ret.Dispose();
+                throw;
+            }
+            return ret;
+        }
         #endregion
     }
 }
