@@ -42,6 +42,82 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         public void GetCurrentPosition(ActionCallback<GeolocationPosition> success, ActionCallback<GeolocationPositionError> error, GetCurrentPositionOptions options) => JSRef!.CallVoid("getCurrentPosition", success, error, options);
         /// <summary>
+        /// Determines the device's current location and gives back a GeolocationPosition object with the data.
+        /// </summary>
+        /// <param name="success"></param>
+        /// <param name="error"></param>
+        /// <param name="options"></param>
+        public void GetCurrentPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError>? error = null, GetCurrentPositionOptions? options = null)
+        {
+            ActionCallback<GeolocationPositionError>? onError = null;
+            ActionCallback<GeolocationPosition>? onSuccess = null;
+            onError = new ActionCallback<GeolocationPositionError>((err) =>
+            {
+                if (onSuccess != null && onError != null)
+                {
+                    onSuccess.Dispose();
+                    onError.Dispose();
+                    onSuccess = null;
+                    onError = null;
+                    error?.Invoke(err);
+                }
+            });
+            onSuccess = new ActionCallback<GeolocationPosition>((pos) =>
+            {
+                if (onSuccess != null && onError != null)
+                {
+                    onSuccess.Dispose();
+                    onError.Dispose();
+                    onSuccess = null;
+                    onError = null;
+                    success?.Invoke(pos);
+                }
+            });
+            if (options == null)
+                GetCurrentPosition(onSuccess, onError);
+            else
+                GetCurrentPosition(onSuccess, onError, options);
+        }
+        /// <summary>
+        /// Determines the device's current location and gives back a GeolocationPosition object with the data.<br/>
+        /// Throws an exception if the request fails.<br/>
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public async Task<GeolocationPosition> GetCurrentPositionAsync(GetCurrentPositionOptions? options = null)
+        {
+            var tcs = new TaskCompletionSource<GeolocationPosition>();
+            ActionCallback<GeolocationPositionError>? onError = null;
+            ActionCallback<GeolocationPosition>? onSuccess = null;
+            onError = new ActionCallback<GeolocationPositionError>((err) =>
+            {
+                if (onSuccess != null && onError != null)
+                {
+                    onSuccess.Dispose();
+                    onError.Dispose();
+                    onSuccess = null;
+                    onError = null;
+                    tcs.TrySetException(new Exception($"{err.Code} {err.Message}"));
+                }
+            });
+            onSuccess = new ActionCallback<GeolocationPosition>((pos) =>
+            {
+                if (onSuccess != null && onError != null)
+                {
+                    onSuccess.Dispose();
+                    onError.Dispose();
+                    onSuccess = null;
+                    onError = null;
+                    tcs.TrySetResult(pos);
+                }
+            });
+            if (options == null)
+                GetCurrentPosition(onSuccess, onError);
+            else
+                GetCurrentPosition(onSuccess, onError, options);
+            return await tcs.Task;
+        }
+        /// <summary>
         /// The Geolocation method watchPosition() method is used to register a handler function that will be called automatically each time the position of the device changes. You can also, optionally, specify an error handling callback function.
         /// </summary>
         /// <param name="success"></param>
