@@ -34,6 +34,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public CacheStorage Caches => JSRef!.Get<CacheStorage>("caches");
         /// <summary>
+        /// Returns a reference to the CookieStore object, or null if not supported.
+        /// </summary>
+        public CookieStore? CookieStore => JSRef!.Get<CookieStore?>("cookieStore");
+        /// <summary>
         /// The devicePixelRatio of Window interface returns the ratio of the resolution in physical pixels to the resolution in CSS pixels for the current display device.
         /// </summary>
         public double DevicePixelRatio { get { var tmp = JSRef!.Get<double>("devicePixelRatio"); return tmp > 0d ? tmp : 1d; } }

@@ -14,10 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Credential : JSObject
     {
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
+        /// <inheritdoc/>
         public Credential(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a string containing the credential's identifier. This might be any one of a GUID, username, or email address.
