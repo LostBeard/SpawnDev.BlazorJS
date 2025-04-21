@@ -34,6 +34,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public ServiceWorker? Waiting => JSRef!.Get<ServiceWorker?>("waiting");
         /// <summary>
+        /// Returns a payment app's PaymentManager instance, which is used to manage various payment app functionality.
+        /// </summary>
+        public PaymentManager? PaymentManager => JSRef!.Get<PaymentManager?>("paymentManager");
+        /// <summary>
         /// Returns a reference to the PushManager interface for managing push subscriptions including subscribing, getting an active subscription, and accessing push permission status.
         /// </summary>
         public PushManager? PushManager => JSRef!.Get<PushManager?>("pushManager");
