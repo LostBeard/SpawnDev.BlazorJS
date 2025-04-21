@@ -22,6 +22,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public BackgroundFetchManager? BackgroundFetch => JSRef!.Get<BackgroundFetchManager?>("backgroundFetch");
         /// <summary>
+        /// Returns a reference to the CookieStoreManager interface, which allows subscribe and unsubscribe to cookie change events.
+        /// </summary>
+        public CookieStoreManager? Cookies => JSRef!.Get<CookieStoreManager?>("cookies");
+        /// <summary>
         /// Returns the instance of NavigationPreloadManager associated with the current service worker registration.
         /// </summary>
         public NavigationPreloadManager NavigationPreload => JSRef!.Get<NavigationPreloadManager>("vavigationPreload");
