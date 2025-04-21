@@ -17,7 +17,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// 
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IEnumerable<BackgroundFetchIconInfo>? Icons { get; set; }
+        public IEnumerable<IconInfo>? Icons { get; set; }
         /// <summary>
         /// A number representing the estimated total download size, in bytes, for the fetch operation. This is used to show the user how big the download is and to show the user download progress.<br/>
         /// As soon as the total download size exceeds downloadTotal, then the fetch is aborted.
