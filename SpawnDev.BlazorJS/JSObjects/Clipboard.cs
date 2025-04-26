@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The Clipboard API provides the ability to respond to clipboard commands (cut, copy, and paste) as well as to asynchronously read from and write to the system clipboard.
+    /// The Clipboard API provides the ability to respond to clipboard commands (cut, copy, and paste) as well as to asynchronously read from and write to the system clipboard.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
     /// </summary>
     public class Clipboard : EventTarget
     {
@@ -27,7 +28,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task Write(object data) => JSRef!.CallAsync<string>("write", data);
+        public Task Write(IEnumerable<ClipboardItem> data) => JSRef!.CallAsync<string>("write", data);
         /// <summary>
         /// Writes text to the system clipboard, returning a Promise which is resolved once the text is fully copied into the clipboard.
         /// </summary>
