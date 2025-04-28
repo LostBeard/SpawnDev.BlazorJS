@@ -4,8 +4,7 @@ namespace SpawnDev.BlazorJS.Toolbox
 {
     /// <summary>
     /// Creates an asynchronously writable Stream from a writable FileSystemHandle<br/>
-    /// IMPORTANT: Only asynchornous writes will work, synchronous writes will throw an exception<br/>
-    /// Seeking is currently not enabled, but should be possible<br/>
+    /// IMPORTANT: Only asynchronous writes will work, synchronous writes will throw an exception<br/>
     /// </summary>
     public class FileSystemHandleWritableStream : Stream, IDisposable
     {
@@ -23,24 +22,22 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             var startSize = appendMode ? await fileHandle.GetSize() : 0;
             var fsStream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = appendMode });
-            var writer = fsStream.GetWriter();
-            var ret = new FileSystemHandleWritableStream(fileHandle, fsStream, writer, startSize);
+            var ret = new FileSystemHandleWritableStream(fileHandle, fsStream, startSize);
             return ret;
         }
         /// <summary>
         /// Private constructor. Used by the static Create method
         /// </summary>
-        private FileSystemHandleWritableStream(FileSystemFileHandle fileHandle, FileSystemWritableFileStream fsStream, WritableStreamDefaultWriter writer, long startSize)
+        private FileSystemHandleWritableStream(FileSystemFileHandle fileHandle, FileSystemWritableFileStream fsStream, long startSize)
         {
             FileHandle = fileHandle;
             FSStream = fsStream;
-            Writer = writer;
             StartSize = startSize;
             _Length = startSize;
             // currently under the assumption the the position starts at the end ofthe file
             // will test and adjust if needed
             _Position = startSize;
-            _PositionReal = _Position;
+            //_PositionReal = _Position;
         }
         /// <summary>
         /// The FileSystemFileHandle that this stream is writing to
@@ -49,11 +46,11 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <summary>
         /// The FileSystemWritableFileStream that this stream is writing to
         /// </summary>
-        FileSystemWritableFileStream FSStream { get; set; }
+        FileSystemWritableFileStream? FSStream { get; set; }
         /// <summary>
         /// The WritableStreamDefaultWriter that this stream is writing to
         /// </summary>
-        WritableStreamDefaultWriter Writer { get; set; }
+        WritableStreamDefaultWriter? Writer { get; set; }
         ///<inheritdoc/>
         public override bool CanRead => false;
         ///<inheritdoc/>
@@ -131,14 +128,30 @@ namespace SpawnDev.BlazorJS.Toolbox
         ///<inheritdoc/>
         public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
-            if (Writer == null) throw new Exception("Invalid state");
+            if (FSStream == null) throw new Exception("Invalid state");
             // seek if needed
             if (_PositionReal != Position)
             {
+                if (Writer != null)
+                {
+                    Writer.ReleaseLock();
+                    Writer.Dispose();
+                    Writer = null;
+                }
                 await FSStream.Seek((ulong)Position);
                 _PositionReal = Position;
             }
-            await Writer.Write(buffer);
+            Writer ??= FSStream.GetWriter();
+            if (offset != 0 || count != buffer.Length)
+            {
+                var tmp = new byte[count];
+                System.Array.Copy(buffer, offset, tmp, 0, count);
+                await Writer.Write(tmp);
+            }
+            else
+            {
+                await Writer.Write(buffer);
+            }
             _Position += count;
             _PositionReal = _Position;
             if (Position > Length)

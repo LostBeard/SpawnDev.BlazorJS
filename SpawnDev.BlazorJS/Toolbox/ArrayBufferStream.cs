@@ -7,10 +7,13 @@ namespace SpawnDev.BlazorJS.Toolbox
     /// </summary>
     public class ArrayBufferStream : Stream
     {
-        public bool ReadOnlyModeSet { get; set; } = false;
+        /// <summary>
+        /// If true, writes and calls to SetLength will throw an exception<br/> 
+        /// </summary>
+        public bool ReadOnly { get; set; } = false;
         public override bool CanRead => Source != null;
         public override bool CanSeek => Source != null;
-        public override bool CanWrite => Source != null && !ReadOnlyModeSet;
+        public override bool CanWrite => Source != null && !ReadOnly;
         public override bool CanTimeout => false;
         public override long Length => Source == null ? 0 : Source.ByteLength;
         protected long _Position = 0;
@@ -35,7 +38,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         }
         public void SetReadOnly()
         {
-            ReadOnlyModeSet = true;
+            ReadOnly = true;
         }
         public bool IsDisposed { get; private set; }
         protected override void Dispose(bool disposing)
@@ -110,7 +113,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public override void Write(byte[] buffer, int offset, int count)
         {
             if (Source == null) throw new ObjectDisposedException(nameof(Source));
-            if (ReadOnlyModeSet) throw new NotSupportedException("Stream is in read-only mode");
+            if (ReadOnly) throw new NotSupportedException("Stream is in read-only mode");
             if (offset != 0 || count != buffer.Length)
             {
                 var tmp = new byte[count];
@@ -127,7 +130,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public void Write(Uint8Array buffer, int offset, long count)
         {
             if (Source == null) throw new ObjectDisposedException(nameof(Source));
-            if (ReadOnlyModeSet) throw new NotSupportedException("Stream is in read-only mode");
+            if (ReadOnly) throw new NotSupportedException("Stream is in read-only mode");
             if (offset != 0 || count != buffer.Length)
             {
                 using var tmp = buffer.Slice(offset, count + offset);
@@ -142,7 +145,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         }
         public override void SetLength(long value)
         {
-            if (ReadOnlyModeSet) throw new NotSupportedException("Stream is in read-only mode");
+            if (ReadOnly) throw new NotSupportedException("Stream is in read-only mode");
             if (Length == value) return;
             if (Source == null)
             {
