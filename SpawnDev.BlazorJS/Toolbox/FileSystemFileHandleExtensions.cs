@@ -1,4 +1,5 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
+using System.IO;
 using System.Text.Json;
 
 namespace SpawnDev.BlazorJS.Toolbox
@@ -9,6 +10,17 @@ namespace SpawnDev.BlazorJS.Toolbox
     public static class FileSystemFileHandleExtensions
     {
         #region Write
+        /// <summary>
+        /// Asynchronously write a stream to the file
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static async Task Write(this FileSystemFileHandle _this, Stream stream)
+        {
+            using var handleStream = await FileSystemHandleWritableStream.Create(_this);
+            await stream.CopyToAsync(handleStream);
+        }
         /// <summary>
         /// Replace the contents of a file with an ArrayBuffer
         /// </summary>
@@ -126,6 +138,17 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// Append data to the end of the file
         /// </summary>
         /// <param name="_this"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static async Task Append(this FileSystemFileHandle _this, Stream stream)
+        {
+            using var handleStream = await FileSystemHandleWritableStream.Create(_this, true);
+            await stream.CopyToAsync(handleStream);
+        }
+        /// <summary>
+        /// Append data to the end of the file
+        /// </summary>
+        /// <param name="_this"></param>
         /// <param name="data"></param>
         /// <returns></returns>
         public static async Task Append(this FileSystemFileHandle _this, Blob data)
@@ -230,6 +253,17 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var file = await _this!.GetFile();
             using var ret = await file.ArrayBuffer();
             return ret.ReadBytes();
+        }
+        /// <summary>
+        /// Read a Stream from the file
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
+        public static async Task<ArrayBufferStream> ReadStream(this FileSystemFileHandle _this)
+        {
+            var arrayBuffer = await _this.ReadArrayBuffer();
+            var stream = new ArrayBufferStream(arrayBuffer);
+            return stream;
         }
         /// <summary>
         /// Read an ArrayBuffer from the file
