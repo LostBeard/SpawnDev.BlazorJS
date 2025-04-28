@@ -34,10 +34,9 @@ namespace SpawnDev.BlazorJS.Toolbox
             FSStream = fsStream;
             StartSize = startSize;
             _Length = startSize;
-            // currently under the assumption the the position starts at the end ofthe file
-            // will test and adjust if needed
+            // if appendMode, set the position to the end of the file
+            // the actual seek will be done during the next write
             _Position = startSize;
-            //_PositionReal = _Position;
         }
         /// <summary>
         /// The FileSystemFileHandle that this stream is writing to
@@ -54,7 +53,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         ///<inheritdoc/>
         public override bool CanRead => false;
         ///<inheritdoc/>
-        public override bool CanSeek => false;
+        public override bool CanSeek => true;
         ///<inheritdoc/>
         public override bool CanWrite => true;
         /// <summary>
