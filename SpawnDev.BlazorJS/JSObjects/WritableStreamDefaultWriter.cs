@@ -21,7 +21,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Allows you to write code that responds to an end to the streaming process. Returns a promise that fulfills if the stream becomes closed, or rejects if the stream errors or the writer's lock is released.
         /// </summary>
-        public bool Closed => JSRef!.Get<bool>("closed");
+        public Task Closed => JSRef!.GetVoidAsync("closed");
         /// <summary>
         /// Returns the desired size required to fill the stream's internal queue.
         /// </summary>
