@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public WorkerGlobalScope(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// 
+        /// The importScripts() method of the WorkerGlobalScope interface synchronously imports one or more scripts into the worker's scope.
         /// </summary>
         /// <param name="scripts"></param>
         public void ImportScripts(params string[] scripts) => JSRef!.CallApplyVoid("importScripts", scripts);
