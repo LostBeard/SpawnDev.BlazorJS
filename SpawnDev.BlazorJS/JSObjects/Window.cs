@@ -244,7 +244,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
+        public long RequestAnimationFrame(ActionCallback callback) => JSRef!.Call<long>("requestAnimationFrame", callback);
+        /// <summary>
+        /// The window.requestAnimationFrame() method tells the browser you wish to perform an animation. It requests the browser to call a user-supplied callback function before the next repaint.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
         public long RequestAnimationFrame(Action<double> callback) => JSRef!.Call<long>("requestAnimationFrame", Callback.CreateOne(callback));
+        /// <summary>
+        /// The window.requestAnimationFrame() method tells the browser you wish to perform an animation. It requests the browser to call a user-supplied callback function before the next repaint.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public long RequestAnimationFrame(Action callback) => JSRef!.Call<long>("requestAnimationFrame", Callback.CreateOne(callback));
         /// <summary>
         /// Enables you to cancel a callback previously scheduled with Window.requestAnimationFrame.
         /// </summary>
