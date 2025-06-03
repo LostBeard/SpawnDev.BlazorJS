@@ -3,6 +3,7 @@
         constructor() {
             this.callbacks = {};
             this.asyncCallbacks = {};
+            this.verbose = false; // set to true to enable verbose logging
         }
         // *************************************************
         // ************ Object Property Methods ************
@@ -419,7 +420,7 @@
                 if (callback) return callback;
                 callback = function fn() {
                     if (callback !== blazorJSInterop.callbacks[_callbackId]) {
-                        console.warn('Disposed callback called.');
+                        if (blazorJSInterop.verbose) console.warn('Disposed callback called.', _callbackId);
                         return;
                     }
                     var ret = null;
@@ -447,7 +448,7 @@
                 if (callback) return callback;
                 callback = function fn() {
                     if (callback !== blazorJSInterop.asyncCallbacks[_callbackId]) {
-                        console.warn('Disposed callback called.');
+                        if (blazorJSInterop.verbose) console.warn('Disposed async callback called.', _callbackId);
                         return;
                     }
                     var ret = null;
