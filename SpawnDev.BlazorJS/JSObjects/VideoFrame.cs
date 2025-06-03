@@ -62,11 +62,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an integer indicating the duration of the video in microseconds.
         /// </summary>
-        public int Duration => JSRef!.Get<int>("duration");
+        public long Duration => JSRef!.Get<long>("duration");
         /// <summary>
         /// Returns an integer indicating the timestamp of the video in microseconds.
         /// </summary>
-        public int Timestamp => JSRef!.Get<int>("timestamp");
+        public long Timestamp => JSRef!.Get<long>("timestamp");
         /// <summary>
         /// Returns a VideoColorSpace object.
         /// </summary>
