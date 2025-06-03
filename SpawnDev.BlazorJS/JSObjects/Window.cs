@@ -237,13 +237,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The createImageBitmap() method of the Window interface creates a bitmap from a given source, optionally cropped to contain only a portion of that source. It accepts a variety of different image sources, and returns a Promise which resolves to an ImageBitmap.
         /// </summary>
         /// <param name="image">An image source</param>
-        /// <param name="sx">The x coordinate of the reference point of the rectangle from which the ImageBitmap will be extracted.</param>
-        /// <param name="sy">The y coordinate of the reference point of the rectangle from which the ImageBitmap will be extracted.</param>
-        /// <param name="sw">The width of the rectangle from which the ImageBitmap will be extracted. This value can be negative.</param>
-        /// <param name="sh">The height of the rectangle from which the ImageBitmap will be extracted. This value can be negative.</param>
         /// <param name="options">An object that sets options for the image's extraction.</param>
         /// <returns>A Promise which resolves to an ImageBitmap object containing bitmap data from the given rectangle.</returns>
         public Task<ImageBitmap> CreateImageBitmap(Union<HTMLImageElement, SVGImageElement, HTMLVideoElement, HTMLCanvasElement, Blob, ImageData, OffscreenCanvas, VideoFrame> image, ImageBitmapOptions options) => JSRef!.CallAsync<ImageBitmap>("createImageBitmap", image, options);
+        /// <summary>
+        /// The createImageBitmap() method of the Window interface creates a bitmap from a given source, optionally cropped to contain only a portion of that source. It accepts a variety of different image sources, and returns a Promise which resolves to an ImageBitmap.
+        /// </summary>
+        /// <param name="image">An image source</param>
+        /// <returns>A Promise which resolves to an ImageBitmap object containing bitmap data from the given rectangle.</returns>
+        public Task<ImageBitmap> CreateImageBitmap(Union<HTMLImageElement, SVGImageElement, HTMLVideoElement, HTMLCanvasElement, Blob, ImageData, OffscreenCanvas, VideoFrame> image) => JSRef!.CallAsync<ImageBitmap>("createImageBitmap", image);
         /// <summary>
         /// The createImageBitmap() method of the Window interface creates a bitmap from a given source, optionally cropped to contain only a portion of that source. It accepts a variety of different image sources, and returns a Promise which resolves to an ImageBitmap.
         /// </summary>
@@ -252,7 +254,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="sy">The y coordinate of the reference point of the rectangle from which the ImageBitmap will be extracted.</param>
         /// <param name="sw">The width of the rectangle from which the ImageBitmap will be extracted. This value can be negative.</param>
         /// <param name="sh">The height of the rectangle from which the ImageBitmap will be extracted. This value can be negative.</param>
-        /// <param name="options">An object that sets options for the image's extraction.</param>
         /// <returns>A Promise which resolves to an ImageBitmap object containing bitmap data from the given rectangle.</returns>
         public Task<ImageBitmap> CreateImageBitmap(Union<HTMLImageElement, SVGImageElement, HTMLVideoElement, HTMLCanvasElement, Blob, ImageData, OffscreenCanvas, VideoFrame> image, int sx, int sy, int sw, int sh) => JSRef!.CallAsync<ImageBitmap>("createImageBitmap", image, sx, sy, sw, sh);
         /// <summary>
