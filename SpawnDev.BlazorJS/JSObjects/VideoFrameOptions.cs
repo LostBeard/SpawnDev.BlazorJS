@@ -11,11 +11,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An integer representing the duration of the frame in microseconds.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public double? Duration { get; set; }
+        public long? Duration { get; set; }
         /// <summary>
         /// An integer representing the timestamp of the frame in microseconds.
         /// </summary>
-        public double Timestamp { get; set; }
+        public long Timestamp { get; set; }
 
         /// <summary>
         /// A string, describing how the user agent should behave when dealing with alpha channels. The default value is "keep".<br/>
