@@ -23,28 +23,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The TransformStream() constructor creates a new TransformStream object which represents a pair of streams: a WritableStream representing the writable side, and a ReadableStream representing the readable side.
         /// </summary>
-        public TransformStream(TransformerAsync transformer) : base(JS.New(nameof(TransformStream), transformer)) { }
+        public TransformStream(TransformStreamCallbacks transformer) : base(JS.New(nameof(TransformStream), transformer)) { }
         /// <summary>
         /// The TransformStream() constructor creates a new TransformStream object which represents a pair of streams: a WritableStream representing the writable side, and a ReadableStream representing the readable side.
         /// </summary>
-        public TransformStream(TransformerSync transformer) : base(JS.New(nameof(TransformStream), transformer)) { }
+        public TransformStream(TransformStreamCallbacks transformer, QueueingStrategy writableStrategy) : base(JS.New(nameof(TransformStream), transformer, writableStrategy)) { }
         /// <summary>
         /// The TransformStream() constructor creates a new TransformStream object which represents a pair of streams: a WritableStream representing the writable side, and a ReadableStream representing the readable side.
         /// </summary>
-        public TransformStream(TransformerAsync transformer, QueueingStrategy writableStrategy) : base(JS.New(nameof(TransformStream), transformer, writableStrategy)) { }
-        /// <summary>
-        /// The TransformStream() constructor creates a new TransformStream object which represents a pair of streams: a WritableStream representing the writable side, and a ReadableStream representing the readable side.
-        /// </summary>
-        public TransformStream(TransformerSync transformer, QueueingStrategy writableStrategy) : base(JS.New(nameof(TransformStream), transformer, writableStrategy)) { }
-        /// <summary>
-        /// The TransformStream() constructor creates a new TransformStream object which represents a pair of streams: a WritableStream representing the writable side, and a ReadableStream representing the readable side.
-        /// </summary>
-        public TransformStream(TransformerAsync transformer, QueueingStrategy writableStrategy, QueueingStrategy readableStrategy) : base(JS.New(nameof(TransformStream), transformer, writableStrategy, readableStrategy)) { }
-        /// <summary>
-        /// The TransformStream() constructor creates a new TransformStream object which represents a pair of streams: a WritableStream representing the writable side, and a ReadableStream representing the readable side.
-        /// </summary>
-        public TransformStream(TransformerSync transformer, QueueingStrategy writableStrategy, QueueingStrategy readableStrategy) : base(JS.New(nameof(TransformStream), transformer, writableStrategy, readableStrategy)) { }
-        /// <summary>
+        public TransformStream(TransformStreamCallbacks transformer, QueueingStrategy writableStrategy, QueueingStrategy readableStrategy) : base(JS.New(nameof(TransformStream), transformer, writableStrategy, readableStrategy)) { }
+       /// <summary>
         /// The readable end of a TransformStream.
         /// </summary>
         public ReadableStream Readable => JSRef!.Get<ReadableStream>("readable");
