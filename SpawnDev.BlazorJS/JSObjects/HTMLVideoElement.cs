@@ -56,6 +56,26 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="callback"></param>
         public void RequestVideoFrameCallback(ActionCallback<double> callback) => JSRef!.CallVoid("requestVideoFrameCallback", callback);
         /// <summary>
+        /// The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources.
+        /// </summary>
+        /// <param name="callback"></param>
+        public void RequestVideoFrameCallback(ActionCallback<double, VideoFrameMetadata> callback) => JSRef!.CallVoid("requestVideoFrameCallback", callback);
+        /// <summary>
+        /// The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources.
+        /// </summary>
+        /// <param name="callback"></param>
+        public void RequestVideoFrameCallback(Action callback) => RequestVideoFrameCallback(Callback.CreateOne(callback));
+        /// <summary>
+        /// The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources.
+        /// </summary>
+        /// <param name="callback"></param>
+        public void RequestVideoFrameCallback(Action<double> callback) => RequestVideoFrameCallback(Callback.CreateOne(callback));
+        /// <summary>
+        /// The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources.
+        /// </summary>
+        /// <param name="callback"></param>
+        public void RequestVideoFrameCallback(Action<double, VideoFrameMetadata> callback) => RequestVideoFrameCallback(Callback.CreateOne(callback));
+        /// <summary>
         /// This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience regarding what content is loaded before the video is played. It may have one of the following values:<br/>
         /// none: Indicates that the video should not be preloaded.<br/>
         /// metadata: Indicates that only video metadata (e.g. length) is fetched.<br/>
