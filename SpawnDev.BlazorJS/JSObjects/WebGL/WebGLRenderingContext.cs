@@ -15,7 +15,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public WebGLRenderingContext(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
-        /// Returns the canvas element that the drawing context is bound to.
+        /// Returns the canvas element that the drawing context is bound to.<br/>
+        /// This may be an HTMLCanvasElement or an OffscreenCanvas, depending on how the context was created.
         /// </summary>
         public HTMLCanvasElement Canvas => JSRef!.Get<HTMLCanvasElement>("canvas");
         /// <summary>
@@ -1601,6 +1602,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="format"></param>
         /// <param name="type"></param>
         /// <param name="source"></param>
+        public void TexImage2D(int target, int level, int internalformat, int format, int type, OffscreenCanvas source) => JSRef!.CallVoid("texImage2D", target, level, internalformat, format, type, source);
+        /// <summary>
+        /// The WebGLRenderingContext.texImage2D() method of the WebGL API specifies a two-dimensional texture image.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="level"></param>
+        /// <param name="internalformat"></param>
+        /// <param name="format"></param>
+        /// <param name="type"></param>
+        /// <param name="source"></param>
         public void TexImage2D(int target, int level, int internalformat, int format, int type, HTMLVideoElement source) => JSRef!.CallVoid("texImage2D", target, level, internalformat, format, type, source);
         /// <summary>
         /// The WebGLRenderingContext.texParameter[fi]() methods of the WebGL API set texture parameters.
@@ -1725,6 +1736,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="type"></param>
         /// <param name="source"></param>
         public void TexSubImage2D(int target, int level, int xoffset, int yoffset, int format, int type, HTMLCanvasElement source) => JSRef!.CallVoid("texSubImage2D", target, level, xoffset, yoffset, format, type, source);
+        /// <summary>
+        /// The WebGLRenderingContext.texSubImage2D() method of the WebGL API specifies a sub-rectangle of the current texture.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="level"></param>
+        /// <param name="xoffset"></param>
+        /// <param name="yoffset"></param>
+        /// <param name="format"></param>
+        /// <param name="type"></param>
+        /// <param name="source"></param>
+        public void TexSubImage2D(int target, int level, int xoffset, int yoffset, int format, int type, OffscreenCanvas source) => JSRef!.CallVoid("texSubImage2D", target, level, xoffset, yoffset, format, type, source);
         /// <summary>
         /// The WebGLRenderingContext.texSubImage2D() method of the WebGL API specifies a sub-rectangle of the current texture.
         /// </summary>
