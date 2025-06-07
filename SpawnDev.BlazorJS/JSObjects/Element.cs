@@ -5,7 +5,8 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// Element is the most general base class from which all element objects (i.e. objects that represent elements) in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element.<br/>
-    /// https://developer.mozilla.org/en-US/docs/Web/API/Element
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Element<br/>
+    /// https://docs.w3cub.com/dom/element
     /// </summary>
     public class Element : Node
     {
@@ -130,10 +131,17 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Properties
         /// <summary>
-        /// The Element.shadowRoot read-only property represents the shadow root hosted by the element.<br/>
-        /// Use Element.attachShadow() to add a shadow root to an existing element.
+        /// Returns a HTMLSlotElement representing the &lt;slot> the node is inserted in.
         /// </summary>
-        public ShadowRoot? ShadowRoot => JSRef!.Get<ShadowRoot?>("shadowRoot");
+        public HTMLSlotElement? AssignedSlot { get => JSRef!.Get<HTMLSlotElement?>("assignedSlot"); set => JSRef!.Set("assignedSlot", value); }
+        /// <summary>
+        /// Returns the number of child elements of this element.
+        /// </summary>
+        public int ChildElementCount => JSRef!.Get<int>("childElementCount");
+        /// <summary>
+        /// Returns the child elements of this element.
+        /// </summary>
+        public HTMLCollection Children => JSRef!.Get<HTMLCollection>("children");
         /// <summary>
         /// Returns a DOMTokenList containing the list of class attributes.
         /// </summary>
@@ -147,33 +155,90 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string[] ClassNames => ClassName.Split(' ').ToArray();
         /// <summary>
+        /// Returns a number representing the inner height of the element.<br/>
+        /// This property will round the value to an integer. If you need a fractional value, use element.getBoundingClientRect().
+        /// </summary>
+        public int ClientHeight => JSRef!.Get<int>("clientHeight");
+        /// <summary>
+        /// Returns a number representing the inner width of the element.<br/>
+        /// This property will round the value to an integer. If you need a fractional value, use element.getBoundingClientRect().
+        /// </summary>
+        public int ClientWidth => JSRef!.Get<int>("clientWidth");
+        /// <summary>
+        /// Returns a number representing the width of the top border of the element.<br/>
+        /// This property will round the value to an integer. If you need a fractional value, use element.getBoundingClientRect().
+        /// </summary>
+        public int ClientTop => JSRef!.Get<int>("clientTop");
+        /// <summary>
+        /// Returns a number representing the width of the left border of the element.<br/>
+        /// This property will round the value to an integer. If you need a fractional value, use element.getBoundingClientRect().
+        /// </summary>
+        public int ClientLeft => JSRef!.Get<int>("clientLeft");
+        /// <summary>
+        /// A number indicating the effective zoom size of the element, or 1.0 if the element is not rendered.
+        /// </summary>
+        public float CurrentCSSZoom => JSRef!.Get<float>("currentCSSZoom");
+        /// <summary>
+        /// A string reflecting the elementtiming attribute which marks an element for observation in the PerformanceElementTiming API.
+        /// </summary>
+        public string? ElementTiming { get => JSRef!.Get<string?>("elementTiming"); set => JSRef!.Set("elementTiming", value); }
+        /// <summary>
+        /// Returns the first child element of this element.
+        /// </summary>
+        public Element? FirstElementChild => JSRef!.Get<Element?>("firstElementChild");
+        /// <summary>
         /// The id property of the Element interface represents the element's identifier, reflecting the id global attribute.
         /// </summary>
-        public string Id { get => JSRef!.Get<string>("id"); set => JSRef!.Set("id", value); }
+        public string? Id { get => JSRef!.Get<string?>("id"); set => JSRef!.Set("id", value); }
+        /// <summary>
+        /// A string representing the markup of the element's content.
+        /// </summary>
+        public string InnerHTML { get => JSRef!.Get<string>("innerHTML"); set => JSRef!.Set("innerHTML", value); }
+        /// <summary>
+        /// Returns the last child element of this element.
+        /// </summary>
+        public Element? LastElementChild => JSRef!.Get<Element?>("lastElementChild");
+        /// <summary>
+        /// A string representing the local part of the qualified name of the element.
+        /// </summary>
+        public string? LocalName => JSRef!.Get<string?>("localName");
+        /// <summary>
+        /// The namespace URI of the element, or null if it is no namespace.
+        /// </summary>
+        public string? NamespaceURI => JSRef!.Get<string?>("namespaceURI");
+        /// <summary>
+        /// An Element, the element immediately following the given one in the tree, or null if there's no sibling node.
+        /// </summary>
+        public Element? NextElementSibling => JSRef!.Get<Element?>("nextElementSibling");
+        /// <summary>
+        /// A string representing the markup of the element including its content. When used as a setter, replaces the element with nodes parsed from the given string.
+        /// </summary>
+        public string? OuterHTML { get => JSRef!.Get<string?>("outerHTML"); set => JSRef!.Set("outerHTML", value); }
+        /// <summary>
+        /// An Element, the element immediately preceding the given one in the tree, or null if there is no sibling element.
+        /// </summary>
+        public Element? PreviousElementSibling => JSRef!.Get<Element?>("previousElementSibling");
         /// <summary>
         /// Returns a number representing the scroll view height of an element.
         /// </summary>
-        public float ScrollHeight => JSRef!.Get<float>("scrollHeight");
+        public int ScrollHeight => JSRef!.Get<int>("scrollHeight");
         /// <summary>
         /// Returns a number representing the scroll view width of the element.
         /// </summary>
-        public float ScrollWidth => JSRef!.Get<float>("scrollWidth");
+        public int ScrollWidth => JSRef!.Get<int>("scrollWidth");
         /// <summary>
         /// A number representing number of pixels the top of the element is scrolled vertically.
         /// </summary>
-        public float ScrollTop { get => JSRef!.Get<float>("scrollTop"); set => JSRef!.Set("scrollTop", value); }
+        public int ScrollTop { get => JSRef!.Get<int>("scrollTop"); set => JSRef!.Set("scrollTop", value); }
+        /// <summary>
+        /// The Element.shadowRoot read-only property represents the shadow root hosted by the element.<br/>
+        /// Use Element.attachShadow() to add a shadow root to an existing element.
+        /// </summary>
+        public ShadowRoot? ShadowRoot => JSRef!.Get<ShadowRoot?>("shadowRoot");
         /// <summary>
         /// Returns a string with the name of the tag for the given element.
         /// </summary>
         public string TagName => JSRef!.Get<string>("tagName");
-        /// <summary>
-        /// Returns a number representing the inner height of the element.
-        /// </summary>
-        public float ClientHeight => JSRef!.Get<float>("clientHeight");
-        /// <summary>
-        /// Returns a number representing the inner width of the element.
-        /// </summary>
-        public float ClientWidth => JSRef!.Get<float>("clientWidth");
         #endregion
 
         #region Events
