@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+
     /// <summary>
     /// The OffscreenCanvas interface provides a canvas that can be rendered off screen, decoupling the DOM and the Canvas API so that the canvas element is no longer entirely dependent on the DOM. Rendering operations can also be run inside a worker context, allowing you to run some tasks in a separate thread and avoid heavy work on the main thread.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
@@ -32,11 +33,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The width of the offscreen canvas.
         /// </summary>
-        public int Width { get { var tmp = JSRef!.Get<int?>("width"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef!.Set("width", value); } }
+        public int Width { get => JSRef!.Get<int?>("width") ?? 0; set => JSRef!.Set("width", value); } 
         /// <summary>
         /// The height of the offscreen canvas.
         /// </summary>
-        public int Height { get { var tmp = JSRef!.Get<int?>("height"); return tmp.HasValue ? tmp.Value : 0; } set { JSRef!.Set("height", value); } }
+        public int Height { get => JSRef!.Get<int?>("height") ?? 0; set => JSRef!.Set("height", value); }
         #endregion
 
         #region Methods

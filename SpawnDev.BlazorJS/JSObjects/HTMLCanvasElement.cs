@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.IJSInProcessObjectReferenceAnyKey;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
