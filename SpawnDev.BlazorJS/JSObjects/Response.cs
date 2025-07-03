@@ -59,6 +59,54 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Response(ReadableStream body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
         /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(TypedArray body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(DataView body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(FormData body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(URLSearchParams body, ResponseOptions? options = null) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(string body, Response options) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(Blob body, Response options) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(ArrayBuffer body, Response options) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(ReadableStream body, Response options) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(TypedArray body, Response options) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(DataView body, Response options) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(FormData body, Response options) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
+        /// Creates a new Response object.
+        /// </summary>
+        public Response(URLSearchParams body, Response options) : base(JS.New(nameof(Response), body, options)) { }
+        /// <summary>
         /// A ReadableStream of the body contents.
         /// </summary>
         public ReadableStream? Body => JSRef!.Get<ReadableStream?>("body");
