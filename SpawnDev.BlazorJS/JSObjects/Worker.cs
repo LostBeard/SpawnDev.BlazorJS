@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -17,8 +18,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Creates a dedicated web worker that executes the script at the specified URL. This also works for Blob URLs.
         /// </summary>
-        /// <param name="url"></param>
+        /// <param name="url">A string representing the URL of the script the worker will execute. It must obey the same-origin policy. The URL is resolved relative to the current HTML page's location.</param>
         public Worker(string url) : base(JS.New(nameof(Worker), url)) { }
+        /// <summary>
+        /// Creates a dedicated web worker that executes the script at the specified URL. This also works for Blob URLs.
+        /// </summary>
+        /// <param name="url">A string representing the URL of the script the worker will execute. It must obey the same-origin policy. The URL is resolved relative to the current HTML page's location.</param>
+        /// <param name="options">An object containing option properties that can be set when creating the Worker instance.</param>
+        public Worker(string url, WorkerOptions options) : base(JS.New(nameof(Worker), url, options)) { }
         #endregion
         #region Methods
         /// <summary>
