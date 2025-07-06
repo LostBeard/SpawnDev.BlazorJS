@@ -4,7 +4,7 @@
 		<TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>2.20.0</Version>
+		<Version>2.21.0</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
@@ -54,5 +54,11 @@
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<!-- Disable filename mangling with hash which is enabled by default in .Net (9?) 10 SDK. It causes runtime loading of Javascript files to fail due to unknown filename. -->
+		<StaticWebAssetFingerprintingEnabled>false</StaticWebAssetFingerprintingEnabled>
+		<StaticWebAssetsFingerprintContent>false</StaticWebAssetsFingerprintContent>
+	</PropertyGroup>
 
 </Project>

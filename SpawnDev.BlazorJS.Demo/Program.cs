@@ -9,6 +9,11 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazorJSRuntime(out var JS);
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 var host = await builder.Build().StartBackgroundServices();
+
+JS.Set("_testit", (string msg) =>
+{
+    Console.WriteLine($"_testit called with message: {msg}");
+});
 #if DEBUG && false
 // null-conditional test
 JS.Set("__test", new { name = "something", config = new { visible = true } });
