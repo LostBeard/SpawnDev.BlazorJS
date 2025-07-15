@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public USB(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
-        #region 
+        #region
         /// <summary>
         /// Returns a Promise that resolves with an array of USBDevice objects for paired attached devices.
         /// </summary>
@@ -26,7 +26,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a Promise that resolves with an instance of USBDevice if the specified device is found. Calling this function triggers the user agent's pairing flow.
         /// </summary>
         /// <returns></returns>
-        public Task<USBDevice> RequestDevice(IEnumerable<USBRequestDeviceFilter> filters) => JSRef!.CallAsync<USBDevice>("requestDevice", new { filters: filters });
+        public Task<USBDevice> RequestDevice(IEnumerable<USBRequestDeviceFilter> filters) => JSRef!.CallAsync<USBDevice>("requestDevice", new { filters });
         #endregion
 
         #region Events
