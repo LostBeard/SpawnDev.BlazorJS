@@ -18,8 +18,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a string representing the UUID of this characteristic.
         /// </summary>
         public string UUID => JSRef!.Get<string>("uuid");
-
-        // TODO determine proper types to use for these properties
         /// <summary>
         /// Returns the properties of this characteristic.
         /// </summary>
@@ -27,13 +25,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The currently cached characteristic value. This value gets updated when the value of the characteristic is read or updated via a notification or indication.
         /// </summary>
-        public DataView Value => JSRef!.Get<DataView>("value");
-
-        public string ValueTypeOf => JSRef!.TypeOf("value");
-        public string PropertiesTypeOf => JSRef!.TypeOf("properties");
-
-
-
+        public DataView? Value => JSRef!.Get<DataView?>("value");
         /// <summary>
         /// Returns a Promise that resolves to the first BluetoothRemoteGATTDescriptor for a given descriptor UUID.
         /// </summary>
@@ -43,10 +35,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a Promise that resolves to an Array of all BluetoothRemoteGATTDescriptor objects for a given descriptor UUID.
         /// </summary>
-        /// <param name="bluetoothDescriptorUUID"></param>
         /// <returns></returns>
-        public Task<BluetoothRemoteGATTDescriptor[]> GetDescriptors(string bluetoothDescriptorUUID) => JSRef!.CallAsync<BluetoothRemoteGATTDescriptor[]>("getDescriptors", bluetoothDescriptorUUID);
-
+        public Task<BluetoothRemoteGATTDescriptor[]> GetDescriptors() => JSRef!.CallAsync<BluetoothRemoteGATTDescriptor[]>("getDescriptors");
         /// <summary>
         /// The BluetoothRemoteGATTCharacteristic.readValue() method returns a Promise that resolves to a DataView holding a duplicate of the value property if it is available and supported. Otherwise it throws an error.
         /// </summary>
