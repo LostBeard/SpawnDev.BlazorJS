@@ -21,12 +21,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the currently cached descriptor value. This value gets updated when the value of the descriptor is read.
         /// </summary>
-        public ArrayBuffer Value => JSRef!.Get<ArrayBuffer>("value");
+        public DataView? Value => JSRef!.Get<DataView?>("value");
         /// <summary>
-        /// Returns a Promise that resolves to an ArrayBuffer holding a duplicate of the value property if it is available and supported. Otherwise it throws an error.
+        /// Returns a Promise that resolves to a DataView holding a duplicate of the value property if it is available and supported. Otherwise it throws an error.
         /// </summary>
         /// <returns></returns>
-        public Task<ArrayBuffer> ReadValue() => JSRef!.CallAsync<ArrayBuffer>("readValue");
+        public Task<DataView> ReadValue() => JSRef!.CallAsync<DataView>("readValue");
         /// <summary>
         /// The BluetoothRemoteGATTDescriptor.writeValue() method sets the value property to the bytes contained in an ArrayBuffer and returns a Promise.
         /// </summary>
