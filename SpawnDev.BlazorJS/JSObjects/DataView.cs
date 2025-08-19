@@ -319,5 +319,38 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="byteOffset">The offset, in bytes, from the start of the view to store the data in.</param>
         /// <param name="value">The value to set. For how the value is encoded in bytes, see Value encoding and normalization.</param>
         public void SetUint8(long byteOffset, byte value) => JSRef!.CallVoid("setUint8", byteOffset, value);
+        /// <summary>
+        /// Read bytes from the underlying ArrayBuffer starting at this DataView's byteOffset
+        /// </summary>
+        /// <returns></returns>
+        public virtual byte[] ReadBytes()
+        {
+            using var buffer = Buffer;
+            using var uint8Array = new Uint8Array(buffer, ByteOffset, ByteLength);
+            return uint8Array.ReadBytes();
+        }
+        /// <summary>
+        /// Read bytes from the underlying ArrayBuffer starting at this DataView's byteOffset
+        /// </summary>
+        /// <param name="byteOffset"></param>
+        /// <returns></returns>
+        public virtual byte[] ReadBytes(long byteOffset)
+        {
+            using var buffer = Buffer;
+            using var uint8Array = new Uint8Array(buffer, ByteOffset + byteOffset, ByteLength - byteOffset);
+            return uint8Array.ReadBytes();
+        }
+        /// <summary>
+        /// Read bytes from the underlying ArrayBuffer starting at this DataView's byteOffset
+        /// </summary>
+        /// <param name="byteOffset"></param>
+        /// <param name="byteLength"></param>
+        /// <returns></returns>
+        public virtual byte[] ReadBytes(long byteOffset, long byteLength)
+        {
+            using var buffer = Buffer;
+            using var uint8Array = new Uint8Array(buffer, ByteOffset + byteOffset, byteLength);
+            return uint8Array.ReadBytes();
+        }
     }
 }
