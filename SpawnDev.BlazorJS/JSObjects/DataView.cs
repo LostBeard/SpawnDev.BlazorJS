@@ -9,10 +9,41 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class DataView : JSObject
     {
         /// <summary>
-        /// Creates a new DataView object.
+        /// The DataView() constructor creates DataView objects.
         /// </summary>
         /// <param name="arrayBuffer"></param>
         public DataView(ArrayBuffer arrayBuffer) : base(JS.New(nameof(DataView), arrayBuffer)) { }
+        /// <summary>
+        /// The DataView() constructor creates DataView objects.
+        /// </summary>
+        /// <param name="arrayBuffer">An existing ArrayBuffer or SharedArrayBuffer to use as the storage backing the new DataView object.</param>
+        /// <param name="byteOffset">The offset, in bytes, to the first byte in the above buffer for the new view to reference. If unspecified, the buffer view starts with the first byte.</param>
+        public DataView(ArrayBuffer arrayBuffer, long byteOffset) : base(JS.New(nameof(DataView), arrayBuffer, byteOffset)) { }
+        /// <summary>
+        /// The DataView() constructor creates DataView objects.
+        /// </summary>
+        /// <param name="arrayBuffer">An existing ArrayBuffer or SharedArrayBuffer to use as the storage backing the new DataView object.</param>
+        /// <param name="byteOffset">The offset, in bytes, to the first byte in the above buffer for the new view to reference. If unspecified, the buffer view starts with the first byte.</param>
+        /// <param name="byteLength">The number of bytes in the byte array. If unspecified, the view's length will match the buffer's length.</param>
+        public DataView(ArrayBuffer arrayBuffer, long byteOffset, long byteLength) : base(JS.New(nameof(DataView), arrayBuffer, byteOffset, byteLength)) { }
+        /// <summary>
+        /// The DataView() constructor creates DataView objects.
+        /// </summary>
+        /// <param name="arrayBuffer"></param>
+        public DataView(SharedArrayBuffer arrayBuffer) : base(JS.New(nameof(DataView), arrayBuffer)) { }
+        /// <summary>
+        /// The DataView() constructor creates DataView objects.
+        /// </summary>
+        /// <param name="arrayBuffer">An existing ArrayBuffer or SharedArrayBuffer to use as the storage backing the new DataView object.</param>
+        /// <param name="byteOffset">The offset, in bytes, to the first byte in the above buffer for the new view to reference. If unspecified, the buffer view starts with the first byte.</param>
+        public DataView(SharedArrayBuffer arrayBuffer, long byteOffset) : base(JS.New(nameof(DataView), arrayBuffer, byteOffset)) { }
+        /// <summary>
+        /// The DataView() constructor creates DataView objects.
+        /// </summary>
+        /// <param name="arrayBuffer">An existing ArrayBuffer or SharedArrayBuffer to use as the storage backing the new DataView object.</param>
+        /// <param name="byteOffset">The offset, in bytes, to the first byte in the above buffer for the new view to reference. If unspecified, the buffer view starts with the first byte.</param>
+        /// <param name="byteLength">The number of bytes in the byte array. If unspecified, the view's length will match the buffer's length.</param>
+        public DataView(SharedArrayBuffer arrayBuffer, long byteOffset, long byteLength) : base(JS.New(nameof(DataView), arrayBuffer, byteOffset, byteLength)) { }
         /// <summary>
         /// Deserialization constructor
         /// </summary>
