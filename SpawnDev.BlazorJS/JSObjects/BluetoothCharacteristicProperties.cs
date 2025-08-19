@@ -38,7 +38,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a boolean that is true if reliable writes to the characteristic descriptor is permitted.
         /// </summary>
-        public bool WritableAuxilaries => JSRef!.Get<bool>("writableAuxiliaries");
+        public bool WritableAuxiliaries => JSRef!.Get<bool>("writableAuxiliaries");
         /// <summary>
         /// Returns a boolean that is true if the writing to the characteristic with response is permitted.
         /// </summary>
