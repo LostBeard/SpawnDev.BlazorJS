@@ -23,10 +23,37 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public DataView? Value => JSRef!.Get<DataView?>("value");
         /// <summary>
+        /// Returns the currently cached descriptor value. This value gets updated when the value of the descriptor is read.
+        /// </summary>
+        public byte[]? ValueBytes => JSRef!.Get<DataView?>("value")?.Using(o => o.ReadBytes());
+        /// <summary>
         /// Returns a Promise that resolves to a DataView holding a duplicate of the value property if it is available and supported. Otherwise it throws an error.
         /// </summary>
         /// <returns></returns>
         public Task<DataView> ReadValue() => JSRef!.CallAsync<DataView>("readValue");
+        /// <summary>
+        /// Returns a Promise that resolves to a DataView holding a duplicate of the value property if it is available and supported. Otherwise it throws an error.
+        /// </summary>
+        /// <returns></returns>
+        public Task<byte[]> ReadValueBytes() => JSRef!.CallAsync<DataView>("readValue").UsingAsync(async o => (await o).ReadBytes());
+        /// <summary>
+        /// The BluetoothRemoteGATTDescriptor.writeValue() method sets the value property to the bytes contained in an ArrayBuffer and returns a Promise.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Task WriteValue(TypedArray value) => JSRef!.CallVoidAsync("writeValue", value);
+        /// <summary>
+        /// The BluetoothRemoteGATTDescriptor.writeValue() method sets the value property to the bytes contained in an ArrayBuffer and returns a Promise.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Task WriteValue(DataView value) => JSRef!.CallVoidAsync("writeValue", value);
+        /// <summary>
+        /// The BluetoothRemoteGATTDescriptor.writeValue() method sets the value property to the bytes contained in an ArrayBuffer and returns a Promise.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Task WriteValue(SharedArrayBuffer value) => JSRef!.CallVoidAsync("writeValue", value);
         /// <summary>
         /// The BluetoothRemoteGATTDescriptor.writeValue() method sets the value property to the bytes contained in an ArrayBuffer and returns a Promise.
         /// </summary>
@@ -38,10 +65,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async Task WriteValue(byte[] value)
-        {
-            using var arrayBuffer = (ArrayBuffer)value!;
-            await WriteValue(arrayBuffer);
-        }
+        public Task WriteValue(byte[] value) => WriteValue((ArrayBuffer)value);
     }
 }
