@@ -1,0 +1,22 @@
+﻿namespace SpawnDev.BlazorJS.JSObjects
+{
+    /// <summary>
+    /// Configuration options for creating a GPUCanvasContext.
+    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUCanvasContext/configure#configuration
+    /// </summary>
+    public class GPUCanvasContextConfiguration
+    {
+        /// <summary>
+        /// The GPUDevice that the rendering information for the context will come from.
+        /// </summary>
+        public GPUDevice Device { get; set; }
+
+        /// <summary>
+        /// The format that textures returned by getCurrentTexture() will have. This can be bgra8unorm, rgba8unorm, or rgba16float. 
+        /// The optimal canvas texture format for the current system can be returned by GPU.getPreferredCanvasFormat(). 
+        /// Using this is recommended — if you don't use the preferred format when configuring the canvas context, 
+        /// you may incur additional overhead, such as additional texture copies, depending on the platform.
+        /// </summary>
+        public string Format { get; set; }
+    }
+}

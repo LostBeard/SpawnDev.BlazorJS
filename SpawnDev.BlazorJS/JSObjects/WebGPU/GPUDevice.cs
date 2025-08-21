@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.JSObjects.WebGPU;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -18,6 +19,59 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="descriptor"></param>
         /// <returns></returns>
         public GPUBuffer CreateBuffer(GPUBufferDescriptor descriptor) => JSRef!.Call<GPUBuffer>("createBuffer", descriptor);
-        // TODO
+
+        /// <summary>
+        /// The createRenderPipeline() method of the GPUDevice interface creates a GPURenderPipeline object, 
+        /// which represents a collection of GPU state and shader programs that can be used to render graphics.
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public GPURenderPipeline CreateRenderPipeline(GPURenderPipelineDescriptor descriptor) => JSRef!.Call<GPURenderPipeline>("createRenderPipeline", descriptor);
+
+        /// <summary>
+        /// The createComputePipeline() method of the GPUDevice interface creates a GPUPipelineLayout that defines the GPUBindGroupLayouts used by a pipeline.
+        /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/createPipelineLayout
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public GPUPipelineLayout CreatePipelineLayout(GPUPipelineLayoutDescriptor descriptor) => JSRef!.Call<GPUPipelineLayout>("createPipelineLayout", descriptor);
+
+        /// <summary>
+        /// Creates a GPUBindGroupLayout that defines the structure and purpose of related GPU resources such as buffers that will be used in a pipeline, 
+        /// and is used as a template when creating GPUBindGroups.
+        /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/createBindGroupLayout
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public GPUBindGroupLayout CreateBindGroupLayout(GPUBindGroupLayoutDescriptor descriptor) => JSRef!.Call<GPUBindGroupLayout>("createBindGroupLayout", descriptor);
+
+        /// <summary>
+        /// Creates a GPUShaderModule from a string of WGSL source code.
+        /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/createShaderModule
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public GPUShaderModule CreateShaderModule(GPUShaderModuleDescriptor descriptor) => JSRef!.Call<GPUShaderModule>("createShaderModule", descriptor);
+
+        /// <summary>
+        /// Creates a GPUCommandEncoder, which is used to encode commands to be issued to the GPU.
+        /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/createCommandEncoder
+        /// </summary>
+        /// <returns></returns>
+        public GPUCommandEncoder CreateCommandEncoder() => JSRef!.Call<GPUCommandEncoder>("createCommandEncoder");
+
+        /// <summary>
+        /// Creates a GPUCommandEncoder, which is used to encode commands to be issued to the GPU.
+        /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/createCommandEncoder
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public GPUCommandEncoder CreateCommandEncoder(GPUCommandEncoderDescriptor descriptor) => JSRef!.Call<GPUCommandEncoder>("createCommandEncoder", descriptor);
+
+        /// <summary>
+        /// Returns the primary GPUQueue for the device.
+        /// </summary>
+        public GPUQueue Queue => JSRef!.Get<GPUQueue>("queue");
+
     }
 }
