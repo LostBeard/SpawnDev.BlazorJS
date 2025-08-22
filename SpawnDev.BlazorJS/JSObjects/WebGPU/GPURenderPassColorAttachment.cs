@@ -39,6 +39,24 @@ namespace SpawnDev.BlazorJS.JSObjects
         private object _view;
 
         /// <summary>
+        /// Describes the texture subresource that will receive the resolved output for this color attachment if view is multisampled. 
+        /// The subresource is determined by calling get as texture view(resolveTarget).
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public object? ResolveTarget
+        {
+            get => _resolveTarget;
+            set
+            {
+                if (value is IGPUTextureOrTextureView)
+                    _resolveTarget = value;
+                else
+                    throw new ArgumentException("View must be of type GPUTexture or GPUTextureView");
+            }
+        }
+        private object? _resolveTarget;
+
+        /// <summary>
         /// A color value to clear the view texture to, prior to executing the render pass.
         /// This value is ignored if loadOp is not set to "clear". clearValue takes an array or 
         /// object representing the four color components r, g, b, and a as decimals.
