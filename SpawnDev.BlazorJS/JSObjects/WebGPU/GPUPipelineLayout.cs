@@ -1,4 +1,4 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects.WebGPU
+﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The GPUPipelineLayout interface of the WebGPU API defines the GPUBindGroupLayouts used by a pipeline. 

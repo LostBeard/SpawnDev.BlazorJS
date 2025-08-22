@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using SpawnDev.BlazorJS.JSObjects.WebGPU;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
