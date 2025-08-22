@@ -65,6 +65,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// If clearValue is omitted, it defaults to { r: 0, g: 0, b: 0, a: 0 }.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public float[]? ClearValue { get; init; }
+        public double[]? ClearValue { get; init; }
     }
 }
