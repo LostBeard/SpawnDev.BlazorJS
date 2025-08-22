@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An object describing depth-stencil properties including testing, operations, and bias.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public GPUDepthStencil? DepthStencil { get; set; }
+        public GPUDepthStencilState? DepthStencil { get; set; }
 
         /// <summary>
         /// An object describing the fragment shader entry point of the pipeline and its output colors. 
