@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using System.Text.Json.Serialization;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// An object describing the vertex shader entry point of the pipeline and its input buffer layouts.
@@ -12,6 +14,7 @@
         /// between elements of that array. Each element of a vertex buffer is like a structure with a memory layout defined by its attributes,
         /// which describe the members of the structure.
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IEnumerable<GPUVertexBufferLayout>? Buffers { get; init; }
     }
 }
