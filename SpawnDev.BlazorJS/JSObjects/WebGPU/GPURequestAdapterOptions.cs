@@ -13,7 +13,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Defaults to "core".
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? FeatureLevel { get; set; }
+        public string? FeatureLevel { get; init; }
 
         /// <summary>
         /// An enumerated value that can be used to provide a hint to the user agent indicating what class of adapter should be chosen from the system's available adapters. Available values are:<br/>
@@ -26,20 +26,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// It may also result in increased GPUDevice loss — the system will sometimes elect to switch to a lower-power adapter to save power.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? PowerPreference { get; set; }
+        public string? PowerPreference { get; init; }
 
         /// <summary>
         /// When set to true indicates that only a fallback adapter may be returned. If the user agent does not support a fallback adapter, will cause requestAdapter() to resolve to null.
         /// Defaults to false.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? ForceFallbackAdapter { get; set; }
+        public bool? ForceFallbackAdapter { get; init; }
 
         /// <summary>
         /// When set to true indicates that the best adapter for rendering to a WebXR session must be returned. If the user agent or system does not support WebXR sessions then adapter selection may ignore this value.
         /// Defaults to false.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? XrCompatible { get; set; }
+        public bool? XrCompatible { get; init; }
     }
 }

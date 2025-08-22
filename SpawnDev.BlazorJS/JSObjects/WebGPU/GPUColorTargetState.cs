@@ -9,6 +9,6 @@
         /// <summary>
         /// Gets or sets the format string used to define the output representation.
         /// </summary>
-        public string Format { get; set; }
+        public string Format { get; init; }
     }
 }

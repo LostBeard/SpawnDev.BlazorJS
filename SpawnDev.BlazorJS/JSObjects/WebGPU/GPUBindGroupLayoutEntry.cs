@@ -13,13 +13,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// value of a corresponding GPUBindGroup entry. In addition, it matches the n index value of the 
         /// corresponding @binding(n) attribute in the shader (GPUShaderModule) used in the related pipeline.
         /// </summary>
-        public GPUSize32 Binding { get; set; }
+        public GPUSize32 Binding { get; init; }
 
         /// <summary>
         /// A bitset of the members of GPUShaderStage. 
         /// Each set bit indicates that a GPUBindGroupLayoutEntry’s resource will be accessible from the associated shader stage.
         /// </summary>
-        public GPUShaderStageFlags Visibility { get; set; }
+        public GPUShaderStageFlags Visibility { get; init; }
 
         /// <summary>
         /// Exactly one of these members must be set, indicating the binding type. The contents of the member specify options specific to that type.

@@ -13,14 +13,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Possible values are: "clear": Loads the clearValue for this attachment into the render pass.
         /// "load": Loads the existing value for this attachment into the render pass.
         /// </summary>
-        public string LoadOp { get; set; }
+        public string LoadOp { get; init; }
 
         /// <summary>
         ///An enumerated value indicating the store operation to perform on view after executing the render pass.
         ///Possible values are: "discard": Discards the resulting value of the render pass for this attachment. 
         ///"store": Stores the resulting value of the render pass for this attachment.
         /// </summary>
-        public string StoreOp { get; set; }
+        public string StoreOp { get; init; }
 
         /// <summary>
         /// A GPUTextureView object representing the texture subresource that will be output to for this color attachment.
@@ -47,6 +47,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// If clearValue is omitted, it defaults to { r: 0, g: 0, b: 0, a: 0 }.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public float[]? ClearValue { get; set; }
+        public float[]? ClearValue { get; init; }
     }
 }
