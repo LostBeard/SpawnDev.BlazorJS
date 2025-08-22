@@ -1,4 +1,10 @@
 (function () {
+    // helper function used in place of 'in' operator for hecking if a property exists to allow a consistent operation regardless of obj's type
+    function _in(key, obj) {
+        if (obj === null || obj === void 0) return false;
+        if (typeof obj === 'object') return key in obj;
+        return obj[key] !== void 0;
+    }
     class BlazorJSInterop {
         constructor() {
             this.reviverAttached = false;
@@ -116,7 +122,7 @@
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
             var { parent, propertyName, shortCircuit } = this.pathObjectInfo(obj, key);
             if (shortCircuit) return false;
-            return propertyName in parent;
+            return _in(propertyName, parent);
         }
         // *****************************************************
         // ************ globalThis Property Methods ************
@@ -375,7 +381,7 @@
             var target;
             var propertyName;
             var shortCircuit = false;
-            if (typeof path === 'string' && !(path in parent)) {
+            if (typeof path === 'string' && !(_in(path, parent))) {
                 var parts = path.split('.');
                 propertyName = parts[parts.length - 1];
                 var part;
@@ -413,7 +419,7 @@
         customReviverfunction(key, value) {
             var _this = this;
             if (value && typeof value === 'object') {
-                if ('_callbackId' in value) {
+                if (_in('_callbackId', value)) {
                     var _callbackId = value._callbackId;
                     var callback = _this.callbacks[_callbackId];
                     if (callback) return callback;
@@ -441,7 +447,7 @@
                     _this.callbacks[_callbackId] = callback;
                     return callback;
                 }
-                else if ('_callbackAsyncId' in value) {
+                else if (_in('_callbackAsyncId', value)) {
                     var _callbackId = value._callbackAsyncId;
                     var callback = _this.asyncCallbacks[_callbackId];
                     if (callback) return callback;
@@ -470,13 +476,13 @@
                     _this.asyncCallbacks[_callbackId] = callback;
                     return callback;
                 }
-                else if ('__wrappedJSObject' in value) {
+                else if (_in('__wrappedJSObject', value)) {
                     return value.__wrappedJSObject;
                 }
-                else if ('__undefinedref__' in value) {
+                else if (_in('__undefinedref__', value)) {
                     return;
                 }
-                else if ('$bigint' in value) {
+                else if (_in('$bigint', value)) {
                     return BigInt(value.$bigint);
                 }
             }
