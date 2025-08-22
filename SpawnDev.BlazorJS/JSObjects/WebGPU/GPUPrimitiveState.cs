@@ -6,7 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// An object describing how a pipeline constructs and rasterizes primitives from its vertex inputs.
     /// https://www.w3.org/TR/webgpu/#primitive-state
     /// </summary>
-    public class GPUPrimitive
+    public class GPUPrimitiveState
     {
         /// <summary>
         ///An enumerated value that defines the type of primitive to be constructed from the specified vertex inputs.Possible values are:
@@ -17,16 +17,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///"triangle-strip": Each vertex after the first two defines a triangle primitive between it and the previous two vertices.
         /// If omitted, topology defaults to "triangle-list".
         /// </summary>
-        public string Topology { get; set; }
-
-        /// <summary>
-        /// Defines which polygons will be culled by draw calls made with a GPURenderPipeline. The possible values are:
-        /// "none" No polygons are discarded.
-        /// "front" Front-facing polygons are discarded.
-        /// "back" Back-facing polygons are discarded.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? CullMode { get; set; }
+        public string Topology { get; init; }
 
         /// <summary>
         /// The index format determines both the data type of index values in a buffer and, when used with strip primitive topologies 
@@ -37,7 +28,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// a list primitive topology will use the index format passed to setIndexBuffer() when doing indexed rendering.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? StripIndexFormat { get; set; }
+        public string? StripIndexFormat { get; init; }
 
         /// <summary>
         /// Defines which polygons are considered front-facing. The possible values are:
@@ -45,6 +36,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "cw" Polygons with vertices whose framebuffer coordinates are given in clockwise order are considered front-facing.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? FrontFace { get; set; }
+        public string? FrontFace { get; init; }
+
+        /// <summary>
+        /// Defines which polygons will be culled by draw calls made with a GPURenderPipeline. The possible values are:
+        /// "none" No polygons are discarded.
+        /// "front" Front-facing polygons are discarded.
+        /// "back" Back-facing polygons are discarded.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? CullMode { get; init; }
+
+        /// <summary>
+        /// If true, indicates that depth clipping is disabled.
+        /// Requires the "depth-clip-control" feature to be enabled.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? UnclippedDepth { get; init; }
     }
 }

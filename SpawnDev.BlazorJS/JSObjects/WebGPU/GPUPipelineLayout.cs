@@ -1,14 +1,15 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using Microsoft.JSInterop;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The GPUPipelineLayout interface of the WebGPU API defines the GPUBindGroupLayouts used by a pipeline. 
     /// GPUBindGroups used with the pipeline during command encoding must have compatible GPUBindGroupLayouts.
     /// </summary>
-    public class GPUPipelineLayout
+    public class GPUPipelineLayout : GPUObjectBase
     {
-        /// <summary>
-        /// A string providing a label that can be used to identify the object, for example in GPUError messages or console warnings.
-        /// </summary>
-        public string Label { get; set; }
+        /// <inheritdoc/>
+        public GPUPipelineLayout(IJSInProcessObjectReference _ref) : base(_ref) { }
+
     }
 }

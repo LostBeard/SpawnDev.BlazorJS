@@ -9,6 +9,13 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class GPURequestAdapterOptions
     {
         /// <summary>
+        /// "Feature level" for the adapter request. The allowed feature level string values are: "core" and "compatibility"
+        /// Defaults to "core".
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? FeatureLevel { get; set; }
+
+        /// <summary>
         /// An enumerated value that can be used to provide a hint to the user agent indicating what class of adapter should be chosen from the system's available adapters. Available values are:<br/>
         /// undefined (or not specified), which provides no hint.<br/>
         /// "low-power", which provides a hint to prioritize power savings over performance. 
@@ -20,13 +27,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? PowerPreference { get; set; }
-
-        /// <summary>
-        /// "Feature level" for the adapter request. The allowed feature level string values are: "core" and "compatibility"
-        /// Defaults to "core".
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? FeatureLevel { get; set; }
 
         /// <summary>
         /// When set to true indicates that only a fallback adapter may be returned. If the user agent does not support a fallback adapter, will cause requestAdapter() to resolve to null.

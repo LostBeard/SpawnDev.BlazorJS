@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Represents the state of a color target in a GPU rendering pipeline, including its format.
+    /// https://www.w3.org/TR/webgpu/#color-target-state
     /// </summary>
     public class GPUColorTargetState
     {

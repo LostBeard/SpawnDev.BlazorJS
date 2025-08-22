@@ -5,9 +5,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The GPUCommandEncoder interface of the WebGPU API represents an encoder that collects a sequence of GPU commands to be issued to the GPU.
     /// A GPUCommandEncoder object instance is created via the GPUDevice.createCommandEncoder() property.
-    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUCommandEncoder
+    /// https://www.w3.org/TR/webgpu/#gpucommandencoder
     /// </summary>
-    public class GPUCommandEncoder : JSObject
+    public class GPUCommandEncoder : GPUObjectBase
     {
         /// <inheritdoc/>
         public GPUCommandEncoder(IJSInProcessObjectReference _ref) : base(_ref) { }
@@ -26,5 +26,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>A <see cref="GPUCommandBuffer"/> containing the recorded commands. The command buffer can be submitted to a
         /// GPU queue for execution.</returns>
         public GPUCommandBuffer Finish() => JSRef!.Call<GPUCommandBuffer>("finish");
+
+        /// <summary>
+        /// Completes the recording of commands in the current GPU command encoder and returns a command buffer.
+        /// </summary>
+        /// <returns>A <see cref="GPUCommandBuffer"/> containing the recorded commands. The command buffer can be submitted to a
+        /// GPU queue for execution.</returns>
+        public GPUCommandBuffer Finish(GPUCommandBufferDescriptor descriptor) => JSRef!.Call<GPUCommandBuffer>("finish", descriptor);
     }
 }

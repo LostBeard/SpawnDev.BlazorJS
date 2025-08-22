@@ -12,6 +12,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <inheritdoc/>
         public GPUDevice(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filter"></param>
+        public void PushErrorScope(string filter) => JSRef!.CallVoid("pushErrorScope", filter);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<object?> PopErrorScopeAsync() => JSRef!.CallAsync<object?>("popErrorScope");
+
         /// <summary>
         /// The createBuffer() method of the GPUDevice interface creates a GPUBuffer in which to store raw data to use in GPU operations.
         /// </summary>
@@ -66,6 +79,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="descriptor"></param>
         /// <returns></returns>
         public GPUCommandEncoder CreateCommandEncoder(GPUCommandEncoderDescriptor descriptor) => JSRef!.Call<GPUCommandEncoder>("createCommandEncoder", descriptor);
+
+        /// <summary>
+        /// The createTexture() method of the GPUDevice interface creates a GPUTexture in which to store 1D, 2D, or 3D arrays of data, such as images, to use in GPU rendering operations.
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public GPUTexture CreateTexture(GPUTextureDescriptor descriptor) => JSRef!.Call<GPUTexture>("createTexture", descriptor);
+
+        /// <summary>
+        /// The createBindGroup() method of the GPUDevice interface creates a GPUBindGroup based on a GPUBindGroupLayout that defines a set of resources to be bound together in 
+        /// a group and how those resources are used in shader stages.
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public GPUBindGroup CreateBindGroup(GPUBindGroupDescriptor descriptor) => JSRef!.Call<GPUBindGroup>("createBindGroup", descriptor);
 
         /// <summary>
         /// Returns the primary GPUQueue for the device.

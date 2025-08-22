@@ -2,13 +2,10 @@
 {
     /// <summary>
     /// Represents a descriptor used to configure a GPU command encoder.
-    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/createCommandEncoder#descriptor
+    /// https://www.w3.org/TR/webgpu/#dictdef-gpucommandencoderdescriptor
     /// </summary>
-    public class GPUCommandEncoderDescriptor
+    public class GPUCommandEncoderDescriptor : GPUObjectDescriptorBase
     {
-        /// <summary>
-        /// A string providing a label that can be used to identify the object, for example in GPUError messages or console warnings.
-        /// </summary>
-        public string Label { get; set; }
+
     }
 }

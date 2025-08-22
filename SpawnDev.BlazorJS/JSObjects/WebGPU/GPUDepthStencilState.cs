@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An enumerated value specifying the depthStencilAttachment format that the GPURenderPipeline will be compatible with. 
         /// See the specification's Texture Formats section for all the available format values.
         /// </summary>
-        public string Format { get; set; }
+        public string Format { get; init; }
 
         /// <summary>
         /// GPUCompareFunction specifies the behavior of a comparison sampler. If a comparison sampler is used in a shader, 
@@ -30,12 +30,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "always" Comparison tests always pass.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? DepthCompare { get; set; }
+        public string? DepthCompare { get; init; }
 
         /// <summary>
         /// Gets or sets a value indicating whether depth writing is enabled.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? DepthWriteEnabled { get; set; }
+        public bool? DepthWriteEnabled { get; init; }
     }
 }

@@ -4,8 +4,9 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// Defines the color attachments that will be output to when executing a render pass.
+    /// https://www.w3.org/TR/webgpu/#dictdef-gpurenderpasscolorattachment
     /// </summary>
-    public class GPUColorAttachment
+    public class GPURenderPassColorAttachment
     {
         /// <summary>
         /// An enumerated value indicating the load operation to perform on view prior to executing the render pass. 
@@ -24,7 +25,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A GPUTextureView object representing the texture subresource that will be output to for this color attachment.
         /// </summary>
-        public GPUTextureView View { get; set; }
+        public object View 
+        { 
+            get => _view; 
+            set
+            {
+                if (value is IGPUTextureOrTextureView)
+                    _view = value;
+                else
+                    throw new ArgumentException("View must be of type GPUTexture or GPUTextureView");
+            }
+        }
+        private object _view;
 
         /// <summary>
         /// A color value to clear the view texture to, prior to executing the render pass.

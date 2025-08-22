@@ -2,9 +2,9 @@
 {
     /// <summary>
     /// Configuration options for creating a GPUCanvasContext.
-    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUCanvasContext/configure#configuration
+    /// https://www.w3.org/TR/webgpu/#dictdef-gpucanvasconfiguration
     /// </summary>
-    public class GPUCanvasContextConfiguration
+    public class GPUCanvasConfiguration
     {
         /// <summary>
         /// The GPUDevice that the rendering information for the context will come from.
