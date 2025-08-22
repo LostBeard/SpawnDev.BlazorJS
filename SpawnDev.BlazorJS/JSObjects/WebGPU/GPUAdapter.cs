@@ -27,11 +27,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         public Task<GPUAdapterInfo> RequestAdapterInfo() => JSRef!.CallAsync<GPUAdapterInfo>("requestAdapterInfo");
         /// <summary>
         /// Returns a Promise that fulfills with a GPUDevice object, which is the primary interface for communicating with the GPU.
+        /// This is a one-time action: if a device is returned successfully, the adapter becomes "consumed".
         /// </summary>
         /// <returns></returns>
         public Task<GPUDevice> RequestDevice() => JSRef!.CallAsync<GPUDevice>("requestDevice");
         /// <summary>
-        /// 
+        /// Returns a Promise that fulfills with a GPUDevice object, which is the primary interface for communicating with the GPU.
+        /// This is a one-time action: if a device is returned successfully, the adapter becomes "consumed".
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
