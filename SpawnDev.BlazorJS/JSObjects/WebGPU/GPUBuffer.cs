@@ -5,16 +5,12 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The GPUBuffer interface of the WebGPU API represents a block of memory that can be used to store raw data to use in GPU operations.<br/>
     /// A GPUBuffer object instance is created using the GPUDevice.createBuffer() method.<br/>
-    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUBuffer
+    /// https://www.w3.org/TR/webgpu/#gpubuffer
     /// </summary>
-    public class GPUBuffer : JSObject
+    public class GPUBuffer : GPUObjectBase, IGPUBindingResource
     {
         /// <inheritdoc/>
         public GPUBuffer(IJSInProcessObjectReference _ref) : base(_ref) { }
-        /// <summary>
-        /// A string providing a label that can be used to identify the object, for example in GPUError messages or console warnings.
-        /// </summary>
-        public string? Label { get => JSRef!.Get<string?>("label"); set => JSRef!.Set("label", value); }
         /// <summary>
         /// An enumerated value representing the mapped state of the GPUBuffer.
         /// </summary>
@@ -22,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A number representing the length of the GPUBuffer's memory allocation, in bytes.
         /// </summary>
-        public long Size => JSRef!.Get<long>("size");
+        public GPUSize64Out Size => JSRef!.Get<GPUSize64Out>("size");
         /// <summary>
         /// The usage read-only property of the GPUBuffer interface contains the bitwise flags representing the allowed usages of the GPUBuffer.<br/>
         /// usage is set via the usage property in the descriptor object passed into the originating GPUDevice.createBuffer() call.

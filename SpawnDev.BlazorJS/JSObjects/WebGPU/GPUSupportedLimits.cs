@@ -4,12 +4,14 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The GPUSupportedLimits interface of the WebGPU API describes the limits supported by a GPUAdapter.<br/>
-    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUSupportedLimits
+    /// https://www.w3.org/TR/webgpu/#gpusupportedlimits
     /// </summary>
     public class GPUSupportedLimits : JSObject
     {
+        /// <inheritdoc />
         public GPUSupportedLimits(IJSInProcessObjectReference _ref) : base(_ref){ }
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public int? MaxTextureDimension1D => JSRef!.Get<int?>("maxTextureDimension1D");
         public int? MaxTextureDimension2D => JSRef!.Get<int?>("maxTextureDimension2D");
         public int? MaxTextureDimension3D => JSRef!.Get<int?>("maxTextureDimension3D");
@@ -41,5 +43,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         public int? MaxComputeWorkgroupSizeY => JSRef!.Get<int?>("maxComputeWorkgroupSizeY");
         public int? MaxComputeWorkgroupSizeZ => JSRef!.Get<int?>("maxComputeWorkgroupSizeZ");
         public int? MaxComputeWorkgroupsPerDimension => JSRef!.Get<int?>("maxComputeWorkgroupsPerDimension");
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }
