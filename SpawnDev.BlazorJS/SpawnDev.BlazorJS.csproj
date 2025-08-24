@@ -40,6 +40,7 @@
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.17" />
+    <PackageReference Include="System.Text.Json" Version="8.0.6" /> <!-- All 7.x are vulnerable -->
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
@@ -49,6 +50,7 @@
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.8" />
+    <PackageReference Include="System.Text.Json" Version="9.0.8" />
 	</ItemGroup>
 
 	<ItemGroup>
