@@ -37,7 +37,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns>A Promise that fulfills with a GPUAdapter object instance if the request is successful. requestAdapter() will resolve to null if an appropriate adapter is not available.</returns>
-        public Task<GPUAdapter> RequestAdapter(RequestAdapterOptions options) => JSRef!.CallAsync<GPUAdapter>("requestAdapter", options);
+        public Task<GPUAdapter> RequestAdapter(GPURequestAdapterOptions options) => JSRef!.CallAsync<GPUAdapter>("requestAdapter", options);
         #endregion
 
         #region Events

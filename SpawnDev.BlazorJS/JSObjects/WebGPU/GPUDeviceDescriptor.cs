@@ -4,9 +4,9 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// RequestDevice options<br/>
-    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUAdapter/requestDevice
+    /// https://www.w3.org/TR/webgpu/#gpudevicedescriptor
     /// </summary>
-    public class GPURequestDeviceOptions
+    public class GPUDeviceDescriptor
     {
         /// <summary>
         /// An object that provides information for the device's default GPUQueue (as returned by GPUDevice.queue). This object has a single property — label — which provides the default queue with a label value. If no value is provided, this defaults to an empty object, and the default queue's label will be an empty string.
