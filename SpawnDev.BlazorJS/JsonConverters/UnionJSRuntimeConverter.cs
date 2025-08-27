@@ -49,9 +49,10 @@ namespace SpawnDev.BlazorJS.JsonConverters
             if (_ref == null) return null;
             var value = UnionConverter.ImportFromIJSInprocessObjectReference(_ref, UnionTypes);
             if (value == null) return null;
-            var constructor = TypeToConvert.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new[] { value.GetType() }, null);
-            var ret = constructor!.Invoke(new object?[] { value });
-            return (Union)ret;
+            //var constructor = TypeToConvert.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new[] { value.GetType() }, null);
+            //var ret = constructor!.Invoke(new object?[] { value });
+            var ret = Activator.CreateInstance(TypeToConvert, new object?[] { value });
+            return (Union)ret!;
         }
         /// <summary>
         /// Writes value to Json stream
