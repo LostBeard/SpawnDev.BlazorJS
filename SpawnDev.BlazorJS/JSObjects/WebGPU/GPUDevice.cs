@@ -100,5 +100,32 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public GPUQueue Queue => JSRef!.Get<GPUQueue>("queue");
 
+        /// <summary>
+        /// The createQuerySet() method of the GPUDevice interface creates a GPUQuerySet that can be used to record the results of queries on passes, such as occlusion or timestamp queries.
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public GPUQuerySet CreateQuerySet(GPUQuerySetDescriptor descriptor) => JSRef!.Call<GPUQuerySet>("createQuerySet", descriptor);
+
+        /// <summary>
+        /// Destroys the GPUDevice.
+        /// </summary>
+        public void Destroy() => JSRef!.CallVoid("destroy");
+
+        /// <summary>
+        /// Creates a GPUComputePipeline using immediate pipeline creation.
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public GPUComputePipeline CreateComputePipeline(GPUComputePipelineDescriptor descriptor) => JSRef!.Call<GPUComputePipeline>("createComputePipeline", descriptor);
+
+        /// <summary>
+        /// Creates a GPUComputePipeline using async pipeline creation. The returned Promise resolves when the created pipeline is ready to be used without additional delay.<br/>
+        /// If pipeline creation fails, the returned Promise rejects with an GPUPipelineError. (A GPUError is not dispatched to the device.)<br/>
+        /// Note: Use of this method is preferred whenever possible, as it prevents blocking the queue timeline work on pipeline compilation.
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
+        public Task<GPUComputePipeline> CreateComputePipelineAsync(GPUComputePipelineDescriptor descriptor) => JSRef!.CallAsync<GPUComputePipeline>("createComputePipeline", descriptor);
     }
 }

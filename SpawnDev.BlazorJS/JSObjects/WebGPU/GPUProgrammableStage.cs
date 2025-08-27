@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// one of the programmable stages of a pipeline. Entry point names follow the rules defined in WGSL identifier comparison.
     /// https://www.w3.org/TR/webgpu/#gpuprogrammablestage
     /// </summary>
-    public abstract class GPUProgrammableStage
+    public class GPUProgrammableStage
     {
         /// <summary>
         /// A GPUShaderModule object containing the WGSL code that this programmable stage will execute.
