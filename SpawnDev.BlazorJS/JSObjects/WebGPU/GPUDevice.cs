@@ -14,16 +14,52 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         /// <summary>
-        /// 
+        /// The adapterInfo read-only property of the GPUDevice interface returns a GPUAdapterInfo object containing identifying information about the device's originating adapter.
         /// </summary>
-        /// <param name="filter"></param>
-        public void PushErrorScope(string filter) => JSRef!.CallVoid("pushErrorScope", filter);
+        public GPUAdapterInfo AdapterInfo => JSRef!.Get<GPUAdapterInfo>("adapter");
 
         /// <summary>
-        /// 
+        /// A GPUSupportedFeatures object that describes additional functionality supported by the device.
+        /// </summary>
+        public GPUSupportedFeatures Features => JSRef!.Get<GPUSupportedFeatures>("features");
+
+        /// <summary>
+        /// A string providing a label that can be used to identify the object, for example in GPUError messages or console warnings.
+        /// </summary>
+        public string? Label => JSRef!.Get<string?>("label");
+
+        /// <summary>
+        /// A GPUSupportedLimits object that describes the limits supported by the device.
+        /// </summary>
+        public GPUSupportedLimits Limits => JSRef!.Get<GPUSupportedLimits>("limits");
+
+        /// <summary>
+        /// Contains a Promise that remains pending throughout the device's lifetime and resolves with a GPUDeviceLostInfo object when the device is lost.
+        /// </summary>
+        public Task<GPUDeviceLostInfo> Lost => JSRef!.GetAsync<GPUDeviceLostInfo>("lost");
+
+        /// <summary>
+        /// Returns the primary GPUQueue for the device.
+        /// </summary>
+        public GPUQueue Queue => JSRef!.Get<GPUQueue>("queue");
+
+        /// <summary>
+        /// Destroys the GPUDevice.
+        /// </summary>
+        public void Destroy() => JSRef!.CallVoid("destroy");
+
+        /// <summary>
+        /// The pushErrorScope() method of the GPUDevice interface pushes a new GPU error scope onto the device's error scope stack, allowing you to capture errors of a particular type.<br/>
+        /// Once you are done capturing errors, you can end capture by invoking GPUDevice.popErrorScope(). This pops the scope from the stack and returns a Promise that resolves to an object describing the first error captured in the scope, or null if no errors were captured.
+        /// </summary>
+        /// <param name="filter"></param>
+        public void PushErrorScope(GPUErrorFilter filter) => JSRef!.CallVoid("pushErrorScope", filter);
+
+        /// <summary>
+        /// The popErrorScope() method of the GPUDevice interface pops an existing GPU error scope from the error scope stack (originally pushed using GPUDevice.pushErrorScope()) and returns a Promise that resolves to an object describing the first error captured in the scope, or null if no error occurred.
         /// </summary>
         /// <returns></returns>
-        public Task<object?> PopErrorScopeAsync() => JSRef!.CallAsync<object?>("popErrorScope");
+        public Task<GPUError?> PopErrorScope() => JSRef!.CallAsync<GPUError?>("popErrorScope");
 
         /// <summary>
         /// The createBuffer() method of the GPUDevice interface creates a GPUBuffer in which to store raw data to use in GPU operations.
@@ -96,21 +132,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         public GPUBindGroup CreateBindGroup(GPUBindGroupDescriptor descriptor) => JSRef!.Call<GPUBindGroup>("createBindGroup", descriptor);
 
         /// <summary>
-        /// Returns the primary GPUQueue for the device.
-        /// </summary>
-        public GPUQueue Queue => JSRef!.Get<GPUQueue>("queue");
-
-        /// <summary>
         /// The createQuerySet() method of the GPUDevice interface creates a GPUQuerySet that can be used to record the results of queries on passes, such as occlusion or timestamp queries.
         /// </summary>
         /// <param name="descriptor"></param>
         /// <returns></returns>
         public GPUQuerySet CreateQuerySet(GPUQuerySetDescriptor descriptor) => JSRef!.Call<GPUQuerySet>("createQuerySet", descriptor);
-
-        /// <summary>
-        /// Destroys the GPUDevice.
-        /// </summary>
-        public void Destroy() => JSRef!.CallVoid("destroy");
 
         /// <summary>
         /// Creates a GPUComputePipeline using immediate pipeline creation.
