@@ -126,6 +126,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="descriptor"></param>
         /// <returns></returns>
-        public Task<GPUComputePipeline> CreateComputePipelineAsync(GPUComputePipelineDescriptor descriptor) => JSRef!.CallAsync<GPUComputePipeline>("createComputePipeline", descriptor);
+        public Task<GPUComputePipeline> CreateComputePipelineAsync(GPUComputePipelineDescriptor descriptor) => JSRef!.CallAsync<GPUComputePipeline>("createComputePipelineAsync", descriptor);
     }
 }
