@@ -29,7 +29,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         /// <param name="data">An ArrayBuffer, a TypedArray or a DataView object containing the data to be digested.</param>
         /// <returns>A Promise that fulfills with an ArrayBuffer containing the digest.</returns>
-        public Task<ArrayBuffer> Digest(string algorithm, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<ArrayBuffer>("digest", algorithm, data);
+        public Task<ArrayBuffer> Digest(string algorithm, BufferSource data) => JSRef!.CallAsync<ArrayBuffer>("digest", algorithm, data);
         /// <summary>
         /// The decrypt() method of the SubtleCrypto interface decrypts some encrypted data. It takes as arguments a key to decrypt with, some optional extra parameters, and the data to decrypt (also known as "ciphertext"). It returns a Promise which will be fulfilled with the decrypted data (also known as "plaintext").<br/>
         /// </summary>
@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="key">A CryptoKey containing the key to be used for decryption. If using RSA-OAEP, this is the privateKey property of the CryptoKeyPair object.</param>
         /// <param name="data">An ArrayBuffer, a TypedArray, or a DataView containing the data to be decrypted (also known as ciphertext).</param>
         /// <returns>A Promise that fulfills with an ArrayBuffer containing the plaintext.</returns>
-        public Task<ArrayBuffer> Decrypt(EncryptParams algorithm, CryptoKey key, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<ArrayBuffer>("decrypt", algorithm, key, data);
+        public Task<ArrayBuffer> Decrypt(EncryptParams algorithm, CryptoKey key, BufferSource data) => JSRef!.CallAsync<ArrayBuffer>("decrypt", algorithm, key, data);
         /// <summary>
         /// The encrypt() method of the SubtleCrypto interface encrypts data. It takes as its arguments a key to encrypt with, some algorithm-specific parameters, and the data to encrypt(also known as "plaintext"). It returns a Promise which will be fulfilled with the encrypted data(also known as "ciphertext").
         /// </summary>
@@ -59,7 +59,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="key">A CryptoKey containing the key to be used for encryption.</param>
         /// <param name="data">An ArrayBuffer, a TypedArray, or a DataView containing the data to be encrypted (also known as the plaintext).</param>
         /// <returns>A Promise that fulfills with an ArrayBuffer containing the "ciphertext".</returns>
-        public Task<ArrayBuffer> Encrypt(EncryptParams algorithm, CryptoKey key, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<ArrayBuffer>("encrypt", algorithm, key, data);
+        public Task<ArrayBuffer> Encrypt(EncryptParams algorithm, CryptoKey key, BufferSource data) => JSRef!.CallAsync<ArrayBuffer>("encrypt", algorithm, key, data);
         /// <summary>
         /// The exportKey() method of the SubtleCrypto interface exports a key: that is, it takes as input a CryptoKey object and gives you the key in an external, portable format.
         /// To export a key, the key must have CryptoKey.extractable set to true.
@@ -160,7 +160,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="key">A CryptoKey object containing the key to be used for signing. If algorithm identifies a public-key cryptosystem, this is the private key.</param>
         /// <param name="data">An ArrayBuffer, a TypedArray, byte array or a DataView object containing the data to be signed.</param>
         /// <returns>A Promise that fulfills with an ArrayBuffer containing the signature.</returns>
-        public Task<ArrayBuffer> Sign(Union<CryptoSignParams, string> algorithm, CryptoKey key, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<ArrayBuffer>("sign", algorithm, key, data);
+        public Task<ArrayBuffer> Sign(Union<CryptoSignParams, string> algorithm, CryptoKey key, BufferSource data) => JSRef!.CallAsync<ArrayBuffer>("sign", algorithm, key, data);
         /// <summary>
         /// The verify() method of the SubtleCrypto interface verifies a digital signature.<br/>
         /// It takes as its arguments a key to verify the signature with, some algorithm-specific parameters, the signature, and the original signed data.It returns a Promise which will be fulfilled with a boolean value indicating whether the signature is valid.
@@ -170,7 +170,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="signature">An ArrayBuffer, a TypedArray, byte array or a DataView object containing the signature to verify.</param>
         /// <param name="data">An ArrayBuffer, a TypedArray, byte array or a DataView object containing the data whose signature is to be verified.</param>
         /// <returns>A Promise that fulfills with a boolean value: true if the signature is valid, false otherwise.</returns>
-        public Task<bool> Verify(Union<CryptoSignParams, string> algorithm, CryptoKey key, Union<ArrayBuffer, TypedArray, DataView, byte[]> signature, Union<ArrayBuffer, TypedArray, DataView, byte[]> data) => JSRef!.CallAsync<bool>("verify", algorithm, key, signature, data);
+        public Task<bool> Verify(Union<CryptoSignParams, string> algorithm, CryptoKey key, BufferSource signature, BufferSource data) => JSRef!.CallAsync<bool>("verify", algorithm, key, signature, data);
         /// <summary>
         /// The unwrapKey() method of the SubtleCrypto interface "unwraps" a key. This means that it takes as its input a key that has been exported and then encrypted (also called "wrapped"). It decrypts the key and then imports it, returning a CryptoKey object that can be used in the Web Crypto API.
         /// </summary>

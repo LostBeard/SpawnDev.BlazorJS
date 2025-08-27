@@ -18,14 +18,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="bits">An iterable object such as an Array, having ArrayBuffers, TypedArrays, DataViews, Blobs, strings, or a mix of any of such elements, that will be put inside the File. Note that strings here are encoded as UTF-8, unlike the usual JavaScript UTF-16 strings.</param>
         /// <param name="name">A string representing the file name or the path to the file.</param>
-        public File(IEnumerable<Union<ArrayBuffer, TypedArray, DataView, Blob, string>> bits, string name) : base(JS.New(nameof(File), bits, name)) { }
+        public File(IEnumerable<Union<ArrayBuffer, TypedArray, DataView, Blob, string, byte[]>> bits, string name) : base(JS.New(nameof(File), bits, name)) { }
         /// <summary>
         /// The File() constructor creates a new File object instance.
         /// </summary>
         /// <param name="bits">An iterable object such as an Array, having ArrayBuffers, TypedArrays, DataViews, Blobs, strings, or a mix of any of such elements, that will be put inside the File. Note that strings here are encoded as UTF-8, unlike the usual JavaScript UTF-16 strings.</param>
         /// <param name="name">A string representing the file name or the path to the file.</param>
         /// <param name="options">An options object containing optional attributes for the file</param>
-        public File(IEnumerable<Union<ArrayBuffer, TypedArray, DataView, Blob, string>> bits, string name, FileOptions options) : base(JS.New(nameof(File), bits, name, options)) { }
+        public File(IEnumerable<Union<ArrayBuffer, TypedArray, DataView, Blob, string, byte[]>> bits, string name, FileOptions options) : base(JS.New(nameof(File), bits, name, options)) { }
         /// <summary>
         /// The File() constructor creates a new File object instance.
         /// </summary>
@@ -104,7 +104,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="name">A string representing the file name or the path to the file.</param>
         /// <param name="options">An options object containing optional attributes for the file</param>
         public File(IEnumerable<byte[]> bits, string name, FileOptions options) : base(JS.New(nameof(File), bits, name, options)) { }
-
 
         /// <summary>
         /// Returns the name of the file referenced by the File object.

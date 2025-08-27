@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An ArrayBuffer, TypedArray, or DataView representing the ID of the public key credential to retrieve. This value is mirrored by the rawId property of the PublicKeyCredential object returned by a successful get() call.
         /// </summary>
-        public Union<ArrayBuffer, TypedArray, DataView, byte[]> Id { get; set; }
+        public BufferSource Id { get; set; }
         /// <summary>
         /// An array of strings providing hints as to the methods the client could use to communicate with the relevant authenticator of the public key credential to retrieve. Possible transports are:<br/>
         /// "ble", "hybrid", "internal", "nfc", and "usb".<br/>

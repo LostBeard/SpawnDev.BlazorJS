@@ -286,7 +286,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="imageData">An element to draw into the context. The specification permits any canvas image source, specifically, an HTMLImageElement, an SVGImageElement, an HTMLVideoElement, an HTMLCanvasElement, an ImageBitmap, an OffscreenCanvas, or a VideoFrame.</param>
         /// <param name="dx">The x-axis coordinate in the destination canvas at which to place the top-left corner of the source image.</param>
         /// <param name="dy">The y-axis coordinate in the destination canvas at which to place the top-left corner of the source image.</param>
-        public void DrawImage(Union<HTMLVideoElement, HTMLImageElement, HTMLCanvasElement, OffscreenCanvas, SVGImageElement, ImageBitmap, VideoFrame> imageData, int dx = 0, int dy = 0) => JSRef!.CallVoid("drawImage", imageData, dx, dy);
+        public void DrawImage(CanvasImageSource imageData, int dx = 0, int dy = 0) => JSRef!.CallVoid("drawImage", imageData, dx, dy);
         /// <summary>
         /// Draws the specified image. This method is available in multiple formats, providing a great deal of flexibility in its use.
         /// </summary>
@@ -295,7 +295,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="dy">The y-axis coordinate in the destination canvas at which to place the top-left corner of the source image.</param>
         /// <param name="dWidth">The width to draw the image in the destination canvas. This allows scaling of the drawn image. If not specified, the image is not scaled in width when drawn. Note that this argument is not included in the 3-argument syntax.</param>
         /// <param name="dHeight">The height to draw the image in the destination canvas. This allows scaling of the drawn image. If not specified, the image is not scaled in height when drawn. Note that this argument is not included in the 3-argument syntax.</param>
-        public void DrawImage(Union<HTMLVideoElement, HTMLImageElement, HTMLCanvasElement, OffscreenCanvas, SVGImageElement, ImageBitmap, VideoFrame> imageData, int dx, int dy, int dWidth, int dHeight) => JSRef!.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
+        public void DrawImage(CanvasImageSource imageData, int dx, int dy, int dWidth, int dHeight) => JSRef!.CallVoid("drawImage", imageData, dx, dy, dWidth, dHeight);
         /// <summary>
         /// Draws the specified image. This method is available in multiple formats, providing a great deal of flexibility in its use.
         /// </summary>
@@ -308,7 +308,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="dy">The y-axis coordinate in the destination canvas at which to place the top-left corner of the source image.</param>
         /// <param name="dWidth">The width to draw the image in the destination canvas. This allows scaling of the drawn image. If not specified, the image is not scaled in width when drawn. Note that this argument is not included in the 3-argument syntax.</param>
         /// <param name="dHeight">The height to draw the image in the destination canvas. This allows scaling of the drawn image. If not specified, the image is not scaled in height when drawn. Note that this argument is not included in the 3-argument syntax.</param>
-        public void DrawImage(Union<HTMLVideoElement, HTMLImageElement, HTMLCanvasElement, OffscreenCanvas, SVGImageElement, ImageBitmap, VideoFrame> imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => JSRef!.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        public void DrawImage(CanvasImageSource imageData, int sx, int sy, int sWidth, int sHeight, int dx, int dy, int dWidth, int dHeight) => JSRef!.CallVoid("drawImage", imageData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         /// <summary>
         /// Draws a filled rectangle at (x, y) position whose size is determined by width and height.
         /// </summary>

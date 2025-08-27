@@ -34,7 +34,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// 16 byte challenge. Must be randomly generated on the server.<br/>
         /// An ArrayBuffer, TypedArray, or DataView originating from the relying party's server and used as a cryptographic challenge. This value will be signed by the authenticator and the signature will be sent back as part of the AuthenticatorAssertionResponse.signature (available in the response property of the PublicKeyCredential object returned by a successful get() call).
         /// </summary>
-        public Union<ArrayBuffer, TypedArray, DataView, byte[]> Challenge { get; set; }
+        public BufferSource Challenge { get; set; }
         /// <summary>
         /// An object containing properties representing the input values for any requested extensions. These extensions are used to specific additional processing by the client or authenticator during the authentication process. Examples include dealing with legacy FIDO API credentials, and evaluating outputs from a pseudo-random function (PRF) associated with a credential.<br/>
         /// Extensions are optional and different browsers may recognize different extensions. Processing extensions is always optional for the client: if a browser does not recognize a given extension, it will just ignore it. For information on using extensions, and which ones are supported by which browsers, see Web Authentication extensions.

@@ -13,6 +13,6 @@
         /// <summary>
         /// An ArrayBuffer, a TypedArray, or a DataView. The initialization vector. Must be 16 bytes, unpredictable, and preferably cryptographically random. However, it need not be secret (for example, it may be transmitted unencrypted along with the ciphertext).
         /// </summary>
-        public Union<ArrayBuffer, TypedArray, DataView, byte[]>? Iv { get; set; }
+        public BufferSource? Iv { get; set; }
     }
 }

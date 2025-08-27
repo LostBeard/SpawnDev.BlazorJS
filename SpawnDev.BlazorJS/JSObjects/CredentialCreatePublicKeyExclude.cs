@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An ArrayBuffer, TypedArray, or DataView representing the existing credential ID.
         /// </summary>
-        public Union<ArrayBuffer, TypedArray, DataView, byte[]> Id { get; set; }
+        public BufferSource Id { get; set; }
         /// <summary>
         /// An Array of strings representing allowed transports. Possible transports are: "ble", "hybrid", "internal", "nfc", and "usb" (see getTransports() for more details).
         /// </summary>

@@ -7,14 +7,14 @@ namespace SpawnDev.BlazorJS
     {
         public object? Value { get; protected set; }
         public Type ValueType { get; protected set; }
-        public Union(object? value, Type valueType)
+        protected Union(object? value, Type valueType)
         {
             Value = value;
             ValueType = valueType;
         }
     }
     [JsonConverter(typeof(UnionJsonConverter))]
-    public class Union<T1, T2> : Union
+    public sealed class Union<T1, T2> : Union
     {
         public static implicit operator Union<T1, T2>(T1 instance) => instance == null ? null : new Union<T1, T2>(instance);
         public static implicit operator Union<T1, T2>(T2 instance) => instance == null ? null : new Union<T1, T2>(instance);
@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS
         public Union(T2 value) : base(value, typeof(T2)) { }
     }
     [JsonConverter(typeof(UnionJsonConverter))]
-    public class Union<T1, T2, T3> : Union
+    public sealed class Union<T1, T2, T3> : Union
     {
         public static implicit operator Union<T1, T2, T3>(T1 instance) => instance == null ? null : new Union<T1, T2, T3>(instance);
         public static implicit operator Union<T1, T2, T3>(T2 instance) => instance == null ? null : new Union<T1, T2, T3>(instance);
@@ -32,7 +32,7 @@ namespace SpawnDev.BlazorJS
         public Union(T3 value) : base(value, typeof(T3)) { }
     }
     [JsonConverter(typeof(UnionJsonConverter))]
-    public class Union<T1, T2, T3, T4> : Union
+    public sealed class Union<T1, T2, T3, T4> : Union
     {
         public static implicit operator Union<T1, T2, T3, T4>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4>(instance);
         public static implicit operator Union<T1, T2, T3, T4>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4>(instance);
@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS
         public Union(T4 value) : base(value, typeof(T4)) { }
     }
     [JsonConverter(typeof(UnionJsonConverter))]
-    public class Union<T1, T2, T3, T4, T5> : Union
+    public sealed class Union<T1, T2, T3, T4, T5> : Union
     {
         public static implicit operator Union<T1, T2, T3, T4, T5>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5>(instance);
         public static implicit operator Union<T1, T2, T3, T4, T5>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5>(instance);
@@ -58,7 +58,7 @@ namespace SpawnDev.BlazorJS
         public Union(T5 value) : base(value, typeof(T5)) { }
     }
     [JsonConverter(typeof(UnionJsonConverter))]
-    public class Union<T1, T2, T3, T4, T5, T6> : Union
+    public sealed class Union<T1, T2, T3, T4, T5, T6> : Union
     {
         public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6>(instance);
         public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6>(instance);
@@ -74,7 +74,7 @@ namespace SpawnDev.BlazorJS
         public Union(T6 value) : base(value, typeof(T6)) { }
     }
     [JsonConverter(typeof(UnionJsonConverter))]
-    public class Union<T1, T2, T3, T4, T5, T6, T7> : Union
+    public sealed class Union<T1, T2, T3, T4, T5, T6, T7> : Union
     {
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
@@ -92,7 +92,7 @@ namespace SpawnDev.BlazorJS
         public Union(T7 value) : base(value, typeof(T7)) { }
     }
     [JsonConverter(typeof(UnionJsonConverter))]
-    public class Union<T1, T2, T3, T4, T5, T6, T7, T8> : Union
+    public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8> : Union
     {
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
@@ -112,7 +112,7 @@ namespace SpawnDev.BlazorJS
         public Union(T8 value) : base(value, typeof(T8)) { }
     }
     [JsonConverter(typeof(UnionJsonConverter))]
-    public class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> : Union
+    public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> : Union
     {
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
@@ -134,7 +134,7 @@ namespace SpawnDev.BlazorJS
         public Union(T9 value) : base(value, typeof(T9)) { }
     }
     [JsonConverter(typeof(UnionJsonConverter))]
-    public class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : Union
+    public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : Union
     {
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);

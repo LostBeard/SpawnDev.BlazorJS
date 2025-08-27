@@ -21,7 +21,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Defines the origin of the copy - the minimum corner of the texture sub-region to copy to/from. Together with copySize, defines the full copy sub-region.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Union<GPUOrigin3DDict, IEnumerable<GPUIntegerCoordinate>>? Origin { get; set; }
+        public GPUOrigin3D? Origin { get; set; }
         /// <summary>
         /// Defines which aspects of the texture to copy to/from.
         /// </summary>
