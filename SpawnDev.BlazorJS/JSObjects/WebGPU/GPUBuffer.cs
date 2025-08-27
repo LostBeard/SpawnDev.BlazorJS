@@ -69,7 +69,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="offset">A number representing the offset, in bytes, from the start of the buffer to the start of the range to be mapped. If offset is omitted, it defaults to 0.</param>
         /// <param name="size">A number representing the size, in bytes, of the range to be mapped. If size is omitted, the range mapped extends to the end of the GPUBuffer.</param>
         /// <returns>A Promise that resolves to Undefined when the GPUBuffer's content is ready to be accessed.</returns>
-        public Task MapAsync(int mode, long offset, long size) => JSRef!.CallVoidAsync("mapAsync", mode, offset, size);
+        public Task MapAsync(GPUMapMode mode, long offset, long size) => JSRef!.CallVoidAsync("mapAsync", mode, offset, size);
         /// <summary>
         /// The mapAsync() method of the GPUBuffer interface maps the specified range of the GPUBuffer. It returns a Promise that resolves when the GPUBuffer's content is ready to be accessed. While the GPUBuffer is mapped it cannot be used in any GPU commands.<br/>
         /// Once the buffer is successfully mapped (which can be checked via GPUBuffer.mapState), calls to GPUBuffer.getMappedRange() will return an ArrayBuffer containing the GPUBuffer's current values, to be read and updated by JavaScript as required.<br/>
@@ -86,7 +86,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         /// <param name="offset">A number representing the offset, in bytes, from the start of the buffer to the start of the range to be mapped. If offset is omitted, it defaults to 0.</param>
         /// <returns>A Promise that resolves to Undefined when the GPUBuffer's content is ready to be accessed.</returns>
-        public Task MapAsync(int mode, long offset = 0) => JSRef!.CallVoidAsync("mapAsync", mode, offset);
+        public Task MapAsync(GPUMapMode mode, long offset = 0) => JSRef!.CallVoidAsync("mapAsync", mode, offset);
         /// <summary>
         /// The unmap() method of the GPUBuffer interface unmaps the mapped range of the GPUBuffer, making its contents available for use by the GPU again after it has previously been mapped with GPUBuffer.mapAsync() (the GPU cannot access a mapped GPUBuffer).<br/>
         /// When unmap() is called, any ArrayBuffers created via GPUBuffer.getMappedRange() are detached.
