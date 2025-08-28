@@ -83,7 +83,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public static ImageData FromUint8Array(Uint8Array rgbaBytesUint8Array, int width, int height)
         {
-            using var rgbaBytesUint8ClampedArray = new Uint8ClampedArray(rgbaBytesUint8Array);
+            using var arrayBuffer = rgbaBytesUint8Array.Buffer;
+            using var rgbaBytesUint8ClampedArray = new Uint8ClampedArray(arrayBuffer);
             return new ImageData(rgbaBytesUint8ClampedArray, width, height);
         }
         /// <summary>
@@ -96,7 +97,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         public static ImageData FromBytes(byte[] rgbaBytes, int width, int height)
         {
             using var rgbaBytesUint8Array = new Uint8Array(rgbaBytes);
-            return FromUint8Array(rgbaBytesUint8Array, width, height);
+            using var arrayBuffer = rgbaBytesUint8Array.Buffer;
+            using var rgbaBytesUint8ClampedArray = new Uint8ClampedArray(arrayBuffer);
+            return new ImageData(rgbaBytesUint8ClampedArray, width, height);
         }
     }
 }
