@@ -75,17 +75,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         public int Width => JSRef!.Get<int>("width");
         #endregion
         /// <summary>
-        /// Creates an ImageData from a Uint8Array
+        /// Creates an ImageData from a Uint8Array's view on its underlying ArrayBuffer.<br/>
+        /// This is a zero-copy operation. The ImageData.Data property, a Uint8ClampedArray, will point to the same section of the same ArrayBuffer as the source.
         /// </summary>
-        /// <param name="rgbaBytesUint8Array"></param>
+        /// <param name="rgbaUint8Array"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static ImageData FromUint8Array(Uint8Array rgbaBytesUint8Array, int width, int height)
+        public static ImageData FromUint8Array(Uint8Array rgbaUint8Array, int width, int height)
         {
-            using var arrayBuffer = rgbaBytesUint8Array.Buffer;
-            using var rgbaBytesUint8ClampedArray = new Uint8ClampedArray(arrayBuffer);
-            return new ImageData(rgbaBytesUint8ClampedArray, width, height);
+            using var arrayBuffer = rgbaUint8Array.Buffer;
+            using var rgbaUint8ClampedArray = new Uint8ClampedArray(arrayBuffer, rgbaUint8Array.ByteOffset, rgbaUint8Array.ByteLength);
+            return new ImageData(rgbaUint8ClampedArray, width, height);
         }
         /// <summary>
         /// Creates an ImageData from a byte[]
