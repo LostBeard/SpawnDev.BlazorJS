@@ -1,4 +1,6 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.Toolbox;
+using System.Data.SqlTypes;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -269,7 +271,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="dy"></param>
         public void PutImageBytes(byte[] srcBytes, int srcWidth, int srcHeight, int dx = 0, int dy = 0)
         {
-            using var imageData = ImageData.FromBytes(srcBytes, srcWidth, srcHeight);
+            // using a SharedByteArray prevents a copy of the data from being made before the draw. 
+            using var sharedUint8Array = (SharedByteArray)srcBytes;
+            using var imageData = ImageData.FromUint8Array(sharedUint8Array, srcWidth, srcHeight);
             PutImageData(imageData, dx, dy);
         }
         /// <summary>
@@ -277,7 +281,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public void PutImageBytes(byte[] imageBytes, int srcWidth, int srcHeight, int dx, int dy, int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight)
         {
-            using var imageData = ImageData.FromBytes(imageBytes, srcWidth, srcHeight);
+            // using a SharedByteArray prevents a copy of the data from being made before the draw. 
+            using var sharedUint8Array = (SharedByteArray)imageBytes;
+            using var imageData = ImageData.FromUint8Array(sharedUint8Array, srcWidth, srcHeight);
             PutImageData(imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
         }
         /// <summary>

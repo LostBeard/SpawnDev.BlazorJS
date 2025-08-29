@@ -36,6 +36,37 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="size"></param>
         public SharedByteArray(long size) : base(size) { }
     }
+    /// <summary>
+    /// Pins the byte[] in memory, and creates a Uint8ClampedArray, pointing at that byte[], that can be passed to Javascript.<br/>
+    /// Javascript can modify the Blazor .Net byte[] directly by modifying the Uint8ClampedArray.<br/>
+    /// When this object is disposed the memory will be unpinned.<br/>
+    /// WARNING: The Uint8ClampedArray will point to a small region of the Blazor .Net memory heap ArrayBuffer.<br/>
+    /// If using the Uint8ClampedArray.buffer, make sure to only use the region specified by the Uint8ClampedArray.byteOffset and length properties.
+    /// </summary>
+    [JsonConverter(typeof(SharedMemoryConverter))]
+    public class SharedByteClampedArray : SharedMemory<byte, Uint8ClampedArray>
+    {
+        /// <summary>
+        /// Allows casting to SharedByteArray in situations where the Uint8ClampedArray will be immediately used
+        /// </summary>
+        /// <param name="data">source</param>
+        public static explicit operator SharedByteClampedArray(byte[] data) => new SharedByteClampedArray(data);
+        /// <summary>
+        /// Implicit conversion to Uint8ClampedArray allows drop in use anywhere Uint8ClampedArray is used.
+        /// </summary>
+        /// <param name="memView"></param>
+        public static implicit operator Uint8ClampedArray(SharedByteClampedArray memView) => memView.JSView;
+        /// <summary>
+        /// Pin data in a region of Blazor memory to make it directly accessible by Javascript
+        /// </summary>
+        /// <param name="data"></param>
+        public SharedByteClampedArray(byte[] data) : base(data) { }
+        /// <summary>
+        /// Pin data in a region of Blazor memory to make it directly accessible by Javascript
+        /// </summary>
+        /// <param name="size"></param>
+        public SharedByteClampedArray(long size) : base(size) { }
+    }
 
     /// <summary>
     /// Pins the float[] in memory, and creates a Float32Array, pointing at that float[], that can be passed to Javascript.<br/>
