@@ -3,13 +3,16 @@ using System.Diagnostics;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
+    /// <summary>
+    /// QuickWorker provides helper methods for running Javascript workers.<br/>
+    /// </summary>
     public static class QuickWorker
     {
         /// <summary>
         /// Create a dedicated worker instance from the provided Javascript code string
         /// </summary>
-        /// <param name="js"></param>
-        /// <returns></returns>
+        /// <param name="js">worker script string</param>
+        /// <returns>The new Worker</returns>
         public static Worker CreateWorkerFromJS(string js)
         {
             using var blob = new Blob(new string[] { js }, new BlobOptions { Type = "application/javascript" });
@@ -18,6 +21,12 @@ namespace SpawnDev.BlazorJS.Toolbox
             URL.RevokeObjectURL(objUrl);
             return ret;
         }
+        /// <summary>
+        /// Creates the specified number of workers using the provided Javascript script source
+        /// </summary>
+        /// <param name="js">worker script string</param>
+        /// <param name="count">number of workers to create</param>
+        /// <returns>The new Workers</returns>
         public static List<Worker> CreateWorkersFromJS(string js, int count)
         {
             using var blob = new Blob(new string[] { js }, new BlobOptions { Type = "application/javascript" });
@@ -35,9 +44,17 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// When done the worker must postMessage(INSTANCE_OF_Uint8Array, [ INSTANCE_OF_Uint8Array.buffer ])
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="js"></param>
+        /// <param name="js">worker script string</param>
         /// <returns></returns>
         public static Task<byte[]> ProcessData(byte[] data, string js) => ProcessData<byte[]>(data, js);
+
+        /// <summary>
+        /// Create a worker that will process the data received in the first message event and postMessage back the result as type TResult.
+        /// </summary>
+        /// <typeparam name="TResult">The data Type of the result.</typeparam>
+        /// <param name="data">data to send to the worker via postMessage</param>
+        /// <param name="js">The Javascript source</param>
+        /// <returns>The data received from the worker via a message event as type TResult.</returns>
         public static Task<TResult> ProcessData<TResult>(byte[] data, string js)
         {
             using var uint8 = new Uint8Array(data);
@@ -46,12 +63,13 @@ namespace SpawnDev.BlazorJS.Toolbox
         }
 
         /// <summary>
-        /// Creates a Worker from the provided Javascript code and sends it the data optionally using transferables
+        /// Creates a Worker from the provided Javascript code and sends it the specified data, optionally using transferables<br/>
+        /// The first message received from the worker is expected to have the result that will be returned as type TResult.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="js"></param>
-        /// <param name="data"></param>
-        /// <param name="transferables"></param>
+        /// <typeparam name="TResult">The return type of the data the worker will return via postMessage</typeparam>
+        /// <param name="js">worker script string</param>
+        /// <param name="data">data to send to the worker</param>
+        /// <param name="transferables">What data, if any, should be transferred instead of cloned.</param>
         /// <returns></returns>
         public static Task<TResult> ProcessData<TResult>(string js, object data, object[]? transferables = null)
         {
@@ -61,7 +79,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             Action<MessageEvent>? msgHandler = null;
             msgHandler = new Action<MessageEvent>((msg) =>
             {
-                worker.OnMessage -= msgHandler; 
+                worker.OnMessage -= msgHandler!; 
                 worker.Terminate();
                 worker.Dispose();
                 var result = msg.GetData<TResult>();
@@ -81,32 +99,60 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
             return t.Task;
         }
+
+        /// <summary>
+        /// Creates a new SharedArrayBuffer and copies the data from the provided ArrayBuffer to it.
+        /// </summary>
+        /// <param name="arrayBuffer">Source data to copy</param>
+        /// <param name="options">Optional SharedArrayBufferOptions</param>
+        /// <returns>new SharedArrayBuffer</returns>
         public static SharedArrayBuffer CreateSharedArrayBuffer(ArrayBuffer arrayBuffer, SharedArrayBufferOptions? options = null)
         {
-            var ret = new SharedArrayBuffer(arrayBuffer.ByteLength, options);
+            var ret = options == null ? new SharedArrayBuffer(arrayBuffer.ByteLength) : new SharedArrayBuffer(arrayBuffer.ByteLength, options);
             using var uint8ArraySrc = new Uint8Array(arrayBuffer);
             using var uint8ArrayDest = new Uint8Array(ret);
             uint8ArrayDest.Set(uint8ArraySrc);
             return ret;
         }
+
+        /// <summary>
+        /// Creates a new SharedArrayBuffer, copies the data from the provided Uint8Array to it, and returns a new Uint8Array view of the SharedArrayBuffer.<br/>
+        /// </summary>
+        /// <param name="uint8ArraySrc">Source data to copy</param>
+        /// <param name="options">Optional SharedArrayBufferOptions</param>
+        /// <returns>new Uint8Array with an SharedArrayBuffer buffer</returns>
         public static Uint8Array CreateNewSharedUint8Array(Uint8Array uint8ArraySrc, SharedArrayBufferOptions? options = null)
         {
-            using var ret = new SharedArrayBuffer(uint8ArraySrc.Length, options);
-            var uint8ArrayDest = new Uint8Array(ret);
-            uint8ArrayDest.Set(uint8ArraySrc);
-            return uint8ArrayDest;
-        }
-        public static Uint8Array CreateNewSharedUint8Array(byte[] uint8ArraySrc, SharedArrayBufferOptions? options = null)
-        {
-            using var ret = new SharedArrayBuffer(uint8ArraySrc.Length, options);
+            using var ret = options == null ? new SharedArrayBuffer(uint8ArraySrc.Length) : new SharedArrayBuffer(uint8ArraySrc.Length, options);
             var uint8ArrayDest = new Uint8Array(ret);
             uint8ArrayDest.Set(uint8ArraySrc);
             return uint8ArrayDest;
         }
 
-        // the worker message data property will be an array with the values [ WORKER_INDEX, WORKER_COUNT, SharedArrayBuffer ]
-        // this function could check if SharedArrayBuffer and Passing it to workers is supported and force a count of 1 and disable SharedArrayBuffer if needed
-        // but that would require the script to know that and work differently
+        /// <summary>
+        /// Creates a new SharedArrayBuffer, copies the data from the provided byte[] to it, and returns a new Uint8Array view of the SharedArrayBuffer.<br/>
+        /// </summary>
+        /// <param name="uint8ArraySrc">Source data to copy</param>
+        /// <param name="options">Optional SharedArrayBufferOptions</param>
+        /// <returns>new Uint8Array with an SharedArrayBuffer buffer</returns>
+        public static Uint8Array CreateNewSharedUint8Array(byte[] uint8ArraySrc, SharedArrayBufferOptions? options = null)
+        {
+            using var ret = options == null ? new SharedArrayBuffer(uint8ArraySrc.Length) : new SharedArrayBuffer(uint8ArraySrc.Length, options);
+            var uint8ArrayDest = new Uint8Array(ret);
+            uint8ArrayDest.Set(uint8ArraySrc);
+            return uint8ArrayDest;
+        }
+
+
+        /// <summary>
+        /// The worker message data property will be an array with the values [ WORKER_INDEX, WORKER_COUNT, SharedArrayBuffer ]
+        /// this function could check if SharedArrayBuffer and Passing it to workers is supported and force a count of 1 and disable SharedArrayBuffer if needed
+        /// but that would require the script to know that and work differently
+        /// </summary>
+        /// <param name="js"></param>
+        /// <param name="data"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public static async Task<byte[]> ParallelProcessData(string js, byte[] data, int count = 4)
         {
             using var sharedUint8Array = CreateNewSharedUint8Array(data);
@@ -119,7 +165,7 @@ namespace SpawnDev.BlazorJS.Toolbox
                 Action<MessageEvent>? msgHandler = null;
                 msgHandler = new Action<MessageEvent>((msg) =>
                 {
-                    worker.OnMessage -= msgHandler;
+                    worker.OnMessage -= msgHandler!;
                     worker.Terminate();
                     worker.Dispose();
                     t.SetResult();
