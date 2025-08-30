@@ -421,5 +421,58 @@ namespace SpawnDev.BlazorJS.JSObjects
             var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
             return byteSpan;
         }
+        static Dictionary<Type, int> TypedArrayElementSize = new Dictionary<Type, int>
+        {
+            { typeof(Uint8ClampedArray), 1 },
+            { typeof(Uint8Array), 1 },
+            { typeof(Uint16Array), 2 },
+            { typeof(Uint32Array), 4 },
+            { typeof(BigUint64Array), 8 },
+            { typeof(Int8Array), 1 },
+            { typeof(Int16Array), 2 },
+            { typeof(Int32Array), 4 },
+            { typeof(BigInt64Array), 8 },
+            { typeof(Float16Array), 2 },
+            { typeof(Float32Array), 4 },
+            { typeof(Float64Array), 8 },
+        };
+        static Dictionary<Type, Type> TypeDefaultTypedArrayType = new Dictionary<Type, Type>
+        {
+            { typeof(byte), typeof(Uint8Array) },
+            { typeof(ushort), typeof(Uint16Array) },
+            { typeof(uint), typeof(Uint32Array) },
+            { typeof(ulong), typeof(BigUint64Array) },
+            { typeof(sbyte), typeof(Int8Array) },
+            { typeof(short), typeof(Int16Array) },
+            { typeof(int), typeof(Int32Array) },
+            { typeof(long), typeof(BigInt64Array) },
+            { typeof(Half), typeof(Float16Array) },
+            { typeof(float), typeof(Float32Array) },
+            { typeof(double), typeof(Float64Array) },
+        };
+        /// <summary>
+        /// Returns the Javascript native array type for the specified unmanaged type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static Type? GetTypeDefaultTypedArrayType<T>() where T : unmanaged => TypeDefaultTypedArrayType.TryGetValue(typeof(T), out var typedArrayType) ? typedArrayType : null;
+        /// <summary>
+        /// Returns the Javascript native array type for the specified unmanaged type
+        /// </summary>
+        /// <param name="unmanagedType"></param>
+        /// <returns></returns>
+        public static Type? GetTypeDefaultTypedArrayType(Type unmanagedType) => TypeDefaultTypedArrayType.TryGetValue(unmanagedType, out var typedArrayType) ? typedArrayType : null;
+        /// <summary>
+        /// Returns the size of the specified TypedArray type
+        /// </summary>
+        /// <typeparam name="TTypedArray"></typeparam>
+        /// <returns></returns>
+        public static int GetTypedArrayElementSize<TTypedArray>() where TTypedArray : TypedArray => TypedArrayElementSize.TryGetValue(typeof(TTypedArray), out var size) ? size : 0;
+        /// <summary>
+        /// Returns the size of the specified TypedArray type
+        /// </summary>
+        /// <param name="typedArrayType"></param>
+        /// <returns></returns>
+        public static int GetTypedArrayElementSize(Type typedArrayType) => TypedArrayElementSize.TryGetValue(typedArrayType, out var size) ? size : 0;
     }
 }
