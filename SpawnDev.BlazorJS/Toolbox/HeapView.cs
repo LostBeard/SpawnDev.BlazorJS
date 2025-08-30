@@ -68,42 +68,131 @@ namespace SpawnDev.BlazorJS.Toolbox
     [JsonConverter(typeof(HeapViewConverter))]
     public class HeapView : IDisposable
     {
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(string data) => Create(data);
-
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(byte[] data) => Create(data);
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(ushort[] data) => Create(data);
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(uint[] data) => Create(data);
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(ulong[] data) => Create(data);
-
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(sbyte[] data) => Create(data);
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(short[] data) => Create(data);
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(int[] data) => Create(data);
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(long[] data) => Create(data);
-
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(Half[] data) => Create(data);
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(float[] data) => Create(data);
+        /// <summary>
+        /// Explicit conversion to HeapView
+        /// </summary>
+        /// <param name="data">Data to pin</param>
         public static explicit operator HeapView(double[] data) => Create(data);
         /// <summary>
-        /// Implicit conversion to BigInt64Array
+        /// Implicit conversion to a TypedArray
         /// </summary>
-        /// <param name="memView"></param>
-        public static implicit operator BigInt64Array(HeapView memView) => memView.As<BigInt64Array>();
-        public static implicit operator BigUint64Array(HeapView memView) => memView.As<BigUint64Array>();
-
-        public static implicit operator Float16Array(HeapView memView) => memView.As<Float16Array>();
-        public static implicit operator Float32Array(HeapView memView) => memView.As<Float32Array>();
-        public static implicit operator Float64Array(HeapView memView) => memView.As<Float64Array>();
-
-        public static implicit operator Int16Array(HeapView memView) => memView.As<Int16Array>();
-        public static implicit operator Int32Array(HeapView memView) => memView.As<Int32Array>();
-        public static implicit operator Int8Array(HeapView memView) => memView.As<Int8Array>();
-
-        public static implicit operator Uint16Array(HeapView memView) => memView.As<Uint16Array>();
-        public static implicit operator Uint32Array(HeapView memView) => memView.As<Uint32Array>();
-        public static implicit operator Uint8Array(HeapView memView) => memView.As<Uint8Array>();
-        public static implicit operator Uint8ClampedArray(HeapView memView) => memView.As<Uint8ClampedArray>();
-
-        public static implicit operator DataView(HeapView memView) => memView.AsDataView();
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator BigInt64Array(HeapView heapView) => heapView.As<BigInt64Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator BigUint64Array(HeapView heapView) => heapView.As<BigUint64Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Float16Array(HeapView heapView) => heapView.As<Float16Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Float32Array(HeapView heapView) => heapView.As<Float32Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Float64Array(HeapView heapView) => heapView.As<Float64Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Int16Array(HeapView heapView) => heapView.As<Int16Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Int32Array(HeapView heapView) => heapView.As<Int32Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Int8Array(HeapView heapView) => heapView.As<Int8Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Uint16Array(HeapView heapView) => heapView.As<Uint16Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Uint32Array(HeapView heapView) => heapView.As<Uint32Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Uint8Array(HeapView heapView) => heapView.As<Uint8Array>();
+        /// <summary>
+        /// Implicit conversion to a TypedArray
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator Uint8ClampedArray(HeapView heapView) => heapView.As<Uint8ClampedArray>();
+        /// <summary>
+        /// Implicit conversion to a DataView
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator DataView(HeapView heapView) => heapView.AsDataView();
 
         /// <summary>
         /// Returns a TypedArray based on the ElementType
@@ -127,10 +216,11 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// Returns a TypedArray based on the ElementType
         /// </summary>
         /// <returns></returns>
-        public JSObject AsJSView()
+        public JSObject AsNativeView()
         {
             if (DataType == typeof(string))
             {
+                // ArrayBuffer does not have a string viewer so it must be copied using TextDecoder
                 using var textDecoder = new TextDecoder("utf-16");
                 var jsString = textDecoder.JSRef!.Call<JSObject>("decode", (Uint8Array)this);
                 return jsString;
@@ -145,7 +235,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// Returns a TypedArray copy based on the ElementType
         /// </summary>
         /// <returns></returns>
-        public JSObject ToJSView()
+        public JSObject ToNativeView()
         {
             if (DataType == typeof(string))
             {
@@ -246,6 +336,9 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             Dispose(false);
         }
+        /// <summary>
+        /// BlazorJSRuntime
+        /// </summary>
         protected BlazorJSRuntime JS => BlazorJSRuntime.JS;
         /// <summary>
         /// Creates a copy of the data and returns it as an ArrayBuffer
@@ -383,7 +476,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="options"></param>
         public override void Write(Utf8JsonWriter writer, HeapView value, JsonSerializerOptions options)
         {
-            JsonSerializer.Serialize(writer, (object?)value?.AsJSView(), options);
+            JsonSerializer.Serialize(writer, (object?)value?.AsNativeView(), options);
         }
     }
 }
