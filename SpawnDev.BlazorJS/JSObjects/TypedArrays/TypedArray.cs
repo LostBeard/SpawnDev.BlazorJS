@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Web.Virtualization;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.Toolbox;
 using System.Runtime.InteropServices;
 
 namespace SpawnDev.BlazorJS.JSObjects
@@ -102,17 +102,31 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Create a new typed array starting at this typed array's ByteOffset + byteOffset, returning length number of items in the resulting typed array
         /// </summary>
+        /// <param name="typedArray"></param>
+        /// <param name="byteOffset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public TypedArray ReCast(Type typedArray, long byteOffset, long length) => Buffer.Using(o => (TypedArray)Activator.CreateInstance(typedArray, o, ByteOffset + byteOffset, length)!);
+        /// <summary>
+        /// Create a new typed array starting at this typed array's ByteOffset + byteOffset
+        /// </summary>
+        /// <param name="typedArray"></param>
+        /// <returns></returns>
+        public TypedArray ReCast(Type typedArray) => Buffer.Using(o => (TypedArray)Activator.CreateInstance(typedArray, o, ByteOffset, ByteLength)!);
+        /// <summary>
+        /// Create a new typed array starting at this typed array's ByteOffset + byteOffset, returning length number of items in the resulting typed array
+        /// </summary>
         /// <typeparam name="TTypedArray"></typeparam>
         /// <param name="byteOffset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public TTypedArray ReCast<TTypedArray>(long byteOffset, long length) where TTypedArray : TypedArray => Buffer.Using(o => (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), new object?[] { o, ByteOffset + byteOffset, length })!);
+        public TTypedArray ReCast<TTypedArray>(long byteOffset, long length) where TTypedArray : TypedArray => Buffer.Using(o => (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), o, ByteOffset + byteOffset, length)!);
         /// <summary>
         /// Create a new typed array starting at this typed array's ByteOffset + byteOffset
         /// </summary>
         /// <typeparam name="TTypedArray"></typeparam>
         /// <returns></returns>
-        public TTypedArray ReCast<TTypedArray>() where TTypedArray : TypedArray => Buffer.Using(o => (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), new object?[] { o, ByteOffset, ByteLength })!);
+        public TTypedArray ReCast<TTypedArray>() where TTypedArray : TypedArray => Buffer.Using(o => (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), o, ByteOffset, ByteLength)!);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -141,113 +155,69 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
-        /// <param name="typedArray"></param>
-        public void Set(sbyte[] typedArray) => JSRef!.CallVoid("set", typedArray);
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="typedArray"></param>
-        /// <param name="targetOffset"></param>
-        public void Set(sbyte[] typedArray, long targetOffset) => JSRef!.CallVoid("set", typedArray, targetOffset);
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="typedArray"></param>
-        public void Set(byte[] typedArray) => JSRef!.CallVoid("set", typedArray);
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="typedArray"></param>
-        /// <param name="targetOffset"></param>
-        public void Set(byte[] typedArray, long targetOffset) => JSRef!.CallVoid("set", typedArray, targetOffset);
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
         /// <param name="array"></param>
-        public void Set(short[] array) => JSRef!.CallVoid("set", array);
+        /// <param name="targetOffset"></param>
+        public void Set(sbyte[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(short[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="array"></param>
-        public void Set(ushort[] array) => JSRef!.CallVoid("set", array);
+        public void Set(byte[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(ushort[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="array"></param>
-        public void Set(int[] array) => JSRef!.CallVoid("set", array);
+        public void Set(short[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(int[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="array"></param>
-        public void Set(uint[] array) => JSRef!.CallVoid("set", array);
+        public void Set(ushort[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(uint[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="array"></param>
-        public void Set(long[] array) => new BigInt64Array(array).Using(o => JSRef!.CallVoid("set", o));
+        public void Set(int[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(long[] array, long targetOffset) => new BigInt64Array(array).Using(o => JSRef!.CallVoid("set", o, targetOffset));
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="array"></param>
-        public void Set(ulong[] array) => new BigUint64Array(array).Using(o => JSRef!.CallVoid("set", o));
+        public void Set(uint[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(ulong[] array, long targetOffset) => new BigUint64Array(array).Using(o => JSRef!.CallVoid("set", o, targetOffset));
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="array"></param>
-        public void Set(float[] array) => JSRef!.CallVoid("set", array);
+        public void Set(long[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(float[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
-        /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
-        /// </summary>
-        /// <param name="array"></param>
-        public void Set(double[] array) => JSRef!.CallVoid("set", array);
+        public void Set(ulong[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(double[] array, long targetOffset) => JSRef!.CallVoid("set", array, targetOffset);
+        public void Set(Half[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(float[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        /// <summary>
+        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="targetOffset"></param>
+        public void Set(double[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
@@ -269,40 +239,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="typedArray"></param>
         /// <param name="targetOffset"></param>
-        public void Set(Array typedArray, long targetOffset) => JSRef!.CallVoid("set", typedArray, targetOffset);
-        /// <summary>
-        /// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
-        /// </summary>
-        /// <returns></returns>
-        public virtual byte[] ReadBytes()
-        {
-            using var buffer = Buffer;
-            using var uint8Array = new Uint8Array(buffer, ByteOffset, ByteLength);
-            return uint8Array.ReadBytes();
-        }
+        public void Set(Array typedArray, long targetOffset = 0) => JSRef!.CallVoid("set", typedArray, targetOffset);
         /// <summary>
         /// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
         /// </summary>
         /// <param name="byteOffset"></param>
         /// <returns></returns>
-        public virtual byte[] ReadBytes(long byteOffset)
-        {
-            using var buffer = Buffer;
-            using var uint8Array = new Uint8Array(buffer, ByteOffset + byteOffset, ByteLength - byteOffset);
-            return uint8Array.ReadBytes();
-        }
+        public virtual byte[] ReadBytes(long byteOffset = 0) => Read<byte>(byteOffset);
         /// <summary>
         /// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
         /// </summary>
         /// <param name="byteOffset"></param>
         /// <param name="byteLength"></param>
         /// <returns></returns>
-        public virtual byte[] ReadBytes(long byteOffset, long byteLength)
-        {
-            using var buffer = Buffer;
-            using var uint8Array = new Uint8Array(buffer, ByteOffset + byteOffset, byteLength);
-            return uint8Array.ReadBytes();
-        }
+        public virtual byte[] ReadBytes(long byteOffset, long byteLength) => Read<byte>(byteOffset, byteLength);
         /// <summary>
         /// Write bytes to the underlying ArrayBuffer starting at this TypedArray's byteOffset
         /// </summary>
@@ -317,21 +267,146 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
-        /// <param name="typedArray"></param>
-        public void Write<T>(T[] typedArray) where T : unmanaged
+        public void Write<T>(T[] srcData, long destByteOffset = 0) where T : unmanaged
         {
-            if (typeof(T) == typeof(byte)) WriteBytes((byte[])(object)typedArray);
-            else WriteBytes(MemoryMarshal.Cast<T, byte>(typedArray).ToArray());
+            var typeTypedArrayType = TypedArray.GetTypeDefaultTypedArrayType<T>();
+            if (typeTypedArrayType == null) throw new NotImplementedException($"Unsupported type: {typeof(T).Name}");
+            if (destByteOffset < 0) new IndexOutOfRangeException(nameof(destByteOffset));
+            var tSize = Marshal.SizeOf<T>();
+            var bytesToCopy = srcData.LongLength * tSize;
+            var bytesMax = ByteLength - destByteOffset;
+            if (bytesMax < bytesToCopy) throw new NotImplementedException($"Write out of bounds: {typeof(T).Name}");
+            // create a TypedArray that starts at destByteOffset and with an element of type T
+            if (typeTypedArrayType == this.GetType() && destByteOffset == 0)
+            {
+                using var heapView = HeapView.Create(srcData);
+                using var typedArray = heapView.AsTypedArray();
+                Set(typedArray);
+            }
+            else
+            {
+                try
+                {
+                    using var thisTyped = ReCast(typeTypedArrayType, destByteOffset, srcData.LongLength);
+                    using var heapView = HeapView.Create(srcData);
+                    using var typedArray = heapView.AsTypedArray();
+                    thisTyped.Set(typedArray);
+                }
+                catch (Exception ex)
+                {
+                    var err = ex.ToString();
+                    var nmt = true;
+                }
+            }
         }
         /// <summary>
-        /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
+        /// Copies an array of type T from this TypedArray
         /// </summary>
-        /// <param name="typedArray"></param>
-        /// <param name="targetOffset"></param>
-        public void Write<T>(T[] typedArray, long targetOffset) where T : unmanaged
+        /// <typeparam name="T"></typeparam>
+        /// <param name="srcByteOffset"></param>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public long Read<T>(long srcByteOffset, T[] buffer, long offset, long count) where T : unmanaged
         {
-            if (typeof(T) == typeof(byte)) WriteBytes((byte[])(object)typedArray, targetOffset);
-            else WriteBytes(MemoryMarshal.Cast<T, byte>(typedArray).ToArray(), targetOffset);
+            var typeTypedArrayType = TypedArray.GetTypeDefaultTypedArrayType<T>();
+            if (typeTypedArrayType == null) throw new NotImplementedException($"Unsupported type: {typeof(T).Name}");
+            if (srcByteOffset < 0) new IndexOutOfRangeException(nameof(srcByteOffset));
+            var tSize = Marshal.SizeOf<T>();
+            var bytesMax = ByteLength - srcByteOffset;
+            if (bytesMax <= 0) return 0;
+            var countMax = (long)Math.Floor((double)bytesMax / (double)tSize);
+            count = Math.Clamp(count, 0, countMax);
+            if (count > 0)
+            {
+                if (typeTypedArrayType == this.GetType() && srcByteOffset == 0)
+                {
+                    using var heapView = HeapView.Create(buffer);
+                    using var typedArray = heapView.AsTypedArray();
+                    typedArray.Set(this, offset);
+                }
+                else
+                {
+                    using var thisTyped = ReCast(typeTypedArrayType, srcByteOffset, count);
+                    using var heapView = HeapView.Create(buffer);
+                    using var typedArray = heapView.AsTypedArray();
+                    typedArray.Set(thisTyped, offset);
+                }
+            }
+            return count;
+        }
+        /// <summary>
+        /// Read type T from this TypedArray
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="srcByteOffset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public T[] Read<T>(long srcByteOffset, long count) where T : unmanaged
+        {
+            var typeTypedArrayType = TypedArray.GetTypeDefaultTypedArrayType<T>();
+            if (typeTypedArrayType == null) throw new NotImplementedException($"Unsupported type: {typeof(T).Name}");
+            if (srcByteOffset < 0) new IndexOutOfRangeException(nameof(srcByteOffset));
+            var tSize = Marshal.SizeOf<T>();
+            var bytesMax = ByteLength - srcByteOffset;
+            if (bytesMax <= 0) return new T[0];
+            var countMax = (long)Math.Floor((double)bytesMax / (double)tSize);
+            count = Math.Clamp(count, 0, countMax);
+            var buffer = new T[count];
+            if (count > 0)
+            {
+                if (typeTypedArrayType == this.GetType() && srcByteOffset == 0)
+                {
+                    using var heapView = HeapView.Create(buffer);
+                    using var typedArray = heapView.AsTypedArray();
+                    typedArray.Set(this);
+                }
+                else
+                {
+                    using var thisTyped = ReCast(typeTypedArrayType, srcByteOffset, count);
+                    using var heapView = HeapView.Create(buffer);
+                    using var typedArray = heapView.AsTypedArray();
+                    typedArray.Set(thisTyped);
+                }
+            }
+            return buffer;
+        }
+        /// <summary>
+        /// Read type T from this TypedArray
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="srcByteOffset"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public T[] Read<T>(long srcByteOffset = 0) where T : unmanaged
+        {
+            var typeTypedArrayType = TypedArray.GetTypeDefaultTypedArrayType<T>();
+            if (typeTypedArrayType == null) throw new NotImplementedException($"Unsupported type: {typeof(T).Name}");
+            if (srcByteOffset < 0) new IndexOutOfRangeException(nameof(srcByteOffset));
+            var bytesMax = ByteLength - srcByteOffset;
+            if (bytesMax <= 0) return new T[0];
+            var tSize = Marshal.SizeOf<T>();
+            var count = (long)Math.Floor((double)bytesMax / (double)tSize);
+            var buffer = new T[count];
+            if (count > 0)
+            {
+                if (typeTypedArrayType == this.GetType() && srcByteOffset == 0)
+                {
+                    using var heapView = HeapView.Create(buffer);
+                    using var typedArray = heapView.AsTypedArray();
+                    typedArray.Set(this);
+                }
+                else
+                {
+                    using var thisTyped = ReCast(typeTypedArrayType, srcByteOffset, count);
+                    using var heapView = HeapView.Create(buffer);
+                    using var typedArray = heapView.AsTypedArray();
+                    typedArray.Set(thisTyped);
+                }
+            }
+            return buffer;
         }
         /// <summary>
         /// Returns an array of type T

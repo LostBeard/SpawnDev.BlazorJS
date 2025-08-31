@@ -27,7 +27,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static BigUint64Array From(IEnumerable<BigInt<ulong>> values) => JS.Call<BigUint64Array>($"{nameof(BigUint64Array)}.from", values);
+        public static BigUint64Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<BigUint64Array>($"{nameof(BigUint64Array)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -56,14 +56,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Creates a new BigUint64Array object.
         /// </summary>
         /// <param name="array"></param>
-        public BigUint64Array(ulong[] array) : base(default!)
-        {
-            var myByteArray = new byte[array.Length * sizeof(ulong)];
-            System.Buffer.BlockCopy(array, 0, myByteArray, 0, array.Length * sizeof(ulong));
-            using var uint8Array = new Uint8Array(myByteArray);
-            var jsRef = JS.New(nameof(BigUint64Array), uint8Array.Buffer);
-            FromReference(jsRef);
-        }        
+        public BigUint64Array(ulong[] array) : base(JS.New(nameof(BigUint64Array), (ArrayBuffer)array)) { }
         /// <summary>
         /// Creates a new BigUint64Array object.
         /// </summary>

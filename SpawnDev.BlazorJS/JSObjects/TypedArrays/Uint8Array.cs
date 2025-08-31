@@ -1,4 +1,6 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.Toolbox;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
@@ -13,7 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a copy of the Javascript typed array as a .Net array
         /// </summary>
         /// <param name="values"></param>
-        public static explicit operator byte[]?(Uint8Array? values) => values == null ? null : values.ToArray();
+        public static explicit operator byte[]?(Uint8Array? values) => values == null ? null : values.ReadBytes();
         /// <summary>
         /// Returns a copy of the .Net array as a Javascript typed array
         /// </summary>
@@ -29,7 +31,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static Uint8Array From(IEnumerable<byte> values) => JS.ReturnMe<Uint8Array>(values);
+        public static Uint8Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<Uint8Array>($"{nameof(Uint8Array)}.from", values);
         #region Constructors
         /// <summary>
         /// Deserialization constructor
@@ -90,7 +92,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Uint8Array() constructor creates Uint8Array objects.
         /// </summary>
         /// <param name="sourceBytes"></param>
-        public Uint8Array(byte[] sourceBytes) : base(JS.ReturnMe<IJSInProcessObjectReference>(sourceBytes)) { }
+        public Uint8Array(byte[] sourceBytes) : base(JS.New(nameof(Uint8Array), (ArrayBuffer)sourceBytes)) { }
         /// <summary>
         /// The Uint8Array() constructor creates Uint8Array objects.
         /// </summary>
@@ -133,48 +135,70 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="end">Element to end at. The offset is exclusive. If not specified, all elements from the one specified by begin to the end of the array are included in the new view.</param>
         /// <returns></returns>
         public Uint8Array SubArray(long start, long end) => JSRef!.Call<Uint8Array>("subarray", start, end);
-        /// <summary>
-        /// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
-        /// </summary>
-        /// <returns></returns>
-        public byte[] SubArrayBytes() => JSRef!.Call<byte[]>("subarray");
-        /// <summary>
-        /// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
-        /// </summary>
-        /// <param name="start">Element to begin at. The offset is inclusive. The whole array will be included in the new view if this value is not specified.</param>
-        /// <returns></returns>
-        public byte[] SubArrayBytes(long start) => JSRef!.Call<byte[]>("subarray", start);
-        /// <summary>
-        /// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
-        /// </summary>
-        /// <param name="start">Element to begin at. The offset is inclusive. The whole array will be included in the new view if this value is not specified.</param>
-        /// <param name="end">Element to end at. The offset is exclusive. If not specified, all elements from the one specified by begin to the end of the array are included in the new view.</param>
-        /// <returns></returns>
-        public byte[] SubArrayBytes(long start, long end) => JSRef!.Call<byte[]>("subarray", start, end);
-        /// <summary>
-        /// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
-        /// </summary>
-        /// <returns></returns>
-        public override byte[] ReadBytes() => JS.ReturnMe<byte[]>(JSRef);
-        /// <summary>
-        /// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
-        /// </summary>
-        /// <param name="start"></param>
-        /// <returns></returns>
-        public override byte[] ReadBytes(long start) => JSRef!.Call<byte[]>("subarray", start);
-        /// <summary>
-        /// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        public override byte[] ReadBytes(long start, long length) => JSRef!.Call<byte[]>("subarray", start, start + length);
-        /// <summary>
-        /// Write bytes to the underlying ArrayBuffer starting at this TypedArray's byteOffset
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="byteOffset"></param>
-        public override void WriteBytes(byte[] data, long byteOffset = 0) => Set(data, byteOffset);
+        ///// <summary>
+        ///// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
+        ///// </summary>
+        ///// <returns></returns>
+        //public byte[] SubArrayBytes() => JSRef!.Call<byte[]>("subarray");
+        ///// <summary>
+        ///// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
+        ///// </summary>
+        ///// <param name="start">Element to begin at. The offset is inclusive. The whole array will be included in the new view if this value is not specified.</param>
+        ///// <returns></returns>
+        //public byte[] SubArrayBytes(long start) => JSRef!.Call<byte[]>("subarray", start);
+        ///// <summary>
+        ///// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
+        ///// </summary>
+        ///// <param name="start">Element to begin at. The offset is inclusive. The whole array will be included in the new view if this value is not specified.</param>
+        ///// <param name="end">Element to end at. The offset is exclusive. If not specified, all elements from the one specified by begin to the end of the array are included in the new view.</param>
+        ///// <returns></returns>
+        //public byte[] SubArrayBytes(long start, long end) => JSRef!.Call<byte[]>("subarray", start, end);
+        ///// <summary>
+        ///// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
+        ///// </summary>
+        ///// <returns></returns>
+        //public override byte[] ReadBytes(long srcByteOffset = 0)
+        //{
+        //    var length = this.Length;
+        //    var ret = new byte[length];
+        //    using var heapView = HeapView.Create(ret);
+        //    using var retUint8ArrayView = heapView.As<Uint8Array>();
+        //    retUint8ArrayView.Set(this);
+        //    return ret;
+        //}
+        ///// <summary>
+        ///// Copies this Uint8Array to the provided byte[]
+        ///// </summary>
+        ///// <param name="dest"></param>
+        ///// <param name="destByteOffset"></param>
+        ///// <returns></returns>
+        //public long CopyTo(byte[] dest, long destByteOffset = 0)
+        //{
+        //    var length = this.Length;
+        //    using var heapView = HeapView.Create(dest);
+        //    using var retUint8ArrayView = heapView.As<Uint8Array>();
+        //    retUint8ArrayView.Set(this, destByteOffset);
+        //    return length;
+        //}
+        ///// <summary>
+        ///// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
+        ///// </summary>
+        ///// <param name="start"></param>
+        ///// <returns></returns>
+        //public override byte[] ReadBytes(long start = 0) => JSRef!.Call<byte[]>("subarray", start);
+        ///// <summary>
+        ///// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
+        ///// </summary>
+        ///// <param name="start"></param>
+        ///// <param name="length"></param>
+        ///// <returns></returns>
+        //public override byte[] ReadBytes(long start, long length) => JSRef!.Call<byte[]>("subarray", start, start + length);
+        ///// <summary>
+        ///// Write bytes to the underlying ArrayBuffer starting at this TypedArray's byteOffset
+        ///// </summary>
+        ///// <param name="data"></param>
+        ///// <param name="byteOffset"></param>
+        //public override void WriteBytes(byte[] data, long byteOffset = 0) => Set(data, byteOffset);
         /// <summary>
         /// Fills all the elements of an array from a start index to an end index with a static value.
         /// </summary>

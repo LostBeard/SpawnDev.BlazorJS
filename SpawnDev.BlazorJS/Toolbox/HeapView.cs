@@ -1,4 +1,5 @@
-﻿using SpawnDev.BlazorJS.JSObjects;
+﻿using SpawnDev.BlazorJS.BlazorJSRuntimeAnyKey;
+using SpawnDev.BlazorJS.JSObjects;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -193,6 +194,16 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         /// <param name="heapView">HeapView</param>
         public static implicit operator DataView(HeapView heapView) => heapView.AsDataView();
+        /// <summary>
+        /// Implicit conversion to an ArrayBuffer copy
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator ArrayBuffer(HeapView heapView) => heapView.ToArrayBuffer();
+        /// <summary>
+        /// Implicit conversion to a SharedArrayBuffer copy
+        /// </summary>
+        /// <param name="heapView">HeapView</param>
+        public static implicit operator SharedArrayBuffer(HeapView heapView) => heapView.ToSharedArrayBuffer();
 
         /// <summary>
         /// Returns a TypedArray based on the ElementType
@@ -222,7 +233,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             {
                 // ArrayBuffer does not have a string viewer so it must be copied using TextDecoder
                 using var textDecoder = new TextDecoder("utf-16");
-                var jsString = textDecoder.JSRef!.Call<JSObject>("decode", (Uint8Array)this);
+                var jsString = textDecoder.DecodeToPrimitive((Uint8Array)this);
                 return jsString;
             }
             else
@@ -240,7 +251,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             if (DataType == typeof(string))
             {
                 using var textDecoder = new TextDecoder("utf-16");
-                var jsString = textDecoder.JSRef!.Call<JSObject>("decode", (Uint8Array)this);
+                var jsString = textDecoder.JSRef!.Call<StringPrimitive>("decode", (Uint8Array)this);
                 return jsString;
             }
             else
@@ -306,6 +317,9 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             if (Disposed) return;
             Disposed = true;
+#if DEBUG
+            Console.WriteLine($"HeapView.Dispose({disposing})");
+#endif
             Address = 0;
             handle.Free();
             Pointer = IntPtr.Zero;
@@ -336,10 +350,51 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             Dispose(false);
         }
+        static string? _ModulePath = null;
+        static string ModulePath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_ModulePath))
+                {
+                    var modulePaths = new string[]{
+                        "Module",                   // .Net 8 and earlier
+                        "Blazor.runtime.Module" ,   // .Net 9 and up
+                    };
+                    foreach (var mPath in modulePaths)
+                    {
+                        if (!JS.IsUndefined(mPath))
+                        {
+                            _ModulePath = mPath;
+                            break;
+                        }
+                    }
+                }
+                if (string.IsNullOrEmpty(_ModulePath))
+                {
+                    throw new Exception("SpawnDev.BlazorJS.HeapView: Unsupported .Net version. Module not found.");
+                }
+                return _ModulePath;
+            }
+        }
+
+        static Lazy<string> HeapName = new Lazy<string>(() => $"{ModulePath}.HEAPU8");
+
+        static Lazy<string> HeapBufferName = new Lazy<string>(() => $"{HeapName}.buffer");
+        /// <summary>
+        /// Returns the current ArrayBuffer the Heap is using
+        /// </summary>
+        /// <returns></returns>
+        public static ArrayBuffer GetHeapBuffer() => JS.Get<ArrayBuffer>(HeapBufferName.Value);
+        /// <summary>
+        /// Returns the current Uint8Array the Heap is using
+        /// </summary>
+        /// <returns></returns>
+        public static Uint8Array GetHeap() => JS.Get<Uint8Array>(HeapName.Value);
         /// <summary>
         /// BlazorJSRuntime
         /// </summary>
-        protected BlazorJSRuntime JS => BlazorJSRuntime.JS;
+        protected static BlazorJSRuntime JS => BlazorJSRuntime.JS;
         /// <summary>
         /// Creates a copy of the data and returns it as an ArrayBuffer
         /// </summary>
@@ -354,11 +409,32 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public ArrayBuffer ToArrayBuffer(long byteOffset, long byteLength)
         {
-            using var heapBuffer = JS.Get<ArrayBuffer>("Module.asm.memory.buffer");
-            using var uint8Array = new Uint8Array(byteLength);
+            using var heapBuffer = GetHeapBuffer();
             using var jsView = new Uint8Array(heapBuffer, Address + byteOffset, byteLength)!;
+            using var uint8Array = new Uint8Array(byteLength);
             uint8Array.Set(jsView);
-            return ToDispose(uint8Array.Buffer);
+            return uint8Array.Buffer;
+        }
+        /// <summary>
+        /// Creates a copy of the data and returns it as an ArrayBuffer
+        /// </summary>
+        /// <param name="byteOffset"></param>
+        /// <returns></returns>
+        public SharedArrayBuffer ToSharedArrayBuffer(long byteOffset = 0) => ToSharedArrayBuffer(byteOffset, ByteLength - byteOffset);
+        /// <summary>
+        /// Creates a copy of the data and returns it as an SharedArrayBuffer
+        /// </summary>
+        /// <param name="byteOffset"></param>
+        /// <param name="byteLength"></param>
+        /// <returns></returns>
+        public SharedArrayBuffer ToSharedArrayBuffer(long byteOffset, long byteLength)
+        {
+            using var heapBuffer = GetHeapBuffer();
+            using var jsView = new Uint8Array(heapBuffer, Address + byteOffset, byteLength)!;
+            var sharedArrayBuffer = new SharedArrayBuffer(byteLength);
+            using var uint8Array = new Uint8Array(sharedArrayBuffer);
+            uint8Array.Set(jsView);
+            return sharedArrayBuffer;
         }
         /// <summary>
         /// Creates a copy of the data and returns it as a TypedArray
@@ -400,7 +476,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         public TTypedArray As<TTypedArray>(long byteOffset, long elementCount) where TTypedArray : TypedArray
         {
-            using var heapBuffer = JS.Get<ArrayBuffer>("Module.asm.memory.buffer");
+            using var heapBuffer = GetHeapBuffer();
             var typedArray = (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), heapBuffer, Address + byteOffset, elementCount)!;
             ToDispose(typedArray);
             return typedArray;
@@ -415,7 +491,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         public TypedArray As(Type typedArrayType, long byteOffset, long elementCount)
         {
-            using var heapBuffer = JS.Get<ArrayBuffer>("Module.asm.memory.buffer");
+            using var heapBuffer = GetHeapBuffer();
             var typedArray = (TypedArray)Activator.CreateInstance(typedArrayType, heapBuffer, Address + byteOffset, elementCount)!;
             ToDispose(typedArray);
             return typedArray;
@@ -429,9 +505,22 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         public DataView AsDataView(long byteOffset, long byteLength)
         {
-            using var heapBuffer = JS.Get<ArrayBuffer>("Module.asm.memory.buffer");
+            using var heapBuffer = GetHeapBuffer();
             var jsView = new DataView(heapBuffer, Address + byteOffset, byteLength)!;
             ToDispose(jsView);
+            return jsView;
+        }
+        /// <summary>
+        /// Returns a DataView that points at the pinned data.
+        /// </summary>
+        public DataView ToDataView(long byteOffset = 0) => ToDataView(byteOffset, ByteLength - byteOffset);
+        /// <summary>
+        /// Returns a DataView that points at the pinned data.
+        /// </summary>
+        public DataView ToDataView(long byteOffset, long byteLength)
+        {
+            using var arrayBuffer = ToArrayBuffer(byteOffset, byteLength);
+            var jsView = new DataView(arrayBuffer)!;
             return jsView;
         }
         List<IDisposable> DisposableViews = new List<IDisposable>();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.Toolbox;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -32,7 +33,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
+        public StringPrimitive DecodeToPrimitive(ArrayBuffer data) => JSRef!.Call<StringPrimitive>("decode", data);
+        /// <summary>
+        /// Returns a string containing the text decoded with the method of the specific TextDecoder object.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public string Decode(DataView data) => JSRef!.Call<string>("decode", data);
+        /// <summary>
+        /// Returns a string containing the text decoded with the method of the specific TextDecoder object.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public StringPrimitive DecodeToPrimitive(DataView data) => JSRef!.Call<StringPrimitive>("decode", data);
         /// <summary>
         /// Returns a string containing the text decoded with the method of the specific TextDecoder object.
         /// </summary>
@@ -44,7 +57,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public string Decode(byte[] data) => JSRef!.Call<string>("decode", (ArrayBuffer)data);
+        public StringPrimitive DecodeToPrimitive(TypedArray data) => JSRef!.Call<StringPrimitive>("decode", data);
+        /// <summary>
+        /// Returns a string containing the text decoded with the method of the specific TextDecoder object.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public string Decode(byte[] data) => Decode((Uint8Array)(HeapView)data);
+        /// <summary>
+        /// Returns a string containing the text decoded with the method of the specific TextDecoder object.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public StringPrimitive DecodeToPrimitive(byte[] data) => DecodeToPrimitive((Uint8Array)(HeapView)data);
         /// <summary>
         /// A Boolean indicating whether the error mode is fatal.
         /// </summary>

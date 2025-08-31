@@ -9,6 +9,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class String : JSObject
     {
         /// <summary>
+        /// Implicit conversion to .Net string
+        /// </summary>
+        /// <param name="strObj"></param>
+        public static implicit operator string(String strObj) => strObj.ValueOf();
+        /// <summary>
+        /// Explicit cast from .Net string to StringPrimitive
+        /// </summary>
+        /// <param name="source">.Net string</param>
+        public static explicit operator String(string source) => new String(source);
+        /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
@@ -17,16 +27,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The String() constructor creates String objects.
         /// </summary>
         /// <param name="thing">Anything to be converted to a string.</param>
-        public String(object thing) : base(JS.New(nameof(String), thing)) { }
+        public String(object thing) : base(JS.New(nameof(String), thing is string thingStr ? (StringPrimitive)thingStr : thing)) { }
         /// <summary>
         /// Returns the primitive value of the specified object. Overrides the Object.prototype.valueOf() method.
         /// </summary>
         /// <returns></returns>
         public string ValueOf() => JSRef!.Call<string>("valueOf");
         /// <summary>
-        /// Implicit conversion to .Net string
+        /// Returns the primitive string as a .Net string
         /// </summary>
-        /// <param name="strObj"></param>
-        public static implicit operator string(String strObj) => strObj.ValueOf();
+        /// <returns></returns>
+        public override string ToString() => ValueOf();
     }
 }

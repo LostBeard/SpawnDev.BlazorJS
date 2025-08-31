@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static Float16Array From(IEnumerable<Half> values) => JS.Call<Float16Array>($"{nameof(Float16Array)}.from", values);
+        public static Float16Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<Float16Array>($"{nameof(Float16Array)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -84,7 +84,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Float16Array() constructor creates Float16Array objects.
         /// </summary>
         /// <param name="array"></param>
-        public Float16Array(Half[] array) : base(JS.New(nameof(Float16Array), array)) { }
+        public Float16Array(Half[] array) : base(JS.New(nameof(Float16Array), (ArrayBuffer)array)) { }
         /// <summary>
         /// The Float16Array() constructor creates Float16Array objects.
         /// </summary>

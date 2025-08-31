@@ -25,7 +25,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static Int8Array From(IEnumerable<sbyte> values) => JS.Call<Int8Array>($"{nameof(Int8Array)}.from", values);
+        public static Int8Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<Int8Array>($"{nameof(Int8Array)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -85,7 +85,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Int8Array() constructor creates Int8Array objects.
         /// </summary>
         /// <param name="array"></param>
-        public Int8Array(sbyte[] array) : base(JS.New(nameof(Int8Array), array)) { }
+        public Int8Array(sbyte[] array) : base(JS.New(nameof(Int8Array), (ArrayBuffer)array)) { }
         /// <summary>
         /// The Int8Array() constructor creates Int8Array objects.
         /// </summary>

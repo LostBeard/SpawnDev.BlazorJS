@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static Float64Array From(IEnumerable<double> values) => JS.Call<Float64Array>($"{nameof(Float64Array)}.from", values);
+        public static Float64Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<Float64Array>($"{nameof(Float64Array)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -83,7 +83,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Float64Array() constructor creates Float64Array objects.
         /// </summary>
         /// <param name="array"></param>
-        public Float64Array(double[] array) : base(JS.New(nameof(Float64Array), array)) { }
+        public Float64Array(double[] array) : base(JS.New(nameof(Float64Array), (ArrayBuffer)array)) { }
         /// <summary>
         /// The Float64Array() constructor creates Float64Array objects.
         /// </summary>

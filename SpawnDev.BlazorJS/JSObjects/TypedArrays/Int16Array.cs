@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static Int16Array From(IEnumerable<short> values) => JS.Call<Int16Array>($"{nameof(Int16Array)}.from", values);
+        public static Int16Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<Int16Array>($"{nameof(Int16Array)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -83,7 +83,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Int16Array() constructor creates Int16Array objects.
         /// </summary>
         /// <param name="array"></param>
-        public Int16Array(short[] array) : base(JS.New(nameof(Int16Array), array)) { }
+        public Int16Array(short[] array) : base(JS.New(nameof(Int16Array), (ArrayBuffer)array)) { }
         /// <summary>
         /// The Int16Array() constructor creates Int16Array objects.
         /// </summary>

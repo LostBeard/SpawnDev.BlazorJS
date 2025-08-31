@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static Uint16Array From(IEnumerable<ushort> values) => JS.Call<Uint16Array>($"{nameof(Uint16Array)}.from", values);
+        public static Uint16Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<Uint16Array>($"{nameof(Uint16Array)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -83,12 +83,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Uint16Array() constructor creates Uint16Array objects.
         /// </summary>
         /// <param name="array"></param>
-        public Uint16Array(ushort[] array) : base(JS.New(nameof(Uint16Array), array)) { }
+        public Uint16Array(ushort[] array) : base(JS.New(nameof(Uint16Array), (ArrayBuffer)array)) { }
         /// <summary>
-        /// The Uint32Array() constructor creates Uint32Array objects.
+        /// The Uint16Array() constructor creates Uint16Array objects.
         /// </summary>
         /// <param name="array"></param>
-        public Uint16Array(Array<ushort> array) : base(JS.New(nameof(Uint32Array), array)) { }
+        public Uint16Array(Array<ushort> array) : base(JS.New(nameof(Uint16Array), array)) { }
         /// <summary>
         /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
         /// </summary>

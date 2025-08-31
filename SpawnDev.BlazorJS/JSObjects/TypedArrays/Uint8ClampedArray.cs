@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static Uint8ClampedArray From(IEnumerable<byte> values) => JS.Call<Uint8ClampedArray>($"{nameof(Uint8ClampedArray)}.from", values);
+        public static Uint8ClampedArray From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<Uint8ClampedArray>($"{nameof(Uint8ClampedArray)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>
@@ -83,12 +83,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects.
         /// </summary>
         /// <param name="array"></param>
-        public Uint8ClampedArray(byte[] array) : base(JS.New(nameof(Uint8ClampedArray), array)) { }
+        public Uint8ClampedArray(byte[] array) : base(JS.New(nameof(Uint8ClampedArray), (ArrayBuffer)array)) { }
         /// <summary>
-        /// The Uint32Array() constructor creates Uint32Array objects.
+        /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects.
         /// </summary>
         /// <param name="array"></param>
-        public Uint8ClampedArray(Array<byte> array) : base(JS.New(nameof(Uint32Array), array)) { }
+        public Uint8ClampedArray(Array<byte> array) : base(JS.New(nameof(Uint8ClampedArray), array)) { }
         /// <summary>
         /// Extracts a section of an array and returns a new array. See also Array.prototype.slice().
         /// </summary>
