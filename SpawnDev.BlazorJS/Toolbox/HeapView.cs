@@ -1,5 +1,4 @@
-﻿using SpawnDev.BlazorJS.BlazorJSRuntimeAnyKey;
-using SpawnDev.BlazorJS.JSObjects;
+﻿using SpawnDev.BlazorJS.JSObjects;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -8,7 +7,7 @@ namespace SpawnDev.BlazorJS.Toolbox
 {
     /// <inheritdoc/>
     [JsonConverter(typeof(HeapViewConverter))]
-    public class HeapView<TElement> : HeapView where TElement : unmanaged
+    public sealed class HeapView<TElement> : HeapView where TElement : unmanaged
     {
         /// <summary>
         /// Pinned data that can be shared with Javascript
@@ -33,7 +32,7 @@ namespace SpawnDev.BlazorJS.Toolbox
     }
     /// <inheritdoc/>
     [JsonConverter(typeof(HeapViewConverter))]
-    public class HeapViewString : HeapView
+    public sealed class HeapViewString : HeapView
     {
         /// <summary>
         /// Pinned data that can be shared with Javascript
@@ -380,7 +379,7 @@ namespace SpawnDev.BlazorJS.Toolbox
 
         static Lazy<string> HeapName = new Lazy<string>(() => $"{ModulePath}.HEAPU8");
 
-        static Lazy<string> HeapBufferName = new Lazy<string>(() => $"{HeapName}.buffer");
+        static Lazy<string> HeapBufferName = new Lazy<string>(() => $"{HeapName.Value}.buffer");
         /// <summary>
         /// Returns the current ArrayBuffer the Heap is using
         /// </summary>
@@ -409,11 +408,9 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public ArrayBuffer ToArrayBuffer(long byteOffset, long byteLength)
         {
-            using var heapBuffer = GetHeapBuffer();
-            using var jsView = new Uint8Array(heapBuffer, Address + byteOffset, byteLength)!;
-            using var uint8Array = new Uint8Array(byteLength);
-            uint8Array.Set(jsView);
-            return uint8Array.Buffer;
+            using var heap = GetHeap();
+            using var heapChunk = heap.Slice(Address + byteOffset, Address + byteOffset + byteLength);
+            return heapChunk.Buffer;
         }
         /// <summary>
         /// Creates a copy of the data and returns it as an ArrayBuffer
@@ -429,11 +426,11 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public SharedArrayBuffer ToSharedArrayBuffer(long byteOffset, long byteLength)
         {
-            using var heapBuffer = GetHeapBuffer();
-            using var jsView = new Uint8Array(heapBuffer, Address + byteOffset, byteLength)!;
+            using var heap = GetHeap();
+            using var heapChunk = heap.SubArray(Address + byteOffset, Address + byteOffset + byteLength);
             var sharedArrayBuffer = new SharedArrayBuffer(byteLength);
             using var uint8Array = new Uint8Array(sharedArrayBuffer);
-            uint8Array.Set(jsView);
+            uint8Array.Set(heapChunk);
             return sharedArrayBuffer;
         }
         /// <summary>
