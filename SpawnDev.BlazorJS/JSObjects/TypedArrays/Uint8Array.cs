@@ -1,7 +1,5 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
-using System.Runtime.InteropServices;
-using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -135,75 +133,59 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="end">Element to end at. The offset is exclusive. If not specified, all elements from the one specified by begin to the end of the array are included in the new view.</param>
         /// <returns></returns>
         public Uint8Array SubArray(long start, long end) => JSRef!.Call<Uint8Array>("subarray", start, end);
-        ///// <summary>
-        ///// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
-        ///// </summary>
-        ///// <returns></returns>
-        //public byte[] SubArrayBytes() => JSRef!.Call<byte[]>("subarray");
-        ///// <summary>
-        ///// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
-        ///// </summary>
-        ///// <param name="start">Element to begin at. The offset is inclusive. The whole array will be included in the new view if this value is not specified.</param>
-        ///// <returns></returns>
-        //public byte[] SubArrayBytes(long start) => JSRef!.Call<byte[]>("subarray", start);
-        ///// <summary>
-        ///// The subarray() method of TypedArray instances returns a new typed array on the same ArrayBuffer store and with the same element types as this typed array. The begin offset is inclusive and the end offset is exclusive.
-        ///// </summary>
-        ///// <param name="start">Element to begin at. The offset is inclusive. The whole array will be included in the new view if this value is not specified.</param>
-        ///// <param name="end">Element to end at. The offset is exclusive. If not specified, all elements from the one specified by begin to the end of the array are included in the new view.</param>
-        ///// <returns></returns>
-        //public byte[] SubArrayBytes(long start, long end) => JSRef!.Call<byte[]>("subarray", start, end);
-        ///// <summary>
-        ///// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
-        ///// </summary>
-        ///// <returns></returns>
-        //public override byte[] ReadBytes(long srcByteOffset = 0)
-        //{
-        //    var length = this.Length;
-        //    var ret = new byte[length];
-        //    using var heapView = HeapView.Create(ret);
-        //    using var retUint8ArrayView = heapView.As<Uint8Array>();
-        //    retUint8ArrayView.Set(this);
-        //    return ret;
-        //}
-        ///// <summary>
-        ///// Copies this Uint8Array to the provided byte[]
-        ///// </summary>
-        ///// <param name="dest"></param>
-        ///// <param name="destByteOffset"></param>
-        ///// <returns></returns>
-        //public long CopyTo(byte[] dest, long destByteOffset = 0)
-        //{
-        //    var length = this.Length;
-        //    using var heapView = HeapView.Create(dest);
-        //    using var retUint8ArrayView = heapView.As<Uint8Array>();
-        //    retUint8ArrayView.Set(this, destByteOffset);
-        //    return length;
-        //}
-        ///// <summary>
-        ///// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
-        ///// </summary>
-        ///// <param name="start"></param>
-        ///// <returns></returns>
-        //public override byte[] ReadBytes(long start = 0) => JSRef!.Call<byte[]>("subarray", start);
-        ///// <summary>
-        ///// Read bytes from the underlying ArrayBuffer starting at this TypedArray's byteOffset
-        ///// </summary>
-        ///// <param name="start"></param>
-        ///// <param name="length"></param>
-        ///// <returns></returns>
-        //public override byte[] ReadBytes(long start, long length) => JSRef!.Call<byte[]>("subarray", start, start + length);
-        ///// <summary>
-        ///// Write bytes to the underlying ArrayBuffer starting at this TypedArray's byteOffset
-        ///// </summary>
-        ///// <param name="data"></param>
-        ///// <param name="byteOffset"></param>
-        //public override void WriteBytes(byte[] data, long byteOffset = 0) => Set(data, byteOffset);
         /// <summary>
         /// Fills all the elements of an array from a start index to an end index with a static value.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public override Uint8Array Fill(byte value) => JSRef!.Call<Uint8Array>("fill", value);
+        /// <summary>
+        /// Returns a copy of the struct array as a new Uint8Array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static Uint8Array Create<T>(T[] data, long offset = 0) where T : struct
+        {
+            using var heapView = HeapView.Create(data, offset);
+            return heapView.To<Uint8Array>();
+        }
+        /// <summary>
+        /// Returns a copy of the struct array as a new Uint8Array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static Uint8Array Create<T>(T[] data, long offset, long length) where T : struct
+        {
+            using var heapView = HeapView.Create(data, offset, length);
+            return heapView.To<Uint8Array>();
+        }
+        /// <summary>
+        /// Returns a copy of the string as a new Uint8Array
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static Uint8Array Create(string data, long offset, long length)
+        {
+            using var heapView = HeapView.Create(data, offset, length);
+            return heapView.To<Uint8Array>();
+        }
+        /// <summary>
+        /// Returns a copy of string as a new Uint8Array
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static Uint8Array Create(string data, long offset = 0)
+        {
+            using var heapView = HeapView.Create(data, offset);
+            return heapView.To<Uint8Array>();
+        }
     }
 }

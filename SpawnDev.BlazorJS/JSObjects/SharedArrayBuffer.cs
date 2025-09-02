@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.Toolbox;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -63,5 +64,53 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="end">Zero-based index before which to end extraction. slice extracts up to but not including end. For example, slice(1, 4) extracts the second element through the fourth element(elements indexed 1, 2, and 3). A negative index can be used, indicating an offset from the end of the sequence.slice(2,-1) extracts the third element through the second-to-last element in the sequence. If end is omitted, slice extracts through the end of the sequence (sab.byteLength).</param>
         /// <returns></returns>
         public SharedArrayBuffer Slice(long begin, long end) => JSRef!.Call<SharedArrayBuffer>("slice", begin, end);
+        /// <summary>
+        /// Returns a copy of the struct array as a new SharedArrayBuffer
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static SharedArrayBuffer Create<T>(T[] data, long offset = 0) where T : struct
+        {
+            using var heapView = HeapView.Create(data, offset);
+            return heapView.ToSharedArrayBuffer();
+        }
+        /// <summary>
+        /// Returns a copy of the struct array as a new SharedArrayBuffer
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static SharedArrayBuffer Create<T>(T[] data, long offset, long length) where T : struct
+        {
+            using var heapView = HeapView.Create(data, offset, length);
+            return heapView.ToSharedArrayBuffer();
+        }
+        /// <summary>
+        /// Returns a copy of the string as a new SharedArrayBuffer
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static SharedArrayBuffer Create(string data, long offset, long length)
+        {
+            using var heapView = HeapView.Create(data, offset, length);
+            return heapView.ToSharedArrayBuffer();
+        }
+        /// <summary>
+        /// Returns a copy of the string as a new SharedArrayBuffer
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static SharedArrayBuffer Create(string data, long offset = 0)
+        {
+            using var heapView = HeapView.Create(data, offset);
+            return heapView.ToSharedArrayBuffer();
+        }
     }
 }

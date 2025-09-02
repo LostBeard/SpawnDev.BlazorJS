@@ -83,6 +83,54 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="data">Data to copy to a new ArrayBuffer</param>
         public static explicit operator ArrayBuffer(double[] data) => HeapView.Create(data).Using(o => o.ToArrayBuffer());
         /// <summary>
+        /// Returns a copy of the struct array as a new ArrayBuffer
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static ArrayBuffer Create<T>(T[] data, long offset = 0) where T : struct
+        {
+            using var heapView = HeapView.Create(data, offset);
+            return heapView.ToArrayBuffer();
+        }
+        /// <summary>
+        /// Returns a copy of the struct array as a new ArrayBuffer
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static ArrayBuffer Create<T>(T[] data, long offset, long length) where T : struct
+        {
+            using var heapView = HeapView.Create(data, offset, length);
+            return heapView.ToArrayBuffer();
+        }
+        /// <summary>
+        /// Returns a copy of the string as a new ArrayBuffer
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static ArrayBuffer Create(string data, long offset, long length)
+        {
+            using var heapView = HeapView.Create(data, offset, length);
+            return heapView.ToArrayBuffer();
+        }
+        /// <summary>
+        /// Returns a copy of the string as a new ArrayBuffer
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static ArrayBuffer Create(string data, long offset = 0)
+        {
+            using var heapView = HeapView.Create(data, offset);
+            return heapView.ToArrayBuffer();
+        }
+        /// <summary>
         /// Returns a copy of the Javascript ArrayBuffer as a .Net byte[]
         /// </summary>
         /// <param name="arrayBuffer"></param>

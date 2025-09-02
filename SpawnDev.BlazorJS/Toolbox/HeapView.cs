@@ -12,23 +12,35 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <summary>
         /// Pinned data that can be shared with Javascript
         /// </summary>
-        public TElement[] Data { get; protected set; }
+        public TElement[] Data { get; private set; }
         /// <summary>
         /// Pin data in a region of Blazor memory to make it directly accessible by Javascript
         /// </summary>
         /// <param name="data"></param>
-        public HeapView(TElement[] data) : base()
+        /// <param name="offset">Start index in the data</param>
+        /// <param name="length">The number of elements to include</param>
+        public HeapView(TElement[] data, long offset, long length) : base()
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+            var maxCount = data.Length - offset;
+            if (offset < 0 || length > maxCount) throw new ArgumentOutOfRangeException(nameof(offset));
+            ElementSize = Marshal.SizeOf<TElement>();
+            Offset = offset;
             DataType = data.GetType();
             ElementType = typeof(TElement);
             Data = data;
             handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
-            Pointer = handle.AddrOfPinnedObject();
+            Pointer = IntPtr.Add(handle.AddrOfPinnedObject(), (int)(Offset * ElementSize));
             Address = Pointer.ToInt64();
-            Length = Data.Length;
-            ElementSize = Marshal.SizeOf<TElement>();
-            ByteLength = ElementSize * Data.Length;
+            Length = length;
+            ByteLength = ElementSize * Length;
         }
+        /// <summary>
+        /// Pin data in a region of Blazor memory to make it directly accessible by Javascript
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset">Start index in the data</param>
+        public HeapView(TElement[] data, long offset = 0) : this(data, offset, data.Length - offset) { }
     }
     /// <inheritdoc/>
     [JsonConverter(typeof(HeapViewConverter))]
@@ -37,23 +49,35 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <summary>
         /// Pinned data that can be shared with Javascript
         /// </summary>
-        public string Data { get; protected set; }
+        public string Data { get; private set; }
         /// <summary>
         /// Pin data in a region of Blazor memory to make it directly accessible by Javascript
         /// </summary>
         /// <param name="data"></param>
-        public HeapViewString(string data) : base()
+        /// <param name="offset">Start index in the data</param>
+        /// <param name="length">The number of characters to include</param>
+        public HeapViewString(string data, long offset, long length) : base()
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+            var maxCount = data.Length - offset;
+            if (offset < 0 || length > maxCount) throw new ArgumentOutOfRangeException(nameof(offset));
+            ElementSize = 2;
+            Offset = offset;
             DataType = data.GetType();
             ElementType = typeof(char);
             Data = data;
             handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
-            Pointer = handle.AddrOfPinnedObject();
+            Pointer = IntPtr.Add(handle.AddrOfPinnedObject(), (int)(Offset * ElementSize));
             Address = Pointer.ToInt64();
-            Length = Data.Length;
-            ElementSize = 2;
-            ByteLength = ElementSize * Data.Length;
+            Length = length;
+            ByteLength = ElementSize * length;
         }
+        /// <summary>
+        /// Pin data in a region of Blazor memory to make it directly accessible by Javascript
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset">Start index in the data</param>
+        public HeapViewString(string data, long offset = 0) : this(data, offset, data.Length - offset) { }
     }
     /// <summary>
     /// Pins the Data in memory so that it can be passed to Javascript and used directly without a copy operation using implicit conversion or the As() methods.<br/>
@@ -223,7 +247,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             return To(typedArrayType);
         }
         /// <summary>
-        /// Returns a TypedArray based on the ElementType
+        /// Returns a JSObject based on the ElementType<br/>
         /// </summary>
         /// <returns></returns>
         public JSObject AsNativeView()
@@ -262,6 +286,10 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <summary>
         /// The number of elements in Data
         /// </summary>
+        public long Offset { get; protected set; }
+        /// <summary>
+        /// The number of elements in Data - Offset
+        /// </summary>
         public long Length { get; protected set; }
         /// <summary>
         /// Data element type
@@ -276,14 +304,33 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
+        /// <param name="offset">Start index in the data</param>
+        /// <param name="length">The number of elements to include</param>
         /// <returns></returns>
-        public static HeapView Create<T>(T[] data) where T : struct => new HeapView<T>(data);
+        public static HeapView Create<T>(T[] data, long offset, long length) where T : struct => new HeapView<T>(data, offset, length);
+        /// <summary>
+        /// Creates a new HeapView of the provided array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="offset">Start index in the data</param>
+        /// <returns></returns>
+        public static HeapView Create<T>(T[] data, long offset = 0) where T : struct => new HeapView<T>(data, offset);
         /// <summary>
         /// Creates a new HeapView of the provided string
         /// </summary>
         /// <param name="data"></param>
+        /// <param name="offset">Start index in the data</param>
+        /// <param name="length">The number of characters to include</param>
         /// <returns></returns>
-        public static HeapView Create(string data) => new HeapViewString(data);
+        public static HeapView Create(string data, long offset, long length) => new HeapViewString(data, offset, length);
+        /// <summary>
+        /// Creates a new HeapView of the provided string
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset">Start index in the data</param>
+        /// <returns></returns>
+        public static HeapView Create(string data, long offset = 0) => new HeapViewString(data, offset);
         /// <summary>
         /// The size of Data in bytes
         /// </summary>
