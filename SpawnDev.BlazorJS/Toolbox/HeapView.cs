@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.Toolbox
 {
     /// <inheritdoc/>
     [JsonConverter(typeof(HeapViewConverter))]
-    public sealed class HeapView<TElement> : HeapView where TElement : unmanaged
+    public sealed class HeapView<TElement> : HeapView where TElement : struct
     {
         /// <summary>
         /// Pinned data that can be shared with Javascript
@@ -277,7 +277,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static HeapView Create<T>(T[] data) where T : unmanaged => new HeapView<T>(data);
+        public static HeapView Create<T>(T[] data) where T : struct => new HeapView<T>(data);
         /// <summary>
         /// Creates a new HeapView of the provided string
         /// </summary>

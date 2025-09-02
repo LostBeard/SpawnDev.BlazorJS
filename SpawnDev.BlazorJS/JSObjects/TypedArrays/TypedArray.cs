@@ -50,32 +50,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="start">The TElement index to start at</param>
         /// <returns>An array of type TElement</returns>
-        public virtual TElement[] ToArray(long start) => ToArray<TElement>(start * BYTES_PER_ELEMENT);
+        public virtual TElement[] ToArray(long start) => ToArray<TElement>(start);
         /// <summary>
         /// Returns an array of type TElement
         /// </summary>
         /// <param name="start">The TElement index to start at</param>
         /// <param name="length">The number of TElements to return</param>
         /// <returns>An array of type TElement</returns>
-        public virtual TElement[] ToArray(long start, long length) => ToArray<TElement>(start * BYTES_PER_ELEMENT, length);
-        /// <summary>
-        /// Read a Span of type TElement
-        /// </summary>
-        /// <param name="start">The TElement index to start at</param>
-        /// <param name="length">The number of TElements to return</param>
-        /// <returns>An array of type TElement</returns>
-        public virtual Span<TElement> ToSpan(long start, long length) => ToSpan<TElement>(start * BYTES_PER_ELEMENT, length);
-        /// <summary>
-        /// Read a Span of type TElement
-        /// </summary>
-        /// <param name="start">The TElement index to start at</param>
-        /// <returns>A Span of type TElement</returns>
-        public virtual Span<TElement> ToSpan(long start) => ToSpan<TElement>(start * BYTES_PER_ELEMENT);
-        /// <summary>
-        /// Read a Span of type TElement
-        /// </summary>
-        /// <returns>A Span of type TElement</returns>
-        public virtual Span<TElement> ToSpan() => ToSpan<TElement>();
+        public virtual TElement[] ToArray(long start, long length) => ToArray<TElement>(start, length);
         /// <summary>
         /// Returns a value iterator 
         /// </summary>
@@ -258,46 +240,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="data"></param>
         /// <param name="byteOffset"></param>
-        public virtual void WriteBytes(byte[] data, long byteOffset = 0)
-        {
-            using var buffer = Buffer;
-            using var uint8Array = new Uint8Array(buffer, ByteOffset + byteOffset, data.Length);
-            uint8Array.Set(data);
-        }
+        public virtual void WriteBytes(byte[] data, long byteOffset = 0) => Write(data, byteOffset);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
-        public void Write<T>(T[] srcData, long destByteOffset = 0) where T : unmanaged
+        public void Write<T>(T[] srcData, long destByteOffset = 0) where T : struct
         {
-            var typeTypedArrayType = TypedArray.GetTypeDefaultTypedArrayType<T>();
-            if (typeTypedArrayType == null) throw new NotImplementedException($"Unsupported type: {typeof(T).Name}");
             if (destByteOffset < 0) new IndexOutOfRangeException(nameof(destByteOffset));
             var tSize = Marshal.SizeOf<T>();
             var bytesToCopy = srcData.LongLength * tSize;
             var bytesMax = ByteLength - destByteOffset;
             if (bytesMax < bytesToCopy) throw new NotImplementedException($"Write out of bounds: {typeof(T).Name}");
             // create a TypedArray that starts at destByteOffset and with an element of type T
-            if (typeTypedArrayType == this.GetType() && destByteOffset == 0)
-            {
-                using var heapView = HeapView.Create(srcData);
-                using var typedArray = heapView.AsTypedArray();
-                Set(typedArray);
-            }
-            else
-            {
-                try
-                {
-                    using var thisTyped = ReCast(typeTypedArrayType, destByteOffset, srcData.LongLength);
-                    using var heapView = HeapView.Create(srcData);
-                    using var typedArray = heapView.AsTypedArray();
-                    thisTyped.Set(typedArray);
-                }
-                catch (Exception ex)
-                {
-                    var err = ex.ToString();
-                    var nmt = true;
-                }
-            }
+            using var thisTyped = ReCast<Uint8Array>(destByteOffset, bytesToCopy);
+            using var heapView = HeapView.Create(srcData);
+            using var typedArray = heapView.As<Uint8Array>();
+            thisTyped.Set(typedArray);
         }
         /// <summary>
         /// Copies an array of type T from this TypedArray
@@ -308,10 +266,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="offset"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public long Read<T>(long srcByteOffset, T[] buffer, long offset, long count) where T : unmanaged
+        public long Read<T>(long srcByteOffset, T[] buffer, long offset, long count) where T : struct
         {
-            var typeTypedArrayType = TypedArray.GetTypeDefaultTypedArrayType<T>();
-            if (typeTypedArrayType == null) throw new NotImplementedException($"Unsupported type: {typeof(T).Name}");
             if (srcByteOffset < 0) new IndexOutOfRangeException(nameof(srcByteOffset));
             var tSize = Marshal.SizeOf<T>();
             var bytesMax = ByteLength - srcByteOffset;
@@ -320,19 +276,11 @@ namespace SpawnDev.BlazorJS.JSObjects
             count = Math.Clamp(count, 0, countMax);
             if (count > 0)
             {
-                if (typeTypedArrayType == this.GetType() && srcByteOffset == 0)
-                {
-                    using var heapView = HeapView.Create(buffer);
-                    using var typedArray = heapView.AsTypedArray();
-                    typedArray.Set(this, offset);
-                }
-                else
-                {
-                    using var thisTyped = ReCast(typeTypedArrayType, srcByteOffset, count);
-                    using var heapView = HeapView.Create(buffer);
-                    using var typedArray = heapView.AsTypedArray();
-                    typedArray.Set(thisTyped, offset);
-                }
+                var byteLength = count * tSize;
+                using var thisTyped = ReCast<Uint8Array>(srcByteOffset, byteLength);
+                using var heapView = HeapView.Create(buffer);
+                using var typedArray = heapView.As<Uint8Array>();
+                typedArray.Set(thisTyped, offset);
             }
             return count;
         }
@@ -344,10 +292,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="count"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public T[] Read<T>(long srcByteOffset, long count) where T : unmanaged
+        public T[] Read<T>(long srcByteOffset, long count) where T : struct
         {
-            var typeTypedArrayType = TypedArray.GetTypeDefaultTypedArrayType<T>();
-            if (typeTypedArrayType == null) throw new NotImplementedException($"Unsupported type: {typeof(T).Name}");
             if (srcByteOffset < 0) new IndexOutOfRangeException(nameof(srcByteOffset));
             var tSize = Marshal.SizeOf<T>();
             var bytesMax = ByteLength - srcByteOffset;
@@ -357,19 +303,11 @@ namespace SpawnDev.BlazorJS.JSObjects
             var buffer = new T[count];
             if (count > 0)
             {
-                if (typeTypedArrayType == this.GetType() && srcByteOffset == 0)
-                {
-                    using var heapView = HeapView.Create(buffer);
-                    using var typedArray = heapView.AsTypedArray();
-                    typedArray.Set(this);
-                }
-                else
-                {
-                    using var thisTyped = ReCast(typeTypedArrayType, srcByteOffset, count);
-                    using var heapView = HeapView.Create(buffer);
-                    using var typedArray = heapView.AsTypedArray();
-                    typedArray.Set(thisTyped);
-                }
+                var byteLength = count * tSize;
+                using var sourceUint8Array = ReCast<Uint8Array>(srcByteOffset, byteLength);
+                using var heapView = HeapView.Create(buffer);
+                using var typedArray = heapView.As<Uint8Array>();
+                typedArray.Set(sourceUint8Array);
             }
             return buffer;
         }
@@ -380,122 +318,45 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="srcByteOffset"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public T[] Read<T>(long srcByteOffset = 0) where T : unmanaged
+        public T[] Read<T>(long srcByteOffset = 0) where T : struct
         {
-            var typeTypedArrayType = TypedArray.GetTypeDefaultTypedArrayType<T>();
-            if (typeTypedArrayType == null) throw new NotImplementedException($"Unsupported type: {typeof(T).Name}");
             if (srcByteOffset < 0) new IndexOutOfRangeException(nameof(srcByteOffset));
+            var tSize = Marshal.SizeOf<T>();
             var bytesMax = ByteLength - srcByteOffset;
             if (bytesMax <= 0) return new T[0];
-            var tSize = Marshal.SizeOf<T>();
             var count = (long)Math.Floor((double)bytesMax / (double)tSize);
             var buffer = new T[count];
             if (count > 0)
             {
-                if (typeTypedArrayType == this.GetType() && srcByteOffset == 0)
-                {
-                    using var heapView = HeapView.Create(buffer);
-                    using var typedArray = heapView.AsTypedArray();
-                    typedArray.Set(this);
-                }
-                else
-                {
-                    using var thisTyped = ReCast(typeTypedArrayType, srcByteOffset, count);
-                    using var heapView = HeapView.Create(buffer);
-                    using var typedArray = heapView.AsTypedArray();
-                    typedArray.Set(thisTyped);
-                }
+                var byteLength = count * tSize;
+                using var sourceUint8Array = ReCast<Uint8Array>(srcByteOffset, byteLength);
+                using var heapView = HeapView.Create(buffer);
+                using var typedArray = heapView.As<Uint8Array>();
+                typedArray.Set(sourceUint8Array);
             }
             return buffer;
         }
         /// <summary>
-        /// Returns an array of type T
+        /// Read an array of type T starting at this TypedArray's ByteOffset + byteOffset
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>Array of type T</returns>
-        public T[] ToArray<T>() where T : struct
-        {
-            var bytes = ReadBytes();
-            var typeofT = typeof(T);
-            if (typeofT == typeof(byte)) return (T[])(object)bytes;
-            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
-            return byteSpan.ToArray();
-        }
+        public T[] ToArray<T>() where T : struct => Read<T>();
         /// <summary>
         /// Read an array of type T starting at this TypedArray's ByteOffset + byteOffset
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="byteOffset"></param>
+        /// <param name="start">Element Index to start</param>
         /// <returns>Array of type T</returns>
-        public T[] ToArray<T>(long byteOffset) where T : struct
-        {
-            var typeofT = typeof(T);
-            var bytes = ReadBytes(byteOffset);
-            if (typeofT == typeof(byte)) return (T[])(object)bytes;
-            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
-            return byteSpan.ToArray();
-        }
+        public T[] ToArray<T>(long start) where T : struct => Read<T>(start * Marshal.SizeOf<T>());
         /// <summary>        
         /// Read an array of type T starting at this TypedArray's ByteOffset + byteOffset
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="byteOffset">The byte position offset to add to this TypeArray's ByteOffset</param>
+        /// <param name="start">Element Index to start</param>
         /// <param name="count">Number of type T to read</param>
         /// <returns>Array of type T</returns>
-        public T[] ToArray<T>(long byteOffset, long count) where T : struct
-        {
-            var typeofT = typeof(T);
-            var size = Marshal.SizeOf<T>();
-            var byteLength = count * size;
-            var bytes = ReadBytes(byteOffset, byteLength);
-            if (typeofT == typeof(byte)) return (T[])(object)bytes;
-            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
-            return byteSpan.ToArray();
-        }
-        /// <summary>
-        /// Read a Span of type T starting at this TypedArray's ByteOffset + byteOffset
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public Span<T> ToSpan<T>() where T : struct
-        {
-            var typeofT = typeof(T);
-            var bytes = ReadBytes();
-            if (typeofT == typeof(byte)) return (Span<T>)(T[])(object)bytes;
-            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
-            return byteSpan;
-        }
-        /// <summary>
-        /// Read a Span of type T starting at this TypedArray's ByteOffset + byteOffset
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="byteOffset"></param>
-        /// <returns></returns>
-        public Span<T> ToSpan<T>(long byteOffset) where T : struct
-        {
-            var typeofT = typeof(T);
-            var bytes = ReadBytes(byteOffset);
-            if (typeofT == typeof(byte)) return (Span<T>)(T[])(object)bytes;
-            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
-            return byteSpan;
-        }
-        /// <summary>
-        /// Read a Span of type T starting at this TypedArray's ByteOffset + byteOffset
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="byteOffset"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public Span<T> ToSpan<T>(long byteOffset, long count) where T : struct
-        {
-            var typeofT = typeof(T);
-            var size = Marshal.SizeOf<T>();
-            var byteLength = count * size;
-            var bytes = ReadBytes(byteOffset, byteLength);
-            if (typeofT == typeof(byte)) return (Span<T>)(T[])(object)bytes;
-            var byteSpan = MemoryMarshal.Cast<byte, T>(bytes);
-            return byteSpan;
-        }
+        public T[] ToArray<T>(long start, long count) where T : struct => Read<T>(start * Marshal.SizeOf<T>(), count);
         static Dictionary<Type, int> TypedArrayElementSize = new Dictionary<Type, int>
         {
             { typeof(Uint8ClampedArray), 1 },
@@ -526,13 +387,13 @@ namespace SpawnDev.BlazorJS.JSObjects
             { typeof(double), typeof(Float64Array) },
         };
         /// <summary>
-        /// Returns the Javascript native array type for the specified unmanaged type
+        /// Returns the Javascript native array type for the specified struct type
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static Type? GetTypeDefaultTypedArrayType<T>() where T : unmanaged => TypeDefaultTypedArrayType.TryGetValue(typeof(T), out var typedArrayType) ? typedArrayType : null;
+        public static Type? GetTypeDefaultTypedArrayType<T>() where T : struct => TypeDefaultTypedArrayType.TryGetValue(typeof(T), out var typedArrayType) ? typedArrayType : null;
         /// <summary>
-        /// Returns the Javascript native array type for the specified unmanaged type
+        /// Returns the Javascript native array type for the specified struct type
         /// </summary>
         /// <param name="unmanagedType"></param>
         /// <returns></returns>

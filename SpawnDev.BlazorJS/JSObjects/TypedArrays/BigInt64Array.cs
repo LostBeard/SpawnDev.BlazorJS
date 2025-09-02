@@ -27,7 +27,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static BigInt64Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<BigInt64Array>($"{nameof(BigInt64Array)}.from", values);
+        public static BigInt64Array From<T>(IEnumerable<T> values) where T : struct => JS.Call<BigInt64Array>($"{nameof(BigInt64Array)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>

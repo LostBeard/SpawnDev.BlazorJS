@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static Uint16Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<Uint16Array>($"{nameof(Uint16Array)}.from", values);
+        public static Uint16Array From<T>(IEnumerable<T> values) where T : struct => JS.Call<Uint16Array>($"{nameof(Uint16Array)}.from", values);
         /// <summary>
         /// Deserialization constructor
         /// </summary>

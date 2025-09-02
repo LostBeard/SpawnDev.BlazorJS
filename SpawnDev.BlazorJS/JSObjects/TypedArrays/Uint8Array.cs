@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        public static Uint8Array From<T>(IEnumerable<T> values) where T : unmanaged => JS.Call<Uint8Array>($"{nameof(Uint8Array)}.from", values);
+        public static Uint8Array From<T>(IEnumerable<T> values) where T : struct => JS.Call<Uint8Array>($"{nameof(Uint8Array)}.from", values);
         #region Constructors
         /// <summary>
         /// Deserialization constructor
