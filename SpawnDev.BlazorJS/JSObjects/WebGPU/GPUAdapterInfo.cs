@@ -3,7 +3,8 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The GPUAdapterInfo interface of the WebGPU API contains identifying information about a GPUAdapter.
+    /// The GPUAdapterInfo interface of the WebGPU API contains identifying information about a GPUAdapter.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUAdapterInfo
     /// </summary>
     public class GPUAdapterInfo : JSObject
     {
@@ -32,6 +33,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The name of the adapter vendor. Returns an empty string if it is not available.
         /// </summary>
         public string Vendor => JSRef!.Get<string>("vendor");
+        /// <summary>
+        /// The maximum supported subgroup size for the GPUAdapter.
+        /// </summary>
+        public int SubgroupMaxSize => JSRef!.Get<int>("subgroupMaxSize");
+        /// <summary>
+        /// The minimum supported subgroup size for the GPUAdapter.
+        /// </summary>
+        public int SubgroupMinSize => JSRef!.Get<int>("subgroupMinSize");
         #endregion
     }
 }

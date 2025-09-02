@@ -2,13 +2,21 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// Read only set like object.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+    /// </summary>
     public class SetReadOnly : JSObject
     {
         #region Constructors
+        /// <inheritdoc/>
         public SetReadOnly(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// The size accessor property of Set instances returns the number of (unique) elements in this set.
+        /// </summary>
         public int Size => JSRef!.Get<int>("size");
         #endregion
 
@@ -42,19 +50,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Iterator<TValue> Values<TValue>() => JSRef!.Call<Iterator<TValue>>("values");
         #endregion
-
-        #region Events
-        // Existing
-        // New
-        #endregion
     }
+    /// <summary>
+    /// Read only set like object.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+    /// </summary>
     public class SetReadOnly<TValue> : JSObject
     {
         #region Constructors
+        /// <inheritdoc/>
         public SetReadOnly(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// The size accessor property of Set instances returns the number of (unique) elements in this set.
+        /// </summary>
         public int Size => JSRef!.Get<int>("size");
         #endregion
 
@@ -87,11 +98,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a new iterator object that yields the values for each element in the Set object in insertion order.
         /// </summary>
         public Iterator<TValue> Values() => JSRef!.Call<Iterator<TValue>>("values");
-        #endregion
-
-        #region Events
-        // Existing
-        // New
         #endregion
     }
 }

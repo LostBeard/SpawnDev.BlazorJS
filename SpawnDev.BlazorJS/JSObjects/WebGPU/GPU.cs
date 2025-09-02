@@ -4,6 +4,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The GPU interface of the WebGPU API is the starting point for using WebGPU. It can be used to return a GPUAdapter from which you can request devices, configure features and limits, and more.
+    /// https://developer.mozilla.org/en-US/docs/Web/API/GPU
     /// </summary>
     public class GPU : JSObject
     {

@@ -10,12 +10,22 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class GPUAdapter : GPUObjectBase
     {
         #region Constructors
+        /// <inheritdoc/>
         public GPUAdapter(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// GPUSupportedFeatures is a setlike interface. Its set entries are the GPUFeatureName values of the features supported by an adapter or device. It must only contain strings from the GPUFeatureName enum.
+        /// </summary>
         public GPUSupportedFeatures Features => JSRef!.Get<GPUSupportedFeatures>("features");
+        /// <summary>
+        /// A boolean value. Returns true if the adapter is a fallback adapter, and false if not.<br/>
+        /// </summary>
         public bool IsFallbackAdapter => JSRef!.Get<bool>("isFallbackAdapter");
+        /// <summary>
+        /// A GPUSupportedLimits object that describes the limits supported by the adapter.
+        /// </summary>
         public GPUSupportedLimits Limits => JSRef!.Get<GPUSupportedLimits>("limits");
         #endregion
 
@@ -38,9 +48,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <returns></returns>
         public Task<GPUDevice> RequestDevice(GPUDeviceDescriptor options) => JSRef!.CallAsync<GPUDevice>("requestDevice", options);
-        #endregion
-
-        #region Events
         #endregion
     }
 }
