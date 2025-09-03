@@ -1,4 +1,5 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -30,7 +31,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             ElementType = typeof(TElement);
             Data = data;
             handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
-            Pointer = IntPtr.Add(handle.AddrOfPinnedObject(), (int)(Offset * ElementSize));
+            Pointer = new IntPtr(handle.AddrOfPinnedObject().ToInt64() + (Offset * ElementSize));
             Address = Pointer.ToInt64();
             Length = length;
             ByteLength = ElementSize * Length;
@@ -44,6 +45,7 @@ namespace SpawnDev.BlazorJS.Toolbox
     }
     /// <inheritdoc/>
     [JsonConverter(typeof(HeapViewConverter))]
+    [RequiresUnreferencedCode("")]
     public sealed class HeapViewString : HeapView
     {
         /// <summary>
@@ -56,6 +58,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="data"></param>
         /// <param name="offset">Start index in the data</param>
         /// <param name="length">The number of characters to include</param>
+        [DynamicDependency("Helper", "MyType", "System")]
         public HeapViewString(string data, long offset, long length) : base()
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
@@ -67,7 +70,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             ElementType = typeof(char);
             Data = data;
             handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
-            Pointer = IntPtr.Add(handle.AddrOfPinnedObject(), (int)(Offset * ElementSize));
+            Pointer = new IntPtr(handle.AddrOfPinnedObject().ToInt64() + (Offset * ElementSize));
             Address = Pointer.ToInt64();
             Length = length;
             ByteLength = ElementSize * length;
