@@ -205,6 +205,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public long SetTimeout(Action callback, double delay) => JSRef!.Call<long>("setTimeout", ActionCallback.CreateOne(callback), delay);
         /// <summary>
+        /// Schedules a function to execute in a given amount of time.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="delay"></param>
+        /// <returns></returns>
+        public long SetTimeout(Func<Task> callback, double delay) => JSRef!.Call<long>("setTimeout", Callback.CreateOne(callback), delay);
+        /// <summary>
         /// The setInterval() method of the Window interface repeatedly calls a function or executes a code snippet, with a fixed time delay between each call.<br/>
         /// This method returns an interval ID which uniquely identifies the interval, so you can remove it later by calling clearInterval().
         /// </summary>
@@ -280,6 +287,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="callback"></param>
         /// <returns></returns>
         public long RequestAnimationFrame(Action callback) => JSRef!.Call<long>("requestAnimationFrame", Callback.CreateOne(callback));
+        /// <summary>
+        /// The window.requestAnimationFrame() method tells the browser you wish to perform an animation. It requests the browser to call a user-supplied callback function before the next repaint.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public long RequestAnimationFrame(Func<double, Task> callback) => JSRef!.Call<long>("requestAnimationFrame", Callback.CreateOne(callback));
+        /// <summary>
+        /// The window.requestAnimationFrame() method tells the browser you wish to perform an animation. It requests the browser to call a user-supplied callback function before the next repaint.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public long RequestAnimationFrame(Func<Task> callback) => JSRef!.Call<long>("requestAnimationFrame", Callback.CreateOne(callback));
         /// <summary>
         /// Enables you to cancel a callback previously scheduled with Window.requestAnimationFrame.
         /// </summary>
