@@ -23,7 +23,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a number value of the element size.
         /// </summary>
-        public static int BYTES_PER_ELEMENT = Marshal.SizeOf<TElement>();
+        public static int BYTES_PER_ELEMENT { get; } = Marshal.SizeOf<TElement>();
         /// <summary>
         /// Takes an integer value and returns the item at that index. This method allows for negative integers, which count back from the last item.
         /// </summary>
@@ -43,21 +43,38 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an array of type TElement
         /// </summary>
-        /// <returns>An array of type TElement</returns>
-        public virtual TElement[] ToArray() => ToArray<TElement>();
-        /// <summary>
-        /// Returns an array of type TElement
-        /// </summary>
         /// <param name="start">The TElement index to start at</param>
         /// <returns>An array of type TElement</returns>
-        public virtual TElement[] ToArray(long start) => ToArray<TElement>(start);
+        public virtual TElement[] ToArray(long start = 0) => Read<TElement>(start * BYTES_PER_ELEMENT);
         /// <summary>
         /// Returns an array of type TElement
         /// </summary>
         /// <param name="start">The TElement index to start at</param>
         /// <param name="length">The number of TElements to return</param>
         /// <returns>An array of type TElement</returns>
-        public virtual TElement[] ToArray(long start, long length) => ToArray<TElement>(start, length);
+        public virtual TElement[] ToArray(long start, long length) => Read<TElement>(start * BYTES_PER_ELEMENT, length);
+        /// <summary>
+        /// Copies elements of type T from this TypedArray tp the destination
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="srcOffset">Source element offset</param>
+        /// <param name="dest">The array to copy the data into</param>
+        /// <param name="destOffset">Destination offset</param>
+        /// <param name="count">Count</param>
+        /// <returns></returns>
+        public long ToArray(long srcOffset, TElement[] dest, long destOffset, long count) => Read<TElement>(srcOffset * BYTES_PER_ELEMENT, dest, destOffset, count);
+        /// <summary>
+        /// Writes an array of TElement to this TypedArray. This is a direct byte for byte copy with no type conversions.
+        /// </summary>
+        public void FromArray(TElement[] srcData, long destOffset = 0) => Write(srcData, destOffset * BYTES_PER_ELEMENT);
+        /// <summary>
+        /// Writes an array of TElement to this TypedArray. This is a direct byte for byte copy with no type conversions.
+        /// </summary>
+        /// <param name="srcData"></param>
+        /// <param name="destOffset">The destination index to start copying to</param>
+        /// <param name="srcOffset">The source index to start copying from</param>
+        /// <param name="length">The number of items to copy</param>
+        public void FromArray(TElement[] srcData, long destOffset, long srcOffset, long length) => Write(srcData, destOffset * BYTES_PER_ELEMENT, srcOffset, length);
         /// <summary>
         /// Returns a value iterator 
         /// </summary>
@@ -242,12 +259,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="byteOffset"></param>
         public virtual void WriteBytes(byte[] data, long byteOffset = 0) => Write(data, byteOffset);
         /// <summary>
-        /// Writes an array of struct to this TypedArray
+        /// Writes an array of struct to this TypedArray. This is a direct byte for byte copy with no type conversions.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="srcData"></param>
+        /// <param name="destByteOffset"></param>
         public void Write<T>(T[] srcData, long destByteOffset = 0) where T : struct => Write<T>(srcData, destByteOffset, 0, srcData.Length);
         /// <summary>
-        /// Writes an array of struct to this TypedArray
+        /// Writes an array of struct to this TypedArray. This is a direct byte for byte copy with no type conversions.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="srcData"></param>
+        /// <param name="destByteOffset"></param>
+        /// <param name="srcOffset"></param>
+        /// <param name="length"></param>
+        /// <exception cref="NotImplementedException"></exception>
         public void Write<T>(T[] srcData, long destByteOffset, long srcOffset, long length) where T : struct
         {
             if (destByteOffset < 0) new IndexOutOfRangeException(nameof(destByteOffset));
@@ -330,15 +356,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Read an array of type T starting at this TypedArray's ByteOffset + byteOffset
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <returns>Array of type T</returns>
-        public T[] ToArray<T>() where T : struct => Read<T>();
-        /// <summary>
-        /// Read an array of type T starting at this TypedArray's ByteOffset + byteOffset
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="start">Element Index to start</param>
         /// <returns>Array of type T</returns>
-        public T[] ToArray<T>(long start) where T : struct => Read<T>(start * Marshal.SizeOf<T>());
+        public T[] ToArray<T>(long start = 0) where T : struct => Read<T>(start * Marshal.SizeOf<T>());
         /// <summary>        
         /// Read an array of type T starting at this TypedArray's ByteOffset + byteOffset
         /// </summary>
@@ -347,6 +367,32 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="count">Number of type T to read</param>
         /// <returns>Array of type T</returns>
         public T[] ToArray<T>(long start, long count) where T : struct => Read<T>(start * Marshal.SizeOf<T>(), count);
+        /// <summary>
+        /// Copies elements of type T from this TypedArray tp the destination
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="srcOffset">Source element offset</param>
+        /// <param name="dest">The array to copy the data into</param>
+        /// <param name="destOffset">Destination offset</param>
+        /// <param name="count">Count</param>
+        /// <returns></returns>
+        public long ToArray<T>(long srcOffset, T[] dest, long destOffset, long count) where T : struct => Read<T>(srcOffset * Marshal.SizeOf<T>(), dest, destOffset, count);
+        /// <summary>
+        /// Writes an array of struct to this TypedArray
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="srcData"></param>
+        /// <param name="destOffset">The destination index to start copying to</param>
+        public void FromArray<T>(T[] srcData, long destOffset = 0) where T : struct => Write<T>(srcData, destOffset * Marshal.SizeOf<T>());
+        /// <summary>
+        /// Writes an array of struct to this TypedArray
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="srcData"></param>
+        /// <param name="destOffset">The destination index to start copying to</param>
+        /// <param name="srcOffset">The source index to start copying from</param>
+        /// <param name="length">The number of items to copy</param>
+        public void FromArray<T>(T[] srcData, long destOffset, long srcOffset, long length) where T : struct => Write<T>(srcData, destOffset * Marshal.SizeOf<T>(), srcOffset, length);
         static Dictionary<Type, int> TypedArrayElementSize = new Dictionary<Type, int>
         {
             { typeof(Uint8ClampedArray), 1 },
