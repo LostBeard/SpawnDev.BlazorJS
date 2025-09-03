@@ -14,19 +14,6 @@
         /// <summary>
         /// The resource to bind, which may be a GPUSampler, GPUTexture, GPUTextureView, GPUBuffer, GPUBufferBinding, or GPUExternalTexture.
         /// </summary>
-        public object Resource
-        {
-            get => _resource;
-
-            init
-            {
-                if (value is IGPUBindingResource)
-                    _resource = value;
-                else
-                    throw new ArgumentException("Resource must be a GPUSampler, GPUTexture, GPUTextureView, GPUBuffer, GPUBufferBinding, or GPUExternalTexture");
-            }
-        }
-
-        private object _resource;
+        public GPUBindingResource Resource { get; init; }
     }
 }

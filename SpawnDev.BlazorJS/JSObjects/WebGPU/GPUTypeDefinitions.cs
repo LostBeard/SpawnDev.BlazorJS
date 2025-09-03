@@ -26,12 +26,22 @@ global using GPUOrigin2D = SpawnDev.BlazorJS.Union<System.Collections.Generic.IE
 // https://www.w3.org/TR/webgpu/#typedefdef-gpucopyexternalimagesource
 // typedef (ImageBitmap or ImageData or HTMLImageElement or HTMLVideoElement or VideoFrame or HTMLCanvasElement or OffscreenCanvas) GPUCopyExternalImageSource;
 global using GPUCopyExternalImageSource = SpawnDev.BlazorJS.Union
-    <
-        SpawnDev.BlazorJS.JSObjects.ImageBitmap,
-        SpawnDev.BlazorJS.JSObjects.ImageData,
-        SpawnDev.BlazorJS.JSObjects.HTMLImageElement,
-        SpawnDev.BlazorJS.JSObjects.HTMLVideoElement,
-        SpawnDev.BlazorJS.JSObjects.VideoFrame,
-        SpawnDev.BlazorJS.JSObjects.HTMLCanvasElement,
-        SpawnDev.BlazorJS.JSObjects.OffscreenCanvas
-    >;
+<
+    SpawnDev.BlazorJS.JSObjects.ImageBitmap,
+    SpawnDev.BlazorJS.JSObjects.ImageData,
+    SpawnDev.BlazorJS.JSObjects.HTMLImageElement,
+    SpawnDev.BlazorJS.JSObjects.HTMLVideoElement,
+    SpawnDev.BlazorJS.JSObjects.VideoFrame,
+    SpawnDev.BlazorJS.JSObjects.HTMLCanvasElement,
+    SpawnDev.BlazorJS.JSObjects.OffscreenCanvas
+>;
+
+global using GPUBindingResource = SpawnDev.BlazorJS.Union
+<
+    SpawnDev.BlazorJS.JSObjects.GPUSampler,
+    SpawnDev.BlazorJS.JSObjects.GPUTexture,
+    SpawnDev.BlazorJS.JSObjects.GPUTextureView,
+    SpawnDev.BlazorJS.JSObjects.GPUBuffer,
+    SpawnDev.BlazorJS.JSObjects.GPUBufferBinding,
+    SpawnDev.BlazorJS.JSObjects.GPUExternalTexture
+>;
