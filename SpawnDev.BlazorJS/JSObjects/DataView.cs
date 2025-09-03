@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using SpawnDev.BlazorJS.Toolbox;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -351,6 +352,31 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var buffer = Buffer;
             using var uint8Array = new Uint8Array(buffer, ByteOffset + byteOffset, byteLength);
             return uint8Array.ReadBytes();
+        }
+        /// <summary>
+        /// Returns a copy of the struct array as a new DataView
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static DataView Create<T>(T[] data, long offset = 0) where T : struct
+        {
+            using var heapView = HeapView.Create(data, offset);
+            return heapView.ToDataView();
+        }
+        /// <summary>
+        /// Returns a copy of the struct array as a new DataView
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static DataView Create<T>(T[] data, long offset, long length) where T : struct
+        {
+            using var heapView = HeapView.Create(data, offset, length);
+            return heapView.ToDataView();
         }
     }
 }
