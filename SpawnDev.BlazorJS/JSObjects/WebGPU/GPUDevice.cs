@@ -4,7 +4,8 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The GPUDevice interface of the WebGPU API represents a logical GPU device. This is the main interface through which the majority of WebGPU functionality is accessed.<br/>
-    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice
+    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice<br/>
+    /// https://www.w3.org/TR/webgpu/#gpudevice
     /// </summary>
     public class GPUDevice : EventTarget
     {
@@ -69,12 +70,35 @@ namespace SpawnDev.BlazorJS.JSObjects
         public GPUBuffer CreateBuffer(GPUBufferDescriptor descriptor) => JSRef!.Call<GPUBuffer>("createBuffer", descriptor);
 
         /// <summary>
+        /// Creates a GPUSampler.
+        /// </summary>
+        /// <param name="descriptor">Description of the GPUSampler to create.</param>
+        /// <returns></returns>
+        public GPUSampler CreateSampler(GPUSamplerDescriptor? descriptor = null) => descriptor == null ? JSRef!.Call<GPUSampler>("createSampler") : JSRef!.Call<GPUSampler>("createSampler", descriptor);
+
+        /// <summary>
+        /// Creates a GPUExternalTexture wrapping the provided image source.
+        /// </summary>
+        /// <param name="descriptor">Provides the external image source object (and any creation options).</param>
+        /// <returns></returns>
+        public GPUExternalTexture ImportExternalTexture(GPUExternalTextureDescriptor descriptor) => JSRef!.Call<GPUExternalTexture>("importExternalTexture", descriptor);
+
+        /// <summary>
         /// The createRenderPipeline() method of the GPUDevice interface creates a GPURenderPipeline object, 
         /// which represents a collection of GPU state and shader programs that can be used to render graphics.
         /// </summary>
         /// <param name="descriptor"></param>
         /// <returns></returns>
         public GPURenderPipeline CreateRenderPipeline(GPURenderPipelineDescriptor descriptor) => JSRef!.Call<GPURenderPipeline>("createRenderPipeline", descriptor);
+
+        /// <summary>
+        /// Creates a GPURenderPipeline using async pipeline creation. The returned Promise resolves when the created pipeline is ready to be used without additional delay.<br/>
+        /// If pipeline creation fails, the returned Promise rejects with an GPUPipelineError. (A GPUError is not dispatched to the device.)<br/>
+        /// Note: Use of this method is preferred whenever possible, as it prevents blocking the queue timeline work on pipeline compilation.
+        /// </summary>
+        /// <param name="descriptor">Description of the GPURenderPipeline to create.</param>
+        /// <returns></returns>
+        public Task<GPURenderPipeline> CreateRenderPipelineAsync(GPURenderPipelineDescriptor descriptor) => JSRef!.CallAsync<GPURenderPipeline>("createRenderPipelineAsync", descriptor);
 
         /// <summary>
         /// The createComputePipeline() method of the GPUDevice interface creates a GPUPipelineLayout that defines the GPUBindGroupLayouts used by a pipeline.
@@ -105,16 +129,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Creates a GPUCommandEncoder, which is used to encode commands to be issued to the GPU.
         /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/createCommandEncoder
         /// </summary>
-        /// <returns></returns>
-        public GPUCommandEncoder CreateCommandEncoder() => JSRef!.Call<GPUCommandEncoder>("createCommandEncoder");
-
-        /// <summary>
-        /// Creates a GPUCommandEncoder, which is used to encode commands to be issued to the GPU.
-        /// https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/createCommandEncoder
-        /// </summary>
         /// <param name="descriptor"></param>
         /// <returns></returns>
-        public GPUCommandEncoder CreateCommandEncoder(GPUCommandEncoderDescriptor descriptor) => JSRef!.Call<GPUCommandEncoder>("createCommandEncoder", descriptor);
+        public GPUCommandEncoder CreateCommandEncoder(GPUCommandEncoderDescriptor? descriptor = null) => descriptor == null ? JSRef!.Call<GPUCommandEncoder>("createCommandEncoder") : JSRef!.Call<GPUCommandEncoder>("createCommandEncoder", descriptor);
 
         /// <summary>
         /// The createTexture() method of the GPUDevice interface creates a GPUTexture in which to store 1D, 2D, or 3D arrays of data, such as images, to use in GPU rendering operations.
@@ -153,5 +170,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="descriptor"></param>
         /// <returns></returns>
         public Task<GPUComputePipeline> CreateComputePipelineAsync(GPUComputePipelineDescriptor descriptor) => JSRef!.CallAsync<GPUComputePipeline>("createComputePipelineAsync", descriptor);
+
+        /// <summary>
+        /// Creates a GPURenderBundleEncoder.
+        /// </summary>
+        /// <param name="descriptor">Description of the GPURenderBundleEncoder to create.</param>
+        /// <returns></returns>
+        public GPURenderBundleEncoder CreateRenderBundleEncoder(GPURenderBundleEncoderDescriptor descriptor) => JSRef!.Call<GPURenderBundleEncoder>("createRenderBundleEncoder", descriptor);
     }
 }

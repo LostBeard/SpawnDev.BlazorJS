@@ -14,6 +14,9 @@ global using GPUIntegerCoordinateOut = System.UInt32;
 global using GPUSize32Out = System.UInt32;
 global using GPUFlagsConstant = System.UInt32;
 
+// typedef (sequence<double> or GPUColorDict) GPUColor;
+global using GPUColor = SpawnDev.BlazorJS.Union<System.Collections.Generic.IEnumerable<System.Double>, SpawnDev.BlazorJS.JSObjects.GPUColorDict>;
+
 // typedef (sequence<GPUIntegerCoordinate> or GPUExtent3DDict) GPUExtent3D;
 global using GPUExtent3D = SpawnDev.BlazorJS.Union<System.Collections.Generic.IEnumerable<System.UInt32>, SpawnDev.BlazorJS.JSObjects.GPUExtent3DDict>;
 
