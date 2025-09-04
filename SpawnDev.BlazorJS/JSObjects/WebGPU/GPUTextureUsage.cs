@@ -1,10 +1,12 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The bitwise flags representing the original usages set when the GPUTexture was first created. 
-    /// The returned number is the sum of decimal values representing the different flags, as seen in the table below.
+    /// The bitwise flags representing the original usages set when the GPUTexture was first created. <br/>
+    /// The returned number is the sum of decimal values representing the different flags, as seen in the table below.<br/>
+    /// https://www.w3.org/TR/webgpu/#namespacedef-gputextureusage
     /// </summary>
-    public enum GPUTextureUsage
+    [Flags]
+    public enum GPUTextureUsage : uint
     {
         /// <summary>
         /// The texture can be used as the source of a copy operation, for example the source argument of a copyTextureToBuffer() call.

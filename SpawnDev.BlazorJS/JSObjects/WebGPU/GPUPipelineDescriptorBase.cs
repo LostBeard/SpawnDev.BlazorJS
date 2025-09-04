@@ -9,6 +9,6 @@
         /// The GPUPipelineLayout for this pipeline, or "auto" to generate the pipeline layout automatically.<br/>
         /// Note: If "auto" is used the pipeline cannot share GPUBindGroups with any other pipelines.
         /// </summary>
-        public Union<GPUPipelineLayout, GPUAutoLayoutMode> Layout { get; set; }
+        public Union<GPUPipelineLayout, EnumString<GPUAutoLayoutMode>> Layout { get; set; }
     }
 }

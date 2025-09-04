@@ -26,6 +26,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Defines which aspects of the texture to copy to/from.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public GPUTextureAspect? Aspect { get; set; }
+        public EnumString<GPUTextureAspect>? Aspect { get; set; }
     }
 }

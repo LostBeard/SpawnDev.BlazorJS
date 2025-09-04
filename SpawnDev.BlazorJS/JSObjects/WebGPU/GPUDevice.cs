@@ -54,7 +54,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Once you are done capturing errors, you can end capture by invoking GPUDevice.popErrorScope(). This pops the scope from the stack and returns a Promise that resolves to an object describing the first error captured in the scope, or null if no errors were captured.
         /// </summary>
         /// <param name="filter"></param>
-        public void PushErrorScope(GPUErrorFilter filter) => JSRef!.CallVoid("pushErrorScope", filter);
+        public void PushErrorScope(EnumString<GPUErrorFilter> filter) => JSRef!.CallVoid("pushErrorScope", filter);
 
         /// <summary>
         /// The popErrorScope() method of the GPUDevice interface pops an existing GPU error scope from the error scope stack (originally pushed using GPUDevice.pushErrorScope()) and returns a Promise that resolves to an object describing the first error captured in the scope, or null if no error occurred.

@@ -9,7 +9,7 @@
         /// <summary>
         /// The type of queries managed by GPUQuerySet.
         /// </summary>
-        public GPUQueryType Type { get; set; }
+        public EnumString<GPUQueryType> Type { get; set; }
         /// <summary>
         /// The number of queries managed by GPUQuerySet.
         /// </summary>

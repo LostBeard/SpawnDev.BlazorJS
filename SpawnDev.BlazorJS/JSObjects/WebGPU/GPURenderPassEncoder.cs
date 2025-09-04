@@ -27,11 +27,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void SetPipeline(GPURenderPipeline pipeline) => JSRef!.CallVoid("setPipeline", pipeline);
 
         /// <inheritdoc/>
-        public void SetIndexBuffer(GPUBuffer buffer, GPUIndexFormat indexFormat, GPUSize64 offset = 0) 
+        public void SetIndexBuffer(GPUBuffer buffer, EnumString<GPUIndexFormat> indexFormat, GPUSize64 offset = 0) 
             => JSRef!.CallVoid("setIndexBuffer", buffer, indexFormat, offset);
 
         /// <inheritdoc/>
-        public void SetIndexBuffer(GPUBuffer buffer, GPUIndexFormat indexFormat, GPUSize64 offset, GPUSize64 size)
+        public void SetIndexBuffer(GPUBuffer buffer, EnumString<GPUIndexFormat> indexFormat, GPUSize64 offset, GPUSize64 size)
             => JSRef!.CallVoid("setIndexBuffer", buffer, indexFormat, offset, size);
 
         /// <inheritdoc/>

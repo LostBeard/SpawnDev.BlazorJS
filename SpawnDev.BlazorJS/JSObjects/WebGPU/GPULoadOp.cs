@@ -4,20 +4,20 @@ using System.Text.Json.Serialization;
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// https://www.w3.org/TR/webgpu/#enumdef-gpuindexformat
+    /// https://www.w3.org/TR/webgpu/#enumdef-gpuloadop
     /// </summary>
     [JsonConverter(typeof(EnumStringConverterFactory))]
-    public enum GPUIndexFormat
+    public enum GPULoadOp
     {
         /// <summary>
-        /// Uint16
+        /// Load
         /// </summary>
-        [JsonPropertyName("uint16")]
-        Uint16,
+        [JsonPropertyName("load")]
+        Load,
         /// <summary>
-        /// Uint32
+        /// Clear
         /// </summary>
-        [JsonPropertyName("uint32")]
-        Uint32,
+        [JsonPropertyName("clear")]
+        Clear,
     }
 }

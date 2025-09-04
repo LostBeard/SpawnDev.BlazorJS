@@ -5,7 +5,8 @@
     /// for this GPUBindGroupLayoutEntry will be visible to.
     /// https://www.w3.org/TR/webgpu/#typedefdef-gpushaderstageflags
     /// </summary>
-    public enum GPUShaderStageFlags
+    [Flags]
+    public enum GPUShaderStageFlags : uint
     {
         /// <summary>
         /// The bind group entry will be accessible to vertex shaders.

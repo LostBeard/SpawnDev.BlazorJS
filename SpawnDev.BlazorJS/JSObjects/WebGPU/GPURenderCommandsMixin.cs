@@ -18,7 +18,7 @@
         /// <param name="buffer">Buffer containing index data to use for subsequent drawing commands.</param>
         /// <param name="indexFormat">Format of the index data contained in buffer.</param>
         /// <param name="offset">Offset in bytes into buffer where the index data begins. Defaults to 0.</param>
-        void SetIndexBuffer(GPUBuffer buffer, GPUIndexFormat indexFormat, GPUSize64 offset = 0);
+        void SetIndexBuffer(GPUBuffer buffer, EnumString<GPUIndexFormat> indexFormat, GPUSize64 offset = 0);
 
         /// <summary>
         /// Sets the current index buffer.
@@ -27,7 +27,7 @@
         /// <param name="indexFormat">Format of the index data contained in buffer.</param>
         /// <param name="offset">Offset in bytes into buffer where the index data begins. Defaults to 0.</param>
         /// <param name="size">Size in bytes of the index data in buffer. Defaults to the size of the buffer minus the offset.</param>
-        void SetIndexBuffer(GPUBuffer buffer, GPUIndexFormat indexFormat, GPUSize64 offset, GPUSize64 size);
+        void SetIndexBuffer(GPUBuffer buffer, EnumString<GPUIndexFormat> indexFormat, GPUSize64 offset, GPUSize64 size);
 
         /// <summary>
         /// Sets the current vertex buffer for the given slot.

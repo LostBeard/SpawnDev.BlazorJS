@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An enumerated value representing the mapped state of the GPUBuffer.
         /// </summary>
-        public string? MapState => JSRef!.Get<string?>("mapState");
+        public EnumString<GPUBufferMapState>? MapState => JSRef!.Get<EnumString<GPUBufferMapState>?>("mapState");
         /// <summary>
         /// A number representing the length of the GPUBuffer's memory allocation, in bytes.
         /// </summary>

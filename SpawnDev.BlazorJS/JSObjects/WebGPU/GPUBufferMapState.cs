@@ -5,7 +5,8 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// A GPUBuffer represents a block of memory that can be used in GPU operations. Data is stored in linear layout, meaning that each byte of the allocation can be addressed by its offset from the start of the GPUBuffer, subject to alignment restrictions depending on the operation. Some GPUBuffers can be mapped which makes the block of memory accessible via an ArrayBuffer called its mapping.<br/>
-    /// GPUBuffers are created via createBuffer(). Buffers may be mappedAtCreation.
+    /// GPUBuffers are created via createBuffer(). Buffers may be mappedAtCreation.<br/>
+    /// https://www.w3.org/TR/webgpu/#enumdef-gpubuffermapstate
     /// </summary>
     [JsonConverter(typeof(EnumStringConverterFactory))]
     public enum GPUBufferMapState

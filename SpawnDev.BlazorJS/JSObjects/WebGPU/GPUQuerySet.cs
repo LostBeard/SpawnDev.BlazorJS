@@ -13,7 +13,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The type of the queries managed by this GPUQuerySet.
         /// </summary>
-        public GPUQueryType Type => JSRef!.Get<GPUQueryType>("type");
+        public EnumString<GPUQueryType> Type => JSRef!.Get<EnumString<GPUQueryType>>("type");
 
         /// <summary>
         /// The number of queries managed by this GPUQuerySet.
