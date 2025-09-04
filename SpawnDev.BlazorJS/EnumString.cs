@@ -8,7 +8,12 @@ namespace SpawnDev.BlazorJS
     /// </summary>
     public abstract class EnumString
     {
+        /// <summary>
+        /// The string value of this EnumString
+        /// </summary>
         public abstract string? String { get; set; }
+        /// <inheritdoc/>
+        public override string ToString() => String ?? "";
     }
     /// <summary>
     /// Enum string class is a class that allows easy conversion to and from Enums, and strings<br />
@@ -86,7 +91,7 @@ namespace SpawnDev.BlazorJS
             {
                 typeMappings = new Dictionary<Enum, string>();
                 var values = (T[])System.Enum.GetValues(enumType);
-                foreach(var value in values)
+                foreach (var value in values)
                 {
                     var stringValue = value.ToString();
                     var jsonPropertyNameAttr = (JsonPropertyNameAttribute?)typeof(T).GetField(stringValue)?.GetCustomAttributes(typeof(JsonPropertyNameAttribute), false).FirstOrDefault();
@@ -97,28 +102,60 @@ namespace SpawnDev.BlazorJS
             return typeMappings;
         }
         Dictionary<Enum, string> TypeMapping;
+        /// <summary>
+        /// New instance
+        /// </summary>
         public EnumString()
         {
             TypeMapping = GetMapping();
         }
+        /// <summary>
+        /// New instance
+        /// </summary>
+        /// <param name="value"></param>
         public EnumString(T value)
         {
             TypeMapping = GetMapping();
             Enum = value;
         }
+        /// <summary>
+        /// New instance
+        /// </summary>
+        /// <param name="value"></param>
         public EnumString(string value)
         {
             TypeMapping = GetMapping();
             String = value;
         }
-        // T
+        /// <summary>
+        /// Convert from enum
+        /// </summary>
+        /// <param name="value"></param>
         public static implicit operator EnumString<T>(T value) => new EnumString<T>(value);
+        /// <summary>
+        /// Convert to enum
+        /// </summary>
+        /// <param name="value"></param>
         public static implicit operator T(EnumString<T> value) => value.Enum!.Value;
-        // T?
+        /// <summary>
+        /// Convert from enum
+        /// </summary>
+        /// <param name="value"></param>
         public static implicit operator EnumString<T>?(T? value) => value == null ? null : new EnumString<T>(value.Value);
+        /// <summary>
+        /// Convert to enum
+        /// </summary>
+        /// <param name="value"></param>
         public static implicit operator T?(EnumString<T> value) => value == null || !value.IsDefined ? null : value.Enum;
-        // string?
+        /// <summary>
+        /// Convert from string
+        /// </summary>
+        /// <param name="value"></param>
         public static implicit operator EnumString<T>(string value) => value == null ? null! : new EnumString<T>(value);
-        public static implicit operator string?(EnumString<T>? value) => value == null ? null : value.String;
+        /// <summary>
+        /// Convert to string
+        /// </summary>
+        /// <param name="value"></param>
+        public static implicit operator string(EnumString<T> value) => value == null ? null! : value.String!;
     }
 }
