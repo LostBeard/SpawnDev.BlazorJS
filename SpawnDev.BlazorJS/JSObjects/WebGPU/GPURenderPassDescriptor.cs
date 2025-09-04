@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An array of objects (see Color attachment object structure) defining the color attachments 
         /// that will be output to when executing this render pass.
         /// </summary>
-        public IEnumerable<GPURenderPassColorAttachment> ColorAttachments { get; init; }
+        public GPURenderPassColorAttachment[] ColorAttachments { get; init; }
 
         /// <summary>
         /// The GPURenderPassDepthStencilAttachment value that defines the depth/stencil attachment that will be output to and tested against when executing this render pass.

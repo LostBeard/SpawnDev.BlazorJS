@@ -20,6 +20,6 @@
         /// <param name="dynamicOffsetsData">Array containing buffer offsets in bytes for each entry in bindGroup marked as buffer.hasDynamicOffset, ordered by GPUBindGroupLayoutEntry.binding. See note for additional details.</param>
         /// <param name="dynamicOffsetsDataStart">Offset in elements into dynamicOffsetsData where the buffer offset data begins.</param>
         /// <param name="dynamicOffsetsDataLength">Number of buffer offsets to read from dynamicOffsetsData.</param>
-        void SetBindGroup(GPUIndex32 index, GPUBindGroup? bindGroup, Uint32Array dynamicOffsetsData, GPUSize64 dynamicOffsetsDataStart, GPUSize32 dynamicOffsetsDataLength)
+        void SetBindGroup(GPUIndex32 index, GPUBindGroup? bindGroup, Uint32Array dynamicOffsetsData, GPUSize64 dynamicOffsetsDataStart, GPUSize32 dynamicOffsetsDataLength);
     }
 }

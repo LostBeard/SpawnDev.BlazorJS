@@ -9,7 +9,7 @@
         /// <summary>
         /// The data format for this attribute. 
         /// </summary>
-        public string Format { get; init; }
+        public EnumString<GPUVertexFormat> Format { get; init; }
 
         /// <summary>
         /// The byte offset of this attribute within the vertex structure. 

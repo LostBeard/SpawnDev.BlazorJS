@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using System.Text.Json.Serialization;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// Represents the state of a color target in a GPU rendering pipeline, including its format.
@@ -9,6 +11,18 @@
         /// <summary>
         /// Gets or sets the format string used to define the output representation.
         /// </summary>
-        public string Format { get; init; }
+        public EnumString<GPUTextureFormat> Format { get; init; }
+
+        /// <summary>
+        /// The blending behavior for this color target. If left undefined, disables blending for this color target.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public GPUBlendState? Blend { get; init; }
+
+        /// <summary>
+        /// Bitmask controlling which channels are are written to when drawing to this color target.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public GPUColorWriteFlags? WriteMask { get; init; } = GPUColorWriteFlags.ALL;
     }
 }

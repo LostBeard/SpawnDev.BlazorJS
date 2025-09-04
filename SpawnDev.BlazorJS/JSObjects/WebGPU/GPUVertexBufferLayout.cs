@@ -22,6 +22,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A GPUVertexStepMode describing how vertex attributes are advanced during rendering. 
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? StepMode { get; init; }
+        public GPUVertexStepMode? StepMode { get; init; }
     }
 }

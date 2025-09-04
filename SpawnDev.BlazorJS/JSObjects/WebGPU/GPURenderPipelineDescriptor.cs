@@ -6,15 +6,8 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// Create render pipeline descriptor<br/>
     /// https://www.w3.org/TR/webgpu/#dictdef-gpurenderpipelinedescriptor
     /// </summary>
-    public class GPURenderPipelineDescriptor : GPUObjectDescriptorBase
+    public class GPURenderPipelineDescriptor : GPUPipelineDescriptorBase
     {
-        /// <summary>
-        /// Defines the layout (structure, purpose, and type) of all the GPU resources (buffers, textures, etc.) used during the execution of the pipeline.
-        /// Layout can be a GPUPipelineLayout object or a string = "auto". 
-        /// If set to "auto", the GPU will automatically create a pipeline layout based on the resources used in the pipeline.
-        /// </summary>
-        public object Layout { get; init; }
-
         /// <summary>
         /// An object describing the vertex shader entry point of the pipeline and its input buffer layouts.
         /// </summary>

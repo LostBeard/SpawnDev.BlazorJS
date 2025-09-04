@@ -25,36 +25,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A GPUTextureView object representing the texture subresource that will be output to for this color attachment.
         /// </summary>
-        public object View 
-        { 
-            get => _view; 
-            set
-            {
-                if (value is IGPUTextureOrTextureView)
-                    _view = value;
-                else
-                    throw new ArgumentException("View must be of type GPUTexture or GPUTextureView");
-            }
-        }
-        private object _view;
+        public Union<GPUTexture, GPUTextureView> View { get; set; }
 
         /// <summary>
         /// Describes the texture subresource that will receive the resolved output for this color attachment if view is multisampled. 
         /// The subresource is determined by calling get as texture view(resolveTarget).
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public object? ResolveTarget
-        {
-            get => _resolveTarget;
-            set
-            {
-                if (value is IGPUTextureOrTextureView)
-                    _resolveTarget = value;
-                else
-                    throw new ArgumentException("View must be of type GPUTexture or GPUTextureView");
-            }
-        }
-        private object? _resolveTarget;
+        public Union<GPUTexture, GPUTextureView> ResolveTarget { get; set; }
+
+        /// <summary>
+        /// Indicates the depth slice index of "3d" view that will be output to for this color attachment.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public GPUIntegerCoordinate? DepthSlice { get; set; }
 
         /// <summary>
         /// A color value to clear the view texture to, prior to executing the render pass.
