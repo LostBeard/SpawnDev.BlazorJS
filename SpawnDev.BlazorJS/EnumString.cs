@@ -118,7 +118,7 @@ namespace SpawnDev.BlazorJS
         public static implicit operator EnumString<T>?(T? value) => value == null ? null : new EnumString<T>(value.Value);
         public static implicit operator T?(EnumString<T> value) => value == null || !value.IsDefined ? null : value.Enum;
         // string?
-        public static implicit operator EnumString<T>?(string? value) => value == null ? null : new EnumString<T>(value);
+        public static implicit operator EnumString<T>(string value) => value == null ? null! : new EnumString<T>(value);
         public static implicit operator string?(EnumString<T>? value) => value == null ? null : value.String;
     }
 }

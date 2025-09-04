@@ -10,27 +10,27 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Specifies the address modes for the texture width.
         /// </summary>
-        public GPUAddressMode AddressModeU { get; set; } = GPUAddressMode.ClampToEdge;
+        public EnumString<GPUAddressMode> AddressModeU { get; set; } = GPUAddressMode.ClampToEdge;
         /// <summary>
         /// Specifies the address modes for the texture height.
         /// </summary>
-        public GPUAddressMode AddressModeV { get; set; } = GPUAddressMode.ClampToEdge;
+        public EnumString<GPUAddressMode> AddressModeV { get; set; } = GPUAddressMode.ClampToEdge;
         /// <summary>
         /// Specifies the address modes for the texture depth.
         /// </summary>
-        public GPUAddressMode AddressModeW { get; set; } = GPUAddressMode.ClampToEdge;
+        public EnumString<GPUAddressMode> AddressModeW { get; set; } = GPUAddressMode.ClampToEdge;
         /// <summary>
         /// Specifies the sampling behavior when the sampled area is smaller than or equal to one texel.
         /// </summary>
-        public GPUFilterMode MagFilter { get; set; } = GPUFilterMode.Nearest;
+        public EnumString<GPUFilterMode> MagFilter { get; set; } = GPUFilterMode.Nearest;
         /// <summary>
         /// Specifies the sampling behavior when the sampled area is larger than one texel.
         /// </summary>
-        public GPUFilterMode MinFilter { get; set; } = GPUFilterMode.Nearest;
+        public EnumString<GPUFilterMode> MinFilter { get; set; } = GPUFilterMode.Nearest;
         /// <summary>
         /// Specifies behavior for sampling between mipmap levels.
         /// </summary>
-        public GPUMipmapFilterMode MipmapFilter { get; set; } = GPUMipmapFilterMode.Nearest;
+        public EnumString<GPUMipmapFilterMode> MipmapFilter { get; set; } = GPUMipmapFilterMode.Nearest;
         /// <summary>
         /// Specifies the minimum and maximum levels of detail, respectively, used internally when sampling a texture.
         /// </summary>
@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Note: Comparison samplers may use filtering, but the sampling results will be implementation-dependent and may differ from the normal filtering rules.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public GPUCompareFunction? Compare { get; set; }
+        public EnumString<GPUCompareFunction>? Compare { get; set; }
         /// <summary>
         /// Specifies the maximum anisotropy value clamp used by the sampler. Anisotropic filtering is enabled when maxAnisotropy is > 1 and the implementation supports it.<br/>
         /// Anisotropic filtering improves the image quality of textures sampled at oblique viewing angles. Higher maxAnisotropy values indicate the maximum ratio of anisotropy supported when filtering.<br/>
