@@ -17,7 +17,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///"triangle-strip": Each vertex after the first two defines a triangle primitive between it and the previous two vertices.
         /// If omitted, topology defaults to "triangle-list".
         /// </summary>
-        public string Topology { get; init; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public EnumString<GPUPrimitiveTopology>? Topology { get; init; }
 
         /// <summary>
         /// The index format determines both the data type of index values in a buffer and, when used with strip primitive topologies 
@@ -28,7 +29,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// a list primitive topology will use the index format passed to setIndexBuffer() when doing indexed rendering.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? StripIndexFormat { get; init; }
+        public EnumString<GPUIndexFormat>? StripIndexFormat { get; init; }
 
         /// <summary>
         /// Defines which polygons are considered front-facing. The possible values are:
@@ -36,7 +37,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "cw" Polygons with vertices whose framebuffer coordinates are given in clockwise order are considered front-facing.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? FrontFace { get; init; }
+        public EnumString<GPUFrontFace>? FrontFace { get; init; }
 
         /// <summary>
         /// Defines which polygons will be culled by draw calls made with a GPURenderPipeline. The possible values are:
@@ -45,7 +46,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "back" Back-facing polygons are discarded.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? CullMode { get; init; }
+        public EnumString<GPUCullMode>? CullMode { get; init; }
 
         /// <summary>
         /// If true, indicates that depth clipping is disabled.
