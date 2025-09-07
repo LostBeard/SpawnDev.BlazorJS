@@ -140,7 +140,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the WindowControlsOverlay interface which exposes information about the geometry of the title bar in desktop Progressive Web Apps, and an event to know whenever it changes.
         /// </summary>
         public WindowControlsOverlay? WindowControlsOverlay => JSRef!.Get<WindowControlsOverlay?>("windowControlsOverlay");
-        //public XRSystem Xr => JSRef!.Get<XRSystem>("xr");
+        /// <summary>
+        /// Returns XRSystem object, which represents the entry point into the WebXR API.
+        /// </summary>
+        public XRSystem? XR => JSRef!.Get<XRSystem>("xr");
         /// <summary>
         /// Always returns 'Mozilla', in any browser. This property is kept only for compatibility purposes.<br/>
         /// Deprecated
