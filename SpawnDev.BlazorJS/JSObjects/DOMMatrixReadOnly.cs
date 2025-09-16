@@ -2,6 +2,10 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/DOMPointReadOnly<br/>
+    /// https://www.w3.org/TR/geometry-1/#dommatrixreadonly
+    /// </summary>
     public class DOMMatrixReadOnly : JSObject
     {
         /// <summary>
@@ -169,9 +173,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns>A new Float64Array object.</returns>
         public Float64Array ToFloat64Array() => JSRef!.Call<Float64Array>("toFloat64Array");
-
-
     }
-
-
 }

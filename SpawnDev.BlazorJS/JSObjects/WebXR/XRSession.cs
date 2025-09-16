@@ -14,5 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
 
         public Task<XRReferenceSpace> RequestReferenceSpace(EnumString<XRReferenceSpaceType> type) => JSRef!.CallAsync<XRReferenceSpace>("requestReferenceSpace", type);
+
+        public Task<XRHitTestSource> RequestHitTestSource(object options) => JSRef!.CallAsync<XRHitTestSource>("requestHitTestSource", options);
     }
 }

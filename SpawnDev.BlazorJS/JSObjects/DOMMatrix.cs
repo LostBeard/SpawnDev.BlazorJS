@@ -273,9 +273,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="transformList">A string representing a transform list.</param>
         /// <returns>The current DOMMatrix object.</returns>
         public DOMMatrix SetMatrixValue(string transformList) => JSRef!.Call<DOMMatrix>("setMatrixValue", transformList);
-
-
     }
-
-
 }

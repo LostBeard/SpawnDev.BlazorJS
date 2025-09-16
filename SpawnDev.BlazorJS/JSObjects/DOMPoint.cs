@@ -2,17 +2,13 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/DOMPoint
+    /// </summary>
     public class DOMPoint : DOMPointReadOnly
     {
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
+        /// <inheritdoc/>
         public DOMPoint(IJSInProcessObjectReference _ref) : base(_ref) { }
-        /// <summary>
-        /// The DOMPoint() constructor creates a new DOMPoint object representing a 2D or 3D point in a coordinate system.
-        /// </summary>
-        public DOMPoint() : base(JS.New("DOMPoint")) { }
 
         /// <summary>
         /// The DOMPoint() constructor creates a new DOMPoint object representing a 2D or 3D point in a coordinate system.
@@ -21,7 +17,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="y">The y-coordinate of the point. Default is 0.</param>
         /// <param name="z">The z-coordinate of the point. Default is 0.</param>
         /// <param name="w">The perspective value of the point. Default is 1.</param>
-        public DOMPoint(double x, double y = 0, double z = 0, double w = 1) : base(JS.New("DOMPoint", x, y, z, w)) { }
+        public DOMPoint(double x = 0, double y = 0, double z = 0, double w = 1) : base(JS.New("DOMPoint", x, y, z, w)) { }
 
         /// <summary>
         /// The x coordinate of the point in space.

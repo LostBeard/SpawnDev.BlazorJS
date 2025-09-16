@@ -35,7 +35,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public void Disconnect(AudioNode audioNode) => JSRef!.CallVoid("disconnect", audioNode);
         /// <summary>
-        /// 
+        /// Allows us to disconnect the current node from another one it is already connected to.
         /// </summary>
         /// <param name="audioParam"></param>
         public void Disconnect(AudioParam audioParam) => JSRef!.CallVoid("disconnect", audioParam);

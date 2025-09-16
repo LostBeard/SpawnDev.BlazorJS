@@ -14,5 +14,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public AudioParam(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Represents the initial value of the attribute as defined by the specific AudioNode creating the AudioParam.
+        /// </summary>
+        public float DefaultValue => JSRef!.Get<float>("defaultValue");
+        /// <summary>
+        /// Represents the maximum possible value for the parameter's nominal (effective) range.
+        /// </summary>
+        public float MaxValue => JSRef!.Get<float>("maxValue");
+        /// <summary>
+        /// Represents the minimum possible value for the parameter's nominal (effective) range.
+        /// </summary>
+        public float MinValue => JSRef!.Get<float>("minValue");
+        /// <summary>
+        /// Represents the parameter's current value as of the current time; initially set to the value of defaultValue.
+        /// </summary>
+        public float Value { get => JSRef!.Get<float>("value"); set => JSRef!.Set("value", value); }
     }
 }
