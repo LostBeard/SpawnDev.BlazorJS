@@ -1,5 +1,4 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
-using System.IO;
 using System.Text.Json;
 
 namespace SpawnDev.BlazorJS.Toolbox
@@ -9,6 +8,28 @@ namespace SpawnDev.BlazorJS.Toolbox
     /// </summary>
     public static class FileSystemFileHandleExtensions
     {
+        /// <summary>
+        /// Seeks the file handle's stream to the end
+        /// </summary>
+        /// <param name="fileHandle"></param>
+        /// <param name="fileStream"></param>
+        /// <returns></returns>
+        public static async Task SeekToEnd(this FileSystemFileHandle fileHandle, FileSystemWritableFileStream fileStream)
+        {
+            var size = await fileHandle.GetSize();
+            await fileStream.Seek((ulong)size);
+        }
+        /// <summary>
+        /// Seeks the file handle's stream to the end
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <param name="fileHandle"></param>
+        /// <returns></returns>
+        public static async Task SeekToEnd(this FileSystemWritableFileStream fileStream, FileSystemFileHandle fileHandle)
+        {
+            var size = await fileHandle.GetSize();
+            await fileStream.Seek((ulong)size);
+        }
         #region Write
         /// <summary>
         /// Asynchronously write a stream to the file
@@ -131,6 +152,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, ArrayBuffer data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(_this);
             await stream.Write(data);
             stream.Close();
         }
@@ -154,6 +176,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, Blob data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(_this);
             await stream.Write(data);
             stream.Close();
         }
@@ -166,6 +189,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, TypedArray data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(_this);
             await stream.Write(data);
             stream.Close();
         }
@@ -178,6 +202,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, byte[] data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(_this);
             await stream.Write(data);
             stream.Close();
         }
@@ -190,6 +215,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, DataView data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(_this);
             await stream.Write(data);
             stream.Close();
         }
@@ -202,6 +228,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, string data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(_this);
             await stream.Write(data);
             stream.Close();
         }
@@ -214,6 +241,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, FileSystemWriteOptions data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(_this);
             await stream.Write(data);
             stream.Close();
         }

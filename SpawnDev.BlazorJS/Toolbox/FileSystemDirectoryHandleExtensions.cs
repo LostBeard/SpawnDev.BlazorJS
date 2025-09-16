@@ -328,7 +328,11 @@ namespace SpawnDev.BlazorJS.Toolbox
                 curDir = nextDir;
             }
             var fileName = pathParts.Last();
-            await curDir.RemoveEntry(fileName, recursive);
+            try
+            {
+                await curDir.RemoveEntry(fileName, recursive);
+            }
+            catch { }
         }
         /// <summary>
         /// Returns the path's parent directory or null
@@ -499,6 +503,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             stream.Close();
         }
@@ -512,7 +517,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, Blob data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true }); ;
+            using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             stream.Close();
         }
@@ -527,6 +533,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             stream.Close();
         }
@@ -541,6 +548,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             stream.Close();
         }
@@ -560,6 +568,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             stream.Close();
         }
@@ -574,6 +583,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             stream.Close();
         }
@@ -588,6 +598,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             stream.Close();
         }
