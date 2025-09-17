@@ -199,10 +199,6 @@ namespace SpawnDev.BlazorJS
             {
                 GlobalScope = GlobalScope.Server;
             }
-#if DEBUG
-            Console.WriteLine($"{GlobalScope} _jsAsync == null: {(AsyncJSRuntime == null)}");
-            Console.WriteLine($"{GlobalScope} _js == null: {(JSRuntime == null)}");
-#endif
         }
         internal void SetReady()
         {
