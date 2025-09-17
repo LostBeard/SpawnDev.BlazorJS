@@ -14,10 +14,11 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="fileHandle"></param>
         /// <param name="fileStream"></param>
         /// <returns></returns>
-        public static async Task SeekToEnd(this FileSystemFileHandle fileHandle, FileSystemWritableFileStream fileStream)
+        public static async Task<long> SeekToEnd(this FileSystemFileHandle fileHandle, FileSystemWritableFileStream fileStream)
         {
             var size = await fileHandle.GetSize();
             await fileStream.Seek((ulong)size);
+            return size;
         }
         /// <summary>
         /// Seeks the file handle's stream to the end
@@ -25,10 +26,11 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="fileStream"></param>
         /// <param name="fileHandle"></param>
         /// <returns></returns>
-        public static async Task SeekToEnd(this FileSystemWritableFileStream fileStream, FileSystemFileHandle fileHandle)
+        public static async Task<long> SeekToEnd(this FileSystemWritableFileStream fileStream, FileSystemFileHandle fileHandle)
         {
             var size = await fileHandle.GetSize();
             await fileStream.Seek((ulong)size);
+            return size;
         }
         #region Write
         /// <summary>
