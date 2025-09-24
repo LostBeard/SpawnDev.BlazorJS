@@ -23,5 +23,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A DOMPointReadOnly which contains a unit quaternion describing the rotational component of the transform. As a unit quaternion, its length is always normalized to 1.0.
         /// </summary>
         public DOMPointReadOnly Orientation => JSRef!.Get<DOMPointReadOnly>("orientation");
+        /// <summary>
+        /// Returns the transform matrix in the form of a 16-member Float32Array. See the section Matrix format for how the array is used to represent a matrix.
+        /// </summary>
+        public Float32Array Matrix => JSRef!.Get<Float32Array>("matrix");
+        /// <summary>
+        /// Returns a XRRigidTransform which is the inverse of this transform. That is, if applied to an object that had been previously transformed by the original transform, it will undo the transform and return the original object.
+        /// </summary>
+        public XRRigidTransform Inverse => JSRef!.Get<XRRigidTransform>("inverse");
     }
 }
