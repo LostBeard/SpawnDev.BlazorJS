@@ -148,9 +148,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public long ByteOffset => JSRef!.Get<long>("byteOffset");
         /// <summary>
-        /// Returns true if the underlying ArrayBuffer is not the same size as the TypedArray
+        /// Returns true if the underlying ArrayBuffer is not the same size as the TypedArray.<br/>
+        /// Non-standard property
         /// </summary>
         public bool IsPartialView => JSRef!.Get<long>("buffer.byteLength") != JSRef!.Get<long>("byteLength");
+        /// <summary>
+        /// Returns true if the buffer object is a SharedArrayBuffer,<br/>
+        /// This property aids in using a SharedArrayBuffer as an ArrayBuffer for APIs that may only have methods for ArrayBuffer but can use a SharedArrayBuffer.<br/>
+        /// </summary>
+        public bool IsSharedArrayBuffer => JSRef!.Get<string>("buffer.constructor.name") == nameof(SharedArrayBuffer);
+        /// <summary>
+        /// Returns true if the buffer object is an ArrayBuffer.<br/>
+        /// This property aids in using a SharedArrayBuffer as an ArrayBuffer for APIs that may only have methods for ArrayBuffer but can use a SharedArrayBuffer.<br/>
+        /// </summary>
+        public bool IsArrayBuffer => JSRef!.Get<string>("buffer.constructor.name") == nameof(ArrayBuffer);
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>

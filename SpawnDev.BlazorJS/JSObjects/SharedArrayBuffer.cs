@@ -10,6 +10,24 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class SharedArrayBuffer : JSObject
     {
         /// <summary>
+        /// Allows quick casting a SharedArrayBuffer to an ArrayBuffer for APIs that may not have methods that take SharedArrayBuffer but will work with them anyways because they are mostly compatible.<br/>
+        /// </summary>
+        public static explicit operator ArrayBuffer(SharedArrayBuffer sharedArrayBuffer) => sharedArrayBuffer == null ? null! : sharedArrayBuffer.JSRefCopy<ArrayBuffer>();
+        /// <summary>
+        /// Allows quick casting an ArrayBuffer to a SharedArrayBuffer for APIs that may not have methods that take SharedArrayBuffer but will work with them anyways because they are mostly compatible.<br/>
+        /// </summary>
+        public static explicit operator SharedArrayBuffer(ArrayBuffer arrayBuffer) => arrayBuffer == null ? null! : arrayBuffer.JSRefCopy<SharedArrayBuffer>();
+        /// <summary>
+        /// Returns true if the Javascript object is a SharedArrayBuffer,<br/>
+        /// This property aids in using a SharedArrayBuffer as an ArrayBuffer for APIs that may only have methods for ArrayBuffer but can use a SharedArrayBuffer.<br/>
+        /// </summary>
+        public bool IsSharedArrayBuffer => JSRef!.Get<string>("constructor.name") == nameof(SharedArrayBuffer);
+        /// <summary>
+        /// Returns true if the Javascript object is an ArrayBuffer.<br/>
+        /// This property aids in using a SharedArrayBuffer as an ArrayBuffer for APIs that may only have methods for ArrayBuffer but can use a SharedArrayBuffer.<br/>
+        /// </summary>
+        public bool IsArrayBuffer => JSRef!.Get<string>("constructor.name") == nameof(ArrayBuffer);
+        /// <summary>
         /// Returns true if SharedArrayBuffer appears to be supported
         /// </summary>
         public static bool Supported => BlazorJSRuntime.JS?.IsUndefined("SharedArrayBuffer") == false;

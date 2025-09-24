@@ -11,6 +11,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class ArrayBuffer : JSObject
     {
         /// <summary>
+        /// Returns true if the Javascript object is a SharedArrayBuffer,<br/>
+        /// This property aids in using a SharedArrayBuffer as an ArrayBuffer for APIs that may only have methods for ArrayBuffer but can use a SharedArrayBuffer.<br/>
+        /// </summary>
+        public bool IsSharedArrayBuffer => JSRef!.Get<string>("constructor.name") == nameof(SharedArrayBuffer);
+        /// <summary>
+        /// Returns true if the Javascript object is an ArrayBuffer.<br/>
+        /// This property aids in using a SharedArrayBuffer as an ArrayBuffer for APIs that may only have methods for ArrayBuffer but can use a SharedArrayBuffer.<br/>
+        /// </summary>
+        public bool IsArrayBuffer => JSRef!.Get<string>("constructor.name") == nameof(ArrayBuffer);
+        /// <summary>
         /// Explicit conversion to ArrayBuffer.<br/>
         /// This cast uses the HeapView class for a fast copy into a new ArrayBuffer.
         /// </summary>
