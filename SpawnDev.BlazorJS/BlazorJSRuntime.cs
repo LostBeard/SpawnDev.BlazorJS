@@ -271,11 +271,58 @@ namespace SpawnDev.BlazorJS
         /// <returns>Returns a promise which fulfills to a module namespace object: an object containing all exports from moduleName.</returns>
         public Task<ModuleNamespaceObject?> Import(string moduleName) => CallAsync<ModuleNamespaceObject?>("import", moduleName);
         /// <summary>
-        /// The import() syntax, commonly called dynamic import, is a function-like expression that allows loading an ECMAScript module asynchronously and dynamically into a potentially non-module environment.
-        /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
-        /// <returns>Returns a promise which fulfills to type T</returns>
+        /// Import a module and assign it to the specified global variable name<br/>
+        /// Equivalent to (acorn is an example module):<br/>
+        /// import * as acorn from "https://www.acornlib.com/acorn.js"
         /// </summary>
+        /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
+        /// <param name="importAs">the global variable name to assign the module to</param>
+        /// <returns></returns>
+        public async Task<ModuleNamespaceObject?> Import(string moduleName, string importAs)
+        {
+            ModuleNamespaceObject ret;
+            if (JS.IsUndefined(importAs))
+            {
+                ret = (await Import(moduleName))!;
+                JS.Set(importAs, ret);
+            }
+            else
+            {
+                ret = JS.Get<ModuleNamespaceObject>(importAs);
+            }
+            return ret;
+        }
+        /// <summary>
+        /// The import() syntax, commonly called dynamic import, is a function-like expression that allows loading an ECMAScript module asynchronously and dynamically into a potentially non-module environment.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
+        /// <returns></returns>
         public Task<T> Import<T>(string moduleName) => CallAsync<T>("import", moduleName);
+        /// <summary>
+        /// Import a module and assign it to the specified global variable name<br/>
+        /// Equivalent to (acorn is an example module):<br/>
+        /// import * as acorn from "https://www.acornlib.com/acorn.js"<br/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
+        /// <param name="importAs">the global variable name to assign the module to</param>
+        /// <returns></returns>
+        public async Task<T> Import<T>(string moduleName, string importAs)
+        {
+            T ret;
+            if (JS.IsUndefined(importAs))
+            {
+                ret = await Import<T>(moduleName);
+                JS.Set(importAs, ret);
+            }
+            else
+            {
+                ret = JS.Get<T>(importAs);
+            }
+            return ret;
+        }
+
         /// <summary>
         /// Returns the window object or null
         /// </summary>
