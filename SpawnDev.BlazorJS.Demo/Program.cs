@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Demo;
+using SpawnDev.BlazorJS.Toolbox;
+using System.Text;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -14,14 +16,7 @@ JS.Set("_testit", (string msg) =>
 {
     Console.WriteLine($"_testit called with message: {msg}");
 });
-#if DEBUG && false
-// null-conditional test
-JS.Set("__test", new { name = "something", config = new { visible = true } });
-var testVar1 = JS.Get<bool>("__test.config.visible");
-var testVar2 = JS.Get<bool>("__test.config?.visible");
-var testVar3 = JS.Get<bool>("__test.config2?.visible");
-var testVar4 = JS.Call<bool>("__test.config2?.doesNotExist");
-JS.Set("__test.config2?.doesNotExist", true);
-JS.Delete("__test");
+#if DEBUG && true
+
 #endif
 await host.BlazorJSRunAsync();

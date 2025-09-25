@@ -11,6 +11,15 @@
     <link rel="icon" type="image/png" href="favicon.png" />
     <link href="SpawnDev.BlazorJS.Demo.styles.css" rel="stylesheet" />
     <script webworker-enabled>
+
+        // this enables creation of SharedArrayBuffers even when window.isSecureContext == false. This can be useful for some purposes (like testing.)
+        // however, the SharedArrayBuffers cannot be Shared with other contexts. (postMessage calls with the SharedArrayBuffer will fail)
+        if (false && !globalThis.SharedArrayBuffer) {
+            var mem = new WebAssembly.Memory({ initial: 0, maximum: 0, shared: true });
+            globalThis.SharedArrayBuffer = mem.buffer.constructor;
+        }
+
+
         function Sleep(timeout) {
             return new Promise(r => {
                 setTimeout(r, timeout);
@@ -31,7 +40,6 @@
             var ret = await task;
             console.log('> WaitForIt', ret);
         }
-
 
         function getProtoChain(o) {
             const ans = []
