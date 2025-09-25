@@ -8,15 +8,21 @@ namespace SpawnDev.BlazorJS.Toolbox
     public class ArrayBufferStream : Stream
     {
         /// <summary>
-        /// True if the underlying ArrayBuffer is a SharedArrayBuffer
+        /// True if the underlying buffer is a SharedArrayBuffer instead of an ArrayBuffer
         /// </summary>
         public bool IsSharedArrayBuffer { get; private set; }
+        /// <summary>
+        /// If true and SetLength is used with a value that is not compatible with ArrayBuffer.resize() or SharedArrayBuffer.grow(), a new underlying buffer will be created<br/>
+        /// and the contents of the current buffer will be copied over.<br/>
+        /// If false, and an incompatible value is used for SetLength an exception will be thrown.
+        /// </summary>
+        public bool AllowRecreateBuffer { get; set; }
         /// <summary>
         /// True if the underlying ArrayBuffer is Resizable
         /// </summary>
         public bool CanShrink { get; private set; }
         /// <summary>
-        /// True if the underlying ArrayBuffer is Growable. SharedArrayBuffers can be grown, but not shrunk.
+        /// True if the underlying ArrayBuffer is resizable or the underlying SharedArrayBuffer is growable.
         /// </summary>
         public bool CanGrow { get; private set; }
         /// <summary>
@@ -37,12 +43,6 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// Internal position
         /// </summary>
         protected long _Position = 0;
-        /// <summary>
-        /// If true and SetLength is used with a value that is not compatible with ArrayBuffer.resize() or SharedArrayBuffer.grow(), a new underlying buffer will be created<br/>
-        /// and the contents of the current buffer will be copied over.<br/>
-        /// If false, and an incompatible value is used for SetLength an exception will be thrown.
-        /// </summary>
-        public bool AllowRecreateBuffer { get; set; }
         /// <inheritdoc/>
         public override long Position { get => _Position; set => _Position = value; }
         /// <summary>
@@ -230,7 +230,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             return byteCount;
         }
         /// <summary>
-        /// Read from the stream
+        /// Read from the stream starting at the current position
         /// </summary>
         /// <param name="count"></param>
         /// <param name="subArray">If true, subArray() will be used instead of slice() to return a view of the same ArrayBuffer instead of copying to a new ArrayBuffer.</param>
@@ -245,16 +245,6 @@ namespace SpawnDev.BlazorJS.Toolbox
             var ret = subArray ? Source.SubArray(_Position, end) : Source.Slice(_Position, end);
             _Position = end;
             return ret;
-        }
-        /// <inheritdoc/>
-        public override void CopyTo(Stream destination, int bufferSize)
-        {
-            base.CopyTo(destination, bufferSize);
-        }
-        /// <inheritdoc/>
-        public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
-        {
-            return base.CopyToAsync(destination, bufferSize, cancellationToken);
         }
         /// <inheritdoc/>
         public override void Write(byte[] buffer, int offset, int count)
