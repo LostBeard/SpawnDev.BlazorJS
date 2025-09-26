@@ -272,23 +272,25 @@ namespace SpawnDev.BlazorJS
         public Task<ModuleNamespaceObject?> Import(string moduleName) => CallAsync<ModuleNamespaceObject?>("import", moduleName);
         /// <summary>
         /// Import a module and assign it to the specified global variable name<br/>
-        /// Equivalent to (acorn is an example module):<br/>
-        /// import * as acorn from "https://www.acornlib.com/acorn.js"
+        /// Ex.:<br/>
+        /// await JS.Import("acorn", "https://www.acornlib.com/acorn.js")<br/>
+        /// Is roughly equivalent to:<br/>
+        /// import * as acorn from "https://www.acornlib.com/acorn.js"<br/>
         /// </summary>
+        /// <param name="name">Name of the module object that will be used as a kind of namespace when referring to the imports. Must be a valid JavaScript identifier.</param>
         /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
-        /// <param name="importAs">the global variable name to assign the module to</param>
         /// <returns></returns>
-        public async Task<ModuleNamespaceObject?> Import(string moduleName, string importAs)
+        public async Task<ModuleNamespaceObject?> Import(string name, string moduleName)
         {
             ModuleNamespaceObject ret;
-            if (JS.IsUndefined(importAs))
+            if (JS.IsUndefined(name))
             {
                 ret = (await Import(moduleName))!;
-                JS.Set(importAs, ret);
+                JS.Set(name, ret);
             }
             else
             {
-                ret = JS.Get<ModuleNamespaceObject>(importAs);
+                ret = JS.Get<ModuleNamespaceObject>(name);
             }
             return ret;
         }
@@ -301,28 +303,29 @@ namespace SpawnDev.BlazorJS
         public Task<T> Import<T>(string moduleName) => CallAsync<T>("import", moduleName);
         /// <summary>
         /// Import a module and assign it to the specified global variable name<br/>
-        /// Equivalent to (acorn is an example module):<br/>
+        /// Ex.:<br/>
+        /// await JS.Import("acorn", "https://www.acornlib.com/acorn.js")<br/>
+        /// Is roughly equivalent to:<br/>
         /// import * as acorn from "https://www.acornlib.com/acorn.js"<br/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="name">Name of the module object that will be used as a kind of namespace when referring to the imports. Must be a valid JavaScript identifier.</param>
         /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
-        /// <param name="importAs">the global variable name to assign the module to</param>
         /// <returns></returns>
-        public async Task<T> Import<T>(string moduleName, string importAs)
+        public async Task<T> Import<T>(string name, string moduleName)
         {
             T ret;
-            if (JS.IsUndefined(importAs))
+            if (JS.IsUndefined(name))
             {
                 ret = await Import<T>(moduleName);
-                JS.Set(importAs, ret);
+                JS.Set(name, ret);
             }
             else
             {
-                ret = JS.Get<T>(importAs);
+                ret = JS.Get<T>(name);
             }
             return ret;
         }
-
         /// <summary>
         /// Returns the window object or null
         /// </summary>
