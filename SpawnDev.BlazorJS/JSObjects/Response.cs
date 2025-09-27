@@ -161,7 +161,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Creates a clone of a Response object.
         /// </summary>
         /// <returns></returns>
-        public Task<Blob> Clone() => JSRef!.CallAsync<Blob>("clone");
+        public Task<Response> Clone() => JSRef!.CallAsync<Response>("clone");
         /// <summary>
         /// Returns a promise that resolves with a FormData representation of the response body.
         /// </summary>
