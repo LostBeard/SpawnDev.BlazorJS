@@ -101,6 +101,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task Put(string request, Response response) => JSRef!.CallVoidAsync("put", request, response);
         /// <summary>
+        /// Takes both a request and its response and adds it to the given cache.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public Task Put(Request request, Response response) => JSRef!.CallVoidAsync("put", request, response);
+        /// <summary>
         /// Finds the Cache entry whose key is the request, returning a Promise that resolves to true if a matching Cache entry is found and deleted. If no Cache entry is found, the promise resolves to false.
         /// </summary>
         /// <param name="request"></param>
@@ -113,6 +120,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <returns></returns>
         public Task<bool> Delete(string request, CacheMatchOptions options) => JSRef!.CallAsync<bool>("delete", request, options);
+        /// <summary>
+        /// Finds the Cache entry whose key is the request, returning a Promise that resolves to true if a matching Cache entry is found and deleted. If no Cache entry is found, the promise resolves to false.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Task<bool> Delete(Request request) => JSRef!.CallAsync<bool>("delete", request);
+        /// <summary>
+        /// Finds the Cache entry whose key is the request, returning a Promise that resolves to true if a matching Cache entry is found and deleted. If no Cache entry is found, the promise resolves to false.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task<bool> Delete(Request request, CacheMatchOptions options) => JSRef!.CallAsync<bool>("delete", request, options);
         /// <summary>
         /// Returns a Promise that resolves to an array of Cache keys which are Request objects
         /// </summary>
@@ -131,6 +151,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <returns></returns>
         public Task<Request[]> Keys(string request, CacheMatchOptions options) => JSRef!.CallAsync<Request[]>("keys", request, options);
-
+        /// <summary>
+        /// Returns a Promise that resolves to an array of Cache keys which are Request objects
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Task<Request[]> Keys(Request request) => JSRef!.CallAsync<Request[]>("keys", request);
+        /// <summary>
+        /// Returns a Promise that resolves to an array of Cache keys which are Request objects
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task<Request[]> Keys(Request request, CacheMatchOptions options) => JSRef!.CallAsync<Request[]>("keys", request, options);
     }
 }
