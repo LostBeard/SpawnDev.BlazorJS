@@ -52,6 +52,28 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public AudioBufferSourceNode CreateBufferSource() => JSRef!.Call<AudioBufferSourceNode>("createBufferSource");
+        /// <summary>
+        /// The createPanner() method of the BaseAudioContext Interface is used to create a new PannerNode, which is used to spatialize an incoming audio stream in 3D space.<br/>
+        /// The panner node is spatialized in relation to the AudioContext's AudioListener (defined by the AudioContext.listener attribute), which represents the position and orientation of the person listening to the audio.
+        /// </summary>
+        /// <returns></returns>
+        public PannerNode CreatePanner() => JSRef!.Call<PannerNode>("createPanner");
+        /// <summary>
+        /// The createGain() method of the BaseAudioContext interface creates a GainNode, which can be used to control the overall gain (or volume) of the audio graph.
+        /// </summary>
+        /// <returns></returns>
+        public GainNode CreateGain() => JSRef!.Call<GainNode>("createGain");
+        /// <summary>
+        /// Creates a DelayNode, which is used to delay the incoming audio signal by a certain amount. This node is also useful to create feedback loops in a Web Audio API graph.
+        /// </summary>
+        /// <returns></returns>
+        public DelayNode CreateDelay(float? maxDelayTime = null)
+            => maxDelayTime == null ? JSRef!.Call<DelayNode>("createDelay") : JSRef!.Call<DelayNode>("createDelay", maxDelayTime);
+        /// <summary>
+        /// The createConvolver() method of the BaseAudioContext interface creates a ConvolverNode, which is commonly used to apply reverb effects to your audio. See the spec definition of Convolution for more information
+        /// </summary>
+        /// <returns></returns>
+        public ConvolverNode CreateConvolver() => JSRef!.Call<ConvolverNode>("cerateConvolver");
 
         // TODO - finish methods
 
