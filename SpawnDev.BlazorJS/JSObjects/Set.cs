@@ -2,6 +2,13 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <inheritdoc/>
+    [Obsolete("Use Set")]
+    public class SetReadOnly : Set
+    {
+        /// <inheritdoc/>
+        public SetReadOnly(IJSInProcessObjectReference _ref) : base(_ref) { }
+    }
     /// <summary>
     /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
     /// </summary>
