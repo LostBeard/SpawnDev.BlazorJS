@@ -73,7 +73,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The createConvolver() method of the BaseAudioContext interface creates a ConvolverNode, which is commonly used to apply reverb effects to your audio. See the spec definition of Convolution for more information
         /// </summary>
         /// <returns></returns>
-        public ConvolverNode CreateConvolver() => JSRef!.Call<ConvolverNode>("cerateConvolver");
+        public ConvolverNode CreateConvolver() => JSRef!.Call<ConvolverNode>("createConvolver");
 
         // TODO - finish methods
 
