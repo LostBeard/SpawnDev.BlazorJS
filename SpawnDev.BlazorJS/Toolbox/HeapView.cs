@@ -436,7 +436,9 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public static ArrayBuffer GetHeapBuffer() => JS.Get<ArrayBuffer>(HeapBufferName.Value);
         /// <summary>
-        /// Returns the current Uint8Array the Heap is using
+        /// Returns the current Uint8Array the Heap is using.<br/>
+        /// The underlying Uint8Array ArrayBuffer will become detached when it is resized.<br/>
+        /// This happens VERY frequently, therefore this Uint8Array must be used immediately.
         /// </summary>
         /// <returns></returns>
         public static Uint8Array GetHeap() => JS.Get<Uint8Array>(HeapName.Value);
