@@ -5,7 +5,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The MIDIOutputMap read-only interface of the Web MIDI API provides the set of MIDI output ports that are currently available.
     /// </summary>
-    public class MIDIOutputMap : MapReadOnly<string, MIDIOutput>
+    public class MIDIOutputMap : Map<string, MIDIOutput>
     {
         #region Constructors
         public MIDIOutputMap(IJSInProcessObjectReference _ref) : base(_ref) { }

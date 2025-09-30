@@ -4,6 +4,13 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <inheritdoc/>
     [Obsolete("Use Map")]
+    public class MapReadOnly<TKey, TValue> : Map<TKey, TValue>
+    {
+        /// <inheritdoc/>
+        public MapReadOnly(IJSInProcessObjectReference _ref) : base(_ref) { }
+    }
+    /// <inheritdoc/>
+    [Obsolete("Use Map")]
     public class  MapReadOnly : Map
     {
         /// <inheritdoc/>

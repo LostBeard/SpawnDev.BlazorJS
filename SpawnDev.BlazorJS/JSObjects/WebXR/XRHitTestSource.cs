@@ -11,5 +11,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         /// <inheritdoc/>
         public XRHitTestSource(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// The cancel() method of the XRHitTestSource interface unsubscribes a hit test.
+        /// </summary>
+        public void Cancel() => JSRef!.CallVoid("cancel");
     }
 }

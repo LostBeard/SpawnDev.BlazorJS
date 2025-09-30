@@ -3,6 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
+    /// The XRRigidTransform is a WebXR API interface that represents the 3D geometric transform described by a position and orientation.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/XRRigidTransform
     /// </summary>
     public class XRRigidTransform : JSObject

@@ -18,7 +18,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IEnumerable<string>? OptionalFeatures { get; set; }
-
         /// <summary>
         /// 
         /// </summary>

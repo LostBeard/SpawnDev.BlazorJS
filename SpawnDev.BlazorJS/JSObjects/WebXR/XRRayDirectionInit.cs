@@ -1,9 +1,10 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// The DOMPointInit dictionary of the Geometry Interfaces Module Level 1 specification is used to provide optional parameters when creating or initializing a DOMPoint or DOMPointReadOnly object.
+    /// An XRRayDirectionInit dictionary represents a direction vector to be passed to the XRRay(origin, direction) constructor.<br/>
+    /// https://www.w3.org/TR/webxr-hit-test-1/#dictdef-xrraydirectioninit
     /// </summary>
-    public class DOMPointInit
+    public class XRRayDirectionInit
     {
         /// <summary>
         /// The x coordinate of the point in space. Default is 0.
@@ -18,11 +19,11 @@
         /// <summary>
         /// The z coordinate of the point in space. Default is 0.
         /// </summary>
-        public double Z { get; set; } = 0;
+        public double Z { get; set; } = -1;
 
         /// <summary>
         /// The w coordinate of the point in space. Default is 1.
         /// </summary>
-        public double W { get; set; } = 1;
+        public double W { get; set; } = 0;
     }
 }
