@@ -262,7 +262,10 @@ namespace SpawnDev.BlazorJS
                 DocumentHeadAppendChild(script);
                 await script.OnLoadAsync();
             }
-            throw new NotImplementedException("Unsupported global scope");
+            else
+            {
+                throw new NotImplementedException("Unsupported global scope");
+            }
         }
         /// <summary>
         /// Loads the specified scripts
