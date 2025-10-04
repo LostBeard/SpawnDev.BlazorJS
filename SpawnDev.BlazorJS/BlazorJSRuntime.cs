@@ -246,14 +246,23 @@ namespace SpawnDev.BlazorJS
             await LoadScript(src);
         }
         /// <summary>
-        /// Load the given script by adding a document head script element
+        /// Load the given script by adding a document head script element, if in a window scope.<br/>
+        /// If in a WorkerGlobalScope, load the given script using importScripts.
         /// </summary>
         public async Task LoadScript(string src)
         {
-            using var script = new HTMLScriptElement();
-            script.Src = src;
-            DocumentHeadAppendChild(script);
-            await script.OnLoadAsync();
+            if (GlobalThis is WorkerGlobalScope workerGlobalScope)
+            {
+                workerGlobalScope.ImportScripts(src);
+            }
+            else if (WindowThis != null)
+            {
+                using var script = new HTMLScriptElement();
+                script.Src = src;
+                DocumentHeadAppendChild(script);
+                await script.OnLoadAsync();
+            }
+            throw new NotImplementedException("Unsupported global scope");
         }
         /// <summary>
         /// Loads the specified scripts
