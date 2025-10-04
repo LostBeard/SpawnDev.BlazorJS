@@ -21,13 +21,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Opens the Picture-in-Picture window for the current main browsing context. Returns a Promise that fulfills with a Window instance representing the browsing context inside the Picture-in-Picture window.
         /// </summary>
         /// <returns></returns>
-        public Task<Window> RequestWindow() => JSRef!.CallAsync<Window?>("requestWindow");
+        public Task<Window> RequestWindow() => JSRef!.CallAsync<Window>("requestWindow");
         /// <summary>
         /// Opens the Picture-in-Picture window for the current main browsing context. Returns a Promise that fulfills with a Window instance representing the browsing context inside the Picture-in-Picture window.
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task<Window> RequestWindow(PIPRequestWindowOptions options) => JSRef!.CallAsync<Window?>("requestWindow", options);
+        public Task<Window> RequestWindow(PIPRequestWindowOptions options) => JSRef!.CallAsync<Window>("requestWindow", options);
         /// <summary>
         /// Fired when the Picture-in-Picture window is successfully opened.
         /// </summary>
