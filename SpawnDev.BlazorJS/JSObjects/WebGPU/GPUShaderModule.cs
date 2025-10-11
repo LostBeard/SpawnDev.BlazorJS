@@ -12,5 +12,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         /// <inheritdoc/>
         public GPUShaderModule(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<GPUCompilationInfo> GetCompilationInfo() => JSRef!.CallAsync<GPUCompilationInfo>("getCompilationInfo");
     }
 }

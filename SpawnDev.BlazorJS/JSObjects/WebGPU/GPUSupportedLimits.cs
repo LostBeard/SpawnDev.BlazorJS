@@ -5,6 +5,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The GPUSupportedLimits interface of the WebGPU API describes the limits supported by a GPUAdapter.<br/>
     /// https://www.w3.org/TR/webgpu/#gpusupportedlimits
+    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUSupportedLimits
     /// </summary>
     public class GPUSupportedLimits : JSObject
     {

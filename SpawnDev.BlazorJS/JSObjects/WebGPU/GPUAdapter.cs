@@ -6,6 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The GPUAdapter interface of the WebGPU API represents a GPU adapter. 
     /// From this you can request a GPUDevice, adapter info, features, and limits.<br/>
     /// https://www.w3.org/TR/webgpu/#gpuadapter
+    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUAdapter
     /// </summary>
     public class GPUAdapter : GPUObjectBase
     {
@@ -23,6 +24,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A boolean value. Returns true if the adapter is a fallback adapter, and false if not.<br/>
         /// </summary>
         public bool IsFallbackAdapter => JSRef!.Get<bool>("isFallbackAdapter");
+        /// <summary>
+        /// A GPUAdapterInfo object containing identifying information about the adapter.
+        /// </summary>
+        public GPUAdapterInfo Info => JSRef!.Get<GPUAdapterInfo>("info");
         /// <summary>
         /// A GPUSupportedLimits object that describes the limits supported by the adapter.
         /// </summary>
