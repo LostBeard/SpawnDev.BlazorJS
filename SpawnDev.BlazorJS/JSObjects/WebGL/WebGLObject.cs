@@ -8,10 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class WebGLObject : JSObject
     {
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
+        /// <inheritdoc/>
         public WebGLObject(IJSInProcessObjectReference _ref) : base(_ref) { }
     }
 }
