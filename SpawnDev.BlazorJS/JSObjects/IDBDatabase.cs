@@ -118,5 +118,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options">Additional options</param>
         /// <returns>IDBTransaction</returns>
         public IDBTransaction Transaction(Union<string, IEnumerable<string>> storeNames, bool readWrite, IDBDatabaseTransactionOptions options) => JSRef!.Call<IDBTransaction>("transaction", storeNames, readWrite ? "readwrite" : "readonly", options);
+        /// <summary>
+        /// An event fired when the database connection is unexpectedly closed.
+        /// </summary>
+        public ActionEvent<Event> OnClose { get => new ActionEvent<Event>("close", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// An event fired when a database structure change was requested.
+        /// </summary>
+        public ActionEvent<Event> OnVersionChange { get => new ActionEvent<Event>("versionchange", AddEventListener, RemoveEventListener); set { } }
     }
 }
