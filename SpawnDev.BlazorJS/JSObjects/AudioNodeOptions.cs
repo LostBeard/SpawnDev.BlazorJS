@@ -13,10 +13,10 @@
         /// <summary>
         /// Desired mode for the channelCountMode attribute.
         /// </summary>
-        public ChannelCountMode ChannelCountMode { get; set; }
+        public EnumString<ChannelCountMode> ChannelCountMode { get; set; }
         /// <summary>
         /// Desired mode for the channelInterpretation attribute.
         /// </summary>
-        public ChannelInterpretation ChannelInterpretation { get; set; }
+        public EnumString<ChannelInterpretation> ChannelInterpretation { get; set; }
     }
 }
