@@ -3,29 +3,21 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// HID RequestDevice options
+    /// HID Device request options
+    /// https://wicg.github.io/webhid/#dom-hid-requestdevice
     /// </summary>
-    public class HIDRequestDeviceOptions
+    public class HIDDeviceRequestOptions
     {
         /// <summary>
-        /// An integer representing the vendorId of the requested HID device
+        /// An array of HIDDeviceFilter objects used to filter the requested devices.
         /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public int? VendorId { get; set; }
+        public IEnumerable<HIDDeviceFilter> Filters { get; set; }
+
         /// <summary>
-        /// An integer representing the productId of the requested HID device.
+        /// An optional array of HIDDeviceFilter objects used to exclude devices from the requested devices.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public int? ProductId { get; set; }
-        /// <summary>
-        /// An integer representing the usage page component of the HID usage of the requested device. The usage for a top level collection is used to identify the device type.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public int? UsagePage { get; set; }
-        /// <summary>
-        /// An integer representing the usage ID component of the HID usage of the requested device.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public int? Usage { get; set; }
+        public IEnumerable<HIDDeviceFilter>? ExclusionFilters { get; set; }
+
     }
 }
