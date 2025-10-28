@@ -106,6 +106,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>A Promise that fulfills with a JSON object containing the key</returns>
         public Task<JSObject> ExportKeyJwk(CryptoKey key) => JSRef!.CallAsync<JSObject>("exportKey", "jwk", key);
         /// <summary>
+        /// You can use JSON Web Key format to export RSA or Elliptic Curve public or private keys, as well as AES and HMAC secret keys.<br/>
+        /// JSON Web Key format is defined in RFC 7517. It describes a way to represent public, private, and secret keys as JSON objects.
+        /// </summary>
+        /// <param name="key">the CryptoKey to export</param>
+        /// <returns>A Promise that fulfills with a JSON object containing the key</returns>
+        public Task<TJWK> ExportKey<TJWK>(CryptoKey key) where TJWK : JWK => JSRef!.CallAsync<TJWK>("exportKey", "jwk", key);
+        /// <summary>
         /// Use the generateKey() method of the SubtleCrypto interface to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         /// </summary>
         /// <param name="algorithm">
@@ -134,7 +141,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="extractable">A boolean value indicating whether it will be possible to export the key using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().</param>
         /// <param name="keyUsages">An Array indicating what can be done with the key. Possible array values are: encrypt, decrypt, sign, verify, deriveKey, deriveBits, wrapKey, or unwrapKey.</param>
         /// <returns>A Promise that fulfills with the imported key as a CryptoKey object.</returns>
-        public Task<CryptoKey> ImportKey(string format, Union<ArrayBuffer, TypedArray, DataView, byte[], JSObject> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) => JSRef!.CallAsync<CryptoKey>("importKey", format, keyData, algorithm, extractable, keyUsages);
+        public Task<CryptoKey> ImportKey(string format, Union<ArrayBuffer, TypedArray, DataView, byte[], JWK> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) => JSRef!.CallAsync<CryptoKey>("importKey", format, keyData, algorithm, extractable, keyUsages);
+        /// <summary>
+        /// The importKey() method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
+        /// </summary>
+        /// <param name="keyData">JSON Web Key</param>
+        /// <param name="algorithm">An object defining the type of key to import and providing extra algorithm-specific parameters. CryptoImportParams, RsaHashedImportParams, EcKeyImportParams, HmacImportParams, or a string.</param>
+        /// <param name="extractable">A boolean value indicating whether it will be possible to export the key using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().</param>
+        /// <param name="keyUsages">An Array indicating what can be done with the key. Possible array values are: encrypt, decrypt, sign, verify, deriveKey, deriveBits, wrapKey, or unwrapKey.</param>
+        /// <returns>A Promise that fulfills with the imported key as a CryptoKey object.</returns>
+        public Task<CryptoKey> ImportKey(JWK keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) => JSRef!.CallAsync<CryptoKey>("importKey", "jwk", keyData, algorithm, extractable, keyUsages);
         /// <summary>
         /// The importKey() method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         /// </summary>
@@ -151,7 +167,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="extractable">A boolean value indicating whether it will be possible to export the key using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().</param>
         /// <param name="keyUsages">An Array indicating what can be done with the key. Possible array values are: encrypt, decrypt, sign, verify, deriveKey, deriveBits, wrapKey, or unwrapKey.</param>
         /// <returns>A Promise that fulfills with the imported key as a CryptoKey object.</returns>
-        public Task<T> ImportKey<T>(string format, Union<ArrayBuffer, TypedArray, DataView, byte[], JSObject> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) where T : CryptoKeyBase => JSRef!.CallAsync<T>("importKey", format, keyData, algorithm, extractable, keyUsages);
+        public Task<T> ImportKey<T>(string format, Union<ArrayBuffer, TypedArray, DataView, byte[], JWK> keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) where T : CryptoKeyBase => JSRef!.CallAsync<T>("importKey", format, keyData, algorithm, extractable, keyUsages);
+        /// <summary>
+        /// The importKey() method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="keyData">An ArrayBuffer, a TypedArray, or a DataView containing the key in the given format.</param>
+        /// <param name="algorithm">An object defining the type of key to import and providing extra algorithm-specific parameters. CryptoImportParams, RsaHashedImportParams, EcKeyImportParams, HmacImportParams, or a string.</param>
+        /// <param name="extractable">A boolean value indicating whether it will be possible to export the key using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().</param>
+        /// <param name="keyUsages">An Array indicating what can be done with the key. Possible array values are: encrypt, decrypt, sign, verify, deriveKey, deriveBits, wrapKey, or unwrapKey.</param>
+        /// <returns>A Promise that fulfills with the imported key as a CryptoKey object.</returns>
+        public Task<T> ImportKey<T>(JWK keyData, Union<CryptoImportParams, string> algorithm, bool extractable, IEnumerable<string> keyUsages) where T : CryptoKeyBase => JSRef!.CallAsync<T>("importKey", "jwk", keyData, algorithm, extractable, keyUsages);
         /// <summary>
         /// The sign() method of the SubtleCrypto interface generates a digital signature.<br/>
         /// It takes as its arguments a key to sign with, some algorithm-specific parameters, and the data to sign. It returns a Promise which will be fulfilled with the signature.

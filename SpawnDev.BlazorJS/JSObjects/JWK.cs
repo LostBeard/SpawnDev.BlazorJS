@@ -7,12 +7,21 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class ECJWKPublic : JWK
     {
+        /// <summary>
+        /// Named curve
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("crv")]
         public string? Crv { get; set; }
+        /// <summary>
+        /// X value
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("x")]
         public string? X { get; set; }
+        /// <summary>
+        /// Y value
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("y")]
         public string? Y { get; set; }
