@@ -95,6 +95,41 @@ namespace SpawnDev.BlazorJS.Toolbox
     [JsonConverter(typeof(HeapViewConverter))]
     public class HeapView : IDisposable
     {
+        static int InstanceCount = 0;
+        /// <summary>
+        /// New instance
+        /// </summary>
+        public HeapView()
+        {
+            if (InstanceCount == 0)
+            {
+                PrimeHeap();
+            }
+            InstanceCount++;
+        }
+        /// <summary>
+        /// Allocates memory on the heap and then releases it to delay heap growth after this call
+        /// </summary>
+        /// <param name="preAllocateSize"></param>
+        public static void PrimeHeap(int preAllocateSize = 16 * 1024 * 1024)
+        {
+            try
+            {
+                // Allocate a large byte array to force a heap resize
+                byte[]? bigArray = new byte[preAllocateSize];
+                // To ensure the allocation isn't optimized away, perform a trivial operation
+                // on the array. In a real scenario, this might not be strictly necessary
+                // as the JIT is limited in Blazor WASM, but it's a good practice.
+                if (bigArray.Length > 0)
+                {
+                    bigArray[0] = 0xAA;
+                }
+                // Release the reference and call Collect
+                bigArray = null;
+                GC.Collect(2, GCCollectionMode.Forced, blocking: true, compacting: true);
+            }
+            catch { }
+        }
         /// <summary>
         /// Explicit conversion to HeapView
         /// </summary>
@@ -366,6 +401,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             if (Disposed) return;
             Disposed = true;
+            if (InstanceCount > 0) InstanceCount--;
 #if DEBUG
             Console.WriteLine($"HeapView.Dispose({disposing})");
 #endif
@@ -435,6 +471,11 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         /// <returns></returns>
         public static ArrayBuffer GetHeapBuffer() => JS.Get<ArrayBuffer>(HeapBufferName.Value);
+        /// <summary>
+        /// Gets the size of the current ArrayBuffer the Heap is using 
+        /// </summary>
+        /// <returns></returns>
+        public static long GetHeapBufferSize() => JS.Get<long>($"{ModulePath}.HEAPU8.byteLength");
         /// <summary>
         /// Returns the current Uint8Array the Heap is using.<br/>
         /// The underlying Uint8Array ArrayBuffer will become detached when it is resized.<br/>
