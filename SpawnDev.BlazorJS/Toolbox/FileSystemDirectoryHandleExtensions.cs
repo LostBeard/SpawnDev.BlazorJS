@@ -376,7 +376,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle!.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Write the data to the file, the file will be created if it does not exist
@@ -390,7 +390,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle!.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Write the data to the file, the file will be created if it does not exist
@@ -416,7 +416,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Write the data to the file, the file will be created if it does not exist
@@ -430,7 +430,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Write the data to the file, the file will be created if it does not exist
@@ -444,7 +444,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Write the data to the file, the file will be created if it does not exist
@@ -458,7 +458,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle!.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Write the data to the file, the file will be created if it does not exist
@@ -474,7 +474,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable();
             await stream.Write(json);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Write the data to the file, the file will be created if it does not exist
@@ -488,7 +488,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var fileHandle = await _this.GetPathFileHandle(path, true);
             using var stream = await fileHandle.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         #endregion
         #region Append
@@ -505,7 +505,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the file, the file will be created if it does not exist
@@ -520,7 +520,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the file, the file will be created if it does not exist
@@ -535,7 +535,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the file, the file will be created if it does not exist
@@ -550,7 +550,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, Stream data)
         {
@@ -570,7 +570,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the file, the file will be created if it does not exist
@@ -585,7 +585,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the file, the file will be created if it does not exist
@@ -600,7 +600,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         #endregion
         #region Read

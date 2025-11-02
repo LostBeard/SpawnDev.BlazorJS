@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Demo;
+using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Toolbox;
 using System.Text;
 
@@ -17,6 +18,18 @@ JS.Set("_testit", (string msg) =>
     Console.WriteLine($"_testit called with message: {msg}");
 });
 #if DEBUG && true
+long usedManagedMemory = GC.GetTotalMemory(forceFullCollection: true);
+long heapSize = HeapView.GetHeapBufferSize();
+JS.Log($"usedManagedMemory: {usedManagedMemory}/{heapSize}");
+var mem = new Uint8Array(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 });
+usedManagedMemory = GC.GetTotalMemory(forceFullCollection: true);
+heapSize = HeapView.GetHeapBufferSize();
+JS.Log($"usedManagedMemory: {usedManagedMemory}/{heapSize}");
+var bb = mem.ReadBytes();
+usedManagedMemory = GC.GetTotalMemory(forceFullCollection: true);
+heapSize = HeapView.GetHeapBufferSize();
+JS.Log($"usedManagedMemory: {usedManagedMemory}/{heapSize}");
+var nmt = true;
 
 #endif
 await host.BlazorJSRunAsync();

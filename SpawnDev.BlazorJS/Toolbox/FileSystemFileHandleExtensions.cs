@@ -54,7 +54,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var stream = await _this!.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Replace the contents of a file with a Blob
@@ -66,7 +66,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var stream = await _this.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Replace the contents of a file with a TypedArray
@@ -78,7 +78,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var stream = await _this.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Replace the contents of a file with a byte array
@@ -90,7 +90,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var stream = await _this.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Replace the contents of a file with a DataView
@@ -103,7 +103,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             
             using var stream = await _this.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Replace the contents of a file with an string
@@ -115,7 +115,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var stream = await _this.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Replace the contents of a file with JSON
@@ -129,7 +129,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             var json = JsonSerializer.Serialize(data, jsonSerializerOptions);
             using var stream = await _this!.CreateWritable();
             await stream.Write(json);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Process FileSystemWriteOptions
@@ -141,7 +141,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var stream = await _this.CreateWritable();
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         #endregion
         #region Append
@@ -156,7 +156,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(_this);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the end of the file
@@ -180,7 +180,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(_this);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the end of the file
@@ -193,7 +193,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(_this);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the end of the file
@@ -206,7 +206,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(_this);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the end of the file
@@ -219,7 +219,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(_this);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the end of the file
@@ -232,7 +232,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(_this);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         /// <summary>
         /// Append data to the end of the file
@@ -245,7 +245,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(_this);
             await stream.Write(data);
-            stream.Close();
+            await stream.Close();
         }
         #endregion
         /// <summary>
