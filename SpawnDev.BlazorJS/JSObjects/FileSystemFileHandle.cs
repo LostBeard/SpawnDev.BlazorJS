@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -49,5 +50,12 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var file = await GetFile();
             return file.LastModified;
         }
+        /// <summary>
+        /// The createSyncAccessHandle() method of the FileSystemFileHandle interface returns a Promise which resolves to a FileSystemSyncAccessHandle object that can be used to synchronously read from and write to a file. The synchronous nature of this method brings performance advantages, but it is only usable inside dedicated Web Workers for files within the origin private file system.<br/>
+        /// Creating a FileSystemSyncAccessHandle takes an exclusive lock on the file associated with the file handle. This prevents the creation of further FileSystemSyncAccessHandles or FileSystemWritableFileStreams for the file until the existing access handle is closed.
+        /// </summary>
+        /// <returns></returns>
+        public Task<FileSystemSyncAccessHandle> CreateSyncAccessHandle(FileSystemSyncAccessOptions? options = null)
+            => options == null ? JSRef!.CallAsync<FileSystemSyncAccessHandle>("createSyncAccessHandle") : JSRef!.CallAsync<FileSystemSyncAccessHandle>("createSyncAccessHandle", options);
     }
 }
