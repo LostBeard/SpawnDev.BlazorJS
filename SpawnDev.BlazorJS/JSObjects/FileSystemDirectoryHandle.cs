@@ -21,17 +21,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<FileSystemDirectoryHandle> GetDirectoryHandle(string name, bool create = false) => JSRef!.CallAsync<FileSystemDirectoryHandle>("getDirectoryHandle", name, new GetHandleOptions { Create = create });
         /// <summary>
-        /// Attempts to asynchronously remove an entry if the directory handle contains a file or directory called the name specified.
-        /// <summary>
         /// Returns a Promise fulfilled with a FileSystemFileHandle for a file with the specified name, within the directory the method is called.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="create"></param>
         /// <returns></returns>
         public Task<FileSystemFileHandle> GetFileHandle(string name, bool create = false) => JSRef!.CallAsync<FileSystemFileHandle>("getFileHandle", name, new GetHandleOptions { Create = create });
+        /// <summary>
+        /// Attempts to asynchronously remove an entry if the directory handle contains a file or directory called the name specified.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="recursive"></param>
+        /// <param name="name">A string representing the FileSystemHandle.name of the entry you wish to remove.</param>
+        /// <param name="recursive">A boolean value, which defaults to false. When set to true entries will be removed recursively.</param>
         /// <returns></returns>
         public Task RemoveEntry(string name, bool recursive = false) => JSRef!.CallVoidAsync("removeEntry", name, new RemoveEntryOptions { Recursive = recursive });
         /// <summary>
