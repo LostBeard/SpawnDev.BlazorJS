@@ -13,5 +13,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? ColorSpace { get; set; }
+        /// <summary>
+        /// 
+        /// "rgba-unorm8"<br/>
+        /// "rgba-float16"
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? PixelFormat { get; set; }
     }
 }
