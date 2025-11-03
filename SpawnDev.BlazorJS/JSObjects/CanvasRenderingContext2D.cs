@@ -256,7 +256,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             // using a SharedByteClampedArray prevents a copy of the data from being made before the draw.
             using var sharedUint8Array = (HeapView)srcBytes;
-            using var imageData = new ImageData(sharedUint8Array, srcWidth, srcHeight);
+            using var imageData = new ImageData(sharedUint8Array, (uint)srcWidth, (uint)srcHeight);
             PutImageData(imageData, dx, dy);
         }
 
@@ -267,7 +267,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             // using a new SharedByteClampedArray prevents a copy of the data from being made before the draw.
             using var sharedUint8Array = (HeapView)imageBytes;
-            using var imageData = new ImageData(sharedUint8Array, srcWidth, srcHeight);
+            using var imageData = new ImageData(sharedUint8Array, (uint)srcWidth, (uint)srcHeight);
             PutImageData(imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
         }
 

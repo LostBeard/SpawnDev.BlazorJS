@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="width">An unsigned long representing the width of the image.</param>
         /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
-        public ImageData(double width, double height) : base(JS.New(nameof(ImageData), width, height)) { }
+        public ImageData(uint width, uint height) : base(JS.New(nameof(ImageData), width, height)) { }
 
         /// <summary>
         /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
@@ -33,7 +33,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="width">An unsigned long representing the width of the image.</param>
         /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
         /// <param name="settings">ImageDataSettings object</param>
-        public ImageData(double width, double height, ImageDataSettings settings) : base(JS.New(nameof(ImageData), width, height, settings)) { }
+        public ImageData(uint width, uint height, ImageDataSettings settings) : base(JS.New(nameof(ImageData), width, height, settings)) { }
 
         /// <summary>
         /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
@@ -41,7 +41,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="dataArray">A Uint8ClampedArray containing the underlying pixel representation of the image. If no such array is given, an image with a transparent black rectangle of the specified width and height will be created.</param>
         /// <param name="width">An unsigned long representing the width of the image.</param>
-        public ImageData(Uint8ClampedArray dataArray, double width) : base(JS.New(nameof(ImageData), dataArray, width)) { }
+        public ImageData(Uint8ClampedArray dataArray, uint width) : base(JS.New(nameof(ImageData), dataArray, width)) { }
 
         /// <summary>
         /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
@@ -50,7 +50,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="dataArray">A Uint8ClampedArray containing the underlying pixel representation of the image. If no such array is given, an image with a transparent black rectangle of the specified width and height will be created.</param>
         /// <param name="width">An unsigned long representing the width of the image.</param>
         /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
-        public ImageData(Uint8ClampedArray dataArray, double width, double height) : base(JS.New(nameof(ImageData), dataArray, width, height)) { }
+        public ImageData(Uint8ClampedArray dataArray, uint width, uint height) : base(JS.New(nameof(ImageData), dataArray, width, height)) { }
 
         /// <summary>
         /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
@@ -60,7 +60,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="width">An unsigned long representing the width of the image.</param>
         /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
         /// <param name="settings">ImageDataSettings object</param>
-        public ImageData(Uint8ClampedArray dataArray, double width, double height, ImageDataSettings settings) : base(JS.New(nameof(ImageData), dataArray, width, height, settings)) { }
+        public ImageData(Uint8ClampedArray dataArray, uint width, uint height, ImageDataSettings settings) : base(JS.New(nameof(ImageData), dataArray, width, height, settings)) { }
 
         #endregion
 
@@ -75,6 +75,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A string indicating the color space of the image data.
         /// </summary>
         public string ColorSpace => JSRef!.Get<string>("colorSpace");
+
+        /// <summary>
+        /// A string indicating the format to use for the ImageData.
+        /// </summary>
+        public string PixelFormat => JSRef!.Get<string>("pixelFormat");
 
         /// <summary>
         /// An unsigned long representing the actual height, in pixels, of the ImageData.
@@ -96,7 +101,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static ImageData FromUint8Array(Uint8Array rgbaUint8Array, int width, int height)
+        public static ImageData FromUint8Array(Uint8Array rgbaUint8Array, uint width, uint height)
         {
             using var arrayBuffer = rgbaUint8Array.Buffer;
             using var rgbaUint8ClampedArray = new Uint8ClampedArray(arrayBuffer, rgbaUint8Array.ByteOffset, rgbaUint8Array.ByteLength);
@@ -110,7 +115,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static ImageData FromBytes(byte[] rgbaBytes, int width, int height)
+        public static ImageData FromBytes(byte[] rgbaBytes, uint width, uint height)
         {
             using var rgbaBytesUint8Array = new Uint8Array(rgbaBytes);
             using var arrayBuffer = rgbaBytesUint8Array.Buffer;
