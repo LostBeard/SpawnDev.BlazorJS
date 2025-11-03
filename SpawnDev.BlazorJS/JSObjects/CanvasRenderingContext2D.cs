@@ -716,22 +716,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The CanvasRenderingContext2D.putImageData() method of the Canvas 2D API paints data from the given ImageData object onto the canvas.
         /// </summary>
-        /// <param name="imagedata">An ImageData object containing the image data to be painted onto the canvas.</param>
+        /// <param name="imageData">An ImageData object containing the image data to be painted onto the canvas.</param>
         /// <param name="dx">The x-axis coordinate in the destination canvas at which to place the top-left corner of the source image.</param>
         /// <param name="dy">The y-axis coordinate in the destination canvas at which to place the top-left corner of the source image.</param>
-        public void PutImageData(ImageData imagedata, double dx, double dy) => JSRef!.CallVoid("putImageData", imagedata, dx, dy);
+        public void PutImageData(ImageData imageData, double dx, double dy) => JSRef!.CallVoid("putImageData", imageData, dx, dy);
 
         /// <summary>
         /// The CanvasRenderingContext2D.putImageData() method of the Canvas 2D API paints data from the given ImageData object onto the canvas.
         /// </summary>
-        /// <param name="imagedata">An ImageData object containing the image data to be painted onto the canvas.</param>
+        /// <param name="imageData">An ImageData object containing the image data to be painted onto the canvas.</param>
         /// <param name="dx">The x-axis coordinate in the destination canvas at which to place the top-left corner of the source image.</param>
         /// <param name="dy">The y-axis coordinate in the destination canvas at which to place the top-left corner of the source image.</param>
         /// <param name="dirtyX">The x-axis coordinate of the top-left corner of the rectangle to be painted.</param>
         /// <param name="dirtyY">The y-axis coordinate of the top-left corner of the rectangle to be painted.</param>
         /// <param name="dirtyWidth">The width of the rectangle to be painted.</param>
         /// <param name="dirtyHeight">The height of the rectangle to be painted.</param>
-        public void PutImageData(ImageData imagedata, double dx, double dy, double dirtyX, double dirtyY, double dirtyWidth, double dirtyHeight) => JSRef!.CallVoid("putImageData", imagedata, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
+        public void PutImageData(ImageData imageData, double dx, double dy, double dirtyX, double dirtyY, double dirtyWidth, double dirtyHeight) => JSRef!.CallVoid("putImageData", imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
 
         /// <summary>
         /// The CanvasRenderingContext2D.getImageData() method of the Canvas 2D API returns an ImageData object representing the underlying pixel data for a specified portion of the canvas.
