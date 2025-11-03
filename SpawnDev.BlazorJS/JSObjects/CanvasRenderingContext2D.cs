@@ -1,6 +1,5 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
-using System.Data.SqlTypes;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
