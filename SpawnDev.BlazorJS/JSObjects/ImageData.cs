@@ -11,69 +11,83 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class ImageData : JSObject
     {
         #region Constructors
+
         /// <summary>
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
         public ImageData(IJSInProcessObjectReference _ref) : base(_ref) { }
+
         /// <summary>
         /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
         /// This constructor is the preferred way of creating such an object in a Worker.
         /// </summary>
         /// <param name="width">An unsigned long representing the width of the image.</param>
         /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
-        public ImageData(int width, int height) : base(JS.New(nameof(ImageData), width, height)) { }
+        public ImageData(double width, double height) : base(JS.New(nameof(ImageData), width, height)) { }
+
         /// <summary>
         /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
         /// This constructor is the preferred way of creating such an object in a Worker.
         /// </summary>
-        /// <param name="width">An unsigned long representing the width of the image.</param>
-        /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
-        /// <param name="settings">ImageDataSettings object</param>
-        public ImageData(int width, int height, ImageDataSettings settings) : base(JS.New(nameof(ImageData), width, height, settings)) { }
-        /// <summary>
-        /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
-        /// This constructor is the preferred way of creating such an object in a Worker.
-        /// </summary>
-        /// <param name="dataArray">A Uint8ClampedArray containing the underlying pixel representation of the image. If no such array is given, an image with a transparent black rectangle of the specified width and height will be created.</param>
-        /// <param name="width">An unsigned long representing the width of the image.</param>
-        public ImageData(Uint8ClampedArray dataArray, int width) : base(JS.New(nameof(ImageData), dataArray, width)) { }
-        /// <summary>
-        /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
-        /// This constructor is the preferred way of creating such an object in a Worker.
-        /// </summary>
-        /// <param name="dataArray">A Uint8ClampedArray containing the underlying pixel representation of the image. If no such array is given, an image with a transparent black rectangle of the specified width and height will be created.</param>
-        /// <param name="width">An unsigned long representing the width of the image.</param>
-        /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
-        public ImageData(Uint8ClampedArray dataArray, int width, int height) : base(JS.New(nameof(ImageData), dataArray, width, height)) { }
-        /// <summary>
-        /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
-        /// This constructor is the preferred way of creating such an object in a Worker.
-        /// </summary>
-        /// <param name="dataArray">A Uint8ClampedArray containing the underlying pixel representation of the image. If no such array is given, an image with a transparent black rectangle of the specified width and height will be created.</param>
         /// <param name="width">An unsigned long representing the width of the image.</param>
         /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
         /// <param name="settings">ImageDataSettings object</param>
-        public ImageData(Uint8ClampedArray dataArray, int width, int height, ImageDataSettings settings) : base(JS.New(nameof(ImageData), dataArray, width, height, settings)) { }
+        public ImageData(double width, double height, ImageDataSettings settings) : base(JS.New(nameof(ImageData), width, height, settings)) { }
+
+        /// <summary>
+        /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
+        /// This constructor is the preferred way of creating such an object in a Worker.
+        /// </summary>
+        /// <param name="dataArray">A Uint8ClampedArray containing the underlying pixel representation of the image. If no such array is given, an image with a transparent black rectangle of the specified width and height will be created.</param>
+        /// <param name="width">An unsigned long representing the width of the image.</param>
+        public ImageData(Uint8ClampedArray dataArray, double width) : base(JS.New(nameof(ImageData), dataArray, width)) { }
+
+        /// <summary>
+        /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
+        /// This constructor is the preferred way of creating such an object in a Worker.
+        /// </summary>
+        /// <param name="dataArray">A Uint8ClampedArray containing the underlying pixel representation of the image. If no such array is given, an image with a transparent black rectangle of the specified width and height will be created.</param>
+        /// <param name="width">An unsigned long representing the width of the image.</param>
+        /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
+        public ImageData(Uint8ClampedArray dataArray, double width, double height) : base(JS.New(nameof(ImageData), dataArray, width, height)) { }
+
+        /// <summary>
+        /// The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.<br/>
+        /// This constructor is the preferred way of creating such an object in a Worker.
+        /// </summary>
+        /// <param name="dataArray">A Uint8ClampedArray containing the underlying pixel representation of the image. If no such array is given, an image with a transparent black rectangle of the specified width and height will be created.</param>
+        /// <param name="width">An unsigned long representing the width of the image.</param>
+        /// <param name="height">An unsigned long representing the height of the image. This value is optional if an array is given: the height will be inferred from the array's size and the given width.</param>
+        /// <param name="settings">ImageDataSettings object</param>
+        public ImageData(Uint8ClampedArray dataArray, double width, double height, ImageDataSettings settings) : base(JS.New(nameof(ImageData), dataArray, width, height, settings)) { }
+
         #endregion
+
         #region Properties
+
         /// <summary>
         /// A Uint8ClampedArray representing a one-dimensional array containing the data in the RGBA order, with integer values between 0 and 255 (inclusive). The order goes by rows from the top-left pixel to the bottom-right.
         /// </summary>
         public Uint8ClampedArray Data => JSRef!.Get<Uint8ClampedArray>("data");
+
         /// <summary>
         /// A string indicating the color space of the image data.
         /// </summary>
         public string ColorSpace => JSRef!.Get<string>("colorSpace");
+
         /// <summary>
         /// An unsigned long representing the actual height, in pixels, of the ImageData.
         /// </summary>
         public int Height => JSRef!.Get<int>("height");
+
         /// <summary>
         /// An unsigned long representing the actual width, in pixels, of the ImageData.
         /// </summary>
         public int Width => JSRef!.Get<int>("width");
+
         #endregion
+
         /// <summary>
         /// Creates an ImageData from a Uint8Array's view on its underlying ArrayBuffer.<br/>
         /// This is a zero-copy operation. The ImageData.Data property, a Uint8ClampedArray, will point to the same section of the same ArrayBuffer as the source.
@@ -88,6 +102,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             using var rgbaUint8ClampedArray = new Uint8ClampedArray(arrayBuffer, rgbaUint8Array.ByteOffset, rgbaUint8Array.ByteLength);
             return new ImageData(rgbaUint8ClampedArray, width, height);
         }
+
         /// <summary>
         /// Creates an ImageData from a byte[]
         /// </summary>
