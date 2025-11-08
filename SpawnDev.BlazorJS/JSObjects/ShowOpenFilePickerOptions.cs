@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A boolean value that defaults to false. By default the picker should include an option to not apply any file type filters (instigated with the type option below). Setting this option to true means that option is not available.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool ExcludeAcceptAllOption { get; set; }
+        public bool? ExcludeAcceptAllOption { get; set; }
         /// <summary>
         /// By specifying an ID, the browser can remember different directories for different IDs. If the same ID is used for another picker, the picker opens in the same directory.
         /// </summary>
