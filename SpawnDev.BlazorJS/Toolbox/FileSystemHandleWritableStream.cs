@@ -3,6 +3,22 @@
 namespace SpawnDev.BlazorJS.Toolbox
 {
     /// <summary>
+    /// FileSystemHandleWritableStream extensions
+    /// </summary>
+    public static partial class FileSystemHandleWritableStreamExtensions
+    {
+        /// <summary>
+        /// Returns a async-only writable Stream
+        /// </summary>
+        /// <param name="fileHandle"></param>
+        /// <param name="appendMode"></param>
+        /// <returns></returns>
+        public static Task<FileSystemHandleWritableStream> GetWritableStream(this FileSystemFileHandle fileHandle, bool appendMode = false)
+        {
+            return FileSystemHandleWritableStream.Create(fileHandle, appendMode);
+        }
+    }
+    /// <summary>
     /// Creates an asynchronously writable Stream from a writable FileSystemHandle<br/>
     /// IMPORTANT: Only asynchronous writes will work, synchronous writes will throw an exception<br/>
     /// </summary>
