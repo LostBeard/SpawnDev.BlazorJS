@@ -402,9 +402,6 @@ namespace SpawnDev.BlazorJS.Toolbox
             if (Disposed) return;
             Disposed = true;
             if (InstanceCount > 0) InstanceCount--;
-#if DEBUG
-            Console.WriteLine($"HeapView.Dispose({disposing})");
-#endif
             Address = 0;
             handle.Free();
             Pointer = IntPtr.Zero;
