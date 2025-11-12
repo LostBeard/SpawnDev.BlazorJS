@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Internal;
 using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.JsonConverters;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -12,7 +14,8 @@ using System.Text.Json;
 namespace SpawnDev.BlazorJS
 {
     /// <summary>
-    /// BlazorJSRuntime provides access to the Javascript environment in a Blazor WebAssembly application
+    /// BlazorJSRuntime provides access to the Javascript environment in a Blazor WebAssembly application.<br/>
+    /// It relies on the IJSInProcessRuntime for synchronous interop with the Javascript environment.<br/>
     /// </summary>
     public partial class BlazorJSRuntime
     {
@@ -20,7 +23,6 @@ namespace SpawnDev.BlazorJS
         internal static Type WebAssemblyJSObjectReferenceType => _WebAssemblyJSObjectReferenceType.Value;
         internal static JsonConverterCollection RuntimeJsonConverters { get; private set; } = new JsonConverterCollection();
         internal static IJSInProcessRuntime JSRuntime;
-        internal static IJSRuntime AsyncJSRuntime;
         /// <summary>
         /// BlazorJSRuntime provides access to the Javascript environment in a Blazor WebAssembly application
         /// </summary>
@@ -29,31 +31,31 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// globalThis JSObject instance
         /// </summary>
-        public JSObject GlobalThis { get; private set; }
+        public JSObject? GlobalThis { get; private set; }
         /// <summary>
         /// If the globalThis is a Window, WindowThis will refer to globalThis, otherwise null.
         /// </summary>
-        public Window? WindowThis { get; private set; } = null;
+        public Window? WindowThis { get; private set; }
         /// <summary>
         /// If the globalThis is a DedicatedWorkerGlobalScope, DedicateWorkerThis will refer to globalThis, otherwise null.
         /// </summary>
-        public DedicatedWorkerGlobalScope? DedicateWorkerThis { get; private set; } = null;
+        public DedicatedWorkerGlobalScope? DedicateWorkerThis { get; private set; }
         /// <summary>
         /// If the globalThis is a SharedWorkerGlobalScope, SharedWorkerThis will refer to globalThis, otherwise null.
         /// </summary>
-        public SharedWorkerGlobalScope? SharedWorkerThis { get; private set; } = null;
+        public SharedWorkerGlobalScope? SharedWorkerThis { get; private set; }
         /// <summary>
         /// If the globalThis is a ServiceWorkerGlobalScope, ServiceWorkerThis will refer to globalThis, otherwise null.
         /// </summary>
-        public ServiceWorkerGlobalScope? ServiceWorkerThis { get; private set; } = null;
+        public ServiceWorkerGlobalScope? ServiceWorkerThis { get; private set; }
         /// <summary>
         /// globalThis.constructor?.name ?? ""
         /// </summary>
-        public string GlobalThisTypeName { get; private set; } = "";
+        public string GlobalThisTypeName { get; private set; }
         /// <summary>
         /// Returns true if globalThis is a Window
         /// </summary>
-        public bool IsWindow => GlobalThis is Window;
+        public bool IsWindow => GlobalScope == GlobalScope.Window;
         /// <summary>
         /// Returns true if globalThis is a DedicatedWorkerGlobalScope, SharedWorkerGlobalScope, or a ServiceWorkerGlobalScope
         /// </summary>
@@ -61,19 +63,19 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Returns true if globalThis is a DedicatedWorkerGlobalScope
         /// </summary>
-        public bool IsDedicatedWorkerGlobalScope => GlobalThis is DedicatedWorkerGlobalScope;
+        public bool IsDedicatedWorkerGlobalScope => GlobalScope == GlobalScope.DedicatedWorker;
         /// <summary>
         /// Returns true if globalThis is a SharedWorkerGlobalScope
         /// </summary>
-        public bool IsSharedWorkerGlobalScope => GlobalThis is SharedWorkerGlobalScope;
+        public bool IsSharedWorkerGlobalScope => GlobalScope == GlobalScope.SharedWorker;
         /// <summary>
         /// Returns true if globalThis is a ServiceWorkerGlobalScope
         /// </summary>
-        public bool IsServiceWorkerGlobalScope => GlobalThis is ServiceWorkerGlobalScope;
+        public bool IsServiceWorkerGlobalScope => GlobalScope == GlobalScope.ServiceWorker;
         /// <summary>
         /// GlobalScope enum
         /// </summary>
-        public GlobalScope GlobalScope { get; private set; } = GlobalScope.None;
+        public GlobalScope GlobalScope { get; private set; }
         /// <summary>
         /// A new instance id generated when the app starts
         /// </summary>
@@ -81,21 +83,27 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Time elapsed until BlazorJSRuntime is initialized.
         /// </summary>
-        public double StartUpTime { get; private set; }
+        [Obsolete("Now the same as ReadyTime")]
+        public double StartUpTime => ReadyTime;
         /// <summary>
         /// Time elapsed until all background services have been started. Before page load.
         /// </summary>
         public double ReadyTime { get; internal set; }
-        Performance? Performance { get; set; }
+        //Performance? Performance { get; set; }
         /// <summary>
         /// Returns true if running in a browser
         /// </summary>
         public bool IsBrowser => OperatingSystem.IsBrowser();
         /// <summary>
+        /// Returns true if the in-process JS runtime is available
+        /// </summary>
+        public bool HasInProcessRuntime => JSRuntime != null;
+        /// <summary>
         /// The crossOriginIsolated read-only property returns a boolean value that indicates whether the website is in a cross-origin isolation state. A website is in a cross-origin isolated state, when the response header Cross-Origin-Opener-Policy has the value same-origin and the Cross-Origin-Embedder-Policy header has the value require-corp or credentialless
         /// </summary>
         public bool? CrossOriginIsolated => _CrossOriginIsolated?.Value;
         private Lazy<bool?>? _CrossOriginIsolated = null;
+        static Stopwatch sw = Stopwatch.StartNew();
         static BlazorJSRuntime()
         {
             if (OperatingSystem.IsBrowser())
@@ -106,7 +114,6 @@ namespace SpawnDev.BlazorJS
                 if (instanceField == null) FatalError("DefaultWebAssemblyJSRuntime.Instance FieldInfo is null");
                 JSRuntime = (IJSInProcessRuntime)instanceField.GetValue(null)!;
                 if (JSRuntime == null) FatalError("IJSInProcessRuntime instance not found");
-                AsyncJSRuntime = (IJSRuntime)JSRuntime;
                 RuntimeJsonSerializerOptions = (JsonSerializerOptions)typeof(JSRuntime).GetProperty("JsonSerializerOptions", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!.GetValue(JSRuntime, null)!;
                 RuntimeJsonSerializerOptions.Converters.Add(new TypeJsonConverter());
                 RuntimeJsonSerializerOptions.Converters.Add(new ITupleConverterFactory());
@@ -133,77 +140,89 @@ namespace SpawnDev.BlazorJS
         /// Always returns false for GlobalScope enum flags Default, and None.
         /// </summary>
         public bool IsScope(GlobalScope scope) => (GlobalScope & scope) != 0;
-        public BlazorJSRuntime(IJSRuntime jsr)
-        {
-            AsyncJSRuntime ??= jsr;
-            JSRuntime ??= jsr as IJSInProcessRuntime;
-            Init();
-        }
         internal BlazorJSRuntime()
         {
             Init();
         }
         void Init()
         {
-            if (OperatingSystem.IsBrowser())
-            {
-                JS ??= this;
-            }
+            JS ??= this;
             var id = Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
             var chunkSize = 4;
             InstanceId = string.Join("-", Enumerable.Range(0, id.Length / chunkSize).Select(i => id.Substring(i * chunkSize, chunkSize)));
-            if (IsBrowser)
+            if (HasInProcessRuntime)
             {
-                _CrossOriginIsolated ??= new Lazy<bool?>(() => JS.Get<bool?>("crossOriginIsolated"));
-                GlobalScope = GlobalScope.Unknown;
                 GlobalThisTypeName = ConstructorName() ?? "";
                 switch (GlobalThisTypeName)
                 {
                     case nameof(Window):
-                        // In Firefox extension content mode window !== globalThis, but globalThis.constructor.name is patched to say 'Window' (instead of 'undefined')
+                        // in firefox browser extension running in content mode, a window and globalThis are not the same so they are loaded separately here to normalize usage
                         WindowThis = Get<Window>("window");
                         GlobalThis = Get<Window>("globalThis");
                         GlobalScope = GlobalScope.Window;
-                        Performance = WindowThis.Performance;
-                        StartUpTime = Performance.Now();
                         break;
                     case nameof(DedicatedWorkerGlobalScope):
                         DedicateWorkerThis = Get<DedicatedWorkerGlobalScope>("globalThis");
                         GlobalThis = DedicateWorkerThis;
                         GlobalScope = GlobalScope.DedicatedWorker;
-                        Performance = DedicateWorkerThis.Performance;
-                        StartUpTime = Performance.Now();
                         break;
                     case nameof(SharedWorkerGlobalScope):
                         SharedWorkerThis = Get<SharedWorkerGlobalScope>("globalThis");
                         GlobalThis = SharedWorkerThis;
                         GlobalScope = GlobalScope.SharedWorker;
-                        Performance = SharedWorkerThis.Performance;
-                        StartUpTime = Performance.Now();
                         break;
                     case nameof(ServiceWorkerGlobalScope):
                         ServiceWorkerThis = Get<ServiceWorkerGlobalScope>("globalThis");
                         GlobalThis = ServiceWorkerThis;
                         GlobalScope = GlobalScope.ServiceWorker;
-                        Performance = ServiceWorkerThis.Performance;
-                        StartUpTime = Performance.Now();
                         break;
                     default:
                         GlobalThis = Get<JSObject>("globalThis");
-                        Performance = Get<Performance?>("performance");
-                        StartUpTime = Performance?.Now() ?? 0;
+                        GlobalScope = GlobalScope.BrowserOther;
                         break;
                 }
             }
             else
             {
-                GlobalScope = GlobalScope.Server;
+                GlobalScope = GlobalScope.NonBrowser;
             }
+        }
+        /// <summary>
+        /// Callable from Javascript to verify BlazorJSRuntime is running
+        /// </summary>
+        /// <returns></returns>
+        [JSInvokable("RuntimeReadyCheck")]
+        public static bool RuntimeReadyCheck()
+        {
+            var interopReady = JS?.InteropReadyCheck();
+            return interopReady == true;
         }
         internal void SetReady()
         {
+            if (!sw.IsRunning) return;
+            // ready
             RuntimeJsonConverters.Lock();
-            ReadyTime = Performance?.Now() ?? 0;
+            sw.Stop();
+            ReadyTime = sw.Elapsed.TotalMilliseconds;
+        }
+        bool InteropReady = false;
+        bool InteropReadyCheck()
+        {
+            if (InteropReady) return true;
+            if (JSRuntime != null)
+            {
+                try
+                {
+                    InteropReady = JSRuntime.Invoke<bool>("blazorJSInterop.interopReadyCheck");
+                    Console.WriteLine($"InteropReadyCheck succ: {InteropReady}");
+                    return InteropReady;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"InteropReadyCheck error: {ex.Message}");
+                }
+            }
+            return false;
         }
         /// <summary>
         /// Returns window.MatchMedia("(display-mode: standalone)").Matches
