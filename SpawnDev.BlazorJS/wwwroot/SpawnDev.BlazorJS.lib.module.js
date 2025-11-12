@@ -1,12 +1,15 @@
 (function () {
-    // helper function used in place of 'in' operator for hecking if a property exists to allow a consistent operation regardless of obj's type
+    // helper function used in place of 'in' operator for checking if a property exists to allow a consistent operation regardless of obj's type
     function _in(key, obj) {
         if (obj === null || obj === void 0) return false;
-        if (typeof obj === 'object') return key in obj;
-        return obj[key] !== void 0;
+        try {
+            return key in Object(obj);
+        } catch { }
+        return false;
     }
     class BlazorJSInterop {
         constructor() {
+            this.runtimeReady = false;
             this.reviverAttached = false;
             this.callbacks = {};
             this.asyncCallbacks = {};
@@ -286,17 +289,23 @@
         // ****************************************
         // ************ Invoke Method *************
         // ****************************************
-        // the below 2 methods are the only Javascript methods that the C# BlazorJSRuntime will call.
-        // it is used to call other Javascript BlazorJSInterop methods and prepare the return value for C#
+        // the below methods are the only Javascript methods that the C# BlazorJSRuntime will call.
+        // Invoke and InvokeAsync call other Javascript BlazorJSInterop methods and prepare the return value for C#
         Invoke(fnName, args, returnType) {
+            this.runtimeReady = true;
             var ret = this[fnName](...args);
             if (returnType === void 0 || returnType === null) return;
             return this.serializeToDotNet(ret, returnType);
         }
         async InvokeAsync(fnName, args, returnType) {
+            this.runtimeReady = true;
             var ret = await this[fnName](...args);
             if (returnType === void 0 || returnType === null) return;
             return this.serializeToDotNet(ret, returnType);
+        }
+        interopReadyCheck() {
+            this.runtimeReady = true;
+            return true;
         }
         // ****************************************
         // ************ Internal Methods **********
@@ -494,6 +503,22 @@
                 this.reviverAttached = true;
             }
             return this.reviverAttached;
+        }
+        async runtimeReadyCheckAsync() {
+            if (!this.runtimeReady && globalThis.DotNet) {
+                try {
+                    this.runtimeReady = await globalThis.DotNet.invokeMethodAsync("SpawnDev.BlazorJS", "RuntimeReadyCheck");
+                } catch { }
+            }
+            return this.runtimeReady;
+        }
+        runtimeReadyCheck() {
+            if (!this.runtimeReady && globalThis.DotNet) {
+                try {
+                    this.runtimeReady = globalThis.DotNet.invokeMethod("SpawnDev.BlazorJS", "RuntimeReadyCheck");
+                } catch { }
+            }
+            return this.runtimeReady;
         }
     }
     var blazorJSInterop = new BlazorJSInterop();
