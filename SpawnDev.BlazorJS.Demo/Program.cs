@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using SpawnDev.BackgroundServices;
+using SpawnDev;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Demo;
 using SpawnDev.BlazorJS.JSObjects;
