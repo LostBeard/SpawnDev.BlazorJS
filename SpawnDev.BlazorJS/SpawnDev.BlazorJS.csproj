@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
+		<TargetFrameworks>net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -55,6 +55,11 @@
 		<PackageReference Include="System.Text.Json" Version="9.0.8" />
 	</ItemGroup>
 
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0" />
+		<PackageReference Include="System.Text.Json" Version="10.0.0" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="SpawnDev.BackgroundServices" Version="1.0.2" />
 	</ItemGroup>
@@ -64,7 +69,11 @@
 	</ItemGroup>
 
 	<PropertyGroup>
-		<!-- Disable filename mangling with hash which is enabled by default in .Net (9?) 10 SDK. It causes runtime loading of Javascript files to fail due to unknown filename. -->
+		<!-- 
+		Disable filename mangling with hash ("cache busting fingerprinting") which is enabled by default in .Net 10 SDK. 
+		It causes runtime loading of Javascript files to fail due to unknown filename. 
+		This library does not support asset name mangling.
+		-->
 		<StaticWebAssetFingerprintingEnabled>false</StaticWebAssetFingerprintingEnabled>
 		<StaticWebAssetsFingerprintContent>false</StaticWebAssetsFingerprintContent>
 	</PropertyGroup>
