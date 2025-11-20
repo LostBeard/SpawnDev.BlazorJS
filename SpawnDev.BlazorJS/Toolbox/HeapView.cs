@@ -45,7 +45,6 @@ namespace SpawnDev.BlazorJS.Toolbox
     }
     /// <inheritdoc/>
     [JsonConverter(typeof(HeapViewConverter))]
-    [RequiresUnreferencedCode("")]
     public sealed class HeapViewString : HeapView
     {
         /// <summary>
@@ -58,7 +57,6 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="data"></param>
         /// <param name="offset">Start index in the data</param>
         /// <param name="length">The number of characters to include</param>
-        [DynamicDependency("Helper", "MyType", "System")]
         public HeapViewString(string data, long offset, long length) : base()
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
