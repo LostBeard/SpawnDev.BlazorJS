@@ -8,7 +8,7 @@ Full Blazor WebAssembly and Javascript interop. Create Javascript objects, acces
 [Live Demo](https://blazorjs.spawndev.com/)  
 
 ### Supported .Net Versions
-- Blazor WebAssembly .Net 6, 7, 8, and 9
+- Blazor WebAssembly .Net 6, 7, 8, 9 and 10
   - Tested VS Template: Blazor WebAssembly Standalone App
 - Blazor United .Net 8 (in WebAssembly project only) 
   - Tested VS Template: Blazor Web App (Interactive WebAssembly mode without prerendering)
