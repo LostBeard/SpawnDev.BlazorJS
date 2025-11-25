@@ -15,3 +15,7 @@ global using GLubyte = System.Byte;
 global using GLushort = System.UInt16;
 global using GLfloat = System.Single;
 global using GLclampf = System.Single;
+global using GLdouble = System.Double;
+global using GLclampd = System.Double;
+global using GLsizeiptr = System.Int64;
+global using GLintptr = System.Int64;
