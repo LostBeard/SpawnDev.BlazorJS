@@ -672,7 +672,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Programs and shaders - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#programs_and_shaders
-
+        /// <summary>
+        /// The WebGL2RenderingContext.getFragDataLocation() method of the WebGL 2 API returns the binding of color numbers to user-defined varying out variables.
+        /// </summary>
+        /// <param name="program">A WebGLProgram to query.</param>
+        /// <param name="name">A string specifying the name of the user-defined varying out variable.</param>
+        /// <returns>A GLint indicating the assigned color number binding, or -1 otherwise.</returns>
+        public GLint GetFragDataLocation(WebGLProgram program, string name) => JSRef!.Call<GLint>("getFragDataLocation", program, name);
         #endregion
 
         #region Uniforms and attributes - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#uniforms_and_attributes
