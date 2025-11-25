@@ -205,28 +205,32 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
         #endregion
 
-        #region Vertex array objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#vertex_array_objects
-        /// <summary>
-        /// The WebGL2RenderingContext.createVertexArray() method of the WebGL 2 API creates and initializes a WebGLVertexArrayObject object that represents a vertex array object (VAO) pointing to vertex array data and which provides names for different sets of vertex data.
-        /// </summary>
-        /// <returns>A WebGLVertexArrayObject representing a vertex array object (VAO) which points to vertex array data.</returns>
-        public WebGLVertexArrayObject CreateVertexArray() => JSRef!.Call<WebGLVertexArrayObject>("createVertexArray");
-        /// <summary>
-        /// The WebGL2RenderingContext.deleteVertexArray() method of the WebGL 2 API deletes a given WebGLVertexArrayObject object.
-        /// </summary>
-        /// <param name="vertexArray">A WebGLVertexArrayObject (VAO) object to delete.</param>
-        public void DeleteVertexArray(WebGLVertexArrayObject vertexArray) => JSRef!.CallVoid("deleteVertexArray", vertexArray);
-        /// <summary>
-        /// The WebGL2RenderingContext.isVertexArray() method of the WebGL API returns true if the passed object is a valid WebGLVertexArrayObject object.
-        /// </summary>
-        /// <param name="vertexArray">A WebGLVertexArrayObject (VAO) object to test.</param>
-        /// <returns>A GLboolean indicating whether the given object is a valid WebGLVertexArrayObject object (true) or not (false).</returns>
-        public bool IsVertexArray(WebGLVertexArrayObject vertexArray) => JSRef!.Call<bool>("isVertexArray", vertexArray);
-        /// <summary>
-        /// The WebGL2RenderingContext.bindVertexArray() method of the WebGL 2 API binds a passed WebGLVertexArrayObject object to the buffer.
-        /// </summary>
-        /// <param name="vertexArray">A WebGLVertexArrayObject (VAO) object to bind.</param>
-        public void BindVertexArray(WebGLVertexArrayObject vertexArray) => JSRef!.CallVoid("bindVertexArray", vertexArray);
+        #region Framebuffers - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#framebuffers
+
+        #endregion
+
+        #region Renderbuffers - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#renderbuffers
+
+        #endregion
+
+        #region Textures - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#textures
+
+        #endregion
+
+        #region Programs and shaders - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#programs_and_shaders
+
+        #endregion
+
+        #region Uniforms and attributes - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#uniforms_and_attributes
+
+        #endregion
+
+        #region Color spaces - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#color_spaces
+
+        #endregion
+
+        #region Drawing buffers - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#drawing_buffers
+
         #endregion
 
         #region Query objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#query_objects
@@ -307,6 +311,46 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="query"></param>
         /// <returns></returns>
         public GLuint GetQueryParameterResult(WebGLQuery query) => JSRef!.Call<GLuint>("getQueryParameter", query, QUERY_RESULT);
+        #endregion
+
+        #region Sampler objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#sampler_objects
+
+        #endregion
+
+        #region Sync objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#sync_objects
+
+        #endregion
+
+        #region Transform feedback - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#transform_feedback
+
+        #endregion
+
+        #region Uniform buffer objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#uniform_buffer_objects
+
+        #endregion
+
+        #region Vertex array objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#vertex_array_objects
+        /// <summary>
+        /// The WebGL2RenderingContext.createVertexArray() method of the WebGL 2 API creates and initializes a WebGLVertexArrayObject object that represents a vertex array object (VAO) pointing to vertex array data and which provides names for different sets of vertex data.
+        /// </summary>
+        /// <returns>A WebGLVertexArrayObject representing a vertex array object (VAO) which points to vertex array data.</returns>
+        public WebGLVertexArrayObject CreateVertexArray() => JSRef!.Call<WebGLVertexArrayObject>("createVertexArray");
+        /// <summary>
+        /// The WebGL2RenderingContext.deleteVertexArray() method of the WebGL 2 API deletes a given WebGLVertexArrayObject object.
+        /// </summary>
+        /// <param name="vertexArray">A WebGLVertexArrayObject (VAO) object to delete.</param>
+        public void DeleteVertexArray(WebGLVertexArrayObject vertexArray) => JSRef!.CallVoid("deleteVertexArray", vertexArray);
+        /// <summary>
+        /// The WebGL2RenderingContext.isVertexArray() method of the WebGL API returns true if the passed object is a valid WebGLVertexArrayObject object.
+        /// </summary>
+        /// <param name="vertexArray">A WebGLVertexArrayObject (VAO) object to test.</param>
+        /// <returns>A GLboolean indicating whether the given object is a valid WebGLVertexArrayObject object (true) or not (false).</returns>
+        public bool IsVertexArray(WebGLVertexArrayObject vertexArray) => JSRef!.Call<bool>("isVertexArray", vertexArray);
+        /// <summary>
+        /// The WebGL2RenderingContext.bindVertexArray() method of the WebGL 2 API binds a passed WebGLVertexArrayObject object to the buffer.
+        /// </summary>
+        /// <param name="vertexArray">A WebGLVertexArrayObject (VAO) object to bind.</param>
+        public void BindVertexArray(WebGLVertexArrayObject vertexArray) => JSRef!.CallVoid("bindVertexArray", vertexArray);
         #endregion
     }
 }
