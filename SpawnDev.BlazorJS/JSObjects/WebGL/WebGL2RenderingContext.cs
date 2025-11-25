@@ -1,10 +1,5 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
-using System;
-using System.Drawing;
-using System.Net.Mail;
-using System.Reflection.Emit;
-using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -295,7 +290,70 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Renderbuffers - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#renderbuffers
-
+        /// <summary>
+        /// The WebGL2RenderingContext.getInternalformatParameter() method of the WebGL 2 API returns information about implementation-dependent support for internal formats.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the target renderbuffer object. Possible values:<br/>
+        ///  gl.RENDERBUFFER - Buffer data storage for single images in a renderable internal format.</param>
+        /// <param name="internalformat">A GLenum specifying the internal format about which to retrieve information (must be a color-renderable, depth-renderable or stencil-renderable format).</param>
+        /// <param name="pname">A GLenum specifying the type of information to query. Possible values:<br/>
+        /// gl.SAMPLES - Returns an Int32Array containing sample counts supported for internalformat in descending order.</param>
+        public Int32Array GetInternalformatParameter(GLenum target, GLenum internalformat, GLenum pname) => JSRef!.Call<Int32Array>("getInternalformatParameter", target, internalformat, pname);
+        /// <summary>
+        /// The WebGL2RenderingContext.getInternalformatParameter() method of the WebGL 2 API returns information about implementation-dependent support for internal formats.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the target renderbuffer object. Possible values:<br/>
+        ///  gl.RENDERBUFFER - Buffer data storage for single images in a renderable internal format.</param>
+        /// <param name="internalformat">A GLenum specifying the internal format about which to retrieve information (must be a color-renderable, depth-renderable or stencil-renderable format).</param>
+        /// <param name="pname">A GLenum specifying the type of information to query. Possible values:<br/>
+        /// gl.SAMPLES - Returns an Int32Array containing sample counts supported for internalformat in descending order.</param>
+        public T GetInternalformatParameter<T>(GLenum target, GLenum internalformat, GLenum pname) => JSRef!.Call<T>("getInternalformatParameter", target, internalformat, pname);
+        /// <summary>
+        /// The WebGL2RenderingContext.renderbufferStorageMultisample() method of the WebGL 2 API returns creates and initializes a renderbuffer object's data store and allows specifying a number of samples to be used.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the target renderbuffer object. Possible values:<br/>
+        ///  gl.RENDERBUFFER - Buffer data storage for single images in a renderable internal format.</param>
+        /// <param name="samples">A GLsizei specifying the number of samples to be used for the renderbuffer storage.</param>
+        /// <param name="internalFormat">A GLenum specifying the internal format of the renderbuffer. Possible values (gl.DEPTH_STENCIL is not supported):<br/>
+        /// gl.R8<br/>
+        /// gl.R8UI<br/>
+        /// gl.R8I<br/>
+        /// gl.R16UI<br/>
+        /// gl.R16I<br/>
+        /// gl.R32UI<br/>
+        /// gl.R32I<br/>
+        /// gl.RG8<br/>
+        /// gl.RG8UI<br/>
+        /// gl.RG8I<br/>
+        /// gl.RG16UI<br/>
+        /// gl.RG16I<br/>
+        /// gl.RG32UI<br/>
+        /// gl.RG32I<br/>
+        /// gl.RGB8<br/>
+        /// gl.RGBA8<br/>
+        /// gl.SRGB8_ALPHA8<br/>
+        /// gl.RGBA4<br/>
+        /// gl.RGB565<br/>
+        /// gl.RGB5_A1<br/>
+        /// gl.RGB10_A2<br/>
+        /// gl.RGBA8UI<br/>
+        /// gl.RGBA8I<br/>
+        /// gl.RGB10_A2UI<br/>
+        /// gl.RGBA16UI<br/>
+        /// gl.RGBA16I<br/>
+        /// gl.RGBA32I<br/>
+        /// gl.RGBA32UI<br/>
+        /// gl.DEPTH_COMPONENT16<br/>
+        /// gl.DEPTH_COMPONENT24<br/>
+        /// gl.DEPTH_COMPONENT32F<br/>
+        /// gl.DEPTH_STENCIL<br/>
+        /// gl.DEPTH24_STENCIL8<br/>
+        /// gl.DEPTH32F_STENCIL8<br/>
+        /// gl.STENCIL_INDEX8
+        /// </param>
+        /// <param name="width">A GLsizei specifying the width of the renderbuffer in pixels.</param>
+        /// <param name="height">A GLsizei specifying the height of the renderbuffer in pixels.</param>
+        public void RenderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height) => JSRef!.CallVoid("renderbufferStorageMultisample", target, samples, internalFormat, width, height);
         #endregion
 
         #region Textures - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#textures
