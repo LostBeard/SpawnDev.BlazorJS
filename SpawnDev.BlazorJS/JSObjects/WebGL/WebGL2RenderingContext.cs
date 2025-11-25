@@ -1,5 +1,10 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
+using System;
+using System.Drawing;
+using System.Net.Mail;
+using System.Reflection.Emit;
+using System.Threading.Tasks;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -155,7 +160,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="readOffset">A GLintptr specifying the byte offset from which to start reading from or writing to the buffer.</param>
         /// <param name="writeOffset">A GLintptr specifying the byte offset from which to start reading from or writing to the buffer.</param>
         /// <param name="size">A GLsizei in bytes specifying the size of the data to be copied from readTarget to writeTarget.</param>
-        public void CopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizei size) 
+        public void CopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizei size)
             => JSRef!.CallVoid("copyBufferSubData", readTarget, writeTarget, readOffset, writeOffset, size);
         /// <summary>
         /// The WebGL2RenderingContext.getBufferSubData() method of the WebGL 2 API reads data from a buffer binding point and writes them to an ArrayBuffer or SharedArrayBuffer.
@@ -206,7 +211,87 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Framebuffers - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#framebuffers
-
+        /// <summary>
+        /// The WebGL2RenderingContext.blitFramebuffer() method of the WebGL 2 API transfers a block of pixels from the read framebuffer to the draw framebuffer. Read and draw framebuffers are bound using WebGLRenderingContext.bindFramebuffer().
+        /// </summary>
+        /// <param name="srcX0">A GLint specifying the bounds of the source rectangle.</param>
+        /// <param name="srcY0">A GLint specifying the bounds of the source rectangle.</param>
+        /// <param name="srcX1">A GLint specifying the bounds of the source rectangle.</param>
+        /// <param name="srcY1">A GLint specifying the bounds of the source rectangle.</param>
+        /// <param name="dstX0">A GLint specifying the bounds of the destination rectangle.</param>
+        /// <param name="dstY0">A GLint specifying the bounds of the destination rectangle.</param>
+        /// <param name="dstX1">A GLint specifying the bounds of the destination rectangle.</param>
+        /// <param name="dstY1">A GLint specifying the bounds of the destination rectangle.</param>
+        /// <param name="mask">A GLbitfield specifying a bitwise OR mask indicating which buffers are to be copied. Possible values:<br/>
+        /// gl.COLOR_BUFFER_BIT<br/>
+        /// gl.DEPTH_BUFFER_BIT<br/>
+        /// gl.STENCIL_BUFFER_BIT
+        /// </param>
+        /// <param name="filter">A GLenum specifying the interpolation to be applied if the image is stretched. Possible values:<br/>
+        /// gl.NEAREST<br/>
+        /// gl.LINEAR</param>
+        public void BlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter) => JSRef!.CallVoid("blitFramebuffer", srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
+        /// <summary>
+        /// The WebGL2RenderingContext.framebufferTextureLayer() method of the WebGL 2 API attaches a single layer of a texture to a framebuffer.<br/>
+        /// This method is similar to WebGLRenderingContext.framebufferTexture2D(), but only a given single layer of the texture level is attached to the attachment point.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target). Possible values:<br/>
+        /// gl.FRAMEBUFFER: Collection buffer data storage of color, alpha, depth and stencil buffers used to render an image.<br/>
+        /// gl.DRAW_FRAMEBUFFER: Equivalent to gl.FRAMEBUFFER.<br/>
+        /// gl.READ_FRAMEBUFFER: Used as a source for reading operations.
+        /// </param>
+        /// <param name="attachment">A GLenum specifying the attachment point for the texture. Possible values:<br/>
+        /// gl.COLOR_ATTACHMENT{0-15}: Attaches the texture to one of the framebuffer's color buffers.<br/>
+        /// gl.DEPTH_ATTACHMENT: Attaches the texture to the framebuffer's depth buffer.<br/>
+        /// gl.STENCIL_ATTACHMENT: Attaches the texture to the framebuffer's stencil buffer.<br/>
+        /// gl.DEPTH_STENCIL_ATTACHMENT: depth and stencil buffer.
+        /// </param>
+        /// <param name="texture">A WebGLTexture object whose image to attach.</param>
+        /// <param name="level">A GLint specifying the mipmap level of the texture image to attach.</param>
+        /// <param name="layer">A GLint specifying the layer of the texture image to attach.</param>
+        public void FramebufferTextureLayer(GLenum target, GLenum attachment, WebGLTexture texture, GLint level, GLint layer) => JSRef!.CallVoid("framebufferTextureLayer", target, attachment, texture, level, layer);
+        /// <summary>
+        /// The WebGL2RenderingContext.invalidateFramebuffer() method of the WebGL 2 API invalidates the contents of attachments in a framebuffer.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target). Possible values:<br/>
+        /// gl.FRAMEBUFFER: Collection buffer data storage of color, alpha, depth and stencil buffers used to render an image.<br/>
+        /// gl.DRAW_FRAMEBUFFER: Equivalent to gl.FRAMEBUFFER.<br/>
+        /// gl.READ_FRAMEBUFFER: Used as a source for reading operations.
+        /// </param>
+        /// <param name="attachments">An Array of GLenum specifying the attachment points to invalidate. Possible values:<br/>
+        /// gl.COLOR_ATTACHMENT{0-15}: Attaches the texture to one of the framebuffer's color buffers.<br/>
+        /// gl.DEPTH_ATTACHMENT: Attaches the texture to the framebuffer's depth buffer.<br/>
+        /// gl.STENCIL_ATTACHMENT: Attaches the texture to the framebuffer's stencil buffer.<br/>
+        /// gl.DEPTH_STENCIL_ATTACHMENT: depth and stencil buffer.
+        /// </param>
+        public void InvalidateFramebuffer(GLenum target, GLenum[] attachments) => JSRef!.CallVoid("invalidateFramebuffer", target, attachments);
+        /// <summary>
+        /// The WebGL2RenderingContext.invalidateSubFramebuffer() method of the WebGL 2 API invalidates portions of the contents of attachments in a framebuffer.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target). Possible values:<br/>
+        /// gl.FRAMEBUFFER: Collection buffer data storage of color, alpha, depth and stencil buffers used to render an image.<br/>
+        /// gl.DRAW_FRAMEBUFFER: Equivalent to gl.FRAMEBUFFER.<br/>
+        /// gl.READ_FRAMEBUFFER: Used as a source for reading operations.
+        /// </param>
+        /// <param name="attachments">An Array of GLenum specifying the attachment points to invalidate. Possible values:<br/>
+        /// gl.COLOR_ATTACHMENT{0-15}: Attaches the texture to one of the framebuffer's color buffers.<br/>
+        /// gl.DEPTH_ATTACHMENT: Attaches the texture to the framebuffer's depth buffer.<br/>
+        /// gl.STENCIL_ATTACHMENT: Attaches the texture to the framebuffer's stencil buffer.<br/>
+        /// gl.DEPTH_STENCIL_ATTACHMENT: depth and stencil buffer.
+        /// </param>
+        /// <param name="x">A GLint specifying the left origin of the pixel rectangle to invalidate.</param>
+        /// <param name="y">A GLint specifying the bottom origin of the pixel rectangle to invalidate.</param>
+        /// <param name="width">A GLsizei specifying the width of the pixel rectangle to invalidate.</param>
+        /// <param name="height">A GLsizei specifying the height of the pixel rectangle to invalidate.</param>
+        public void InvalidateSubFramebuffer(GLenum target, GLenum[] attachments, GLint x, GLint y, GLsizei width, GLsizei height) => JSRef!.CallVoid("invalidateSubFramebuffer", target, attachments, x, y, width, height);
+        /// <summary>
+        /// The WebGL2RenderingContext.readBuffer() method of the WebGL 2 API selects a color buffer as the source for pixels for subsequent calls to copyTexImage2D, copyTexSubImage2D, copyTexSubImage3D or readPixels.
+        /// </summary>
+        /// <param name="source">A GLenum specifying a color buffer. Possible values:<br/>
+        /// gl.BACK - Reads from the back color buffer.
+        /// gl.NONE - Reads from no color buffer.
+        /// gl.COLOR_ATTACHMENT{0 - 15} - Reads from one of the 16 color attachment buffers.</param>
+        public void ReadBuffer(GLenum source) => JSRef!.CallVoid("readBuffer", source);
         #endregion
 
         #region Renderbuffers - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#renderbuffers
