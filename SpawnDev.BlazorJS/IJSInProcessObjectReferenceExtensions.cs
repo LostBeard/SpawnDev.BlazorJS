@@ -227,6 +227,10 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Call the target method
         /// </summary>
+        public static T Call<T>(this IJSInProcessObjectReference _ref, string key, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9, object? arg10) => _ref.CallApply<T>(key, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9,  arg10 });
+        /// <summary>
+        /// Call the target method
+        /// </summary>
         public static void CallVoid(this IJSInProcessObjectReference _ref, string key) => _ref.CallApplyVoid(key);
         /// <summary>
         /// Call the target method
@@ -268,6 +272,10 @@ namespace SpawnDev.BlazorJS
         /// Call the target method
         /// </summary>
         public static void CallVoid(this IJSInProcessObjectReference _ref, string key, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => _ref.CallApplyVoid(key, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        /// <summary>
+        /// Call the target method
+        /// </summary>
+        public static void CallVoid(this IJSInProcessObjectReference _ref, string key, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9, object? arg10) => _ref.CallApplyVoid(key, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
         /// <summary>
         /// Call the target method
         /// </summary>
@@ -315,6 +323,10 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Call the target method
         /// </summary>
+        public static Task<T> CallAsync<T>(this IJSInProcessObjectReference _ref, string key, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9, object? arg10) => _ref.CallApplyAsync<T>(key, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
+        /// <summary>
+        /// Call the target method
+        /// </summary>
         public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string key) => _ref.CallApplyVoidAsync(key);
         /// <summary>
         /// Call the target method
@@ -359,6 +371,10 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Call the target method
         /// </summary>
+        public static Task CallVoidAsync(this IJSInProcessObjectReference _ref, string key, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9, object? arg10) => _ref.CallApplyVoidAsync(key, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
+        /// <summary>
+        /// Call the target method
+        /// </summary>
         public static object? Call(this IJSInProcessObjectReference _ref, Type returnType, string key) => _ref.CallApply(returnType, key);
         /// <summary>
         /// Call the target method
@@ -400,5 +416,9 @@ namespace SpawnDev.BlazorJS
         /// Call the target method
         /// </summary>
         public static object? Call(this IJSInProcessObjectReference _ref, Type returnType, string key, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9) => _ref.CallApply(returnType, key, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
+        /// <summary>
+        /// Call the target method
+        /// </summary>
+        public static object? Call(this IJSInProcessObjectReference _ref, Type returnType, string key, object? arg0, object? arg1, object? arg2, object? arg3, object? arg4, object? arg5, object? arg6, object? arg7, object? arg8, object? arg9, object? arg10) => _ref.CallApply(returnType, key, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
     }
 }

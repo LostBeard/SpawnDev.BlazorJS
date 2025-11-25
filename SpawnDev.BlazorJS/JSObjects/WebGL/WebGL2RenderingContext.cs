@@ -1,5 +1,8 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -357,7 +360,315 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Textures - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#textures
+        /// <summary>
+        /// The texStorage2D() method of the WebGL2RenderingContext of the WebGL API specifies all levels of two-dimensional texture storage.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_2D: A two-dimensional texture.<br/>
+        /// gl.TEXTURE_CUBE_MAP: A cube-mapped texture.</param>
+        /// <param name="levels">A GLint specifying the number of texture levels.</param>
+        /// <param name="internalformat">A GLenum specifying the texture store format. Possible values:<br/>
+        /// gl.R8<br/>
+        /// gl.R8_SNORM<br/>
+        /// gl.R16F<br/>
+        /// gl.R32F<br/>
+        /// gl.R8UI<br/>
+        /// gl.R8I<br/>
+        /// gl.R16UI<br/>
+        /// gl.R16I<br/>
+        /// gl.R32UI<br/>
+        /// gl.R32I<br/>
+        /// gl.RG8<br/>
+        /// gl.RG8_SNORM<br/>
+        /// gl.RG16F<br/>
+        /// gl.RG32F<br/>
+        /// gl.RG8UI<br/>
+        /// gl.RG8I<br/>
+        /// gl.RG16UI<br/>
+        /// gl.RG16I<br/>
+        /// gl.RG32UI<br/>
+        /// gl.RG32I<br/>
+        /// gl.RGB8<br/>
+        /// gl.SRGB8<br/>
+        /// gl.RGB565<br/>
+        /// gl.RGB8_SNORM<br/>
+        /// gl.R11F_G11F_B10F<br/>
+        /// gl.RGB9_E5<br/>
+        /// gl.RGB16F<br/>
+        /// gl.RGB32F<br/>
+        /// gl.RGB8UI<br/>
+        /// gl.RGB8I<br/>
+        /// gl.RGB16UI<br/>
+        /// gl.RGB16I<br/>
+        /// gl.RGB32UI<br/>
+        /// gl.RGB32I<br/>
+        /// gl.RGBA8<br/>
+        /// gl.SRGB8_ALPHA8<br/>
+        /// gl.RGBA8_SNORM<br/>
+        /// gl.RGB5_A1<br/>
+        /// gl.RGBA4<br/>
+        /// gl.RGB10_A2<br/>
+        /// gl.RGBA16F<br/>
+        /// gl.RGBA32F<br/>
+        /// gl.RGBA8UI<br/>
+        /// gl.RGBA8I<br/>
+        /// gl.RGB10_A2UI<br/>
+        /// gl.RGBA16UI<br/>
+        /// gl.RGBA16I<br/>
+        /// gl.RGBA32UI<br/>
+        /// gl.RGBA32I<br/>
+        /// gl.DEPTH_COMPONENT16<br/>
+        /// gl.DEPTH_COMPONENT24<br/>
+        /// gl.DEPTH_COMPONENT32F<br/>
+        /// gl.DEPTH24_STENCIL8<br/>
+        /// gl.DEPTH32F_STENCIL8
+        /// </param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        public void TexStorage2D(GLenum target, GLint levels, GLenum internalformat, GLsizei width, GLsizei height) => JSRef!.CallVoid("texStorage2D", target, levels, internalformat, width, height);
+        /// <summary>
+        /// The texStorage3D() method of the WebGL2RenderingContext of the WebGL API specifies all levels of three-dimensional texture storage.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="levels">A GLint specifying the number of texture levels.</param>
+        /// <param name="internalformat">A GLenum specifying the texture store format. For a list of possible values, see WebGL2RenderingContext.texStorage2D().</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        public void TexStorage3D(GLenum target, GLint levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth) => JSRef!.CallVoid("texStorage3D", target, levels, internalformat, width, height, depth);
+        /// <summary>
+        /// The texImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional texture image.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="internalformat">A GLenum specifying how the texture should be stored after it's loaded.</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="border">A GLint specifying the width of the border. Must be 0.</param>
+        /// <param name="format">A GLenum specifying how each integer element in the raw texel data should be interpreted as color components.</param>
+        /// <param name="type">A GLenum specifying the size of each integer element in the raw texel data.</param>
+        /// <param name="srcData">A TypedArray or DataView containing the compressed texture data. Its type must match the type parameter; see WebGLRenderingContext.texImage2D(). When type is FLOAT_32_UNSIGNED_INT_24_8_REV, srcData must be null.</param>
+        /// <param name="srcOffset">An integer specifying the index of srcData to start reading from. Defaults to 0.</param>
+        public void TexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, Union<TypedArray, DataView> srcData, GLint srcOffset = 0)
+            => JSRef!.CallVoid("texImage3D", target, level, internalformat, width, height, depth, border, format, type, srcData, srcOffset);
+        /// <summary>
+        /// The texImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional texture image.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="internalformat">A GLenum specifying how the texture should be stored after it's loaded.</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="border">A GLint specifying the width of the border. Must be 0.</param>
+        /// <param name="format">A GLenum specifying how each integer element in the raw texel data should be interpreted as color components.</param>
+        /// <param name="type">A GLenum specifying the size of each integer element in the raw texel data.</param>
+        /// <param name="source">Read from a DOM pixel source</param>
+        public void TexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, Union<ImageBitmap, ImageData, HTMLImageElement, HTMLCanvasElement, HTMLVideoElement, OffscreenCanvas, VideoFrame> source)
+            => JSRef!.CallVoid("texImage3D", target, level, internalformat, width, height, depth, border, format, type, source);
+        /// <summary>
+        /// The texImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional texture image.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="internalformat">A GLenum specifying how the texture should be stored after it's loaded.</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="border">A GLint specifying the width of the border. Must be 0.</param>
+        /// <param name="format">A GLenum specifying how each integer element in the raw texel data should be interpreted as color components.</param>
+        /// <param name="type">A GLenum specifying the size of each integer element in the raw texel data.</param>
+        /// <param name="offset">A GLintptr specifying the starting address in the buffer bound to gl.PIXEL_UNPACK_BUFFER.</param>
+        public void TexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, GLintptr offset)
+            => JSRef!.CallVoid("texImage3D", target, level, internalformat, width, height, depth, border, format, type, offset);
 
+        /// <summary>
+        /// The texSubImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional sub-rectangle for a texture image.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="xoffset">A GLint specifying the x offset within the texture image.</param>
+        /// <param name="yoffset">A GLint specifying the y offset within the texture image.</param>
+        /// <param name="zoffset">A GLint specifying the z offset within the texture image.</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="format">A GLenum specifying how each integer element in the raw texel data should be interpreted as color components.</param>
+        /// <param name="type">A GLenum specifying the size of each integer element in the raw texel data. For the combinations of format and type available, see WebGLRenderingContext.texSubImage2D().</param>
+        /// <param name="srcData">A TypedArray or DataView containing the compressed texture data. Its type must match the type parameter; see WebGLRenderingContext.texImage2D().</param>
+        /// <param name="srcOffset">An integer specifying the index of srcData to start reading from. Defaults to 0.</param>
+        public void TexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, Union<TypedArray, DataView> srcData, GLint srcOffset = 0)
+            => JSRef!.CallApplyVoid("texSubImage3D", new object[] { target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, srcData, srcOffset });
+        /// <summary>
+        /// The texSubImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional sub-rectangle for a texture image.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="xoffset">A GLint specifying the x offset within the texture image.</param>
+        /// <param name="yoffset">A GLint specifying the y offset within the texture image.</param>
+        /// <param name="zoffset">A GLint specifying the z offset within the texture image.</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="format">A GLenum specifying how each integer element in the raw texel data should be interpreted as color components.</param>
+        /// <param name="type">A GLenum specifying the size of each integer element in the raw texel data. For the combinations of format and type available, see WebGLRenderingContext.texSubImage2D().</param>
+        /// <param name="source">Read from a DOM pixel source</param>
+        public void TexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, Union<ImageBitmap, ImageData, HTMLImageElement, HTMLCanvasElement, HTMLVideoElement, OffscreenCanvas, VideoFrame> source)
+            => JSRef!.CallVoid("texSubImage3D", target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, source);
+        /// <summary>
+        /// The texSubImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional sub-rectangle for a texture image.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="xoffset">A GLint specifying the x offset within the texture image.</param>
+        /// <param name="yoffset">A GLint specifying the y offset within the texture image.</param>
+        /// <param name="zoffset">A GLint specifying the z offset within the texture image.</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="format">A GLenum specifying how each integer element in the raw texel data should be interpreted as color components.</param>
+        /// <param name="type">A GLenum specifying the size of each integer element in the raw texel data. For the combinations of format and type available, see WebGLRenderingContext.texSubImage2D().</param>
+        /// <param name="offset">A GLintptr specifying the starting address in the buffer bound to gl.PIXEL_UNPACK_BUFFER.</param>
+        public void TexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, GLint offset)
+            => JSRef!.CallVoid("texSubImage3D", target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, offset);
+        /// <summary>
+        /// The copyTexSubImage3D() method of the WebGL2RenderingContext interface of the WebGL API copies pixels from the current WebGLFramebuffer into a 3D texture sub-image.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="xoffset">A GLint specifying the x offset within the texture image.</param>
+        /// <param name="yoffset">A GLint specifying the y offset within the texture image.</param>
+        /// <param name="zoffset">A GLint specifying the z offset within the texture image.</param>
+        /// <param name="x">A GLint specifying the x coordinate of the lower left corner where to start copying.</param>
+        /// <param name="y">A GLint specifying the y coordinate of the lower left corner where to start copying.</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        public void CopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height)
+            => JSRef!.CallVoid("copyTexSubImage3D", target, level, xoffset, yoffset, zoffset, x, y, width, height);
+        /// <summary>
+        /// The compressedTexImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="internalformat">A GLenum specifying the compressed image format. For a list of possible values, see WebGLRenderingContext.compressedTexImage2D().</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="border">A GLint specifying the width of the border. Must be 0.</param>
+        /// <param name="imageSize">A GLsizei specifying the size of the image data in bytes.</param>
+        /// <param name="offset">A GLintptr specifying the starting address in the buffer bound to gl.PIXEL_UNPACK_BUFFER.</param>
+        public void CompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, GLintptr offset)
+            => JSRef!.CallVoid("compressedTexImage3D", target, level, internalformat, width, height, depth, border, imageSize, offset);
+        /// <summary>
+        /// The compressedTexImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="internalformat">A GLenum specifying the compressed image format. For a list of possible values, see WebGLRenderingContext.compressedTexImage2D().</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="border">A GLint specifying the width of the border. Must be 0.</param>
+        /// <param name="srcData">A TypedArray or DataView containing the compressed texture data.</param>
+        /// <param name="srcOffset">An integer specifying the index of srcData to start reading from. Defaults to 0.</param>
+        public void CompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, Union<TypedArray, DataView> srcData, GLint srcOffset = 0)
+            => JSRef!.CallVoid("compressedTexImage3D", target, level, internalformat, width, height, depth, border, srcData, srcOffset);
+        /// <summary>
+        /// The compressedTexImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="internalformat">A GLenum specifying the compressed image format. For a list of possible values, see WebGLRenderingContext.compressedTexImage2D().</param>
+        /// <param name="width">A GLsizei specifying the width of the texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="border">A GLint specifying the width of the border. Must be 0.</param>
+        /// <param name="srcData">A TypedArray or DataView containing the compressed texture data.</param>
+        /// <param name="srcOffset">An integer specifying the index of srcData to start reading from. Defaults to 0.</param>
+        /// <param name="srcLengthOverride">An integer specifying the number of elements in srcData to read. Defaults to srcData.length - srcOffset.</param>
+        public void CompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, Union<TypedArray, DataView> srcData, GLint srcOffset, GLintptr srcLengthOverride)
+            => JSRef!.CallVoid("compressedTexImage3D", target, level, internalformat, width, height, depth, border, srcData, srcOffset, srcLengthOverride);
+        /// <summary>
+        /// The compressedTexSubImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional sub-rectangle for a texture image in a compressed format.<br/>
+        /// Compressed image formats are only available via some WebGL extension.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="xoffset">A GLint specifying the x offset within the compressed texture image.</param>
+        /// <param name="yoffset">A GLint specifying the y offset within the compressed texture image.</param>
+        /// <param name="zoffset">A GLint specifying the z offset within the compressed texture image.</param>
+        /// <param name="width">A GLsizei specifying the width of the compressed texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the compressed texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="format">A GLenum specifying the compressed image format. For a list of possible values, see WebGLRenderingContext.compressedTexImage2D().</param>
+        /// <param name="imageSize">A GLsizei specifying the size of the image data in bytes.</param>
+        /// <param name="offset">A GLintptr specifying the starting address in the buffer bound to gl.PIXEL_UNPACK_BUFFER.</param>
+        public void CompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, GLintptr offset)
+            => JSRef!.CallVoid("compressedTexSubImage3D", target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, offset);
+        /// <summary>
+        /// The compressedTexSubImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional sub-rectangle for a texture image in a compressed format.<br/>
+        /// Compressed image formats are only available via some WebGL extension.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="xoffset">A GLint specifying the x offset within the compressed texture image.</param>
+        /// <param name="yoffset">A GLint specifying the y offset within the compressed texture image.</param>
+        /// <param name="zoffset">A GLint specifying the z offset within the compressed texture image.</param>
+        /// <param name="width">A GLsizei specifying the width of the compressed texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the compressed texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="format">A GLenum specifying the compressed image format. For a list of possible values, see WebGLRenderingContext.compressedTexImage2D().</param>
+        /// <param name="srcData">A TypedArray or DataView containing the compressed texture data.</param>
+        /// <param name="srcOffset">An integer specifying the index of srcData to start reading from. Defaults to 0.</param>
+        public void CompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, Union<TypedArray, DataView> srcData, GLint srcOffset = 0)
+            => JSRef!.CallVoid("compressedTexSubImage3D", target, level, xoffset, yoffset, zoffset, width, height, depth, format, srcData, srcOffset);
+        /// <summary>
+        /// The compressedTexSubImage3D() method of the WebGL2RenderingContext interface of the WebGL API specifies a three-dimensional sub-rectangle for a texture image in a compressed format.<br/>
+        /// Compressed image formats are only available via some WebGL extension.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the binding point (target) of the active texture. Possible values:<br/>
+        /// gl.TEXTURE_3D: A three-dimensional texture.
+        /// gl.TEXTURE_2D_ARRAY: A two-dimensional array texture.</param>
+        /// <param name="level">A GLint specifying the level of detail. Level 0 is the base image level and level n is the n-th mipmap reduction level.</param>
+        /// <param name="xoffset">A GLint specifying the x offset within the compressed texture image.</param>
+        /// <param name="yoffset">A GLint specifying the y offset within the compressed texture image.</param>
+        /// <param name="zoffset">A GLint specifying the z offset within the compressed texture image.</param>
+        /// <param name="width">A GLsizei specifying the width of the compressed texture in texels.</param>
+        /// <param name="height">A GLsizei specifying the height of the compressed texture in texels.</param>
+        /// <param name="depth">A GLsizei specifying the depth of the texture/the number of textures in a TEXTURE_2D_ARRAY.</param>
+        /// <param name="format">A GLenum specifying the compressed image format. For a list of possible values, see WebGLRenderingContext.compressedTexImage2D().</param>
+        /// <param name="srcData">A TypedArray or DataView containing the compressed texture data.</param>
+        /// <param name="srcOffset">An integer specifying the index of srcData to start reading from. Defaults to 0.</param>
+        /// <param name="srcLengthOverride">An integer specifying the number of elements in srcData to read. Defaults to srcData.length - srcOffset.</param>
+        public void CompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, Union<TypedArray, DataView> srcData, GLint srcOffset, GLint srcLengthOverride)
+            => JSRef!.CallApplyVoid("compressedTexSubImage3D", new object?[] { target, level, xoffset, yoffset, zoffset, width, height, depth, format, srcData, srcOffset, srcLengthOverride });
         #endregion
 
         #region Programs and shaders - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#programs_and_shaders
