@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
+using System.Reflection.Emit;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace SpawnDev.BlazorJS.JSObjects
@@ -1315,7 +1316,76 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Sampler objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#sampler_objects
-
+        /// <summary>
+        /// The WebGL2RenderingContext.createSampler() method of the WebGL 2 API creates and initializes WebGLSampler objects.
+        /// </summary>
+        /// <returns></returns>
+        public WebGLSampler CreateSampler() => JSRef!.Call<WebGLSampler>("createSampler");
+        /// <summary>
+        /// The WebGL2RenderingContext.deleteSampler() method of the WebGL 2 API deletes a given WebGLSampler object.
+        /// </summary>
+        /// <param name="sampler">A WebGLSampler object to delete.</param>
+        public void DeleteSampler(WebGLSampler sampler) => JSRef!.CallVoid("deleteSampler", sampler);
+        /// <summary>
+        /// The WebGL2RenderingContext.bindSampler() method of the WebGL 2 API binds a passed WebGLSampler object to the texture unit at the passed index.
+        /// </summary>
+        /// <param name="unit">A GLuint specifying the index of the texture unit to which to bind the sampler to.</param>
+        /// <param name="sampler">A WebGLSampler object to bind.</param>
+        public void BindSampler(GLuint unit, WebGLSampler sampler) => JSRef!.CallVoid("bindSampler", unit, sampler);
+        /// <summary>
+        /// The WebGL2RenderingContext.isSampler() method of the WebGL 2 API returns true if the passed object is a valid WebGLSampler object.
+        /// </summary>
+        /// <param name="sampler"></param>
+        /// <returns></returns>
+        public GLboolean IsSampler(WebGLSampler sampler) => JSRef!.Call<GLboolean>("isSampler", sampler);
+        /// <summary>
+        /// The WebGL2RenderingContext.samplerParameter[if]() methods of the WebGL 2 API set WebGLSampler parameters.
+        /// </summary>
+        /// <param name="sampler">A WebGLSampler object.</param>
+        /// <param name="pname">A GLenum specifying which parameter to set. Possible values:<br/>
+        /// gl.TEXTURE_COMPARE_FUNC - A GLenum specifying the texture comparison function.<br/>
+        /// gl.TEXTURE_COMPARE_MODE - A GLenum specifying the texture comparison mode.<br/>
+        /// gl.TEXTURE_MAG_FILTER - A GLenum specifying the texture magnification filter.<br/>
+        /// gl.TEXTURE_MAX_LOD - A GLfloat specifying the maximum level-of-detail value.<br/>
+        /// gl.TEXTURE_MIN_FILTER - A GLenum specifying the texture minification filter.<br/>
+        /// gl.TEXTURE_MIN_LOD - A GLfloat specifying the minimum level-of-detail value.<br/>
+        /// gl.TEXTURE_WRAP_R - A GLenum specifying the texture wrapping function for the texture coordinate r.<br/>
+        /// gl.TEXTURE_WRAP_S - A GLenum specifying the texture wrapping function for the texture coordinate s.<br/>
+        /// gl.TEXTURE_WRAP_T - A GLenum specifying the texture wrapping function for the texture coordinate t.</param>
+        /// <param name="param">A GLint (samplerParameteri) or a GLfloat (samplerParameterf) specifying a value for pname.</param>
+        public void SamplerParameteri(WebGLSampler sampler, GLenum pname, GLint param) => JSRef!.CallVoid("samplerParameteri", sampler, pname, param);
+        /// <summary>
+        /// The WebGL2RenderingContext.samplerParameter[if]() methods of the WebGL 2 API set WebGLSampler parameters.
+        /// </summary>
+        /// <param name="sampler">A WebGLSampler object.</param>
+        /// <param name="pname">A GLenum specifying which parameter to set. Possible values:<br/>
+        /// gl.TEXTURE_COMPARE_FUNC - A GLenum specifying the texture comparison function.<br/>
+        /// gl.TEXTURE_COMPARE_MODE - A GLenum specifying the texture comparison mode.<br/>
+        /// gl.TEXTURE_MAG_FILTER - A GLenum specifying the texture magnification filter.<br/>
+        /// gl.TEXTURE_MAX_LOD - A GLfloat specifying the maximum level-of-detail value.<br/>
+        /// gl.TEXTURE_MIN_FILTER - A GLenum specifying the texture minification filter.<br/>
+        /// gl.TEXTURE_MIN_LOD - A GLfloat specifying the minimum level-of-detail value.<br/>
+        /// gl.TEXTURE_WRAP_R - A GLenum specifying the texture wrapping function for the texture coordinate r.<br/>
+        /// gl.TEXTURE_WRAP_S - A GLenum specifying the texture wrapping function for the texture coordinate s.<br/>
+        /// gl.TEXTURE_WRAP_T - A GLenum specifying the texture wrapping function for the texture coordinate t.</param>
+        /// <param name="param">A GLint (samplerParameteri) or a GLfloat (samplerParameterf) specifying a value for pname.</param>
+        public void SamplerParameterf(WebGLSampler sampler, GLenum pname, GLfloat param) => JSRef!.CallVoid("samplerParameteri", sampler, pname, param);
+        /// <summary>
+        /// The WebGL2RenderingContext.getSamplerParameter() method of the WebGL 2 API returns parameter information of a WebGLSampler object.
+        /// </summary>
+        /// <param name="sampler"></param>
+        /// <param name="pname">A GLenum specifying which parameter to set. Possible values:<br/>
+        /// gl.TEXTURE_COMPARE_FUNC - A GLenum specifying the texture comparison function.<br/>
+        /// gl.TEXTURE_COMPARE_MODE - A GLenum specifying the texture comparison mode.<br/>
+        /// gl.TEXTURE_MAG_FILTER - A GLenum specifying the texture magnification filter.<br/>
+        /// gl.TEXTURE_MAX_LOD - A GLfloat specifying the maximum level-of-detail value.<br/>
+        /// gl.TEXTURE_MIN_FILTER - A GLenum specifying the texture minification filter.<br/>
+        /// gl.TEXTURE_MIN_LOD - A GLfloat specifying the minimum level-of-detail value.<br/>
+        /// gl.TEXTURE_WRAP_R - A GLenum specifying the texture wrapping function for the texture coordinate r.<br/>
+        /// gl.TEXTURE_WRAP_S - A GLenum specifying the texture wrapping function for the texture coordinate s.<br/>
+        /// gl.TEXTURE_WRAP_T - A GLenum specifying the texture wrapping function for the texture coordinate t.</param>
+        /// <returns>Depends on the pname parameter, either a GLenum or a GLfloat.</returns>
+        public float GetSamplerParameter(WebGLSampler sampler, GLenum pname) => JSRef!.Call<float>("getSamplerParameter", sampler, pname);
         #endregion
 
         #region Sync objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#sync_objects
