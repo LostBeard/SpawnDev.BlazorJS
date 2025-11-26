@@ -1,5 +1,11 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -1130,7 +1136,102 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Drawing buffers - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#drawing_buffers
-
+        /// <summary>
+        /// The WebGL2RenderingContext.vertexAttribDivisor() method of the WebGL 2 API modifies the rate at which generic vertex attributes advance when rendering multiple instances of primitives with gl.drawArraysInstanced() and gl.drawElementsInstanced().
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the generic vertex attributes.</param>
+        /// <param name="divisor">A GLuint specifying the number of instances that will pass between updates of the generic attribute.</param>
+        public void VertexAttribDivisor(GLuint index, GLuint divisor) => JSRef!.CallVoid("vertexAttribDivisor", index, divisor);
+        /// <summary>
+        /// The WebGL2RenderingContext.drawArraysInstanced() method of the WebGL 2 API renders primitives from array data like the gl.drawArrays() method. In addition, it can execute multiple instances of the range of elements.
+        /// </summary>
+        /// <param name="mode">A GLenum specifying the type primitive to render. Possible values are:<br/>
+        /// gl.POINTS: Draws a single dot.<br/>
+        /// gl.LINE_STRIP: Draws a straight line to the next vertex.<br/>
+        /// gl.LINE_LOOP: Draws a straight line to the next vertex, and connects the last vertex back to the first.<br/>
+        /// gl.LINES: Draws a line between a pair of vertices.<br/>
+        /// gl.TRIANGLE_STRIP<br/>
+        /// gl.TRIANGLE_FAN<br/>
+        /// gl.TRIANGLES: Draws a triangle for a group of three vertices.</param>
+        /// <param name="first">A GLint specifying the starting index in the array of vector points.</param>
+        /// <param name="count">A GLsizei specifying the number of indices to be rendered.</param>
+        /// <param name="instanceCount">A GLsizei specifying the number of instances of the range of elements to execute.</param>
+        public void DrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instanceCount) => JSRef!.CallVoid("drawArraysInstanced", mode, first, count, instanceCount);
+        /// <summary>
+        /// The WebGL2RenderingContext.drawElementsInstanced() method of the WebGL 2 API renders primitives from array data like the gl.drawElements() method. In addition, it can execute multiple instances of a set of elements.
+        /// </summary>
+        /// <param name="mode">A GLenum specifying the type primitive to render. Possible values are:<br/>
+        /// gl.POINTS: Draws a single dot.<br/>
+        /// gl.LINE_STRIP: Draws a straight line to the next vertex.<br/>
+        /// gl.LINE_LOOP: Draws a straight line to the next vertex, and connects the last vertex back to the first.<br/>
+        /// gl.LINES: Draws a line between a pair of vertices.<br/>
+        /// gl.TRIANGLE_STRIP<br/>
+        /// gl.TRIANGLE_FAN<br/>
+        /// gl.TRIANGLES: Draws a triangle for a group of three vertices.</param>
+        /// <param name="count">A GLsizei specifying the number of elements to be rendered.</param>
+        /// <param name="type">A GLenum specifying the type of the values in the element array buffer. Possible values are:<br/>
+        ///gl.UNSIGNED_BYTE<br/>
+        ///gl.UNSIGNED_SHORT<br/>
+        ///gl.UNSIGNED_INT When using the OES_element_index_uint extension.</param>
+        /// <param name="offset">A GLintptr specifying an offset in the element array buffer. Must be a valid multiple of the size of the given type.</param>
+        /// <param name="instanceCount">A GLsizei specifying the number of instances of the set of elements to execute.</param>
+        public void DrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, GLintptr offset, GLsizei instanceCount) => JSRef!.CallVoid("drawElementsInstanced", mode, count, type, offset, instanceCount);
+        /// <summary>
+        /// The WebGL2RenderingContext.drawRangeElements() method of the WebGL API renders primitives from array data in a given range.
+        /// </summary>
+        /// <param name="mode">A GLenum specifying the type primitive to render. Possible values are:<br/>
+        /// gl.POINTS: Draws a single dot.<br/>
+        /// gl.LINE_STRIP: Draws a straight line to the next vertex.<br/>
+        /// gl.LINE_LOOP: Draws a straight line to the next vertex, and connects the last vertex back to the first.<br/>
+        /// gl.LINES: Draws a line between a pair of vertices.<br/>
+        /// gl.TRIANGLE_STRIP<br/>
+        /// gl.TRIANGLE_FAN<br/>
+        /// gl.TRIANGLES: Draws a triangle for a group of three vertices.</param>
+        /// <param name="start">A GLuint specifying the minimum array index contained in offset.</param>
+        /// <param name="end">A GLuint specifying the maximum array index contained in offset.</param>
+        /// <param name="count">A GLsizei specifying the number of elements to be rendered.</param>
+        /// <param name="type">A GLenum specifying the type of the values in the element array buffer. Possible values are:<br/>
+        /// gl.UNSIGNED_BYTE<br/>
+        /// gl.UNSIGNED_SHORT<br/>
+        /// gl.UNSIGNED_INT</param>
+        /// <param name="offset">A GLintptr specifying an offset in the element array buffer. Must be a valid multiple of the size of the given type.</param>
+        public void DrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, GLintptr offset) => JSRef!.CallVoid("drawRangeElements", mode, start, end, count, type, offset);
+        /// <summary>
+        /// The WebGL2RenderingContext.drawBuffers() method of the WebGL 2 API defines draw buffers to which fragment colors are written into. The draw buffer settings are part of the state of the currently bound framebuffer or the drawing buffer if no framebuffer is bound.
+        /// </summary>
+        /// <param name="buffers">An Array of GLenum specifying the buffers into which fragment colors will be written. Possible values are:<br/>
+        /// gl.NONE - Fragment shader output is not written into any color buffer.<br/>
+        /// gl.BACK - Fragment shader output is written into the back color buffer.<br/>
+        /// gl.COLOR_ATTACHMENT{0 - 15} - Fragment shader output is written in the nth color attachment of the current framebuffer.</param>
+        public void DrawBuffers(GLenum[] buffers) => JSRef!.CallVoid("drawBuffers", buffers);
+        /// <summary>
+        /// The WebGL2RenderingContext.clearBuffer[fiuv]() methods of the WebGL 2 API clear buffers from the currently bound framebuffer.
+        /// </summary>
+        public void ClearBufferfv(GLenum buffer, GLint drawbuffer, float[] values, int srcOffset = 0) => JSRef!.CallVoid("clearBufferfv", buffer, drawbuffer, values, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.clearBuffer[fiuv]() methods of the WebGL 2 API clear buffers from the currently bound framebuffer.
+        /// </summary>
+        public void ClearBufferuiv(GLenum buffer, GLint drawbuffer, uint[] values, int srcOffset = 0) => JSRef!.CallVoid("clearBufferuiv", buffer, drawbuffer, values, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.clearBuffer[fiuv]() methods of the WebGL 2 API clear buffers from the currently bound framebuffer.
+        /// </summary>
+        public void ClearBufferiv(GLenum buffer, GLint drawbuffer, int[] values, int srcOffset = 0) => JSRef!.CallVoid("clearBufferiv", buffer, drawbuffer, values, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.clearBuffer[fiuv]() methods of the WebGL 2 API clear buffers from the currently bound framebuffer.
+        /// </summary>
+        public void ClearBufferfv(GLenum buffer, GLint drawbuffer, Float32Array values, int srcOffset = 0) => JSRef!.CallVoid("clearBufferfv", buffer, drawbuffer, values, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.clearBuffer[fiuv]() methods of the WebGL 2 API clear buffers from the currently bound framebuffer.
+        /// </summary>
+        public void ClearBufferuiv(GLenum buffer, GLint drawbuffer, Uint32Array values, int srcOffset = 0) => JSRef!.CallVoid("clearBufferuiv", buffer, drawbuffer, values, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.clearBuffer[fiuv]() methods of the WebGL 2 API clear buffers from the currently bound framebuffer.
+        /// </summary>
+        public void ClearBufferiv(GLenum buffer, GLint drawbuffer, Int32Array values, int srcOffset = 0) => JSRef!.CallVoid("clearBufferiv", buffer, drawbuffer, values, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.clearBuffer[fiuv]() methods of the WebGL 2 API clear buffers from the currently bound framebuffer.
+        /// </summary>
+        public void ClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil) => JSRef!.CallVoid("clearBufferiv", buffer, drawbuffer, depth, stencil);
         #endregion
 
         #region Query objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#query_objects
