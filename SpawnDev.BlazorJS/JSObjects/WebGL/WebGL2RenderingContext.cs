@@ -1114,11 +1114,24 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="type">A GLenum specifying the data type of each component in the array. Must be one of: gl.BYTE, gl.UNSIGNED_BYTE, gl.SHORT, gl.UNSIGNED_SHORT, gl.INT, or gl.UNSIGNED_INT.</param>
         /// <param name="stride">A GLsizei specifying the offset in bytes between the beginning of consecutive vertex attributes.</param>
         /// <param name="offset">A GLintptr specifying an offset in bytes of the first component in the vertex attribute array. Must be a multiple of type.</param>
-        public void  VertexAttribIPointer(GLuint index,GLint size,GLenum type,GLsizei stride,GLintptr offset) => JSRef!.CallVoid("vertexAttribIPointer", index, size, type, stride, offset);
+        public void VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, GLintptr offset) => JSRef!.CallVoid("vertexAttribIPointer", index, size, type, stride, offset);
         #endregion
 
         #region Color spaces - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#color_spaces
-
+        /// <summary>
+        /// The WebGL2RenderingContext.drawingBufferColorSpace property specifies the color space of the WebGL drawing buffer. Along with the default (srgb), the display-p3 color space can be used.<br/>
+        /// This property can have the following values:<br/>
+        /// "srgb" selects the sRGB color space. This is the default value.<br/>
+        /// "display-p3" selects the display-p3 color space.
+        /// </summary>
+        public string DrawingBufferColorSpace { get => JSRef!.Get<string>("drawingBufferColorSpace"); set => JSRef!.Set("drawingBufferColorSpace", value); }
+        /// <summary>
+        /// The WebGL2RenderingContext.unpackColorSpace property specifies the color space to convert to when importing textures. Along with the default (srgb), the display-p3 color space can be used.<br/>
+        /// This property can have the following values:<br/>
+        /// "srgb" selects the sRGB color space. This is the default value.<br/>
+        /// "display-p3" selects the display-p3 color space.
+        /// </summary>
+        public string UnpackColorSpace { get => JSRef!.Get<string>("unpackColorSpace"); set => JSRef!.Set("unpackColorSpace", value); }
         #endregion
 
         #region Drawing buffers - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#drawing_buffers
