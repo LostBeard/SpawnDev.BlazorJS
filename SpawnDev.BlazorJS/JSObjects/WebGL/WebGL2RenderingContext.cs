@@ -1,10 +1,5 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
-using System;
-using System.Drawing;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
