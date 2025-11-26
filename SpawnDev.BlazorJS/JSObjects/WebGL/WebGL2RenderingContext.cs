@@ -1,12 +1,9 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Reflection;
-using System.Reflection.Emit;
-using static System.Net.Mime.MediaTypeNames;
+using System.Net.NetworkInformation;
+using System.Threading;
+using System.Timers;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -1389,7 +1386,55 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Sync objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#sync_objects
-
+        /// <summary>
+        /// The WebGL2RenderingContext.fenceSync() method of the WebGL 2 API creates a new WebGLSync object and inserts it into the GL command stream.
+        /// </summary>
+        /// <param name="condition">A GLenum specifying the condition that must be met to set the sync object's state to signaled. Must be gl.SYNC_GPU_COMMANDS_COMPLETE.</param>
+        /// <param name="flags">A GLbitfield specifying a bitwise combination of flags controlling the behavior of the sync object. Must be 0 (exists for extensions only).</param>
+        /// <returns>A WebGLSync object.</returns>
+        public WebGLSync FenceSync(GLenum condition, GLbitfield flags) => JSRef!.Call<WebGLSync>("fenceSync", condition, flags);
+        /// <summary>
+        /// The WebGL2RenderingContext.isSync() method of the WebGL 2 API returns true if the passed object is a valid WebGLSync object.
+        /// </summary>
+        /// <param name="sync"></param>
+        /// <returns></returns>
+        public GLboolean IsSync(WebGLSync sync) => JSRef!.Call<GLboolean>("isSync", sync);
+        /// <summary>
+        /// The WebGL2RenderingContext.deleteSync() method of the WebGL 2 API deletes a given WebGLSync object.
+        /// </summary>
+        /// <param name="sync"></param>
+        public void DeleteSync(WebGLSync sync) => JSRef!.CallVoid("deleteSync", sync);
+        /// <summary>
+        /// The WebGL2RenderingContext.clientWaitSync() method of the WebGL 2 API blocks and waits for a WebGLSync object to become signaled or a given timeout to be passed.
+        /// </summary>
+        /// <param name="sync">A WebGLSync object on which to wait on.</param>
+        /// <param name="flags">A GLbitfield specifying a bitwise combination of flags controlling the flushing behavior. May be gl.SYNC_FLUSH_COMMANDS_BIT.</param>
+        /// <param name="timeout">A GLint64 specifying a timeout (in nanoseconds) for which to wait for the sync object to become signaled. Must not be larger than gl.MAX_CLIENT_WAIT_TIMEOUT_WEBGL.</param>
+        /// <returns>A GLenum indicating the sync object's status.<br/>
+        /// gl.ALREADY_SIGNALED: Indicates that the sync object was signaled when this method was called.<br/>
+        /// gl.TIMEOUT_EXPIRED: Indicates that the timeout time passed and that the sync object did not become signaled.<br/>
+        /// gl.CONDITION_SATISFIED: Indicates that the sync object was signaled before the timeout expired.<br/>
+        /// gl.WAIT_FAILED: Indicates that an error occurred during the execution.</returns>
+        public GLenum clientWaitSync(WebGLSync sync, GLbitfield flags, GLint64 timeout) => JSRef!.Call<GLenum>("clientWaitSync", sync, flags, timeout);
+        /// <summary>
+        /// The WebGL2RenderingContext.waitSync() method of the WebGL 2 API returns immediately, but waits on the GL server until the given WebGLSync object is signaled.<br/>
+        /// The method is a no-op in the absence of the possibility of synchronizing between multiple GL contexts.
+        /// </summary>
+        /// <param name="sync">A WebGLSync object on which to wait on.</param>
+        /// <param name="flags">A GLbitfield specifying a bitwise combination of flags controlling the flushing behavior. Must be 0 (exists for extensions only).</param>
+        /// <param name="timeout">A GLint64 specifying a timeout the server should wait before continuing. Must be gl.TIMEOUT_IGNORED.</param>
+        public void WaitSync(WebGLSync sync, GLbitfield flags, GLint64 timeout) => JSRef!.CallVoid("waitSync", sync, flags, timeout);
+        /// <summary>
+        /// The WebGL2RenderingContext.getSyncParameter() method of the WebGL 2 API returns parameter information of a WebGLSync object.
+        /// </summary>
+        /// <param name="sync">A WebGLSync object.</param>
+        /// <param name="pname">A GLenum specifying which information to return. Possible values:<br/>
+        ///  gl.OBJECT_TYPE -  Returns a GLenum indicating the type of the sync object (always gl.SYNC_FENCE).<br/>
+        ///  gl.SYNC_STATUS - Returns a GLenum indicating the status of the sync object (gl.SIGNALED or gl.UNSIGNALED).<br/>
+        ///  gl.SYNC_CONDITION - Returns a GLenum indicating the sync objects' condition (always gl.SYNC_GPU_COMMANDS_COMPLETE).<br/>
+        ///  gl.SYNC_FLAGS - Returns a GLenum indicating the flags with which the sync object was created(always 0 as no flags are supported).</param>
+        /// <returns>Depends on the pname parameter, either a GLenum or a GLbitfield.</returns>
+        public uint GetSyncParameter(WebGLSync sync, GLenum pname) => JSRef!.Call<uint>("getSyncParameter", sync, pname);
         #endregion
 
         #region Transform feedback - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#transform_feedback
