@@ -1,5 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
+using System;
+using System.Drawing;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Xml.Linq;
@@ -682,7 +684,437 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Uniforms and attributes - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#uniforms_and_attributes
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1ui(WebGLUniformLocation location, uint v0) => JSRef!.CallVoid("uniform1ui", location, v0);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2ui(WebGLUniformLocation location, uint v0, uint v1) => JSRef!.CallVoid("uniform2ui", location, v0, v1);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3ui(WebGLUniformLocation location, uint v0, uint v1, uint v2) => JSRef!.CallVoid("uniform3ui", location, v0, v1, v2);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4ui(WebGLUniformLocation location, uint v0, uint v1, uint v2, uint v3) => JSRef!.CallVoid("uniform4ui", location, v0, v1, v2, v3);
 
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1fv(WebGLUniformLocation location, float[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform1fv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1fv(WebGLUniformLocation location, float[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform1fv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2fv(WebGLUniformLocation location, float[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform2fv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2fv(WebGLUniformLocation location, float[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform2fv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3fv(WebGLUniformLocation location, float[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform3fv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3fv(WebGLUniformLocation location, float[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform3fv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4fv(WebGLUniformLocation location, float[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform4fv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4fv(WebGLUniformLocation location, float[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform4fv", location, data, srcOffset, srcLength);
+
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1fv(WebGLUniformLocation location, Float32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform1fv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1fv(WebGLUniformLocation location, Float32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform1fv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2fv(WebGLUniformLocation location, Float32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform2fv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2fv(WebGLUniformLocation location, Float32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform2fv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3fv(WebGLUniformLocation location, Float32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform3fv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3fv(WebGLUniformLocation location, Float32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform3fv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4fv(WebGLUniformLocation location, Float32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform4fv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4fv(WebGLUniformLocation location, Float32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform4fv", location, data, srcOffset, srcLength);
+
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1iv(WebGLUniformLocation location, int[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform1iv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1iv(WebGLUniformLocation location, int[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform1iv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2iv(WebGLUniformLocation location, int[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform2iv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2iv(WebGLUniformLocation location, int[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform2iv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3iv(WebGLUniformLocation location, int[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform3iv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3iv(WebGLUniformLocation location, int[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform3iv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4iv(WebGLUniformLocation location, int[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform4iv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4iv(WebGLUniformLocation location, int[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform4iv", location, data, srcOffset, srcLength);
+
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1iv(WebGLUniformLocation location, Int32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform1iv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1iv(WebGLUniformLocation location, Int32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform1iv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2iv(WebGLUniformLocation location, Int32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform2iv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2iv(WebGLUniformLocation location, Int32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform2iv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3iv(WebGLUniformLocation location, Int32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform3iv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3iv(WebGLUniformLocation location, Int32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform3iv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4iv(WebGLUniformLocation location, Int32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform4iv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4iv(WebGLUniformLocation location, Int32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform4iv", location, data, srcOffset, srcLength);
+
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1uiv(WebGLUniformLocation location, uint[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform1uiv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1uiv(WebGLUniformLocation location, uint[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform1uiv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2uiv(WebGLUniformLocation location, uint[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform2uiv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2uiv(WebGLUniformLocation location, uint[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform2uiv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3uiv(WebGLUniformLocation location, uint[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform3uiv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3uiv(WebGLUniformLocation location, uint[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform3uiv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4uiv(WebGLUniformLocation location, uint[] data, int srcOffset = 0) => JSRef!.CallVoid("uniform4uiv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4uiv(WebGLUniformLocation location, uint[] data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform4uiv", location, data, srcOffset, srcLength);
+
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1uiv(WebGLUniformLocation location, Uint32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform1uiv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform1uiv(WebGLUniformLocation location, Uint32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform1uiv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2uiv(WebGLUniformLocation location, Uint32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform2uiv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform2uiv(WebGLUniformLocation location, Uint32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform2uiv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3uiv(WebGLUniformLocation location, Uint32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform3uiv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform3uiv(WebGLUniformLocation location, Uint32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform3uiv", location, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4uiv(WebGLUniformLocation location, Uint32Array data, int srcOffset = 0) => JSRef!.CallVoid("uniform4uiv", location, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
+        public void Uniform4uiv(WebGLUniformLocation location, Uint32Array data, int srcOffset, int srcLength) => JSRef!.CallVoid("uniform4uiv", location, data, srcOffset, srcLength);
+
+        #region Matrix uniforms
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix2fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix2fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3x2fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix3x2fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3x2fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix3x2fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4x2fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix4x2fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4x2fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix4x2fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2x3fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix2x3fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2x3fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix2x3fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix3fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix3fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4x3fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix4x3fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4x3fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix4x3fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2x4fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix2x4fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2x4fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix2x4fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3x4fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix3x4fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3x4fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix3x4fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix4fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4fv(WebGLUniformLocation location, GLboolean transpose, float[] data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix4fv", location, transpose, data, srcOffset, srcLength);
+
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix2fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix2fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3x2fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix3x2fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3x2fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix3x2fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4x2fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix4x2fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4x2fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix4x2fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2x3fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix2x3fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2x3fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix2x3fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix3fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix3fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4x3fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix4x3fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4x3fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix4x3fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2x4fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix2x4fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix2x4fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix2x4fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3x4fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix3x4fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix3x4fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix3x4fv", location, transpose, data, srcOffset, srcLength);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset = 0)
+            => JSRef!.CallVoid("uniformMatrix4fv", location, transpose, data, srcOffset);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        public void UniformMatrix4fv(WebGLUniformLocation location, GLboolean transpose, Float32Array data, int srcOffset, int srcLength)
+            => JSRef!.CallVoid("uniformMatrix4fv", location, transpose, data, srcOffset, srcLength);
+        #endregion
+        /// <summary>
+        /// The WebGL2RenderingContext.vertexAttribI4[u]i[v]() methods of the WebGL 2 API specify integer values for generic vertex attributes.
+        /// </summary>
+        public void VertexAttribI4i(GLuint index, int v0, int v1, int v2, int v3) => JSRef!.CallVoid("vertexAttribI4i", index, v0, v1, v2, v3);
+        /// <summary>
+        /// The WebGL2RenderingContext.vertexAttribI4[u]i[v]() methods of the WebGL 2 API specify integer values for generic vertex attributes.
+        /// </summary>
+        public void VertexAttribI4ui(GLuint index, uint v0, uint v1, uint v2, uint v3) => JSRef!.CallVoid("vertexAttribI4ui", index, v0, v1, v2, v3);
+        /// <summary>
+        /// The WebGL2RenderingContext.vertexAttribI4[u]i[v]() methods of the WebGL 2 API specify integer values for generic vertex attributes.
+        /// </summary>
+        public void VertexAttribI4iv(GLuint index, Int32Array value) => JSRef!.CallVoid("vertexAttribI4iv", index, value);
+        /// <summary>
+        /// The WebGL2RenderingContext.vertexAttribI4[u]i[v]() methods of the WebGL 2 API specify integer values for generic vertex attributes.
+        /// </summary>
+        public void VertexAttribI4iv(GLuint index, int[] value) => JSRef!.CallVoid("vertexAttribI4iv", index, value);
+        /// <summary>
+        /// The WebGL2RenderingContext.vertexAttribI4[u]i[v]() methods of the WebGL 2 API specify integer values for generic vertex attributes.
+        /// </summary>
+        public void VertexAttribI4uiv(GLuint index, Uint32Array value) => JSRef!.CallVoid("vertexAttribI4uiv", index, value);
+        /// <summary>
+        /// The WebGL2RenderingContext.vertexAttribI4[u]i[v]() methods of the WebGL 2 API specify integer values for generic vertex attributes.
+        /// </summary>
+        public void VertexAttribI4uiv(GLuint index, uint[] value) => JSRef!.CallVoid("vertexAttribI4uiv", index, value);
+        /// <summary>
+        /// The WebGL2RenderingContext.vertexAttribIPointer() method of the WebGL 2 API specifies integer data formats and locations of vertex attributes in a vertex attributes array.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute that is to be modified.</param>
+        /// <param name="size">A GLint specifying the number of components per vertex attribute. Must be 1, 2, 3, or 4.</param>
+        /// <param name="type">A GLenum specifying the data type of each component in the array. Must be one of: gl.BYTE, gl.UNSIGNED_BYTE, gl.SHORT, gl.UNSIGNED_SHORT, gl.INT, or gl.UNSIGNED_INT.</param>
+        /// <param name="stride">A GLsizei specifying the offset in bytes between the beginning of consecutive vertex attributes.</param>
+        /// <param name="offset">A GLintptr specifying an offset in bytes of the first component in the vertex attribute array. Must be a multiple of type.</param>
+        public void  VertexAttribIPointer(GLuint index,GLint size,GLenum type,GLsizei stride,GLintptr offset) => JSRef!.CallVoid("vertexAttribIPointer", index, size, type, stride, offset);
         #endregion
 
         #region Color spaces - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#color_spaces

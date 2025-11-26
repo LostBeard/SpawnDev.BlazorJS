@@ -1758,24 +1758,90 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="type"></param>
         /// <param name="source"></param>
         public void TexSubImage2D(int target, int level, int xoffset, int yoffset, int format, int type, HTMLVideoElement source) => JSRef!.CallVoid("texSubImage2D", target, level, xoffset, yoffset, format, type, source);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform1f(WebGLUniformLocation location, float x) => JSRef!.CallVoid("uniform1f", location, x);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform1fv(WebGLUniformLocation location, IEnumerable<float> v) => JSRef!.CallVoid("uniform1fv", location, v);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform1i(WebGLUniformLocation location, int x) => JSRef!.CallVoid("uniform1i", location, x);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform1iv(WebGLUniformLocation location, IEnumerable<int> v) => JSRef!.CallVoid("uniform1iv", location, v);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform2f(WebGLUniformLocation location, float x, float y) => JSRef!.CallVoid("uniform2f", location, x, y);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform2fv(WebGLUniformLocation location, IEnumerable<float> v) => JSRef!.CallVoid("uniform2fv", location, v);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform2i(WebGLUniformLocation location, int x, int y) => JSRef!.CallVoid("uniform2i", location, x, y);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform2iv(WebGLUniformLocation location, IEnumerable<int> v) => JSRef!.CallVoid("uniform2iv", location, v);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform3f(WebGLUniformLocation location, float x, float y, float z) => JSRef!.CallVoid("uniform3f", location, x, y, z);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform3fv(WebGLUniformLocation location, IEnumerable<float> v) => JSRef!.CallVoid("uniform3fv", location, v);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform3i(WebGLUniformLocation location, int x, int y, int z) => JSRef!.CallVoid("uniform3i", location, x, y, z);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform3iv(WebGLUniformLocation location, IEnumerable<int> v) => JSRef!.CallVoid("uniform3iv", location, v);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform4f(WebGLUniformLocation location, float x, float y, float z, float w) => JSRef!.CallVoid("uniform4f", location, x, y, z, w);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform4fv(WebGLUniformLocation location, IEnumerable<float> v) => JSRef!.CallVoid("uniform4fv", location, v);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform4i(WebGLUniformLocation location, int x, int y, int z, int w) => JSRef!.CallVoid("uniform4i", location, x, y, z, w);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniform[1234][uif][v]() methods of the WebGL API specify values of uniform variables.
+        /// </summary>
         public void Uniform4iv(WebGLUniformLocation location, IEnumerable<int> v) => JSRef!.CallVoid("uniform4iv", location, v);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        /// <param name="location">A WebGLUniformLocation object containing the location of the uniform attribute to modify.</param>
+        /// <param name="transpose">A GLboolean specifying whether to transpose the matrix.</param>
+        /// <param name="value">A Float32Array of float values.</param>
         public void UniformMatrix2fv(WebGLUniformLocation location, bool transpose, IEnumerable<float> value) => JSRef!.CallVoid("uniformMatrix2fv", location, transpose, value);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        /// <param name="location">A WebGLUniformLocation object containing the location of the uniform attribute to modify.</param>
+        /// <param name="transpose">A GLboolean specifying whether to transpose the matrix.</param>
+        /// <param name="value">A Float32Array of float values.</param>
         public void UniformMatrix3fv(WebGLUniformLocation location, bool transpose, IEnumerable<float> value) => JSRef!.CallVoid("uniformMatrix3fv", location, transpose, value);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformMatrix[234]x[234]fv() methods of the WebGL 2 API specify matrix values for uniform variables.
+        /// </summary>
+        /// <param name="location">A WebGLUniformLocation object containing the location of the uniform attribute to modify.</param>
+        /// <param name="transpose">A GLboolean specifying whether to transpose the matrix.</param>
+        /// <param name="value">A Float32Array of float values.</param>
         public void UniformMatrix4fv(WebGLUniformLocation location, bool transpose, IEnumerable<float> value) => JSRef!.CallVoid("uniformMatrix4fv", location, transpose, value);
         /// <summary>
         /// The WebGLRenderingContext.useProgram() method of the WebGL API sets the specified WebGLProgram as part of the current rendering state.
