@@ -1,9 +1,5 @@
 ﻿using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
-using System;
-using System.Net.NetworkInformation;
-using System.Threading;
-using System.Timers;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -126,8 +122,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="length">A GLuint defaulting to 0, where 0 means bufferSubData should calculate the length.</param>
         public void BufferSubData(GLenum target, GLsizeiptr dstByteOffset, Union<TypedArray, DataView, byte[]> sourceData, GLuint srcOffset = 0, GLuint length = 0)
         {
-            if (length == 0) JSRef!.CallVoid("bufferSubData", target, sourceData, srcOffset);
-            else JSRef!.CallVoid("bufferSubData", target, sourceData, srcOffset, length);
+            if (length == 0) JSRef!.CallVoid("bufferSubData", target, dstByteOffset, sourceData, srcOffset);
+            else JSRef!.CallVoid("bufferSubData", target, dstByteOffset, sourceData, srcOffset, length);
         }
         /// <summary>
         /// The WebGL2RenderingContext.copyBufferSubData() method of the WebGL 2 API copies part of the data of a buffer to another buffer.
