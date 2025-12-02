@@ -1,10 +1,5 @@
 ﻿using Microsoft.JSInterop;
-using Microsoft.VisualBasic;
 using SpawnDev.BlazorJS.Toolbox;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
