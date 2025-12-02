@@ -1439,7 +1439,67 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Transform feedback - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#transform_feedback
-
+        /// <summary>
+        /// The WebGL2RenderingContext.createTransformFeedback() method of the WebGL 2 API creates and initializes WebGLTransformFeedback objects.
+        /// </summary>
+        /// <returns></returns>
+        public WebGLTransformFeedback CreateTransformFeedback() => JSRef!.Call<WebGLTransformFeedback>("createTransformFeedback");
+        /// <summary>
+        /// The WebGL2RenderingContext.deleteTransformFeedback() method of the WebGL 2 API deletes a given WebGLTransformFeedback object.
+        /// </summary>
+        /// <param name="transformFeedback">A WebGLTransformFeedback object to delete.</param>
+        public void DeleteTransformFeedback(WebGLTransformFeedback transformFeedback) => JSRef!.CallVoid("deleteTransformFeedback", transformFeedback);
+        /// <summary>
+        /// The WebGL2RenderingContext.isTransformFeedback() method of the WebGL 2 API returns true if the passed object is a valid WebGLTransformFeedback object.
+        /// </summary>
+        /// <param name="transformFeedback">A WebGLTransformFeedback object to test.</param>
+        /// <returns>A GLboolean indicating whether the given object is a valid WebGLTransformFeedback object (true) or not (false).</returns>
+        public bool IsTransformFeedback(WebGLTransformFeedback transformFeedback) => JSRef!.Call<bool>("isTransformFeedback", transformFeedback);
+        /// <summary>
+        /// The WebGL2RenderingContext.bindTransformFeedback() method of the WebGL 2 API binds a passed WebGLTransformFeedback object to the current GL state.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the target (binding point). Must be gl.TRANSFORM_FEEDBACK.</param>
+        /// <param name="transformFeedback">A WebGLTransformFeedback object to bind.</param>
+        public void BindTransformFeedback(GLenum target, WebGLTransformFeedback? transformFeedback) => JSRef!.CallVoid("bindTransformFeedback", target, transformFeedback);
+        /// <summary>
+        /// The WebGL2RenderingContext.beginTransformFeedback() method of the WebGL 2 API starts a transform feedback operation.
+        /// </summary>
+        /// <param name="primitiveMode">
+        /// A GLenum specifying the output type of the primitives that will be recorded into the buffer objects that are bound for transform feedback. Possible values:<br/>
+        /// gl.POINTS<br/>
+        /// gl.LINES<br/>
+        /// gl.TRIANGLES</param>
+        public void BeginTransformFeedback(GLenum primitiveMode) => JSRef!.CallVoid("beginTransformFeedback", primitiveMode);
+        /// <summary>
+        /// The WebGL2RenderingContext.endTransformFeedback() method of the WebGL 2 API ends a transform feedback operation.
+        /// </summary>
+        public void EndTransformFeedback() => JSRef!.CallVoid("endTransformFeedback");
+        /// <summary>
+        /// The WebGL2RenderingContext.transformFeedbackVaryings() method of the WebGL 2 API specifies values to record in WebGLTransformFeedback buffers.
+        /// </summary>
+        /// <param name="program">A WebGLProgram.</param>
+        /// <param name="varyings">An Array of string specifying the names of the varying variables to use.</param>
+        /// <param name="bufferMode">A GLenum specifying the mode to use when capturing the varying variables. Either:<br/>
+        /// gl.INTERLEAVED_ATTRIBS<br/>
+        /// gl.SEPARATE_ATTRIBS.</param>
+        public void TransformFeedbackVaryings(WebGLProgram program, string[] varyings, GLenum bufferMode)
+            => JSRef!.CallVoid("transformFeedbackVaryings", program, varyings, bufferMode);
+        /// <summary>
+        /// The WebGL2RenderingContext.getTransformFeedbackVarying() method of the WebGL 2 API returns information about varying variables from WebGLTransformFeedback buffers.
+        /// </summary>
+        /// <param name="program">A WebGLProgram.</param>
+        /// <param name="index">A GLuint specifying the index of the varying variable whose information to retrieve.</param>
+        /// <returns>A WebGLActiveInfo object.</returns>
+        public WebGLActiveInfo GetTransformFeedbackVarying(WebGLProgram program, GLuint index)
+            => JSRef!.Call<WebGLActiveInfo>("getTransformFeedbackVarying", program, index);
+        /// <summary>
+        /// The WebGL2RenderingContext.pauseTransformFeedback() method of the WebGL 2 API pauses a transform feedback operation.
+        /// </summary>
+        public void PauseTransformFeedback() => JSRef!.CallVoid("pauseTransformFeedback");
+        /// <summary>
+        /// The WebGL2RenderingContext.resumeTransformFeedback() method of the WebGL 2 API resumes a transform feedback operation.
+        /// </summary>
+        public void ResumeTransformFeedback() => JSRef!.CallVoid("resumeTransformFeedback");
         #endregion
 
         #region Uniform buffer objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#uniform_buffer_objects
