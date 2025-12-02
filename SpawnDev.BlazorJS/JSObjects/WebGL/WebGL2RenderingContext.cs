@@ -1,5 +1,10 @@
 ﻿using Microsoft.JSInterop;
+using Microsoft.VisualBasic;
 using SpawnDev.BlazorJS.Toolbox;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -1438,7 +1443,94 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Uniform buffer objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#uniform_buffer_objects
-
+        /// <summary>
+        /// The WebGL2RenderingContext.bindBufferBase() method of the WebGL 2 API binds a given WebGLBuffer to a given binding point (target) at a given index.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the target for the bind operation. Possible values:
+        /// gl.TRANSFORM_FEEDBACK_BUFFER
+        /// gl.UNIFORM_BUFFER</param>
+        /// <param name="index">A GLuint specifying the index of the target.</param>
+        /// <param name="buffer">A WebGLBuffer which to bind to the binding point (target).</param>
+        public void BindBufferBase(GLenum target, GLuint index, WebGLBuffer buffer) => JSRef!.CallVoid("bindBufferBase", target, index, buffer);
+        /// <summary>
+        /// The WebGL2RenderingContext.bindBufferRange() method of the WebGL 2 API binds a range of a given WebGLBuffer to a given binding point (target) at a given index.
+        /// </summary>
+        /// <param name="target">A GLenum specifying the target for the bind operation. Possible values:
+        /// gl.TRANSFORM_FEEDBACK_BUFFER
+        /// gl.UNIFORM_BUFFER</param>
+        /// <param name="index">A GLuint specifying the index of the target.</param>
+        /// <param name="buffer">A WebGLBuffer which to bind to the binding point (target).</param>
+        /// <param name="offset">A GLintptr specifying the starting offset.</param>
+        /// <param name="size">A GLsizeiptr specifying the amount of data that can be read from the buffer.</param>
+        public void BindBufferRange(GLenum target, GLuint index, WebGLBuffer buffer, GLintptr offset, GLsizeiptr size)
+            => JSRef!.CallVoid("bindBufferRange", target, index, buffer, offset, size);
+        /// <summary>
+        /// The WebGL2RenderingContext.getUniformIndices() method of the WebGL 2 API retrieves the indices of a number of uniforms within a WebGLProgram.
+        /// </summary>
+        /// <param name="program">A WebGLProgram containing uniforms whose indices to query.</param>
+        /// <param name="uniformNames">An Array of string specifying the names of the uniforms to query.</param>
+        public GLuint[] GetUniformIndices(WebGLProgram program, string[] uniformNames)
+            => JSRef!.Call<GLuint[]>("getUniformIndices", program, uniformNames);
+        /// <summary>
+        /// The WebGL2RenderingContext.getActiveUniforms() method of the WebGL 2 API retrieves information about active uniforms within a WebGLProgram.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="program">A WebGLProgram containing the active uniforms.</param>
+        /// <param name="uniformIndices">An Array of GLuint specifying the indices of the active uniforms to query.</param>
+        /// <param name="pname">
+        /// A GLenum specifying which information to query.Possible values:<br/>
+        /// gl.UNIFORM_TYPE - Returns an Array of GLenum indicating the types of the uniforms.<br/>
+        /// gl.UNIFORM_SIZE - Returns an Array of GLuint indicating the sizes of the uniforms.<br/>
+        /// gl.UNIFORM_BLOCK_INDEX - Returns an Array of GLint indicating the block indices of the uniforms.<br/>
+        /// gl.UNIFORM_OFFSET - Returns an Array of GLint indicating the uniform buffer offsets.<br/>
+        /// gl.UNIFORM_ARRAY_STRIDE - Returns an Array of GLint indicating the strides between the elements.<br/>
+        /// gl.UNIFORM_MATRIX_STRIDE - Returns an Array of GLint indicating the strides between columns of a column-major matrix or a row-major matrix.<br/>
+        /// gl.UNIFORM_IS_ROW_MAJOR - Returns an Array of GLboolean indicating whether each of the uniforms is a row-major matrix or not.</param>
+        /// <returns>Depends on which information is requested using the pname parameter.</returns>
+        public T[] GetActiveUniforms<T>(WebGLProgram program, GLuint[] uniformIndices, GLenum pname) where T : struct
+            => JSRef!.Call<T[]>("getActiveUniforms", program, uniformIndices, pname);
+        /// <summary>
+        /// The WebGL2RenderingContext.getUniformBlockIndex() method of the WebGL 2 API retrieves the index of a uniform block within a WebGLProgram.
+        /// </summary>
+        /// <param name="program">A WebGLProgram containing the uniform block.</param>
+        /// <param name="uniformBlockName">A string specifying the name of the uniform block to whose index to retrieve.</param>
+        /// <returns>A GLuint indicating the uniform block index.</returns>
+        public GLuint GetUniformBlockIndex(WebGLProgram program, string uniformBlockName)
+            => JSRef!.Call<GLuint>("getUniformBlockIndex", program, uniformBlockName);
+        /// <summary>
+        /// The WebGL2RenderingContext.getActiveUniformBlockParameter() method of the WebGL 2 API retrieves information about an active uniform block within a WebGLProgram.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="program">A WebGLProgram containing the active uniform block.</param>
+        /// <param name="uniformBlockIndex">A GLuint specifying the index of the active uniform block within the program.</param>
+        /// <param name="pname">
+        /// A GLenum specifying which information to query. Possible values:<br/>
+        /// gl.UNIFORM_BLOCK_BINDING - Returns a GLuint indicating the uniform buffer binding point.<br/>
+        /// gl.UNIFORM_BLOCK_DATA_SIZE - Returns a GLuint indicating the minimum total buffer object size.<br/>
+        /// gl.UNIFORM_BLOCK_ACTIVE_UNIFORMS  - Returns a GLuint indicating the number of active uniforms in the uniform block.<br/>
+        /// gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES - Returns a Uint32Array indicating the list of active uniforms in the uniform block.<br/>
+        /// gl.UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER - Returns a GLboolean indicating whether the uniform block is referenced by the vertex shader.<br/>
+        /// gl.UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER - Returns a GLboolean indicating whether the uniform block is referenced by the fragment shader.
+        /// </param>
+        /// <returns>Depends on which information is requested using the pname parameter. If an error occurs, null is returned.</returns>
+        public T? GetActiveUniformBlockParameter<T>(WebGLProgram program, GLuint uniformBlockIndex, GLenum pname) where T : struct
+            => JSRef!.Call<T>("getActiveUniformBlockParameter", program, uniformBlockIndex, pname);
+        /// <summary>
+        /// The WebGL2RenderingContext.getActiveUniformBlockName() method of the WebGL 2 API retrieves the name of the active uniform block at a given index within a WebGLProgram.
+        /// </summary>
+        /// <param name="program">A WebGLProgram containing the uniform block.</param>
+        /// <param name="uniformBlockIndex">A GLuint specifying the index of the uniform block to whose name to retrieve.</param>
+        /// <returns>A string indicating the active uniform block name.</returns>
+        public string GetActiveUniformBlockName(WebGLProgram program, GLuint uniformBlockIndex)
+            => JSRef!.Call<string>("getActiveUniformBlockName", program, uniformBlockIndex);
+        /// <summary>
+        /// The WebGL2RenderingContext.uniformBlockBinding() method of the WebGL 2 API assigns binding points for active uniform blocks.
+        /// </summary>
+        /// <param name="program">A WebGLProgram containing the active uniform block whose binding to assign.</param>
+        /// <param name="uniformBlockIndex">A GLuint specifying the index of the active uniform block within the program.</param>
+        /// <param name="uniformBlockBinding">A GLuint specifying the binding point to which to bind the uniform block.</param>
+        public void UniformBlockBinding(WebGLProgram program, GLuint uniformBlockIndex, GLuint uniformBlockBinding)
+            => JSRef!.CallVoid("uniformBlockBinding", program, uniformBlockIndex, uniformBlockBinding);
         #endregion
 
         #region Vertex array objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#vertex_array_objects
