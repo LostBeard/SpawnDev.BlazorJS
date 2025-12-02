@@ -1,18 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.ComponentModel;
-using System.Data.Common;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Drawing;
-using System.Dynamic;
-using System.IO;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Resources;
-using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics.X86;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
