@@ -21,6 +21,17 @@ JS.Set("_testit", (string msg) =>
     Console.WriteLine($"_testit called with message: {msg}");
 });
 
+Union<string, int, long> result = "";
+var message = await result.Match(
+    async str => $"String: {str}",
+    num => Task.FromResult($"Number: {num}"),
+    num => Task.FromResult($"Number: {num}")
+);
+var t1 = result.Map((string v) => 99).Map<ulong>((int v) => (ulong)(v * 5));
+var t2 = await result.MapAsync(async (string v) => v + "1");
+var t3 = await result.MapAsync(async (int v) => v * 5 + "");
+
+var t4 = result.Reduce((int v) => v.ToString()).Reduce((long v) => v.ToString());
 
 var nmt = true;
 var http = host.Services.GetRequiredService<HttpClient>();
