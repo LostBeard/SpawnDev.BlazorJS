@@ -750,9 +750,8 @@ audio.Play();
 ```
 
 # Union
-## Use the Union\<T1, T2, ...\> type with method parameters for strong typing while allowing unrelated types just like in TypeScript.
-The Union type allows method parameters to accept multiple unrelated types while retaining strong typing. 
-Similar to TypeScript's union types. When passed to Javascript the correct type is automatically used.
+## Use the Union\<T1, T2, ...\> type for strong typing while allowing unrelated types just like in TypeScript.
+Union JsonConverters allow proper serialization and deserialization during Javascript interop.
 
 ```cs
 void UnionTypeTestMethod(string varName, Union<bool?, string?>? unionTypeValue)
