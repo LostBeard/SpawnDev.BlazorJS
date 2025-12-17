@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS
     public abstract class Union
     {
         /// <summary>
+        /// Invalid state message
+        /// </summary>
+        protected const string InvalidStateMessage = "Union is in an invalid state";
+        /// <summary>
         /// The type index of the value contained in the union
         /// </summary>
         protected byte _type { get; init; }
@@ -79,7 +83,7 @@ namespace SpawnDev.BlazorJS
                     matchT2((T2)Value!);
                     return;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a value based on the type contained in the union
@@ -96,7 +100,7 @@ namespace SpawnDev.BlazorJS
                 case 2:
                     return matchT2((T2)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -124,7 +128,7 @@ namespace SpawnDev.BlazorJS
                 case 1: return map((T1)Value!);
                 case 2: return (T2)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -136,7 +140,7 @@ namespace SpawnDev.BlazorJS
                 case 1: return (T1)Value!;
                 case 2: return map((T2)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -148,7 +152,7 @@ namespace SpawnDev.BlazorJS
                 case 1: return map((T1)Value!);
                 case 2: return Task.FromResult<Union<TResult, T2>>((T2)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -160,7 +164,7 @@ namespace SpawnDev.BlazorJS
                 case 1: return Task.FromResult<Union<T1, TResult>>((T1)Value!);
                 case 2: return map((T2)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
     }
     /// <summary>
@@ -214,7 +218,7 @@ namespace SpawnDev.BlazorJS
                     matchT3((T3)Value!);
                     return;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a value based on the type contained in the union
@@ -234,7 +238,7 @@ namespace SpawnDev.BlazorJS
                 case 3:
                     return matchT3((T3)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -271,7 +275,7 @@ namespace SpawnDev.BlazorJS
                 case 2: return (T2)Value!;
                 case 3: return (T3)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -284,7 +288,7 @@ namespace SpawnDev.BlazorJS
                 case 2: return map((T2)Value!);
                 case 3: return (T3)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -297,7 +301,7 @@ namespace SpawnDev.BlazorJS
                 case 2: return (T2)Value!;
                 case 3: return map((T3)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -310,7 +314,7 @@ namespace SpawnDev.BlazorJS
                 case 2: return Task.FromResult<Union<TResult, T2, T3>>((T2)Value!);
                 case 3: return Task.FromResult<Union<TResult, T2, T3>>((T3)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -323,7 +327,7 @@ namespace SpawnDev.BlazorJS
                 case 2: return map((T2)Value!);
                 case 3: return Task.FromResult<Union<T1, TResult, T3>>((T3)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -336,7 +340,7 @@ namespace SpawnDev.BlazorJS
                 case 2: return Task.FromResult<Union<T1, T2, TResult>>((T2)Value!);
                 case 3: return map((T3)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
     }
     /// <summary>
@@ -402,7 +406,7 @@ namespace SpawnDev.BlazorJS
                     matchT4((T4)Value!);
                     return;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a value based on the type contained in the union
@@ -425,7 +429,7 @@ namespace SpawnDev.BlazorJS
                 case 4:
                     return matchT4((T4)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -471,7 +475,7 @@ namespace SpawnDev.BlazorJS
                 case 3: return (T3)Value!;
                 case 4: return (T4)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -485,7 +489,7 @@ namespace SpawnDev.BlazorJS
                 case 3: return (T3)Value!;
                 case 4: return (T4)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -499,7 +503,7 @@ namespace SpawnDev.BlazorJS
                 case 3: return map((T3)Value!);
                 case 4: return (T4)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -513,7 +517,7 @@ namespace SpawnDev.BlazorJS
                 case 3: return (T3)Value!;
                 case 4: return map((T4)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -527,7 +531,7 @@ namespace SpawnDev.BlazorJS
                 case 3: return Task.FromResult<Union<TResult, T2, T3, T4>>((T3)Value!);
                 case 4: return Task.FromResult<Union<TResult, T2, T3, T4>>((T4)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -541,7 +545,7 @@ namespace SpawnDev.BlazorJS
                 case 3: return Task.FromResult<Union<T1, TResult, T3, T4>>((T3)Value!);
                 case 4: return Task.FromResult<Union<T1, TResult, T3, T4>>((T4)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -555,7 +559,7 @@ namespace SpawnDev.BlazorJS
                 case 3: return map((T3)Value!);
                 case 4: return Task.FromResult<Union<T1, T2, TResult, T4>>((T4)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -569,7 +573,7 @@ namespace SpawnDev.BlazorJS
                 case 3: return Task.FromResult<Union<T1, T2, T3, TResult>>((T3)Value!);
                 case 4: return map((T4)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
     }
     /// <summary>
@@ -647,7 +651,7 @@ namespace SpawnDev.BlazorJS
                     matchT5((T5)Value!);
                     return;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a value based on the type contained in the union
@@ -673,7 +677,7 @@ namespace SpawnDev.BlazorJS
                 case 5:
                     return matchT5((T5)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -728,7 +732,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return (T4)Value!;
                 case 5: return (T5)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -743,7 +747,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return (T4)Value!;
                 case 5: return (T5)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -758,7 +762,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return (T4)Value!;
                 case 5: return (T5)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -773,7 +777,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return map((T4)Value!);
                 case 5: return (T5)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -788,7 +792,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return (T4)Value!;
                 case 5: return map((T5)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -803,7 +807,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return Task.FromResult<Union<TResult, T2, T3, T4, T5>>((T4)Value!);
                 case 5: return Task.FromResult<Union<TResult, T2, T3, T4, T5>>((T5)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -818,7 +822,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return Task.FromResult<Union<T1, TResult, T3, T4, T5>>((T4)Value!);
                 case 5: return Task.FromResult<Union<T1, TResult, T3, T4, T5>>((T5)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -833,7 +837,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return Task.FromResult<Union<T1, T2, TResult, T4, T5>>((T4)Value!);
                 case 5: return Task.FromResult<Union<T1, T2, TResult, T4, T5>>((T5)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -848,7 +852,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return map((T4)Value!);
                 case 5: return Task.FromResult<Union<T1, T2, T3, TResult, T5>>((T5)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -863,7 +867,7 @@ namespace SpawnDev.BlazorJS
                 case 4: return Task.FromResult<Union<T1, T2, T3, T4, TResult>>((T4)Value!);
                 case 5: return map((T5)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
     }
     /// <summary>
@@ -953,7 +957,7 @@ namespace SpawnDev.BlazorJS
                     matchT6((T6)Value!);
                     return;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a value based on the type contained in the union
@@ -982,7 +986,7 @@ namespace SpawnDev.BlazorJS
                 case 6:
                     return matchT6((T6)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1046,7 +1050,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return (T5)Value!;
                 case 6: return (T6)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1062,7 +1066,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return (T5)Value!;
                 case 6: return (T6)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1078,7 +1082,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return (T5)Value!;
                 case 6: return (T6)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1094,7 +1098,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return (T5)Value!;
                 case 6: return (T6)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1110,7 +1114,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return map((T5)Value!);
                 case 6: return (T6)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1126,7 +1130,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return (T5)Value!;
                 case 6: return map((T6)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1142,7 +1146,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6>>((T5)Value!);
                 case 6: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6>>((T6)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1158,7 +1162,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6>>((T5)Value!);
                 case 6: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6>>((T6)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1174,7 +1178,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6>>((T5)Value!);
                 case 6: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6>>((T6)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1190,7 +1194,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6>>((T5)Value!);
                 case 6: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6>>((T6)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1206,7 +1210,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return map((T5)Value!);
                 case 6: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6>>((T6)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1222,7 +1226,7 @@ namespace SpawnDev.BlazorJS
                 case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult>>((T5)Value!);
                 case 6: return map((T6)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
     }
     /// <summary>
@@ -1324,7 +1328,7 @@ namespace SpawnDev.BlazorJS
                     matchT7((T7)Value!);
                     return;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a value based on the type contained in the union
@@ -1356,7 +1360,7 @@ namespace SpawnDev.BlazorJS
                 case 7:
                     return matchT7((T7)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1429,7 +1433,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return (T6)Value!;
                 case 7: return (T7)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1446,7 +1450,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return (T6)Value!;
                 case 7: return (T7)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1463,7 +1467,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return (T6)Value!;
                 case 7: return (T7)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1480,7 +1484,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return (T6)Value!;
                 case 7: return (T7)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1497,7 +1501,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return (T6)Value!;
                 case 7: return (T7)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1514,7 +1518,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return map((T6)Value!);
                 case 7: return (T7)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1531,7 +1535,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return (T6)Value!;
                 case 7: return map((T7)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1548,7 +1552,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7>>((T6)Value!);
                 case 7: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7>>((T7)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1565,7 +1569,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7>>((T6)Value!);
                 case 7: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7>>((T7)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1582,7 +1586,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7>>((T6)Value!);
                 case 7: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7>>((T7)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1599,7 +1603,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7>>((T6)Value!);
                 case 7: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7>>((T7)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1616,7 +1620,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7>>((T6)Value!);
                 case 7: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7>>((T7)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1633,7 +1637,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return map((T6)Value!);
                 case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7>>((T7)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1650,7 +1654,7 @@ namespace SpawnDev.BlazorJS
                 case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult>>((T6)Value!);
                 case 7: return map((T7)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
     }
     /// <summary>
@@ -1764,7 +1768,7 @@ namespace SpawnDev.BlazorJS
                     matchT8((T8)Value!);
                     return;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a value based on the type contained in the union
@@ -1799,7 +1803,7 @@ namespace SpawnDev.BlazorJS
                 case 8:
                     return matchT8((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1881,7 +1885,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return (T7)Value!;
                 case 8: return (T8)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1899,7 +1903,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return (T7)Value!;
                 case 8: return (T8)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1917,7 +1921,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return (T7)Value!;
                 case 8: return (T8)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1935,7 +1939,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return (T7)Value!;
                 case 8: return (T8)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1953,7 +1957,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return (T7)Value!;
                 case 8: return (T8)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1971,7 +1975,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return (T7)Value!;
                 case 8: return (T8)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -1989,7 +1993,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return map((T7)Value!);
                 case 8: return (T8)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2007,7 +2011,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return (T7)Value!;
                 case 8: return map((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2025,7 +2029,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>((T7)Value!);
                 case 8: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2043,7 +2047,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>((T7)Value!);
                 case 8: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2061,7 +2065,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>((T7)Value!);
                 case 8: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2079,7 +2083,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>((T7)Value!);
                 case 8: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2097,7 +2101,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>((T7)Value!);
                 case 8: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2115,7 +2119,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>((T7)Value!);
                 case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2133,7 +2137,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return map((T7)Value!);
                 case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8>>((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2151,7 +2155,7 @@ namespace SpawnDev.BlazorJS
                 case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult>>((T7)Value!);
                 case 8: return map((T8)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
     }
     /// <summary>
@@ -2277,7 +2281,7 @@ namespace SpawnDev.BlazorJS
                     matchT9((T9)Value!);
                     return;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a value based on the type contained in the union
@@ -2315,7 +2319,7 @@ namespace SpawnDev.BlazorJS
                 case 9:
                     return matchT9((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
 
         /// <summary>
@@ -2407,7 +2411,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return (T8)Value!;
                 case 9: return (T9)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2426,7 +2430,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return (T8)Value!;
                 case 9: return (T9)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2445,7 +2449,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return (T8)Value!;
                 case 9: return (T9)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2464,7 +2468,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return (T8)Value!;
                 case 9: return (T9)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2483,7 +2487,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return (T8)Value!;
                 case 9: return (T9)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2502,7 +2506,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return (T8)Value!;
                 case 9: return (T9)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2521,7 +2525,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return (T8)Value!;
                 case 9: return (T9)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2540,7 +2544,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return map((T8)Value!);
                 case 9: return (T9)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2559,7 +2563,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return (T8)Value!;
                 case 9: return map((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2578,7 +2582,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T8)Value!);
                 case 9: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2597,7 +2601,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T8)Value!);
                 case 9: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2616,7 +2620,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T8)Value!);
                 case 9: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2635,7 +2639,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T8)Value!);
                 case 9: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2654,7 +2658,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T8)Value!);
                 case 9: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2673,7 +2677,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T8)Value!);
                 case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2692,7 +2696,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T8)Value!);
                 case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2711,7 +2715,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return map((T8)Value!);
                 case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2730,7 +2734,7 @@ namespace SpawnDev.BlazorJS
                 case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>((T8)Value!);
                 case 9: return map((T9)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
     }
     /// <summary>
@@ -2868,7 +2872,7 @@ namespace SpawnDev.BlazorJS
                     matchT10((T10)Value!);
                     return;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a value based on the type contained in the union
@@ -2909,7 +2913,7 @@ namespace SpawnDev.BlazorJS
                 case 10:
                     return matchT10((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -2929,7 +2933,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return (T9)Value!;
                 case 10: return (T10)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3029,7 +3033,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return (T9)Value!;
                 case 10: return (T10)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3049,7 +3053,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return (T9)Value!;
                 case 10: return (T10)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3069,7 +3073,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return (T9)Value!;
                 case 10: return (T10)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3089,7 +3093,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return (T9)Value!;
                 case 10: return (T10)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3109,7 +3113,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return (T9)Value!;
                 case 10: return (T10)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3129,7 +3133,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return (T9)Value!;
                 case 10: return (T10)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3149,7 +3153,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return (T9)Value!;
                 case 10: return (T10)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3169,7 +3173,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return map((T9)Value!);
                 case 10: return (T10)Value!;
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3189,7 +3193,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return (T9)Value!;
                 case 10: return map((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3209,7 +3213,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T9)Value!);
                 case 10: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3229,7 +3233,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T9)Value!);
                 case 10: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3249,7 +3253,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T9)Value!);
                 case 10: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3269,7 +3273,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T9)Value!);
                 case 10: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3289,7 +3293,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T9)Value!);
                 case 10: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3309,7 +3313,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T9)Value!);
                 case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3329,7 +3333,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T9)Value!);
                 case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3349,7 +3353,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T9)Value!);
                 case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3369,7 +3373,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return map((T9)Value!);
                 case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
         /// Returns a Union
@@ -3389,7 +3393,7 @@ namespace SpawnDev.BlazorJS
                 case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T9)Value!);
                 case 10: return map((T10)Value!);
             }
-            throw new InvalidOperationException("Union is in an invalid state");
+            throw new InvalidOperationException(InvalidStateMessage);
         }
     }
 }
