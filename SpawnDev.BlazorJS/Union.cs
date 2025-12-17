@@ -1,14 +1,28 @@
 ﻿using SpawnDev.BlazorJS.JsonConverters;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+    /// <summary>
+    /// Union type
+    /// </summary>
     public abstract class Union
     {
+        /// <summary>
+        /// The type index of the value contained in the union
+        /// </summary>
         protected byte _type = 0;
+        /// <summary>
+        /// The value contained in the union
+        /// </summary>
         public object? Value { get; protected set; }
+        /// <summary>
+        /// The type of the value contained in the union
+        /// </summary>
         public Type ValueType { get; protected set; }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         protected Union(object? value, Type valueType, byte type)
         {
             Value = value;
@@ -16,13 +30,31 @@ namespace SpawnDev.BlazorJS
             _type = type;
         }
     }
+    /// <summary>
+    /// Union type
+    /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
     public sealed class Union<T1, T2> : Union
     {
-        public static implicit operator Union<T1, T2>(T1 instance) => instance == null ? null : new Union<T1, T2>(instance);
-        public static implicit operator Union<T1, T2>(T2 instance) => instance == null ? null : new Union<T1, T2>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2>(T1 instance) => instance == null ? null! : new Union<T1, T2>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2>(T2 instance) => instance == null ? null! : new Union<T1, T2>(instance);
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T1 value) : base(value, typeof(T1), 1) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is<T>()
         {
             switch (_type)
@@ -34,6 +66,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Runs an action based on the type contained in the union
+        /// </summary>
         public void Match(
             Action<T1> matchT1,
             Action<T2> matchT2
@@ -50,6 +85,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a value based on the type contained in the union
+        /// </summary>
         public T Match<T>(
             Func<T1, T> matchT1,
             Func<T2, T> matchT2
@@ -65,15 +103,39 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException("Union is in an invalid state");
         }
     }
+    /// <summary>
+    /// Union type
+    /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
     public sealed class Union<T1, T2, T3> : Union
     {
-        public static implicit operator Union<T1, T2, T3>(T1 instance) => instance == null ? null : new Union<T1, T2, T3>(instance);
-        public static implicit operator Union<T1, T2, T3>(T2 instance) => instance == null ? null : new Union<T1, T2, T3>(instance);
-        public static implicit operator Union<T1, T2, T3>(T3 instance) => instance == null ? null : new Union<T1, T2, T3>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3>(instance);
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T1 value) : base(value, typeof(T1), 1) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T3 value) : base(value, typeof(T3), 3) { }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is<T>()
         {
             switch (_type)
@@ -87,6 +149,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Runs an action based on the type contained in the union
+        /// </summary>
         public void Match(
             Action<T1> matchT1,
             Action<T2> matchT2,
@@ -107,6 +172,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a value based on the type contained in the union
+        /// </summary>
         public T Match<T>(
             Func<T1, T> matchT1,
             Func<T2, T> matchT2,
@@ -125,17 +193,47 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException("Union is in an invalid state");
         }
     }
+    /// <summary>
+    /// Union type
+    /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
     public sealed class Union<T1, T2, T3, T4> : Union
     {
-        public static implicit operator Union<T1, T2, T3, T4>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4>(instance);
-        public static implicit operator Union<T1, T2, T3, T4>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4>(instance);
-        public static implicit operator Union<T1, T2, T3, T4>(T3 instance) => instance == null ? null : new Union<T1, T2, T3, T4>(instance);
-        public static implicit operator Union<T1, T2, T3, T4>(T4 instance) => instance == null ? null : new Union<T1, T2, T3, T4>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4>(instance);
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T1 value) : base(value, typeof(T1), 1) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T3 value) : base(value, typeof(T3), 3) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T4 value) : base(value, typeof(T4), 4) { }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is<T>()
         {
             switch (_type)
@@ -151,6 +249,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Runs an action based on the type contained in the union
+        /// </summary>
         public void Match(
             Action<T1> matchT1,
             Action<T2> matchT2,
@@ -175,6 +276,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a value based on the type contained in the union
+        /// </summary>
         public T Match<T>(
             Func<T1, T> matchT1,
             Func<T2, T> matchT2,
@@ -196,19 +300,55 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException("Union is in an invalid state");
         }
     }
+    /// <summary>
+    /// Union type
+    /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
     public sealed class Union<T1, T2, T3, T4, T5> : Union
     {
-        public static implicit operator Union<T1, T2, T3, T4, T5>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5>(T3 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5>(T4 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5>(T5 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T1 value) : base(value, typeof(T1), 1) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T3 value) : base(value, typeof(T3), 3) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T4 value) : base(value, typeof(T4), 4) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T5 value) : base(value, typeof(T5), 5) { }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is<T>()
         {
             switch (_type)
@@ -226,6 +366,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Runs an action based on the type contained in the union
+        /// </summary>
         public void Match(
             Action<T1> matchT1,
             Action<T2> matchT2,
@@ -254,6 +397,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a value based on the type contained in the union
+        /// </summary>
         public T Match<T>(
             Func<T1, T> matchT1,
             Func<T2, T> matchT2,
@@ -278,21 +424,63 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException("Union is in an invalid state");
         }
     }
+    /// <summary>
+    /// Union type
+    /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
     public sealed class Union<T1, T2, T3, T4, T5, T6> : Union
     {
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T3 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T4 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T5 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T6 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T1 value) : base(value, typeof(T1), 1) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T3 value) : base(value, typeof(T3), 3) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T4 value) : base(value, typeof(T4), 4) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T5 value) : base(value, typeof(T5), 5) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T6 value) : base(value, typeof(T6), 6) { }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is<T>()
         {
             switch (_type)
@@ -312,6 +500,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Runs an action based on the type contained in the union
+        /// </summary>
         public void Match(
             Action<T1> matchT1,
             Action<T2> matchT2,
@@ -344,6 +535,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a value based on the type contained in the union
+        /// </summary>
         public T Match<T>(
             Func<T1, T> matchT1,
             Func<T2, T> matchT2,
@@ -371,23 +565,71 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException("Union is in an invalid state");
         }
     }
+    /// <summary>
+    /// Union type
+    /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
     public sealed class Union<T1, T2, T3, T4, T5, T6, T7> : Union
     {
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T3 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T4 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T5 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T6 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T7 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T7 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T1 value) : base(value, typeof(T1), 1) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T3 value) : base(value, typeof(T3), 3) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T4 value) : base(value, typeof(T4), 4) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T5 value) : base(value, typeof(T5), 5) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T6 value) : base(value, typeof(T6), 6) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T7 value) : base(value, typeof(T7), 7) { }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is<T>()
         {
             switch (_type)
@@ -409,6 +651,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Runs an action based on the type contained in the union
+        /// </summary>
         public void Match(
             Action<T1> matchT1,
             Action<T2> matchT2,
@@ -445,6 +690,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a value based on the type contained in the union
+        /// </summary>
         public T Match<T>(
             Func<T1, T> matchT1,
             Func<T2, T> matchT2,
@@ -475,25 +723,79 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException("Union is in an invalid state");
         }
     }
+    /// <summary>
+    /// Union type
+    /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
     public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8> : Union
     {
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T3 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T4 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T5 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T6 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T7 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T8 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T7 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T8 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T1 value) : base(value, typeof(T1), 1) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T3 value) : base(value, typeof(T3), 3) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T4 value) : base(value, typeof(T4), 4) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T5 value) : base(value, typeof(T5), 5) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T6 value) : base(value, typeof(T6), 6) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T7 value) : base(value, typeof(T7), 7) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T8 value) : base(value, typeof(T8), 8) { }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is<T>()
         {
             switch (_type)
@@ -517,6 +819,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Runs an action based on the type contained in the union
+        /// </summary>
         public void Match(
             Action<T1> matchT1,
             Action<T2> matchT2,
@@ -557,6 +862,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a value based on the type contained in the union
+        /// </summary>
         public T Match<T>(
             Func<T1, T> matchT1,
             Func<T2, T> matchT2,
@@ -590,27 +898,87 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException("Union is in an invalid state");
         }
     }
+    /// <summary>
+    /// Union type
+    /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
     public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> : Union
     {
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T3 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T4 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T5 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T6 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T7 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T8 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T9 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T7 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T8 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T9 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T1 value) : base(value, typeof(T1), 1) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T3 value) : base(value, typeof(T3), 3) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T4 value) : base(value, typeof(T4), 4) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T5 value) : base(value, typeof(T5), 5) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T6 value) : base(value, typeof(T6), 6) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T7 value) : base(value, typeof(T7), 7) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T8 value) : base(value, typeof(T8), 8) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T9 value) : base(value, typeof(T9), 9) { }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is<T>()
         {
             switch (_type)
@@ -636,6 +1004,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Runs an action based on the type contained in the union
+        /// </summary>
         public void Match(
             Action<T1> matchT1,
             Action<T2> matchT2,
@@ -680,6 +1051,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a value based on the type contained in the union
+        /// </summary>
         public T Match<T>(
             Func<T1, T> matchT1,
             Func<T2, T> matchT2,
@@ -716,29 +1090,95 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException("Union is in an invalid state");
         }
     }
+    /// <summary>
+    /// Union type
+    /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
     public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : Union
     {
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T1 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T2 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T3 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T4 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T5 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T6 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T7 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T8 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T9 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
-        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T10 instance) => instance == null ? null : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T7 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T8 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T9 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// Implicit conversion operators for each type in the union
+        /// </summary>
+        public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T10 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T1 value) : base(value, typeof(T1), 1) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T3 value) : base(value, typeof(T3), 3) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T4 value) : base(value, typeof(T4), 4) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T5 value) : base(value, typeof(T5), 5) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T6 value) : base(value, typeof(T6), 6) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T7 value) : base(value, typeof(T7), 7) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T8 value) : base(value, typeof(T8), 8) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T9 value) : base(value, typeof(T9), 9) { }
+        /// <summary>
+        /// New union instance
+        /// </summary>
         public Union(T10 value) : base(value, typeof(T10), 10) { }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is<T>()
         {
             switch(_type)
@@ -766,6 +1206,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Runs an action based on the type contained in the union
+        /// </summary>
         public void Match(
             Action<T1> matchT1,
             Action<T2> matchT2,
@@ -814,6 +1257,9 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a value based on the type contained in the union
+        /// </summary>
         public T Match<T>(
             Func<T1, T> matchT1,
             Func<T2, T> matchT2,
