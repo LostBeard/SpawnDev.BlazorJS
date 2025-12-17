@@ -756,6 +756,8 @@ Union JsonConverters allow proper serialization and deserialization during Javas
 ```cs
 void UnionTypeTestMethod(string varName, Union<bool?, string?>? unionTypeValue)
 {
+    // unionTypeValue.Value will be either a bool? or string? depending on what was passed in
+    // and will be properly serialized to Javascript as boolean | string | null
     JS.Set(varName, unionTypeValue);
 }
 
@@ -786,7 +788,8 @@ Union<string, ulong, long> t1 = result.Map((string v) => 99).Map<ulong>((int v) 
 Union<string, int, long> t2 = await result.MapAsync(async (string v) => v + "1");
 Union<string, int, long> t3 = await result.MapAsync(async (int v) => v * 5 + "");
 
-// Use Reduce to get a single type result
+// Reduce allows processing a single type value into one of the other types reducing the possible types by 1
+// Here Reduce is used to get a single type result
 // Here we reduce Union<string, int, long> to Union<string, long> to string
 string finalValue = result.Reduce((int v) => v.ToString()).Reduce((long v) => v.ToString());
 // finalValue will be "6" here
