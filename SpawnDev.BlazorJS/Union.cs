@@ -166,6 +166,56 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Reduce
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public T2 Reduce(Func<T1, T2> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public T1 Reduce(Func<T2, T1> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<T2> ReduceAsync(Func<T1, Task<T2>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<T2>((T2)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<T1> ReduceAsync(Func<T2, Task<T1>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<T1>((T1)Value!);
+                case 2: return map((T2)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        #endregion
     }
     /// <summary>
     /// Union type
@@ -342,6 +392,86 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Reduce
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T2, T3> Reduce(Func<T1, Union<T2, T3>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T3> Reduce(Func<T2, Union<T1, T3>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2> Reduce(Func<T3, Union<T1, T2>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T2, T3>> ReduceAsync(Func<T1, Task<Union<T2, T3>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<T2, T3>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T2, T3>>((T3)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T3>> ReduceAsync(Func<T2, Task<Union<T1, T3>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T3>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T3>>((T3)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2>> ReduceAsync(Func<T3, Task<Union<T1, T2>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2>>((T2)Value!);
+                case 3: return map((T3)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        #endregion
     }
     /// <summary>
     /// Union type
@@ -575,6 +705,120 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Reduce
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T2, T3, T4> Reduce(Func<T1, Union<T2, T3, T4>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T3, T4> Reduce(Func<T2, Union<T1, T3, T4>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T4> Reduce(Func<T3, Union<T1, T2, T4>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3> Reduce(Func<T4, Union<T1, T2, T3>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T2, T3, T4>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<T2, T3, T4>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T2, T3, T4>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T2, T3, T4>>((T4)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T3, T4>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T3, T4>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T3, T4>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T3, T4>>((T4)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T4>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T4>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T4>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T4>>((T4)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3>>((T3)Value!);
+                case 4: return map((T4)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        #endregion
     }
     /// <summary>
     /// Union type
@@ -869,6 +1113,158 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Reduce
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T2, T3, T4, T5> Reduce(Func<T1, Union<T2, T3, T4, T5>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T3, T4, T5> Reduce(Func<T2, Union<T1, T3, T4, T5>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T4, T5> Reduce(Func<T3, Union<T1, T2, T4, T5>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T5> Reduce(Func<T4, Union<T1, T2, T3, T5>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4> Reduce(Func<T5, Union<T1, T2, T3, T4>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T2, T3, T4, T5>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<T2, T3, T4, T5>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T2, T3, T4, T5>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T2, T3, T4, T5>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T2, T3, T4, T5>>((T5)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T3, T4, T5>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T3, T4, T5>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T3, T4, T5>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T3, T4, T5>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T3, T4, T5>>((T5)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T4, T5>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T4, T5>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T4, T5>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T4, T5>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T4, T5>>((T5)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T5>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T5>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T5>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T5>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T5>>((T5)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4>>((T4)Value!);
+                case 5: return map((T5)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        #endregion
     }
     /// <summary>
     /// Union type
@@ -1228,6 +1624,200 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Reduce
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T2, T3, T4, T5, T6> Reduce(Func<T1, Union<T2, T3, T4, T5, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T3, T4, T5, T6> Reduce(Func<T2, Union<T1, T3, T4, T5, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T4, T5, T6> Reduce(Func<T3, Union<T1, T2, T4, T5, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T5, T6> Reduce(Func<T4, Union<T1, T2, T3, T5, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T6> Reduce(Func<T5, Union<T1, T2, T3, T4, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5> Reduce(Func<T6, Union<T1, T2, T3, T4, T5>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T2, T3, T4, T5, T6>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<T2, T3, T4, T5, T6>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T2, T3, T4, T5, T6>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T2, T3, T4, T5, T6>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T2, T3, T4, T5, T6>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T2, T3, T4, T5, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T3, T4, T5, T6>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T3, T4, T5, T6>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T3, T4, T5, T6>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T3, T4, T5, T6>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T3, T4, T5, T6>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T3, T4, T5, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T4, T5, T6>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T4, T5, T6>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T4, T5, T6>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T4, T5, T6>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T4, T5, T6>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T4, T5, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T5, T6>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T5, T6>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T5, T6>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T5, T6>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T5, T6>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T5, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T6>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T6>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T6>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T6>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T6>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5>>((T5)Value!);
+                case 6: return map((T6)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        #endregion
     }
     /// <summary>
     /// Union type
@@ -1656,6 +2246,246 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Reduce
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T2, T3, T4, T5, T6, T7> Reduce(Func<T1, Union<T2, T3, T4, T5, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T3, T4, T5, T6, T7> Reduce(Func<T2, Union<T1, T3, T4, T5, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T4, T5, T6, T7> Reduce(Func<T3, Union<T1, T2, T4, T5, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T5, T6, T7> Reduce(Func<T4, Union<T1, T2, T3, T5, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T6, T7> Reduce(Func<T5, Union<T1, T2, T3, T4, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T7> Reduce(Func<T6, Union<T1, T2, T3, T4, T5, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6> Reduce(Func<T7, Union<T1, T2, T3, T4, T5, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return map((T7)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T2, T3, T4, T5, T6, T7>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T3, T4, T5, T6, T7>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T4, T5, T6, T7>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T5, T6, T7>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T6, T7>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T7>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7>>((T5)Value!);
+                case 6: return map((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6>> ReduceAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6>>((T6)Value!);
+                case 7: return map((T7)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        #endregion
     }
     /// <summary>
     /// Union type
@@ -2157,6 +2987,296 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Reduce
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T2, T3, T4, T5, T6, T7, T8> Reduce(Func<T1, Union<T2, T3, T4, T5, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T3, T4, T5, T6, T7, T8> Reduce(Func<T2, Union<T1, T3, T4, T5, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T4, T5, T6, T7, T8> Reduce(Func<T3, Union<T1, T2, T4, T5, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T5, T6, T7, T8> Reduce(Func<T4, Union<T1, T2, T3, T5, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T6, T7, T8> Reduce(Func<T5, Union<T1, T2, T3, T4, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T7, T8> Reduce(Func<T6, Union<T1, T2, T3, T4, T5, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T8> Reduce(Func<T7, Union<T1, T2, T3, T4, T5, T6, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return map((T7)Value!);
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7> Reduce(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return map((T8)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T2, T3, T4, T5, T6, T7, T8>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T3, T4, T5, T6, T7, T8>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T4, T5, T6, T7, T8>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T5, T6, T7, T8>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T6, T7, T8>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T7, T8>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8>>((T5)Value!);
+                case 6: return map((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T8>> ReduceAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8>>((T6)Value!);
+                case 7: return map((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7>> ReduceAsync(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7>>((T7)Value!);
+                case 8: return map((T8)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        #endregion
     }
     /// <summary>
     /// Union type
@@ -2736,6 +3856,350 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Reduce
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T2, T3, T4, T5, T6, T7, T8, T9> Reduce(Func<T1, Union<T2, T3, T4, T5, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T3, T4, T5, T6, T7, T8, T9> Reduce(Func<T2, Union<T1, T3, T4, T5, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T4, T5, T6, T7, T8, T9> Reduce(Func<T3, Union<T1, T2, T4, T5, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T5, T6, T7, T8, T9> Reduce(Func<T4, Union<T1, T2, T3, T5, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T6, T7, T8, T9> Reduce(Func<T5, Union<T1, T2, T3, T4, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T7, T8, T9> Reduce(Func<T6, Union<T1, T2, T3, T4, T5, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T8, T9> Reduce(Func<T7, Union<T1, T2, T3, T4, T5, T6, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return map((T7)Value!);
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T9> Reduce(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return map((T8)Value!);
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8> Reduce(Func<T9, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return map((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T2, T3, T4, T5, T6, T7, T8, T9>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T3, T4, T5, T6, T7, T8, T9>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T4, T5, T6, T7, T8, T9>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T5, T6, T7, T8, T9>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T6, T7, T8, T9>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T7, T8, T9>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9>>((T5)Value!);
+                case 6: return map((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T8, T9>> ReduceAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9>>((T6)Value!);
+                case 7: return map((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T9>> ReduceAsync(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9>>((T7)Value!);
+                case 8: return map((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> ReduceAsync(Func<T9, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8>>((T8)Value!);
+                case 9: return map((T9)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        #endregion
     }
     /// <summary>
     /// Union type
@@ -2918,26 +4382,6 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Returns a Union
         /// </summary>
-        public Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map<TResult>(Func<T1, Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map)
-        {
-            switch (_type)
-            {
-                case 1: return map((T1)Value!);
-                case 2: return (T2)Value!;
-                case 3: return (T3)Value!;
-                case 4: return (T4)Value!;
-                case 5: return (T5)Value!;
-                case 6: return (T6)Value!;
-                case 7: return (T7)Value!;
-                case 8: return (T8)Value!;
-                case 9: return (T9)Value!;
-                case 10: return (T10)Value!;
-            }
-            throw new InvalidOperationException(InvalidStateMessage);
-        }
-        /// <summary>
-        /// Returns a Union
-        /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T1, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 1 ? map((T1)Value!) : this;
         /// <summary>
         /// Returns a Union
@@ -3015,6 +4459,26 @@ namespace SpawnDev.BlazorJS
         /// Returns a Union
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T10, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 10 ? map((T10)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map<TResult>(Func<T1, Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
         /// <summary>
         /// Returns a Union
         /// </summary>
@@ -3395,5 +4859,407 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Reduce
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T2, T3, T4, T5, T6, T7, T8, T9, T10> Reduce(Func<T1, Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T3, T4, T5, T6, T7, T8, T9, T10> Reduce(Func<T2, Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T4, T5, T6, T7, T8, T9, T10> Reduce(Func<T3, Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T5, T6, T7, T8, T9, T10> Reduce(Func<T4, Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T6, T7, T8, T9, T10> Reduce(Func<T5, Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T7, T8, T9, T10> Reduce(Func<T6, Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T8, T9, T10> Reduce(Func<T7, Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return map((T7)Value!);
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T9, T10> Reduce(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return map((T8)Value!);
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T10> Reduce(Func<T9, Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return map((T9)Value!);
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Reduce(Func<T10, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return map((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return map((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>> ReduceAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>((T6)Value!);
+                case 7: return map((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>> ReduceAsync(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>((T7)Value!);
+                case 8: return map((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>> ReduceAsync(Func<T9, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>((T8)Value!);
+                case 9: return map((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> ReduceAsync(Func<T10, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>((T9)Value!);
+                case 10: return map((T10)Value!);
+            }
+            throw new InvalidOperationException(InvalidStateMessage);
+        }
+        #endregion
     }
 }
