@@ -789,7 +789,7 @@ Union<string, int, long> t2 = await result.MapAsync(async (string v) => v + "1")
 Union<string, int, long> t3 = await result.MapAsync(async (int v) => v * 5 + "");
 
 // Reduce allows processing a single type value into one of the other types reducing the possible types by 1
-// Here Reduce is used to get a single type result by reduxing int to string and then long to string
+// Here Reduce is used to get a single type result by reducing int to string and then long to string
 // Ex. Union<string, int, long> => Union<string, long> => string
 string finalValue = result.Reduce((int v) => v.ToString()).Reduce((long v) => v.ToString());
 // finalValue will be "6" here
