@@ -11,15 +11,15 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// The type index of the value contained in the union
         /// </summary>
-        protected byte _type = 0;
+        protected byte _type { get; init; }
         /// <summary>
         /// The value contained in the union
         /// </summary>
-        public object? Value { get; protected set; }
+        public object? Value { get; init; }
         /// <summary>
         /// The type of the value contained in the union
         /// </summary>
-        public Type ValueType { get; protected set; }
+        public Type ValueType { get; init; }
         /// <summary>
         /// New union instance
         /// </summary>
@@ -29,6 +29,16 @@ namespace SpawnDev.BlazorJS
             ValueType = valueType;
             _type = type;
         }
+        /// <inheritdoc/>
+        public override string ToString() => Value?.ToString() ?? "null";
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
+        public bool Is<T>() => typeof(T) == ValueType;
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
+        public bool Is(Type type) => type == ValueType;
     }
     /// <summary>
     /// Union type
@@ -52,20 +62,6 @@ namespace SpawnDev.BlazorJS
         /// New union instance
         /// </summary>
         public Union(T2 value) : base(value, typeof(T2), 2) { }
-        /// <summary>
-        /// Returns true if the union contains the specified type
-        /// </summary>
-        public bool Is<T>()
-        {
-            switch (_type)
-            {
-                case 1:
-                    return typeof(T) == typeof(T1);
-                case 2:
-                    return typeof(T) == typeof(T2);
-            }
-            throw new InvalidOperationException("Union is in an invalid state");
-        }
         /// <summary>
         /// Runs an action based on the type contained in the union
         /// </summary>
@@ -102,6 +98,70 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2> Map(Func<T1, Union<T1, T2>> map) => _type == 1 ? map((T1)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2> Map(Func<T2, Union<T1, T2>> map) => _type == 2 ? map((T2)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2>> MapAsync(Func<T1, Task<Union<T1, T2>>> map) => _type == 1 ? map((T1)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2>> MapAsync(Func<T2, Task<Union<T1, T2>>> map) => _type == 2 ? map((T2)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2> Map<TResult>(Func<T1, Union<TResult, T2>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, TResult> Map<TResult>(Func<T2, Union<T1, TResult>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<TResult, T2>> MapAsync<TResult>(Func<T1, Task<Union<TResult, T2>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<TResult, T2>>((T2)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, TResult>> MapAsync<TResult>(Func<T2, Task<Union<T1, TResult>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, TResult>>((T1)Value!);
+                case 2: return map((T2)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
     }
     /// <summary>
     /// Union type
@@ -133,22 +193,6 @@ namespace SpawnDev.BlazorJS
         /// New union instance
         /// </summary>
         public Union(T3 value) : base(value, typeof(T3), 3) { }
-        /// <summary>
-        /// Returns true if the union contains the specified type
-        /// </summary>
-        public bool Is<T>()
-        {
-            switch (_type)
-            {
-                case 1:
-                    return typeof(T) == typeof(T1);
-                case 2:
-                    return typeof(T) == typeof(T2);
-                case 3:
-                    return typeof(T) == typeof(T3);
-            }
-            throw new InvalidOperationException("Union is in an invalid state");
-        }
         /// <summary>
         /// Runs an action based on the type contained in the union
         /// </summary>
@@ -192,6 +236,108 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3> Map(Func<T1, Union<T1, T2, T3>> map) => _type == 1 ? map((T1)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3> Map(Func<T2, Union<T1, T2, T3>> map) => _type == 2 ? map((T2)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3> Map(Func<T3, Union<T1, T2, T3>> map) => _type == 3 ? map((T3)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3>> MapAsync(Func<T1, Task<Union<T1, T2, T3>>> map) => _type == 1 ? map((T1)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3>> MapAsync(Func<T2, Task<Union<T1, T2, T3>>> map) => _type == 2 ? map((T2)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3>> MapAsync(Func<T3, Task<Union<T1, T2, T3>>> map) => _type == 3 ? map((T3)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2, T3> Map<TResult>(Func<T1, Union<TResult, T2, T3>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, TResult, T3> Map<TResult>(Func<T2, Union<T1, TResult, T3>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, TResult> Map<TResult>(Func<T3, Union<T1, T2, TResult>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<TResult, T2, T3>> MapAsync<TResult>(Func<T1, Task<Union<TResult, T2, T3>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<TResult, T2, T3>>((T2)Value!);
+                case 3: return Task.FromResult<Union<TResult, T2, T3>>((T3)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, TResult, T3>> MapAsync<TResult>(Func<T2, Task<Union<T1, TResult, T3>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, TResult, T3>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, TResult, T3>>((T3)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, TResult>> MapAsync<TResult>(Func<T3, Task<Union<T1, T2, TResult>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, TResult>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, TResult>>((T2)Value!);
+                case 3: return map((T3)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
     }
     /// <summary>
     /// Union type
@@ -231,24 +377,6 @@ namespace SpawnDev.BlazorJS
         /// New union instance
         /// </summary>
         public Union(T4 value) : base(value, typeof(T4), 4) { }
-        /// <summary>
-        /// Returns true if the union contains the specified type
-        /// </summary>
-        public bool Is<T>()
-        {
-            switch (_type)
-            {
-                case 1:
-                    return typeof(T) == typeof(T1);
-                case 2:
-                    return typeof(T) == typeof(T2);
-                case 3:
-                    return typeof(T) == typeof(T3);
-                case 4:
-                    return typeof(T) == typeof(T4);
-            }
-            throw new InvalidOperationException("Union is in an invalid state");
-        }
         /// <summary>
         /// Runs an action based on the type contained in the union
         /// </summary>
@@ -299,6 +427,150 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4> Map(Func<T1, Union<T1, T2, T3, T4>> map) => _type == 1 ? map((T1)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4> Map(Func<T2, Union<T1, T2, T3, T4>> map) => _type == 2 ? map((T2)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4> Map(Func<T3, Union<T1, T2, T3, T4>> map) => _type == 3 ? map((T3)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4> Map(Func<T4, Union<T1, T2, T3, T4>> map) => _type == 4 ? map((T4)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4>> MapAsync(Func<T1, Task<Union<T1, T2, T3, T4>>> map) => _type == 1 ? map((T1)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4>> MapAsync(Func<T2, Task<Union<T1, T2, T3, T4>>> map) => _type == 2 ? map((T2)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4>> MapAsync(Func<T3, Task<Union<T1, T2, T3, T4>>> map) => _type == 3 ? map((T3)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4>> MapAsync(Func<T4, Task<Union<T1, T2, T3, T4>>> map) => _type == 4 ? map((T4)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2, T3, T4> Map<TResult>(Func<T1, Union<TResult, T2, T3, T4>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, TResult, T3, T4> Map<TResult>(Func<T2, Union<T1, TResult, T3, T4>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, TResult, T4> Map<TResult>(Func<T3, Union<T1, T2, TResult, T4>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, TResult> Map<TResult>(Func<T4, Union<T1, T2, T3, TResult>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<TResult, T2, T3, T4>> MapAsync<TResult>(Func<T1, Task<Union<TResult, T2, T3, T4>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<TResult, T2, T3, T4>>((T2)Value!);
+                case 3: return Task.FromResult<Union<TResult, T2, T3, T4>>((T3)Value!);
+                case 4: return Task.FromResult<Union<TResult, T2, T3, T4>>((T4)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, TResult, T3, T4>> MapAsync<TResult>(Func<T2, Task<Union<T1, TResult, T3, T4>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, TResult, T3, T4>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, TResult, T3, T4>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, TResult, T3, T4>>((T4)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, TResult, T4>> MapAsync<TResult>(Func<T3, Task<Union<T1, T2, TResult, T4>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, TResult, T4>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, TResult, T4>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, TResult, T4>>((T4)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, TResult>> MapAsync<TResult>(Func<T4, Task<Union<T1, T2, T3, TResult>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, TResult>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, TResult>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, TResult>>((T3)Value!);
+                case 4: return map((T4)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
     }
     /// <summary>
     /// Union type
@@ -346,26 +618,6 @@ namespace SpawnDev.BlazorJS
         /// New union instance
         /// </summary>
         public Union(T5 value) : base(value, typeof(T5), 5) { }
-        /// <summary>
-        /// Returns true if the union contains the specified type
-        /// </summary>
-        public bool Is<T>()
-        {
-            switch (_type)
-            {
-                case 1:
-                    return typeof(T) == typeof(T1);
-                case 2:
-                    return typeof(T) == typeof(T2);
-                case 3:
-                    return typeof(T) == typeof(T3);
-                case 4:
-                    return typeof(T) == typeof(T4);
-                case 5:
-                    return typeof(T) == typeof(T5);
-            }
-            throw new InvalidOperationException("Union is in an invalid state");
-        }
         /// <summary>
         /// Runs an action based on the type contained in the union
         /// </summary>
@@ -420,6 +672,196 @@ namespace SpawnDev.BlazorJS
                     return matchT4((T4)Value!);
                 case 5:
                     return matchT5((T5)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5> Map(Func<T1, Union<T1, T2, T3, T4, T5>> map) => _type == 1 ? map((T1)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5> Map(Func<T2, Union<T1, T2, T3, T4, T5>> map) => _type == 2 ? map((T2)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5> Map(Func<T3, Union<T1, T2, T3, T4, T5>> map) => _type == 3 ? map((T3)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5> Map(Func<T4, Union<T1, T2, T3, T4, T5>> map) => _type == 4 ? map((T4)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5> Map(Func<T5, Union<T1, T2, T3, T4, T5>> map) => _type == 5 ? map((T5)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5>> MapAsync(Func<T1, Task<Union<T1, T2, T3, T4, T5>>> map) => _type == 1 ? map((T1)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5>> MapAsync(Func<T2, Task<Union<T1, T2, T3, T4, T5>>> map) => _type == 2 ? map((T2)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5>> MapAsync(Func<T3, Task<Union<T1, T2, T3, T4, T5>>> map) => _type == 3 ? map((T3)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5>> MapAsync(Func<T4, Task<Union<T1, T2, T3, T4, T5>>> map) => _type == 4 ? map((T4)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5>> MapAsync(Func<T5, Task<Union<T1, T2, T3, T4, T5>>> map) => _type == 5 ? map((T5)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2, T3, T4, T5> Map<TResult>(Func<T1, Union<TResult, T2, T3, T4, T5>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, TResult, T3, T4, T5> Map<TResult>(Func<T2, Union<T1, TResult, T3, T4, T5>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, TResult, T4, T5> Map<TResult>(Func<T3, Union<T1, T2, TResult, T4, T5>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, TResult, T5> Map<TResult>(Func<T4, Union<T1, T2, T3, TResult, T5>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, TResult> Map<TResult>(Func<T5, Union<T1, T2, T3, T4, TResult>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<TResult, T2, T3, T4, T5>> MapAsync<TResult>(Func<T1, Task<Union<TResult, T2, T3, T4, T5>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<TResult, T2, T3, T4, T5>>((T2)Value!);
+                case 3: return Task.FromResult<Union<TResult, T2, T3, T4, T5>>((T3)Value!);
+                case 4: return Task.FromResult<Union<TResult, T2, T3, T4, T5>>((T4)Value!);
+                case 5: return Task.FromResult<Union<TResult, T2, T3, T4, T5>>((T5)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, TResult, T3, T4, T5>> MapAsync<TResult>(Func<T2, Task<Union<T1, TResult, T3, T4, T5>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, TResult, T3, T4, T5>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, TResult, T3, T4, T5>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, TResult, T3, T4, T5>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, TResult, T3, T4, T5>>((T5)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, TResult, T4, T5>> MapAsync<TResult>(Func<T3, Task<Union<T1, T2, TResult, T4, T5>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, TResult, T4, T5>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, TResult, T4, T5>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, TResult, T4, T5>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, TResult, T4, T5>>((T5)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, TResult, T5>> MapAsync<TResult>(Func<T4, Task<Union<T1, T2, T3, TResult, T5>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, TResult, T5>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, TResult, T5>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, TResult, T5>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, TResult, T5>>((T5)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, TResult>> MapAsync<TResult>(Func<T5, Task<Union<T1, T2, T3, T4, TResult>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, TResult>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, TResult>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, TResult>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, TResult>>((T4)Value!);
+                case 5: return map((T5)Value!);
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
@@ -478,28 +920,6 @@ namespace SpawnDev.BlazorJS
         /// New union instance
         /// </summary>
         public Union(T6 value) : base(value, typeof(T6), 6) { }
-        /// <summary>
-        /// Returns true if the union contains the specified type
-        /// </summary>
-        public bool Is<T>()
-        {
-            switch (_type)
-            {
-                case 1:
-                    return typeof(T) == typeof(T1);
-                case 2:
-                    return typeof(T) == typeof(T2);
-                case 3:
-                    return typeof(T) == typeof(T3);
-                case 4:
-                    return typeof(T) == typeof(T4);
-                case 5:
-                    return typeof(T) == typeof(T5);
-                case 6:
-                    return typeof(T) == typeof(T6);
-            }
-            throw new InvalidOperationException("Union is in an invalid state");
-        }
         /// <summary>
         /// Runs an action based on the type contained in the union
         /// </summary>
@@ -561,6 +981,246 @@ namespace SpawnDev.BlazorJS
                     return matchT5((T5)Value!);
                 case 6:
                     return matchT6((T6)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6> Map(Func<T1, Union<T1, T2, T3, T4, T5, T6>> map) => _type == 1 ? map((T1)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6> Map(Func<T2, Union<T1, T2, T3, T4, T5, T6>> map) => _type == 2 ? map((T2)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6> Map(Func<T3, Union<T1, T2, T3, T4, T5, T6>> map) => _type == 3 ? map((T3)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6> Map(Func<T4, Union<T1, T2, T3, T4, T5, T6>> map) => _type == 4 ? map((T4)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6> Map(Func<T5, Union<T1, T2, T3, T4, T5, T6>> map) => _type == 5 ? map((T5)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6> Map(Func<T6, Union<T1, T2, T3, T4, T5, T6>> map) => _type == 6 ? map((T6)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6>> MapAsync(Func<T1, Task<Union<T1, T2, T3, T4, T5, T6>>> map) => _type == 1 ? map((T1)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6>> MapAsync(Func<T2, Task<Union<T1, T2, T3, T4, T5, T6>>> map) => _type == 2 ? map((T2)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6>> MapAsync(Func<T3, Task<Union<T1, T2, T3, T4, T5, T6>>> map) => _type == 3 ? map((T3)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6>> MapAsync(Func<T4, Task<Union<T1, T2, T3, T4, T5, T6>>> map) => _type == 4 ? map((T4)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6>> MapAsync(Func<T5, Task<Union<T1, T2, T3, T4, T5, T6>>> map) => _type == 5 ? map((T5)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6>> MapAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T6>>> map) => _type == 6 ? map((T6)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2, T3, T4, T5, T6> Map<TResult>(Func<T1, Union<TResult, T2, T3, T4, T5, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, TResult, T3, T4, T5, T6> Map<TResult>(Func<T2, Union<T1, TResult, T3, T4, T5, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, TResult, T4, T5, T6> Map<TResult>(Func<T3, Union<T1, T2, TResult, T4, T5, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, TResult, T5, T6> Map<TResult>(Func<T4, Union<T1, T2, T3, TResult, T5, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, TResult, T6> Map<TResult>(Func<T5, Union<T1, T2, T3, T4, TResult, T6>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, TResult> Map<TResult>(Func<T6, Union<T1, T2, T3, T4, T5, TResult>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<TResult, T2, T3, T4, T5, T6>> MapAsync<TResult>(Func<T1, Task<Union<TResult, T2, T3, T4, T5, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6>>((T2)Value!);
+                case 3: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6>>((T3)Value!);
+                case 4: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6>>((T4)Value!);
+                case 5: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6>>((T5)Value!);
+                case 6: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, TResult, T3, T4, T5, T6>> MapAsync<TResult>(Func<T2, Task<Union<T1, TResult, T3, T4, T5, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, TResult, T4, T5, T6>> MapAsync<TResult>(Func<T3, Task<Union<T1, T2, TResult, T4, T5, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, TResult, T5, T6>> MapAsync<TResult>(Func<T4, Task<Union<T1, T2, T3, TResult, T5, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, TResult, T6>> MapAsync<TResult>(Func<T5, Task<Union<T1, T2, T3, T4, TResult, T6>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6>>((T6)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, TResult>> MapAsync<TResult>(Func<T6, Task<Union<T1, T2, T3, T4, T5, TResult>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult>>((T5)Value!);
+                case 6: return map((T6)Value!);
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
@@ -627,30 +1287,6 @@ namespace SpawnDev.BlazorJS
         /// New union instance
         /// </summary>
         public Union(T7 value) : base(value, typeof(T7), 7) { }
-        /// <summary>
-        /// Returns true if the union contains the specified type
-        /// </summary>
-        public bool Is<T>()
-        {
-            switch (_type)
-            {
-                case 1:
-                    return typeof(T) == typeof(T1);
-                case 2:
-                    return typeof(T) == typeof(T2);
-                case 3:
-                    return typeof(T) == typeof(T3);
-                case 4:
-                    return typeof(T) == typeof(T4);
-                case 5:
-                    return typeof(T) == typeof(T5);
-                case 6:
-                    return typeof(T) == typeof(T6);
-                case 7:
-                    return typeof(T) == typeof(T7);
-            }
-            throw new InvalidOperationException("Union is in an invalid state");
-        }
         /// <summary>
         /// Runs an action based on the type contained in the union
         /// </summary>
@@ -719,6 +1355,300 @@ namespace SpawnDev.BlazorJS
                     return matchT6((T6)Value!);
                 case 7:
                     return matchT7((T7)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7> Map(Func<T1, Union<T1, T2, T3, T4, T5, T6, T7>> map) => _type == 1 ? map((T1)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7> Map(Func<T2, Union<T1, T2, T3, T4, T5, T6, T7>> map) => _type == 2 ? map((T2)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7> Map(Func<T3, Union<T1, T2, T3, T4, T5, T6, T7>> map) => _type == 3 ? map((T3)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7> Map(Func<T4, Union<T1, T2, T3, T4, T5, T6, T7>> map) => _type == 4 ? map((T4)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7> Map(Func<T5, Union<T1, T2, T3, T4, T5, T6, T7>> map) => _type == 5 ? map((T5)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7> Map(Func<T6, Union<T1, T2, T3, T4, T5, T6, T7>> map) => _type == 6 ? map((T6)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7> Map(Func<T7, Union<T1, T2, T3, T4, T5, T6, T7>> map) => _type == 7 ? map((T7)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7>> MapAsync(Func<T1, Task<Union<T1, T2, T3, T4, T5, T6, T7>>> map) => _type == 1 ? map((T1)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7>> MapAsync(Func<T2, Task<Union<T1, T2, T3, T4, T5, T6, T7>>> map) => _type == 2 ? map((T2)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7>> MapAsync(Func<T3, Task<Union<T1, T2, T3, T4, T5, T6, T7>>> map) => _type == 3 ? map((T3)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7>> MapAsync(Func<T4, Task<Union<T1, T2, T3, T4, T5, T6, T7>>> map) => _type == 4 ? map((T4)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7>> MapAsync(Func<T5, Task<Union<T1, T2, T3, T4, T5, T6, T7>>> map) => _type == 5 ? map((T5)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7>> MapAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T6, T7>>> map) => _type == 6 ? map((T6)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7>> MapAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T7>>> map) => _type == 7 ? map((T7)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2, T3, T4, T5, T6, T7> Map<TResult>(Func<T1, Union<TResult, T2, T3, T4, T5, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, TResult, T3, T4, T5, T6, T7> Map<TResult>(Func<T2, Union<T1, TResult, T3, T4, T5, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, TResult, T4, T5, T6, T7> Map<TResult>(Func<T3, Union<T1, T2, TResult, T4, T5, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, TResult, T5, T6, T7> Map<TResult>(Func<T4, Union<T1, T2, T3, TResult, T5, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, TResult, T6, T7> Map<TResult>(Func<T5, Union<T1, T2, T3, T4, TResult, T6, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, TResult, T7> Map<TResult>(Func<T6, Union<T1, T2, T3, T4, T5, TResult, T7>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+                case 7: return (T7)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, TResult> Map<TResult>(Func<T7, Union<T1, T2, T3, T4, T5, T6, TResult>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return map((T7)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<TResult, T2, T3, T4, T5, T6, T7>> MapAsync<TResult>(Func<T1, Task<Union<TResult, T2, T3, T4, T5, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7>>((T2)Value!);
+                case 3: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7>>((T3)Value!);
+                case 4: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7>>((T4)Value!);
+                case 5: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7>>((T5)Value!);
+                case 6: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, TResult, T3, T4, T5, T6, T7>> MapAsync<TResult>(Func<T2, Task<Union<T1, TResult, T3, T4, T5, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, TResult, T4, T5, T6, T7>> MapAsync<TResult>(Func<T3, Task<Union<T1, T2, TResult, T4, T5, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, TResult, T5, T6, T7>> MapAsync<TResult>(Func<T4, Task<Union<T1, T2, T3, TResult, T5, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, TResult, T6, T7>> MapAsync<TResult>(Func<T5, Task<Union<T1, T2, T3, T4, TResult, T6, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, TResult, T7>> MapAsync<TResult>(Func<T6, Task<Union<T1, T2, T3, T4, T5, TResult, T7>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7>>((T5)Value!);
+                case 6: return map((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7>>((T7)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, TResult>> MapAsync<TResult>(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, TResult>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult>>((T6)Value!);
+                case 7: return map((T7)Value!);
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
@@ -794,32 +1724,6 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         public Union(T8 value) : base(value, typeof(T8), 8) { }
         /// <summary>
-        /// Returns true if the union contains the specified type
-        /// </summary>
-        public bool Is<T>()
-        {
-            switch (_type)
-            {
-                case 1:
-                    return typeof(T) == typeof(T1);
-                case 2:
-                    return typeof(T) == typeof(T2);
-                case 3:
-                    return typeof(T) == typeof(T3);
-                case 4:
-                    return typeof(T) == typeof(T4);
-                case 5:
-                    return typeof(T) == typeof(T5);
-                case 6:
-                    return typeof(T) == typeof(T6);
-                case 7:
-                    return typeof(T) == typeof(T7);
-                case 8:
-                    return typeof(T) == typeof(T8);
-            }
-            throw new InvalidOperationException("Union is in an invalid state");
-        }
-        /// <summary>
         /// Runs an action based on the type contained in the union
         /// </summary>
         public void Match(
@@ -894,6 +1798,358 @@ namespace SpawnDev.BlazorJS
                     return matchT7((T7)Value!);
                 case 8:
                     return matchT8((T8)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8> Map(Func<T1, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map) => _type == 1 ? map((T1)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8> Map(Func<T2, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map) => _type == 2 ? map((T2)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8> Map(Func<T3, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map) => _type == 3 ? map((T3)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8> Map(Func<T4, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map) => _type == 4 ? map((T4)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8> Map(Func<T5, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map) => _type == 5 ? map((T5)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8> Map(Func<T6, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map) => _type == 6 ? map((T6)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8> Map(Func<T7, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map) => _type == 7 ? map((T7)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8> Map(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map) => _type == 8 ? map((T8)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> MapAsync(Func<T1, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map) => _type == 1 ? map((T1)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> MapAsync(Func<T2, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map) => _type == 2 ? map((T2)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> MapAsync(Func<T3, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map) => _type == 3 ? map((T3)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> MapAsync(Func<T4, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map) => _type == 4 ? map((T4)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> MapAsync(Func<T5, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map) => _type == 5 ? map((T5)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> MapAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map) => _type == 6 ? map((T6)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> MapAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map) => _type == 7 ? map((T7)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> MapAsync(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map) => _type == 8 ? map((T8)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2, T3, T4, T5, T6, T7, T8> Map<TResult>(Func<T1, Union<TResult, T2, T3, T4, T5, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, TResult, T3, T4, T5, T6, T7, T8> Map<TResult>(Func<T2, Union<T1, TResult, T3, T4, T5, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, TResult, T4, T5, T6, T7, T8> Map<TResult>(Func<T3, Union<T1, T2, TResult, T4, T5, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, TResult, T5, T6, T7, T8> Map<TResult>(Func<T4, Union<T1, T2, T3, TResult, T5, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, TResult, T6, T7, T8> Map<TResult>(Func<T5, Union<T1, T2, T3, T4, TResult, T6, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, TResult, T7, T8> Map<TResult>(Func<T6, Union<T1, T2, T3, T4, T5, TResult, T7, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, TResult, T8> Map<TResult>(Func<T7, Union<T1, T2, T3, T4, T5, T6, TResult, T8>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return map((T7)Value!);
+                case 8: return (T8)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, TResult> Map<TResult>(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, TResult>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return map((T8)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<TResult, T2, T3, T4, T5, T6, T7, T8>> MapAsync<TResult>(Func<T1, Task<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, TResult, T3, T4, T5, T6, T7, T8>> MapAsync<TResult>(Func<T2, Task<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, TResult, T4, T5, T6, T7, T8>> MapAsync<TResult>(Func<T3, Task<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, TResult, T5, T6, T7, T8>> MapAsync<TResult>(Func<T4, Task<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, TResult, T6, T7, T8>> MapAsync<TResult>(Func<T5, Task<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, TResult, T7, T8>> MapAsync<TResult>(Func<T6, Task<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>((T5)Value!);
+                case 6: return map((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, TResult, T8>> MapAsync<TResult>(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, TResult, T8>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8>>((T6)Value!);
+                case 7: return map((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8>>((T8)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, TResult>> MapAsync<TResult>(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, TResult>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult>>((T7)Value!);
+                case 8: return map((T8)Value!);
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
@@ -977,34 +2233,6 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         public Union(T9 value) : base(value, typeof(T9), 9) { }
         /// <summary>
-        /// Returns true if the union contains the specified type
-        /// </summary>
-        public bool Is<T>()
-        {
-            switch (_type)
-            {
-                case 1:
-                    return typeof(T) == typeof(T1);
-                case 2:
-                    return typeof(T) == typeof(T2);
-                case 3:
-                    return typeof(T) == typeof(T3);
-                case 4:
-                    return typeof(T) == typeof(T4);
-                case 5:
-                    return typeof(T) == typeof(T5);
-                case 6:
-                    return typeof(T) == typeof(T6);
-                case 7:
-                    return typeof(T) == typeof(T7);
-                case 8:
-                    return typeof(T) == typeof(T8);
-                case 9:
-                    return typeof(T) == typeof(T9);
-            }
-            throw new InvalidOperationException("Union is in an invalid state");
-        }
-        /// <summary>
         /// Runs an action based on the type contained in the union
         /// </summary>
         public void Match(
@@ -1086,6 +2314,421 @@ namespace SpawnDev.BlazorJS
                     return matchT8((T8)Value!);
                 case 9:
                     return matchT9((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Map(Func<T1, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map) => _type == 1 ? map((T1)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Map(Func<T2, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map) => _type == 2 ? map((T2)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Map(Func<T3, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map) => _type == 3 ? map((T3)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Map(Func<T4, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map) => _type == 4 ? map((T4)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Map(Func<T5, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map) => _type == 5 ? map((T5)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Map(Func<T6, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map) => _type == 6 ? map((T6)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Map(Func<T7, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map) => _type == 7 ? map((T7)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Map(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map) => _type == 8 ? map((T8)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Map(Func<T9, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map) => _type == 9 ? map((T9)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync(Func<T1, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map) => _type == 1 ? map((T1)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync(Func<T2, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map) => _type == 2 ? map((T2)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync(Func<T3, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map) => _type == 3 ? map((T3)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync(Func<T4, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map) => _type == 4 ? map((T4)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync(Func<T5, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map) => _type == 5 ? map((T5)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map) => _type == 6 ? map((T6)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map) => _type == 7 ? map((T7)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map) => _type == 8 ? map((T8)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync(Func<T9, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map) => _type == 9 ? map((T9)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9> Map<TResult>(Func<T1, Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9> Map<TResult>(Func<T2, Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9> Map<TResult>(Func<T3, Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9> Map<TResult>(Func<T4, Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9> Map<TResult>(Func<T5, Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9> Map<TResult>(Func<T6, Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9> Map<TResult>(Func<T7, Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return map((T7)Value!);
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9> Map<TResult>(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return map((T8)Value!);
+                case 9: return (T9)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult> Map<TResult>(Func<T9, Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return map((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>> MapAsync<TResult>(Func<T1, Task<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>> MapAsync<TResult>(Func<T2, Task<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>> MapAsync<TResult>(Func<T3, Task<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>> MapAsync<TResult>(Func<T4, Task<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>> MapAsync<TResult>(Func<T5, Task<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>> MapAsync<TResult>(Func<T6, Task<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T5)Value!);
+                case 6: return map((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>> MapAsync<TResult>(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T6)Value!);
+                case 7: return map((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>> MapAsync<TResult>(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>((T7)Value!);
+                case 8: return map((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9>>((T9)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>> MapAsync<TResult>(Func<T9, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult>>((T8)Value!);
+                case 9: return map((T9)Value!);
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
@@ -1177,36 +2820,6 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         public Union(T10 value) : base(value, typeof(T10), 10) { }
         /// <summary>
-        /// Returns true if the union contains the specified type
-        /// </summary>
-        public bool Is<T>()
-        {
-            switch(_type)
-            {
-                case 1:
-                    return typeof(T) == typeof(T1);
-                case 2:
-                    return typeof(T) == typeof(T2);
-                case 3:
-                    return typeof(T) == typeof(T3);
-                case 4:
-                    return typeof(T) == typeof(T4);
-                case 5:
-                    return typeof(T) == typeof(T5);
-                case 6:
-                    return typeof(T) == typeof(T6);
-                case 7:
-                    return typeof(T) == typeof(T7);
-                case 8:
-                    return typeof(T) == typeof(T8);
-                case 9:
-                    return typeof(T) == typeof(T9);
-                case 10:
-                    return typeof(T) == typeof(T10);
-            }
-            throw new InvalidOperationException("Union is in an invalid state");
-        }
-        /// <summary>
         /// Runs an action based on the type contained in the union
         /// </summary>
         public void Match(
@@ -1295,6 +2908,486 @@ namespace SpawnDev.BlazorJS
                     return matchT9((T9)Value!);
                 case 10:
                     return matchT10((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map<TResult>(Func<T1, Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T1, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 1 ? map((T1)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T2, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 2 ? map((T2)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T3, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 3 ? map((T3)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T4, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 4 ? map((T4)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T5, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 5 ? map((T5)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T6, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 6 ? map((T6)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T7, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 7 ? map((T7)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 8 ? map((T8)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T9, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 9 ? map((T9)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Map(Func<T10, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> map) => _type == 10 ? map((T10)Value!) : this;
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T1, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 1 ? map((T1)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T2, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 2 ? map((T2)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T3, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 3 ? map((T3)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T4, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 4 ? map((T4)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T5, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 5 ? map((T5)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 6 ? map((T6)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 7 ? map((T7)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 8 ? map((T8)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T9, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 9 ? map((T9)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync(Func<T10, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map) => _type == 10 ? map((T10)Value!) : Task.FromResult(this);
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10> Map<TResult>(Func<T2, Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return map((T2)Value!);
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10> Map<TResult>(Func<T3, Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return map((T3)Value!);
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10> Map<TResult>(Func<T4, Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return map((T4)Value!);
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10> Map<TResult>(Func<T5, Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return map((T5)Value!);
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10> Map<TResult>(Func<T6, Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return map((T6)Value!);
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10> Map<TResult>(Func<T7, Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return map((T7)Value!);
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10> Map<TResult>(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return map((T8)Value!);
+                case 9: return (T9)Value!;
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10> Map<TResult>(Func<T9, Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return map((T9)Value!);
+                case 10: return (T10)Value!;
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> Map<TResult>(Func<T10, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> map)
+        {
+            switch (_type)
+            {
+                case 1: return (T1)Value!;
+                case 2: return (T2)Value!;
+                case 3: return (T3)Value!;
+                case 4: return (T4)Value!;
+                case 5: return (T5)Value!;
+                case 6: return (T6)Value!;
+                case 7: return (T7)Value!;
+                case 8: return (T8)Value!;
+                case 9: return (T9)Value!;
+                case 10: return map((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync<TResult>(Func<T1, Task<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return map((T1)Value!);
+                case 2: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<TResult, T2, T3, T4, T5, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>> MapAsync<TResult>(Func<T2, Task<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return map((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, TResult, T3, T4, T5, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>> MapAsync<TResult>(Func<T3, Task<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return map((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, TResult, T4, T5, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>> MapAsync<TResult>(Func<T4, Task<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return map((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, TResult, T5, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>> MapAsync<TResult>(Func<T5, Task<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return map((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, TResult, T6, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>> MapAsync<TResult>(Func<T6, Task<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T5)Value!);
+                case 6: return map((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, TResult, T7, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>> MapAsync<TResult>(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T6)Value!);
+                case 7: return map((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, TResult, T8, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>> MapAsync<TResult>(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T7)Value!);
+                case 8: return map((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, TResult, T9, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>> MapAsync<TResult>(Func<T9, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T8)Value!);
+                case 9: return map((T9)Value!);
+                case 10: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, TResult, T10>>((T10)Value!);
+            }
+            throw new InvalidOperationException("Union is in an invalid state");
+        }
+        /// <summary>
+        /// Returns a Union
+        /// </summary>
+        public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> MapAsync<TResult>(Func<T10, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>> map)
+        {
+            switch (_type)
+            {
+                case 1: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T1)Value!);
+                case 2: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T2)Value!);
+                case 3: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T3)Value!);
+                case 4: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T4)Value!);
+                case 5: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T5)Value!);
+                case 6: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T6)Value!);
+                case 7: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T7)Value!);
+                case 8: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T8)Value!);
+                case 9: return Task.FromResult<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>((T9)Value!);
+                case 10: return map((T10)Value!);
             }
             throw new InvalidOperationException("Union is in an invalid state");
         }
