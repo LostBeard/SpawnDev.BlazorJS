@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
     /// This converter is designed to allow converting Union types to and from JSON<br />
     /// When being serialized/deserialized by the Blazor JSRuntime UnionConverterFactory overrides this converter and is used<br />
     /// This allows handling serialization based on the environment the result will be used in<br />
-    /// Ex. JSObjects nad IJSInProcessObjectReferences are only valid in the Javascript scope
+    /// Ex. JSObjects and IJSInProcessObjectReferences are only valid in the Javascript scope
     /// </summary>
     public class UnionJsonConverter : JsonConverter<object?>
     {
