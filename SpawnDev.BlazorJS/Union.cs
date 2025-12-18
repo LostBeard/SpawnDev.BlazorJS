@@ -42,6 +42,19 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Returns true if the union contains the specified type
         /// </summary>
+        public bool Is<T>(out T value)
+        {
+            if (typeof(T) == ValueType)
+            {
+                value = (T)Value!;
+                return true;
+            }
+            value = default(T)!;
+            return false;
+        }
+        /// <summary>
+        /// Returns true if the union contains the specified type
+        /// </summary>
         public bool Is(Type type) => type == ValueType;
     }
     /// <summary>
@@ -51,11 +64,21 @@ namespace SpawnDev.BlazorJS
     public sealed class Union<T1, T2> : Union
     {
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T1(Union<T1, T2> instance) => instance._type == 1 ? (T1)instance.Value! : default(T1)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T2(Union<T1, T2> instance) => instance._type == 2 ? (T2)instance.Value! : default(T2)!;
+        /// <summary>
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2>(T1 instance) => instance == null ? null! : new Union<T1, T2>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2>(T2 instance) => instance == null ? null! : new Union<T1, T2>(instance);
         /// <summary>
@@ -168,7 +191,7 @@ namespace SpawnDev.BlazorJS
         }
         #region Reduce
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public T2 Reduce(Func<T1, T2> map)
         {
@@ -180,7 +203,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public T1 Reduce(Func<T2, T1> map)
         {
@@ -192,7 +215,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<T2> ReduceAsync(Func<T1, Task<T2>> map)
         {
@@ -204,7 +227,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<T1> ReduceAsync(Func<T2, Task<T1>> map)
         {
@@ -224,15 +247,30 @@ namespace SpawnDev.BlazorJS
     public sealed class Union<T1, T2, T3> : Union
     {
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T1(Union<T1, T2, T3> instance) => instance._type == 1 ? (T1)instance.Value! : default(T1)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T2(Union<T1, T2, T3> instance) => instance._type == 2 ? (T2)instance.Value! : default(T2)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T3(Union<T1, T2, T3> instance) => instance._type == 3 ? (T3)instance.Value! : default(T3)!;
+        /// <summary>
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3>(instance);
         /// <summary>
@@ -394,7 +432,7 @@ namespace SpawnDev.BlazorJS
         }
         #region Reduce
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T2, T3> Reduce(Func<T1, Union<T2, T3>> map)
         {
@@ -407,7 +445,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T3> Reduce(Func<T2, Union<T1, T3>> map)
         {
@@ -420,7 +458,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2> Reduce(Func<T3, Union<T1, T2>> map)
         {
@@ -433,7 +471,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T2, T3>> ReduceAsync(Func<T1, Task<Union<T2, T3>>> map)
         {
@@ -446,7 +484,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T3>> ReduceAsync(Func<T2, Task<Union<T1, T3>>> map)
         {
@@ -459,7 +497,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2>> ReduceAsync(Func<T3, Task<Union<T1, T2>>> map)
         {
@@ -480,19 +518,39 @@ namespace SpawnDev.BlazorJS
     public sealed class Union<T1, T2, T3, T4> : Union
     {
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T1(Union<T1, T2, T3, T4> instance) => instance._type == 1 ? (T1)instance.Value! : default(T1)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T2(Union<T1, T2, T3, T4> instance) => instance._type == 2 ? (T2)instance.Value! : default(T2)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T3(Union<T1, T2, T3, T4> instance) => instance._type == 3 ? (T3)instance.Value! : default(T3)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T4(Union<T1, T2, T3, T4> instance) => instance._type == 4 ? (T4)instance.Value! : default(T4)!;
+        /// <summary>
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4>(instance);
         /// <summary>
@@ -707,7 +765,7 @@ namespace SpawnDev.BlazorJS
         }
         #region Reduce
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T2, T3, T4> Reduce(Func<T1, Union<T2, T3, T4>> map)
         {
@@ -721,7 +779,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T3, T4> Reduce(Func<T2, Union<T1, T3, T4>> map)
         {
@@ -735,7 +793,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T4> Reduce(Func<T3, Union<T1, T2, T4>> map)
         {
@@ -749,7 +807,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3> Reduce(Func<T4, Union<T1, T2, T3>> map)
         {
@@ -763,7 +821,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T2, T3, T4>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4>>> map)
         {
@@ -777,7 +835,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T3, T4>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4>>> map)
         {
@@ -791,7 +849,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T4>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4>>> map)
         {
@@ -805,7 +863,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3>>> map)
         {
@@ -827,23 +885,48 @@ namespace SpawnDev.BlazorJS
     public sealed class Union<T1, T2, T3, T4, T5> : Union
     {
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T1(Union<T1, T2, T3, T4, T5> instance) => instance._type == 1 ? (T1)instance.Value! : default(T1)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T2(Union<T1, T2, T3, T4, T5> instance) => instance._type == 2 ? (T2)instance.Value! : default(T2)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T3(Union<T1, T2, T3, T4, T5> instance) => instance._type == 3 ? (T3)instance.Value! : default(T3)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T4(Union<T1, T2, T3, T4, T5> instance) => instance._type == 4 ? (T4)instance.Value! : default(T4)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T5(Union<T1, T2, T3, T4, T5> instance) => instance._type == 5 ? (T5)instance.Value! : default(T5)!;
+        /// <summary>
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5>(instance);
         /// <summary>
@@ -1115,7 +1198,7 @@ namespace SpawnDev.BlazorJS
         }
         #region Reduce
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T2, T3, T4, T5> Reduce(Func<T1, Union<T2, T3, T4, T5>> map)
         {
@@ -1130,7 +1213,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T3, T4, T5> Reduce(Func<T2, Union<T1, T3, T4, T5>> map)
         {
@@ -1145,7 +1228,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T4, T5> Reduce(Func<T3, Union<T1, T2, T4, T5>> map)
         {
@@ -1160,7 +1243,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T5> Reduce(Func<T4, Union<T1, T2, T3, T5>> map)
         {
@@ -1175,7 +1258,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4> Reduce(Func<T5, Union<T1, T2, T3, T4>> map)
         {
@@ -1190,7 +1273,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T2, T3, T4, T5>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5>>> map)
         {
@@ -1205,7 +1288,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T3, T4, T5>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5>>> map)
         {
@@ -1220,7 +1303,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T4, T5>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5>>> map)
         {
@@ -1235,7 +1318,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T5>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5>>> map)
         {
@@ -1250,7 +1333,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4>>> map)
         {
@@ -1273,27 +1356,57 @@ namespace SpawnDev.BlazorJS
     public sealed class Union<T1, T2, T3, T4, T5, T6> : Union
     {
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T1(Union<T1, T2, T3, T4, T5, T6> instance) => instance._type == 1 ? (T1)instance.Value! : default(T1)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T2(Union<T1, T2, T3, T4, T5, T6> instance) => instance._type == 2 ? (T2)instance.Value! : default(T2)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T3(Union<T1, T2, T3, T4, T5, T6> instance) => instance._type == 3 ? (T3)instance.Value! : default(T3)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T4(Union<T1, T2, T3, T4, T5, T6> instance) => instance._type == 4 ? (T4)instance.Value! : default(T4)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T5(Union<T1, T2, T3, T4, T5, T6> instance) => instance._type == 5 ? (T5)instance.Value! : default(T5)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T6(Union<T1, T2, T3, T4, T5, T6> instance) => instance._type == 6 ? (T6)instance.Value! : default(T6)!;
+        /// <summary>
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6>(instance);
         /// <summary>
@@ -1626,7 +1739,7 @@ namespace SpawnDev.BlazorJS
         }
         #region Reduce
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T2, T3, T4, T5, T6> Reduce(Func<T1, Union<T2, T3, T4, T5, T6>> map)
         {
@@ -1642,7 +1755,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T3, T4, T5, T6> Reduce(Func<T2, Union<T1, T3, T4, T5, T6>> map)
         {
@@ -1658,7 +1771,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T4, T5, T6> Reduce(Func<T3, Union<T1, T2, T4, T5, T6>> map)
         {
@@ -1674,7 +1787,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T5, T6> Reduce(Func<T4, Union<T1, T2, T3, T5, T6>> map)
         {
@@ -1690,7 +1803,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T6> Reduce(Func<T5, Union<T1, T2, T3, T4, T6>> map)
         {
@@ -1706,7 +1819,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5> Reduce(Func<T6, Union<T1, T2, T3, T4, T5>> map)
         {
@@ -1722,7 +1835,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T2, T3, T4, T5, T6>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6>>> map)
         {
@@ -1738,7 +1851,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T3, T4, T5, T6>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6>>> map)
         {
@@ -1754,7 +1867,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T4, T5, T6>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6>>> map)
         {
@@ -1770,7 +1883,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T5, T6>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6>>> map)
         {
@@ -1786,7 +1899,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T6>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6>>> map)
         {
@@ -1802,7 +1915,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5>>> map)
         {
@@ -1826,31 +1939,66 @@ namespace SpawnDev.BlazorJS
     public sealed class Union<T1, T2, T3, T4, T5, T6, T7> : Union
     {
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T1(Union<T1, T2, T3, T4, T5, T6, T7> instance) => instance._type == 1 ? (T1)instance.Value! : default(T1)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T2(Union<T1, T2, T3, T4, T5, T6, T7> instance) => instance._type == 2 ? (T2)instance.Value! : default(T2)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T3(Union<T1, T2, T3, T4, T5, T6, T7> instance) => instance._type == 3 ? (T3)instance.Value! : default(T3)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T4(Union<T1, T2, T3, T4, T5, T6, T7> instance) => instance._type == 4 ? (T4)instance.Value! : default(T4)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T5(Union<T1, T2, T3, T4, T5, T6, T7> instance) => instance._type == 5 ? (T5)instance.Value! : default(T5)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T6(Union<T1, T2, T3, T4, T5, T6, T7> instance) => instance._type == 6 ? (T6)instance.Value! : default(T6)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T7(Union<T1, T2, T3, T4, T5, T6, T7> instance) => instance._type == 7 ? (T7)instance.Value! : default(T7)!;
+        /// <summary>
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7>(T7 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7>(instance);
         /// <summary>
@@ -2248,7 +2396,7 @@ namespace SpawnDev.BlazorJS
         }
         #region Reduce
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T2, T3, T4, T5, T6, T7> Reduce(Func<T1, Union<T2, T3, T4, T5, T6, T7>> map)
         {
@@ -2265,7 +2413,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T3, T4, T5, T6, T7> Reduce(Func<T2, Union<T1, T3, T4, T5, T6, T7>> map)
         {
@@ -2282,7 +2430,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T4, T5, T6, T7> Reduce(Func<T3, Union<T1, T2, T4, T5, T6, T7>> map)
         {
@@ -2299,7 +2447,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T5, T6, T7> Reduce(Func<T4, Union<T1, T2, T3, T5, T6, T7>> map)
         {
@@ -2316,7 +2464,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T6, T7> Reduce(Func<T5, Union<T1, T2, T3, T4, T6, T7>> map)
         {
@@ -2333,7 +2481,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T7> Reduce(Func<T6, Union<T1, T2, T3, T4, T5, T7>> map)
         {
@@ -2350,7 +2498,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6> Reduce(Func<T7, Union<T1, T2, T3, T4, T5, T6>> map)
         {
@@ -2367,7 +2515,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T2, T3, T4, T5, T6, T7>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6, T7>>> map)
         {
@@ -2384,7 +2532,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T3, T4, T5, T6, T7>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6, T7>>> map)
         {
@@ -2401,7 +2549,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T4, T5, T6, T7>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6, T7>>> map)
         {
@@ -2418,7 +2566,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T5, T6, T7>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6, T7>>> map)
         {
@@ -2435,7 +2583,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T6, T7>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6, T7>>> map)
         {
@@ -2452,7 +2600,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T7>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T7>>> map)
         {
@@ -2469,7 +2617,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6>> ReduceAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6>>> map)
         {
@@ -2494,35 +2642,75 @@ namespace SpawnDev.BlazorJS
     public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8> : Union
     {
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T1(Union<T1, T2, T3, T4, T5, T6, T7, T8> instance) => instance._type == 1 ? (T1)instance.Value! : default(T1)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T2(Union<T1, T2, T3, T4, T5, T6, T7, T8> instance) => instance._type == 2 ? (T2)instance.Value! : default(T2)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T3(Union<T1, T2, T3, T4, T5, T6, T7, T8> instance) => instance._type == 3 ? (T3)instance.Value! : default(T3)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T4(Union<T1, T2, T3, T4, T5, T6, T7, T8> instance) => instance._type == 4 ? (T4)instance.Value! : default(T4)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T5(Union<T1, T2, T3, T4, T5, T6, T7, T8> instance) => instance._type == 5 ? (T5)instance.Value! : default(T5)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T6(Union<T1, T2, T3, T4, T5, T6, T7, T8> instance) => instance._type == 6 ? (T6)instance.Value! : default(T6)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T7(Union<T1, T2, T3, T4, T5, T6, T7, T8> instance) => instance._type == 7 ? (T7)instance.Value! : default(T7)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T8(Union<T1, T2, T3, T4, T5, T6, T7, T8> instance) => instance._type == 8 ? (T8)instance.Value! : default(T8)!;
+        /// <summary>
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T7 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8>(T8 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8>(instance);
         /// <summary>
@@ -2989,7 +3177,7 @@ namespace SpawnDev.BlazorJS
         }
         #region Reduce
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T2, T3, T4, T5, T6, T7, T8> Reduce(Func<T1, Union<T2, T3, T4, T5, T6, T7, T8>> map)
         {
@@ -3007,7 +3195,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T3, T4, T5, T6, T7, T8> Reduce(Func<T2, Union<T1, T3, T4, T5, T6, T7, T8>> map)
         {
@@ -3025,7 +3213,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T4, T5, T6, T7, T8> Reduce(Func<T3, Union<T1, T2, T4, T5, T6, T7, T8>> map)
         {
@@ -3043,7 +3231,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T5, T6, T7, T8> Reduce(Func<T4, Union<T1, T2, T3, T5, T6, T7, T8>> map)
         {
@@ -3061,7 +3249,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T6, T7, T8> Reduce(Func<T5, Union<T1, T2, T3, T4, T6, T7, T8>> map)
         {
@@ -3079,7 +3267,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T7, T8> Reduce(Func<T6, Union<T1, T2, T3, T4, T5, T7, T8>> map)
         {
@@ -3097,7 +3285,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T8> Reduce(Func<T7, Union<T1, T2, T3, T4, T5, T6, T8>> map)
         {
@@ -3115,7 +3303,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T7> Reduce(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7>> map)
         {
@@ -3133,7 +3321,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T2, T3, T4, T5, T6, T7, T8>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6, T7, T8>>> map)
         {
@@ -3151,7 +3339,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T3, T4, T5, T6, T7, T8>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6, T7, T8>>> map)
         {
@@ -3169,7 +3357,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T4, T5, T6, T7, T8>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6, T7, T8>>> map)
         {
@@ -3187,7 +3375,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T5, T6, T7, T8>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6, T7, T8>>> map)
         {
@@ -3205,7 +3393,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T6, T7, T8>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6, T7, T8>>> map)
         {
@@ -3223,7 +3411,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T7, T8>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T7, T8>>> map)
         {
@@ -3241,7 +3429,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T8>> ReduceAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T8>>> map)
         {
@@ -3259,7 +3447,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T7>> ReduceAsync(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7>>> map)
         {
@@ -3285,39 +3473,84 @@ namespace SpawnDev.BlazorJS
     public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> : Union
     {
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T1(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> instance) => instance._type == 1 ? (T1)instance.Value! : default(T1)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T2(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> instance) => instance._type == 2 ? (T2)instance.Value! : default(T2)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T3(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> instance) => instance._type == 3 ? (T3)instance.Value! : default(T3)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T4(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> instance) => instance._type == 4 ? (T4)instance.Value! : default(T4)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T5(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> instance) => instance._type == 5 ? (T5)instance.Value! : default(T5)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T6(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> instance) => instance._type == 6 ? (T6)instance.Value! : default(T6)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T7(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> instance) => instance._type == 7 ? (T7)instance.Value! : default(T7)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T8(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> instance) => instance._type == 8 ? (T8)instance.Value! : default(T8)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T9(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> instance) => instance._type == 9 ? (T9)instance.Value! : default(T9)!;
+        /// <summary>
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T7 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T8 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T9 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>(instance);
         /// <summary>
@@ -3858,7 +4091,7 @@ namespace SpawnDev.BlazorJS
         }
         #region Reduce
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T2, T3, T4, T5, T6, T7, T8, T9> Reduce(Func<T1, Union<T2, T3, T4, T5, T6, T7, T8, T9>> map)
         {
@@ -3877,7 +4110,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T3, T4, T5, T6, T7, T8, T9> Reduce(Func<T2, Union<T1, T3, T4, T5, T6, T7, T8, T9>> map)
         {
@@ -3896,7 +4129,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T4, T5, T6, T7, T8, T9> Reduce(Func<T3, Union<T1, T2, T4, T5, T6, T7, T8, T9>> map)
         {
@@ -3915,7 +4148,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T5, T6, T7, T8, T9> Reduce(Func<T4, Union<T1, T2, T3, T5, T6, T7, T8, T9>> map)
         {
@@ -3934,7 +4167,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T6, T7, T8, T9> Reduce(Func<T5, Union<T1, T2, T3, T4, T6, T7, T8, T9>> map)
         {
@@ -3953,7 +4186,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T7, T8, T9> Reduce(Func<T6, Union<T1, T2, T3, T4, T5, T7, T8, T9>> map)
         {
@@ -3972,7 +4205,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T8, T9> Reduce(Func<T7, Union<T1, T2, T3, T4, T5, T6, T8, T9>> map)
         {
@@ -3991,7 +4224,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T7, T9> Reduce(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, T9>> map)
         {
@@ -4010,7 +4243,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T7, T8> Reduce(Func<T9, Union<T1, T2, T3, T4, T5, T6, T7, T8>> map)
         {
@@ -4029,7 +4262,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T2, T3, T4, T5, T6, T7, T8, T9>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6, T7, T8, T9>>> map)
         {
@@ -4048,7 +4281,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T3, T4, T5, T6, T7, T8, T9>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6, T7, T8, T9>>> map)
         {
@@ -4067,7 +4300,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T4, T5, T6, T7, T8, T9>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6, T7, T8, T9>>> map)
         {
@@ -4086,7 +4319,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T5, T6, T7, T8, T9>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6, T7, T8, T9>>> map)
         {
@@ -4105,7 +4338,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T6, T7, T8, T9>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6, T7, T8, T9>>> map)
         {
@@ -4124,7 +4357,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T7, T8, T9>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T7, T8, T9>>> map)
         {
@@ -4143,7 +4376,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T8, T9>> ReduceAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T8, T9>>> map)
         {
@@ -4162,7 +4395,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T7, T9>> ReduceAsync(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, T9>>> map)
         {
@@ -4181,7 +4414,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>> ReduceAsync(Func<T9, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8>>> map)
         {
@@ -4208,43 +4441,93 @@ namespace SpawnDev.BlazorJS
     public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : Union
     {
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T1(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 1 ? (T1)instance.Value! : default(T1)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T2(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 2 ? (T2)instance.Value! : default(T2)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T3(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 3 ? (T3)instance.Value! : default(T3)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T4(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 4 ? (T4)instance.Value! : default(T4)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T5(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 5 ? (T5)instance.Value! : default(T5)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T6(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 6 ? (T6)instance.Value! : default(T6)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T7(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 7 ? (T7)instance.Value! : default(T7)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T8(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 8 ? (T8)instance.Value! : default(T8)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T9(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 9 ? (T9)instance.Value! : default(T9)!;
+        /// <summary>
+        /// Conversion operators for each type in the union.<br/>
+        /// If the Union contains a value of the specified type, returns that value, otherwise returns the default value of the specified type.
+        /// </summary>
+        public static explicit operator T10(Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> instance) => instance._type == 10 ? (T10)instance.Value! : default(T10)!;
+        /// <summary>
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T1 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T2 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T3 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T4 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T5 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T6 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T7 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T8 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T9 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
-        /// Implicit conversion operators for each type in the union
+        /// Conversion operators for each type in the union
         /// </summary>
         public static implicit operator Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T10 instance) => instance == null ? null! : new Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(instance);
         /// <summary>
@@ -4379,6 +4662,7 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #region Map
         /// <summary>
         /// Returns a Union
         /// </summary>
@@ -4859,9 +5143,10 @@ namespace SpawnDev.BlazorJS
             }
             throw new InvalidOperationException(InvalidStateMessage);
         }
+        #endregion
         #region Reduce
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T2, T3, T4, T5, T6, T7, T8, T9, T10> Reduce(Func<T1, Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>> map)
         {
@@ -4881,7 +5166,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T3, T4, T5, T6, T7, T8, T9, T10> Reduce(Func<T2, Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>> map)
         {
@@ -4901,7 +5186,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T4, T5, T6, T7, T8, T9, T10> Reduce(Func<T3, Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>> map)
         {
@@ -4921,7 +5206,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T5, T6, T7, T8, T9, T10> Reduce(Func<T4, Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>> map)
         {
@@ -4941,7 +5226,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T6, T7, T8, T9, T10> Reduce(Func<T5, Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>> map)
         {
@@ -4961,7 +5246,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T7, T8, T9, T10> Reduce(Func<T6, Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>> map)
         {
@@ -4981,7 +5266,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T8, T9, T10> Reduce(Func<T7, Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>> map)
         {
@@ -5001,7 +5286,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T7, T9, T10> Reduce(Func<T8, Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>> map)
         {
@@ -5021,7 +5306,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T7, T8, T10> Reduce(Func<T9, Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>> map)
         {
@@ -5041,7 +5326,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> Reduce(Func<T10, Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> map)
         {
@@ -5061,7 +5346,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>> ReduceAsync(Func<T1, Task<Union<T2, T3, T4, T5, T6, T7, T8, T9, T10>>> map)
         {
@@ -5081,7 +5366,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>> ReduceAsync(Func<T2, Task<Union<T1, T3, T4, T5, T6, T7, T8, T9, T10>>> map)
         {
@@ -5101,7 +5386,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>> ReduceAsync(Func<T3, Task<Union<T1, T2, T4, T5, T6, T7, T8, T9, T10>>> map)
         {
@@ -5121,7 +5406,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>> ReduceAsync(Func<T4, Task<Union<T1, T2, T3, T5, T6, T7, T8, T9, T10>>> map)
         {
@@ -5141,7 +5426,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>> ReduceAsync(Func<T5, Task<Union<T1, T2, T3, T4, T6, T7, T8, T9, T10>>> map)
         {
@@ -5161,7 +5446,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>> ReduceAsync(Func<T6, Task<Union<T1, T2, T3, T4, T5, T7, T8, T9, T10>>> map)
         {
@@ -5181,7 +5466,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>> ReduceAsync(Func<T7, Task<Union<T1, T2, T3, T4, T5, T6, T8, T9, T10>>> map)
         {
@@ -5201,7 +5486,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>> ReduceAsync(Func<T8, Task<Union<T1, T2, T3, T4, T5, T6, T7, T9, T10>>> map)
         {
@@ -5221,7 +5506,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>> ReduceAsync(Func<T9, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T10>>> map)
         {
@@ -5241,7 +5526,7 @@ namespace SpawnDev.BlazorJS
             throw new InvalidOperationException(InvalidStateMessage);
         }
         /// <summary>
-        /// Returns a Union
+        /// Use Reduce to process one of the Union types into another, returning a new Union without the processed type, or the value of the last type if only 1 type remains
         /// </summary>
         public Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>> ReduceAsync(Func<T10, Task<Union<T1, T2, T3, T4, T5, T6, T7, T8, T9>>> map)
         {
