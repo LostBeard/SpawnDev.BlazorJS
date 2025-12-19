@@ -15,15 +15,15 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// The type index of the value contained in the union
         /// </summary>
-        protected byte _type { get; init; }
+        protected byte _type { get; }
         /// <summary>
         /// The value contained in the union
         /// </summary>
-        public object? Value { get; init; }
+        public object? Value { get; }
         /// <summary>
         /// The type of the value contained in the union
         /// </summary>
-        public Type ValueType { get; init; }
+        public Type ValueType { get; }
         /// <summary>
         /// New union instance
         /// </summary>
