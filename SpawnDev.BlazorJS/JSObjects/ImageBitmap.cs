@@ -7,6 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// ImageBitmap is a transferable object.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap
     /// </summary>
+    [Transferable]
     public class ImageBitmap : JSObject
     {
         /// <summary>
