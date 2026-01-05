@@ -145,7 +145,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Element Top => JSRef!.Get<Element>("top");
         /// <summary>
-        /// Returns a boolean value that indicates whether the website is in a cross-origin isolation state.
+        /// Returns true if the website is in a cross-origin isolation state.<br/>
+        /// Returns null if the browser does not support cross-origin isolation detection.
         /// </summary>
         public bool? CrossOriginIsolated => JSRef!.Get<bool?>("crossOriginIsolated");
         /// <summary>
