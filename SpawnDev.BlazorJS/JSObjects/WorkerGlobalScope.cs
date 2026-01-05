@@ -54,6 +54,37 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The global performance property returns a Performance object, which can be used to gather performance information about the context it is called in (window or worker).
         /// </summary>
         public Performance Performance => JSRef!.Get<Performance>("performance");
+        /// <summary>
+        /// Returns a reference to the WorkerGlobalScope itself. Most of the time it is a specific scope like DedicatedWorkerGlobalScope, SharedWorkerGlobalScope or ServiceWorkerGlobalScope.
+        /// </summary>
         public virtual WorkerGlobalScope Self => JSRef!.Get<WorkerGlobalScope>("self");
+        /// <summary>
+        /// Fired when an error occurred.
+        /// </summary>
+        public ActionEvent<ErrorEvent> OnError { get => new ActionEvent<ErrorEvent>("error", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired at the global/worker scope object when the user's preferred languages change.
+        /// </summary>
+        public ActionEvent<Event> OnLanguageChange { get => new ActionEvent<Event>("languagechange", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the browser has lost access to the network and the value of navigator.onLine switched to false.
+        /// </summary>
+        public ActionEvent<Event> OnOffline { get => new ActionEvent<Event>("offline", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the browser has gained access to the network and the value of navigator.onLine switched to true.
+        /// </summary>
+        public ActionEvent<Event> OnOnline { get => new ActionEvent<Event>("online", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired on handled Promise rejection events.
+        /// </summary>
+        public ActionEvent<PromiseRejectionEvent> OnRejectionHandled { get => new ActionEvent<PromiseRejectionEvent>("rejectionhandled", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a Content Security Policy is violated.
+        /// </summary>
+        public ActionEvent<SecurityPolicyViolationEvent> OnSecurityPolicyViolation { get => new ActionEvent<SecurityPolicyViolationEvent>("securitypolicyviolation", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired on unhandled Promise rejection events.
+        /// </summary>
+        public ActionEvent<PromiseRejectionEvent> OnUnhandledRejection { get => new ActionEvent<PromiseRejectionEvent>("unhandledrejection", AddEventListener, RemoveEventListener); set { } }
     }
 }
