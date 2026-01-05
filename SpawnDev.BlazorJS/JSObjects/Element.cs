@@ -243,6 +243,10 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Events
         /// <summary>
+        /// Fired when a Content Security Policy is violated.
+        /// </summary>
+        public ActionEvent<SecurityPolicyViolationEvent> OnSecurityPolicyViolation { get => new ActionEvent<SecurityPolicyViolationEvent>("securitypolicyviolation", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
         /// Fires on any element with content-visibility: auto set on it when it starts or stops being relevant to the user and skipping its contents.
         /// </summary>
         public ActionEvent<ContentVisibilityAutoStateChangeEvent> OnContentVisibilityAutoStateChange { get => new ActionEvent<ContentVisibilityAutoStateChangeEvent>("contentvisibilityautostatechange", AddEventListener, RemoveEventListener); set { } }
