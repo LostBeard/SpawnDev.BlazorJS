@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
@@ -250,6 +251,42 @@ namespace SpawnDev.BlazorJS
             .Where(m => m.Name == methodName)
             .Where(m => allowGeneric || !m.IsGenericMethod)
             .ToList();
+        }
+        /// <summary>
+        /// Checks if a type is IEnumerable and returns its element type.
+        /// </summary>
+        /// <param name="type">The type to check.</param>
+        /// <returns>The element type of the IEnumerable, or null if it's not an IEnumerable of T (excluding string).</returns>
+        public static Type? GetEnumerableElementType(this Type type)
+        {
+            // Ignore strings as they are also IEnumerable<char> but usually treated as a scalar type
+            if (type == typeof(string))
+            {
+                return null;
+            }
+
+            // 1. Check if the type itself is a generic IEnumerable<T>
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            {
+                return type.GetGenericArguments()[0];
+            }
+
+            // 2. Check if the type implements any generic IEnumerable<T> interface
+            var genericIEnumerable = type.GetInterfaces()
+                .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+
+            if (genericIEnumerable != null)
+            {
+                return genericIEnumerable.GetGenericArguments()[0];
+            }
+
+            // 3. Check for the non-generic IEnumerable (returns object as the element type)
+            if (typeof(IEnumerable).IsAssignableFrom(type))
+            {
+                return typeof(object);
+            }
+
+            return null;
         }
     }
 }
