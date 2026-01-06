@@ -21,6 +21,30 @@ JS.Set("_testit", (string msg) =>
     Console.WriteLine($"_testit called with message: {msg}");
 });
 
+
+if (true)
+{
+
+    var bytes = new byte[] { 1, 2, 3, 4, 5 };
+
+    // get bytes as a Uint8Array
+    using var uint8Array = new Uint8Array(bytes);
+
+    //  get the underlying ArrayBuffer
+    using var arrayBufferOrig = uint8Array.Buffer;
+
+    var args1 = new List<Uint8Array>
+        {
+            { uint8Array }
+        };
+
+    JS.Set("_dict1", args1);
+
+    var rbd = JS.Get<List<Uint8Array>>("_dict1");
+    var tt = true;
+}
+
+
 // Example usage of Union type
 // Create a Union<string, int, long> with an int value using implicit conversion
 Union<string, int, long> result = 6;
