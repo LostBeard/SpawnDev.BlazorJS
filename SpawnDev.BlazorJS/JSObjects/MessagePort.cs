@@ -39,7 +39,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The MessagePort interface of the Channel Messaging API represents one of the two ports of a MessageChannel, allowing messages to be sent from one port and listening out for them arriving at the other.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MessagePort
     /// </summary>
-    [Transferable]
+    [Transferable(TransferRequired = true)]
     public class MessagePort : EventTarget, IMessagePort
     {
         /// <summary>
