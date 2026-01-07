@@ -9,10 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class USB : EventTarget
     {
         #region Constructors
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
+        /// <inheritdoc/>
         public USB(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
