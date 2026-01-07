@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class USBInTransferResult : JSObject
     {
-        ///<inheritdoc/>
+        /// <inheritdoc/>
         public USBInTransferResult(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a DataView object containing the data received from the USB device, if any.
