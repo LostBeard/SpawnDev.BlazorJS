@@ -44,6 +44,10 @@ if (true)
     var tt = true;
 }
 
+var gg = new SpawnDev.BlazorJS.JSObjects.Array<string>("one", "two", "three");
+
+foreach(var g in gg)
+{ }
 
 // Example usage of Union type
 // Create a Union<string, int, long> with an int value using implicit conversion

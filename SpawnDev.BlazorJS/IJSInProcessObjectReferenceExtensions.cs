@@ -48,6 +48,11 @@ namespace SpawnDev.BlazorJS
         /// Returns the constructor?.name of the target
         /// </summary>
         public static string? ConstructorName(this IJSInProcessObjectReference _ref) => BlazorJSInterop.ObjectConstructorName(_ref);
+        /// <summary>
+        /// Returns a string[] containing the constructor.name property for each unique entry in the prototype chain
+        /// </summary>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
         public static string[] ConstructorNames(this IJSInProcessObjectReference _ref) => BlazorJSInterop.ObjectConstructorNames(_ref);
         /// <summary>
         /// Returns typeof target

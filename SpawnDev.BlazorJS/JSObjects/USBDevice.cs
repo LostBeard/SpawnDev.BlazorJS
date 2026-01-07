@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Properties
         /// <summary>
-        /// 
+        /// Indicates whether a session has been started with a paired USB device.
         /// </summary>
         public bool Opened=> JSRef!.Get<bool>("opened");
         /// <summary>
