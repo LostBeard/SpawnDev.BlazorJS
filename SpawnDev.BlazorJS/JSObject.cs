@@ -9,7 +9,10 @@ namespace SpawnDev.BlazorJS
     /// <typeparam name="T"></typeparam>
     public class JSObject<T> : JSObject where T : JSObject
     {
-        private static Lazy<T> _Undefined = new Lazy<T>(() => (T)Activator.CreateInstance(typeof(T), JSObject.UndefinedRef));
+        private static Lazy<T> _Undefined = new Lazy<T>(() => (T)Activator.CreateInstance(typeof(T), JSObject.UndefinedRef)!);
+        /// <summary>
+        /// Static instance of Undefined JSObject of type T
+        /// </summary>
         public static T Undefined => _Undefined.Value;
         /// <summary>
         /// Deserialization constructor
@@ -30,7 +33,13 @@ namespace SpawnDev.BlazorJS
         public static bool UndisposedHandleVerboseMode { get; set; } = false;
 #endif
         protected static BlazorJSRuntime JS => BlazorJSRuntime.JS;
+        /// <summary>
+        /// Static instance of JSInProcessObjectReferenceUndefined
+        /// </summary>
         public static JSInProcessObjectReferenceUndefined? UndefinedRef { get; } = new JSInProcessObjectReferenceUndefined();
+        /// <summary>
+        /// Returns true if the underlying JSRef is a JSInProcessObjectReferenceUndefined
+        /// </summary>
         [JsonIgnore]
         public bool IsJSRefUndefined { get; private set; } = false;
         /// <summary>
@@ -88,6 +97,15 @@ namespace SpawnDev.BlazorJS
             }
             Dispose();
             return ret;
+        }
+        /// <summary>
+        /// Compare this JSObject to obj2 using JavaScript equality<br/>
+        /// Returns full ? this === obj2 : this == obj2
+        /// </summary>
+        public bool JSEquals(object? obj2, bool full = false)
+        {
+            if (obj2 == null) return false;
+            return JSRef!.JSEquals(obj2, full);
         }
         /// <summary>
         /// Returns this object's IJSInProcessObjectReference and disposes this wrapper.
