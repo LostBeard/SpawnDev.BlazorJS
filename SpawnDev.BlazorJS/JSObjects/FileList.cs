@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Collections;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -6,8 +7,14 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The FileList interface represents an object of this type returned by the files property of the HTML input element; this lets you access the list of files selected with the input type="file" element. It's also used for a list of files dropped into web content when using the drag and drop API; see the DataTransfer object for details on this usage.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/FileList
     /// </summary>
-    public class FileList : JSObject
+    public class FileList : JSObject, IEnumerable<File>
     {
+        #region IEnumerable
+        /// <inheritdoc/>
+        public IEnumerator<File> GetEnumerator() => new SimpleEnumerator<File>((i) => Item(i), () => Length);
+        /// <inheritdoc/>
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        #endregion
         /// <summary>
         /// Deserialization constructor
         /// </summary>

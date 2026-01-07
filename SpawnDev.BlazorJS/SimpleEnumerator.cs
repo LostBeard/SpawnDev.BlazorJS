@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS
+﻿using System.Collections;
+
+namespace SpawnDev.BlazorJS
 {
     /// <summary>
     /// A simple enumerator the can be created using 2 callbacks
@@ -40,12 +42,10 @@
         /// </summary>
         public void Dispose() { }
         /// <summary>
-        /// Returns the enumerator's current value asn an object?
-        /// </summary>
-        public object? Current => ItemGetter(position);
-        /// <summary>
         /// Returns the enumerator's current value as type TEnumerable
         /// </summary>
-        TEnumerable IEnumerator<TEnumerable>.Current => ItemGetter(position);
+        public TEnumerable Current => ItemGetter(position);
+
+        object IEnumerator.Current => ItemGetter(position)!;
     }
 }
