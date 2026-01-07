@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public USB(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 
-        #region 
+        #region Methods
         /// <summary>
         /// Returns a Promise that resolves with an array of USBDevice objects for paired attached devices.
         /// </summary>

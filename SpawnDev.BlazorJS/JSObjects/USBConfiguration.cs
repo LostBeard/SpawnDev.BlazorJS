@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an array of USBInterface objects representing the interfaces provided by the configuration.
         /// </summary>
-        public USBInterface[] Interfaces => JSRef!.Get<USBInterface[]>("interfaces");
+        public Array<USBInterface> Interfaces => JSRef!.Get<Array<USBInterface>>("interfaces");
         #endregion
     }
 }

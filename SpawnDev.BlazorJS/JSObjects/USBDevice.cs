@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -18,6 +17,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Properties
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Opened=> JSRef!.Get<bool>("opened");
         /// <summary>
         /// Returns the USB device's vendor ID.
         /// </summary>
@@ -47,6 +50,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the USB device's configuration.
         /// </summary>
         public USBConfiguration? Configuration => JSRef!.Get<USBConfiguration?>("configuration");
+
+        /// <summary>
+        /// Returns the USB device's configurations.
+        /// </summary>
+        public Array<USBConfiguration> Configurations => JSRef!.Get<Array<USBConfiguration>>("configurations");
         #endregion
 
         #region Methods
@@ -89,7 +97,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Controls a transfer to the USB device.
         /// </summary>
         /// <param name="setup">The setup packet for the control transfer.</param>
-        /// <param name="data">The data to transfer.</param>
+        /// <param name="length">The data to transfer.</param>
         /// <returns>A promise that resolves with the result of the transfer.</returns>
         public Task<USBInTransferResult> ControlTransferIn(USBControlTransferParameters setup, int length) => JSRef!.CallAsync<USBInTransferResult>("controlTransferIn", setup, length);
 

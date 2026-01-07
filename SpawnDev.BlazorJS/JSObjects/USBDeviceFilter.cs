@@ -3,9 +3,17 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
+    /// Deprecated. Left for backwards compatibility.
+    /// </summary>
+    [Obsolete("USBRequestDevicweFilter renamed, use USBDeviceFilter instead")]
+    public class USBRequestDevicweFilter : USBDeviceFilter { }
+    /// <summary>
+    /// USB.requestDevice() filter dictionary to filter USB devices.<br/>
+    /// 5. Device Enumeration 
+    /// https://wicg.github.io/webusb/#enumeration
     /// https://developer.mozilla.org/en-US/docs/Web/API/USB/requestDevice#filters
     /// </summary>
-    public class USBRequestDeviceFilter
+    public class USBDeviceFilter
     {
         /// <summary>
         /// Vendor ID of the USB device.
@@ -41,6 +49,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public int? SerialNumber { get; set; }
+        public string? SerialNumber { get; set; }
     }
 }

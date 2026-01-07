@@ -11,11 +11,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An array of filter objects for possible devices you would like to pair.
         /// </summary>
-        public IEnumerable<USBRequestDeviceFilter> Filters { get; set; }
+        public IEnumerable<USBDeviceFilter> Filters { get; set; }
         /// <summary>
         /// An array of filter objects for possible devices you would like to exclude.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IEnumerable<USBRequestDeviceFilter>? ExclusionFilters { get; set; }
+        public IEnumerable<USBDeviceFilter>? ExclusionFilters { get; set; }
     }
 }
