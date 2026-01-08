@@ -36,7 +36,7 @@ public class USBAlternateInterface : JSObject
     /// <summary>
     /// The name of the interface, if one is provided by the device. This is the value of the string descriptor with the index specified by the iInterface field of the interface descriptor defining this interface.
     /// </summary>
-    public string InterfaceName => JSRef!.Get<string>("interfaceName");
+    public string? InterfaceName => JSRef!.Get<string?>("interfaceName");
 
     /// <summary>
     /// An array containing instances of the USBEndpoint interface describing each of the endpoints that are part of this interface.
