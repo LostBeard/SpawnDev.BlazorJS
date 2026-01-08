@@ -16,12 +16,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a copy of the Javascript typed array as a .Net array
         /// </summary>
         /// <param name="values"></param>
-        public static explicit operator ulong[]?(BigUint64Array? values) => values == null ? null : values.ToArray();
+        public static explicit operator ulong[](BigUint64Array values) => values == null ? null! : values.ToArray();
         /// <summary>
         /// Returns a copy of the .Net array as a Javascript typed array
         /// </summary>
         /// <param name="values"></param>
-        public static explicit operator BigUint64Array?(ulong[]? values) => values == null ? null : new BigUint64Array(values);
+        public static explicit operator BigUint64Array(ulong[] values) => values == null ? null! : new BigUint64Array(values);
         /// <summary>
         /// The TypedArray.from() static method creates a new typed array from an array-like or iterable object. This method is nearly the same as Array.from().
         /// </summary>

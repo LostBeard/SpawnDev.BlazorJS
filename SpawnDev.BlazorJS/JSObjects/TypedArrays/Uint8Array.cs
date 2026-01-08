@@ -13,12 +13,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a copy of the Javascript typed array as a .Net array
         /// </summary>
         /// <param name="values"></param>
-        public static explicit operator byte[]?(Uint8Array? values) => values == null ? null : values.ReadBytes();
+        public static explicit operator byte[](Uint8Array values) => values == null ? null! : values.ReadBytes();
         /// <summary>
         /// Returns a copy of the .Net array as a Javascript typed array
         /// </summary>
         /// <param name="values"></param>
-        public static explicit operator Uint8Array?(byte[]? values) => values == null ? null : new Uint8Array(values);
+        public static explicit operator Uint8Array(byte[] values) => values == null ? null! : new Uint8Array(values);
         /// <summary>
         /// Returns a new Uint8Array from an ArrayBuffer
         /// </summary>

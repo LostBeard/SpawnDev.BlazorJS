@@ -12,12 +12,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a copy of the Javascript typed array as a .Net array
         /// </summary>
         /// <param name="values"></param>
-        public static explicit operator byte[]?(Uint8ClampedArray? values) => values == null ? null : values.ToArray();
+        public static explicit operator byte[](Uint8ClampedArray values) => values == null ? null! : values.ToArray();
         /// <summary>
         /// Returns a copy of the .Net array as a Javascript typed array
         /// </summary>
         /// <param name="values"></param>
-        public static explicit operator Uint8ClampedArray?(byte[]? values) => values == null ? null : new Uint8ClampedArray(values);
+        public static explicit operator Uint8ClampedArray(byte[] values) => values == null ? null! : new Uint8ClampedArray(values);
         /// <summary>
         /// The TypedArray.from() static method creates a new typed array from an array-like or iterable object. This method is nearly the same as Array.from().
         /// </summary>
