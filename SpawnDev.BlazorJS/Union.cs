@@ -56,6 +56,12 @@ namespace SpawnDev.BlazorJS
         /// Returns true if the union contains the specified type
         /// </summary>
         public bool Is(Type type) => type == ValueType;
+        /// <summary>
+        /// If the Value is T, Value is returned as T, else default(T) is returned.
+        /// </summary>
+        /// <typeparam name="T">The type to return</typeparam>
+        /// <returns>Value as T if Value is type T</returns>
+        public T As<T>() => Value is T t ? t : default(T)!;
     }
     /// <summary>
     /// Union type
