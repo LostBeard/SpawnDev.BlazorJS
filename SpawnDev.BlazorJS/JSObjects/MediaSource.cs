@@ -42,6 +42,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public static bool CanConstructInDedicatedWorker => JS.Get<bool>($"MediaSource.canConstructInDedicatedWorker");
         /// <summary>
+        /// Returns a boolean value indicating if the given MIME type is supported by the current user agent — this is, if it can successfully create SourceBuffer objects for that MIME type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsTypeSupported(string type) => JS.Call<bool>("MediaSource.isTypeSupported", type);
+        /// <summary>
         /// The addSourceBuffer() method of the MediaSource interface creates a new SourceBuffer of the given MIME type and adds it to the MediaSource's sourceBuffers list. The new SourceBuffer is also returned.
         /// </summary>
         /// <param name="mimeType">A string specifying the MIME type of the SourceBuffer to create and add to the MediaSource.</param>
