@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// https://developer.mozilla.org/en-US/docs/Web/API/WritableStream<br/>
     /// https://streams.spec.whatwg.org/#writablestream<br/>
     /// </summary>
-    [Transferable]
+    [Transferable(TransferRequired = true)]
     public class WritableStream : JSObject
     {
         /// <summary>
