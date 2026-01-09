@@ -18,13 +18,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The VideoFrame() constructor creates a new VideoFrame object representing a frame of a video.
         /// </summary>
         /// <param name="image"></param>
-        public VideoFrame(Union<SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame> image) : base(JS.New(nameof(VideoFrame), image)) { }
+        public VideoFrame(Union<SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame, HTMLImageElement> image) : base(JS.New(nameof(VideoFrame), image)) { }
         /// <summary>
         /// The VideoFrame() constructor creates a new VideoFrame object representing a frame of a video.
         /// </summary>
         /// <param name="image"></param>
         /// <param name="options"></param>
-        public VideoFrame(Union<SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame> image, VideoFrameOptions options) : base(JS.New(nameof(VideoFrame), image, options)) { }
+        public VideoFrame(Union<SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame, HTMLImageElement> image, VideoFrameOptions options) : base(JS.New(nameof(VideoFrame), image, options)) { }
         /// <summary>
         /// The VideoFrame() constructor creates a new VideoFrame object representing a frame of a video.
         /// </summary>

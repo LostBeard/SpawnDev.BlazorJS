@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -8,7 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// TransformStream is a transferable object.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/TransformStream
     /// </summary>
-    [Transferable]
+    [Transferable(TransferRequired = true)]
     public class TransformStream : JSObject
     {
         /// <summary>
@@ -32,7 +31,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The TransformStream() constructor creates a new TransformStream object which represents a pair of streams: a WritableStream representing the writable side, and a ReadableStream representing the readable side.
         /// </summary>
         public TransformStream(TransformStreamCallbacks transformer, QueueingStrategy writableStrategy, QueueingStrategy readableStrategy) : base(JS.New(nameof(TransformStream), transformer, writableStrategy, readableStrategy)) { }
-       /// <summary>
+        /// <summary>
         /// The readable end of a TransformStream.
         /// </summary>
         public ReadableStream Readable => JSRef!.Get<ReadableStream>("readable");

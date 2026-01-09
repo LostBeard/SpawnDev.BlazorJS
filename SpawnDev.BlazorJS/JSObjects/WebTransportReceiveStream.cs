@@ -9,7 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// WebTransportReceiveStream is a transferable object.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/WebTransportReceiveStream
     /// </summary>
-    [Transferable]
+    [Transferable(TransferRequired = true)]
     public class WebTransportReceiveStream : ReadableStream
     {
         /// <summary>
