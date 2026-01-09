@@ -9,7 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// MediaSourceHandle is a transferable object.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MediaSourceHandle
     /// </summary>
-    [Transferable]
+    [Transferable(TransferRequired = true)]
     public class MediaSourceHandle : JSObject
     {
         /// <summary>

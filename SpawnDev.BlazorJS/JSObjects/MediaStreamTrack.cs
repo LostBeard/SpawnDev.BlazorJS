@@ -6,7 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The MediaStreamTrack interface of the Media Capture and Streams API represents a single media track within a stream; typically, these are audio or video tracks, but other track types may exist as well.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack
     /// </summary>
-    [Transferable]
+    [Transferable(TransferRequired = true)]
     public class MediaStreamTrack : EventTarget
     {
         /// <summary>
