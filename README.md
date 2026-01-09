@@ -8,10 +8,9 @@ Full Blazor WebAssembly and Javascript interop. Create Javascript objects, acces
 [Live Demo](https://blazorjs.spawndev.com/)  
 
 ### Supported .Net Versions
-- Blazor WebAssembly .Net 6, 7, 8, 9 and 10
-  - Tested VS Template: Blazor WebAssembly Standalone App
-- Blazor United .Net 8 (in WebAssembly project only) 
-  - Tested VS Template: Blazor Web App (Interactive WebAssembly mode without prerendering)
+- .Net 6, 7, 8, 9 and 10
+- Blazor WebAssembly Standalone App
+- Blazor Web App - Interactive WebAssembly mode without prerendering
 
 ### Features:
 - Supports all web browser [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
@@ -30,7 +29,7 @@ Full Blazor WebAssembly and Javascript interop. Create Javascript objects, acces
 - Supports [null-conditional member access operator ?.](#null-conditional) in JS interop
 
 # Issues and Feature requests
-I'm here to help. If you find a bug or missing properties, methods, or Javascript objects please submit an issue [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. I will help as soon as possible.
+If you find a bug or missing properties, methods, or Javascript objects please submit an issue [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. I will help as soon as possible.
 
 # BlazorJSRuntime 
 Getting started. Using BlazorJS requires 2 changes to your Program.cs.
