@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// Options used to set options for the file picker
+    /// </summary>
     public class ShowSaveFilePickerOptions
     {
         /// <summary>
