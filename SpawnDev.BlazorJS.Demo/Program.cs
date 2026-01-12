@@ -46,7 +46,7 @@ if (true)
 
 var gg = new SpawnDev.BlazorJS.JSObjects.Array<string>("one", "two", "three");
 
-foreach(var g in gg)
+foreach (var g in gg)
 { }
 
 // Example usage of Union type
@@ -71,7 +71,6 @@ string finalValue = result.Reduce((int v) => v.ToString()).Reduce((long v) => v.
 
 var nmt = true;
 var http = host.Services.GetRequiredService<HttpClient>();
-var gg = true;
 #if DEBUG && false
 long usedManagedMemory = GC.GetTotalMemory(forceFullCollection: true);
 long heapSize = HeapView.GetHeapBufferSize();
