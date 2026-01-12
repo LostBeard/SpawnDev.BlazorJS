@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33103.201
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS", "SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj", "{085BD3B9-2F11-4BD0-9072-217D2A3C9150}"
 EndProject
@@ -11,10 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.Demo", "SpawnDev.BlazorJS.Demo\SpawnDev.BlazorJS.Demo.csproj", "{CAC3D541-0F24-4B07-8527-BDED4B574518}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpawnDev.BlazorJS.Demo9", "SpawnDev.BlazorJS.Demo9\SpawnDev.BlazorJS.Demo9.csproj", "{8C65A842-BA94-466D-A916-B84A82572BA8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpawnDev.BlazorJS.Demo6", "SpawnDev.BlazorJS.Demo6\SpawnDev.BlazorJS.Demo6.csproj", "{BF6A0732-468D-4A12-9E75-5213C373A426}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,14 +26,6 @@ Global
 		{CAC3D541-0F24-4B07-8527-BDED4B574518}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC3D541-0F24-4B07-8527-BDED4B574518}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC3D541-0F24-4B07-8527-BDED4B574518}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C65A842-BA94-466D-A916-B84A82572BA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C65A842-BA94-466D-A916-B84A82572BA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C65A842-BA94-466D-A916-B84A82572BA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C65A842-BA94-466D-A916-B84A82572BA8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF6A0732-468D-4A12-9E75-5213C373A426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF6A0732-468D-4A12-9E75-5213C373A426}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF6A0732-468D-4A12-9E75-5213C373A426}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF6A0732-468D-4A12-9E75-5213C373A426}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
