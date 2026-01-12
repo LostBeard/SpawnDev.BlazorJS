@@ -47,6 +47,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public SourceBuffer? SourceBuffer => JSRef!.Get<SourceBuffer?>("sourceBuffer");
         /// <summary>
+        /// Returns a VTTRegionList object containing all of the track's regions.
+        /// </summary>
+        public VTTRegionList Regions => JSRef!.Get<VTTRegionList>("regions");
+        /// <summary>
         /// Adds a cue (specified as a TextTrackCue object) to the track's list of cues.
         /// </summary>
         /// <param name="cue"></param>
@@ -56,6 +60,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="cue"></param>
         public void RemoveCue(TextTrackCue cue) => JSRef!.CallVoid("removeCue", cue);
+        /// <summary>
+        /// Adds a region (specified as a VTTRegion object) to the track's list of regions.
+        /// </summary>
+        /// <param name="region"></param>
+        public void AddRegion(VTTRegion region) => JSRef!.CallVoid("addRegion", region);
+        /// <summary>
+        /// Removes a region (specified as a VTTRegion object) from the track's list of regions.
+        /// </summary>
+        /// <param name="region"></param>
+        public void RemoveRegion(VTTRegion region) => JSRef!.CallVoid("removeRegion", region);
+
         /// <summary>
         /// Fired when cues are entered and exited. A given text cue appears when the cue is entered and disappears when the cue is exited. Also available via the oncuechange property.
         /// </summary>
