@@ -103,6 +103,9 @@ namespace SpawnDev.BlazorJS
         public bool? CrossOriginIsolated => _CrossOriginIsolated?.Value;
         private Lazy<bool?>? _CrossOriginIsolated = null;
         static Stopwatch sw = Stopwatch.StartNew();
+        /// <summary>
+        /// Static init
+        /// </summary>
         static BlazorJSRuntime()
         {
             if (OperatingSystem.IsBrowser())
