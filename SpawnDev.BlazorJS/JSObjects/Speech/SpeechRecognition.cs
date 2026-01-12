@@ -80,56 +80,56 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the speech recognition service has detached from a stream or some other reason.
         /// </summary>
-        public JSEventCallback<Event> OnAudioEnd { get => new JSEventCallback<Event>("audioend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnAudioEnd { get => new ActionEvent<Event>("audioend", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the user agent has started to capture audio.
         /// </summary>
-        public JSEventCallback<Event> OnAudioStart { get => new JSEventCallback<Event>("audiostart", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnAudioStart { get => new ActionEvent<Event>("audiostart", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the speech recognition service has finished listening to incoming audio.
         /// </summary>
-        public JSEventCallback<Event> OnEnd { get => new JSEventCallback<Event>("end", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnEnd { get => new ActionEvent<Event>("end", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when a speech recognition error occurs.
         /// </summary>
-        public JSEventCallback<SpeechRecognitionErrorEvent> OnError { get => new JSEventCallback<SpeechRecognitionErrorEvent>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechRecognitionErrorEvent> OnError { get => new ActionEvent<SpeechRecognitionErrorEvent>("error", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the speech recognition service returns a final result with no significant recognition. This may involve some degree of recognition, which doesn't meet or exceed the confidence threshold.
         /// </summary>
-        public JSEventCallback<SpeechRecognitionEvent> OnNoMatch { get => new JSEventCallback<SpeechRecognitionEvent>("nomatch", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechRecognitionEvent> OnNoMatch { get => new ActionEvent<SpeechRecognitionEvent>("nomatch", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the speech recognition service returns a result — a word or phrase has been positively recognized and this has been communicated back to the app.
         /// </summary>
-        public JSEventCallback<SpeechRecognitionEvent> OnResult { get => new JSEventCallback<SpeechRecognitionEvent>("result", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechRecognitionEvent> OnResult { get => new ActionEvent<SpeechRecognitionEvent>("result", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the sound that is being recognized has stopped being detected.
         /// </summary>
-        public JSEventCallback<Event> OnSoundEnd { get => new JSEventCallback<Event>("soundend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnSoundEnd { get => new ActionEvent<Event>("soundend", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when any sound — recognisable speech or not — has been detected.
         /// </summary>
-        public JSEventCallback<Event> OnSoundStart { get => new JSEventCallback<Event>("soundstart", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnSoundStart { get => new ActionEvent<Event>("soundstart", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the speech recognition service has stopped being detected.
         /// </summary>
-        public JSEventCallback<Event> OnSpeechEnd { get => new JSEventCallback<Event>("speechend", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnSpeechEnd { get => new ActionEvent<Event>("speechend", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when sound that is recognized by the speech recognition service as speech has been detected.
         /// </summary>
-        public JSEventCallback<Event> OnSpeechStart { get => new JSEventCallback<Event>("speechstart", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnSpeechStart { get => new ActionEvent<Event>("speechstart", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the speech recognition service has begun listening to incoming audio with intent to recognize grammars associated with the current SpeechRecognition.
         /// </summary>
-        public JSEventCallback<Event> OnStart { get => new JSEventCallback<Event>("start", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnStart { get => new ActionEvent<Event>("start", AddEventListener, RemoveEventListener); set { } }
     }
 }

@@ -134,23 +134,13 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// CONT: An ArrayBuffer sent from Chrome will be received as a Blob in Firefox... Firefox returns "blob" for this property.
         /// </summary>
         public string BinaryType { get => JSRef!.Get<string>("binaryType"); set => JSRef!.Set("binaryType", value); }
-
-
-
-        // TODO ... 
-        // unless there is a compatibility issue ...
-        // switch to JSEventCallback with AddEventListener instead of using property assigning which limits usage more... 
-        // however, a lot of these events should only be handled by a single event handler but that should be up to the consuming code
-
         /// <summary>
         /// Sent when the number of bytes of data in the outgoing data buffer falls below the value specified by bufferedAmountLowThreshold.
         /// </summary>
-        //public ActionCallback OnBufferedAmountLow { set { JSRef!.Set("onbufferedamountlow", value); } }
         public ActionEvent<Event> OnBufferedAmountLow { get => new ActionEvent<Event>("onbufferedamountlow", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// Sent when the underlying data transport closes.
         /// </summary>
-        //public ActionCallback OnClose { set { JSRef!.Set("onclose", value); } }
         public ActionEvent<Event> OnClose { get => new ActionEvent<Event>("onclose", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// Sent when the underlying data transport is about to start closing.<br/>
@@ -160,17 +150,14 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <summary>
         /// Sent when an error occurs on the data channel.
         /// </summary>
-        //public ActionCallback<RTCErrorEvent> OnError { set { JSRef!.Set("onerror", value); } }
         public ActionEvent<RTCErrorEvent> OnError { get => new ActionEvent<RTCErrorEvent>("onerror", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// Sent when a message has been received from the remote peer. The message contents can be found in the event's data property.
         /// </summary>
-        //public ActionCallback<MessageEvent> OnMessage { set { JSRef!.Set("onmessage", value); } }
         public ActionEvent<MessageEvent> OnMessage { get => new ActionEvent<MessageEvent>("onmessage", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// Sent when the data channel is first opened, or when an existing data channel's underlying connection re-opens.
         /// </summary>
-        //public ActionCallback OnOpen { set { JSRef!.Set("onopen", value); } }
         public ActionEvent<RTCDataChannelEvent> OnOpen { get => new ActionEvent<RTCDataChannelEvent>("onopen", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
     }
 }

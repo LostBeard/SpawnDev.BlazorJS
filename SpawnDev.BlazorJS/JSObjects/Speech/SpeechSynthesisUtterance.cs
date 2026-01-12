@@ -74,36 +74,36 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the spoken utterance reaches a word or sentence boundary.
         /// </summary>
-        public JSEventCallback<SpeechSynthesisEvent> OnBoundary { get => new JSEventCallback<SpeechSynthesisEvent>("boundary", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechSynthesisEvent> OnBoundary { get => new ActionEvent<SpeechSynthesisEvent>("boundary", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the utterance has finished being spoken.
         /// </summary>
-        public JSEventCallback<SpeechSynthesisEvent> OnEnd { get => new JSEventCallback<SpeechSynthesisEvent>("end", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechSynthesisEvent> OnEnd { get => new ActionEvent<SpeechSynthesisEvent>("end", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when an error occurs that prevents the utterance from being spoken.
         /// </summary>
-        public JSEventCallback<SpeechSynthesisEvent> OnError { get => new JSEventCallback<SpeechSynthesisEvent>("error", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechSynthesisEvent> OnError { get => new ActionEvent<SpeechSynthesisEvent>("error", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the spoken utterance reaches a named SSML "mark" tag.
         /// </summary>
-        public JSEventCallback<SpeechSynthesisEvent> OnMark { get => new JSEventCallback<SpeechSynthesisEvent>("mark", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechSynthesisEvent> OnMark { get => new ActionEvent<SpeechSynthesisEvent>("mark", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the utterance is paused part way through.
         /// </summary>
-        public JSEventCallback<SpeechSynthesisEvent> OnPause { get => new JSEventCallback<SpeechSynthesisEvent>("pause", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechSynthesisEvent> OnPause { get => new ActionEvent<SpeechSynthesisEvent>("pause", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when a paused utterance is resumed.
         /// </summary>
-        public JSEventCallback<SpeechSynthesisEvent> OnResume { get => new JSEventCallback<SpeechSynthesisEvent>("resume", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechSynthesisEvent> OnResume { get => new ActionEvent<SpeechSynthesisEvent>("resume", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the utterance has begun to be spoken.
         /// </summary>
-        public JSEventCallback<SpeechSynthesisEvent> OnStart { get => new JSEventCallback<SpeechSynthesisEvent>("start", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<SpeechSynthesisEvent> OnStart { get => new ActionEvent<SpeechSynthesisEvent>("start", AddEventListener, RemoveEventListener); set { } }
     }
 }

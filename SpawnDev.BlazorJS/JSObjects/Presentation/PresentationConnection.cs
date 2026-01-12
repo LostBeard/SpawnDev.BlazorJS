@@ -67,21 +67,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the state of the presentation connection changes to closed.
         /// </summary>
-        public JSEventCallback<PresentationConnectionCloseEvent> OnClose { get => new JSEventCallback<PresentationConnectionCloseEvent>("close", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PresentationConnectionCloseEvent> OnClose { get => new ActionEvent<PresentationConnectionCloseEvent>("close", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the state of the presentation connection changes to connected.
         /// </summary>
-        public JSEventCallback<Event> OnConnect { get => new JSEventCallback<Event>("connect", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnConnect { get => new ActionEvent<Event>("connect", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when a message is received from the presentation connection.
         /// </summary>
-        public JSEventCallback<MessageEvent> OnMessage { get => new JSEventCallback<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<MessageEvent> OnMessage { get => new ActionEvent<MessageEvent>("message", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the state of the presentation connection changes to terminated.
         /// </summary>
-        public JSEventCallback<Event> OnTerminate { get => new JSEventCallback<Event>("terminate", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnTerminate { get => new ActionEvent<Event>("terminate", AddEventListener, RemoveEventListener); set { } }
     }
 }

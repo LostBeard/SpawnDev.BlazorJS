@@ -32,14 +32,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        /// <summary>
-        /// A Promise that resolves to undefined or is rejected with an error if advertisements can't be shown for any reason.
-        /// </summary>
-        /// <param name="options"></param>
-        /// <returns></returns>
         public Task WatchAdvertisements(WatchAdvertisementsOptions? options = null) => options == null ? JSRef!.CallVoidAsync("watchAdvertisements") : JSRef!.CallVoidAsync("watchAdvertisements", options);
         /// <summary>
-        /// 
+        /// Fired on a device when an active GATT connection is lost.
         /// </summary>
         public ActionEvent<Event> OnGATTServerDisconnected { get => new ActionEvent<Event>("gattserverdisconnected", AddEventListener, RemoveEventListener); set { } }
         /// <summary>

@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fires when the decode queue size decreases.
         /// </summary>
-        public JSEventCallback<Event> OnDequeue { get => new JSEventCallback<Event>("dequeue", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnDequeue { get => new ActionEvent<Event>("dequeue", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Configures the decoder.

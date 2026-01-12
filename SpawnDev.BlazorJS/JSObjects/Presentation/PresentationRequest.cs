@@ -40,6 +40,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a presentation connection is available.
         /// </summary>
-        public JSEventCallback<PresentationConnectionAvailableEvent> OnConnectionAvailable { get => new JSEventCallback<PresentationConnectionAvailableEvent>("connectionavailable", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PresentationConnectionAvailableEvent> OnConnectionAvailable { get => new ActionEvent<PresentationConnectionAvailableEvent>("connectionavailable", AddEventListener, RemoveEventListener); set { } }
     }
 }

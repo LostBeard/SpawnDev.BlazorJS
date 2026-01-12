@@ -22,6 +22,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options">An optional object which customizes the observer. If options isn't specified, the observer uses the document's viewport as the root, with no margin, and a 0% threshold (meaning that even a one-pixel change is enough to trigger a callback).</param>
         public IntersectionObserver(Action<IntersectionObserverEntry[], IntersectionObserver> callback, IntersectionObserverInit? options = null) : base(JS.New(nameof(IntersectionObserver), Callback.Create(callback), options)) { }
         /// <summary>
+        /// Creates a new IntersectionObserver object which will invoke a specified callback function when it detects that the intersection ratio of the target element vs the root exceeds one of the thresholds.
+        /// </summary>
+        /// <param name="callback">A function which is called when the percentage of the target element is visible crosses a threshold. The callback receives as input two parameters:<br/>
+        /// entries: An array of IntersectionObserverEntry objects, each representing one threshold which was crossed, either becoming more or less visible than the percentage specified by that threshold.<br/>
+        /// observer: The IntersectionObserver object itself.</param>
+        /// <param name="options">An optional object which customizes the observer. If options isn't specified, the observer uses the document's viewport as the root, with no margin, and a 0% threshold (meaning that even a one-pixel change is enough to trigger a callback).</param>
+        public IntersectionObserver(ActionCallback<IntersectionObserverEntry[], IntersectionObserver> callback, IntersectionObserverInit? options = null) : base(JS.New(nameof(IntersectionObserver), callback, options)) { }
+        /// <summary>
         /// Stops the IntersectionObserver object from observing any target.
         /// </summary>
         public void Disconnect() => JSRef!.CallVoid("disconnect");

@@ -40,6 +40,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the idle state of the user or screen changes.
         /// </summary>
-        public JSEventCallback<Event> OnChange { get => new JSEventCallback<Event>("change", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnChange { get => new ActionEvent<Event>("change", AddEventListener, RemoveEventListener); set { } }
     }
 }

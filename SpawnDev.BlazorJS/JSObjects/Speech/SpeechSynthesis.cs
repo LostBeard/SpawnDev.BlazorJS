@@ -55,6 +55,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the list of available voices has changed.
         /// </summary>
-        public JSEventCallback<Event> OnVoicesChanged { get => new JSEventCallback<Event>("voiceschanged", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnVoicesChanged { get => new ActionEvent<Event>("voiceschanged", AddEventListener, RemoveEventListener); set { } }
     }
 }

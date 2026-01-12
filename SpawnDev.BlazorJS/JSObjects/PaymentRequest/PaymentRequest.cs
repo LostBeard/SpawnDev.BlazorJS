@@ -60,16 +60,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when the user changes the payment method.
         /// </summary>
-        public JSEventCallback<Event> OnPaymentMethodChange { get => new JSEventCallback<Event>("paymentmethodchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnPaymentMethodChange { get => new ActionEvent<Event>("paymentmethodchange", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the user changes the shipping address.
         /// </summary>
-        public JSEventCallback<Event> OnShippingAddressChange { get => new JSEventCallback<Event>("shippingaddresschange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnShippingAddressChange { get => new ActionEvent<Event>("shippingaddresschange", AddEventListener, RemoveEventListener); set { } }
 
         /// <summary>
         /// Fired when the user changes the shipping option.
         /// </summary>
-        public JSEventCallback<Event> OnShippingOptionChange { get => new JSEventCallback<Event>("shippingoptionchange", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnShippingOptionChange { get => new ActionEvent<Event>("shippingoptionchange", AddEventListener, RemoveEventListener); set { } }
     }
 }
