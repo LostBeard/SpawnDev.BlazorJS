@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The PannerNode.positionX you want the PannerNode to have (the default is 0.)
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public double? PositionX{ get; set; }
+        public double? PositionX { get; set; }
         /// <summary>
         /// The PannerNode.positionY you want the PannerNode to have (the default is 0.)
         /// </summary>

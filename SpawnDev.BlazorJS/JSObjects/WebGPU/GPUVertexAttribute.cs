@@ -14,7 +14,7 @@
         /// <summary>
         /// The byte offset of this attribute within the vertex structure. 
         /// </summary>
-        
+
         public GPUSize64 Offset { get; init; }
 
         /// <summary>

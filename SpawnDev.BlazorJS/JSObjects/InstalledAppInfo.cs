@@ -8,7 +8,7 @@
         /// <summary>
         /// A string representing the ID used to represent the application on the specified platform. The exact form of the string will vary by platform.
         /// </summary>
-        public string?  Id { get; set; }
+        public string? Id { get; set; }
         /// <summary>
         /// A string representing the platform (ecosystem or operating system) the related app is associated with
         /// </summary>

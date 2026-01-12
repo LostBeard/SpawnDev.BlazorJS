@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="destination">A Float32Array to copy the channel's samples to.</param>
         /// <param name="channelNumber">The channel number of the current AudioBuffer to copy the channel data from.</param>
         /// <param name="startInChannel">An optional offset into the source channel's buffer from which to begin copying samples. If not specified, a value of 0 (the beginning of the buffer) is assumed by default.</param>
-        public void CopyFromChannel(Float32Array destination, int channelNumber, long startInChannel = 0) 
+        public void CopyFromChannel(Float32Array destination, int channelNumber, long startInChannel = 0)
             => JSRef!.CallVoid("copyFromChannel", destination, channelNumber, startInChannel);
         /// <summary>
         /// The copyToChannel() method of the AudioBuffer interface copies the samples to the specified channel of the AudioBuffer, from the source array.

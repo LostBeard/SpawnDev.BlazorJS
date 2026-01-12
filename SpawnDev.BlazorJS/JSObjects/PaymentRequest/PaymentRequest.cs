@@ -21,7 +21,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Shows the payment UI to the user.
         /// </summary>
         public Task<PaymentResponse> Show() => JSRef!.CallAsync<PaymentResponse>("show");
-        
+
         /// <summary>
         /// Shows the payment UI to the user.
         /// </summary>

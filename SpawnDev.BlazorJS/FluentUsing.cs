@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace SpawnDev.BlazorJS
+﻿namespace SpawnDev.BlazorJS
 {
     /// <summary>
     /// Adds extension methods to the IDisposable interface, IDisposable[], and List&lt;IDisposable&gt;<br />
@@ -504,7 +502,7 @@ namespace SpawnDev.BlazorJS
             var n = -1;
             try
             {
-                for(var i =0; i < target.Count; i++)
+                for (var i = 0; i < target.Count; i++)
                 {
                     var item = target[i];
                     if (use(item))

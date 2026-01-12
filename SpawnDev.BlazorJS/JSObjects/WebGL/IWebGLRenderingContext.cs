@@ -1,6 +1,6 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
-    
+
     //public interface IWebGLRenderingContext
     //{
     //    TValue GetExtension<TValue>(string name);

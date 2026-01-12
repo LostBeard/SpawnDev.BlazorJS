@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
@@ -7,6 +5,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class EncodedVideoChunkMetadata
     {
-       // TO-DO: Add decoder config here if needed for more advanced usage
+        // TO-DO: Add decoder config here if needed for more advanced usage
     }
 }

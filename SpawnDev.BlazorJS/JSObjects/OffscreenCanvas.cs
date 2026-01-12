@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -33,7 +32,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The width of the offscreen canvas.
         /// </summary>
-        public int Width { get => JSRef!.Get<int?>("width") ?? 0; set => JSRef!.Set("width", value); } 
+        public int Width { get => JSRef!.Get<int?>("width") ?? 0; set => JSRef!.Set("width", value); }
         /// <summary>
         /// The height of the offscreen canvas.
         /// </summary>

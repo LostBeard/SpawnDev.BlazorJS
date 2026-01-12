@@ -8,7 +8,7 @@
         /// <summary>
         /// Indicates the type required for buffers bound to this bindings.
         /// </summary>
-        public string Type { get; init; }= "uniform";
+        public string Type { get; init; } = "uniform";
 
         /// <summary>
         /// Indicates whether this binding requires a dynamic offset.

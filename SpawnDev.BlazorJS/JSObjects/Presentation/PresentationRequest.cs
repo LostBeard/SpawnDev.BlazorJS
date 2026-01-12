@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Creates a new PresentationRequest.
         /// </summary>
         public PresentationRequest(string url) : base(JS.New(nameof(PresentationRequest), url)) { }
-        
+
         /// <summary>
         /// Creates a new PresentationRequest.
         /// </summary>

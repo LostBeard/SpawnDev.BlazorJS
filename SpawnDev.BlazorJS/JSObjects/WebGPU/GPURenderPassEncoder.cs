@@ -27,7 +27,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void SetPipeline(GPURenderPipeline pipeline) => JSRef!.CallVoid("setPipeline", pipeline);
 
         /// <inheritdoc/>
-        public void SetIndexBuffer(GPUBuffer buffer, EnumString<GPUIndexFormat> indexFormat, GPUSize64 offset = 0) 
+        public void SetIndexBuffer(GPUBuffer buffer, EnumString<GPUIndexFormat> indexFormat, GPUSize64 offset = 0)
             => JSRef!.CallVoid("setIndexBuffer", buffer, indexFormat, offset);
 
         /// <inheritdoc/>
@@ -68,7 +68,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         }
 
         /// <inheritdoc/>
-        public void SetBindGroup(GPUIndex32 index, GPUBindGroup? bindGroup, Uint32Array dynamicOffsetsData, GPUSize64 dynamicOffsetsDataStart, GPUSize32 dynamicOffsetsDataLength) 
+        public void SetBindGroup(GPUIndex32 index, GPUBindGroup? bindGroup, Uint32Array dynamicOffsetsData, GPUSize64 dynamicOffsetsDataStart, GPUSize32 dynamicOffsetsDataLength)
             => JSRef!.CallVoid("setBindGroup", index, bindGroup, dynamicOffsetsData, dynamicOffsetsDataStart, dynamicOffsetsDataLength);
         #endregion
 
@@ -82,7 +82,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="height">Height of the viewport in pixels.</param>
         /// <param name="minDepth">Minimum depth value of the viewport.</param>
         /// <param name="maxDepth">Maximum depth value of the viewport.</param>
-        public void SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth) 
+        public void SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth)
             => JSRef!.CallVoid("setViewport", x, y, width, height, minDepth, maxDepth);
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="bundles"></param>
         public void ExecuteBundles(IEnumerable<GPURenderBundle> bundles)
-            => JSRef!.CallVoid("executeBundles",  bundles);
+            => JSRef!.CallVoid("executeBundles", bundles);
 
         /// <summary>
         /// Completes recording of the current render pass command sequence.

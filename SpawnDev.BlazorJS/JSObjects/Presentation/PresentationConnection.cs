@@ -51,13 +51,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="message"></param>
         public void Send(string message) => JSRef!.CallVoid("send", message);
-        
+
         /// <summary>
         /// Sends a message to the presentation connection.
         /// </summary>
         /// <param name="message"></param>
         public void Send(Blob message) => JSRef!.CallVoid("send", message);
-        
+
         /// <summary>
         /// Sends a message to the presentation connection.
         /// </summary>

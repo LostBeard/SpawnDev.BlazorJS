@@ -36,14 +36,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("dimension")]
         public string? Dimension { get; init; }
-        
+
         /// <summary>
         /// The number of samples per pixel in the texture. 
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("sampleCount")]
         public int? SampleCount { get; init; }
-        
+
         /// <summary>
         /// A GPUTextureViewDescriptor describing the default view to create for the texture. 
         /// </summary>

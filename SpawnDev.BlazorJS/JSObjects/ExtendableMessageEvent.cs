@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Deserialization constructor
         /// </summary>
         /// <param name="_ref"></param>
-        public ExtendableMessageEvent(IJSInProcessObjectReference _ref) : base(_ref){ }
+        public ExtendableMessageEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns the event's data. It can be any data type. If dispatched in messageerror event, the property will be null.
         /// </summary>

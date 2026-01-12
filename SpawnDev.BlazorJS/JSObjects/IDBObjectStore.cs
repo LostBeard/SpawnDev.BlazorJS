@@ -58,7 +58,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="keyPath">The key path for the index to use. Note that it is possible to create an index with an empty keyPath, and also to pass in a sequence (array) as a keyPath.</param>
         /// <param name="options">Additional options</param>
         /// <returns></returns>
-        public IDBIndex<TIndexKey, TPrimaryKey, TValue>  CreateIndex<TIndexKey>(string indexName, string keyPath, IDBObjectStoreCreateIndexOptions options) => JSRef!.Call<IDBIndex<TIndexKey, TPrimaryKey, TValue>>("createIndex", indexName, keyPath, options);
+        public IDBIndex<TIndexKey, TPrimaryKey, TValue> CreateIndex<TIndexKey>(string indexName, string keyPath, IDBObjectStoreCreateIndexOptions options) => JSRef!.Call<IDBIndex<TIndexKey, TPrimaryKey, TValue>>("createIndex", indexName, keyPath, options);
         /// <summary>
         /// Returns an IDBRequest object, and, in a separate thread, deletes the store object selected by the specified key. This is for deleting individual records out of an object store.
         /// </summary>

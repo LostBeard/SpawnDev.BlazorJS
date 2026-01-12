@@ -171,7 +171,7 @@ namespace SpawnDev.BlazorJS.JsonConverters
                         }
                     }
                 }
-                foreach(var o in types)
+                foreach (var o in types)
                 {
                     //if (o.IsValueType || !o.IsClass || o.IsInterface || o == typeof(string)) continue;
                     var name = o.Name.Split("`")[0];

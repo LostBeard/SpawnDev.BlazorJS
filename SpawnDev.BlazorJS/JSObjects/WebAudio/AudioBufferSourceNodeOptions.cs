@@ -41,7 +41,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Represents an integer used to determine how many channels are used when up-mixing and down-mixing connections to any inputs to the node. (See AudioNode.channelCount for more information.) Its usage and precise definition depend on the value of channelCountMode.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public int? ChannelCount{ get; set; }
+        public int? ChannelCount { get; set; }
         /// <summary>
         /// Represents an enumerated value describing the way channels must be matched between the node's inputs and outputs. (See AudioNode.channelCountMode for more information including default values.)
         /// </summary>

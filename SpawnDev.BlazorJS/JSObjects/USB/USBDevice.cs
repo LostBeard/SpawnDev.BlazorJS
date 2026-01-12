@@ -154,7 +154,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="endpointNumber">The number of a device-specific endpoint (buffer).</param>
         /// <param name="packetLengths">An array of lengths for the packets being received.</param>
         /// <returns>A Promise that resolves with a USBIsochronousInTransferResult.</returns>
-        public Task<USBIsochronousInTransferResult> IsochronousTransferIn(int endpointNumber, IEnumerable<IEnumerable<int>> packetLengths) 
+        public Task<USBIsochronousInTransferResult> IsochronousTransferIn(int endpointNumber, IEnumerable<IEnumerable<int>> packetLengths)
             => JSRef!.CallAsync<USBIsochronousInTransferResult>("isochronousTransferIn", endpointNumber, packetLengths);
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="data">A TypedArray containing the data to send to the device.</param>
         /// <param name="packetLengths">An array of lengths for the packets being transferred.</param>
         /// <returns>A Promise that resolves with a USBIsochronousOutTransferResult.</returns>
-        public Task<USBIsochronousOutTransferResult> IsochronousTransferOut(int endpointNumber, TypedArray data, IEnumerable<IEnumerable<int>> packetLengths) 
+        public Task<USBIsochronousOutTransferResult> IsochronousTransferOut(int endpointNumber, TypedArray data, IEnumerable<IEnumerable<int>> packetLengths)
             => JSRef!.CallAsync<USBIsochronousOutTransferResult>("isochronousTransferOut", endpointNumber, data, packetLengths);
 
         /// <summary>

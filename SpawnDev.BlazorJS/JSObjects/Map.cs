@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     }
     /// <inheritdoc/>
     [Obsolete("Use Map")]
-    public class  MapReadOnly : Map
+    public class MapReadOnly : Map
     {
         /// <inheritdoc/>
         public MapReadOnly(IJSInProcessObjectReference _ref) : base(_ref) { }

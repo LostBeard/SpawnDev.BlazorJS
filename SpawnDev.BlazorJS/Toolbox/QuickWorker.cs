@@ -32,7 +32,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var blob = new Blob(new string[] { js }, new BlobOptions { Type = "application/javascript" });
             var objUrl = URL.CreateObjectURL(blob);
             var ret = new List<Worker>();
-            for (var i =0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 ret.Add(new Worker(objUrl));
             }
@@ -79,7 +79,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             Action<MessageEvent>? msgHandler = null;
             msgHandler = new Action<MessageEvent>((msg) =>
             {
-                worker.OnMessage -= msgHandler!; 
+                worker.OnMessage -= msgHandler!;
                 worker.Terminate();
                 worker.Dispose();
                 var result = msg.GetData<TResult>();
@@ -158,7 +158,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var sharedUint8Array = CreateNewSharedUint8Array(data);
             var workers = CreateWorkersFromJS(js, count);
             var tasks = new List<Task>();
-            for(var i=0; i < workers.Count; i++)
+            for (var i = 0; i < workers.Count; i++)
             {
                 var worker = workers[i];
                 var t = new TaskCompletionSource();

@@ -56,7 +56,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Closes the decoder and releases resources.
         /// </summary>
         public void Close() => JSRef!.CallVoid("close");
-        
+
         /// <summary>
         /// Checks if the given config is supported.
         /// </summary>

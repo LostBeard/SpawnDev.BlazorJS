@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A Boolean value which controls whether or not the audio track's sound is enabled. Setting this value to false mutes the track's audio.
         /// </summary>
-        public bool Enabled  { get => JSRef!.Get<bool>("enabled"); set => JSRef!.Set("enabled", value); }
+        public bool Enabled { get => JSRef!.Get<bool>("enabled"); set => JSRef!.Set("enabled", value); }
         /// <summary>
         /// A string specifying the category into which the track falls. For example, the main audio track would have a kind of "main".
         /// </summary>

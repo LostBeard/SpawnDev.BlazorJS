@@ -126,7 +126,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired whenever SourceBuffer.appendBuffer() or SourceBuffer.remove() completes. SourceBuffer.updating changes from true to false.
         /// </summary>
-        public ActionEvent<Event> OnUpdate{ get => new ActionEvent<Event>("update", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnUpdate { get => new ActionEvent<Event>("update", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired after the (not necessarily successful) completion of an appendBuffer() or remove() operation. This event is fired after the update, error, or abort events.
         /// </summary>

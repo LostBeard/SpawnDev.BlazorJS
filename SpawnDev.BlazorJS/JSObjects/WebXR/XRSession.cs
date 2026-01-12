@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the depth-sensing data format with which the session was configured.
         /// </summary>
-        public string DepthDataFormat=> JSRef!.Get<string>("depthDataFormat");
+        public string DepthDataFormat => JSRef!.Get<string>("depthDataFormat");
         /// <summary>
         /// Returns the depth-sensing usage with which the session was configured
         /// </summary>
@@ -89,7 +89,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task<XRLightProbe> RequestLightProbe(XRLightProbeInit? options = null) 
+        public Task<XRLightProbe> RequestLightProbe(XRLightProbeInit? options = null)
             => options == null ? JSRef!.CallAsync<XRLightProbe>("requestLightProbe") : JSRef!.CallAsync<XRLightProbe>("requestLightProbe", options);
         /// <summary>
         /// Requests that a new XRReferenceSpace of the specified type be created. Returns a promise which resolves with the XRReferenceSpace or XRBoundedReferenceSpace which was requested, or throws a NotSupportedError DOMException if the requested space type isn't supported by the device.

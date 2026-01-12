@@ -34,6 +34,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public TextTrackCue? GetCueById(string id) =>JSRef!.Call<TextTrackCue>("getCueById", id);
+        public TextTrackCue? GetCueById(string id) => JSRef!.Call<TextTrackCue>("getCueById", id);
     }
 }

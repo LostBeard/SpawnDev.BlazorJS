@@ -5,7 +5,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The HmacKeyGenParams dictionary of the Web Crypto API represents the object that should be passed as the algorithm parameter into SubtleCrypto.generateKey(), when generating a key for the HMAC algorithm.
     /// </summary>
-    public class HmacKeyGenParams  : KeyGenParams
+    public class HmacKeyGenParams : KeyGenParams
     {
         /// <summary>
         /// A string. This should be set to HMAC.

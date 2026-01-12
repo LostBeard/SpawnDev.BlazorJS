@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Node : EventTarget
     {
-        
+
         #region NodeType
         /// <summary>
         /// An Element node like p or div.

@@ -46,12 +46,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="dynamicOffsetsData"></param>
         public void SetBindGroup(GPUIndex32 index, GPUBindGroup? bindGroup, IEnumerable<GPUBufferDynamicOffset>? dynamicOffsetsData = null)
         {
-            if (dynamicOffsetsData ==  null)
+            if (dynamicOffsetsData == null)
                 JSRef!.CallVoid("setBindGroup", index, bindGroup);
             else
                 JSRef!.CallVoid("setBindGroup", index, bindGroup, dynamicOffsetsData);
         }
-            
+
 
         /// <summary>
         /// Sets the current GPUBindGroup for the given index.
@@ -61,7 +61,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="dynamicOffsetsData"></param>
         /// <param name="dynamicOffsetsDataStart"></param>
         /// <param name="dynamicOffsetsDataLength"></param>
-        public void SetBindGroup(GPUIndex32 index, GPUBindGroup? bindGroup, Uint32Array dynamicOffsetsData, GPUSize64 dynamicOffsetsDataStart, GPUSize32 dynamicOffsetsDataLength)=>
+        public void SetBindGroup(GPUIndex32 index, GPUBindGroup? bindGroup, Uint32Array dynamicOffsetsData, GPUSize64 dynamicOffsetsDataStart, GPUSize32 dynamicOffsetsDataLength) =>
             JSRef!.CallVoid("setBindGroup", index, bindGroup, dynamicOffsetsData, dynamicOffsetsDataStart, dynamicOffsetsDataLength);
 
     }

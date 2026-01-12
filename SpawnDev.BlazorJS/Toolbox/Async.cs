@@ -3,7 +3,7 @@
     /// <summary>
     /// Helper methods for running async lambda methods
     /// </summary>
-    public static class Async 
+    public static class Async
     {
         /// <summary>
         /// Shorthand wrapper for running async lambda functions

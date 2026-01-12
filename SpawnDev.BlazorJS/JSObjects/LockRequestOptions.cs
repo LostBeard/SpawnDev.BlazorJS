@@ -33,6 +33,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("signal")]
-        public AbortSignal? Signal{ get; set; }
+        public AbortSignal? Signal { get; set; }
     }
 }

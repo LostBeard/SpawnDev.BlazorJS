@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task UpdateUI(UpdateUIOptions? options = null) => options == null ? JSRef!.CallVoidAsync("updateUI") :  JSRef!.CallVoidAsync("updateUI", options);
+        public Task UpdateUI(UpdateUIOptions? options = null) => options == null ? JSRef!.CallVoidAsync("updateUI") : JSRef!.CallVoidAsync("updateUI", options);
     }
 }

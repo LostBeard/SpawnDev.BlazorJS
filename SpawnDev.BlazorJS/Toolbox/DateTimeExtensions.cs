@@ -76,7 +76,7 @@
                 var nextMinuteIncrement = TimeSpan.FromMinutes(1d - (diff.TotalMinutes - Math.Truncate(diff.TotalMinutes)));
                 return nextMinuteIncrement;
             }
-            else 
+            else
             {
                 // next day change
                 var nextDayChange = (now.Date + TimeSpan.FromDays(1)) - now;

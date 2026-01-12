@@ -19,7 +19,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var document = JS.Get<Document>("document");
             using var input = document.CreateElement<HTMLInputElement>("input");
             var tcs = new TaskCompletionSource();
-            Action<Event>? onEvent = null; 
+            Action<Event>? onEvent = null;
             onEvent = new Action<Event>((e) =>
             {
                 if (e.Type == "change")

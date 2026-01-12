@@ -26,6 +26,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Disposes of all graphical resources associated with an ImageBitmap.
         /// </summary>
-        public void Close()=> JSRef!.CallVoid("close");
+        public void Close() => JSRef!.CallVoid("close");
     }
 }

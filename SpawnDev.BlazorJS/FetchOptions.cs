@@ -87,7 +87,7 @@ namespace SpawnDev.BlazorJS
         public string? Priority { get; set; }
 
 
-        
+
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, string>? Headers { get; set; }
     }

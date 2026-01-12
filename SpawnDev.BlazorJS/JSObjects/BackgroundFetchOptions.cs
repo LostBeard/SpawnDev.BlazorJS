@@ -23,6 +23,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// As soon as the total download size exceeds downloadTotal, then the fetch is aborted.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public long? DownloadTotal{ get; set; }
+        public long? DownloadTotal { get; set; }
     }
 }

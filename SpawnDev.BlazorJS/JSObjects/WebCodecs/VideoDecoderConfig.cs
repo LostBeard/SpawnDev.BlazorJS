@@ -33,14 +33,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("codedHeight")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? CodedHeight { get; set; }
-        
+
         /// <summary>
         /// An integer representing the display aspect width of the video frame.
         /// </summary>
         [JsonPropertyName("displayAspectWidth")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? DisplayAspectWidth { get; set; }
-        
+
         /// <summary>
         /// An integer representing the display aspect height of the video frame.
         /// </summary>

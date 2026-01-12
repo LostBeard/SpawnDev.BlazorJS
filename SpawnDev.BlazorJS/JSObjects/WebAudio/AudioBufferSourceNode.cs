@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="when">The time, in seconds, at which the sound should begin to play, in the same time coordinate system used by the AudioContext. If when is less than (AudioContext.currentTime, or if it's 0, the sound begins to play at once. The default value is 0.</param>
         /// <param name="offset">An offset, specified as the number of seconds in the same time coordinate system as the AudioContext, to the time within the audio buffer that playback should begin. For example, to start playback halfway through a 10-second audio clip, offset should be 5. The default value, 0, will begin playback at the beginning of the audio buffer, and offsets past the end of the audio which will be played (based on the audio buffer's duration and/or the loopEnd property) are silently clamped to the maximum value allowed. The computation of the offset into the sound is performed using the sound buffer's natural sample rate, rather than the current playback rate, so even if the sound is playing at twice its normal speed, the midway point through a 10-second audio buffer is still 5.</param>
-        public void Start(float when, float offset) => JSRef!.CallVoid("start",  when, offset);
+        public void Start(float when, float offset) => JSRef!.CallVoid("start", when, offset);
         /// <summary>
         /// The start() method of the AudioBufferSourceNode Interface is used to schedule playback of the audio data contained in the buffer, or to begin playback immediately.
         /// </summary>

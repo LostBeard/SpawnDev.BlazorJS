@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
     /// The RTCIceTransport interface provides access to information about the ICE transport layer over which the data is being sent and received. This is particularly useful if you need to access state information about the connection.<br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/RTCIceTransport
     /// </summary>
-    public class RTCIceTransport: EventTarget
+    public class RTCIceTransport : EventTarget
     {
         /// <inheritdoc/>
         public RTCIceTransport(IJSInProcessObjectReference _ref) : base(_ref) { }

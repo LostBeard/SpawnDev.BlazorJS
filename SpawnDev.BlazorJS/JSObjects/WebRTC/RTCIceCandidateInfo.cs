@@ -3,7 +3,7 @@
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
     public class RTCIceCandidateInfo
-    {       
+    {
         /// <summary>
         /// A string describing the properties of the candidate, taken directly from the SDP attribute "candidate". The candidate string specifies the network connectivity information for the candidate. If the candidate is an empty string (""), the end of the candidate list has been reached; this candidate is known as the "end-of-candidates" marker.<br/>
         /// The syntax of the candidate string is described in RFC 5245, section 15.1. <br/>

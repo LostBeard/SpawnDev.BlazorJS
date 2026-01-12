@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// This object doesn't itself contain lighting values, but it is used to collect lighting states for each XRFrame. See XRLightEstimate for the estimated lighting values for an XRLightProbe.
     /// https://developer.mozilla.org/en-US/docs/Web/API/XRLightProbe
     /// </summary>
-    public class XRLightProbe :  EventTarget
+    public class XRLightProbe : EventTarget
     {
         /// <inheritdoc/>
         public XRLightProbe(IJSInProcessObjectReference _ref) : base(_ref) { }

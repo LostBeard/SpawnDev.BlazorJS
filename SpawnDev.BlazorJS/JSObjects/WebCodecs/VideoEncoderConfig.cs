@@ -24,14 +24,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonPropertyName("height")]
         public int Height { get; set; }
-        
+
         /// <summary>
         /// An integer representing the bitrate of the encoded video.
         /// </summary>
         [JsonPropertyName("bitrate")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? Bitrate { get; set; }
-        
+
         /// <summary>
         /// A number representing the frame rate of the encoded video.
         /// </summary>
@@ -45,8 +45,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("bitrateMode")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? BitrateMode { get; set; }
-        
-         /// <summary>
+
+        /// <summary>
         /// A string representing the latency mode.
         /// </summary>
         [JsonPropertyName("latencyMode")]
@@ -59,14 +59,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("hardwareAcceleration")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? HardwareAcceleration { get; set; }
-        
+
         /// <summary>
         /// A string representing the alpha option.
         /// </summary>
         [JsonPropertyName("alpha")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Alpha { get; set; }
-        
+
         /// <summary>
         /// A string representing the scalability mode.
         /// </summary>

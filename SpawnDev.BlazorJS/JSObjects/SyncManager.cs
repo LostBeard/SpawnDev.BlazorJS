@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="tag">An identifier for this synchronization event. This will be the value of the tag property of the SyncEvent that gets passed into the service worker's sync event handler.</param>
         /// <returns></returns>
-        public Task Register(string tag) =>  JSRef!.CallVoidAsync("register", tag);
+        public Task Register(string tag) => JSRef!.CallVoidAsync("register", tag);
         /// <summary>
         /// The getTags() method of the SyncManager interface returns a list of developer-defined identifiers for SyncManager registrations.
         /// </summary>

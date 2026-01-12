@@ -67,7 +67,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// - If specified, the value of this code parameter overrides the automatic setting of the close code for the connection, and instead sets a custom code. The value must be an integer: either 1000, or else a custom code of your choosing in the range 3000-4999. If you specify a code value, you should also specify a reason value.<br/>
         /// </param>
         /// <param name="reason">A string providing a custom WebSocket connection close reason (a concise human-readable prose explanation for the closure). The value must be no longer than 123 bytes (encoded in UTF-8).</param>
-        public void Close(int code, string reason) => JSRef!.CallVoid("close", code ,reason);
+        public void Close(int code, string reason) => JSRef!.CallVoid("close", code, reason);
         /// <summary>
         /// Closes the WebSocket connection or connection attempt, if any. If the connection is already CLOSED, this method does nothing.
         /// </summary>

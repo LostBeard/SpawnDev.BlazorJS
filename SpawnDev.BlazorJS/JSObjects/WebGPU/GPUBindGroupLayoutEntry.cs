@@ -56,6 +56,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("externalTexture")]
-        public GPUExternalTextureBindingLayout? ExternalTexture { get; init;  }
+        public GPUExternalTextureBindingLayout? ExternalTexture { get; init; }
     }
 }

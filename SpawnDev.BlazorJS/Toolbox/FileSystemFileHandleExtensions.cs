@@ -100,7 +100,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public static async Task Write(this FileSystemFileHandle _this, DataView data)
         {
-            
+
             using var stream = await _this.CreateWritable();
             await stream.Write(data);
             await stream.Close();

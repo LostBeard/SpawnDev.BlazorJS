@@ -1,5 +1,4 @@
 ﻿using SpawnDev.BlazorJS.JSObjects;
-using System.IO;
 using System.Text.Json;
 
 namespace SpawnDev.BlazorJS.Toolbox

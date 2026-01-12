@@ -44,7 +44,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A boolean that represents the element's multiple attribute, indicating whether more than one value is possible (e.g., multiple files).
         /// </summary>
-        public bool Multiple  { get => JSRef!.Get<bool>("multiple"); set => JSRef!.Set("multiple", value); }
+        public bool Multiple { get => JSRef!.Get<bool>("multiple"); set => JSRef!.Set("multiple", value); }
         /// <summary>
         /// A boolean that represents the element's disabled attribute, indicating that the control is not available for interaction. The input values will not be submitted with the form. See also readonly.
         /// </summary>

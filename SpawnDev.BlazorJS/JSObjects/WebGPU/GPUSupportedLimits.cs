@@ -10,7 +10,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class GPUSupportedLimits : JSObject
     {
         /// <inheritdoc />
-        public GPUSupportedLimits(IJSInProcessObjectReference _ref) : base(_ref){ }
+        public GPUSupportedLimits(IJSInProcessObjectReference _ref) : base(_ref) { }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public int? MaxTextureDimension1D => JSRef!.Get<int?>("maxTextureDimension1D");

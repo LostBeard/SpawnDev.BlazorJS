@@ -6,7 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// The MediaList interface represents the media queries of a stylesheet, e.g. those set using a @media rule, or when using the media attribute in a link element or an HTMLStyleElement.<br/><br/>
     /// https://developer.mozilla.org/en-US/docs/Web/API/MediaList
     /// </summary>
-    public class MediaList: JSObject
+    public class MediaList : JSObject
     {
         /// <summary>
         /// Deserialization constructor

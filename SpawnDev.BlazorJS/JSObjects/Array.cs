@@ -385,20 +385,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="addItems">The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array.</param>
         /// <returns></returns>
         public Array<T> Splice<T>(int start, int deleteCount, T[] addItems) => JSRef!.CallApply<Array<T>>("splice", new object[] { start, deleteCount }.Concat(addItems.Select(o => (object?)o)).ToArray()); /// <summary>
-        /// Sorts the elements of an array in place and returns the reference to the same array, now sorted. The default sort order is ascending, built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values.
-        /// </summary>
-        /// <param name="compareFn">
-        /// A function that determines the order of the elements. The function is called with the following arguments:<br/>
-        /// a - The first element for comparison.<br/>
-        /// b - The second element for comparison.<br/>
-        /// It should return a number where:<br/>
-        /// - A negative value indicates that a should come before b.<br/>
-        /// - A positive value indicates that a should come after b.<br/>
-        /// - Zero or NaN indicates that a and b are considered equal.<br/>
-        /// To memorize this, remember that (a, b) => a - b sorts numbers in ascending order.<br/>
-        /// If omitted, the array elements are converted to strings, then sorted according to each character's Unicode code point value.
-        /// </param>
-        /// <returns>This Array instance</returns>
+                                                                                                                                                                                                             /// Sorts the elements of an array in place and returns the reference to the same array, now sorted. The default sort order is ascending, built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values.
+                                                                                                                                                                                                             /// </summary>
+                                                                                                                                                                                                             /// <param name="compareFn">
+                                                                                                                                                                                                             /// A function that determines the order of the elements. The function is called with the following arguments:<br/>
+                                                                                                                                                                                                             /// a - The first element for comparison.<br/>
+                                                                                                                                                                                                             /// b - The second element for comparison.<br/>
+                                                                                                                                                                                                             /// It should return a number where:<br/>
+                                                                                                                                                                                                             /// - A negative value indicates that a should come before b.<br/>
+                                                                                                                                                                                                             /// - A positive value indicates that a should come after b.<br/>
+                                                                                                                                                                                                             /// - Zero or NaN indicates that a and b are considered equal.<br/>
+                                                                                                                                                                                                             /// To memorize this, remember that (a, b) => a - b sorts numbers in ascending order.<br/>
+                                                                                                                                                                                                             /// If omitted, the array elements are converted to strings, then sorted according to each character's Unicode code point value.
+                                                                                                                                                                                                             /// </param>
+                                                                                                                                                                                                             /// <returns>This Array instance</returns>
         public Array Sort<T>(Func<T, T, int> compareFn)
         {
             using var cb = Callback.Create(compareFn);

@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Represents the height of the layer in meters.
         /// </summary>
-        public float Height { get => JSRef!.Get<float>("height"); set => JSRef!.Set("height",  value); }
+        public float Height { get => JSRef!.Get<float>("height"); set => JSRef!.Set("height", value); }
         /// <summary>
         /// Represents the width of the layer in meters.
         /// </summary>

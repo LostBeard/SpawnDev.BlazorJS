@@ -8,6 +8,6 @@
         /// <summary>
         /// A string indicating the derive key parameters the inheriting class holds
         /// </summary>
-        public virtual string Name { get; set; } 
+        public virtual string Name { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Task<PublicKeyCredential<AuthenticatorAttestationResponse>> Create(CredentialCreatePublicKeyOptions options) => JSRef!.CallAsync<PublicKeyCredential<AuthenticatorAttestationResponse>>("create", options);        
+        public Task<PublicKeyCredential<AuthenticatorAttestationResponse>> Create(CredentialCreatePublicKeyOptions options) => JSRef!.CallAsync<PublicKeyCredential<AuthenticatorAttestationResponse>>("create", options);
         /// <summary>
         /// Returns a Promise that resolves with the Credential instance that matches the provided parameters.
         /// </summary>

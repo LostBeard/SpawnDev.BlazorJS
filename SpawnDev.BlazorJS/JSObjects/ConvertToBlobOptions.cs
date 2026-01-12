@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A Number between 0 and 1 indicating the image quality to be used when creating images using file formats that support lossy compression (such as image/jpeg or image/webp). A user agent will use its default quality value if this option is not specified, or if the number is outside the allowed range.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public float? Quality{ get; set; }
+        public float? Quality { get; set; }
     }
 }

@@ -21,15 +21,15 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the number of SpeechGrammar objects contained in the list.
         /// </summary>
         public int Length => JSRef!.Get<int>("length");
-        
+
         /// <summary>
         /// Takes a grammar and adds it to the SpeechGrammarList.
         /// </summary>
         /// <param name="src"></param>
         /// <param name="weight"></param>
         public void AddFromString(string src, float weight = 1.0f) => JSRef!.CallVoid("addFromString", src, weight);
-        
-         /// <summary>
+
+        /// <summary>
         /// Takes a grammar and adds it to the SpeechGrammarList.
         /// </summary>
         public void AddFromURI(string src, float weight = 1.0f) => JSRef!.CallVoid("addFromURI", src, weight);

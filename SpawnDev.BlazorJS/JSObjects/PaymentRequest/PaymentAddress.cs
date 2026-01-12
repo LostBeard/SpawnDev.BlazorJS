@@ -59,7 +59,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the sorting code.
         /// </summary>
         public string SortingCode => JSRef!.Get<string>("sortingCode");
-        
+
         /// <summary>
         /// Returns a JSON-serializable object that provides a address information using the PaymentAddress vocabulary.
         /// </summary>

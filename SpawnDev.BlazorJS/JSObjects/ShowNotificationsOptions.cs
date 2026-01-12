@@ -86,6 +86,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A vibration pattern to run with the display of the notification. A vibration pattern can be an array with as few as one member. The values are times in milliseconds where the even indices (0, 2, 4, etc.) indicate how long to vibrate and the odd indices indicate how long to pause. For example, [300, 100, 400] would vibrate 300ms, pause 100ms, then vibrate 400ms.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public double[]? Vibrate{ get; set; }
+        public double[]? Vibrate { get; set; }
     }
 }

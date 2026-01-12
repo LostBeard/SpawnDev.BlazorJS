@@ -24,7 +24,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The inlineVerticalFieldOfView attribute defines the default vertical field of view in radians used when computing projection matrices for "inline" XRSessions. The projection matrix calculation also takes into account the aspect ratio of the output canvas. This value MUST be null for immersive sessions.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public  double? InlineVerticalFieldOfView { get; set; }
+        public double? InlineVerticalFieldOfView { get; set; }
         /// <summary>
         /// The baseLayer attribute defines an XRWebGLLayer which the XR compositor will obtain images from.
         /// </summary>

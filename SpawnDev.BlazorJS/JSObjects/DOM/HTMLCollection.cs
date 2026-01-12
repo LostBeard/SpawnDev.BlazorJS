@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="index">The position of the Element to be returned. Elements appear in an HTMLCollection in the same order in which they appear in the document's source.</param>
         /// <returns>The Element at the specified index, or null if index is less than zero or greater than or equal to the length property.</returns>
-        public T? Item<T>(int index) where T : Element =>  JSRef!.Call<T?>("item", index);
+        public T? Item<T>(int index) where T : Element => JSRef!.Call<T?>("item", index);
         /// <summary>
         /// 
         /// </summary>

@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="buffer"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public long Read(ArrayBuffer buffer, FileSystemSyncReadWriteOptions? options = null) 
+        public long Read(ArrayBuffer buffer, FileSystemSyncReadWriteOptions? options = null)
             => options == null ? JSRef!.Call<long>("read", buffer) : JSRef!.Call<long>("read", buffer, options);
         /// <summary>
         /// The read() method of the FileSystemSyncAccessHandle interface reads the content of the file associated with the handle into a specified buffer, optionally at a given offset.

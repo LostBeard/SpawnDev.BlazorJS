@@ -21,7 +21,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the index position of the character in the SpeechSynthesisUtterance.text that was being spoken when the event was triggered.
         /// </summary>
         public int CharIndex => JSRef!.Get<int>("charIndex");
-        
+
         /// <summary>
         /// Returns the length of the character in the SpeechSynthesisUtterance.text that was being spoken when the event was triggered.
         /// </summary>

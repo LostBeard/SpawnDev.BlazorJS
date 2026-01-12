@@ -64,7 +64,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         public void RemoveEventListener(string type, Callback listener, AddEventListenerOptions options) => JSRef!.CallVoid("removeEventListener", type, listener, options);
 
-        
+
         // AddEventListener and RemoveEventListener that support using actions with auto reference handling
         static Dictionary<object, CallBackInfo> CallBackInfos { get; } = new Dictionary<object, CallBackInfo>();
         #region Func EventHandlers
@@ -294,7 +294,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new FuncCallback<TResult>(() => {
+                    info.Callback = new FuncCallback<TResult>(() =>
+                    {
                         var ret = listener();
                         info.RefCount--;
                         if (info.RefCount <= 0)
@@ -350,7 +351,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new FuncCallback<T1, TResult>((t1) => {
+                    info.Callback = new FuncCallback<T1, TResult>((t1) =>
+                    {
                         var ret = listener(t1);
                         info.RefCount--;
                         if (info.RefCount <= 0)
@@ -408,7 +410,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new FuncCallback<T1, T2, TResult>((t1, t2) => {
+                    info.Callback = new FuncCallback<T1, T2, TResult>((t1, t2) =>
+                    {
                         var ret = listener(t1, t2);
                         info.RefCount--;
                         if (info.RefCount <= 0)
@@ -468,7 +471,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new FuncCallback<T1, T2, T3, TResult>((t1, t2, t3) => {
+                    info.Callback = new FuncCallback<T1, T2, T3, TResult>((t1, t2, t3) =>
+                    {
                         var ret = listener(t1, t2, t3);
                         info.RefCount--;
                         if (info.RefCount <= 0)
@@ -530,7 +534,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new FuncCallback<T1, T2, T3, T4, TResult>((t1, t2, t3, t4) => {
+                    info.Callback = new FuncCallback<T1, T2, T3, T4, TResult>((t1, t2, t3, t4) =>
+                    {
                         var ret = listener(t1, t2, t3, t4);
                         info.RefCount--;
                         if (info.RefCount <= 0)
@@ -791,7 +796,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new ActionCallback(() => {
+                    info.Callback = new ActionCallback(() =>
+                    {
                         listener();
                         info.RefCount--;
                         if (info.RefCount <= 0)
@@ -844,7 +850,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new ActionCallback<T1>((t1) => {
+                    info.Callback = new ActionCallback<T1>((t1) =>
+                    {
                         listener(t1);
                         info.RefCount--;
                         if (info.RefCount <= 0)
@@ -899,7 +906,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new ActionCallback<T1, T2>((t1, t2) => {
+                    info.Callback = new ActionCallback<T1, T2>((t1, t2) =>
+                    {
                         listener(t1, t2);
                         info.RefCount--;
                         if (info.RefCount <= 0)
@@ -956,7 +964,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new ActionCallback<T1, T2, T3>((t1, t2, t3) => {
+                    info.Callback = new ActionCallback<T1, T2, T3>((t1, t2, t3) =>
+                    {
                         listener(t1, t2, t3);
                         info.RefCount--;
                         if (info.RefCount <= 0)
@@ -1015,7 +1024,8 @@ namespace SpawnDev.BlazorJS.JSObjects
                 CallBackInfos[listener] = info;
                 if (options.Once.HasValue && options.Once.Value)
                 {
-                    info.Callback = new ActionCallback<T1, T2, T3, T4>((t1, t2, t3, t4) => {
+                    info.Callback = new ActionCallback<T1, T2, T3, T4>((t1, t2, t3, t4) =>
+                    {
                         listener(t1, t2, t3, t4);
                         info.RefCount--;
                         if (info.RefCount <= 0)

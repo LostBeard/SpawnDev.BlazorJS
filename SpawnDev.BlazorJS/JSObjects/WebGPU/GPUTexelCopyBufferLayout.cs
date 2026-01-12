@@ -23,6 +23,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Required if there are multiple texel images (i.e. the copy depth is more than one).
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public GPUSize32? RowsPerImage { get; set; } 
+        public GPUSize32? RowsPerImage { get; set; }
     }
 }

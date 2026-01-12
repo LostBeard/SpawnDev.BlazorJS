@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Diagnostics.Tracing;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {

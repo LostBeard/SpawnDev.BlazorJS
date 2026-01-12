@@ -1453,7 +1453,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         /// <param name="refValue">A GLint specifying the reference value for the stencil test. This value is clamped to the range 0 to 2^n - 1 where n is the number of bitplanes in the stencil buffer. The default value is 0.</param>
         /// <param name="mask">A GLuint specifying a bit-wise mask that is used to AND the reference value and the stored stencil value when the test is done. The default value is all 1.</param>
-        public void StencilFuncSeparate(int face, int func = 0x0207, int refValue  = 0, uint mask = 1) => JSRef!.CallVoid("stencilFuncSeparate", face, func, refValue, mask);
+        public void StencilFuncSeparate(int face, int func = 0x0207, int refValue = 0, uint mask = 1) => JSRef!.CallVoid("stencilFuncSeparate", face, func, refValue, mask);
         /// <summary>
         /// The WebGLRenderingContext.stencilMask() method of the WebGL API controls enabling and disabling of both the front and back writing of individual bits in the stencil planes.<br/>
         /// The WebGLRenderingContext.stencilMaskSeparate() method can set front and back stencil writemasks to different values.

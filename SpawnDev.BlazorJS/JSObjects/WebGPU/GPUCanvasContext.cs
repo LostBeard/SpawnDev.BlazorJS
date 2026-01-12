@@ -36,5 +36,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public GPUCanvasConfiguration? GetConfiguration() => JSRef!.Call<GPUCanvasConfiguration?>("getConfiguration");
-    } 
+    }
 }

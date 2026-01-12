@@ -19,7 +19,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="buffers"></param>
         /// <param name="options"></param>
-        public Blob(IEnumerable<ArrayBuffer> buffers, BlobOptions? options = null) : base(options == null ? JS.New(nameof(Blob), buffers) :JS.New(nameof(Blob), buffers, options)) { }
+        public Blob(IEnumerable<ArrayBuffer> buffers, BlobOptions? options = null) : base(options == null ? JS.New(nameof(Blob), buffers) : JS.New(nameof(Blob), buffers, options)) { }
         /// <summary>
         /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
         /// </summary>

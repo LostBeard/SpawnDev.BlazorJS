@@ -25,7 +25,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A string representing the credential's origin. PasswordCredential objects are origin-bound, which means that they will only be usable on the specified origin they were intended to be used on.
         /// </summary>
-        public string Origin{ get; set; }
+        public string Origin { get; set; }
         /// <summary>
         /// A string representing the credential password.
         /// </summary>

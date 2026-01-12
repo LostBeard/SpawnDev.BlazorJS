@@ -15,6 +15,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "device-pixel-content-box" - The size of the content area as defined in CSS, in device pixels, before applying any CSS transforms on the element or its ancestors.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? Box {  get; set; }
+        public string? Box { get; set; }
     }
 }

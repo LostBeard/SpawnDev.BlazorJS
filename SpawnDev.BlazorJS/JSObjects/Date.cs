@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Create a new instance of Date from a .Net DateTime
         /// </summary>
         /// <param name="dateTime"></param>
-        public static implicit operator Date(DateTime dateTime)=>new Date(dateTime);
+        public static implicit operator Date(DateTime dateTime) => new Date(dateTime);
         /// <summary>
         /// Returns the Date.ateTime property
         /// </summary>
