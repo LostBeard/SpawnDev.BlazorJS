@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class InkPresenter : JSObject
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="InkPresenter"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public InkPresenter(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a value, in milliseconds, indicating the latency improvement that can be expected using this presenter.

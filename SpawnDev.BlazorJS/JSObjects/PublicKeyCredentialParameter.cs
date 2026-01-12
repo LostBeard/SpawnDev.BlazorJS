@@ -17,10 +17,30 @@
         /// -257: RS256
         /// </summary>
         public int Alg { get; set; }
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public PublicKeyCredentialParameter() { }
+        /// <summary>
+        /// Creates a new instance with the specified algorithm
+        /// </summary>
+        /// <param name="alg"></param>
         public PublicKeyCredentialParameter(int alg) => (Alg) = (alg);
+        /// <summary>
+        /// Creates a new instance with the specified algorithm and type
+        /// </summary>
+        /// <param name="alg"></param>
+        /// <param name="type"></param>
         public PublicKeyCredentialParameter(int alg, string type) => (Alg, Type) = (alg, type);
+        /// <summary>
+        /// Implicit operator to create a PublicKeyCredentialParameter from an int
+        /// </summary>
+        /// <param name="alg"></param>
         public static implicit operator PublicKeyCredentialParameter(int alg) => new PublicKeyCredentialParameter(alg);
+        /// <summary>
+        /// Implicit operator to get the algorithm from a PublicKeyCredentialParameter
+        /// </summary>
+        /// <param name="obj"></param>
         public static implicit operator int(PublicKeyCredentialParameter obj) => obj.Alg;
     }
 }

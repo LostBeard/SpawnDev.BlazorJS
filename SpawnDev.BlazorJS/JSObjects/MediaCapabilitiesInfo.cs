@@ -1,5 +1,9 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The MediaCapabilitiesInfo interface of the Media Capabilities API is returned when MediaCapabilities.decodingInfo() or MediaCapabilities.encodingInfo() is called. It contains information about whether the media configuration is supported, and if so, whether decoding/encoding will be smooth and power efficient.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/MediaCapabilitiesInfo
+    /// </summary>
     public class MediaCapabilitiesInfo
     {
         /// <summary>

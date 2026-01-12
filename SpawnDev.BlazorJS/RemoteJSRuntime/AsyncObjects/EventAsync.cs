@@ -32,10 +32,6 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// <summary>
         /// A reference to the currently registered target for the event. This is the object to which the event is currently slated to be sent. It's possible this has been changed along the way through retargeting.
         /// </summary>
-        //public virtual Task<EventTargetAsync?> Get_CurrentTarget() => JSRef!.GetAsync<EventTargetAsync?>("currentTarget");
-        /// <summary>
-        /// A reference to the currently registered target for the event. This is the object to which the event is currently slated to be sent. It's possible this has been changed along the way through retargeting.
-        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public Task<T> Get_CurrentTargetAs<T>() where T : EventTargetAsync => JSRef!.GetAsync<T>("currentTarget");
@@ -51,10 +47,6 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// Indicates whether or not the event was initiated by the browser (after a user click, for instance) or by a script (using an event creation method, for example).
         /// </summary>
         public Task<bool> Get_IsTrusted() => JSRef!.GetAsync<bool>("isTrusted");
-        /// <summary>
-        /// A reference to the object to which the event was originally dispatched.
-        /// </summary>
-        //public virtual Task<EventTargetAsync> Get_Target() => JSRef!.GetAsync<EventTargetAsync>("target");
         /// <summary>
         /// A reference to the object to which the event was originally dispatched.
         /// </summary>

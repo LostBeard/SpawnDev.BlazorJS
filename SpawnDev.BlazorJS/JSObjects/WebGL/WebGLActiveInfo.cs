@@ -8,10 +8,19 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class WebGLActiveInfo
     {
+        /// <summary>
+        /// The name of the requested variable.
+        /// </summary>
         [JsonPropertyName("name")]
         public string Name { get; set; }
+        /// <summary>
+        /// The size of the requested variable.
+        /// </summary>
         [JsonPropertyName("size")]
         public int Size { get; set; }
+        /// <summary>
+        /// The data type of the requested variable.
+        /// </summary>
         [JsonPropertyName("type")]
         public int Type { get; set; }
     }

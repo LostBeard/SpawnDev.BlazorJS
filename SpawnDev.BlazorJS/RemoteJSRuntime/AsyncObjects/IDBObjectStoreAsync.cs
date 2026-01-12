@@ -4,6 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
 {
+    /// <summary>
+    /// The IDBObjectStoreAsync interface of the IndexedDB API represents an object store in a database.
+    /// </summary>
+    /// <typeparam name="TPrimaryKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     [JsonConverter(typeof(JSObjectAsyncConverterFactory))]
     public class IDBObjectStoreAsync<TPrimaryKey, TValue> : JSObjectAsync
     {

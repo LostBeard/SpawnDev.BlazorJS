@@ -20,8 +20,19 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
         /// <param name="jsRef"></param>
         public IDBDatabaseAsync(IJSObjectReference jsRef) : base(jsRef) { }
 
-        public Task<string[]> Get_ObjectStoreNames() => JSRef!.GetAsync<string[]>("objectStoreName");
-
+        /// <summary>
+        /// Returns a DOMStringList containing the names of the object stores currently in the database.
+        /// </summary>
+        /// <returns></returns>
+        public Task<string[]> Get_ObjectStoreNames() => JSRef!.GetAsync<string[]>("objectStoreNames");
+        /// <summary>
+        /// Creates and returns a new object store or index.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="storeName"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public Task<IDBObjectStoreAsync<TKey, TValue>> CreateObjectStore<TKey, TValue>(string storeName, IDBObjectStoreCreateOptions? options = null) => JSRef!.CallAsync<IDBObjectStoreAsync<TKey, TValue>>("createObjectStore", storeName, options);
     }
 }

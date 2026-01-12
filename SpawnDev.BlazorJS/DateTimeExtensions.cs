@@ -7,7 +7,7 @@
     public static class DateTimeExtensions
     {
         /// <summary>
-        /// Converts an epoch long to a DateTime<br />
+        /// Converts a DateTime to an epoch long<br />
         /// NOTE: .Net treats a DateTime with a Kind property value of DateTimeKind.Unspecified as local time<br />
         /// .Net, by default, deserializes to a DateTime with Kind of DateTimeKind.Unspecified
         /// </summary>
@@ -20,7 +20,7 @@
             return (long)Math.Floor(oDiff.TotalMilliseconds);
         }
         /// <summary>
-        /// Converts a DateTime to an epoch long
+        /// Converts an epoch long to a DateTime
         /// </summary>
         /// <param name="msSince19700101Utc"></param>
         /// <param name="toLocal"></param>

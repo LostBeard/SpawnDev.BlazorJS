@@ -8,10 +8,19 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class WebGLShaderPrecisionFormat
     {
+        /// <summary>
+        /// The base 2 log of the absolute value of the minimum value that can be represented.
+        /// </summary>
         [JsonPropertyName("rangeMin")]
         public int RangeMin { get; set; }
+        /// <summary>
+        /// The base 2 log of the absolute value of the maximum value that can be represented.
+        /// </summary>
         [JsonPropertyName("rangeMax")]
         public int RangeMax { get; set; }
+        /// <summary>
+        /// The number of bits of precision that can be represented.
+        /// </summary>
         [JsonPropertyName("precision")]
         public int Precision { get; set; }
     }

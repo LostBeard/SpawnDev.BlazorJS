@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The ShareOptions dictionary represents the options for a navigator.share() call.
+    /// </summary>
     public class ShareOptions
     {
         /// <summary>

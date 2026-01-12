@@ -27,19 +27,19 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public int AnchorOffset => JSRef!.Get<int>("anchorOffset");
         /// <summary>
-        /// 
+        /// Returns the Node in which the selection begins.
         /// </summary>
         public Node BaseNode => JSRef!.Get<Node>("baseNode");
         /// <summary>
-        /// 
+        /// Returns a number representing the offset of the selection's anchor within the baseNode.
         /// </summary>
         public int BaseOffset => JSRef!.Get<int>("baseOffset");
         /// <summary>
-        /// 
+        /// Returns the Node in which the selection ends.
         /// </summary>
         public Node ExtentNode => JSRef!.Get<Node>("extentNode");
         /// <summary>
-        /// 
+        /// Returns a number representing the offset of the selection's anchor within the extentNode.
         /// </summary>
         public int ExtentOffset => JSRef!.Get<int>("extentOffset");
         /// <summary>
@@ -80,6 +80,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         //public void SelectAllChildren() => JSRef!.CallVoid("selectAllChildren");
         //public void SetBaseAndExtent() => JSRef!.CallVoid("setBaseAndExtent");
         //public void SetPosition() => JSRef!.CallVoid("setPosition");
+        /// <summary>
+        /// Returns a string representation of the selection.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() => JSRef!.Call<string>("toString");
         #endregion
     }

@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
 {
+    /// <summary>
+    /// The FetchOptions interface represents the options for a fetch() call.
+    /// </summary>
     public class FetchOptions
     {
         /// <summary>
@@ -88,6 +91,9 @@ namespace SpawnDev.BlazorJS
 
 
 
+        /// <summary>
+        /// Any headers that you want to add to your request, contained within a ByteString string or literal.
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, string>? Headers { get; set; }
     }

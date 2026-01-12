@@ -19,15 +19,13 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="data"></param>
         /// <param name="offset">Start index in the data</param>
         /// <param name="length">The number of elements to include</param>
-        public HeapView(TElement[] data, long offset, long length) : base()
+        public HeapView(TElement[] data, long offset, long length) : base(data?.GetType()!, typeof(TElement))
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             var maxCount = data.Length - offset;
             if (offset < 0 || length > maxCount) throw new ArgumentOutOfRangeException(nameof(offset));
             ElementSize = Marshal.SizeOf<TElement>();
             Offset = offset;
-            DataType = data.GetType();
-            ElementType = typeof(TElement);
             Data = data;
             handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
             Pointer = new IntPtr(handle.AddrOfPinnedObject().ToInt64() + (Offset * ElementSize));
@@ -56,15 +54,13 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="data"></param>
         /// <param name="offset">Start index in the data</param>
         /// <param name="length">The number of characters to include</param>
-        public HeapViewString(string data, long offset, long length) : base()
+        public HeapViewString(string data, long offset, long length) : base(data?.GetType()!, typeof(char))
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             var maxCount = data.Length - offset;
             if (offset < 0 || length > maxCount) throw new ArgumentOutOfRangeException(nameof(offset));
             ElementSize = 2;
             Offset = offset;
-            DataType = data.GetType();
-            ElementType = typeof(char);
             Data = data;
             handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
             Pointer = new IntPtr(handle.AddrOfPinnedObject().ToInt64() + (Offset * ElementSize));
@@ -96,8 +92,10 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <summary>
         /// New instance
         /// </summary>
-        public HeapView()
+        internal HeapView(Type dataType, Type elementType)
         {
+            DataType = dataType;
+            ElementType = elementType;
             if (InstanceCount == 0)
             {
                 PrimeHeap();
@@ -329,11 +327,11 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <summary>
         /// Data element type
         /// </summary>
-        public Type ElementType { get; protected set; }
+        public Type ElementType { get; private set; }
         /// <summary>
         /// Data type
         /// </summary>
-        public Type DataType { get; protected set; }
+        public Type DataType { get; private set; }
         /// <summary>
         /// Creates a new HeapView of the provided array
         /// </summary>

@@ -25,6 +25,10 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// A DOMHighResTimeStamp object indicating the time at which the sample was taken for this statistics object.
         /// </summary>
         public double Timestamp => JSRef!.Get<double>("timestamp");
+        /// <summary>
+        /// Returns the statistics object cast to its most specific type based on the value of the Type property.
+        /// </summary>
+        /// <returns></returns>
         public RTCStats Typed()
         {
             switch (Type)

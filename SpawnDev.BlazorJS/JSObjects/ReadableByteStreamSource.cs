@@ -3,6 +3,9 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     // TODO - verify the json converter serializes this correctly
+    /// <summary>
+    /// The ReadableByteStreamSource interface represents an underlying source for a ReadableStream of bytes.
+    /// </summary>
     public class ReadableByteStreamSource : ReadableStreamUnderlyingSource, IDisposable
     {
         /// <summary>
@@ -30,12 +33,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ActionCallback<string?>? Cancel { get; set; }
+        /// <summary>
+        /// Creates a new instance
+        /// </summary>
+        /// <param name="pull"></param>
+        /// <param name="start"></param>
+        /// <param name="cancel"></param>
         public ReadableByteStreamSource(Action<ReadableByteStreamController>? pull = null, Action<ReadableByteStreamController>? start = null, Action<string?>? cancel = null)
         {
             if (pull != null) Pull = pull;
             if (start != null) Start = start;
             if (cancel != null) Cancel = cancel;
         }
+        /// <summary>
+        /// Disposes of the instance
+        /// </summary>
         public void Dispose()
         {
             Pull?.Dispose();

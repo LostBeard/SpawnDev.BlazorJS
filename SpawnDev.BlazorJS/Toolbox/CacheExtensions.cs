@@ -75,7 +75,19 @@ namespace SpawnDev.BlazorJS.Toolbox
             return dirs.ToList();
         }
 
+        /// <summary>
+        /// Returns a list of all files from a recursive search
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
         public static Task<List<string>> GetAllFiles(this Cache _this) => _this.GetFiles("/", true);
+        /// <summary>
+        /// Returns all files from the specified path, optionally recursive
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="inFolder"></param>
+        /// <param name="recursive"></param>
+        /// <returns></returns>
         public static async Task<List<string>> GetFiles(this Cache _this, string inFolder = "/", bool recursive = false)
         {
             var ret = await _this.GetAllHostFiles(HostName, true);
@@ -95,13 +107,31 @@ namespace SpawnDev.BlazorJS.Toolbox
             return ret;
         }
 
+        /// <summary>
+        /// Cache path type enum
+        /// </summary>
         public enum CachePathType
         {
+            /// <summary>
+            /// The path was not found
+            /// </summary>
             NOT_FOUND,
+            /// <summary>
+            /// The path is a directory
+            /// </summary>
             DIRECTORY,
+            /// <summary>
+            /// The path is a file
+            /// </summary>
             FILE,
         }
 
+        /// <summary>
+        /// Returns the type of the path
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static async Task<CachePathType> GetPathType(this Cache _this, string path)
         {
             var files = await _this.GetAllFiles();
@@ -114,6 +144,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             return CachePathType.NOT_FOUND;
         }
 
+        /// <summary>
+        /// Returns all files for the specified hostname
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="hostname"></param>
+        /// <param name="returnAbsolutePaths"></param>
+        /// <returns></returns>
         public static async Task<List<string>> GetAllHostFiles(this Cache _this, string hostname, bool returnAbsolutePaths = false)
         {
             var ret = new List<string>();
@@ -131,6 +168,14 @@ namespace SpawnDev.BlazorJS.Toolbox
             requests.DisposeAll();
             return ret;
         }
+        /// <summary>
+        /// Writes bytes to the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="content"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
         public static Task WriteBytes(this Cache _this, string url, byte[] content, string contentType = "")
         {
             using var uint8 = new Uint8Array(content);
@@ -144,12 +189,28 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
         }
 
+        /// <summary>
+        /// Writes a Uint8Array to the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="uint8Array"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
         public static Task WriteUint8Array(this Cache _this, string url, Uint8Array uint8Array, string contentType = "")
         {
             using var buffer = uint8Array.Buffer;
             return _this.WriteArrayBuffer(url, buffer);
         }
 
+        /// <summary>
+        /// Writes an ArrayBuffer to the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="buffer"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
         public static Task WriteArrayBuffer(this Cache _this, string url, ArrayBuffer buffer, string contentType = "")
         {
             using (var response = new Response(buffer))
@@ -164,6 +225,14 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
         }
 
+        /// <summary>
+        /// Writes a Blob to the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="buffer"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
         public static Task WriteBlob(this Cache _this, string url, Blob buffer, string contentType = "")
         {
             using (var response = new Response(buffer))
@@ -175,40 +244,93 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
         }
 
+        /// <summary>
+        /// Writes text to the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="content"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
         public static Task WriteText(this Cache _this, string url, string content, string contentType = "text/plain")
         {
             return _this.WriteBytes(url, Encoding.UTF8.GetBytes(content), contentType);
         }
 
+        /// <summary>
+        /// Writes JSON to the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="value"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
         public static Task WriteJSON(this Cache _this, string url, object value, string contentType = "application/json")
         {
             return _this.WriteText(url, JsonSerializer.Serialize(value), contentType);
         }
 
+        /// <summary>
+        /// Reads bytes from the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static async Task<byte[]?> ReadBytes(this Cache _this, string url, CacheMatchOptions? options = null)
         {
             using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);
             return response == null ? null : await response.ReadBytes();
         }
 
+        /// <summary>
+        /// Reads an ArrayBuffer from the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static async Task<ArrayBuffer?> ReadArrayBuffer(this Cache _this, string url, CacheMatchOptions? options = null)
         {
             using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);
             return response == null ? null : await response.ArrayBuffer();
         }
 
+        /// <summary>
+        /// Reads a Blob from the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static async Task<Blob?> ReadBlob(this Cache _this, string url, CacheMatchOptions? options = null)
         {
             using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);
             return response == null ? null : await response.Blob();
         }
 
+        /// <summary>
+        /// Reads text from the cache
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static async Task<string?> ReadText(this Cache _this, string url, CacheMatchOptions? options = null)
         {
             using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);
             return response == null ? null : await response.Text();
         }
 
+        /// <summary>
+        /// Reads JSON from the cache
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="options"></param>
+        /// <param name="jsonSerializerOptions"></param>
+        /// <returns></returns>
         public static async Task<T?> ReadJSON<T>(this Cache _this, string url, CacheMatchOptions? options = null, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             var tmp = await _this.ReadText(url, options);
@@ -216,6 +338,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             return JsonSerializer.Deserialize<T>(tmp, jsonSerializerOptions != null ? jsonSerializerOptions : JsonSerializerDeserializeOptions) ?? default;
         }
 
+        /// <summary>
+        /// Gets the content type of the cached response
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static async Task<string?> GetContentType(this Cache _this, string url, CacheMatchOptions? options = null)
         {
             using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);
@@ -224,6 +353,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             return headers == null ? "" : headers.JSRef.Get<string>("content-type") ?? "";
         }
 
+        /// <summary>
+        /// Gets the filename from the URL
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="nameOnly"></param>
+        /// <returns></returns>
         public static string GetFilename(this Cache _this, string url, bool nameOnly = false)
         {
             var ret = url.Split('/').Last();
@@ -236,6 +372,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             return ret;
         }
 
+        /// <summary>
+        /// Gets the size of the cached response
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="url"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static async Task<long?> GetSize(this Cache _this, string url, CacheMatchOptions? options = null)
         {
             using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);

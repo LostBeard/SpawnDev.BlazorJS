@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class MIDIOutput : MIDIPort
     {
         #region Constructors
+        /// <summary>
+        /// Creates a new instance of <see cref="MIDIOutput"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public MIDIOutput(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 

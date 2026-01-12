@@ -91,9 +91,18 @@ namespace SpawnDev.BlazorJS.JSObjects
             return false;
         }
 
+        /// <summary>
+        /// Options for requesting file permissions
+        /// </summary>
         public class FilePermissionsOptions
         {
+            /// <summary>
+            /// "read" or "readwrite"
+            /// </summary>
             public string Mode { get; set; } = "";
+            /// <summary>
+            /// Creates a new FilePermissionsOptions instance
+            /// </summary>
             public FilePermissionsOptions(bool readWriteMode = false)
             {
                 Mode = readWriteMode ? MODE_READ_WRITE : MODE_READ;
@@ -105,6 +114,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         // Firefox  unsupported
         // Chrome   supported
         // non-standard implementation to prevent need to polyfill when used
+        /// <summary>
+        /// Queries the current permission state of the file or directory handle.
+        /// </summary>
+        /// <param name="writePermission">If true, queries for write permission; otherwise, queries for read permission.</param>
+        /// <returns>A string representing the permission state (e.g., "granted", "denied", "prompt").</returns>
         public async Task<string> QueryPermission(bool writePermission = false)
         {
             if (JSRef!.IsUndefined("queryPermission"))
@@ -114,6 +128,11 @@ namespace SpawnDev.BlazorJS.JSObjects
             return await JSRef!.CallAsync<string>("queryPermission", new FilePermissionsOptions(writePermission));
         }
 
+        /// <summary>
+        /// Requests permission to read or write to the file or directory handle.
+        /// </summary>
+        /// <param name="writePermission">If true, requests write permission; otherwise, requests read permission.</param>
+        /// <returns>A string representing the new permission state (e.g., "granted", "denied", "prompt").</returns>
         public async Task<string> RequestPermission(bool writePermission = false)
         {
             if (JSRef!.IsUndefined("requestPermission"))
@@ -143,6 +162,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public static string MODE_READ_WRITE = "readwrite";
 
+        /// <summary>
+        /// Verifies if the user has granted the specified permission (read or read/write).
+        /// Optionally requests permission if it hasn't been granted yet.
+        /// </summary>
+        /// <param name="readWrite">If true,ifies write permission; otherwise, verifies read permission.</param>
+        /// <param name="askIfNeeded">If true, requests permission if the current state is "prompt".</param>
+        /// <returns>True if permission is granted, otherwise false.</returns>
         public async Task<bool> VerifyPermission(bool readWrite = true, bool askIfNeeded = true)
         {
             var permState = await QueryPermission(readWrite);

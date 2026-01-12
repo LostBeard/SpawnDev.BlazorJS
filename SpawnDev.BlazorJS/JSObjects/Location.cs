@@ -2,8 +2,16 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The Location interface represents the location (URL) of the object it is linked to. Changes done on it are reflected on the object it relates to. Both the Document and Window interface have such a linked Location, accessible via Document.location and Window.location respectively.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Location
+    /// </summary>
     public class Location : JSObject
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="Location"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public Location(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// A string containing a '#' followed by the fragment identifier of the URL.

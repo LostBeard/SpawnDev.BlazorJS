@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class MIDIConnectionEvent : Event
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="MIDIConnectionEvent"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public MIDIConnectionEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a reference to a MIDIPort instance for a port that has been connected or disconnected.

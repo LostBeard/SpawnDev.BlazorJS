@@ -1,5 +1,8 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The vibration effect to play.
+    /// </summary>
     public class HapticEffectParams
     {
         /// <summary>

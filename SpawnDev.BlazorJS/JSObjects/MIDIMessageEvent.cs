@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class MIDIMessageEvent : Event
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="MIDIMessageEvent"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public MIDIMessageEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// A Uint8Array containing the data bytes of a single MIDI message. See the MIDI specification for more information on its form.

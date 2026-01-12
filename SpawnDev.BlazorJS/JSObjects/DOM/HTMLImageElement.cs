@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="elementReference"></param>
         public HTMLImageElement(ElementReference elementReference) : base(elementReference) { }
         /// <summary>
-        /// The Image() constructor creates and returns a new HTMLImageElement object representing an HTML <img> element which is not attached to any DOM tree. It accepts optional width and height parameters. When called without parameters, new Image() is equivalent to calling document.createElement('img').
+        /// The Image() constructor creates and returns a new HTMLImageElement object representing an HTML &lt;img&gt; element which is not attached to any DOM tree. It accepts optional width and height parameters. When called without parameters, new Image() is equivalent to calling document.createElement('img').
         /// </summary>
         public HTMLImageElement() : base(JS.New("Image")) { }
         /// <summary>

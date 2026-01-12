@@ -25,13 +25,19 @@ namespace SpawnDev.BlazorJS
     /// </summary>
     public class JSObject : IDisposable
     {
+#if DEBUG
         /// <summary>
         /// This event is for diagnostics purposes and will likely be removed in future releases
         /// </summary>
-#if DEBUG
         public static Action<JSObject>? OnJSObjectCreated { get; set; }
+        /// <summary>
+        /// If true, the JSObject finalizer will write a warning to the console if the object has not been disposed.
+        /// </summary>
         public static bool UndisposedHandleVerboseMode { get; set; } = false;
 #endif
+        /// <summary>
+        /// Global scope JSRuntime
+        /// </summary>
         protected static BlazorJSRuntime JS => BlazorJSRuntime.JS;
         /// <summary>
         /// Static instance of JSInProcessObjectReferenceUndefined
@@ -53,7 +59,7 @@ namespace SpawnDev.BlazorJS
         [JsonIgnore]
         public bool IsWrapperDisposed { get; private set; } = false;
         /// <summary>
-        /// Deserialization constructor
+        /// Creates a new instance of <see cref="JSObject"/>.
         /// </summary>
         /// <param name="_ref"></param>
         public JSObject(IJSInProcessObjectReference _ref) => FromReference(_ref);

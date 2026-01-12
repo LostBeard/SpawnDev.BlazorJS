@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The VideoResizeModeEnum enum of the Media Statistics API is used to describe the resize mode of a video source.
+    /// </summary>
     public enum VideoResizeModeEnum
     {
         /// <summary>

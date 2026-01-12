@@ -100,12 +100,12 @@
             if (_onSuccess != null)
             {
                 _onSuccess.Dispose();
-                _onSuccess = null;
+                _onSuccess = null!;
             }
             if (_onError != null)
             {
                 _onError.Dispose();
-                _onError = null;
+                _onError = null!;
             }
         }
         ///<inheritdoc/>

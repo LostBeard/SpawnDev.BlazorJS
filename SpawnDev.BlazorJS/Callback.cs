@@ -1,4 +1,4 @@
-﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.JsonConverters;
 using System.Text.Json.Serialization;
 
@@ -32,15 +32,27 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         [JsonPropertyName("isDisposed")]
         public bool IsDisposed { get; private set; } = false;
+        /// <summary>
+        /// The DotNetObjectReference for the callback
+        /// </summary>
         [JsonInclude]
         [JsonPropertyName("_callback")]
         public DotNetObjectReference<Callback> _callback { get; }
+        /// <summary>
+        /// The unique ID for the callback
+        /// </summary>
         [JsonInclude]
         [JsonPropertyName("_callbackId")]
         public string _callbackId { get; private set; }
+        /// <summary>
+        /// The parameter types for the callback
+        /// </summary>
         [JsonInclude]
         [JsonPropertyName("_paramTypes")]
         public int[] _paramTypes { get; private set; } = new int[0];
+        /// <summary>
+        /// If true the callback returns void
+        /// </summary>
         [JsonInclude]
         [JsonPropertyName("_returnVoid")]
         public bool _returnVoid { get; private set; }
@@ -101,7 +113,7 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Fired when the Callback is disposed
         /// </summary>
-        public event Action OnDisposed;
+        public event Action OnDisposed = default!;
         // FuncCallback Create
         /// <summary>
         /// Creates a new Callback instance from the given .Net method

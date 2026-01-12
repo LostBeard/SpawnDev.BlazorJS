@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The VideoFacingModeEnum enum of the Media Statistics API is used to describe the facing mode of a video source.
+    /// </summary>
     public enum VideoFacingModeEnum
     {
         /// <summary>

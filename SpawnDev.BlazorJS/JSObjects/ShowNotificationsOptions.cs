@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The ShowNotificationsOptions dictionary of the Notifications API is the dictionary containing the options used to configure a notification.
+    /// </summary>
     public class ShowNotificationsOptions
     {
         /// <summary>

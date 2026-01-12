@@ -1005,7 +1005,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The WebGLRenderingContext.getBufferParameter() method of the WebGL API returns information about the buffer.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="target">
         /// A GLenum specifying the target buffer object. Possible values:<br/>
         /// gl.ARRAY_BUFFER - Buffer containing vertex attributes, such as vertex coordinates, texture coordinate data, or vertex color data.<br/>
@@ -1421,12 +1420,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="func">
         /// A GLenum specifying the test function. The default function is gl.ALWAYS (0x0207). The possible values are:<br/>
         /// gl.NEVER - Never pass.<br/>
-        /// gl.LESS - Pass if (ref & mask) < (stencil & mask).<br/>
-        /// gl.EQUAL - Pass if (ref & mask) = (stencil & mask).<br/>
-        /// gl.LEQUAL - Pass if (ref & mask) <= (stencil & mask).<br/>
-        /// gl.GREATER - Pass if (ref & mask) > (stencil & mask).<br/>
-        /// gl.NOTEQUAL - Pass if (ref & mask) !== (stencil & mask).<br/>
-        /// gl.GEQUAL - Pass if (ref & mask) >= (stencil & mask).<br/>
+        /// gl.LESS - Pass if (ref &amp; mask) &lt; (stencil &amp; mask).<br/>
+        /// gl.EQUAL - Pass if (ref &amp; mask) = (stencil &amp; mask).<br/>
+        /// gl.LEQUAL - Pass if (ref &amp; mask) &lt;= (stencil &amp; mask).<br/>
+        /// gl.GREATER - Pass if (ref &amp; mask) &gt; (stencil &amp; mask).<br/>
+        /// gl.NOTEQUAL - Pass if (ref &amp; mask) !== (stencil &amp; mask).<br/>
+        /// gl.GEQUAL - Pass if (ref &amp; mask) &gt;= (stencil &amp; mask).<br/>
         /// gl.ALWAYS - Always pass.<br/>
         /// </param>
         /// <param name="refValue">A GLint specifying the reference value for the stencil test. This value is clamped to the range 0 to 2^n - 1 where n is the number of bitplanes in the stencil buffer. The default value is 0.</param>
@@ -1443,12 +1442,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="func">
         /// A GLenum specifying the test function. The default function is gl.ALWAYS (0x0207). The possible values are:<br/>
         /// gl.NEVER - Never pass.<br/>
-        /// gl.LESS - Pass if (ref & mask) < (stencil & mask).<br/>
-        /// gl.EQUAL - Pass if (ref & mask) = (stencil & mask).<br/>
-        /// gl.LEQUAL - Pass if (ref & mask) <= (stencil & mask).<br/>
-        /// gl.GREATER - Pass if (ref & mask) > (stencil & mask).<br/>
-        /// gl.NOTEQUAL - Pass if (ref & mask) !== (stencil & mask).<br/>
-        /// gl.GEQUAL - Pass if (ref & mask) >= (stencil & mask).<br/>
+        /// gl.LESS - Pass if (ref &amp; mask) &lt; (stencil &amp; mask).<br/>
+        /// gl.EQUAL - Pass if (ref &amp; mask) = (stencil &amp; mask).<br/>
+        /// gl.LEQUAL - Pass if (ref &amp; mask) &lt;= (stencil &amp; mask).<br/>
+        /// gl.GREATER - Pass if (ref &amp; mask) &gt; (stencil &amp; mask).<br/>
+        /// gl.NOTEQUAL - Pass if (ref &amp; mask) !== (stencil &amp; mask).<br/>
+        /// gl.GEQUAL - Pass if (ref &amp; mask) &gt;= (stencil &amp; mask).<br/>
         /// gl.ALWAYS - Always pass.<br/>
         /// </param>
         /// <param name="refValue">A GLint specifying the reference value for the stencil test. This value is clamped to the range 0 to 2^n - 1 where n is the number of bitplanes in the stencil buffer. The default value is 0.</param>
@@ -1853,14 +1852,69 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="program">A WebGLProgram to validate.</param>
         public void ValidateProgram(WebGLProgram program) => JSRef!.CallVoid("validateProgram", program);
+        /// <summary>
+        /// The WebGLRenderingContext.vertexAttrib[1234]f[v]() methods of the WebGL API specify constant values for generic vertex attributes.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute to modify.</param>
+        /// <param name="x">A floating point number for the first component opof the vertex attribute.</param>
         public void VertexAttrib1f(uint index, float x) => JSRef!.CallVoid("vertexAttrib1f", index, x);
+        /// <summary>
+        /// The WebGLRenderingContext.vertexAttrib[1234]f[v]() methods of the WebGL API specify constant values for generic vertex attributes.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute to modify.</param>
+        /// <param name="values">A Float32Array or sequence of floating point numbers (for example, number[], Float32Array, etc.) from which to take values for the generic vertex attribute.</param>
         public void VertexAttrib1fv(uint index, IEnumerable<float> values) => JSRef!.CallVoid("vertexAttrib1fv", index, values);
+        /// <summary>
+        /// The WebGLRenderingContext.vertexAttrib[1234]f[v]() methods of the WebGL API specify constant values for generic vertex attributes.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute to modify.</param>
+        /// <param name="x">A floating point number for the first component opof the vertex attribute.</param>
+        /// <param name="y">A floating point number for the second component opof the vertex attribute.</param>
         public void VertexAttrib2f(uint index, float x, float y) => JSRef!.CallVoid("vertexAttrib2f", index, x, y);
+        /// <summary>
+        /// The WebGLRenderingContext.vertexAttrib[1234]f[v]() methods of the WebGL API specify constant values for generic vertex attributes.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute to modify.</param>
+        /// <param name="values">A Float32Array or sequence of floating point numbers (for example, number[], Float32Array, etc.) from which to take values for the generic vertex attribute.</param>
         public void VertexAttrib2fv(uint index, IEnumerable<float> values) => JSRef!.CallVoid("vertexAttrib2fv", index, values);
+        /// <summary>
+        /// The WebGLRenderingContext.vertexAttrib[1234]f[v]() methods of the WebGL API specify constant values for generic vertex attributes.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute to modify.</param>
+        /// <param name="x">A floating point number for the first component opof the vertex attribute.</param>
+        /// <param name="y">A floating point number for the second component opof the vertex attribute.</param>
+        /// <param name="z">A floating point number for the third component opof the vertex attribute.</param>
         public void VertexAttrib3f(uint index, float x, float y, float z) => JSRef!.CallVoid("vertexAttrib3f", index, x, y, z);
+        /// <summary>
+        /// The WebGLRenderingContext.vertexAttrib[1234]f[v]() methods of the WebGL API specify constant values for generic vertex attributes.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute to modify.</param>
+        /// <param name="values">A Float32Array or sequence of floating point numbers (for example, number[], Float32Array, etc.) from which to take values for the generic vertex attribute.</param>
         public void VertexAttrib3fv(uint index, IEnumerable<float> values) => JSRef!.CallVoid("vertexAttrib3fv", index, values);
+        /// <summary>
+        /// The WebGLRenderingContext.vertexAttrib[1234]f[v]() methods of the WebGL API specify constant values for generic vertex attributes.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute to modify.</param>
+        /// <param name="x">A floating point number for the first component opof the vertex attribute.</param>
+        /// <param name="y">A floating point number for the second component opof the vertex attribute.</param>
+        /// <param name="z">A floating point number for the third component opof the vertex attribute.</param>
+        /// <param name="w">A floating point number for the fourth component opof the vertex attribute.</param>
         public void VertexAttrib4f(uint index, float x, float y, float z, float w) => JSRef!.CallVoid("vertexAttrib4f", index, x, y, z, w);
+        /// <summary>
+        /// The WebGLRenderingContext.vertexAttrib[1234]f[v]() methods of the WebGL API specify constant values for generic vertex attributes.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute to modify.</param>
+        /// <param name="values">A Float32Array or sequence of floating point numbers (for example, number[], Float32Array, etc.) from which to take values for the generic vertex attribute.</param>
         public void VertexAttrib4fv(uint index, IEnumerable<float> values) => JSRef!.CallVoid("vertexAttrib4fv", index, values);
+        /// <summary>
+        /// The WebGLRenderingContext.vertexAttribPointer() method of the WebGL API binds the buffer currently bound to the gl.ARRAY_BUFFER target to a generic vertex attribute of the current vertex buffer object and specifies its layout.
+        /// </summary>
+        /// <param name="index">A GLuint specifying the index of the vertex attribute that is to be modified.</param>
+        /// <param name="size">A GLint specifying the number of components per vertex attribute. Must be 1, 2, 3, or 4.</param>
+        /// <param name="type">A GLenum specifying the data type of each component in the array.</param>
+        /// <param name="normalized">A GLboolean specifying whether integer data values should be normalized into a certain range when being casted to a float.</param>
+        /// <param name="stride">A GLsizei specifying the offset in bytes between the beginning of consecutive vertex attributes. Defaults to 0.</param>
+        /// <param name="offset">A GLintptr specifying an offset in bytes of the first component in the vertex attribute array. Must be a multiple of the type size.</param>
         public void VertexAttribPointer(int index, int size, int type, bool normalized, int stride, int offset) => JSRef!.CallVoid("vertexAttribPointer", index, size, type, normalized, stride, offset);
         /// <summary>
         /// The WebGLRenderingContext.viewport() method of the WebGL API sets the viewport, which specifies the affine transformation of x and y from normalized device coordinates to window coordinates.
@@ -1871,6 +1925,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="height">A non-negative GLsizei specifying the height of the viewport. Default value: height of the canvas.</param>
         public void Viewport(int x, int y, int width, int height) => JSRef!.CallVoid("viewport", x, y, width, height);
         // Helper functions (non-spec) 
+        /// <summary>
+        /// Helper functionto create a WebGLProgram from a vertex shader source and a fragment shader source.
+        /// </summary>
+        /// <param name="vertexShader"></param>
+        /// <param name="fragmentShader"></param>
+        /// <returns></returns>
         public WebGLProgram CreateProgram(string vertexShader, string fragmentShader)
         {
             //vertex shader

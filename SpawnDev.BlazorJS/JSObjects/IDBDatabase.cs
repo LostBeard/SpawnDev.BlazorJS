@@ -16,21 +16,45 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// True is indexedDB global object is found
         /// </summary>
         public static bool IsSupported => _IsSupported.Value;
+        /// <summary>
+        /// Opens a connection to a database.
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <returns></returns>
         public static IDBOpenDBRequest Open(string dbName)
         {
             using var dbFactory = new IDBFactory();
             return dbFactory.Open(dbName);
         }
+        /// <summary>
+        /// Opens a connection to a database.
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="dbVersion"></param>
+        /// <returns></returns>
         public static IDBOpenDBRequest Open(string dbName, long dbVersion)
         {
             using var dbFactory = new IDBFactory();
             return dbFactory.Open(dbName, dbVersion);
         }
+        /// <summary>
+        /// Opens a connection to a database asynchronously.
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="onUpgradeNeeded"></param>
+        /// <returns></returns>
         public static Task<IDBDatabase> OpenAsync(string dbName, Action<IDBVersionChangeEvent>? onUpgradeNeeded = null)
         {
             using var dbFactory = new IDBFactory();
             return dbFactory.OpenAsync(dbName, onUpgradeNeeded);
         }
+        /// <summary>
+        /// Opens a connection to a database asynchronously.
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="dbVersion"></param>
+        /// <param name="onUpgradeNeeded"></param>
+        /// <returns></returns>
         public static Task<IDBDatabase> OpenAsync(string dbName, long dbVersion, Action<IDBVersionChangeEvent>? onUpgradeNeeded = null)
         {
             using var dbFactory = new IDBFactory();

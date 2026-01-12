@@ -50,7 +50,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Window ContentWindow => JSRef!.Get<Window>("contentWindow");
         /// <summary>
-        /// A boolean value indicating whether the <iframe> is credentialless, meaning that its content is loaded in a new, ephemeral context. This context does not have access to the parent context's shared storage and credentials. In return, the Cross-Origin-Embedder-Policy (COEP) embedding rules can be lifted, so documents with COEP set can embed third-party documents that do not. See IFrame credentialless for a deeper explanation.
+        /// A boolean value indicating whether the &lt;iframe&gt; is credentialless, meaning that its content is loaded in a new, ephemeral context. This context does not have access to the parent context's shared storage and credentials. In return, the Cross-Origin-Embedder-Policy (COEP) embedding rules can be lifted, so documents with COEP set can embed third-party documents that do not. See IFrame credentialless for a deeper explanation.
         /// </summary>
         public bool Credentialless { get => JSRef!.Get<bool>("credentialless"); set => JSRef!.Set("credentialless", value); }
         /// <summary>

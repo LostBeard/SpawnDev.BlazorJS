@@ -37,6 +37,7 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime
         /// <summary>
         /// Get a global property
         /// </summary>
+        /// <param name="_ref"></param>
         /// <param name="key"></param>
         /// <returns></returns>
         public static Task<IJSObjectReference> GetAsync(this IJSRuntime _ref, string key) => _ref.GetInterop().GlobalPropertyGet<IJSObjectReference>(key);

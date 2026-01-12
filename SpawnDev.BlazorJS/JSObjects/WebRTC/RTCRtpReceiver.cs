@@ -3,10 +3,23 @@
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
+    /// <summary>
+    /// The RTCRtpReceiver interface manages the reception and decoding of data for a MediaStreamTrack on an RTCPeerConnection.
+    /// </summary>
     public class RTCRtpReceiver : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public RTCRtpReceiver(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// The MediaStreamTrack which is being received and decoded by the RTCRtpReceiver.
+        /// </summary>
         public MediaStreamTrack Track => JSRef!.Get<MediaStreamTrack>("track");
+        /// <summary>
+        /// The RTCDtlsTransport instance that is used for receiving the media.
+        /// </summary>
         public RTCDtlsTransport Transport => JSRef!.Get<RTCDtlsTransport>("transport");
         /// <summary>
         /// The static method RTCRtpReceiver.getCapabilities() returns an object describing the codec and header extension capabilities supported by RTCRtpReceiver objects on the current device.

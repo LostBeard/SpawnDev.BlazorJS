@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -14,10 +14,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A string indicating the current value of the deviceId property. The device ID is an origin-unique string identifying the source of the track; this is usually a GUID. This value is specific to the source of the track's data and is not usable for setting constraints; it can, however, be used for initially selecting media when calling MediaDevices.getUserMedia().
         /// </summary>
+        /// <summary>
+        /// DeviceId
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DeviceId { get; set; }
         /// <summary>
         /// A string indicating the current value of the groupId property. The group ID is a browsing session-unique string identifying the source group of the track. Two devices (as identified by the deviceId) are considered part of the same group if they are from the same physical device. For instance, the audio input and output devices for the speaker and microphone built into a phone would share the same group ID, since they're part of the same physical device. The microphone on a headset would have a different ID, though. This value is specific to the source of the track's data and is not usable for setting constraints; it can, however, be used for initially selecting media when calling MediaDevices.getUserMedia().
+        /// </summary>
+        /// <summary>
+        /// GroupId
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string GroupId { get; set; }
@@ -28,35 +34,56 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A Boolean which indicates the current value of the autoGainControl property, which is true if automatic gain control is enabled and is false otherwise.
         /// </summary>
+        /// <summary>
+        /// AutoGainControl
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? AutoGainControl { get; set; }
         /// <summary>
         /// A long integer value indicating the current value of the channelCount property, specifying the number of audio channels present on the track (therefore indicating how many audio samples exist in each audio frame). This is 1 for mono, 2 for stereo, and so forth.
+        /// </summary>
+        /// <summary>
+        /// ChannelCount
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? ChannelCount { get; set; }
         /// <summary>
         /// A Boolean indicating the current value of the echoCancellation property, specifying true if echo cancellation is enabled, otherwise false.
         /// </summary>
+        /// <summary>
+        /// EchoCancellation
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? EchoCancellation { get; set; }
         /// <summary>
         /// A double-precision floating point value indicating the current value of the latency property, specifying the audio latency, in seconds. Latency is the amount of time which elapses between the start of processing the audio and the data being available to the next stop in the audio utilization process. This value is a target value; actual latency may vary to some extent for various reasons.
+        /// </summary>
+        /// <summary>
+        /// Latency
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? Latency { get; set; }
         /// <summary>
         /// A Boolean which indicates the current value of the noiseSuppression property, which is true if noise suppression is enabled and is false otherwise.
         /// </summary>
+        /// <summary>
+        /// NoiseSuppression
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? NoiseSuppression { get; set; }
         /// <summary>
         /// A long integer value indicating the current value of the sampleRate property, specifying the sample rate in samples per second of the audio data. Standard CD-quality audio, for example, has a sample rate of 41,000 samples per second.
         /// </summary>
+        /// <summary>
+        /// SampleRate
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public uint? SampleRate { get; set; }
         /// <summary>
         /// A long integer value indicating the current value of the sampleSize property, specifying the linear size, in bits, of each audio sample. CD-quality audio, for example, is 16-bit, so this value would be 16 in that case.
+        /// </summary>
+        /// <summary>
+        /// SampleSize
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public uint? SampleSize { get; set; }
@@ -67,6 +94,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A double-precision floating point value indicating the current value of the aspectRatio property, specified precisely to 10 decimal places. This is the width of the image in pixels divided by its height in pixels. Common values include 1.3333333333 (for the classic television 4:3 "standard" aspect ratio, also used on tablets such as Apple's iPad), 1.7777777778 (for the 16:9 high-definition widescreen aspect ratio), and 1.6 (for the 16:10 aspect ratio common among widescreen computers and tablets).
         /// </summary>
+        /// <summary>
+        /// AspectRatio
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? AspectRatio { get; set; }
         /// <summary>
@@ -76,20 +106,32 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "left" - A camera facing toward the environment to the user's left.<br/>
         /// "right" - A camera facing toward the environment to the user's right.<br/>
         /// </summary>
+        /// <summary>
+        /// FacingMode
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FacingMode { get; set; }
         /// <summary>
         /// A double-precision floating point value indicating the current value of the frameRate property, specifying how many frames of video per second the track includes. If the value can't be determined for any reason, the value will match the vertical sync rate of the device the user agent is running on.
+        /// </summary>
+        /// <summary>
+        /// FrameRate
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? FrameRate { get; set; }
         /// <summary>
         /// A long integer value indicating the current value of the height property, specifying the height of the track's video data in pixels.
         /// </summary>
+        /// <summary>
+        /// Height
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public uint? Height { get; set; }
         /// <summary>
         /// A long integer value indicating the current value of the width property, specifying the width of the track's video data in pixels.
+        /// </summary>
+        /// <summary>
+        /// Width
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public uint? Width { get; set; }
@@ -97,6 +139,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A string indicating the current value of the resizeMode property, specifying the mode used by the user agent to derive the resolution of the track. The value will be one of:<br/>
         /// "none" - The track has the resolution offered by the camera, its driver or the OS.<br/>
         /// "crop-and-scale" - The track's resolution might be the result of the user agent using cropping or downscaling from a higher camera resolution.
+        /// </summary>
+        /// <summary>
+        /// ResizeMode
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? ResizeMode { get; set; }
@@ -109,6 +154,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "motion" - The mouse cursor is always included in the video if it's moving, and for a short time after it stops moving.<br/>
         /// "never" - The mouse cursor is never included in the shared video.
         /// </summary>
+        /// <summary>
+        /// Cursor
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Cursor { get; set; }
         /// <summary>
@@ -118,40 +166,73 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "monitor" - The stream's video track contains the entire contents of one or more of the user's screens.<br/>
         /// "window" - The stream contains a single window selected by the user for sharing.
         /// </summary>
+        /// <summary>
+        /// DisplaySurface
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? DisplaySurface { get; set; }
         /// <summary>
         /// A Boolean value which, if true, indicates that the video contained in the stream's video track contains a background rendering context, rather than a user-visible one. This is false if the video being captured is coming from a foreground (user-visible) source.
+        /// </summary>
+        /// <summary>
+        /// LogicalSurface
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? LogicalSurface { get; set; }
 
         // ************** Not listed on w3.org
 
+        /// <summary>
+        /// BackgroundBlur
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BackgroundBlur { get; set; }
 
+        /// <summary>
+        /// Brightness
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? Brightness { get; set; }
 
+        /// <summary>
+        /// ColorTemperature
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? ColorTemperature { get; set; }
 
+        /// <summary>
+        /// Contrast
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? Contrast { get; set; }
 
+        /// <summary>
+        /// ExposureCompensation
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? ExposureCompensation { get; set; }
 
+        /// <summary>
+        /// ExposureTime
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? ExposureTime { get; set; }
 
+        /// <summary>
+        /// Saturation
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? Saturation { get; set; }
 
+        /// <summary>
+        /// Sharpness
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? Sharpness { get; set; }
 
+        /// <summary>
+        /// WhiteBalanceMode
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public EnumString<WhiteBalanceModeEnum>? WhiteBalanceMode { get; set; }
     }

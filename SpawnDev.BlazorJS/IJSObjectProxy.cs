@@ -3,9 +3,23 @@ using System.Reflection;
 
 namespace SpawnDev.BlazorJS
 {
+    /// <summary>
+    /// A proxy class that implements an interface by forwarding calls to a JavaScript object.
+    /// </summary>
     public class IJSObjectProxy : DispatchProxy
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="IJSObjectProxy"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
+        public IJSObjectProxy(IJSInProcessObjectReference _ref) { JSRef = _ref; }
+        /// <summary>
+        /// The underlying JavaScript object reference.
+        /// </summary>
         public IJSInProcessObjectReference JSRef { get; private set; }
+        /// <summary>
+        /// The interface type being proxied.
+        /// </summary>
         public Type InterfaceType { get; private set; }
 
 #if NET8_0_OR_GREATER && false
@@ -41,6 +55,12 @@ namespace SpawnDev.BlazorJS
             return methodInfoTyped;
         }
 
+        /// <summary>
+        /// Creates a proxy for a given interface.
+        /// </summary>
+        /// <param name="interfaceType"></param>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
         public static object GetInterface(Type interfaceType, IJSInProcessObjectReference _ref)
         {
             var mi = GetGetInterfaceGeneric(interfaceType);
@@ -49,16 +69,27 @@ namespace SpawnDev.BlazorJS
         }
 #endif
 
+        /// <summary>
+        /// Creates a proxy for a given interface.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_ref"></param>
+        /// <returns></returns>
         public static T GetInterface<T>(IJSInProcessObjectReference _ref) where T : class, IJSObject
         {
             var typeofT = typeof(T);
             if (!typeofT.IsInterface) throw new Exception("GetInterface must be called with an interface");
             var proxy = Create<T, IJSObjectProxy>() as IJSObjectProxy;
-            proxy.JSRef = _ref;
+            proxy!.JSRef = _ref;
             proxy.InterfaceType = typeofT;
-            return proxy as T;
+            return (proxy as T)!;
         }
 
+        /// <summary>
+        /// Returns the JavaScript method name for a given MethodInfo.
+        /// </summary>
+        /// <param name="targetMethod"></param>
+        /// <returns></returns>
         string GetTargetMethodName(MethodInfo? targetMethod)
         {
             if (targetMethod == null) throw new ArgumentNullException(nameof(targetMethod));
@@ -71,6 +102,11 @@ namespace SpawnDev.BlazorJS
             return name;
         }
 
+        /// <summary>
+        /// Returns the JavaScript property name for a given MethodInfo.
+        /// </summary>
+        /// <param name="targetMethod"></param>
+        /// <returns></returns>
         string GetTargetPropertyName(MethodInfo? targetMethod)
         {
             if (targetMethod == null) throw new ArgumentNullException(nameof(targetMethod));
@@ -84,6 +120,13 @@ namespace SpawnDev.BlazorJS
             return name;
         }
 
+        /// <summary>
+        /// Invokes the method on the JavaScript object.
+        /// </summary>
+        /// <param name="targetMethod"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
         {
             object? ret = null;
@@ -104,11 +147,7 @@ namespace SpawnDev.BlazorJS
                     else if (methodName.StartsWith("set_"))
                     {
                         var propName = GetTargetPropertyName(targetMethod);
-                        JSRef.Set(propName, args[0]);
-                    }
-                    else
-                    {
-                        var nmt = true;
+                        JSRef.Set(propName, args?[0]);
                     }
                 }
                 else
@@ -124,18 +163,21 @@ namespace SpawnDev.BlazorJS
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                var ttt = true;
+                // continue
             }
             return ret;
         }
 
+        /// <summary>
+        /// Finalizer
+        /// </summary>
         ~IJSObjectProxy()
         {
             // IJSObjects dispose of their IJSInProcessObjectReference objects in the finalizer (here)
             JSRef?.Dispose();
-            JSRef = null;
+            JSRef = null!;
         }
     }
 }

@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class HIDConnectionEvent : Event
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="HIDConnectionEvent"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public HIDConnectionEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns the HIDDevice instance representing the device associated with the connection event.

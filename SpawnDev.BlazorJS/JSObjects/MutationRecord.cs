@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class MutationRecord : JSObject
     {
         #region Constructors
+        /// <summary>
+        /// Creates a new instance of <see cref="MutationRecord"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public MutationRecord(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
 

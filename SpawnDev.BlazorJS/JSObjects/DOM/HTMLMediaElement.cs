@@ -35,6 +35,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A MediaStream representing the media to play or that has played in the current HTMLMediaElement, or null if not assigned.
         /// </summary>
         public Union<MediaStream, File, Blob, MediaSource>? SrcObject { get => JSRef!.Get<Union<MediaStream, File, Blob, MediaSource>?>("srcObject"); set => JSRef!.Set("srcObject", value); }
+        /// <summary>
+        /// Returns the srcObject property cast to the specified type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T? GetSrcObject<T>() => JSRef!.Get<T>("srcObject");
         /// <summary>
         /// A string that reflects the src HTML attribute, which contains the URL of a media resource to use.
@@ -139,7 +144,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns MediaStream, captures a stream of the media content.
         /// </summary>
         /// <returns></returns>
-        public MediaStream CaptureStream() => JSRef!.Call<MediaStream>("capture");
+        public MediaStream CaptureStream() => JSRef!.Call<MediaStream>("captureStream");
         #endregion
 
         #region Events

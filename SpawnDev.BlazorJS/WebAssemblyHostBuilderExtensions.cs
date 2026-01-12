@@ -3,6 +3,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace SpawnDev.BlazorJS
 {
+    /// <summary>
+    /// Extension methods for <see cref="WebAssemblyHostBuilder"/>.
+    /// </summary>
     public static class WebAssemblyHostBuilderExtensions
     {
         /// <summary>
@@ -33,7 +36,7 @@ namespace SpawnDev.BlazorJS
                 }
                 catch (Exception ex)
                 {
-                    if (verbose) Console.WriteLine($"LoadDomainConfiguration failed: {domainConfig}");
+                    if (verbose) Console.WriteLine($"LoadDomainConfiguration failed: {domainConfig} {ex.ToString()}");
                 }
             }
             if (loadDevelopmentConfigIfIsDevelopment && builder.HostEnvironment.IsDevelopment())
@@ -47,7 +50,7 @@ namespace SpawnDev.BlazorJS
                 }
                 catch (Exception ex)
                 {
-                    if (verbose) Console.WriteLine($"LoadDomainConfiguration failed: {domainEnvironmentConfig}");
+                    if (verbose) Console.WriteLine($"LoadDomainConfiguration failed: {domainEnvironmentConfig} {ex.ToString()}");
                 }
             }
         }

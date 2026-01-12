@@ -56,7 +56,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Copies elements of type T from this TypedArray tp the destination
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="srcOffset">Source element offset</param>
         /// <param name="dest">The array to copy the data into</param>
         /// <param name="destOffset">Destination offset</param>

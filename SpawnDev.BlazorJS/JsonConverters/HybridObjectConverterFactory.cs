@@ -96,9 +96,9 @@ namespace SpawnDev.BlazorJS.JsonConverters
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                var nmt = true;
+                // continue
             }
         CanConvertFalse:
             CanConvertAnswers[typeToConvert] = false;

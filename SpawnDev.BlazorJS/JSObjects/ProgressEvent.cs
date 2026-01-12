@@ -26,6 +26,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public bool? LengthComputable => JSRef!.Get<bool?>("lengthComputable");
     }
+    /// <summary>
+    /// The progress event is fired periodically as the FileReader reads data.
+    /// </summary>
+    /// <typeparam name="TTarget"></typeparam>
     public class ProgressEvent<TTarget> : Event<TTarget> where TTarget : EventTarget
     {
         /// <summary>

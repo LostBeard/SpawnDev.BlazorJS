@@ -1,7 +1,16 @@
 ﻿namespace SpawnDev.BlazorJS.Toolbox
 {
+    /// <summary>
+    /// DateTime extension methods
+    /// </summary>
     public static class DateTimeExtensions
     {
+        /// <summary>
+        /// Converts the DateTime to local time
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="unspecifiedKindIsUtc"></param>
+        /// <returns></returns>
         public static DateTime ToLocalTime(this DateTime dateTime, bool unspecifiedKindIsUtc)
         {
             if (!unspecifiedKindIsUtc) return dateTime.ToLocalTime();
@@ -11,6 +20,12 @@
                 default: return dateTime.ToLocalTime();
             }
         }
+        /// <summary>
+        /// Converts the DateTime to universal time
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="unspecifiedKindIsUtc"></param>
+        /// <returns></returns>
         public static DateTime ToUniversalTime(this DateTime dateTime, bool unspecifiedKindIsUtc)
         {
             if (!unspecifiedKindIsUtc) return dateTime.ToUniversalTime();
@@ -62,10 +77,21 @@
                 return dateTime.ToString("MMM d yyyy");
             }
         }
+        /// <summary>
+        /// Returns the milliseconds until the next simple time change
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="padValue"></param>
+        /// <returns></returns>
         public static double NextSimpleTimeChangeMS(this DateTime dateTime, double padValue = 0)
         {
             return dateTime.NextSimpleTimeChange().TotalMilliseconds + padValue;
         }
+        /// <summary>
+        /// Returns the time span until the next simple time change
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
         public static TimeSpan NextSimpleTimeChange(this DateTime dateTime)
         {
             var now = DateTime.Now;

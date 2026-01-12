@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class MIDIOutputMap : Map<string, MIDIOutput>
     {
         #region Constructors
+        /// <summary>
+        /// Creates a new instance of <see cref="MIDIOutputMap"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public MIDIOutputMap(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
     }

@@ -13,24 +13,100 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="_ref"></param>
         public Number(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
+        /// <param name="value"></param>
         public Number(Union<int, uint, float, double, long, ulong, byte, short, ushort> value) : base(JS.New(nameof(Number), value)) { }
+        /// <summary>
+        /// Returns the value of the object as a float
+        /// </summary>
+        /// <returns></returns>
         public float ValueOfFloat() => JSRef!.Call<float>("valueOf");
+        /// <summary>
+        /// Returns the value of the object as a double
+        /// </summary>
+        /// <returns></returns>
         public double ValueOfDouble() => JSRef!.Call<double>("valueOf");
+        /// <summary>
+        /// Returns the value of the object as an int
+        /// </summary>
+        /// <returns></returns>
         public int ValueOfInt32() => JSRef!.Call<int>("valueOf");
+        /// <summary>
+        /// Returns the value of the object as a uint
+        /// </summary>
+        /// <returns></returns>
         public uint ValueOfUint32() => JSRef!.Call<uint>("valueOf");
+        /// <summary>
+        /// Returns the value of the object as a short
+        /// </summary>
+        /// <returns></returns>
         public short ValueOfInt16() => JSRef!.Call<short>("valueOf");
+        /// <summary>
+        /// Returns the value of the object as a ushort
+        /// </summary>
+        /// <returns></returns>
         public ushort ValueOfUint16() => JSRef!.Call<ushort>("valueOf");
+        /// <summary>
+        /// Returns the value of the object as a long
+        /// </summary>
+        /// <returns></returns>
         public long ValueOfInt64() => JSRef!.Call<long>("valueOf");
+        /// <summary>
+        /// Returns the value of the object as a ulong
+        /// </summary>
+        /// <returns></returns>
         public ulong ValueOfUint64() => JSRef!.Call<ulong>("valueOf");
+        /// <summary>
+        /// Returns the value of the object as a byte
+        /// </summary>
+        /// <returns></returns>
         public byte ValueOfByte() => JSRef!.Call<byte>("valueOf");
+        /// <summary>
+        /// Implicit conversion to long
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator long(Number number) => number.ValueOfInt64();
+        /// <summary>
+        /// Implicit conversion to ulong
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator ulong(Number number) => number.ValueOfUint64();
+        /// <summary>
+        /// Implicit conversion to float
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator float(Number number) => number.ValueOfFloat();
+        /// <summary>
+        /// Implicit conversion to double
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator double(Number number) => number.ValueOfDouble();
+        /// <summary>
+        /// Implicit conversion to short
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator short(Number number) => number.ValueOfInt16();
+        /// <summary>
+        /// Implicit conversion to ushort
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator ushort(Number number) => number.ValueOfUint16();
+        /// <summary>
+        /// Implicit conversion to byte
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator byte(Number number) => number.ValueOfByte();
+        /// <summary>
+        /// Implicit conversion to int
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator int(Number number) => number.ValueOfInt32();
+        /// <summary>
+        /// Implicit conversion to uint
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator uint(Number number) => number.ValueOfUint32();
         /// <summary>
         /// The Number.isNaN() static method determines whether the passed value is the number value NaN, and returns false if the input is not of the Number type. It is a more robust version of the original, global isNaN() function.

@@ -413,7 +413,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemDirectoryHandle _this, string path, TypedArray data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable();
+            using var stream = await fileHandle!.CreateWritable();
             await stream.Write(data);
             await stream.Close();
         }
@@ -427,7 +427,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemDirectoryHandle _this, string path, byte[] data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable();
+            using var stream = await fileHandle!.CreateWritable();
             await stream.Write(data);
             await stream.Close();
         }
@@ -441,7 +441,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemDirectoryHandle _this, string path, DataView data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable();
+            using var stream = await fileHandle!.CreateWritable();
             await stream.Write(data);
             await stream.Close();
         }
@@ -471,7 +471,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             var json = JsonSerializer.Serialize(data, jsonSerializerOptions);
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable();
+            using var stream = await fileHandle!.CreateWritable();
             await stream.Write(json);
             await stream.Close();
         }
@@ -485,7 +485,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemDirectoryHandle _this, string path, FileSystemWriteOptions data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable();
+            using var stream = await fileHandle!.CreateWritable();
             await stream.Write(data);
             await stream.Close();
         }
@@ -501,7 +501,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, ArrayBuffer data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            using var stream = await fileHandle!.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             await stream.Close();
@@ -516,7 +516,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, Blob data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            using var stream = await fileHandle!.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             await stream.Close();
@@ -531,7 +531,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, TypedArray data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            using var stream = await fileHandle!.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             await stream.Close();
@@ -546,11 +546,18 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, byte[] data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            using var stream = await fileHandle!.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             await stream.Close();
         }
+        /// <summary>
+        /// Append data to the file, the file will be created if it does not exist
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="path"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, Stream data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
@@ -566,7 +573,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, DataView data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            using var stream = await fileHandle!.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             await stream.Close();
@@ -581,7 +588,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, string data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            using var stream = await fileHandle!.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             await stream.Close();
@@ -596,7 +603,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, FileSystemWriteOptions data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            using var stream = await fileHandle.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
+            using var stream = await fileHandle!.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
             await stream.SeekToEnd(fileHandle);
             await stream.Write(data);
             await stream.Close();
@@ -618,7 +625,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var file = await fileHandle.GetFile();
             var ret = await file.Text();
             var obj = JsonSerializer.Deserialize<T>(ret, jsonSerializerOptions);
-            return obj;
+            return obj!;
         }
         /// <summary>
         /// Read the data from the file as a string

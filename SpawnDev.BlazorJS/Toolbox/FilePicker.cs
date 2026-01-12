@@ -3,6 +3,9 @@ using File = SpawnDev.BlazorJS.JSObjects.File;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
+    /// <summary>
+    /// FilePicker helper class
+    /// </summary>
     public static class FilePicker
     {
         static BlazorJSRuntime JS => BlazorJSRuntime.JS;

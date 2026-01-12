@@ -1,5 +1,8 @@
 ﻿namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The InstallPromptResult interface represents the result of the prompt() method of the BeforeInstallPromptEvent.
+    /// </summary>
     public class InstallPromptResult
     {
         /// <summary>

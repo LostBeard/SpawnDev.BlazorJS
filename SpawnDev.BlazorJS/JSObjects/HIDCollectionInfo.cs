@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class HIDCollectionInfo : JSObject
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="HIDCollectionInfo"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public HIDCollectionInfo(IJSInProcessObjectReference _ref) : base(_ref)
         {
         }

@@ -71,6 +71,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             }
         }
 
+        /// <summary>
+        /// Reads the data as a string or ArrayBuffer
+        /// </summary>
+        /// <returns></returns>
         public async Task<(string?, ArrayBuffer?)> GetTextOrArrayBuffer()
         {
             switch (TypeOfData)

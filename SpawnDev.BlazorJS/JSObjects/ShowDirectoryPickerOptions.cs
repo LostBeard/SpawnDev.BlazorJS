@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The ShowDirectoryPickerOptions dictionary of the File System Access API is the dictionary containing the options used to configure the directory picker.
+    /// </summary>
     public class ShowDirectoryPickerOptions
     {
         /// <summary>

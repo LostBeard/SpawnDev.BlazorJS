@@ -27,6 +27,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 _ApplyCallback = _Apply == null ? null : new FuncCallback<JSObject, JSObject, Array<JSObject?>, object?>(_Apply);
             }
         }
+        /// <summary>
+        /// The handler.apply() callback.
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("apply")]
         [JsonInclude]
@@ -54,6 +57,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 _GetCallback = _Get == null ? null : new FuncCallback<JSObject, JSObject, JSObject, object?>(_Get);
             }
         }
+        /// <summary>
+        /// The handler.get() callback.
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("get")]
         [JsonInclude]
@@ -81,6 +87,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 _ConstructCallback = _Construct == null ? null : new FuncCallback<JSObject, Array<JSObject?>, JSObject, object?>(_Construct);
             }
         }
+        /// <summary>
+        /// The handler.construct() callback.
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("construct")]
         [JsonInclude]
@@ -109,6 +118,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 _SetCallback = _Set == null ? null : new FuncCallback<JSObject, JSObject, JSObject, bool>(_Set);
             }
         }
+        /// <summary>
+        /// The handler.set() callback.
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("set")]
         [JsonInclude]
@@ -135,6 +147,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 _HasCallback = _Has == null ? null : new FuncCallback<JSObject, JSObject, bool>(_Has);
             }
         }
+        /// <summary>
+        /// The handler.has() callback.
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("has")]
         [JsonInclude]
@@ -160,6 +175,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 _OwnKeysCallback = _OwnKeys == null ? null : new FuncCallback<JSObject, IEnumerable<Union<Symbol, string>>>(_OwnKeys);
             }
         }
+        /// <summary>
+        /// The handler.ownKeys() callback.
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("ownKeys")]
         [JsonInclude]
@@ -186,6 +204,9 @@ namespace SpawnDev.BlazorJS.JSObjects
                 _DeletePropertyCallback = _DeleteProperty == null ? null : new FuncCallback<JSObject, JSObject, bool>(_DeleteProperty);
             }
         }
+        /// <summary>
+        /// The handler.deleteProperty() callback.
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("deleteProperty")]
         [JsonInclude]

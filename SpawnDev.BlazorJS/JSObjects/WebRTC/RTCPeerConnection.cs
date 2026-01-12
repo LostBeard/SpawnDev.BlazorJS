@@ -234,6 +234,9 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         // unless there is a compatibility issue ...
         // switch to ActionEvent with AddEventListener instead of using property assigning which limits usage more... 
         // however, a lot of these events should only be handled by a single event handler but that should be up to the consuming code
+        /// <summary>
+        /// An event handler which is called when the connectionState property on the RTCPeerConnection interface changes.
+        /// </summary>
         public ActionEvent<Event> OnConnectionStateChange { get => new ActionEvent<Event>("onconnectionstatechange", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
         /// <summary>
         /// A datachannel event is sent to an RTCPeerConnection instance when an RTCDataChannel has been added to the connection, as a result of the remote peer calling RTCPeerConnection.createDataChannel().

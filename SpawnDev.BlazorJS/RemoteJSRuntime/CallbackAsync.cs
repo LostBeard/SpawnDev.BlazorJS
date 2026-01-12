@@ -4,12 +4,21 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.RemoteJSRuntime
 {
+    /// <summary>
+    /// Base class for asynchronous callbacks
+    /// </summary>
     public abstract class CallbackAsync : IAsyncDisposable
     {
+        /// <summary>
+        /// The parameter types for the callback
+        /// </summary>
         [JsonInclude]
         [JsonPropertyName("_paramTypes")]
         public int[] _paramTypes { get; private set; } = new int[0];
 
+        /// <summary>
+        /// If true the callback returns void
+        /// </summary>
         [JsonInclude]
         [JsonPropertyName("_returnVoid")]
         public bool _returnVoid { get; private set; }
@@ -18,15 +27,26 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime
         /// </summary>
         protected bool once { get; private set; }
 
+        /// <summary>
+        /// The unique ID for the callback
+        /// </summary>
         [JsonInclude]
         [JsonPropertyName("_callbackAsyncId")]
         public string _callbackAsyncId;
 
+        /// <summary>
+        /// The DotNetObjectReference for the callback
+        /// </summary>
         [JsonInclude]
         [JsonPropertyName("_callback")]
         public DotNetObjectReference<CallbackAsync> _callback { get; }
 
         IJSRuntime JSR;
+        /// <summary>
+        /// Creates a new instance
+        /// </summary>
+        /// <param name="jsr"></param>
+        /// <param name="once"></param>
         protected CallbackAsync(IJSRuntime jsr, bool once)
         {
             JSR = jsr;
@@ -50,15 +70,19 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime
             }
             this.once = once;
         }
+        /// <summary>
+        /// Disposes of the instance
+        /// </summary>
+        /// <returns></returns>
         public async ValueTask DisposeAsync()
         {
             try
             {
                 await JSR.CallVoidAsync("blazorJSInterop.DisposeCallbackAsync", _callbackAsyncId);
             }
-            catch (Exception ex)
+            catch
             {
-                var nmt = true;
+                // continue
             }
             _callback.Dispose();
         }

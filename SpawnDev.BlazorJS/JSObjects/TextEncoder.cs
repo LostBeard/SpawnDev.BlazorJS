@@ -11,7 +11,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Creates a new instance of TextEncoder
         /// </summary>
-        /// <param name="_ref"></param>
         public TextEncoder() : base(JS.New(nameof(TextEncoder))) { }
         /// <summary>
         /// Deserialization constructor

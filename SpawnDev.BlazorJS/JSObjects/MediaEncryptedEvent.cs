@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class MediaEncryptedEvent : Event
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="MediaEncryptedEvent"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public MediaEncryptedEvent(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns an ArrayBuffer containing the initialization data found. If there is no initialization data associated with the format, it returns null.

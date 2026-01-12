@@ -15,16 +15,35 @@ namespace SpawnDev.BlazorJS
     public class DynamicJSObject : DynamicObject
     {
         static BlazorJSRuntime JS => BlazorJSRuntime.JS;
+        /// <summary>
+        /// Explicit conversion from JSObject to DynamicJSObject
+        /// </summary>
+        /// <param name="obj"></param>
         public static explicit operator DynamicJSObject(JSObject obj) => new DynamicJSObject(obj);
+        /// <summary>
+        /// The instance JSObject reference
+        /// </summary>
         public JSObject JSObjectRef { get; private set; }
+        /// <summary>
+        /// Creates a new instance
+        /// </summary>
+        /// <param name="obj"></param>
         public DynamicJSObject(JSObject obj)
         {
             JSObjectRef = obj;
         }
+        /// <summary>
+        /// Creates a new instance
+        /// </summary>
+        /// <param name="_ref"></param>
         public DynamicJSObject(IJSInProcessObjectReference _ref)
         {
             JSObjectRef = new JSObject(_ref);
         }
+        /// <summary>
+        /// Returns a list of properties on the object
+        /// </summary>
+        /// <returns></returns>
         public override IEnumerable<string> GetDynamicMemberNames()
         {
             //Console.WriteLine("GetDynamicMemberNames");
@@ -32,11 +51,18 @@ namespace SpawnDev.BlazorJS
             return keys;
         }
         // method invoke
+        /// <summary>
+        /// Calls a method on the wrapped object
+        /// </summary>
+        /// <param name="binder"></param>
+        /// <param name="args"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public override bool TryInvoke(InvokeBinder binder, object?[]? args, out object? result)
         {
             //Console.WriteLine($"TryInvoke");
             var csharpBinder = binder.GetType().GetInterface("Microsoft.CSharp.RuntimeBinder.ICSharpInvokeOrInvokeMemberBinder");
-            var typeArgs = (csharpBinder.GetProperty("TypeArguments")!.GetValue(binder, null) as IList<Type>);
+            var typeArgs = (csharpBinder?.GetProperty("TypeArguments")?.GetValue(binder, null) as IList<Type>);
             var returnType = typeArgs != null && typeArgs.Count > 0 ? typeArgs[0] : null;
             var args0 = new List<object?>();
             if (args != null) args0.AddRange(args);
@@ -58,6 +84,12 @@ namespace SpawnDev.BlazorJS
             return true;
         }
         // object instance
+        /// <summary>
+        /// Gets a property from the wrapped object
+        /// </summary>
+        /// <param name="binder"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public override bool TryGetMember(GetMemberBinder binder, out object? result)
         {
             //Console.WriteLine($"TryGetMember: {binder.Name}");
@@ -65,13 +97,29 @@ namespace SpawnDev.BlazorJS
             result = tmp == null ? null : new DynamicJSObject(tmp);
             return true;
         }
+        /// <summary>
+        /// Sets a property on the wrapped object
+        /// </summary>
+        /// <param name="binder"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
             //Console.WriteLine($"TrySetMember: {binder.Name}");
             JSObjectRef.JSRef!.Set(binder.Name, value);
             return true;
         }
+        /// <summary>
+        /// Postfix used to call typed methods
+        /// </summary>
         public const string TypedAsPostfix = "__As";
+        /// <summary>
+        /// Calls a method on the wrapped object
+        /// </summary>
+        /// <param name="binder"></param>
+        /// <param name="args"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public override bool TryInvokeMember(InvokeMemberBinder binder, object?[]? args, out object? result)
         {
             //Console.WriteLine($"TryInvokeMember: {binder.Name}");

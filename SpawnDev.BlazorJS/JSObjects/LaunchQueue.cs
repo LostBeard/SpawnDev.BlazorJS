@@ -7,6 +7,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class LaunchQueue : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public LaunchQueue(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// The setConsumer() method of the LaunchQueue interface is used to declare the callback that will handle custom launch navigation handling in a progressive web app (PWA). Such custom navigation is initiated via Window.launchQueue when a PWA has been launched with a launch_handler client_mode value of focus-existing, navigate-new, or navigate-existing

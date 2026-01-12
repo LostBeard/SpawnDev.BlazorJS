@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class Map<TKey, TValue> : Map
+    public class Map<TKey, TValue> : Map where TKey : notnull
     {
         #region Constructors
         /// <inheritdoc/>
@@ -55,7 +55,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a new Iterator object that contains a two-member array of [key, value] for each element in the Map object in insertion order.
         /// </summary>
         /// <returns></returns>
-        public Iterator<Array> Entries() => JSRef!.Call<Iterator<Array>>("entries");
+        public Iterator<(TKey, TValue)> Entries() => JSRef!.Call<Iterator<(TKey, TValue)>>("entries");
         /// <summary>
         /// Calls callbackFn once for each key-value pair present in the Map object, in insertion order. If a thisArg parameter is provided to forEach, it will be used as the this value for each callback.
         /// </summary>
@@ -124,16 +124,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Sets the value for the passed key in the Map object. Returns the Map object.
         /// </summary>
-        public Map<TKey, TValue> Set<TKey, TValue>(TKey key, TValue value) => JSRef!.Call<Map<TKey, TValue>>("set", key, value);
+        public Map<TKey, TValue> Set<TKey, TValue>(TKey key, TValue value) where TKey : notnull => JSRef!.Call<Map<TKey, TValue>>("set", key, value);
         /// <summary>
         /// Returns a new Iterator object that contains a two-member array of [key, value] for each element in the Map object in insertion order.
         /// </summary>
         /// <returns></returns>
-        public Iterator<Array> Entries() => JSRef!.Call<Iterator<Array>>("entries");
+        public Iterator<(TKey, TValue)> Entries<TKey, TValue>() => JSRef!.Call<Iterator<(TKey, TValue)>>("entries");
         /// <summary>
         /// Calls callbackFn once for each key-value pair present in the Map object, in insertion order. If a thisArg parameter is provided to forEach, it will be used as the this value for each callback.
         /// </summary>
-        public void ForEach<TKey, TValue>(ActionCallback<TValue, TKey, Map<TKey, TValue>> callbackFn) => JSRef!.CallVoid("forEach", callbackFn);
+        public void ForEach<TKey, TValue>(ActionCallback<TValue, TKey, Map<TKey, TValue>> callbackFn) where TKey : notnull => JSRef!.CallVoid("forEach", callbackFn);
         /// <summary>
         /// Returns the value associated to the passed key, or undefined if there is none.
         /// </summary>

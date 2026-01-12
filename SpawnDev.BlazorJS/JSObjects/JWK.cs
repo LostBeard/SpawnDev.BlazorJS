@@ -43,9 +43,15 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class RSAPS256JWKPublic : JWK
     {
+        /// <summary>
+        /// Exponent
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("e")]
         public string? E { get; set; }
+        /// <summary>
+        /// Modulus
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("n")]
         public string? N { get; set; }
@@ -55,21 +61,39 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class RSAPS256JWKFull : RSAPS256JWKPublic
     {
+        /// <summary>
+        /// Private exponent
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("d")]
         public string? D { get; set; }
+        /// <summary>
+        /// First factor CRT exponent
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("dp")]
         public string? Dp { get; set; }
+        /// <summary>
+        /// Second factor CRT exponent
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("dq")]
         public string? Dq { get; set; }
+        /// <summary>
+        /// First prime factor
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("p")]
         public string? P { get; set; }
+        /// <summary>
+        /// Second prime factor
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("q")]
         public string? Q { get; set; }
+        /// <summary>
+        /// First CRT coefficient
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("qi")]
         public string? Qi { get; set; }

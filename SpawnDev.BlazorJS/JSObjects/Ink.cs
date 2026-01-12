@@ -8,7 +8,16 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class Ink : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public Ink(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// The requestPresenter() method of the Ink interface returns a Promise that fulfills with an InkPresenter object.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public Task<InkPresenter> RequestPresenter(InkPresenterParam param) => JSRef!.CallAsync<InkPresenter>("requestPresenter", param);
     }
 }

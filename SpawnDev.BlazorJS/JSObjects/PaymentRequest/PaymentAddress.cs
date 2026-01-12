@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class PaymentAddress : JSObject
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="PaymentAddress"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public PaymentAddress(IJSInProcessObjectReference _ref) : base(_ref) { }
 
         /// <summary>

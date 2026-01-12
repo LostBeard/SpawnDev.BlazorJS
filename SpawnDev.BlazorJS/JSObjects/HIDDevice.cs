@@ -10,6 +10,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     {
         #region Constructors
 
+        /// <summary>
+        /// Creates a new instance of <see cref="HIDDevice"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public HIDDevice(IJSInProcessObjectReference _ref) : base(_ref)
         {
         }

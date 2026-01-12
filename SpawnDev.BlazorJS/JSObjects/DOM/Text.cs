@@ -27,7 +27,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Properties
         /// <summary>
-        /// Returns a HTMLSlotElement representing the <slot> the node is inserted in.
+        /// Returns a HTMLSlotElement representing the &lt;slot&gt; the node is inserted in.
         /// </summary>
         public HTMLSlotElement? AssignedSlot => JSRef!.Get<HTMLSlotElement?>("assignedSlot");
         /// <summary>

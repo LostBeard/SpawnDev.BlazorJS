@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects.WebRTC
 {
+    /// <summary>
+    /// The RTCIceCandidateInfo interface of the WebRTC API represents a candidate Internet Connectivity Establishment (ICE) configuration which may be used to establish an RTCPeerConnection.
+    /// </summary>
     public class RTCIceCandidateInfo
     {
         /// <summary>

@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The SerialPortRequestOptions dictionary represents the options for a Serial.requestPort() call.
+    /// </summary>
     public class SerialPortRequestOptions
     {
         /// <summary>

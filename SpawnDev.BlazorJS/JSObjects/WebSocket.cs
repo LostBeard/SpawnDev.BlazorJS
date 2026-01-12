@@ -54,7 +54,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The sub-protocol selected by the server.
         /// </summary>
+        /// <summary>
+        /// The sub-protocol selected by the server.
+        /// </summary>
         public string Protocol => JSRef!.Get<string>("protocol");
+        /// <summary>
+        /// The absolute URL of the WebSocket as resolved by the constructor.
+        /// </summary>
         public string Url => JSRef!.Get<string>("url");
         #endregion
         #region Methods

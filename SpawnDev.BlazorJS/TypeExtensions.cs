@@ -124,9 +124,9 @@ namespace SpawnDev.BlazorJS
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                var nmt = true;
+                // continue
             }
             switch (type.Name)
             {

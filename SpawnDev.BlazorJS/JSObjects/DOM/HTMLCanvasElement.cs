@@ -228,6 +228,11 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         // Non-standard methods
         // NOTE - may not work on some browsers if not added to DOM first (even if temporary)
+        /// <summary>
+        /// Initiates a download of the canvas content as an image file.
+        /// </summary>
+        /// <param name="fileName">The name of the file to download.</param>
+        /// <param name="appendToBody">If true, appends the link element to the body before clicking it. Useful for some browsers compatibility.</param>
         public void DownloadAsImage(string fileName, bool appendToBody = false)
         {
             var dataUrl = ToDataURL();
@@ -239,6 +244,14 @@ namespace SpawnDev.BlazorJS.JSObjects
             if (appendToBody) link.Remove();
         }
 
+        /// <summary>
+        /// Converts RGBA values to a hex string.
+        /// </summary>
+        /// <param name="r">Red component (0-255)</param>
+        /// <param name="g">Green component (0-255)</param>
+        /// <param name="b">Blue component (0-255)</param>
+        /// <param name="a">Alpha component (0-255)</param>
+        /// <returns>Hex string representation (e.g. #RRGGBBAA)</returns>
         public static string Color4ToHexString(byte r, byte g, byte b, byte a)
         {
             var hex = "#" + BitConverter.ToString(new byte[] { r, g, b, a }).Replace("-", "");

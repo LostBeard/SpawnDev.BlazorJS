@@ -20,6 +20,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Returns an integer representing the number of data items stored in the Storage object.
+        /// </summary>
         public int Length => JSRef!.Get<int>("length");
         #endregion
 

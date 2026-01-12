@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -19,24 +19,45 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class MediaTrackCapabilities
     {
+        /// <summary>
+        /// WhiteBalanceMode
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public EnumString<WhiteBalanceModeEnum>[]? WhiteBalanceMode { get; set; }
 
+        /// <summary>
+        /// Sharpness
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public DoubleRange? Sharpness { get; set; }
 
+        /// <summary>
+        /// Saturation
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public DoubleRange? Saturation { get; set; }
 
+        /// <summary>
+        /// ExposureCompensation
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public DoubleRange? ExposureCompensation { get; set; }
 
+        /// <summary>
+        /// Contrast
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public DoubleRange? Contrast { get; set; }
 
+        /// <summary>
+        /// ColorTemperature
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public DoubleRange? ColorTemperature { get; set; }
 
+        /// <summary>
+        /// Brightness
+        /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public DoubleRange? Brightness { get; set; }
         /// <summary>

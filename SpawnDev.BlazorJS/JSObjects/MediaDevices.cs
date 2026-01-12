@@ -9,11 +9,30 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class MediaDevices : EventTarget
     {
+        /// <summary>
+        /// videoinput
+        /// </summary>
         public const string VIDEO_INPUT = "videoinput";
+        /// <summary>
+        /// audioinput
+        /// </summary>
         public const string AUDIO_INPUT = "audioinput";
+        /// <summary>
+        /// audiooutput
+        /// </summary>
         public const string AUDIO_OUTPUT = "audiooutput";
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MediaDevices(IJSInProcessObjectReference _ref) : base(_ref) { }
+        /// <summary>
+        /// Returns true if the MediaDevices interface is supported.
+        /// </summary>
         public static bool Supported => !JS.IsUndefined("navigator.mediaDevices") && !JS.IsUndefined("navigator.mediaDevices.enumerateDevices");
+        /// <summary>
+        /// Returns true if getDisplayMedia is supported.
+        /// </summary>
         public static bool GetDisplayMediaSupported => !JS.IsUndefined("navigator.mediaDevices") && !JS.IsUndefined("navigator.mediaDevices.getDisplayMedia");
         /// <summary>
         /// Fired when a media input or output device is attached to or removed from the user's computer.

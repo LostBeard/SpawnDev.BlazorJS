@@ -9,6 +9,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class MediaCapabilities : JSObject
     {
         #region Constructors
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public MediaCapabilities(IJSInProcessObjectReference _ref) : base(_ref) { }
         #endregion
         #region Methods

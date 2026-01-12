@@ -8,6 +8,11 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class BigInt<T> where T : struct
     {
+        /// <summary>
+        /// Returns true if the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object? obj)
         {
             if (obj is null) return false;
@@ -56,5 +61,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Creates a new instance of BigInt
         /// </summary>
         public BigInt(T value) { Value = value; }
+        /// <inheritdoc/>
+        public override int GetHashCode() => Value.GetHashCode();
     }
 }

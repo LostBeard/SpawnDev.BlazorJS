@@ -10,6 +10,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class HIDInputReportEvent : Event
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="HIDInputReportEvent"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public HIDInputReportEvent(IJSInProcessObjectReference _ref) : base(_ref)
         {
         }

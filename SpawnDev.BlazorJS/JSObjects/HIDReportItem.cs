@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class HIDReportItem : JSObject
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="HIDReportItem"/>.
+        /// </summary>
+        /// <param name="_ref"></param>
         public HIDReportItem(IJSInProcessObjectReference _ref) : base(_ref)
         {
         }

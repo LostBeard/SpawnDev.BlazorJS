@@ -6,6 +6,9 @@ namespace SpawnDev.BlazorJS.JSObjects
     // A readable stream with an underlying push source and backpressure support
     // https://streams.spec.whatwg.org/#example-rs-push-backpressure
     // https://streams.spec.whatwg.org/#underlying-source-api
+    /// <summary>
+    /// The ReadableStreamDefaultSource interface represents an underlying source for a ReadableStream.
+    /// </summary>
     public class ReadableStreamDefaultSource : ReadableStreamUnderlyingSource, IDisposable
     {
         /// <summary>
@@ -37,12 +40,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ActionCallback<string?>? Cancel { get; set; }
+        /// <summary>
+        /// Creates a new instance
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="pull"></param>
+        /// <param name="cancel"></param>
         public ReadableStreamDefaultSource(Func<ReadableStreamDefaultController, Task>? start = null, Func<ReadableStreamDefaultController, Task>? pull = null, Action<string?>? cancel = null)
         {
             if (start != null) Start = start;
             if (pull != null) Pull = pull;
             if (cancel != null) Cancel = cancel;
         }
+        /// <summary>
+        /// Disposes of the instance
+        /// </summary>
         public void Dispose()
         {
             Pull?.Dispose();

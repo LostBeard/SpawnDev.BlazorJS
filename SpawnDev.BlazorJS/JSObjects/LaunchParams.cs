@@ -8,6 +8,10 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class LaunchParams : JSObject
     {
+        /// <summary>
+        /// Deserialization constructor
+        /// </summary>
+        /// <param name="_ref"></param>
         public LaunchParams(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a read-only array of FileSystemHandle objects representing any files passed along with the launch navigation via the POST method

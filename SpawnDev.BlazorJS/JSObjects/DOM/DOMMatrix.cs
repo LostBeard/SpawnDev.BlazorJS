@@ -2,6 +2,9 @@
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
+    /// <summary>
+    /// The DOMMatrix interface represents 4x4 matrices, suitable for 2D and 3D operations.
+    /// </summary>
     public class DOMMatrix : DOMMatrixReadOnly
     {
         /// <summary>
