@@ -4,8 +4,6 @@ using SpawnDev;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Demo;
 using SpawnDev.BlazorJS.JSObjects;
-using SpawnDev.BlazorJS.Toolbox;
-using System.Text;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
