@@ -123,7 +123,6 @@ namespace SpawnDev.BlazorJS
                 RuntimeJsonSerializerOptions.Converters.Add(new UndefinableConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new JSInProcessObjectReferenceUndefinedConverter());
                 RuntimeJsonSerializerOptions.Converters.Add(new JSObjectConverterFactory());
-                RuntimeJsonSerializerOptions.Converters.Add(new IJSObjectConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new TaskConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new ActionConverterFactory());
                 RuntimeJsonSerializerOptions.Converters.Add(new FuncConverterFactory());

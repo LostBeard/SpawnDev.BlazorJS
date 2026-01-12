@@ -28,10 +28,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
             {
                 return true;
             }
-            if (typeof(IJSObjectProxy).IsAssignableFrom(pType))
-            {
-                return true;
-            }
             if (typeof(IJSInProcessObjectReference) == pType)
             {
                 return true;

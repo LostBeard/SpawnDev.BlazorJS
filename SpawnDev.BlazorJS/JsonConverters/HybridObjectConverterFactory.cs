@@ -54,7 +54,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
                 if (typeToConvert.IsAbstract) goto CanConvertFalse;
                 if (typeof(JSObjectAsync).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
                 if (typeof(JSObject).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
-                if (typeof(IJSObjectProxy).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
                 if (typeof(Callback).IsAssignableFrom(typeToConvert)) goto CanConvertFalse;
                 if (typeToConvert.IsAsync()) goto CanConvertFalse;
                 if (typeToConvert.IsGenericType)
