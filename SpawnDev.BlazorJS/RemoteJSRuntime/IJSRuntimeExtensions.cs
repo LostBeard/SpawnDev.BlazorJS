@@ -19,7 +19,7 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime
         internal static async Task<object?> InvokeAsync(this IJSRuntime _js, Type returnType, string identifier, params object?[]? args)
         {
             var typedMethod = GetJSRuntimeInvokeAsync(returnType);
-            var ret = await typedMethod.InvokeAsync(_js, new object[] { identifier, args });
+            var ret = await typedMethod.InvokeAsync(_js, new object?[] { identifier, args });
             return ret;
         }
         private static BlazorJSInteropAsync GetInterop(this IJSRuntime _ref)
@@ -153,6 +153,6 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime
         /// <param name="_ref"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static Task<T> ReturnAs<T>(this IJSRuntime _ref, object? obj) => _ref.GetInterop().ObjectGet<T>(obj);
+        public static Task<T> ReturnAs<T>(this IJSRuntime _ref, object obj) => _ref.GetInterop().ObjectGet<T>(obj);
     }
 }

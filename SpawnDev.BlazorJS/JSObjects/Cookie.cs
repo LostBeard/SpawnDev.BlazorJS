@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -11,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A string containing the domain of the cookie.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Domain { get; set; }
+        public string? Domain { get; set; }
         /// <summary>
         /// A timestamp, given as Unix time in milliseconds, containing the expiration date of the cookie.
         /// </summary>
@@ -20,7 +21,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A string containing the name of the cookie.
         /// </summary>
-        public string Name { get; set; }
+        [Required]
+        public string Name { get; set; } = default!;
         /// <summary>
         /// A boolean indicating whether the cookie is a partitioned cookie (true) or not (false). See Cookies Having Independent Partitioned State (CHIPS) for more information.
         /// </summary>
@@ -45,6 +47,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A string containing the value of the cookie.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Value { get; set; }
+        public string? Value { get; set; }
     }
 }

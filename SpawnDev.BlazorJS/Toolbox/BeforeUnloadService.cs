@@ -30,9 +30,9 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <summary>
         /// Event that is fired before the window is unloaded
         /// </summary>
-        public event BeforeUnloadDelegate OnBeforeUnload;
+        public event BeforeUnloadDelegate OnBeforeUnload = default!;
         BlazorJSRuntime JS;
-        Callback BeforeUnloadCallback;
+        Callback? BeforeUnloadCallback;
         /// <summary>
         /// Creates a new instance of the BeforeUnloadService
         /// </summary>

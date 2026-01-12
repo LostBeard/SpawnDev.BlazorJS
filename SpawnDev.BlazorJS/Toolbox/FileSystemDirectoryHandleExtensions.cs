@@ -561,7 +561,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemDirectoryHandle _this, string path, Stream data)
         {
             using var fileHandle = await _this.GetPathFileHandle(path, true);
-            await fileHandle.Append(data);
+            await fileHandle!.Append(data);
         }
         /// <summary>
         /// Append data to the file, the file will be created if it does not exist

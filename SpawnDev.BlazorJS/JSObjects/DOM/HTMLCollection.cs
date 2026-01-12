@@ -64,7 +64,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             var ret = new List<Element>();
             for (int i = 0; i < Length; i++)
             {
-                ret.Add(Item(i));
+                ret.Add(Item(i)!);
             }
             return ret;
         }
@@ -82,7 +82,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             var ret = new List<T>();
             for (int i = 0; i < Length; i++)
             {
-                ret.Add(Item<T>(i));
+                ret.Add(Item<T>(i)!);
             }
             return ret;
         }

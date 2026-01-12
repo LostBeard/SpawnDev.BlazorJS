@@ -349,8 +349,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             using var response = options == null ? await _this.Match(url) : await _this.Match(url, options);
             if (response == null) return null;
-            using var headers = response.JSRef.Get<JSObject>("headers");
-            return headers == null ? "" : headers.JSRef.Get<string>("content-type") ?? "";
+            using var headers = response.JSRef!.Get<JSObject>("headers");
+            return headers == null ? "" : headers.JSRef!.Get<string>("content-type") ?? "";
         }
 
         /// <summary>

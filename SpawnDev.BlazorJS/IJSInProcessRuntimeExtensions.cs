@@ -16,7 +16,7 @@ namespace SpawnDev.BlazorJS
             if (GenericInvokeMethods.TryGetValue(type, out MethodInfo? generic)) return generic!;
             return GenericInvokeMethods[type] = IJSInProcessRuntime_Invoke.Value.MakeGenericMethod(type);
         }
-        internal static object? Invoke(this IJSInProcessRuntime _js, Type returnType, string identifier, params object?[]? args) => GetJSRuntimeInvoke(returnType).Invoke(_js, new object[] { identifier, args });
+        internal static object? Invoke(this IJSInProcessRuntime _js, Type returnType, string identifier, params object?[]? args) => GetJSRuntimeInvoke(returnType).Invoke(_js, new object?[] { identifier, args });
         internal static IJSInProcessObjectReference CreateIJSInProcessObjectReference(this IJSInProcessRuntime _js, long id)
         {
             return (IJSInProcessObjectReference)Activator.CreateInstance(WebAssemblyJSObjectReferenceType, _js, id)!;

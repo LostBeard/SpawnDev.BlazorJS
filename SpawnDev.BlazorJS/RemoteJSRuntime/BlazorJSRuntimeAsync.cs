@@ -126,6 +126,6 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public Task<T> ReturnAs<T>(object? obj) => jsInterop.ObjectGet<T>(obj);
+        public Task<T> ReturnAs<T>(object obj) => jsInterop.ObjectGet<T>(obj);
     }
 }

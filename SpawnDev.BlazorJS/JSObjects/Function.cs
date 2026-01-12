@@ -151,7 +151,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Action<T0> ToAction<T0>()
         {
-            var ret = new Action<T0>((arg0) => ApplyVoid(null, new object[] { arg0 }));
+            var ret = new Action<T0>((arg0) => ApplyVoid(null, new object?[] { arg0 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -163,7 +163,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Action<T0, T1> ToAction<T0, T1>()
         {
-            var ret = new Action<T0, T1>((arg0, arg1) => ApplyVoid(null, new object[] { arg0, arg1 }));
+            var ret = new Action<T0, T1>((arg0, arg1) => ApplyVoid(null, new object?[] { arg0, arg1 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -176,7 +176,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Action<T0, T1, T2> ToAction<T0, T1, T2>()
         {
-            var ret = new Action<T0, T1, T2>((arg0, arg1, arg2) => ApplyVoid(null, new object[] { arg0, arg1, arg2 }));
+            var ret = new Action<T0, T1, T2>((arg0, arg1, arg2) => ApplyVoid(null, new object?[] { arg0, arg1, arg2 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -190,7 +190,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Action<T0, T1, T2, T3> ToAction<T0, T1, T2, T3>()
         {
-            var ret = new Action<T0, T1, T2, T3>((arg0, arg1, arg2, arg3) => ApplyVoid(null, new object[] { arg0, arg1, arg2, arg3 }));
+            var ret = new Action<T0, T1, T2, T3>((arg0, arg1, arg2, arg3) => ApplyVoid(null, new object?[] { arg0, arg1, arg2, arg3 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -205,7 +205,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Action<T0, T1, T2, T3, T4> ToAction<T0, T1, T2, T3, T4>()
         {
-            var ret = new Action<T0, T1, T2, T3, T4>((arg0, arg1, arg2, arg3, arg4) => ApplyVoid(null, new object[] { arg0, arg1, arg2, arg3, arg4 }));
+            var ret = new Action<T0, T1, T2, T3, T4>((arg0, arg1, arg2, arg3, arg4) => ApplyVoid(null, new object?[] { arg0, arg1, arg2, arg3, arg4 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -221,7 +221,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Action<T0, T1, T2, T3, T4, T5> ToAction<T0, T1, T2, T3, T4, T5>()
         {
-            var ret = new Action<T0, T1, T2, T3, T4, T5>((arg0, arg1, arg2, arg3, arg4, arg5) => ApplyVoid(null, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 }));
+            var ret = new Action<T0, T1, T2, T3, T4, T5>((arg0, arg1, arg2, arg3, arg4, arg5) => ApplyVoid(null, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -238,7 +238,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Action<T0, T1, T2, T3, T4, T5, T6> ToAction<T0, T1, T2, T3, T4, T5, T6>()
         {
-            var ret = new Action<T0, T1, T2, T3, T4, T5, T6>((arg0, arg1, arg2, arg3, arg4, arg5, arg6) => ApplyVoid(null, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 }));
+            var ret = new Action<T0, T1, T2, T3, T4, T5, T6>((arg0, arg1, arg2, arg3, arg4, arg5, arg6) => ApplyVoid(null, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -261,7 +261,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Func<T0, TResult> ToFunc<T0, TResult>()
         {
-            var ret = new Func<T0, TResult>((arg0) => Apply<TResult>(null, new object[] { arg0 }));
+            var ret = new Func<T0, TResult>((arg0) => Apply<TResult>(null, new object?[] { arg0 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -288,7 +288,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Func<T0, T1, T2, TResult> ToFunc<T0, T1, T2, TResult>()
         {
-            var ret = new Func<T0, T1, T2, TResult>((arg0, arg1, arg2) => Apply<TResult>(new object[] { arg0, arg1, arg2 }));
+            var ret = new Func<T0, T1, T2, TResult>((arg0, arg1, arg2) => Apply<TResult>(new object?[] { arg0, arg1, arg2 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -303,7 +303,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Func<T0, T1, T2, T3, TResult> ToFunc<T0, T1, T2, T3, TResult>()
         {
-            var ret = new Func<T0, T1, T2, T3, TResult>((arg0, arg1, arg2, arg3) => Apply<TResult>(null, new object[] { arg0, arg1, arg2, arg3 }));
+            var ret = new Func<T0, T1, T2, T3, TResult>((arg0, arg1, arg2, arg3) => Apply<TResult>(null, new object?[] { arg0, arg1, arg2, arg3 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -319,7 +319,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Func<T0, T1, T2, T3, T4, TResult> ToFunc<T0, T1, T2, T3, T4, TResult>()
         {
-            var ret = new Func<T0, T1, T2, T3, T4, TResult>((arg0, arg1, arg2, arg3, arg4) => Apply<TResult>(null, new object[] { arg0, arg1, arg2, arg3, arg4 }));
+            var ret = new Func<T0, T1, T2, T3, T4, TResult>((arg0, arg1, arg2, arg3, arg4) => Apply<TResult>(null, new object?[] { arg0, arg1, arg2, arg3, arg4 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -336,7 +336,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Func<T0, T1, T2, T3, T4, T5, TResult> ToFunc<T0, T1, T2, T3, T4, T5, TResult>()
         {
-            var ret = new Func<T0, T1, T2, T3, T4, T5, TResult>((arg0, arg1, arg2, arg3, arg4, arg5) => Apply<TResult>(null, new object[] { arg0, arg1, arg2, arg3, arg4, arg5 }));
+            var ret = new Func<T0, T1, T2, T3, T4, T5, TResult>((arg0, arg1, arg2, arg3, arg4, arg5) => Apply<TResult>(null, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5 }));
             ret.FunctionSet(this);
             return ret;
         }
@@ -354,7 +354,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Func<T0, T1, T2, T3, T4, T5, T6, TResult> ToFunc<T0, T1, T2, T3, T4, T5, T6, TResult>()
         {
-            var ret = new Func<T0, T1, T2, T3, T4, T5, T6, TResult>((arg0, arg1, arg2, arg3, arg4, arg5, arg6) => Apply<TResult>(null, new object[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 }));
+            var ret = new Func<T0, T1, T2, T3, T4, T5, T6, TResult>((arg0, arg1, arg2, arg3, arg4, arg5, arg6) => Apply<TResult>(null, new object?[] { arg0, arg1, arg2, arg3, arg4, arg5, arg6 }));
             ret.FunctionSet(this);
             return ret;
         }

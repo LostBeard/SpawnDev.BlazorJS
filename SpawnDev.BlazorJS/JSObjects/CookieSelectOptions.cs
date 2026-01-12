@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// https://developer.mozilla.org/en-US/docs/Web/API/CookieStore/delete#options
@@ -8,7 +10,8 @@
         /// <summary>
         /// A string with the name of a cookie.
         /// </summary>
-        public string Name { get; set; }
+        [Required]
+        public string Name { get; set; } = default!;
         /// <summary>
         /// A string with the domain of a cookie. Defaults to null.
         /// </summary>

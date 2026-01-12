@@ -78,8 +78,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             Action<ProgressEvent>? load = null;
             load = new Action<ProgressEvent>((evt) =>
             {
-                fr.OnLoad -= load;
-                fr.OnLoadEnd -= load;
+                fr.OnLoad -= load!;
+                fr.OnLoadEnd -= load!;
                 if (evt.Type == "load")
                 {
                     var result = fr.ResultAs<string>();
@@ -108,8 +108,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             Action<ProgressEvent>? load = null;
             load = new Action<ProgressEvent>((evt) =>
             {
-                fr.OnLoad -= load;
-                fr.OnLoadEnd -= load;
+                fr.OnLoad -= load!;
+                fr.OnLoadEnd -= load!;
                 if (evt.Type == "load")
                 {
                     var result = fr.ResultAs<string>();
@@ -138,8 +138,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             Action<ProgressEvent>? load = null;
             load = new Action<ProgressEvent>((evt) =>
             {
-                fr.OnLoad -= load;
-                fr.OnLoadEnd -= load;
+                fr.OnLoad -= load!;
+                fr.OnLoadEnd -= load!;
                 if (evt.Type == "load")
                 {
                     var result = fr.ResultAs<ArrayBuffer>();

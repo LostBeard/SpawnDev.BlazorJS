@@ -68,7 +68,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///     </item>
         /// </list>
         /// </summary>
-        public byte Type => JSRef.Get<byte>("type");
+        public byte Type => JSRef!.Get<byte>("type");
 
         /// <summary>
         /// An array of sub-collections which takes the same format as a top-level collection.

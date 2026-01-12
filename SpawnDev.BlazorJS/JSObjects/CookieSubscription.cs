@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -11,11 +12,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A string with the name of a cookie.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Name { get; set; }
+        [Required]
+        public string Name { get; set; } = default!;
         /// <summary>
         /// A string with the url of the scope used to subscribe to this cookie.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Url { get; set; }
+        public string? Url { get; set; }
     }
 }
