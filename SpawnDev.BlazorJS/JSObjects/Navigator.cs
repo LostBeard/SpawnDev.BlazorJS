@@ -87,6 +87,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a reference to a MediaDevices object which can then be used to get information about available media devices (MediaDevices.enumerateDevices()), find out what constrainable properties are supported for media on the user's computer and user agent (MediaDevices.getSupportedConstraints()), and to request access to media using MediaDevices.getUserMedia().
         /// </summary>
         public MediaDevices MediaDevices => JSRef!.Get<MediaDevices>("mediaDevices");
+        /// <summary>
+        /// Returns MediaSession object which can be used to provide metadata that can be used by the browser to present information about the currently-playing media to the user, such as in a global media controls UI.
+        /// </summary>
         public MediaSession MediaSession => JSRef!.Get<MediaSession>("mediaSession");
         /// <summary>
         /// Returns a boolean value indicating whether the browser is working online.
@@ -100,8 +103,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns a Permissions object that can be used to query and update permission status of APIs covered by the Permissions API.
         /// </summary>
         public Permissions Permissions => JSRef!.Get<Permissions>("permissions");
+        /// <summary>
+        /// Returns a reference to the Presentation API.
+        /// </summary>
         public Presentation Presentation => JSRef!.Get<Presentation>("presentation");
-        //public Scheduling Scheduling => JSRef!.Get<Scheduling>("scheduling");
         /// <summary>
         /// Returns a Serial object, which represents the entry point into the Web Serial API to enable the control of serial ports.
         /// </summary>

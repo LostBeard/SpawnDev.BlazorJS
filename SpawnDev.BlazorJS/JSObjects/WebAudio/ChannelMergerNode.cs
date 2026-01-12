@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class ChannelMergerNode : AudioNode
     {
+        /// <inheritdoc/>
         public ChannelMergerNode(IJSInProcessObjectReference _ref) : base(_ref) { }
     }
 }

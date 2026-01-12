@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class WaveShaperNode : AudioNode
     {
+        /// <inheritdoc/>
         public WaveShaperNode(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// A Float32Array of numbers describing the distortion to apply.

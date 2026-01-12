@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class IIRFilterNode : AudioNode
     {
+        /// <inheritdoc/>
         public IIRFilterNode(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// Returns a Float32Array containing the frequency response for the specified number of frequencies.

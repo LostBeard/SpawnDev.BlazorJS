@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class DynamicsCompressorNode : AudioNode
     {
+        /// <inheritdoc/>
         public DynamicsCompressorNode(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// An k-rate AudioParam representing the decibel value above which the compression will start taking effect.

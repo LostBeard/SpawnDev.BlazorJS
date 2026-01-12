@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class ChannelSplitterNode : AudioNode
     {
+        /// <inheritdoc/>
         public ChannelSplitterNode(IJSInProcessObjectReference _ref) : base(_ref) { }
     }
 }

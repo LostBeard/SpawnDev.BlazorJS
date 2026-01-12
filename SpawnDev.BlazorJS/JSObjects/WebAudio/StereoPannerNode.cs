@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class StereoPannerNode : AudioNode
     {
+        /// <inheritdoc/>
         public StereoPannerNode(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// An a-rate AudioParam holding the pan value. A value of -1 represents full left pan, 0 represents the center, and 1 represents full right pan.

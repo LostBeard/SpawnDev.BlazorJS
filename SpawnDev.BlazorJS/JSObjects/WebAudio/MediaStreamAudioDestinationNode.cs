@@ -8,6 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class MediaStreamAudioDestinationNode : AudioNode
     {
+        /// <inheritdoc/>
         public MediaStreamAudioDestinationNode(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
         /// A MediaStream containing a single AudioMediaStreamTrack with the same number of channels as the node itself.
