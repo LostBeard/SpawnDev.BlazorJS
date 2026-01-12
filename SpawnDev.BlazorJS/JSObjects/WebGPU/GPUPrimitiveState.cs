@@ -18,6 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// If omitted, topology defaults to "triangle-list".
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("topology")]
         public EnumString<GPUPrimitiveTopology>? Topology { get; init; }
 
         /// <summary>
@@ -29,6 +30,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// a list primitive topology will use the index format passed to setIndexBuffer() when doing indexed rendering.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("stripIndexFormat")]
         public EnumString<GPUIndexFormat>? StripIndexFormat { get; init; }
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "cw" Polygons with vertices whose framebuffer coordinates are given in clockwise order are considered front-facing.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("frontFace")]
         public EnumString<GPUFrontFace>? FrontFace { get; init; }
 
         /// <summary>
@@ -46,6 +49,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "back" Back-facing polygons are discarded.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("cullMode")]
         public EnumString<GPUCullMode>? CullMode { get; init; }
 
         /// <summary>
@@ -53,6 +57,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Requires the "depth-clip-control" feature to be enabled.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("unclippedDepth")]
         public bool? UnclippedDepth { get; init; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using System.Text.Json.Serialization;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// https://www.w3.org/TR/webgpu/#dictdef-gpucomputepipelinedescriptor
@@ -8,6 +10,7 @@
         /// <summary>
         /// Describes the compute shader entry point of the pipeline.
         /// </summary>
+        [JsonPropertyName("compute")]
         public GPUProgrammableStage Compute { get; set; }
     }
 }

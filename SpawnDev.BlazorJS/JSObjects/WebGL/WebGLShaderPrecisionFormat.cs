@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using System.Text.Json.Serialization;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The WebGLShaderPrecisionFormat interface is part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getShaderPrecisionFormat() method.<br/>
@@ -6,8 +8,11 @@
     /// </summary>
     public class WebGLShaderPrecisionFormat
     {
+        [JsonPropertyName("rangeMin")]
         public int RangeMin { get; set; }
+        [JsonPropertyName("rangeMax")]
         public int RangeMax { get; set; }
+        [JsonPropertyName("precision")]
         public int Precision { get; set; }
     }
     //public interface IWebGLRenderingContext

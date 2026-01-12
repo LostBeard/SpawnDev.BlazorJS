@@ -12,6 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A GPUShaderModule object containing the WGSL code that this programmable stage will execute.
         /// </summary>
+        [JsonPropertyName("module")]
         public GPUShaderModule Module { get; init; }
 
 
@@ -24,6 +25,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// generated and the resulting GPURenderPipeline will be invalid.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("entryPoint")]
         public string? EntryPoint { get; init; }
 
         /// <summary>
@@ -35,6 +37,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A code snippet providing override values for several overridable constants might look like this:
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("constants")]
         public Dictionary<object, double>? Constants { get; init; }
     }
 }

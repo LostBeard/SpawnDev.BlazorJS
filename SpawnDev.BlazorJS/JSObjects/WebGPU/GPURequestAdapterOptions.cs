@@ -13,6 +13,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Defaults to "core".
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("featureLevel")]
         public string? FeatureLevel { get; init; }
 
         /// <summary>
@@ -26,6 +27,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// It may also result in increased GPUDevice loss — the system will sometimes elect to switch to a lower-power adapter to save power.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("powerPreference")]
         public string? PowerPreference { get; init; }
 
         /// <summary>
@@ -33,6 +35,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Defaults to false.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("forceFallbackAdapter")]
         public bool? ForceFallbackAdapter { get; init; }
 
         /// <summary>
@@ -40,6 +43,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Defaults to false.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("xrCompatible")]
         public bool? XrCompatible { get; init; }
     }
 }

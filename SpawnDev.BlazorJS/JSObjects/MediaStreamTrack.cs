@@ -71,7 +71,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="constraints">A MediaTrackConstraints object listing the constraints to apply to the track's constrainable properties; any existing constraints are replaced with the new values specified, and any constrainable properties not included are restored to their default constraints. If this parameter is omitted, all currently set custom constraints are cleared. This object represents the basic set of constraints that must apply for the Promise to resolve. The object may contain an advanced property containing an array of additional MediaTrackConstraints objects, which are treated as exact requires.</param>
         /// <returns>A Promise which resolves when the constraints have been successfully applied. If the constraints cannot be applied, the promise is rejected with a OverconstrainedError that is a DOMException whose name is OverconstrainedError with additional parameters, and, to indicate that the constraints could not be met. This can happen if the specified constraints are too strict to find a match when attempting to configure the track.</returns>
-        public Task ApplyConstraints(object constraints) => JSRef!.CallVoidAsync("applyConstraints", constraints);
+
         /// <summary>
         /// The applyConstraints() method of the MediaStreamTrack interface applies a set of constraints to the track; these constraints let the website or app establish ideal values and acceptable ranges of values for the constrainable properties of the track, such as frame rate, dimensions, echo cancellation, and so forth.
         /// </summary>

@@ -15,6 +15,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// which describe the members of the structure.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("buffers")]
         public IEnumerable<GPUVertexBufferLayout>? Buffers { get; init; }
     }
 }

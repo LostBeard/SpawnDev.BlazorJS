@@ -13,6 +13,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Possible values are: "clear": Loads the clearValue for this attachment into the render pass.
         /// "load": Loads the existing value for this attachment into the render pass.
         /// </summary>
+        [JsonPropertyName("loadOp")]
         public EnumString<GPULoadOp> LoadOp { get; init; }
 
         /// <summary>
@@ -20,11 +21,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///Possible values are: "discard": Discards the resulting value of the render pass for this attachment. 
         ///"store": Stores the resulting value of the render pass for this attachment.
         /// </summary>
+        [JsonPropertyName("storeOp")]
         public EnumString<GPUStoreOp> StoreOp { get; init; }
 
         /// <summary>
         /// A GPUTextureView object representing the texture subresource that will be output to for this color attachment.
         /// </summary>
+        [JsonPropertyName("view")]
         public Union<GPUTexture, GPUTextureView> View { get; set; }
 
         /// <summary>
@@ -32,12 +35,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The subresource is determined by calling get as texture view(resolveTarget).
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("resolveTarget")]
         public Union<GPUTexture, GPUTextureView> ResolveTarget { get; set; }
 
         /// <summary>
         /// Indicates the depth slice index of "3d" view that will be output to for this color attachment.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("depthSlice")]
         public GPUIntegerCoordinate? DepthSlice { get; set; }
 
         /// <summary>
@@ -49,6 +54,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// If clearValue is omitted, it defaults to { r: 0, g: 0, b: 0, a: 0 }.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("clearValue")]
         public GPUColor? ClearValue { get; init; }
     }
 }

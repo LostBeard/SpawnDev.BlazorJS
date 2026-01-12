@@ -12,6 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An enumerated value specifying the depthStencilAttachment format that the GPURenderPipeline will be compatible with. 
         /// See the specification's Texture Formats section for all the available format values.
         /// </summary>
+        [JsonPropertyName("format")]
         public string Format { get; init; }
 
         /// <summary>
@@ -30,12 +31,58 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "always" Comparison tests always pass.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("depthCompare")]
         public string? DepthCompare { get; init; }
 
         /// <summary>
         /// Gets or sets a value indicating whether depth writing is enabled.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("depthWriteEnabled")]
         public bool? DepthWriteEnabled { get; init; }
+
+        /// <summary>
+        /// The depth bias to use.
+        /// </summary>
+        [JsonPropertyName("depthBias")]
+        public int DepthBias { get; init; } = 0;
+
+        /// <summary>
+        /// The depth bias slope scale.
+        /// </summary>
+        [JsonPropertyName("depthBiasSlopeScale")]
+        public float DepthBiasSlopeScale { get; init; } = 0;
+
+        /// <summary>
+        /// The depth bias clamp.
+        /// </summary>
+        [JsonPropertyName("depthBiasClamp")]
+        public float DepthBiasClamp { get; init; } = 0;
+
+        /// <summary>
+        /// The stencil front state.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("stencilFront")]
+        public GPUStencilFaceState? StencilFront { get; init; }
+
+        /// <summary>
+        /// The stencil back state.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("stencilBack")]
+        public GPUStencilFaceState? StencilBack { get; init; }
+
+        /// <summary>
+        /// The stencil read mask.
+        /// </summary>
+        [JsonPropertyName("stencilReadMask")]
+        public uint StencilReadMask { get; init; } = 0xFFFFFFFF;
+
+        /// <summary>
+        /// The stencil write mask.
+        /// </summary>
+        [JsonPropertyName("stencilWriteMask")]
+        public uint StencilWriteMask { get; init; } = 0xFFFFFFFF;
     }
 }

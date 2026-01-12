@@ -1,4 +1,6 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+﻿using System.Text.Json.Serialization;
+
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// An object describing the layout of a bind group, which is a collection of resources that can be bound to a pipeline.<br/>
@@ -11,6 +13,7 @@
         /// Each entry will correspond to an entry defined in a GPUBindGroup (created via a GPUDevice.createBindGroup() call) that uses 
         /// this GPUBindGroupLayout object as a template.
         /// </summary>
+        [JsonPropertyName("entries")]
         public IEnumerable<GPUBindGroupLayoutEntry> Entries { get; init; }
 
     }

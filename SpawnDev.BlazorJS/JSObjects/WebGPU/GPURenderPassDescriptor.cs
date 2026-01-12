@@ -12,6 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An array of objects (see Color attachment object structure) defining the color attachments 
         /// that will be output to when executing this render pass.
         /// </summary>
+        [JsonPropertyName("colorAttachments")]
         public GPURenderPassColorAttachment[] ColorAttachments { get; init; }
 
         /// <summary>
@@ -19,6 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Due to usage compatibility, no writable depth/stencil attachment may alias another attachment or any resource used inside the render pass.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("depthStencilAttachment")]
         public GPURenderPassDepthStencilAttachment? DepthStencilAttachment { get; init; }
 
         /// <summary>
@@ -27,6 +29,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Keeping the default value is a good default, unless it is known that more draw calls will be done.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("maxDrawCount")]
         public GPUSize64? MaxDrawCount { get; init; }
     }
 }

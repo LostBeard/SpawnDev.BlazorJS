@@ -11,24 +11,28 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An object describing the vertex shader entry point of the pipeline and its input buffer layouts.
         /// </summary>
+        [JsonPropertyName("vertex")]
         public GPUVertexState Vertex { get; init; }
 
         /// <summary>
         /// An object describing how a pipeline constructs and rasterizes primitives from its vertex inputs.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("primitive")]
         public GPUPrimitiveState? Primitive { get; init; }
 
         /// <summary>
         /// An object describing depth-stencil properties including testing, operations, and bias.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("depthStencil")]
         public GPUDepthStencilState? DepthStencil { get; init; }
 
         /// <summary>
         /// An object describing how the pipeline interacts with a render pass's multisampled attachments.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("multisample")]
         public GPUMultisampleState? Multisample { get; init; }
 
         /// <summary>
@@ -38,6 +42,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Depth testing and stencil operations can still be used.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("fragment")]
         public GPUFragmentState? Fragment { get; init; }
     }
 }
