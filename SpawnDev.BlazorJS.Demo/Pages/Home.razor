@@ -1,7 +1,41 @@
-﻿@page "/"
+﻿@using SpawnDev.Blazor.UnitTesting;
+@using System.Reflection;
+@using System.Runtime.InteropServices
+@using SpawnDev.BlazorJS.IJSInProcessObjectReferenceAnyKey
+@using System.Security.Cryptography
+@using System.Text.Json
+@using System.Text
+@using SpawnDev.BlazorJS.JSObjects.WebRTC
+
+@page "/"
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h3>Unit Tests for SpawnDev.BlazorJS</h3>
+<p>
+    This page runs tests to verify SpawnDev.BlazorJS is working as expected.
+</p>
 
-Welcome to your new app.
+<UnitTestsView TypeInstanceResolver="TestTypeResolver" TestAssemblies="Assemblies" TestTypes="Types"></UnitTestsView>
+
+@code{
+    [Inject]
+    IServiceCollection ServiceDescriptors { get; set; } = default!;
+    List<Assembly>? Assemblies = new List<Assembly>();
+    List<Type>? Types = new List<Type>();
+    object? TestTypeResolver(Type testType)
+    {
+        if (testType == this.GetType()) return this;
+        return null;
+    }
+    protected override void OnInitialized()
+    {
+        Types = new List<Type> { this.GetType() };
+        Assemblies = new List<Assembly> { this.GetType().Assembly };
+        // add all services. only services with tests will be used.
+        foreach (var descriptor in ServiceDescriptors)
+        {
+            Types.Add(descriptor.ServiceType);
+        }
+    }
+}

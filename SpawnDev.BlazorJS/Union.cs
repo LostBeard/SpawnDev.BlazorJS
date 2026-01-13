@@ -67,7 +67,7 @@ namespace SpawnDev.BlazorJS
     /// Union type
     /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
-    public sealed class Union<T1, T2> : Union
+    public class Union<T1, T2> : Union
     {
         /// <summary>
         /// Conversion operators for each type in the union.<br/>
@@ -250,7 +250,7 @@ namespace SpawnDev.BlazorJS
     /// Union type
     /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
-    public sealed class Union<T1, T2, T3> : Union
+    public class Union<T1, T2, T3> : Union
     {
         /// <summary>
         /// Conversion operators for each type in the union.<br/>
@@ -521,7 +521,7 @@ namespace SpawnDev.BlazorJS
     /// Union type
     /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
-    public sealed class Union<T1, T2, T3, T4> : Union
+    public class Union<T1, T2, T3, T4> : Union
     {
         /// <summary>
         /// Conversion operators for each type in the union.<br/>
@@ -888,7 +888,7 @@ namespace SpawnDev.BlazorJS
     /// Union type
     /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
-    public sealed class Union<T1, T2, T3, T4, T5> : Union
+    public class Union<T1, T2, T3, T4, T5> : Union
     {
         /// <summary>
         /// Conversion operators for each type in the union.<br/>
@@ -1359,7 +1359,7 @@ namespace SpawnDev.BlazorJS
     /// Union type
     /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
-    public sealed class Union<T1, T2, T3, T4, T5, T6> : Union
+    public class Union<T1, T2, T3, T4, T5, T6> : Union
     {
         /// <summary>
         /// Conversion operators for each type in the union.<br/>
@@ -1942,7 +1942,7 @@ namespace SpawnDev.BlazorJS
     /// Union type
     /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
-    public sealed class Union<T1, T2, T3, T4, T5, T6, T7> : Union
+    public class Union<T1, T2, T3, T4, T5, T6, T7> : Union
     {
         /// <summary>
         /// Conversion operators for each type in the union.<br/>
@@ -2645,7 +2645,7 @@ namespace SpawnDev.BlazorJS
     /// Union type
     /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
-    public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8> : Union
+    public class Union<T1, T2, T3, T4, T5, T6, T7, T8> : Union
     {
         /// <summary>
         /// Conversion operators for each type in the union.<br/>
@@ -3476,7 +3476,7 @@ namespace SpawnDev.BlazorJS
     /// Union type
     /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
-    public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> : Union
+    public class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9> : Union
     {
         /// <summary>
         /// Conversion operators for each type in the union.<br/>
@@ -4444,7 +4444,7 @@ namespace SpawnDev.BlazorJS
     /// Union type
     /// </summary>
     [JsonConverter(typeof(UnionJsonConverter))]
-    public sealed class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : Union
+    public class Union<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : Union
     {
         /// <summary>
         /// Conversion operators for each type in the union.<br/>
