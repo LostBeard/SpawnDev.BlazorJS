@@ -31,6 +31,7 @@
     protected override void OnInitialized()
     {
         Types = new List<Type> { this.GetType() };
+        // add tests in the assembly this is in
         Assemblies = new List<Assembly> { this.GetType().Assembly };
         // add all services. only services with tests will be used.
         foreach (var descriptor in ServiceDescriptors)
