@@ -14,12 +14,6 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             JS = js;
         }
 
-        //[TestMethod]
-        public void ApplesWillFail()
-        {
-            throw new Exception("Apples are yummy");
-        }
-
         [TestMethod]
         public void IJSInProcessObjectReferenceCallbackArgTest()
         {
