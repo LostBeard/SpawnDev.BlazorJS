@@ -10,7 +10,7 @@ namespace SpawnDev.BlazorJS.Tests
         // test port
         static ushort _port = 32322;
         private Process? _webServerProcess;
-        protected string BaseUrl = $"https://localhost:{_port}";
+        protected string BaseUrl = Environment.GetEnvironmentVariable("BASE_URL") ?? $"https://localhost:{_port}";
 
         public override BrowserNewContextOptions ContextOptions()
         {
@@ -24,6 +24,10 @@ namespace SpawnDev.BlazorJS.Tests
         [OneTimeSetUp]
         public void StartApp()
         {
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BASE_URL")))
+            {
+                return;
+            }
             // start hosting the Blazor WASM app using dotnet
             // path to your Blazor Host/Server project file
             var projectPath = Path.GetFullPath(@"../../../../SpawnDev.BlazorJS.Demo/SpawnDev.BlazorJS.Demo.csproj");
@@ -61,7 +65,7 @@ namespace SpawnDev.BlazorJS.Tests
         [Test]
         public async Task RunAllTestsInTable_ShouldSucceed()
         {
-            await Page.GotoAsync($"https://localhost:{_port}/");
+            await Page.GotoAsync(BaseUrl);
 
             // get the table
             var table = Page.Locator("table.unit-test-view");
