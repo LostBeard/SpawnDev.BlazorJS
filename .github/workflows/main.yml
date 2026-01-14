@@ -5,10 +5,12 @@ on: workflow_dispatch
 jobs:
   test:
     timeout-minutes: 15
-    runs-on: ubuntu-latest
-    # Using the official Playwright .NET container for pre-installed dependencies
-    container: 
-      image: mcr.microsoft.com/playwright/dotnet:v1.52.0-noble 
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Prevent running in parallel
+      max-parallel: 1
+      matrix:
+        os: [ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v4
