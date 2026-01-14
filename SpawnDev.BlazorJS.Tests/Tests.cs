@@ -12,6 +12,15 @@ namespace SpawnDev.BlazorJS.Tests
         private Process? _webServerProcess;
         protected string BaseUrl = $"https://localhost:{_port}";
 
+        public override BrowserNewContextOptions ContextOptions()
+        {
+            return new BrowserNewContextOptions
+            {
+                IgnoreHTTPSErrors = true
+            };
+        }
+
+
         [OneTimeSetUp]
         public void StartApp()
         {
@@ -23,7 +32,11 @@ namespace SpawnDev.BlazorJS.Tests
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "dotnet",
+#if DEBUG
                     Arguments = $"run --project \"{projectPath}\" --urls \"{BaseUrl}\"",
+#else
+                    Arguments = $"run --configuration Release --no-build --project \"{projectPath}\" --urls \"{BaseUrl}\"",
+#endif
                     UseShellExecute = false,
                     CreateNoWindow = true
                 }
