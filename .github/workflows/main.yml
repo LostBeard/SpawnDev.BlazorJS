@@ -1,0 +1,49 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    # Using the official Playwright .NET container for pre-installed dependencies
+    container: 
+      image: mcr.microsoft.com/playwright/dotnet:v1.49.0-noble 
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x # Match your project version
+
+    - name: Install dependencies
+# 
+      run: dotnet restore
+
+    - name: Build Project
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Install Playwright Browsers
+      # Even in the container, we ensure the specific .NET version of Playwright is ready
+      run: pwsh SpawnDev.BlazorJS.Tests/bin/Release/net10.0/playwright.ps1 install --with-deps
+
+    - name: Run Blazor App and Tests
+      # We use '&' to run the app in the background, then wait for it to be ready
+      run: |
+        dotnet run --project SpawnDev.BlazorJS.Demo/SpawnDev.BlazorJS.Demo.csproj --configuration Release &
+        npx wait-on https://localhost:5000 --timeout 60000
+        dotnet test --configuration Release --no-build --logger "trx;LogFileName=test-results.trx"
+      env:
+        ASPNETCORE_URLS: https://localhost:5000
+
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-results
+        path: TestResults/*.trx
