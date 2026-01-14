@@ -13,7 +13,8 @@
 
 <h3>Unit Tests for SpawnDev.BlazorJS</h3>
 <p>
-    This page runs tests to verify SpawnDev.BlazorJS is working as expected.
+    This page runs tests to verify SpawnDev.BlazorJS is working as expected.<br/>
+    NUnit will run these tests during testing.
 </p>
 
 <UnitTestsView TypeInstanceResolver="TestTypeResolver" TestAssemblies="Assemblies" TestTypes="Types"></UnitTestsView>
@@ -34,6 +35,7 @@
         // add tests in the assembly this is in
         Assemblies = new List<Assembly> { this.GetType().Assembly };
         // add all services. only services with tests will be used.
+        // not necessary if the service types are in an assembly that is in the Assemblies list
         foreach (var descriptor in ServiceDescriptors)
         {
             Types.Add(descriptor.ServiceType);

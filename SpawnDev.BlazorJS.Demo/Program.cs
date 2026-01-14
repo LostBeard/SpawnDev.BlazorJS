@@ -4,7 +4,6 @@ using SpawnDev;
 using SpawnDev.BlazorJS;
 using SpawnDev.BlazorJS.Demo;
 using SpawnDev.BlazorJS.Demo.UnitTests;
-using SpawnDev.BlazorJS.JSObjects;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -15,5 +14,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddSingleton<BlazorJSUnitTest>();
 builder.Services.AddSingleton<CryptoService>();
 builder.Services.AddSingleton<FileSystemAPIService>();
+builder.Services.AddSingleton<TypedArrayTests>();
 
 await builder.Build().BlazorJSRunAsync();
