@@ -10,6 +10,7 @@ jobs:
       # Prevent running in parallel
       max-parallel: 1
       matrix:
+        # options (can be multiple) [ubuntu-latest, windows-latest, macos-latest]
         os: [ubuntu-latest]
 
     steps:
