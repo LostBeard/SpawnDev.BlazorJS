@@ -590,11 +590,71 @@ override void OnInitialized()
 From [Cache on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Cache)  
 > The Cache interface provides a persistent storage mechanism for Request / Response object pairs that are cached in long lived memory.  
 
-***Example coming soon***
+```cs
+[Inject]
+BlazorJSRuntime JS { get; set; }
+
+public async Task CacheExample()
+{
+    using var caches = JS.Get<CacheStorage>("caches");
+    using var cache = await caches.Open("my-cache");
+    
+    // Add to cache
+    await cache.Add("https://example.com/data.json");
+    
+    // Match request
+    using var response = await cache.Match("https://example.com/data.json");
+    if (response != null)
+    {
+        var text = await response.Text();
+        Console.WriteLine(text);
+    }
+}
+```
 
 ## TypedArray
 SpawnDev.BlazorJS supports all TypedArray types.  
-***Example coming soon***
+```cs
+// Create a Uint8Array from a C# byte array
+byte[] data = [1, 2, 3, 4, 5];
+using var uint8 = new Uint8Array(data);
+
+// Set a value at index 0
+uint8[0] = 10;
+
+// Get the value back
+var val = uint8[0];
+// val == 10
+
+// Copy back to C# array
+var readBack = uint8.ToArray();
+```
+
+## MediaDevices
+Access camera and microphone using the standard Web API.
+
+```cs
+using var navigator = JS.Get<Navigator>("navigator");
+using var mediaDevices = navigator.MediaDevices;
+
+// List devices
+var devices = await mediaDevices.EnumerateDevices();
+foreach (var d in devices)
+{
+    Console.WriteLine($"{d.Kind}: {d.Label}");
+}
+
+// Get user media (Webcam)
+try 
+{
+    using var stream = await mediaDevices.GetUserMedia(new { video = true, audio = true });
+    // use stream (e.g. assign to HTMLVideoElement or send via WebRTC)
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error getting stream: {ex.Message}");
+}
+```
 
 ## Atomics
 From [Atomics on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics):  

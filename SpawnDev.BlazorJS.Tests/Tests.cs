@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.Tests
     public class Tests : PageTest
     {
         // test port
-        static ushort _port = 32322;
+        static ushort _port = 32301;
         private Process? _webServerProcess;
         protected string BaseUrl = Environment.GetEnvironmentVariable("BASE_URL") ?? $"https://localhost:{_port}";
 
@@ -16,7 +16,8 @@ namespace SpawnDev.BlazorJS.Tests
         {
             return new BrowserNewContextOptions
             {
-                IgnoreHTTPSErrors = true
+                IgnoreHTTPSErrors = true,
+                Permissions = new[] { "camera", "microphone" }
             };
         }
 
@@ -85,7 +86,7 @@ namespace SpawnDev.BlazorJS.Tests
             {
                 // get the specific row by index
                 var currentRow = rows.Nth(i);
-                
+
                 // find the button within THIS specific row
                 var runButton = currentRow.GetByRole(AriaRole.Button, new() { Name = "Run" });
 

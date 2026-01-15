@@ -15,5 +15,7 @@ builder.Services.AddSingleton<BlazorJSUnitTest>();
 builder.Services.AddSingleton<CryptoService>();
 builder.Services.AddSingleton<FileSystemAPIService>();
 builder.Services.AddSingleton<TypedArrayTests>();
+builder.Services.AddSingleton<MediaTests>();
+builder.Services.AddSingleton<CacheTests>();
 
 await builder.Build().BlazorJSRunAsync();
