@@ -36,6 +36,15 @@ jobs:
       run: pwsh ./SpawnDev.BlazorJS.Tests/bin/Debug/net10.0/playwright.ps1 install
 
       # Run test script
+    - name: Set script exec bit
+      shell: bash
+      run: chmod +x ./SpawnDev.BlazorJS.Demo/_test.sh
+      
+    - name: Set script exec bit
+      shell: bash
+      run: chmod +x ./SpawnDev.BlazorJS.Tests/_publish.sh
+      
+      # Run test script
     - name: Start tests
       shell: bash
       run: ./SpawnDev.BlazorJS.Tests/_test.sh
