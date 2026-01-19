@@ -24,17 +24,8 @@ jobs:
     - name: Install dotnet wasm tools
       run: dotnet workload install wasm-tools
 
-    - name: Install dotnet-serve
-      run: dotnet tool install --global dotnet-serve
-
-    - name: Install dependencies
-      run: dotnet restore
-
-    - name: Publish application
-      run: dotnet publish ./SpawnDev.BlazorJS.Demo/SpawnDev.BlazorJS.Demo.csproj --configuration Release --no-restore
-
     - name: Build Test
-      run: dotnet build ./SpawnDev.BlazorJS.Tests/SpawnDev.BlazorJS.Tests.csproj --no-restore
+      run: dotnet build ./SpawnDev.BlazorJS.Tests/SpawnDev.BlazorJS.Tests.csproj
 
     - name: Install Playwright dependencies
       # Only needed on Linux
@@ -44,47 +35,19 @@ jobs:
     - name: Install Playwright
       run: pwsh ./SpawnDev.BlazorJS.Tests/bin/Debug/net10.0/playwright.ps1 install
 
-      # This step starts a local webserver and waits until it is available.
-    - name: Start application
+      # Run test script
+    - name: Set script exec bit
       shell: bash
-      run: |
-        echo "Create file as workaround for https://github.com/natemcmaster/dotnet-serve/issues/149" >> index.html
-        dotnet serve --directory ./SpawnDev.BlazorJS.Demo/bin/Release/net10.0/publish/wwwroot --fallback-file index.html --port 5100 &
-        BASE_URL=http://localhost:5100/
-        echo "BASE_URL=$BASE_URL" >> $GITHUB_ENV
-
-        timeout=30  # Timeout in seconds
-        start_time=$(date +%s)  # Get current timestamp in seconds
-
-        while true; do
-            current_time=$(date +%s)
-            elapsed_time=$((current_time - start_time))
-
-            if (( elapsed_time >= timeout )); then
-                echo "Timeout reached. Server not available after $elapsed_time seconds."
-                exit 1  # Exit with non-zero status indicating failure
-            fi
-
-            # Check if server is reachable with curl
-            if curl -f $BASE_URL &> /dev/null; then
-                echo "Server is now available at $BASE_URL after $elapsed_time seconds."
-                break
-            else
-                echo "Waiting for server to become available at $BASE_URL... Elapsed time: $elapsed_time seconds"
-                sleep 1  # Wait for 1 second before checking again
-            fi
-        done
-
-    - name: Playwright test Webkit
-      # Web assembly is not fully supported on Windows and Webkit (https://github.com/microsoft/playwright/issues/2876)
-      if: ${{ runner.os != 'Windows' }}
-      run: dotnet test ./SpawnDev.BlazorJS.Tests/SpawnDev.BlazorJS.Tests.csproj --no-restore -- Playwright.BrowserName=webkit
-        
-    - name: Playwright test Firefox
-      run: dotnet test ./SpawnDev.BlazorJS.Tests/SpawnDev.BlazorJS.Tests.csproj --no-restore -- Playwright.BrowserName=firefox
- 
-    - name: Playwright test Chromium
-      run: dotnet test ./SpawnDev.BlazorJS.Tests/SpawnDev.BlazorJS.Tests.csproj --no-restore -- Playwright.BrowserName=chromium
+      run: chmod +x ./SpawnDev.BlazorJS.Demo/_publish.sh
+      
+    - name: Set script exec bit
+      shell: bash
+      run: chmod +x ./SpawnDev.BlazorJS.Tests/_test.sh
+      
+      # Run test script
+    - name: Start tests
+      shell: bash
+      run: ./SpawnDev.BlazorJS.Tests/_test.sh
 
     - name: Upload Playwright logs
       if: failure()
