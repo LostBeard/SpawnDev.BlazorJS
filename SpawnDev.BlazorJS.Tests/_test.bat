@@ -1,6 +1,8 @@
 
 SET "OriginalDir=%CD%"
 
+cd "%~dp0"
+
 echo Building...
 cd ../SpawnDev.BlazorJS.Demo
 call _publish.bat || goto :ERROR

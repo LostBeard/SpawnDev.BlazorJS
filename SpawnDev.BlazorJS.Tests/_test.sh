@@ -3,6 +3,9 @@ set -e
 
 OriginalDir=$(pwd)
 
+# Switch to the script's directory
+cd "$(dirname "$0")"
+
 echo "Building..."
 cd ../SpawnDev.BlazorJS.Demo
 if [ -f "./_publish.sh" ]; then
