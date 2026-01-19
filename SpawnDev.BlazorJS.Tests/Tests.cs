@@ -1,5 +1,6 @@
 ﻿using Microsoft.Playwright;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace SpawnDev.BlazorJS.Tests
 {
@@ -8,8 +9,9 @@ namespace SpawnDev.BlazorJS.Tests
     public class Tests : PageTest
     {
         // test port
+        string dotnetVersion = "";
         static ushort _port = 32301;
-        private Process? _webServerProcess;
+        StaticFileServer? staticFileServer;
         protected string BaseUrl = Environment.GetEnvironmentVariable("BASE_URL") ?? $"https://localhost:{_port}";
 
         public override BrowserNewContextOptions ContextOptions()
@@ -25,6 +27,9 @@ namespace SpawnDev.BlazorJS.Tests
         [OneTimeSetUp]
         public async Task StartApp()
         {
+            // The GitHub action in this project that runs tests sets the enviroment BASE_URL value with the url of the server it has already started
+            // if the environment variable is not found
+            // this method will handle the steps the GitHub action normally handles: build publish version and host for testing
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BASE_URL")))
             {
                 return;
@@ -32,24 +37,42 @@ namespace SpawnDev.BlazorJS.Tests
             // start hosting the Blazor WASM app using dotnet
             // path to the Blazor WASM project file
             var projectPath = Path.GetFullPath(@"../../../../SpawnDev.BlazorJS.Demo/SpawnDev.BlazorJS.Demo.csproj");
-            _webServerProcess = new Process
+
+            // get the Blazor WASM project's dotnet version from its csproj file
+            dotnetVersion = GetDotnetVersion(projectPath);
+
+            Console.WriteLine($"projectPath: {projectPath}");
+            Console.WriteLine($"dotnetVersion: {dotnetVersion}");
+
+            // build a publish release version of the app
+            var publishProcess = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "dotnet",
-#if DEBUG
-                    Arguments = $"run --project \"{projectPath}\" --urls \"{BaseUrl}\"",
-#else
-                    Arguments = $"run --configuration Release --no-build --project \"{projectPath}\" --urls \"{BaseUrl}\"",
-#endif
+                    Arguments = $"publish --configuration Release \"{projectPath}\"",
                     UseShellExecute = false,
                     CreateNoWindow = true
                 }
             };
-            _webServerProcess.Start();
-            // wait a few seconds for the Blazor app to warm up
+            publishProcess.Start();
+            publishProcess.WaitForExit();
+            // verify success
+            if (publishProcess.ExitCode != 0)
+            {
+                throw new Exception("Failed to publish Blazor WASM app");
+            }
+
+            // start hosting the published Blazor WASM app using dotnet
+            var publishPath = Path.GetFullPath(@$"../../../../SpawnDev.BlazorJS.Demo/bin/Release/{dotnetVersion}/publish/wwwroot");
+
+            // start http server for testing using StaticFileServer
+            staticFileServer = new StaticFileServer(publishPath, BaseUrl);
+            staticFileServer.Start();
+
+            // wait for the server to start
             // use HttpClient to test for the server readiness
-            using var httpClient = new HttpClient { BaseAddress = new Uri(BaseUrl) };
+            using var httpClient = new HttpClient() { BaseAddress = new Uri(BaseUrl) };
             var sw = Stopwatch.StartNew();
             while (sw.Elapsed < TimeSpan.FromSeconds(30))
             {
@@ -61,19 +84,25 @@ namespace SpawnDev.BlazorJS.Tests
                         break;
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+
+                }
                 await Task.Delay(1000);
             }
+            var nmt = sw.Elapsed.TotalSeconds;
         }
         /// <summary>
         /// Shutdown Blazor WASM host process
         /// </summary>
         [OneTimeTearDown]
-        public void StopApp()
+        public async Task StopApp()
         {
             // shutdown the Blazor WASM host
-            _webServerProcess?.Kill();
-            _webServerProcess?.Dispose();
+            if (staticFileServer != null)
+            {
+                await staticFileServer.Stop();
+            }
         }
         /// <summary>
         /// Runs all tests in Home.razor > UnitTestsView component one at a time
@@ -130,6 +159,22 @@ namespace SpawnDev.BlazorJS.Tests
                     throw new Exception($"Failed - {typeName}.{methodName} {ex.ToString()}");
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the dotnet version from the csproj file
+        /// </summary>
+        /// <param name="projectPath">Path to the csproj file</param>
+        /// <returns>The dotnet version</returns>
+        private string GetDotnetVersion(string projectPath)
+        {
+            var xml = XDocument.Load(projectPath);
+            var targetFramework = xml.Descendants("TargetFramework").FirstOrDefault();
+            if (targetFramework == null)
+            {
+                throw new Exception("Could not find TargetFramework in csproj file");
+            }
+            return targetFramework.Value;
         }
     }
 }
