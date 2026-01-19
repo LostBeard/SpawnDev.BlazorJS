@@ -34,37 +34,38 @@ namespace SpawnDev.BlazorJS.Tests
             {
                 return;
             }
+            var projectDirectory = Path.GetFullPath(@"../../../../SpawnDev.BlazorJS.Demo");
             // start hosting the Blazor WASM app using dotnet
             // path to the Blazor WASM project file
-            var projectPath = Path.GetFullPath(@"../../../../SpawnDev.BlazorJS.Demo/SpawnDev.BlazorJS.Demo.csproj");
+            var projectPath = Path.Combine(projectDirectory, "SpawnDev.BlazorJS.Demo.csproj");
 
             // get the Blazor WASM project's dotnet version from its csproj file
             dotnetVersion = GetDotnetVersion(projectPath);
 
+            // get wwwroot path
+            var publishPath = Path.GetFullPath(Path.Combine(projectDirectory, $"bin/Release/{dotnetVersion}/publish/wwwroot"));
+
             Console.WriteLine($"projectPath: {projectPath}");
             Console.WriteLine($"dotnetVersion: {dotnetVersion}");
 
-            // build a publish release version of the app
-            var publishProcess = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "dotnet",
-                    Arguments = $"publish --configuration Release \"{projectPath}\"",
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                }
-            };
-            publishProcess.Start();
-            publishProcess.WaitForExit();
-            // verify success
-            if (publishProcess.ExitCode != 0)
-            {
-                throw new Exception("Failed to publish Blazor WASM app");
-            }
-
-            // start hosting the published Blazor WASM app using dotnet
-            var publishPath = Path.GetFullPath(@$"../../../../SpawnDev.BlazorJS.Demo/bin/Release/{dotnetVersion}/publish/wwwroot");
+            //// build a publish release version of the app
+            //var publishProcess = new Process
+            //{
+            //    StartInfo = new ProcessStartInfo
+            //    {
+            //        FileName = "dotnet",
+            //        Arguments = $"publish --configuration Release \"{projectPath}\"",
+            //        UseShellExecute = false,
+            //        CreateNoWindow = true
+            //    }
+            //};
+            //publishProcess.Start();
+            //publishProcess.WaitForExit();
+            //// verify success
+            //if (publishProcess.ExitCode != 0)
+            //{
+            //    throw new Exception("Failed to publish Blazor WASM app");
+            //}
 
             // start http server for testing using StaticFileServer
             staticFileServer = new StaticFileServer(publishPath, BaseUrl);

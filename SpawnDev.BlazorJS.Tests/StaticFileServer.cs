@@ -15,9 +15,13 @@ namespace SpawnDev.BlazorJS.Tests
         string devcertPath;
         public StaticFileServer(string wwwroot, string url, string requestPath = "")
         {
-            if (string.IsNullOrEmpty(wwwroot) || !Directory.Exists(wwwroot))
+            if (string.IsNullOrEmpty(wwwroot))
             {
                 throw new ArgumentNullException(nameof(wwwroot));
+            }
+            if (!Directory.Exists(wwwroot))
+            {
+                throw new DirectoryNotFoundException(wwwroot);
             }
             WWWRoot = Path.GetFullPath(wwwroot);
             RequestPath = requestPath;
