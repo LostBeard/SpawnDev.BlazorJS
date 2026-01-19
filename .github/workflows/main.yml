@@ -25,15 +25,15 @@ jobs:
       run: dotnet workload install wasm-tools
 
     - name: Build Test
-      run: dotnet build ./SpawnDev.BlazorJS.Tests/SpawnDev.BlazorJS.Tests.csproj
+      run: dotnet build ./PlaywrightTestRunner/PlaywrightTestRunner.csproj
 
     - name: Install Playwright dependencies
       # Only needed on Linux
       if: ${{ runner.os == 'Linux' }}
-      run: pwsh ./SpawnDev.BlazorJS.Tests/bin/Debug/net10.0/playwright.ps1 install-deps
+      run: pwsh ./PlaywrightTestRunner/bin/Debug/net10.0/playwright.ps1 install-deps
 
     - name: Install Playwright
-      run: pwsh ./SpawnDev.BlazorJS.Tests/bin/Debug/net10.0/playwright.ps1 install
+      run: pwsh ./PlaywrightTestRunner/bin/Debug/net10.0/playwright.ps1 install
 
       # Run test script
     - name: Set script exec bit
@@ -42,12 +42,12 @@ jobs:
       
     - name: Set script exec bit
       shell: bash
-      run: chmod +x ./SpawnDev.BlazorJS.Tests/_test.sh
+      run: chmod +x ./PlaywrightTestRunner/_test.sh
       
       # Run test script
     - name: Start tests
       shell: bash
-      run: ./SpawnDev.BlazorJS.Tests/_test.sh
+      run: ./PlaywrightTestRunner/_test.sh
 
     - name: Upload Playwright logs
       if: failure()
@@ -56,4 +56,4 @@ jobs:
         name: playwright
         retention-days: 2
         path: |
-          ./SpawnDev.BlazorJS.Tests/bin/Debug/net10.0/playwright-traces/**/*.*
+          ./PlaywrightTestRunner/bin/Debug/net10.0/playwright-traces/**/*.*
