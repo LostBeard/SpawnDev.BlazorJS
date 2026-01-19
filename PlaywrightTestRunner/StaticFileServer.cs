@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using System.Net;
 
-namespace SpawnDev.BlazorJS.Tests
+namespace PlaywrightTestRunner
 {
     internal class StaticFileServer
     {

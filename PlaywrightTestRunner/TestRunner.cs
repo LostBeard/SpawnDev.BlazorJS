@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.Xml.Linq;
 
-namespace SpawnDev.BlazorJS.Tests
+namespace PlaywrightTestRunner
 {
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]
-    public class Tests : PageTest
+    public class TestRunner : PageTest
     {
         // test port
         string dotnetVersion = "";

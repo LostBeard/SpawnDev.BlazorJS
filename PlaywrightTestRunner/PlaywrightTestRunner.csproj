@@ -9,13 +9,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="assets\testcert.pfx" />
+		<None Remove="assets\testcert.pfx" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="assets\testcert.pfx">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
+		<Content Include="assets\testcert.pfx">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>

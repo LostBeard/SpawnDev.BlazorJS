@@ -1,4 +1,4 @@
-﻿namespace SpawnDev.BlazorJS.Tests
+﻿namespace PlaywrightTestRunner
 {
     [SetUpFixture]
     public class GlobalSetup
