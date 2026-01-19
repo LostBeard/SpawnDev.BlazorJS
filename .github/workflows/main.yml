@@ -11,7 +11,7 @@ jobs:
       max-parallel: 1
       matrix:
         # options (can be multiple) [ubuntu-latest, windows-latest, macos-latest]
-        os: [windows-latest]
+        os: [ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v4
