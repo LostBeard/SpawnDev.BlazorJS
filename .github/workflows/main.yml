@@ -38,7 +38,7 @@ jobs:
       # Run test script
     - name: Start tests
       shell: bash
-      run: _test.sh
+      run: ./SpawnDev.BlazorJS.Tests/_test.sh
 
     - name: Upload Playwright logs
       if: failure()
