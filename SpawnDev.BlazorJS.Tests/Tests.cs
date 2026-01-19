@@ -20,17 +20,18 @@ namespace SpawnDev.BlazorJS.Tests
                 Permissions = new[] { "camera", "microphone" }
             };
         }
-
-
+        /// <summary>
+        /// Starts serving the Blazor WebAssembly app using dotnet and waits for it to be ready for a max amount of time
+        /// </summary>
         [OneTimeSetUp]
-        public void StartApp()
+        public async Task StartApp()
         {
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BASE_URL")))
             {
                 return;
             }
             // start hosting the Blazor WASM app using dotnet
-            // path to your Blazor Host/Server project file
+            // path to the Blazor WASM project file
             var projectPath = Path.GetFullPath(@"../../../../SpawnDev.BlazorJS.Demo/SpawnDev.BlazorJS.Demo.csproj");
             _webServerProcess = new Process
             {
@@ -48,9 +49,26 @@ namespace SpawnDev.BlazorJS.Tests
             };
             _webServerProcess.Start();
             // wait a few seconds for the Blazor app to warm up
-            Thread.Sleep(5000);
+            // use HttpClient to test for the server readiness
+            using var httpClient = new HttpClient { BaseAddress = new Uri(BaseUrl) };
+            var sw = Stopwatch.StartNew();
+            while (sw.Elapsed < TimeSpan.FromSeconds(30))
+            {
+                try
+                {
+                    using var response = await httpClient.GetAsync(BaseUrl).WaitAsync(TimeSpan.FromSeconds(2));
+                    if (response?.IsSuccessStatusCode == true)
+                    {
+                        break;
+                    }
+                }
+                catch { }
+                await Task.Delay(1000);
+            }
         }
-
+        /// <summary>
+        /// Shutdown Blazor WASM host process
+        /// </summary>
         [OneTimeTearDown]
         public void StopApp()
         {
