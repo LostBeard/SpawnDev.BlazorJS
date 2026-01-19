@@ -3,8 +3,10 @@ set -e
 
 OriginalDir=$(pwd)
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 # Switch to the script's directory
-cd "$(dirname "$0")"
+cd "$SCRIPT_DIR"
 
 echo "Building..."
 cd ../SpawnDev.BlazorJS.Demo
@@ -16,7 +18,7 @@ else
 fi
 
 # Switch to the script's directory
-cd "$(dirname "$0")"
+cd "$SCRIPT_DIR"
 
 echo "Preparing tests"
 dotnet restore
