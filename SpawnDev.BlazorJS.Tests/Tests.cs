@@ -34,7 +34,10 @@ namespace SpawnDev.BlazorJS.Tests
             {
                 return;
             }
+
+            // get the project being tested directory
             var projectDirectory = Path.GetFullPath(@"../../../../SpawnDev.BlazorJS.Demo");
+
             // start hosting the Blazor WASM app using dotnet
             // path to the Blazor WASM project file
             var projectPath = Path.Combine(projectDirectory, "SpawnDev.BlazorJS.Demo.csproj");
@@ -45,30 +48,10 @@ namespace SpawnDev.BlazorJS.Tests
             // get wwwroot path
             var publishPath = Path.GetFullPath(Path.Combine(projectDirectory, $"bin/Release/{dotnetVersion}/publish/wwwroot"));
 
-            Console.WriteLine($"projectPath: {projectPath}");
-            Console.WriteLine($"dotnetVersion: {dotnetVersion}");
-
-            //// build a publish release version of the app
-            //var publishProcess = new Process
-            //{
-            //    StartInfo = new ProcessStartInfo
-            //    {
-            //        FileName = "dotnet",
-            //        Arguments = $"publish --configuration Release \"{projectPath}\"",
-            //        UseShellExecute = false,
-            //        CreateNoWindow = true
-            //    }
-            //};
-            //publishProcess.Start();
-            //publishProcess.WaitForExit();
-            //// verify success
-            //if (publishProcess.ExitCode != 0)
-            //{
-            //    throw new Exception("Failed to publish Blazor WASM app");
-            //}
-
-            // start http server for testing using StaticFileServer
+            // create https server for testing using StaticFileServer
             staticFileServer = new StaticFileServer(publishPath, BaseUrl);
+
+            // start https server
             staticFileServer.Start();
 
             // wait for the server to start
@@ -85,13 +68,9 @@ namespace SpawnDev.BlazorJS.Tests
                         break;
                     }
                 }
-                catch (Exception ex)
-                {
-
-                }
+                catch { }
                 await Task.Delay(1000);
             }
-            var nmt = sw.Elapsed.TotalSeconds;
         }
         /// <summary>
         /// Shutdown Blazor WASM host process
