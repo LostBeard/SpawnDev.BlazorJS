@@ -17,7 +17,6 @@ namespace SpawnDev.BlazorJS.Tests
             return new BrowserNewContextOptions
             {
                 IgnoreHTTPSErrors = true,
-                Permissions = new[] { "camera", "microphone" }
             };
         }
         /// <summary>

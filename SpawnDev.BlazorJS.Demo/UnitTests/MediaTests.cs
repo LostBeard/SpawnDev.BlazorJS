@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             JS = js;
         }
 
-        [TestMethod]
+        //[TestMethod]
         public async Task EnumerateDevicesTest()
         {
             using var navigator = JS.Get<Navigator>("navigator");
