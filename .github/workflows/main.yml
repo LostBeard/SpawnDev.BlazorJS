@@ -42,7 +42,7 @@ jobs:
       
     - name: Set script exec bit
       shell: bash
-      run: chmod +x ./SpawnDev.BlazorJS.Tests/test.sh
+      run: chmod +x ./SpawnDev.BlazorJS.Tests/_test.sh
       
       # Run test script
     - name: Start tests
