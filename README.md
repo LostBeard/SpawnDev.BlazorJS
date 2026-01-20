@@ -944,6 +944,14 @@ IJSInProcessObjectReference does not dispose of interop resources with a finaliz
 
 IDisposable objects returned from a WebWorker or SharedWorker service are automatically disposed after the data has been sent to the calling thread.
 
+# Unit Testing
+This project uses Playwright .Net to enable unit testing in a real web browser with an actual Javascript environment.
+- SpawnDev.BlazorJS.Demo - Demo project that contains unit test methods that can be automated or ran manually.
+- PlaywrightTestRunner - The Playwright Unit Test project that runs the tests identified in the Demo project.
+- PlaywrightTestRunner/_test.sh - builds a publish version of the Demo project and runs the tests on Linux.
+- PlaywrightTestRunner/_test.bat - builds a publish version of the Demo project and runs the tests on Windows.
+- .github/workflows/playwright-test-runner.yml - builds a publish version of the Demo project and runs the tests on GitHub.
+
 # Support for You
 Issues can be reported [here](https://github.com/LostBeard/SpawnDev.BlazorJS/issues) on GitHub. Create a new [discussion](https://github.com/LostBeard/SpawnDev.BlazorJS/discussions) to show off your projects and post your ideas. We are always here to help.
 
