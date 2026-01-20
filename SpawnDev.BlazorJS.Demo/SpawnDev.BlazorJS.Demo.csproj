@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SpawnDev.Blazor.UnitTesting" Version="2.2.0" />
+		<PackageReference Include="SpawnDev.Blazor.UnitTesting" Version="2.4.0" />
 		<ProjectReference Include="..\SpawnDev.BlazorJS\SpawnDev.BlazorJS.csproj" />
 	</ItemGroup>
 

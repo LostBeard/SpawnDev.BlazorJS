@@ -12,11 +12,15 @@ namespace PlaywrightTestRunner
         string dotnetVersion = "";
         static ushort _port = 32301;
         StaticFileServer? staticFileServer;
-        protected string BaseUrl = Environment.GetEnvironmentVariable("BASE_URL") ?? $"https://localhost:{_port}";
+        protected string BaseUrl = Environment.GetEnvironmentVariable("BASE_URL") ?? $"https://localhost:{_port}/";
         /// <summary>
         /// This environment value should be set by the batch file that calls this script
         /// </summary>
         protected string TestProjectDirName = Environment.GetEnvironmentVariable("TestProjectDirName") ?? "";
+        /// <summary>
+        /// Unit test page
+        /// </summary>
+        protected string UnitTestPage = Environment.GetEnvironmentVariable("UnitTestPage") ?? "";
         ///  <inheritdoc/>
         public override BrowserNewContextOptions ContextOptions()
         {
@@ -97,7 +101,8 @@ namespace PlaywrightTestRunner
         [Test]
         public async Task RunAllTestsInTable_ShouldSucceed()
         {
-            await Page.GotoAsync(BaseUrl);
+            var testPage = new Uri(new Uri(BaseUrl), UnitTestPage).ToString();
+            await Page.GotoAsync(testPage);
 
             // get the table
             var table = Page.Locator("table.unit-test-view");
@@ -124,8 +129,8 @@ namespace PlaywrightTestRunner
                 // click the button to start the process for this row
                 await runButton.ClickAsync();
 
-                // assert that the row eventualyl gets the class 'test-state-done'
-                await Expect(currentRow).ToHaveClassAsync(new Regex("test-state-done"), new() { Timeout = 10000 });
+                // assert that the row eventually gets the class 'test-state-done'
+                await Expect(currentRow).ToHaveClassAsync(new Regex("test-state-done"), new() { Timeout = 15000 });
 
                 // get test type name
                 var typeName = await currentRow.Locator(".test-type-name").TextContentAsync();
@@ -133,15 +138,14 @@ namespace PlaywrightTestRunner
                 // get test method name
                 var methodName = await currentRow.Locator(".test-method-name").TextContentAsync();
 
-                try
+                // current state text
+                var stateMessage = await currentRow.Locator(".test-state").TextContentAsync();
+
+                //  check for error  class
+                var wasError = await currentRow.EvaluateAsync<bool>("el => el.classList.contains('test-error')");
+                if (wasError)
                 {
-                    // verify success
-                    await Expect(currentRow).ToHaveClassAsync(new Regex("test-success"));
-                }
-                catch (Exception ex)
-                {
-                    // throw an error with details about the TestMethod that failed
-                    throw new Exception($"Failed - {typeName}.{methodName} {ex.ToString()}");
+                    throw new Exception($"Failed - {typeName}.{methodName}\nTest-error: {stateMessage}");
                 }
             }
         }

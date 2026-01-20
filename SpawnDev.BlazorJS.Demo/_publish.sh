@@ -7,6 +7,6 @@ echo "Building publish version"
 ScriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # publish
-dotnet publish "$ScriptDir/SpawnDev.BlazorJS.Demo.csproj" --configuration Release
+dotnet publish "$ScriptDir/." --configuration Release
 
 echo "Success"

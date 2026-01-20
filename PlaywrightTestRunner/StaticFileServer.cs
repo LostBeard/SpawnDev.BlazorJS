@@ -57,6 +57,17 @@ namespace PlaywrightTestRunner
 
                 app = builder.Build();
 
+                // (optional) add headers that enables: window.crossOriginIsolated == true
+                app.Use(async (context, next) =>
+                {
+                    context.Response.Headers["Cross-Origin-Embedder-Policy"] = "credentialless";
+                    context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
+                    await next();
+                });
+
+                // enable 404 fallback to default root
+                app.UseStatusCodePagesWithReExecute(string.IsNullOrEmpty(RequestPath) ? "/" : RequestPath);
+
                 // enable index.html fallback
                 app.UseDefaultFiles(new DefaultFilesOptions
                 {

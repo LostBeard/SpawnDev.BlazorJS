@@ -1,6 +1,6 @@
 @echo off
 echo Building publish version
-dotnet publish "%~dp0/SpawnDev.BlazorJS.Demo.csproj" --configuration Release || goto :ERROR
+dotnet publish "%~dp0/." --configuration Release || goto :ERROR
 
 echo Success
 exit /b 0

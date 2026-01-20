@@ -3,6 +3,9 @@
 REM test project's directory name
 SET "TestProjectDirName=SpawnDev.BlazorJS.Demo"
 
+REM The page that serves the unit tests
+SET "UnitTestPage=tests"
+
 REM save the original directory
 SET "OriginalDir=%CD%"
 

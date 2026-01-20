@@ -8,13 +8,14 @@
 @using SpawnDev.BlazorJS.JSObjects.WebRTC
 
 @page "/"
+@page "/tests"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Unit Tests</PageTitle>
 
 <h3>Unit Tests for SpawnDev.BlazorJS</h3>
 <p>
-    This page runs tests to verify SpawnDev.BlazorJS is working as expected.<br/>
-    NUnit will run these tests during testing.
+    This page runs tests to verify SpawnDev.BlazorJS is working as expected.<br />
+    NUnit will run these tests during testing with Playwright.
 </p>
 
 <UnitTestsView TypeInstanceResolver="TestTypeResolver" TestAssemblies="Assemblies" TestTypes="Types"></UnitTestsView>

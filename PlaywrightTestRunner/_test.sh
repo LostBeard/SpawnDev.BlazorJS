@@ -3,8 +3,11 @@ set -e
 
 # test project's directory name
 TestProjectDirName="SpawnDev.BlazorJS.Demo"
-
 export TestProjectDirName="$TestProjectDirName"
+
+# The page that serves the unit tests
+UnitTestPage="tests"
+export UnitTestPage="$UnitTestPage"
 
 # save the original directory
 OriginalDir=$(pwd)
