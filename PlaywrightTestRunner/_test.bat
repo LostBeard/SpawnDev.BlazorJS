@@ -1,3 +1,4 @@
+@echo off
 
 REM test project's directory name
 SET "TestProjectDirName=SpawnDev.BlazorJS.Demo"
@@ -7,8 +8,6 @@ SET "OriginalDir=%CD%"
 
 REM switch to the script's directory
 cd "%~dp0"
-
-echo Building...
 
 REM switch to the test project's dirctory
 cd ../%TestProjectDirName%
