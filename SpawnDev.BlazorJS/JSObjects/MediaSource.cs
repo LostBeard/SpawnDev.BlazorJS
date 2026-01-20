@@ -32,7 +32,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns an enum representing the state of the current MediaSource, whether it is not currently attached to a media element (closed), attached and ready to receive SourceBuffer objects (open), or attached but the stream has been ended via MediaSource.endOfStream() (ended.)
         /// </summary>
-        public string ReadyState => JSRef!.Get<string>("readyStaet");
+        public string ReadyState => JSRef!.Get<string>("readyState");
         /// <summary>
         /// Returns a SourceBufferList object containing the list of SourceBuffer objects associated with this MediaSource.
         /// </summary>
