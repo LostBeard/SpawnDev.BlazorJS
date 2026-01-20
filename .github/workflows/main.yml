@@ -24,7 +24,7 @@ jobs:
     - name: Install dotnet wasm tools
       run: dotnet workload install wasm-tools
 
-    - name: Build Test
+    - name: Build PlaywrightTestRunner
       run: dotnet build ./PlaywrightTestRunner/PlaywrightTestRunner.csproj
 
     - name: Install Playwright dependencies
@@ -36,16 +36,16 @@ jobs:
       run: pwsh ./PlaywrightTestRunner/bin/Debug/net10.0/playwright.ps1 install
 
       # Run test script
-    - name: Set script exec bit
+    - name: Set execute flag on _publish script
       shell: bash
       run: chmod +x ./SpawnDev.BlazorJS.Demo/_publish.sh
       
-    - name: Set script exec bit
+    - name: Set execute flag on _test script
       shell: bash
       run: chmod +x ./PlaywrightTestRunner/_test.sh
       
-      # Run test script
-    - name: Start tests
+      # Run tests
+    - name: Run PlaywrightTestRunner
       shell: bash
       run: ./PlaywrightTestRunner/_test.sh
 
