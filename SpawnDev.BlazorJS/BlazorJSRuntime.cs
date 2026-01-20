@@ -182,6 +182,7 @@ namespace SpawnDev.BlazorJS
                         GlobalScope = GlobalScope.BrowserOther;
                         break;
                 }
+                _CrossOriginIsolated = new Lazy<bool?>(() => JS.Get<bool?>("crossOriginIsolated"));
             }
             else
             {
