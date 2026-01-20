@@ -50,10 +50,10 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
 
             // Create dir
             using var dirHandle = await root.GetDirectoryHandle(dirName, true);
-            
+
             // Create file in dir
             using var fileHandle = await dirHandle.GetFileHandle(fileName, true);
-            
+
             // Verify file exists in dir listing
             var keys = await dirHandle.KeysList();
             if (!keys.Contains(fileName)) throw new Exception("File not found in directory listing");

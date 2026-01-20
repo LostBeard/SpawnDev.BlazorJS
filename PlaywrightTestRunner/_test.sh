@@ -18,6 +18,9 @@ cd "$ScriptDir"
 # switch to the test project's dirctory
 cd ../$TestProjectDirName
 
+# verify execute flag is set 
+chmod +x _publish.sh
+
 # run the test project's _publish script to get a published version for testing
 bash ./_publish.sh
 

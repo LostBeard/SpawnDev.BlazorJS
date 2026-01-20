@@ -1,4 +1,3 @@
-using Microsoft.JSInterop;
 using SpawnDev.Blazor.UnitTesting;
 using SpawnDev.BlazorJS.JSObjects;
 
@@ -21,7 +20,7 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             if (typedArray.Length != testData.Length) throw new Exception("Length mismatch");
             var readBack = typedArray.ToArray();
             if (!readBack.SequenceEqual(testData)) throw new Exception("Data mismatch");
-            
+
             typedArray[0] = 10;
             if (typedArray[0] != 10) throw new Exception("Indexer set/get failed");
         }
@@ -50,7 +49,7 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
 
             typedArray[0] = 10;
             if (typedArray[0] != 10) throw new Exception("Indexer set/get failed");
-            
+
             // Test clamping
             JS.Set("_clamped", typedArray);
             JS.CallVoid("eval", "_clamped[1] = 300"); // Should clamp to 255
@@ -141,7 +140,7 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             if (typedArray.Length != testData.Length) throw new Exception("Length mismatch");
             var readBack = typedArray.ToArray();
             if (!readBack.SequenceEqual(testData)) throw new Exception("Data mismatch");
-            
+
             typedArray[0] = 10;
             if (typedArray[0] != 10) throw new Exception("Indexer set/get failed");
         }

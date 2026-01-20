@@ -1,4 +1,3 @@
-using SpawnDev.Blazor.UnitTesting;
 using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS.Demo.UnitTests
@@ -47,10 +46,10 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             {
                 throw new Exception("navigator.mediaDevices not supported");
             }
-            
+
             // This relies on the fake webcam args we added to Playwright/Browser
             using var stream = await mediaDevices.GetUserMedia(new { video = true });
-            
+
             if (stream == null)
             {
                 throw new Exception("getUserMedia returned null");
@@ -68,7 +67,7 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             }
 
             // Cleanup
-            foreach(var track in tracks)
+            foreach (var track in tracks)
             {
                 track.Stop();
                 track.Dispose();

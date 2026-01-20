@@ -18,10 +18,10 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             if (caches == null) return; // Not supported or invalid context
 
             var cacheName = "test-cache-" + Guid.NewGuid();
-            
+
             // Open (create) cache
             using var cache = await caches.Open(cacheName);
-            
+
             // Add request
             var requestUrl = "https://jsonplaceholder.typicode.com/todos/1";
             await cache.Add(requestUrl);
@@ -29,7 +29,7 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             // Match request
             using var response = await cache.Match(requestUrl);
             if (response == null) throw new Exception("Cache match failed");
-            
+
             var text = await response.Text();
             if (string.IsNullOrEmpty(text)) throw new Exception("Response body empty");
 

@@ -17,11 +17,12 @@ namespace PlaywrightTestRunner
         /// This environment value should be set by the batch file that calls this script
         /// </summary>
         protected string TestProjectDirName = Environment.GetEnvironmentVariable("TestProjectDirName") ?? "";
-
+        ///  <inheritdoc/>
         public override BrowserNewContextOptions ContextOptions()
         {
             return new BrowserNewContextOptions
             {
+                // required to use the included self signed certificate
                 IgnoreHTTPSErrors = true,
             };
         }
@@ -31,14 +32,14 @@ namespace PlaywrightTestRunner
         [OneTimeSetUp]
         public async Task StartApp()
         {
-            // get the project being tested directory
+            // get the directory that contains the project being tested
             var projectDirectory = Path.GetFullPath($@"../../../../{TestProjectDirName}");
             if (!Directory.Exists(projectDirectory))
             {
                 throw new DirectoryNotFoundException(projectDirectory);
             }
 
-            // find the first csproj in the project directory
+            // find the first *.csproj in the project's directory
             var projectPath = Directory.GetFiles(projectDirectory, "*.csproj").FirstOrDefault();
             if (projectPath == null)
             {
@@ -52,6 +53,7 @@ namespace PlaywrightTestRunner
             var publishPath = Path.GetFullPath(Path.Combine(projectDirectory, $"bin/Release/{dotnetVersion}/publish/wwwroot"));
 
             // create https server for testing using StaticFileServer
+            // uses the included self signed certificate for unit testing: assets/testcert.pfx
             staticFileServer = new StaticFileServer(publishPath, BaseUrl);
 
             // start https server
