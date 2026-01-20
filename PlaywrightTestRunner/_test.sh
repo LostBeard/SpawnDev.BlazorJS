@@ -4,6 +4,8 @@ set -e
 # test project's directory name
 TestProjectDirName="SpawnDev.BlazorJS.Demo"
 
+export TestProjectDirName="$TestProjectDirName"
+
 # save the original directory
 OriginalDir=$(pwd)
 

@@ -13,6 +13,10 @@ namespace PlaywrightTestRunner
         static ushort _port = 32301;
         StaticFileServer? staticFileServer;
         protected string BaseUrl = Environment.GetEnvironmentVariable("BASE_URL") ?? $"https://localhost:{_port}";
+        /// <summary>
+        /// This environment value should be set by the batch file that calls this script
+        /// </summary>
+        protected string TestProjectDirName = Environment.GetEnvironmentVariable("TestProjectDirName") ?? "";
 
         public override BrowserNewContextOptions ContextOptions()
         {
@@ -27,20 +31,19 @@ namespace PlaywrightTestRunner
         [OneTimeSetUp]
         public async Task StartApp()
         {
-            // The GitHub action in this project that runs tests sets the enviroment BASE_URL value with the url of the server it has already started
-            // if the environment variable is not found
-            // this method will handle the steps the GitHub action normally handles: build publish version and host for testing
-            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BASE_URL")))
+            // get the project being tested directory
+            var projectDirectory = Path.GetFullPath($@"../../../../{TestProjectDirName}");
+            if (!Directory.Exists(projectDirectory))
             {
-                return;
+                throw new DirectoryNotFoundException(projectDirectory);
             }
 
-            // get the project being tested directory
-            var projectDirectory = Path.GetFullPath(@"../../../../SpawnDev.BlazorJS.Demo");
-
-            // start hosting the Blazor WASM app using dotnet
-            // path to the Blazor WASM project file
-            var projectPath = Path.Combine(projectDirectory, "SpawnDev.BlazorJS.Demo.csproj");
+            // find the first csproj in the project directory
+            var projectPath = Directory.GetFiles(projectDirectory, "*.csproj").FirstOrDefault();
+            if (projectPath == null)
+            {
+                throw new FileNotFoundException($".csproj not found in: {projectDirectory}");
+            }
 
             // get the Blazor WASM project's dotnet version from its csproj file
             dotnetVersion = GetDotnetVersion(projectPath);
