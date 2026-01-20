@@ -1,0 +1,53 @@
+name: PlaywrightTestRunner
+
+on: workflow_dispatch
+
+jobs:
+  test:
+    timeout-minutes: 15
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Prevent running in parallel
+      max-parallel: 1
+      matrix:
+        # options (can be multiple) [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x # Match your project version
+        
+    - name: Install dotnet wasm tools
+      run: dotnet workload install wasm-tools
+
+    - name: Build PlaywrightTestRunner
+      run: dotnet build ./PlaywrightTestRunner/PlaywrightTestRunner.csproj
+
+    - name: Install Playwright dependencies
+      # Only needed on Linux
+      if: ${{ runner.os == 'Linux' }}
+      run: pwsh ./PlaywrightTestRunner/bin/Debug/net10.0/playwright.ps1 install-deps
+
+    - name: Install Playwright
+      run: pwsh ./PlaywrightTestRunner/bin/Debug/net10.0/playwright.ps1 install
+      
+    - name: Set execute flag on _test script
+      shell: bash
+      run: chmod +x ./PlaywrightTestRunner/_test.sh
+      
+    - name: Run PlaywrightTestRunner
+      shell: bash
+      run: ./PlaywrightTestRunner/_test.sh
+
+    - name: Upload Playwright logs
+      if: failure()
+      uses: actions/upload-artifact@v4.3.2
+      with:
+        name: playwright
+        retention-days: 2
+        path: |
+          ./PlaywrightTestRunner/bin/Debug/net10.0/playwright-traces/**/*.*
