@@ -1,0 +1,419 @@
+@page "/presentation"
+@using SpawnDev.BlazorJS
+@using SpawnDev.BlazorJS.JSObjects
+
+<PageTitle>Presentation API Demo</PageTitle>
+
+<h3>Presentation API Demo</h3>
+<p>
+    The Presentation API lets a web page display content on a secondary screen
+    such as a projector, external monitor, or connected TV.
+    <a href="https://developer.mozilla.org/en-US/docs/Web/API/Presentation_API" target="_blank">MDN Documentation</a>
+</p>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <strong>API Support</strong>
+    </div>
+    <div class="card-body">
+        <p>
+            <strong>Presentation API Supported:</strong>
+            @if (apiSupported == null)
+            {
+                <span class="text-muted">Checking...</span>
+            }
+            else if (apiSupported == true)
+            {
+                <span class="text-success">✓ Yes</span>
+            }
+            else
+            {
+                <span class="text-danger">✗ No</span>
+            }
+        </p>
+    </div>
+</div>
+
+@if (apiSupported == true)
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>Presentation Display Availability</strong>
+        </div>
+        <div class="card-body">
+            <p>
+                <strong>Display Available:</strong>
+                @if (displayAvailable == null)
+                {
+                    <span class="text-muted">Not checked</span>
+                }
+                else if (displayAvailable == true)
+                {
+                    <span class="text-success">✓ Yes - External display detected</span>
+                }
+                else
+                {
+                    <span class="text-warning">✗ No external display available</span>
+                }
+            </p>
+            <button class="btn btn-primary me-2" @onclick="CheckAvailabilityAsync" disabled="@isCheckingAvailability">
+                @if (isCheckingAvailability)
+                {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                }
+                Check Availability
+            </button>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>Start Presentation</strong>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Presentation URL:</label>
+                <input type="text" class="form-control" @bind="presentationUrl" placeholder="Enter URL to present" />
+                <small class="text-muted">
+                    Enter a URL to display on the presentation screen. You can use any URL that allows embedding.
+                </small>
+            </div>
+            <button class="btn btn-success me-2" @onclick="StartPresentationAsync" disabled="@(isStartingPresentation || string.IsNullOrWhiteSpace(presentationUrl))">
+                @if (isStartingPresentation)
+                {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                }
+                Start Presentation
+            </button>
+            @if (connection != null)
+            {
+                <button class="btn btn-danger" @onclick="CloseConnection">
+                    Close Connection
+                </button>
+            }
+        </div>
+    </div>
+
+    @if (connection != null)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Connection Info</strong>
+            </div>
+            <div class="card-body">
+                <p><strong>Connection ID:</strong> @connectionId</p>
+                <p><strong>Connection State:</strong> <span class="badge @GetStateBadgeClass()">@connectionState</span></p>
+                <p><strong>URL:</strong> @connectionUrl</p>
+                
+                <div class="mt-3">
+                    <label class="form-label">Send Message to Presentation:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" @bind="messageToSend" placeholder="Enter message..." />
+                        <button class="btn btn-outline-primary" @onclick="SendMessage" disabled="@(connectionState != "connected")">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>Event Log</strong>
+        <button class="btn btn-sm btn-outline-secondary" @onclick="ClearLog">Clear</button>
+    </div>
+    <div class="card-body">
+        <div style="max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.85rem;">
+            @if (logMessages.Count == 0)
+            {
+                <span class="text-muted">No events logged yet.</span>
+            }
+            else
+            {
+                @foreach (var msg in logMessages)
+                {
+                    <div>@msg</div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject]
+    BlazorJSRuntime JS { get; set; } = default!;
+
+    private bool? apiSupported;
+    private bool? displayAvailable;
+    private bool isCheckingAvailability;
+    private bool isStartingPresentation;
+    
+    private string presentationUrl = "https://example.com";
+    private string messageToSend = "";
+    
+    private PresentationRequest? request;
+    private PresentationConnection? connection;
+    private PresentationAvailability? availability;
+    
+    private string? connectionId;
+    private string? connectionState;
+    private string? connectionUrl;
+    
+    private List<string> logMessages = new();
+
+    protected override void OnInitialized()
+    {
+        Log("Checking Presentation API support...");
+        
+        using var navigator = new Navigator();
+        try
+        {
+            using var presentation = navigator.Presentation;
+            apiSupported = presentation != null;
+        }
+        catch
+        {
+            apiSupported = false;
+        }
+        
+        if (apiSupported == true)
+        {
+            Log("Presentation API is supported!");
+        }
+        else
+        {
+            Log("Presentation API is NOT supported in this browser.");
+        }
+    }
+
+    private async Task CheckAvailabilityAsync()
+    {
+        if (string.IsNullOrWhiteSpace(presentationUrl))
+        {
+            Log("Please enter a presentation URL first.");
+            return;
+        }
+
+        isCheckingAvailability = true;
+        StateHasChanged();
+
+        try
+        {
+            Log($"Creating PresentationRequest for: {presentationUrl}");
+            request?.Dispose();
+            request = new PresentationRequest(presentationUrl);
+
+            Log("Checking for available presentation displays...");
+            availability?.Dispose();
+            availability = await request.GetAvailability();
+            
+            displayAvailable = availability.Value;
+            Log($"Display availability: {displayAvailable}");
+
+            // Subscribe to availability changes
+            availability.OnChange += OnAvailabilityChange;
+            Log("Subscribed to availability change events.");
+        }
+        catch (Exception ex)
+        {
+            Log($"Error checking availability: {ex.Message}");
+            displayAvailable = false;
+        }
+        finally
+        {
+            isCheckingAvailability = false;
+            StateHasChanged();
+        }
+    }
+
+    private void OnAvailabilityChange(Event e)
+    {
+        if (availability != null)
+        {
+            displayAvailable = availability.Value;
+            Log($"Availability changed: {displayAvailable}");
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task StartPresentationAsync()
+    {
+        if (string.IsNullOrWhiteSpace(presentationUrl))
+        {
+            Log("Please enter a presentation URL.");
+            return;
+        }
+
+        isStartingPresentation = true;
+        StateHasChanged();
+
+        try
+        {
+            Log($"Starting presentation for: {presentationUrl}");
+            
+            request?.Dispose();
+            request = new PresentationRequest(presentationUrl);
+
+            Log("Calling PresentationRequest.Start()...");
+            Log("Note: This requires a user gesture and may prompt for display selection.");
+            
+            connection = await request.Start();
+            
+            connectionId = connection.Id;
+            connectionState = connection.State;
+            connectionUrl = connection.Url;
+            
+            Log($"Presentation started! Connection ID: {connectionId}");
+            Log($"Connection state: {connectionState}");
+
+            // Subscribe to connection events
+            connection.OnConnect += OnConnect;
+            connection.OnClose += OnClose;
+            connection.OnTerminate += OnTerminate;
+            connection.OnMessage += OnMessage;
+            
+            Log("Subscribed to connection events.");
+        }
+        catch (Exception ex)
+        {
+            Log($"Error starting presentation: {ex.Message}");
+            Log("Note: The Presentation API requires user activation (click/tap) and may not work in all browsers.");
+        }
+        finally
+        {
+            isStartingPresentation = false;
+            StateHasChanged();
+        }
+    }
+
+    private void OnConnect(Event e)
+    {
+        if (connection != null)
+        {
+            connectionState = connection.State;
+            Log($"Connection event: connected");
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnClose(PresentationConnectionCloseEvent e)
+    {
+        if (connection != null)
+        {
+            connectionState = connection.State;
+            Log($"Connection closed. Reason: {e.Reason}");
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnTerminate(Event e)
+    {
+        connectionState = "terminated";
+        Log("Connection terminated.");
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnMessage(MessageEvent e)
+    {
+        var dataType = e.TypeOfData;
+        var data = dataType == "String" ? e.GetData<string>() : $"[{dataType}]";
+        Log($"Message received: {data ?? "(null)"}");
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void SendMessage()
+    {
+        if (connection == null || string.IsNullOrWhiteSpace(messageToSend))
+            return;
+
+        try
+        {
+            connection.Send(messageToSend);
+            Log($"Message sent: {messageToSend}");
+            messageToSend = "";
+        }
+        catch (Exception ex)
+        {
+            Log($"Error sending message: {ex.Message}");
+        }
+        
+        StateHasChanged();
+    }
+
+    private void CloseConnection()
+    {
+        if (connection != null)
+        {
+            Log("Closing connection...");
+            try
+            {
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Log($"Error closing: {ex.Message}");
+            }
+            
+            connection.Dispose();
+            connection = null;
+            connectionId = null;
+            connectionState = null;
+            connectionUrl = null;
+            
+            Log("Connection closed and disposed.");
+            StateHasChanged();
+        }
+    }
+
+    private string GetStateBadgeClass()
+    {
+        return connectionState switch
+        {
+            "connected" => "bg-success",
+            "connecting" => "bg-warning",
+            "closed" => "bg-secondary",
+            "terminated" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    private void Log(string message)
+    {
+        var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+        logMessages.Insert(0, $"[{timestamp}] {message}");
+        
+        // Keep only last 100 messages
+        if (logMessages.Count > 100)
+        {
+            logMessages.RemoveAt(logMessages.Count - 1);
+        }
+    }
+
+    private void ClearLog()
+    {
+        logMessages.Clear();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        if (availability != null)
+        {
+            availability.OnChange -= OnAvailabilityChange;
+            availability.Dispose();
+        }
+
+        if (connection != null)
+        {
+            connection.OnConnect -= OnConnect;
+            connection.OnClose -= OnClose;
+            connection.OnTerminate -= OnTerminate;
+            connection.OnMessage -= OnMessage;
+            connection.Dispose();
+        }
+
+        request?.Dispose();
+    }
+}
