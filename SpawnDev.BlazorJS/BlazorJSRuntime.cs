@@ -302,18 +302,18 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
         /// <returns>Returns a promise which fulfills to a module namespace object: an object containing all exports from moduleName.</returns>
-        public Task<ModuleNamespaceObject?> Import(string moduleName) => CallAsync<ModuleNamespaceObject?>("import", moduleName);
+        public Task<ModuleNamespaceObject> Import(string moduleName) => CallAsync<ModuleNamespaceObject>("import", moduleName);
         /// <summary>
         /// Import a module and assign it to the specified global variable name<br/>
         /// Ex.:<br/>
-        /// await JS.Import("acorn", "https://www.acornlib.com/acorn.js")<br/>
+        /// await JS.Import("name", "moduleName")<br/>
         /// Is roughly equivalent to:<br/>
-        /// import * as acorn from "https://www.acornlib.com/acorn.js"<br/>
+        /// import * as name from "moduleName"<br/>
         /// </summary>
-        /// <param name="name">Name of the module object that will be used as a kind of namespace when referring to the imports. Must be a valid JavaScript identifier.</param>
+        /// <param name="name">Global variable name to assign the import to. Must be a valid JavaScript identifier.</param>
         /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
         /// <returns></returns>
-        public async Task<ModuleNamespaceObject?> Import(string name, string moduleName)
+        public async Task<ModuleNamespaceObject> Import(string name, string moduleName)
         {
             ModuleNamespaceObject ret;
             if (JS.IsUndefined(name))
@@ -342,7 +342,7 @@ namespace SpawnDev.BlazorJS
         /// import * as acorn from "https://www.acornlib.com/acorn.js"<br/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="name">Name of the module object that will be used as a kind of namespace when referring to the imports. Must be a valid JavaScript identifier.</param>
+        /// <param name="name">Global variable name to assign the import to. Must be a valid JavaScript identifier.</param>
         /// <param name="moduleName">The module to import from. The evaluation of the specifier is host-specified, but always follows the same algorithm as static import declarations.</param>
         /// <returns></returns>
         public async Task<T> Import<T>(string name, string moduleName)
