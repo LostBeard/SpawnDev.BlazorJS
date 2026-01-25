@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Collections.Immutable;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -21,16 +22,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Local cache of export names
         /// </summary>
-        List<string>? _ExportNames = null;
+        string[]? _ExportNames = null;
         /// <summary>
         /// Gets the names of all available exports.
         /// </summary>
-        public string[] ExportNames => (_ExportNames ??= JSRef!.Keys()).ToArray();
+        public string[] ExportNames => (_ExportNames ??= JSRef!.Keys().ToArray());
         /// <summary>
         /// Returns a list of exported property names
         /// </summary>
         /// <returns></returns>
-        public List<string> GetExportNames() => _ExportNames ??= JSRef!.Keys();
+        public List<string> GetExportNames() => ExportNames.ToList();
         /// <summary>
         /// Returns the exported property as type T
         /// </summary>
