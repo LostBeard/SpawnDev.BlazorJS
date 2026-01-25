@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System.Collections.Immutable;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -57,7 +56,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="exportNames">The exports to export to the Javascript environment.</param>
         public ModuleNamespaceObject Export(params string[] exportNames)
         {
-            if (exportNames.Length == 0) exportNames = GetExportNames().ToArray();
+            if (exportNames.Length == 0) exportNames = ExportNames;
             foreach (var exportName in exportNames)
             {
                 if (exportName == "default") continue;
@@ -85,7 +84,7 @@ namespace SpawnDev.BlazorJS.JSObjects
             if (string.IsNullOrWhiteSpace(nameSpace)) throw new ArgumentNullException(nameof(nameSpace));
             if (JS.IsUndefined(nameSpace)) JS.Set(nameSpace, new { });
             using var ns = JS.Get<JSObject>(nameSpace);
-            if (exportNames.Length == 0) exportNames = GetExportNames().ToArray();
+            if (exportNames.Length == 0) exportNames = ExportNames;
             foreach (var exportName in exportNames)
             {
                 if (exportName == "default") continue;
@@ -185,7 +184,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="exportNames">The names of the exports to check. Cannot be null.</param>
         /// <returns>true if an export with the specified name exists; otherwise, false.</returns>
-        public bool ExportExists(params string[] exportNames) => exportNames.Except(GetExportNames()).Count() == 0;
+        public bool ExportExists(params string[] exportNames) => exportNames.Except(ExportNames).Count() == 0;
         /// <summary>
         /// Exports the default export JavaScript object under the specified name.
         /// </summary>
