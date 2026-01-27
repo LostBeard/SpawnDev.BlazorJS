@@ -5,7 +5,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The USB Implementors Forum assigns IDs to specific companies. Each company assigns IDs to its products.
     /// </summary>
-    public class SerialPortRequestFilter
+    public class SerialPortFilter
     {
         /// <summary>
         /// An unsigned short integer that identifies a USB device vendor.
@@ -20,4 +20,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("usbProductId")]
         public ushort? UsbProductId { get; set; }
     }
+    [Obsolete("SerialPortRequestFilter is deprecated, use SerialPortFilter instead.")]
+    public class SerialPortRequestFilter : SerialPortFilter { }
 }
