@@ -35,5 +35,5 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonPropertyName("triangle-strip")]
         TriangleStrip,
-    };
+    }
 }
