@@ -25,7 +25,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("dataBits")]
-        public int? DataBits { get; set; }
+        public byte? DataBits { get; set; }
         /// <summary>
         /// The flow control type, either "none" or "hardware". The default value is "none".
         /// </summary>
