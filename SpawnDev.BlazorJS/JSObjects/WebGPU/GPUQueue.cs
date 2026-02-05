@@ -4,6 +4,7 @@ namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The GPUQueue interface of the WebGPU API controls execution of encoded commands on the GPU.<br/>
+    /// https://developer.mozilla.org/en-US/docs/Web/API/GPUQueue<br/>
     /// https://www.w3.org/TR/webgpu/#gpuqueue
     /// </summary>
     public class GPUQueue : GPUObjectBase
@@ -18,6 +19,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="commandBuffers"></param>
         /// <exception cref="ArgumentException"></exception>
         public void Submit(GPUCommandBuffer[] commandBuffers) => JSRef!.CallVoid("submit", commandBuffers);
+
+        /// <summary>
+        /// Returns a Promise that resolves when all the work submitted to the GPU via this GPUQueue at the point the method is called has been processed.
+        /// </summary>
+        /// <returns></returns>
+        public Task OnSubmittedWorkDone() => JSRef!.CallVoidAsync("onSubmittedWorkDone");
 
         /// <summary>
         /// The writeBuffer() method of the GPUQueue interface writes a provided data source into a given GPUBuffer.
