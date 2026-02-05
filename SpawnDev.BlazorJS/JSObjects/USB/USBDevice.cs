@@ -134,6 +134,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Controls a transfer to the USB device.
         /// </summary>
         /// <param name="setup">The setup packet for the control transfer.</param>
+        /// <returns>A promise that resolves with the result of the transfer.</returns>
+        public Task<USBOutTransferResult> ControlTransferOut(USBControlTransferParameters setup) => JSRef!.CallAsync<USBOutTransferResult>("controlTransferOut", setup);
+
+        /// <summary>
+        /// Controls a transfer to the USB device.
+        /// </summary>
+        /// <param name="setup">The setup packet for the control transfer.</param>
         /// <param name="data">The data to transfer.</param>
         /// <returns>A promise that resolves with the result of the transfer.</returns>
         public Task<USBOutTransferResult> ControlTransferOut(USBControlTransferParameters setup, byte[] data) => JSRef!.CallAsync<USBOutTransferResult>("controlTransferOut", setup, data);
