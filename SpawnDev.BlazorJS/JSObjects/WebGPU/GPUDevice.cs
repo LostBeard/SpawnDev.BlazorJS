@@ -177,5 +177,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="descriptor">Description of the GPURenderBundleEncoder to create.</param>
         /// <returns></returns>
         public GPURenderBundleEncoder CreateRenderBundleEncoder(GPURenderBundleEncoderDescriptor descriptor) => JSRef!.Call<GPURenderBundleEncoder>("createRenderBundleEncoder", descriptor);
+
+        /// <summary>
+        /// The uncapturederror event of the GPUDevice interface is fired when an error is thrown that has not been observed by a GPU error scope, to provide a way to report unexpected errors.
+        /// </summary>
+        public ActionEvent<GPUUncapturedErrorEvent> OnUncapturedError { get => new ActionEvent<GPUUncapturedErrorEvent>("uncapturederror", AddEventListener, RemoveEventListener); set { } }
     }
 }

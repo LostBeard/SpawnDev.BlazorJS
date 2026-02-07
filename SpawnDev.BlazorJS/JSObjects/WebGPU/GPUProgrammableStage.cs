@@ -15,7 +15,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("module")]
         public GPUShaderModule Module { get; init; }
 
-
         /// <summary>
         /// The name of the function in the module that this stage will use to perform its work.The corresponding shader 
         /// function must have the @vertex attribute to be identified as this entry point. See Entry Point Declaration 
@@ -38,6 +37,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("constants")]
-        public Dictionary<object, double>? Constants { get; init; }
+        public Dictionary<string, object>? Constants { get; init; }
     }
 }
