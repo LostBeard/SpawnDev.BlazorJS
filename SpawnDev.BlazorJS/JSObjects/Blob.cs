@@ -15,6 +15,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public Blob(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
+        /// New Blob constructor
+        /// </summary>
+        public Blob() : base(JS.New(nameof(Blob))) { }
+        /// <summary>
         /// Returns a newly created Blob object which contains a concatenation of all of the data in the array passed into the constructor.
         /// </summary>
         /// <param name="buffers"></param>
