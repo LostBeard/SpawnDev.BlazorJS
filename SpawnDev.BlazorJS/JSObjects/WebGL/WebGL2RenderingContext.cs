@@ -1299,13 +1299,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public GLboolean GetQueryParameterAvailable(WebGLQuery query) => JSRef!.Call<GLboolean>("getQueryParameter", query, QUERY_RESULT_AVAILABLE);
+        public GLboolean GetQueryParameterAvailable(WebGLQuery query) => JSRef!.Call<GLboolean>("getQueryParameter", query, GL.QUERY_RESULT_AVAILABLE);
         /// <summary>
         /// Returns the query result.
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public GLuint GetQueryParameterResult(WebGLQuery query) => JSRef!.Call<GLuint>("getQueryParameter", query, QUERY_RESULT);
+        public GLuint GetQueryParameterResult(WebGLQuery query) => JSRef!.Call<GLuint>("getQueryParameter", query, GL.QUERY_RESULT);
         #endregion
 
         #region Sampler objects - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#sampler_objects

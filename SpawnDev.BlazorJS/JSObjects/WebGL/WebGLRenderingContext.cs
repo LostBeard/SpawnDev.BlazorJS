@@ -33,6 +33,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="texture">The texture unit to make active. The value is a gl.TEXTUREI where I is within the range from 0 to gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1.</param>
         public void ActiveTexture(int texture) => JSRef!.CallVoid("activeTexture", texture);
         /// <summary>
+        /// Selects the active texture unit (GLenum overload).
+        /// </summary>
+        public void ActiveTexture(uint texture) => JSRef!.CallVoid("activeTexture", texture);
+        /// <summary>
         /// Attaches a WebGLShader to a WebGLProgram.
         /// </summary>
         /// <param name="program">A WebGLProgram.</param>
@@ -62,6 +66,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         /// <param name="buffer">A WebGLBuffer to bind.</param>
         public void BindBuffer(int target, WebGLBuffer buffer) => JSRef!.CallVoid("bindBuffer", target, buffer);
+        /// <summary>
+        /// Binds a given WebGLBuffer to a target (GLenum overload).
+        /// </summary>
+        public void BindBuffer(uint target, WebGLBuffer buffer) => JSRef!.CallVoid("bindBuffer", target, buffer);
         /// <summary>
         /// The WebGLRenderingContext.bindFramebuffer() method of the WebGL API binds to the specified target the provided WebGLFramebuffer, or, if the framebuffer argument is null, the default WebGLFramebuffer, which is associated with the canvas rendering context.
         /// </summary>
@@ -96,6 +104,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         /// <param name="texture">A WebGLTexture object to bind.</param>
         public void BindTexture(int target, WebGLTexture texture) => JSRef!.CallVoid("bindTexture", target, texture);
+        /// <summary>
+        /// Binds a given WebGLTexture to a target (GLenum overload).
+        /// </summary>
+        public void BindTexture(uint target, WebGLTexture texture) => JSRef!.CallVoid("bindTexture", target, texture);
         /// <summary>
         /// The WebGLRenderingContext.blendColor() method of the WebGL API is used to set the source and destination blending factors.
         /// </summary>
@@ -701,6 +713,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>A new WebGLShader.</returns>
         public WebGLShader CreateShader(int type) => JSRef!.Call<WebGLShader>("createShader", type);
         /// <summary>
+        /// Creates a WebGLShader (GLenum overload).
+        /// </summary>
+        public WebGLShader CreateShader(uint type) => JSRef!.Call<WebGLShader>("createShader", type);
+        /// <summary>
         /// The WebGLRenderingContext.createTexture() method of the WebGL API creates and initializes a WebGLTexture object.
         /// </summary>
         /// <returns>A WebGLTexture object to which images can be bound to.</returns>
@@ -797,6 +813,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         public void Disable(int cap) => JSRef!.CallVoid("disable", cap);
         /// <summary>
+        /// Disables specific WebGL capabilities (GLenum overload).
+        /// </summary>
+        public void Disable(uint cap) => JSRef!.CallVoid("disable", cap);
+        /// <summary>
         /// The WebGLRenderingContext.disableVertexAttribArray() method of the WebGL API turns the generic vertex attribute array off at a given index position.
         /// </summary>
         /// <param name="index">A GLuint specifying the index of the vertex attribute to disable.</param>
@@ -817,6 +837,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="first">A GLint specifying the starting index in the array of vector points.</param>
         /// <param name="count">A GLsizei specifying the number of indices to be rendered.</param>
         public void DrawArrays(int mode, int first, int count) => JSRef!.CallVoid("drawArrays", mode, first, count);
+        /// <summary>
+        /// Renders primitives from array data (GLenum overload for mode).
+        /// </summary>
+        public void DrawArrays(uint mode, int first, int count) => JSRef!.CallVoid("drawArrays", mode, first, count);
         /// <summary>
         /// The WebGLRenderingContext.drawElements() method of the WebGL API renders primitives from array data.
         /// </summary>
@@ -859,6 +883,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// gl.RASTERIZER_DISCARD - Deactivates that primitives are discarded immediately before the rasterization stage, but after the optional transform feedback stage.gl.clear() commands are ignored.
         /// </param>
         public void Enable(int cap) => JSRef!.CallVoid("enable", cap);
+        /// <summary>
+        /// Enables specific WebGL capabilities (GLenum overload).
+        /// </summary>
+        public void Enable(uint cap) => JSRef!.CallVoid("enable", cap);
         /// <summary>
         /// The WebGLRenderingContext.disableVertexAttribArray() method of the WebGL API turns the generic vertex attribute array off at a given index position.
         /// </summary>
@@ -1115,6 +1143,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>Returns the requested program information (as specified with pname).</returns>
         public T GetProgramParameter<T>(WebGLProgram program, int pname) => JSRef!.Call<T>("getProgramParameter", program, pname);
         /// <summary>
+        /// Returns information about the given program (GLenum overload).
+        /// </summary>
+        public T GetProgramParameter<T>(WebGLProgram program, uint pname) => JSRef!.Call<T>("getProgramParameter", program, pname);
+        /// <summary>
         /// The WebGLRenderingContext.getRenderbufferParameter() method of the WebGL API returns information about the renderbuffer.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -1164,6 +1196,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         /// <returns>Returns the requested shader information (as specified with pname).</returns>
         public T GetShaderParameter<T>(WebGLShader shader, int pname) => JSRef!.Call<T>("getShaderParameter", shader, pname);
+        /// <summary>
+        /// Returns information about the given shader (GLenum overload).
+        /// </summary>
+        public T GetShaderParameter<T>(WebGLShader shader, uint pname) => JSRef!.Call<T>("getShaderParameter", shader, pname);
         /// <summary>
         /// The WebGLRenderingContext.getShaderPrecisionFormat() method of the WebGL API returns a new WebGLShaderPrecisionFormat object describing the range and precision for the specified shader numeric format.
         /// </summary>
@@ -1627,6 +1663,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="param"></param>
         public void TexParameteri(int target, int pname, int param) => JSRef!.CallVoid("texParameteri", target, pname, param);
         /// <summary>
+        /// Sets texture parameters (GLenum overload for target and pname).
+        /// </summary>
+        public void TexParameteri(uint target, uint pname, int param) => JSRef!.CallVoid("texParameteri", target, pname, param);
+        /// <summary>
+        /// Sets texture parameters (convenience overload accepting GLenum for all parameters).
+        /// While the WebGL spec defines param as GLint, GLenum constants are commonly passed.
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter"/>
+        /// </summary>
+        public void TexParameteri(uint target, uint pname, uint param) => JSRef!.CallVoid("texParameteri", target, pname, param);
+        /// <summary>
         /// The WebGLRenderingContext.texSubImage2D() method of the WebGL API specifies a sub-rectangle of the current texture.
         /// </summary>
         /// <param name="target"></param>
@@ -1924,6 +1970,55 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="width">A non-negative GLsizei specifying the width of the viewport. Default value: width of the canvas.</param>
         /// <param name="height">A non-negative GLsizei specifying the height of the viewport. Default value: height of the canvas.</param>
         public void Viewport(int x, int y, int width, int height) => JSRef!.CallVoid("viewport", x, y, width, height);
+        #region GLenum (uint) overloads for TexImage2D
+        /// <summary>
+        /// The WebGLRenderingContext.texImage2D() method of the WebGL API specifies a two-dimensional texture image (GLenum overload).
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D"/>
+        /// </summary>
+        public void TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, Float32Array pixels) => JSRef!.CallVoid("texImage2D", target, level, internalformat, width, height, border, format, type, pixels);
+        /// <summary>
+        /// The WebGLRenderingContext.texImage2D() method of the WebGL API specifies a two-dimensional texture image (GLenum overload).
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D"/>
+        /// </summary>
+        public void TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, byte[] pixels) => JSRef!.CallVoid("texImage2D", target, level, internalformat, width, height, border, format, type, pixels);
+        /// <summary>
+        /// The WebGLRenderingContext.texImage2D() method of the WebGL API specifies a two-dimensional texture image (GLenum overload).
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D"/>
+        /// </summary>
+        public void TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, Uint8Array pixels) => JSRef!.CallVoid("texImage2D", target, level, internalformat, width, height, border, format, type, pixels);
+        /// <summary>
+        /// Convenience overload accepting uint internalformat for passing sized format constants (e.g. GL.R32F).
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D"/>
+        /// </summary>
+        public void TexImage2D(uint target, int level, uint internalformat, int width, int height, int border, uint format, uint type, Float32Array pixels) => JSRef!.CallVoid("texImage2D", target, level, internalformat, width, height, border, format, type, pixels);
+        /// <summary>
+        /// Convenience overload accepting uint internalformat for passing sized format constants (e.g. GL.R32F).
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D"/>
+        /// </summary>
+        public void TexImage2D(uint target, int level, uint internalformat, int width, int height, int border, uint format, uint type, byte[] pixels) => JSRef!.CallVoid("texImage2D", target, level, internalformat, width, height, border, format, type, pixels);
+        /// <summary>
+        /// Convenience overload accepting uint internalformat for passing sized format constants (e.g. GL.R32F).
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D"/>
+        /// </summary>
+        public void TexImage2D(uint target, int level, uint internalformat, int width, int height, int border, uint format, uint type, Uint8Array pixels) => JSRef!.CallVoid("texImage2D", target, level, internalformat, width, height, border, format, type, pixels);
+        #endregion
+        #region Missing WebGL spec methods
+        /// <summary>
+        /// The WebGLRenderingContext.getParameter() method of the WebGL API returns a value for the passed parameter name.
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getParameter"/>
+        /// </summary>
+        /// <typeparam name="T">The expected return type.</typeparam>
+        /// <param name="pname">A GLenum specifying which parameter value to return.</param>
+        /// <returns>The parameter value.</returns>
+        public T GetParameter<T>(uint pname) => JSRef!.Call<T>("getParameter", pname);
+        /// <summary>
+        /// The WebGLRenderingContext.getExtension() method enables a WebGL extension.
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getExtension"/>
+        /// </summary>
+        /// <param name="name">A String for the name of the WebGL extension to enable.</param>
+        /// <returns>A WebGL extension object, or null if the extension is not supported.</returns>
+        public JSObject? GetExtension(string name) => JSRef!.Call<JSObject?>("getExtension", name);
+        #endregion
         // Helper functions (non-spec) 
         /// <summary>
         /// Helper functionto create a WebGLProgram from a vertex shader source and a fragment shader source.
@@ -1934,10 +2029,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         public WebGLProgram CreateProgram(string vertexShader, string fragmentShader)
         {
             //vertex shader
-            using var vsShader = CreateShader(VERTEX_SHADER);
+            using var vsShader = CreateShader(GL.VERTEX_SHADER);
             ShaderSource(vsShader, vertexShader);
             CompileShader(vsShader);
-            var vsShaderSucc = GetShaderParameter<bool>(vsShader, COMPILE_STATUS);
+            var vsShaderSucc = GetShaderParameter<bool>(vsShader, GL.COMPILE_STATUS);
             if (!vsShaderSucc)
             {
                 var compilationLog = GetShaderInfoLog(vsShader);
@@ -1945,10 +2040,10 @@ namespace SpawnDev.BlazorJS.JSObjects
                 throw new Exception($"Error compile vertex shader for WebGLProgram. {compilationLog}");
             }
             // fragment shader
-            using var psShader = CreateShader(FRAGMENT_SHADER);
+            using var psShader = CreateShader(GL.FRAGMENT_SHADER);
             ShaderSource(psShader, fragmentShader);
             CompileShader(psShader);
-            var psShaderSucc = GetShaderParameter<bool>(psShader, COMPILE_STATUS);
+            var psShaderSucc = GetShaderParameter<bool>(psShader, GL.COMPILE_STATUS);
             if (!psShaderSucc)
             {
                 var compilationLog = GetShaderInfoLog(psShader);
@@ -1961,12 +2056,10 @@ namespace SpawnDev.BlazorJS.JSObjects
             AttachShader(program, vsShader);
             AttachShader(program, psShader);
             LinkProgram(program);
-            var programSucc = GetProgramParameter<bool>(program, LINK_STATUS);
+            var programSucc = GetProgramParameter<bool>(program, GL.LINK_STATUS);
             DeleteShader(vsShader);
             DeleteShader(psShader);
             if (programSucc) return program;
-            //DeleteShader(vsShader);
-            //DeleteShader(psShader);
             DeleteProgram(program);
             program.Dispose();
             throw new Exception("Error creating shader program for WebGLProgram");
