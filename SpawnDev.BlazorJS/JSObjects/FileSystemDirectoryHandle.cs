@@ -59,12 +59,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             using var entries = Entries();
             var files = await entries.ToList();
-            for (var i = 0; i < files.Count; i++)
-            {
-                var kvp = files[i];
-                kvp.Item2 = kvp.Item2.ResolveType(true);
-            }
-            return files;
+            return files.Select(kvp => (kvp.Item1, kvp.Item2.ResolveType(true))).ToList();
         }
         /// <summary>
         /// Returns a new async iterator of a given object's own enumerable property [key, value] pairs.

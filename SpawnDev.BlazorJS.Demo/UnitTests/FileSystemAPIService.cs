@@ -10,6 +10,55 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
         {
             JS = js;
         }
+
+        [TestMethod]
+        public async Task FileSystemDirectoryHandleEntriesListTest()
+        {
+            // 1. Get OPFS root
+            var storage = JS.Get<StorageManager>("navigator.storage");
+            using var root = await storage.GetDirectory();
+            // 2. Create a test file and a test directory
+            using var testFile = await root.GetFileHandle("_test_entries_file.txt", true);
+            using var testDir = await root.GetDirectoryHandle("_test_entries_dir", true);
+            // 3. Use EntriesList() — this is the buggy path
+            var entries = await root.EntriesList();
+            Console.WriteLine($"EntriesList returned {entries.Count} entries");
+            foreach (var (name, handle) in entries)
+            {
+                Console.WriteLine($"  Entry: '{name}'");
+                Console.WriteLine($"  Kind: '{handle.Kind}'");
+                // Also test type resolution
+                Console.WriteLine($"    C# type: {handle.GetType().FullName}");
+                Console.WriteLine($"    is FileSystemFileHandle: {handle is FileSystemFileHandle}");
+                Console.WriteLine($"    is FileSystemDirectoryHandle: {handle is FileSystemDirectoryHandle}");
+                handle?.Dispose();
+            }
+            // 4. Contrast with KeysList() — this works fine
+            var keys = await root.KeysList();
+            Console.WriteLine($"\nKeysList returned {keys.Count} keys");
+            foreach (var key in keys)
+            {
+                Console.WriteLine($"  Key: '{key}'");
+                // These calls work correctly:
+                try
+                {
+                    using var fh = await root.GetFileHandle(key);
+                    Console.WriteLine($"    → file handle OK, Kind={fh.Kind}");
+                    continue;
+                }
+                catch { }
+                try
+                {
+                    using var dh = await root.GetDirectoryHandle(key);
+                    Console.WriteLine($"    → dir handle OK, Kind={dh.Kind}");
+                }
+                catch { }
+            }
+            // 5. Cleanup
+            await root.RemoveEntry("_test_entries_file.txt");
+            await root.RemoveEntry("_test_entries_dir");
+        }
+
         [TestMethod]
         public async Task FileReadWriteTest()
         {
