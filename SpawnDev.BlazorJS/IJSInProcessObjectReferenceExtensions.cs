@@ -9,11 +9,6 @@ namespace SpawnDev.BlazorJS
     public static class IJSInProcessObjectReferenceExtensions
     {
         /// <summary>
-        /// Returns the constructor.name of the property
-        /// </summary>
-        [Obsolete("Use ConstructorName instead. This method will be removed in a future release.")]
-        public static string? PropertyInstanceOf(this IJSInProcessObjectReference _ref, string key) => _ref.ConstructorName(key);
-        /// <summary>
         /// Returns the IJSInProcessObjectReference as an array of IJSInProcessObjectReference?
         /// </summary>
         public static T?[] AsArray<T>(this IJSInProcessObjectReference _ref) where T : JSObject => BlazorJSInterop.ObjectToJSObjectArray<T>(_ref)!;

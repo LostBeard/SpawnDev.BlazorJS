@@ -3,11 +3,6 @@
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
-    /// Deprecated. Left for backwards compatibility.
-    /// </summary>
-    [Obsolete("USBRequestDevicweFilter renamed, use USBDeviceFilter instead")]
-    public class USBRequestDevicweFilter : USBDeviceFilter { }
-    /// <summary>
     /// USB.requestDevice() filter dictionary to filter USB devices.<br/>
     /// 5. Device Enumeration 
     /// https://wicg.github.io/webusb/#enumeration

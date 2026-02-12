@@ -80,11 +80,6 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         public string InstanceId { get; private set; }
         /// <summary>
-        /// Time elapsed until BlazorJSRuntime is initialized.
-        /// </summary>
-        [Obsolete("Now the same as ReadyTime")]
-        public double StartUpTime => ReadyTime;
-        /// <summary>
         /// Time elapsed until all background services have been started. Before page load.
         /// </summary>
         public double ReadyTime { get; internal set; }

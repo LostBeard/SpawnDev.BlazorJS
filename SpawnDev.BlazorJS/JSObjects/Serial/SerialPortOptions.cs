@@ -14,6 +14,4 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("filters")]
         public IEnumerable<SerialPortFilter>? Filters { get; set; }
     }
-    [Obsolete("SerialPortRequestOptions is deprecated, use SerialPortOptions instead.")]
-    public class SerialPortRequestOptions : SerialPortOptions { }
 }

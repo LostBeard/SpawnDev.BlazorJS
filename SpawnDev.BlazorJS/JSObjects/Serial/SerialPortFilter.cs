@@ -20,6 +20,4 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonPropertyName("usbProductId")]
         public ushort? UsbProductId { get; set; }
     }
-    [Obsolete("SerialPortRequestFilter is deprecated, use SerialPortFilter instead.")]
-    public class SerialPortRequestFilter : SerialPortFilter { }
 }
