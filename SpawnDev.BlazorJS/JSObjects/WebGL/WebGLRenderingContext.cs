@@ -1383,6 +1383,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </param>
         public void ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, Uint8Array pixels) => JSRef!.CallVoid("readPixels", x, y, width, height, format, type, pixels);
         /// <summary>
+        /// The WebGLRenderingContext.readPixels() method of the WebGL API reads a block of pixels from a specified rectangle of the current color framebuffer into a Uint16Array.
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/readPixels"/>
+        /// </summary>
+        public void ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, Uint16Array pixels) => JSRef!.CallVoid("readPixels", x, y, width, height, format, type, pixels);
+        /// <summary>
+        /// The WebGLRenderingContext.readPixels() method of the WebGL API reads a block of pixels from a specified rectangle of the current color framebuffer into a Float32Array.
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/readPixels"/>
+        /// </summary>
+        public void ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, Float32Array pixels) => JSRef!.CallVoid("readPixels", x, y, width, height, format, type, pixels);
+        /// <summary>
+        /// The WebGLRenderingContext.readPixels() method of the WebGL API reads a block of pixels from a specified rectangle of the current color framebuffer into a TypedArray.
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/readPixels"/>
+        /// </summary>
+        public void ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, TypedArray pixels) => JSRef!.CallVoid("readPixels", x, y, width, height, format, type, pixels);
+        /// <summary>
         /// The WebGLRenderingContext.renderbufferStorage() method of the WebGL API creates and initializes a renderbuffer object's data store.
         /// </summary>
         /// <param name="target">
@@ -1554,6 +1569,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         public void TexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, Float32Array pixels) => JSRef!.CallVoid("texImage2D", target, level, internalformat, width, height, border, format, type, pixels);
         /// <summary>
         /// The WebGLRenderingContext.texImage2D() method of the WebGL API specifies a two-dimensional texture image.
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D"/>
+        /// </summary>
+        public void TexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, TypedArray pixels) => JSRef!.CallVoid("texImage2D", target, level, internalformat, width, height, border, format, type, pixels);
+        /// <summary>
+        /// The WebGLRenderingContext.texImage2D() method of the WebGL API specifies a two-dimensional texture image.
         /// </summary>
         /// <param name="target"></param>
         /// <param name="level"></param>
@@ -1619,6 +1639,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="pname"></param>
         /// <param name="param"></param>
         public void TexParameterf(GLenum target, GLenum pname, GLfloat param) => JSRef!.CallVoid("texParameterf", target, pname, param);
+        /// <summary>
+        /// The WebGLRenderingContext.texParameterf() method of the WebGL API sets texture parameters.
+        /// Overload accepting a GLenum value for the param parameter.
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texParameter"/>
+        /// </summary>
+        public void TexParameterf(GLenum target, GLenum pname, GLenum param) => JSRef!.CallVoid("texParameterf", target, pname, param);
         /// <summary>
         /// The WebGLRenderingContext.texParameter[fi]() methods of the WebGL API set texture parameters.
         /// </summary>
@@ -1699,6 +1725,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="type"></param>
         /// <param name="pixels"></param>
         public void TexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, Float32Array pixels) => JSRef!.CallVoid("texSubImage2D", target, level, xoffset, yoffset, width, height, format, type, pixels);
+        /// <summary>
+        /// The WebGLRenderingContext.texSubImage2D() method of the WebGL API specifies a sub-rectangle of the current texture.
+        /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texSubImage2D"/>
+        /// </summary>
+        public void TexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, TypedArray pixels) => JSRef!.CallVoid("texSubImage2D", target, level, xoffset, yoffset, width, height, format, type, pixels);
         /// <summary>
         /// The WebGLRenderingContext.texSubImage2D() method of the WebGL API specifies a sub-rectangle of the current texture.
         /// </summary>
