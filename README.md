@@ -8,9 +8,11 @@ Full Blazor WebAssembly and Javascript interop. Create Javascript objects, acces
 [Live Demo](https://blazorjs.spawndev.com/)  
 
 ### Supported .Net Versions
-- .Net 6, 7, 8, 9 and 10
+- .Net 8, 9 and 10
 - Blazor WebAssembly Standalone App
 - Blazor Web App - Interactive WebAssembly mode without prerendering
+
+**Note:** SpawnDev.BlazorJS version 3.x has dropped support for .Net 6 and 7. If you need to target .Net 6 or 7, please use version 2.x.
 
 ### Features:
 - Supports all web browser [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
