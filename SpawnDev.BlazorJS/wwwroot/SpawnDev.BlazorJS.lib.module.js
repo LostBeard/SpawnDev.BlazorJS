@@ -99,7 +99,7 @@
             var ret = null;
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
             var { target, parent, shortCircuit } = this.pathObjectInfo(obj, key);
-            if (typeof target === "function") {
+            if (typeof target === "function" && typeof target.bind === "function") {
                 ret = target.bind(parent);
             } else {
                 ret = target;
