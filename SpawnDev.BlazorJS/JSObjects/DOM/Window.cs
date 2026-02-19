@@ -599,6 +599,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public ActionEvent<KeyboardEvent> OnKeyUp { get => new ActionEvent<KeyboardEvent>("keyup", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
+        /// Fired when a pointing device (usually a mouse) is moved while over the window.<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/API/Window/mousemove_event
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseMove { get => new ActionEvent<MouseEvent>("mousemove", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
         /// The languagechange event is fired at the global scope object when the user's preferred language changes.
         /// </summary>
         public ActionEvent<Event> OnLanguageChange { get => new ActionEvent<Event>("languagechange", AddEventListener, RemoveEventListener); set { } }
