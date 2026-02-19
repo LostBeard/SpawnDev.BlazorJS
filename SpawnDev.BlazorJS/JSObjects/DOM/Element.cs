@@ -80,6 +80,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task RequestFullscreen(RequestFullscreenOptions options) => JSRef!.CallVoidAsync("requestFullscreen", options);
         /// <summary>
+        /// The Element.requestPointerLock() method lets you asynchronously ask for the pointer to be locked on the given element.<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/API/Element/requestPointerLock
+        /// </summary>
+        /// <returns></returns>
+        public Task RequestPointerLock() => JSRef!.CallVoidAsync("requestPointerLock");
+        /// <summary>
         /// Retrieves the value of the named attribute from the current node and returns it as a string.
         /// </summary>
         /// <param name="name"></param>
