@@ -31,6 +31,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         public string FillStyle { get => JSRef!.Get<string>("fillStyle"); set => JSRef!.Set("fillStyle", value); }
 
         /// <summary>
+        /// Sets fillStyle to a CanvasGradient.
+        /// </summary>
+        /// <param name="gradient">A CanvasGradient object to use as the fill style.</param>
+        public void SetFillStyle(CanvasGradient gradient) => JSRef!.Set("fillStyle", gradient);
+
+        /// <summary>
+        /// Sets fillStyle to a CanvasPattern.
+        /// </summary>
+        /// <param name="pattern">A CanvasPattern object to use as the fill style.</param>
+        public void SetFillStyle(CanvasPattern pattern) => JSRef!.Set("fillStyle", pattern);
+
+        /// <summary>
         /// The CanvasRenderingContext2D.lineCap property of the Canvas 2D API determines the shape used to draw the end points of lines.
         /// </summary>
         public string LineCap { get => JSRef!.Get<string>("lineCap"); set => JSRef!.Set("lineCap", value); }
@@ -69,6 +81,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The CanvasRenderingContext2D.strokeStyle property of the Canvas 2D API specifies the color or style to use for the lines around shapes.
         /// </summary>
         public string StrokeStyle { get => JSRef!.Get<string>("strokeStyle"); set => JSRef!.Set("strokeStyle", value); }
+
+        /// <summary>
+        /// Sets strokeStyle to a CanvasGradient.
+        /// </summary>
+        /// <param name="gradient">A CanvasGradient object to use as the stroke style.</param>
+        public void SetStrokeStyle(CanvasGradient gradient) => JSRef!.Set("strokeStyle", gradient);
+
+        /// <summary>
+        /// Sets strokeStyle to a CanvasPattern.
+        /// </summary>
+        /// <param name="pattern">A CanvasPattern object to use as the stroke style.</param>
+        public void SetStrokeStyle(CanvasPattern pattern) => JSRef!.Set("strokeStyle", pattern);
 
         /// <summary>
         /// The CanvasRenderingContext2D.lineWidth property of the Canvas 2D API sets the thickness of lines in space units.
