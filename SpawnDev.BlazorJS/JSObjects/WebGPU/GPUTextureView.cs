@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// A GPUTextureView object instance is created using the GPUTexture.createView() method.
     /// https://www.w3.org/TR/webgpu/#gputextureview
     /// </summary>
-    public class GPUTextureView : GPUObjectBase, IGPUBindingResource, IGPUTextureOrTextureView
+    public class GPUTextureView : GPUObjectBase 
     {
         /// <inheritdoc/>
         public GPUTextureView(IJSInProcessObjectReference _ref) : base(_ref) { }

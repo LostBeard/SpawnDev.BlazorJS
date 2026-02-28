@@ -6,7 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// A GPUBufferBinding describes a buffer and optional range to bind as a resource.
     /// https://www.w3.org/TR/webgpu/#dictdef-gpubufferbinding
     /// </summary>
-    public class GPUBufferBinding : IGPUBindingResource
+    public class GPUBufferBinding 
     {
         /// <summary>
         /// The GPUBuffer to bind.

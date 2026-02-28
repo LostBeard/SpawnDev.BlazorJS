@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// (it is only sampleable) or from outside WebGPU (e.g. due to video frame advancement).
     /// https://www.w3.org/TR/webgpu/#gpuexternaltexture
     /// </summary>
-    public class GPUExternalTexture : GPUObjectBase, IGPUBindingResource
+    public class GPUExternalTexture : GPUObjectBase
     {
         /// <inheritdoc />
         public GPUExternalTexture(IJSInProcessObjectReference _ref) : base(_ref) { }

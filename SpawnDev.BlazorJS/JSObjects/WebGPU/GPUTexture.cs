@@ -9,7 +9,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// https://www.w3.org/TR/webgpu/#gputexture
     /// https://developer.mozilla.org/en-US/docs/Web/API/GPUTexture
     /// </summary>
-    public class GPUTexture : GPUObjectBase, IGPUBindingResource, IGPUTextureOrTextureView
+    public class GPUTexture : GPUObjectBase
     {
         /// <inheritdoc/>
         public GPUTexture(IJSInProcessObjectReference _ref) : base(_ref) { }

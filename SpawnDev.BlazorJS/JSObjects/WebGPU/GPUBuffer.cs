@@ -7,7 +7,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// A GPUBuffer object instance is created using the GPUDevice.createBuffer() method.<br/>
     /// https://www.w3.org/TR/webgpu/#gpubuffer
     /// </summary>
-    public class GPUBuffer : GPUObjectBase, IGPUBindingResource
+    public class GPUBuffer : GPUObjectBase
     {
         /// <inheritdoc/>
         public GPUBuffer(IJSInProcessObjectReference _ref) : base(_ref) { }
