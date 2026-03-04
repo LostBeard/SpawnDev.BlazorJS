@@ -1,4 +1,4 @@
-﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -26,12 +26,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         public int? MaxStorageBuffersPerShaderStage => JSRef!.Get<int?>("maxStorageBuffersPerShaderStage");
         public int? MaxStorageTexturesPerShaderStage => JSRef!.Get<int?>("maxStorageTexturesPerShaderStage");
         public int? MaxUniformBuffersPerShaderStage => JSRef!.Get<int?>("maxUniformBuffersPerShaderStage");
-        public int? MaxUniformBufferBindingSize => JSRef!.Get<int?>("maxUniformBufferBindingSize");
-        public int? MaxStorageBufferBindingSize => JSRef!.Get<int?>("maxStorageBufferBindingSize");
+        public long? MaxUniformBufferBindingSize => JSRef!.Get<long?>("maxUniformBufferBindingSize");
+        public long? MaxStorageBufferBindingSize => JSRef!.Get<long?>("maxStorageBufferBindingSize");
         public int? MinUniformBufferOffsetAlignment => JSRef!.Get<int?>("minUniformBufferOffsetAlignment");
         public int? MinStorageBufferOffsetAlignment => JSRef!.Get<int?>("minStorageBufferOffsetAlignment");
         public int? MaxVertexBuffers => JSRef!.Get<int?>("maxVertexBuffers");
-        public int? MaxBufferSize => JSRef!.Get<int?>("maxBufferSize");
+        public long? MaxBufferSize => JSRef!.Get<long?>("maxBufferSize");
         public int? MaxVertexAttributes => JSRef!.Get<int?>("maxVertexAttributes");
         public int? MaxVertexBufferArrayStride => JSRef!.Get<int?>("maxVertexBufferArrayStride");
         public int? MaxInterStageShaderComponents => JSRef!.Get<int?>("maxInterStageShaderComponents");
