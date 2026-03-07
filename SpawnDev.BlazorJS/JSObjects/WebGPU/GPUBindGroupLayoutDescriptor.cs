@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// this GPUBindGroupLayout object as a template.
         /// </summary>
         [JsonPropertyName("entries")]
-        public IEnumerable<GPUBindGroupLayoutEntry> Entries { get; init; }
+        public IEnumerable<GPUBindGroupLayoutEntry> Entries { get; set; }
 
     }
 }

@@ -12,24 +12,24 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The exclusion operation to perform when the stencil test fails.
         /// </summary>
         [JsonPropertyName("compare")]
-        public EnumString<GPUCompareFunction> Compare { get; init; } = GPUCompareFunction.Always;
+        public EnumString<GPUCompareFunction> Compare { get; set; } = GPUCompareFunction.Always;
 
         /// <summary>
         /// The exclusion operation to perform when the stencil test fails.
         /// </summary>
         [JsonPropertyName("failOp")]
-        public EnumString<GPUStencilOperation> FailOp { get; init; } = GPUStencilOperation.Keep;
+        public EnumString<GPUStencilOperation> FailOp { get; set; } = GPUStencilOperation.Keep;
 
         /// <summary>
         /// The exclusion operation to perform when the stencil test passes but the depth test fails.
         /// </summary>
         [JsonPropertyName("depthFailOp")]
-        public EnumString<GPUStencilOperation> DepthFailOp { get; init; } = GPUStencilOperation.Keep;
+        public EnumString<GPUStencilOperation> DepthFailOp { get; set; } = GPUStencilOperation.Keep;
 
         /// <summary>
         /// The exclusion operation to perform when both the stencil test and the depth test pass.
         /// </summary>
         [JsonPropertyName("passOp")]
-        public EnumString<GPUStencilOperation> PassOp { get; init; } = GPUStencilOperation.Keep;
+        public EnumString<GPUStencilOperation> PassOp { get; set; } = GPUStencilOperation.Keep;
     }
 }

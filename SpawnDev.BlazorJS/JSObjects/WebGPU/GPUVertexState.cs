@@ -16,6 +16,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("buffers")]
-        public IEnumerable<GPUVertexBufferLayout>? Buffers { get; init; }
+        public IEnumerable<GPUVertexBufferLayout>? Buffers { get; set; }
     }
 }

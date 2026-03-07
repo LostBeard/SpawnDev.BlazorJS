@@ -13,7 +13,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// that will be output to when executing this render pass.
         /// </summary>
         [JsonPropertyName("colorAttachments")]
-        public GPURenderPassColorAttachment[] ColorAttachments { get; init; }
+        public GPURenderPassColorAttachment[] ColorAttachments { get; set; }
 
         /// <summary>
         /// The GPURenderPassDepthStencilAttachment value that defines the depth/stencil attachment that will be output to and tested against when executing this render pass.
@@ -21,7 +21,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("depthStencilAttachment")]
-        public GPURenderPassDepthStencilAttachment? DepthStencilAttachment { get; init; }
+        public GPURenderPassDepthStencilAttachment? DepthStencilAttachment { get; set; }
 
         /// <summary>
         /// The maximum number of draw calls that will be done in the render pass. 
@@ -30,6 +30,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("maxDrawCount")]
-        public GPUSize64? MaxDrawCount { get; init; }
+        public GPUSize64? MaxDrawCount { get; set; }
     }
 }

@@ -9,10 +9,10 @@
         /// <summary>
         /// A string providing a human-readable message that explains why the device was lost.
         /// </summary>
-        public string Message { get; init; }
+        public string Message { get; set; }
         /// <summary>
         /// An enumerated value that defines the reason the device was lost in a machine-readable way.
         /// </summary>
-        public string Reason { get; init; }
+        public string Reason { get; set; }
     }
 }

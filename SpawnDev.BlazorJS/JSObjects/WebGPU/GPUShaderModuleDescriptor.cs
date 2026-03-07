@@ -9,6 +9,6 @@
         /// <summary>
         /// A string representing the WGSL source code for the shader module.
         /// </summary>
-        public string Code { get; init; }
+        public string Code { get; set; }
     }
 }

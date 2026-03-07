@@ -13,6 +13,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// colors output by the fragment shader stage.
         /// </summary>
         [JsonPropertyName("targets")]
-        public IEnumerable<GPUColorTargetState> Targets { get; init; }
+        public IEnumerable<GPUColorTargetState> Targets { get; set; }
     }
 }

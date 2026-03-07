@@ -1,4 +1,4 @@
-﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS
@@ -30,10 +30,6 @@ namespace SpawnDev.BlazorJS
         /// This event is for diagnostics purposes and will likely be removed in future releases
         /// </summary>
         public static Action<JSObject>? OnJSObjectCreated { get; set; }
-        /// <summary>
-        /// If true, the JSObject finalizer will write a warning to the console if the object has not been disposed.
-        /// </summary>
-        public static bool UndisposedHandleVerboseMode { get; set; } = false;
 #endif
         /// <summary>
         /// Global scope JSRuntime
@@ -79,7 +75,12 @@ namespace SpawnDev.BlazorJS
 #if DEBUG
             if (JSRef != null) OnJSObjectCreated?.Invoke(this);
 #endif
+            if (JSRef != null)
+            {
+                _disposableTracker = IDisposableTracker.DisposableCreated(this);
+            }
         }
+        IDisposableTracker? _disposableTracker;
         /// <summary>
         /// Returns this object as type T and disposes this wrapper.<br/>
         /// If type T is a JSObject the JSRef is moved instead of copied.
@@ -209,6 +210,7 @@ namespace SpawnDev.BlazorJS
         {
             if (IsWrapperDisposed) return;
             IsWrapperDisposed = true;
+            IDisposableTracker.DisposableDisposed(_disposableTracker, this, disposing);
             JSRef?.Dispose();
             JSRef = null;
             IsJSRefUndefined = false;
@@ -227,16 +229,6 @@ namespace SpawnDev.BlazorJS
         /// </summary>
         ~JSObject()
         {
-#if DEBUG
-            if (UndisposedHandleVerboseMode)
-            {
-                if (JSRef != null)
-                {
-                    var thisType = this.GetType();
-                    Console.WriteLine($"DEBUG WARNING: JSObject JSDebugName was not Disposed properly: {JS.GlobalThisTypeName} {thisType.Name} - {thisType.FullName}");
-                }
-            }
-#endif
             Dispose(false);
         }
     }

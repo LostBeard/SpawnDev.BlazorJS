@@ -19,7 +19,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("topology")]
-        public EnumString<GPUPrimitiveTopology>? Topology { get; init; }
+        public EnumString<GPUPrimitiveTopology>? Topology { get; set; }
 
         /// <summary>
         /// The index format determines both the data type of index values in a buffer and, when used with strip primitive topologies 
@@ -31,7 +31,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("stripIndexFormat")]
-        public EnumString<GPUIndexFormat>? StripIndexFormat { get; init; }
+        public EnumString<GPUIndexFormat>? StripIndexFormat { get; set; }
 
         /// <summary>
         /// Defines which polygons are considered front-facing. The possible values are:
@@ -40,7 +40,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("frontFace")]
-        public EnumString<GPUFrontFace>? FrontFace { get; init; }
+        public EnumString<GPUFrontFace>? FrontFace { get; set; }
 
         /// <summary>
         /// Defines which polygons will be culled by draw calls made with a GPURenderPipeline. The possible values are:
@@ -50,7 +50,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("cullMode")]
-        public EnumString<GPUCullMode>? CullMode { get; init; }
+        public EnumString<GPUCullMode>? CullMode { get; set; }
 
         /// <summary>
         /// If true, indicates that depth clipping is disabled.
@@ -58,6 +58,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("unclippedDepth")]
-        public bool? UnclippedDepth { get; init; }
+        public bool? UnclippedDepth { get; set; }
     }
 }

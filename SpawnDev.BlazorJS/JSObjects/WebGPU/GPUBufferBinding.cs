@@ -11,18 +11,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The GPUBuffer to bind.
         /// </summary>
-        public GPUBuffer Buffer { get; init; }
+        public GPUBuffer Buffer { get; set; }
 
         /// <summary>
         /// The offset, in bytes, from the beginning of buffer to the beginning of the range exposed to the shader by the buffer binding.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public GPUSize64? Offset { get; init; }
+        public GPUSize64? Offset { get; set; }
 
         /// <summary>
         /// The size, in bytes, of the buffer binding. If not provided, specifies the range starting at offset and ending at the end of buffer.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public GPUSize64? Size { get; init; }
+        public GPUSize64? Size { get; set; }
     }
 }

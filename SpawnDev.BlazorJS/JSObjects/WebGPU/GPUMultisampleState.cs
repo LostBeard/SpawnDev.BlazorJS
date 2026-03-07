@@ -14,20 +14,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("count")]
-        public GPUSize32? Count { get; init; }
+        public GPUSize32? Count { get; set; }
 
         /// <summary>
         /// Mask determining which samples are written to.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("mask")]
-        public GPUSampleMask? Mask { get; init; }
+        public GPUSampleMask? Mask { get; set; }
 
         /// <summary>
         /// When true indicates that a fragment’s alpha channel should be used to generate a sample coverage mask.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("alphaToCoverageEnabled")]
-        public bool? AlphaToCoverageEnabled { get; init; }
+        public bool? AlphaToCoverageEnabled { get; set; }
     }
 }

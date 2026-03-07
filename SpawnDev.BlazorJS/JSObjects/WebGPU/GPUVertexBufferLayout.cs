@@ -11,17 +11,17 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An array defining the layout of the vertex attributes within each element.
         /// </summary>
-        public IEnumerable<GPUVertexAttribute> Attributes { get; init; }
+        public IEnumerable<GPUVertexAttribute> Attributes { get; set; }
 
         /// <summary>
         /// The byte offset between the start of consecutive vertex attributes. 
         /// </summary>
-        public GPUSize64 ArrayStride { get; init; }
+        public GPUSize64 ArrayStride { get; set; }
 
         /// <summary>
         /// A GPUVertexStepMode describing how vertex attributes are advanced during rendering. 
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public EnumString<GPUVertexStepMode>? StepMode { get; init; }
+        public EnumString<GPUVertexStepMode>? StepMode { get; set; }
     }
 }

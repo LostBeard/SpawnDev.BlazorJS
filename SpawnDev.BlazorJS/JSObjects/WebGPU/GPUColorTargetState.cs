@@ -12,20 +12,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Gets or sets the format string used to define the output representation.
         /// </summary>
         [JsonPropertyName("format")]
-        public EnumString<GPUTextureFormat> Format { get; init; }
+        public EnumString<GPUTextureFormat> Format { get; set; }
 
         /// <summary>
         /// The blending behavior for this color target. If left undefined, disables blending for this color target.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("blend")]
-        public GPUBlendState? Blend { get; init; }
+        public GPUBlendState? Blend { get; set; }
 
         /// <summary>
         /// Bitmask controlling which channels are are written to when drawing to this color target.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("writeMask")]
-        public GPUColorWriteFlags? WriteMask { get; init; } = GPUColorWriteFlags.ALL;
+        public GPUColorWriteFlags? WriteMask { get; set; } = GPUColorWriteFlags.ALL;
     }
 }

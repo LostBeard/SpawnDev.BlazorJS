@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "load": Loads the existing value for this attachment into the render pass.
         /// </summary>
         [JsonPropertyName("loadOp")]
-        public EnumString<GPULoadOp> LoadOp { get; init; }
+        public EnumString<GPULoadOp> LoadOp { get; set; }
 
         /// <summary>
         ///An enumerated value indicating the store operation to perform on view after executing the render pass.
@@ -22,7 +22,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///"store": Stores the resulting value of the render pass for this attachment.
         /// </summary>
         [JsonPropertyName("storeOp")]
-        public EnumString<GPUStoreOp> StoreOp { get; init; }
+        public EnumString<GPUStoreOp> StoreOp { get; set; }
 
         /// <summary>
         /// A GPUTextureView object representing the texture subresource that will be output to for this color attachment.
@@ -55,6 +55,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("clearValue")]
-        public GPUColor? ClearValue { get; init; }
+        public GPUColor? ClearValue { get; set; }
     }
 }

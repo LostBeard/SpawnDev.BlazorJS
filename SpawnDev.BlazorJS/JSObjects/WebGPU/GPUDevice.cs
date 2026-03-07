@@ -1,4 +1,4 @@
-﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -39,10 +39,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public Task<GPUDeviceLostInfo> Lost => JSRef!.GetAsync<GPUDeviceLostInfo>("lost");
 
+        private GPUQueue? _cachedQueue;
+
         /// <summary>
-        /// Returns the primary GPUQueue for the device.
+        /// Returns the primary GPUQueue for the device. Cached to avoid creating a new JSObject wrapper on each access.
         /// </summary>
-        public GPUQueue Queue => JSRef!.Get<GPUQueue>("queue");
+        public GPUQueue Queue
+        {
+            get
+            {
+                if (_cachedQueue == null || _cachedQueue.IsWrapperDisposed)
+                {
+                    _cachedQueue = JSRef!.Get<GPUQueue>("queue");
+                }
+                return _cachedQueue;
+            }
+        }
 
         /// <summary>
         /// Destroys the GPUDevice.
@@ -182,5 +194,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The uncapturederror event of the GPUDevice interface is fired when an error is thrown that has not been observed by a GPU error scope, to provide a way to report unexpected errors.
         /// </summary>
         public ActionEvent<GPUUncapturedErrorEvent> OnUncapturedError { get => new ActionEvent<GPUUncapturedErrorEvent>("uncapturederror", AddEventListener, RemoveEventListener); set { } }
+
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                _cachedQueue?.Dispose();
+            _cachedQueue = null;
+            base.Dispose(disposing);
+        }
     }
 }

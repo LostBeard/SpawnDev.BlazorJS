@@ -12,28 +12,28 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An object describing the vertex shader entry point of the pipeline and its input buffer layouts.
         /// </summary>
         [JsonPropertyName("vertex")]
-        public GPUVertexState Vertex { get; init; }
+        public GPUVertexState Vertex { get; set; }
 
         /// <summary>
         /// An object describing how a pipeline constructs and rasterizes primitives from its vertex inputs.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("primitive")]
-        public GPUPrimitiveState? Primitive { get; init; }
+        public GPUPrimitiveState? Primitive { get; set; }
 
         /// <summary>
         /// An object describing depth-stencil properties including testing, operations, and bias.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("depthStencil")]
-        public GPUDepthStencilState? DepthStencil { get; init; }
+        public GPUDepthStencilState? DepthStencil { get; set; }
 
         /// <summary>
         /// An object describing how the pipeline interacts with a render pass's multisampled attachments.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("multisample")]
-        public GPUMultisampleState? Multisample { get; init; }
+        public GPUMultisampleState? Multisample { get; set; }
 
         /// <summary>
         /// An object describing the fragment shader entry point of the pipeline and its output colors. 
@@ -43,6 +43,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("fragment")]
-        public GPUFragmentState? Fragment { get; init; }
+        public GPUFragmentState? Fragment { get; set; }
     }
 }

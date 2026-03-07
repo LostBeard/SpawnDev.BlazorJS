@@ -11,18 +11,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Indicates the type required for texture views bound to this binding.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? SampleType { get; init; }
+        public string? SampleType { get; set; }
 
         /// <summary>
         /// Indicates the required dimension for texture views bound to this binding.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? ViewDimension { get; init; }
+        public string? ViewDimension { get; set; }
 
         /// <summary>
         /// Indicates whether or not texture views bound to this binding must be multisampled.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Multisampled { get; init; }
+        public bool? Multisampled { get; set; }
     }
 }

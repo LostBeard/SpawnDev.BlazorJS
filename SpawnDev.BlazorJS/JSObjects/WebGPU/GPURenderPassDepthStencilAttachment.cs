@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A GPUTextureView that will be used as the depth-stencil attachment for a render pass.
         /// </summary>
         [JsonPropertyName("view")]
-        public Union<GPUTextureView, GPUTexture> View { get; init; }
+        public Union<GPUTextureView, GPUTexture> View { get; set; }
 
         /// <summary>
         /// An object (see Depth stencil attachment depth clear value object structure) defining the clear value 
@@ -19,7 +19,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("depthClearValue")]
-        public float? DepthClearValue { get; init; }
+        public float? DepthClearValue { get; set; }
         /// <summary>
         /// A string indicating how the depth aspect of the attachment is treated at the start of the render pass. 
         /// Must be one of "load", "clear", or "undefined". If set to "load", the existing contents of the 
@@ -28,7 +28,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("depthLoadOp")]
-        public string? DepthLoadOp { get; init; }
+        public string? DepthLoadOp { get; set; }
         /// <summary>
         /// A string indicating how the depth aspect of the attachment is treated at the end of the render pass. 
         /// Must be one of "store" or "undefined". If set to "store", the results of rendering to the attachment 
@@ -36,14 +36,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("depthStoreOp")]
-        public string? DepthStoreOp { get; init; }
+        public string? DepthStoreOp { get; set; }
         /// <summary>
         /// An object (see Depth stencil attachment stencil clear value object structure) defining the clear value 
         /// to use for the stencil aspect of the attachment if the stencil load operation is set to "clear".
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("stencilClearValue")]
-        public GPUStencilValue? StencilClearValue { get; init; }
+        public GPUStencilValue? StencilClearValue { get; set; }
         /// <summary>
         /// A string indicating how the stencil aspect of the attachment is treated at the start of the render pass. 
         /// Must be one of "load", "clear", or "undefined". If set to "load", the existing contents of the 
@@ -52,7 +52,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("stencilLoadOp")]
-        public string? StencilLoadOp { get; init; }
+        public string? StencilLoadOp { get; set; }
 
         /// <summary>
         /// A string indicating how the stencil aspect of the attachment is treated at the end of the render pass.
@@ -61,20 +61,20 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("stencilStoreOp")]
-        public string? StencilStoreOp { get; init; }
+        public string? StencilStoreOp { get; set; }
 
         /// <summary>
         /// If true, indicates that the depth aspect of the attachment is read-only.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("depthReadOnly")]
-        public bool? DepthReadOnly { get; init; }
+        public bool? DepthReadOnly { get; set; }
 
         /// <summary>
         /// If true, indicates that the stencil aspect of the attachment is read-only.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("stencilReadOnly")]
-        public bool? StencilReadOnly { get; init; }
+        public bool? StencilReadOnly { get; set; }
     }
 }

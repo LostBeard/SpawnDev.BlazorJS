@@ -14,48 +14,48 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// corresponding @binding(n) attribute in the shader (GPUShaderModule) used in the related pipeline.
         /// </summary>
         [JsonPropertyName("binding")]
-        public GPUSize32 Binding { get; init; }
+        public GPUSize32 Binding { get; set; }
 
         /// <summary>
         /// A bitset of the members of GPUShaderStage. 
         /// Each set bit indicates that a GPUBindGroupLayoutEntry’s resource will be accessible from the associated shader stage.
         /// </summary>
         [JsonPropertyName("visibility")]
-        public GPUShaderStageFlags Visibility { get; init; }
+        public GPUShaderStageFlags Visibility { get; set; }
 
         /// <summary>
         /// Exactly one of these members must be set, indicating the binding type. The contents of the member specify options specific to that type.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("buffer")]
-        public GPUBufferBindingLayout? Buffer { get; init; }
+        public GPUBufferBindingLayout? Buffer { get; set; }
 
         /// <summary>
         /// Exactly one of these members must be set, indicating the binding type. The contents of the member specify options specific to that type.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("sampler")]
-        public GPUSamplerBindingLayout? Sampler { get; init; }
+        public GPUSamplerBindingLayout? Sampler { get; set; }
 
         /// <summary>
         /// Exactly one of these members must be set, indicating the binding type. The contents of the member specify options specific to that type.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("texture")]
-        public GPUTextureBindingLayout? Texture { get; init; }
+        public GPUTextureBindingLayout? Texture { get; set; }
 
         /// <summary>
         /// Exactly one of these members must be set, indicating the binding type. The contents of the member specify options specific to that type.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("storageTexture")]
-        public GPUStorageTextureBindingLayout? StorageTexture { get; init; }
+        public GPUStorageTextureBindingLayout? StorageTexture { get; set; }
 
         /// <summary>
         /// Exactly one of these members must be set, indicating the binding type. The contents of the member specify options specific to that type.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("externalTexture")]
-        public GPUExternalTextureBindingLayout? ExternalTexture { get; init; }
+        public GPUExternalTextureBindingLayout? ExternalTexture { get; set; }
     }
 }

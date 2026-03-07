@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static SpawnDev.BlazorJS.JSObject;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
@@ -101,6 +102,7 @@ namespace SpawnDev.BlazorJS.Toolbox
                 PrimeHeap();
             }
             InstanceCount++;
+            _disposableTracker = IDisposableTracker.DisposableCreated(this);
         }
         /// <summary>
         /// Allocates memory on the heap and then releases it to delay heap growth after this call
@@ -396,6 +398,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             if (Disposed) return;
             Disposed = true;
+            IDisposableTracker.DisposableDisposed(_disposableTracker, this, disposing);
             if (InstanceCount > 0) InstanceCount--;
             Address = 0;
             handle.Free();
@@ -411,6 +414,7 @@ namespace SpawnDev.BlazorJS.Toolbox
                 catch { }
             }
         }
+        IDisposableTracker? _disposableTracker;
         /// <summary>
         /// Dispose resources
         /// </summary>

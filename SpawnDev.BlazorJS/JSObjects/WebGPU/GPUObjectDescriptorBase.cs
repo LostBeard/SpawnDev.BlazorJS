@@ -13,6 +13,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("label")]
-        public string Label { get; init; } = "";
+        public string Label { get; set; } = "";
     }
 }

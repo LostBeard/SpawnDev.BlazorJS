@@ -14,16 +14,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("mappedAtCreation")]
-        public bool? MappedAtCreation { get; init; }
+        public bool? MappedAtCreation { get; set; }
         /// <summary>
         /// A number representing the size of the buffer, in bytes.
         /// </summary>
         [JsonPropertyName("size")]
-        public GPUSize64 Size { get; init; }
+        public GPUSize64 Size { get; set; }
         /// <summary>
         /// The bitwise flags representing the allowed usages for the GPUBuffer. The possible values are in the GPUBuffer.usage value table.
         /// </summary>
         [JsonPropertyName("usage")]
-        public GPUBufferUsage Usage { get; init; }
+        public GPUBufferUsage Usage { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A GPUShaderModule object containing the WGSL code that this programmable stage will execute.
         /// </summary>
         [JsonPropertyName("module")]
-        public GPUShaderModule Module { get; init; }
+        public GPUShaderModule Module { get; set; }
 
         /// <summary>
         /// The name of the function in the module that this stage will use to perform its work.The corresponding shader 
@@ -25,7 +25,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("entryPoint")]
-        public string? EntryPoint { get; init; }
+        public string? EntryPoint { get; set; }
 
         /// <summary>
         /// A sequence of record types, with the structure (id, value), representing override values for WGSL constants 
@@ -37,6 +37,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("constants")]
-        public Dictionary<string, object>? Constants { get; init; }
+        public Dictionary<string, object>? Constants { get; set; }
     }
 }
