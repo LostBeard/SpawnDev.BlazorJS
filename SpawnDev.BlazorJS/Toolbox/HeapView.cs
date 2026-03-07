@@ -398,7 +398,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             if (Disposed) return;
             Disposed = true;
-            IDisposableTracker.DisposableDisposed(_disposableTracker, this, disposing);
+            IDisposableTracker.DisposableDisposed(_disposableTracker, disposing);
             if (InstanceCount > 0) InstanceCount--;
             Address = 0;
             handle.Free();
@@ -414,7 +414,7 @@ namespace SpawnDev.BlazorJS.Toolbox
                 catch { }
             }
         }
-        IDisposableTracker? _disposableTracker;
+        (IDisposableTracker? disposableTracker, ulong disposableId) _disposableTracker;
         /// <summary>
         /// Dispose resources
         /// </summary>

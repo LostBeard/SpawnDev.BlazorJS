@@ -80,7 +80,7 @@ namespace SpawnDev.BlazorJS
                 _disposableTracker = IDisposableTracker.DisposableCreated(this);
             }
         }
-        IDisposableTracker? _disposableTracker;
+        (IDisposableTracker? disposableTracker, ulong disposableId) _disposableTracker;
         /// <summary>
         /// Returns this object as type T and disposes this wrapper.<br/>
         /// If type T is a JSObject the JSRef is moved instead of copied.
@@ -210,7 +210,7 @@ namespace SpawnDev.BlazorJS
         {
             if (IsWrapperDisposed) return;
             IsWrapperDisposed = true;
-            IDisposableTracker.DisposableDisposed(_disposableTracker, this, disposing);
+            IDisposableTracker.DisposableDisposed(_disposableTracker, disposing);
             JSRef?.Dispose();
             JSRef = null;
             IsJSRefUndefined = false;

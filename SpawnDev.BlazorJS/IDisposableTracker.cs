@@ -15,26 +15,26 @@ namespace SpawnDev.BlazorJS
         public ulong DisposedFinalizer { get; set; }
         public int AliveCount => Alive.Count;
         [JsonIgnore]
-        public List<IDisposable> Alive { get; } = new List<IDisposable>();
+        public List<ulong> Alive { get; } = new List<ulong>();
         /// <summary>
         /// Contains tracking information for JSObjects created with the same stack trace. This is used for diagnostics purposes to track where JSObjects are being created and disposed, and can be used to identify potential leaks. This will likely be removed in future releases.
         /// </summary>
         public static Dictionary<string, IDisposableTracker> JSObjectTraces { get; } = new Dictionary<string, IDisposableTracker>();
-        public static void DisposableDisposed(IDisposableTracker? _LifeTrack, IDisposable disposable, bool disposing)
+        public static void DisposableDisposed((IDisposableTracker? disposableTracker, ulong disposableId) tracker, bool disposing)
         {
-            if (_LifeTrack != null && _LifeTrack.Alive.Contains(disposable))
+            if (tracker.disposableTracker != null && tracker.disposableTracker.Alive.Contains(tracker.disposableId))
             {
-                _LifeTrack.Alive.Remove(disposable);
+                tracker.disposableTracker.Alive.Remove(tracker.disposableId);
                 if (disposing)
                 {
-                    _LifeTrack.DisposedProper++;
+                    tracker.disposableTracker.DisposedProper++;
                 }
                 else
                 {
-                    _LifeTrack.DisposedFinalizer++;
-                    if (_LifeTrack.DisposedFinalizer == 1 && UndisposedHandleVerboseMode)
+                    tracker.disposableTracker.DisposedFinalizer++;
+                    if (tracker.disposableTracker.DisposedFinalizer == 1 && UndisposedHandleVerboseMode)
                     {
-                        Console.WriteLine($"DEBUG WARNING: IDisposable disposed in finalizer: {_LifeTrack.Type}\n{_LifeTrack.Trace}");
+                        Console.WriteLine($"DEBUG WARNING: IDisposable disposed in finalizer: {tracker.disposableTracker.Type}\n{tracker.disposableTracker.Trace}");
                     }
                 }
             }
@@ -75,9 +75,11 @@ namespace SpawnDev.BlazorJS
                 reset = Callback.Create(() => IDisposableTracker.JSObjectTraces.Clear()),
             });
         }
-        public static IDisposableTracker? DisposableCreated(IDisposable disposable)
+        static ulong _totalCreated = 0;
+        public static (IDisposableTracker? disposableTracker, ulong disposableId) DisposableCreated(IDisposable disposable)
         {
-            if (!Enabled) return null!;
+            if (!Enabled) return (null, 0);
+            var index = _totalCreated++;
             IDisposableTracker? _LifeTrack = null;
             var creationStackTrace = Environment.StackTrace;
             if (!JSObjectTraces.TryGetValue(creationStackTrace, out _LifeTrack))
@@ -93,12 +95,9 @@ namespace SpawnDev.BlazorJS
                     Console.WriteLine($"NOTICE: IDisposable created: {_LifeTrack.Type}\n{_LifeTrack.Trace}");
                 }
             }
-            if (!_LifeTrack.Alive.Contains(disposable))
-            {
-                _LifeTrack.Alive.Add(disposable);
-                _LifeTrack.Created++;
-            }
-            return _LifeTrack;
+            _LifeTrack.Alive.Add(index);
+            _LifeTrack.Created++;
+            return (_LifeTrack, index);
         }
     }
 }
