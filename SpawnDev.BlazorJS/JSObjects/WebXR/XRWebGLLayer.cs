@@ -18,6 +18,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         public XRWebGLLayer(XRSession session, WebGLRenderingContext context, XRWebGLLayerInit? options = null) : base(options == null ? JS.New(nameof(XRWebGLLayer), session, context) : JS.New(nameof(XRWebGLLayer), session, context, options)) { }
         /// <summary>
+        /// Creates a new instance using a WebGL2 context
+        /// </summary>
+        public XRWebGLLayer(XRSession session, WebGL2RenderingContext context, XRWebGLLayerInit? options = null) : base(options == null ? JS.New(nameof(XRWebGLLayer), session, context) : JS.New(nameof(XRWebGLLayer), session, context, options)) { }
+        /// <summary>
         /// Returns a WebGLFramebuffer suitable for passing into the bindFrameBuffer() method.
         /// </summary>
         public WebGLFramebuffer Framebuffer => JSRef!.Get<WebGLFramebuffer>("framebuffer");
