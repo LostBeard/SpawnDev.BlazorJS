@@ -319,6 +319,141 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Events
         // https://developer.mozilla.org/en-US/docs/Web/API/Document#events
+
+        // ── GlobalEventHandlers mixin ──────────────────────────────────────
+        // https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers
+        // The browser spec includes these on Document via the GlobalEventHandlers mixin.
+
+        #region Mouse events (GlobalEventHandlers)
+        /// <summary>
+        /// Fired when a non-primary pointing device button (e.g., any mouse button other than the left button) has been pressed and released.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnAuxClick { get => new ActionEvent<PointerEvent>("auxclick", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device button (e.g., a mouse's primary button) is pressed and released.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnClick { get => new ActionEvent<PointerEvent>("click", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the user attempts to open a context menu.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnContextMenu { get => new ActionEvent<PointerEvent>("contextmenu", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device button (e.g., a mouse's primary button) is clicked twice.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnDblClick { get => new ActionEvent<MouseEvent>("dblclick", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device button is pressed.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseDown { get => new ActionEvent<MouseEvent>("mousedown", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device (usually a mouse) is moved over the element that has the listener attached.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseEnter { get => new ActionEvent<MouseEvent>("mouseenter", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the pointer of a pointing device (usually a mouse) is moved out of an element that has the listener attached to it.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseLeave { get => new ActionEvent<MouseEvent>("mouseleave", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device (usually a mouse) is moved while over the document.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseMove { get => new ActionEvent<MouseEvent>("mousemove", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device (usually a mouse) is moved off the element to which the listener is attached or off one of its children.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseOut { get => new ActionEvent<MouseEvent>("mouseout", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device is moved onto the element to which the listener is attached or onto one of its children.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseOver { get => new ActionEvent<MouseEvent>("mouseover", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointing device button is released.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseUp { get => new ActionEvent<MouseEvent>("mouseup", AddEventListener, RemoveEventListener); set { } }
+        #endregion
+
+        #region Keyboard events (GlobalEventHandlers)
+        /// <summary>
+        /// Fired when a key is pressed.
+        /// </summary>
+        public ActionEvent<KeyboardEvent> OnKeyDown { get => new ActionEvent<KeyboardEvent>("keydown", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a key is released.
+        /// </summary>
+        public ActionEvent<KeyboardEvent> OnKeyUp { get => new ActionEvent<KeyboardEvent>("keyup", AddEventListener, RemoveEventListener); set { } }
+        #endregion
+
+        #region Pointer events (GlobalEventHandlers)
+        /// <summary>
+        /// Fired when a pointer event is canceled.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerCancel { get => new ActionEvent<PointerEvent>("pointercancel", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer becomes active.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerDown { get => new ActionEvent<PointerEvent>("pointerdown", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer is moved into the hit test boundaries of an element or one of its descendants.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerEnter { get => new ActionEvent<PointerEvent>("pointerenter", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer is moved out of the hit test boundaries of an element.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerLeave { get => new ActionEvent<PointerEvent>("pointerleave", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer changes coordinates.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerMove { get => new ActionEvent<PointerEvent>("pointermove", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer is moved out of the hit test boundaries of an element (among other reasons).
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerOut { get => new ActionEvent<PointerEvent>("pointerout", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer is moved into an element's hit test boundaries.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerOver { get => new ActionEvent<PointerEvent>("pointerover", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer is no longer active.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerUp { get => new ActionEvent<PointerEvent>("pointerup", AddEventListener, RemoveEventListener); set { } }
+        #endregion
+
+        #region Touch events (GlobalEventHandlers)
+        /// <summary>
+        /// Fired when one or more touch points have been disrupted in an implementation-specific manner.
+        /// </summary>
+        public ActionEvent<TouchEvent> OnTouchCancel { get => new ActionEvent<TouchEvent>("touchcancel", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when one or more touch points are removed from the touch surface.
+        /// </summary>
+        public ActionEvent<TouchEvent> OnTouchEnd { get => new ActionEvent<TouchEvent>("touchend", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when one or more touch points are moved along the touch surface.
+        /// </summary>
+        public ActionEvent<TouchEvent> OnTouchMove { get => new ActionEvent<TouchEvent>("touchmove", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when one or more touch points are placed on the touch surface.
+        /// </summary>
+        public ActionEvent<TouchEvent> OnTouchStart { get => new ActionEvent<TouchEvent>("touchstart", AddEventListener, RemoveEventListener); set { } }
+        #endregion
+
+        #region Focus events (GlobalEventHandlers)
+        /// <summary>
+        /// Fired when an element has lost focus.
+        /// </summary>
+        public ActionEvent<FocusEvent> OnBlur { get => new ActionEvent<FocusEvent>("blur", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when an element has gained focus.
+        /// </summary>
+        public ActionEvent<FocusEvent> OnFocus { get => new ActionEvent<FocusEvent>("focus", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when an element has gained focus, after focus.
+        /// </summary>
+        public ActionEvent<FocusEvent> OnFocusIn { get => new ActionEvent<FocusEvent>("focusin", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when an element has lost focus, after blur.
+        /// </summary>
+        public ActionEvent<FocusEvent> OnFocusOut { get => new ActionEvent<FocusEvent>("focusout", AddEventListener, RemoveEventListener); set { } }
+        #endregion
         /// <summary>
         /// The prerenderingchange event is fired on a prerendered document when it is activated (i.e. the user views the page).
         /// </summary>
