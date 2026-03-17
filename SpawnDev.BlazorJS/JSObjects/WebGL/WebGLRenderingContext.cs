@@ -73,7 +73,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// gl.READ_FRAMEBUFFER - Used as a source for reading operations such as gl.readPixels and gl.blitFramebuffer.<br/>
         /// </param>
         /// <param name="framebuffer">A WebGLFramebuffer object to bind, or null for binding the HTMLCanvasElement or OffscreenCanvas object associated with the rendering context.</param>
-        public void BindFramebuffer(GLenum target, WebGLFramebuffer framebuffer) => JSRef!.CallVoid("bindFramebuffer", target, framebuffer);
+        public void BindFramebuffer(GLenum target, WebGLFramebuffer? framebuffer) => JSRef!.CallVoid("bindFramebuffer", target, framebuffer);
         /// <summary>
         /// The WebGLRenderingContext.bindRenderbuffer() method of the WebGL API binds a given WebGLRenderbuffer to a target, which must be gl.RENDERBUFFER.
         /// </summary>

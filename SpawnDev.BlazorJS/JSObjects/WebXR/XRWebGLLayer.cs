@@ -51,5 +51,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A number indicating the amount of foveation used by the XR compositor. Fixed Foveated Rendering (FFR) renders the edges of the eye textures at a lower resolution than the center and reduces the GPU load.
         /// </summary>
         public float FixedFoveation { get => JSRef!.Get<float>("fixedFoveation"); set => JSRef!.Set("fixedFoveation", value); }
+        #region Static Methods
+        /// <summary>
+        /// The XRWebGLLayer.getNativeFramebufferScaleFactor() static method returns the scaling factor needed to scale the resolution of the specified XRSession to the native resolution of the WebXR device's display.<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/API/XRWebGLLayer/getNativeFramebufferScaleFactor_static
+        /// </summary>
+        /// <param name="session">The XRSession for which to return the native framebuffer scale factor.</param>
+        /// <returns>A floating-point value which, when multiplied by the session's recommended framebuffer dimensions, results in the WebXR device's native resolution.</returns>
+        public static double GetNativeFramebufferScaleFactor(XRSession session) => JS.Call<double>("XRWebGLLayer.getNativeFramebufferScaleFactor", session);
+        #endregion
     }
 }

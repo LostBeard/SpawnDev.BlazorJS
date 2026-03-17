@@ -52,6 +52,23 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public string VisibilityState => JSRef!.Get<string>("visibilityState");
         /// <summary>
+        /// A float value indicating the current frame rate of the XR session, or null if not available.<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/API/XRSession/frameRate
+        /// </summary>
+        public float? FrameRate => JSRef!.Get<float?>("frameRate");
+        /// <summary>
+        /// Returns a Float32Array of supported frame rates for the XR session, or null if not supported.<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/API/XRSession/supportedFrameRates
+        /// </summary>
+        public Float32Array? SupportedFrameRates => JSRef!.Get<Float32Array?>("supportedFrameRates");
+        /// <summary>
+        /// The updateTargetFrameRate() method of the XRSession interface requests that the user agent update the session's target frame rate to the specified value.<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/API/XRSession/updateTargetFrameRate
+        /// </summary>
+        /// <param name="rate">A float indicating the target frame rate in frames per second.</param>
+        /// <returns></returns>
+        public Task UpdateTargetFrameRate(float rate) => JSRef!.CallVoidAsync("updateTargetFrameRate", rate);
+        /// <summary>
         /// Ends the WebXR session. Returns a promise which resolves when the session has been shut down.
         /// </summary>
         public Task End() => JSRef!.CallVoidAsync("end");

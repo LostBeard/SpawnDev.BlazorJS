@@ -81,5 +81,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="referenceSpace"></param>
         /// <returns></returns>
         public XRViewerPose GetViewerPose(XRReferenceSpace referenceSpace) => JSRef!.Call<XRViewerPose>("getViewerPose", referenceSpace);
+        /// <summary>
+        /// The getHitTestResultsForTransientInput() method of the XRFrame interface returns an array of XRTransientInputHitTestResult objects containing transient input hit test results for a given XRTransientInputHitTestSource.<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/API/XRFrame/getHitTestResultsForTransientInput
+        /// </summary>
+        /// <param name="hitTestSource">An XRTransientInputHitTestSource object that contains transient input hit test subscriptions.</param>
+        /// <returns></returns>
+        public XRTransientInputHitTestResult[] GetHitTestResultsForTransientInput(XRTransientInputHitTestSource hitTestSource) => JSRef!.Call<XRTransientInputHitTestResult[]>("getHitTestResultsForTransientInput", hitTestSource);
+        /// <summary>
+        /// The detectedPlanes read-only property of the XRFrame interface returns an XRPlaneSet containing all detected planes in the frame.<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/API/XRFrame/detectedPlanes
+        /// </summary>
+        public Set<XRPlane>? DetectedPlanes => JSRef!.Get<Set<XRPlane>?>("detectedPlanes");
+        /// <summary>
+        /// The detectedMeshes read-only property of the XRFrame interface returns an XRMeshSet containing all detected meshes in the frame.
+        /// </summary>
+        public Set<XRMesh>? DetectedMeshes => JSRef!.Get<Set<XRMesh>?>("detectedMeshes");
     }
 }

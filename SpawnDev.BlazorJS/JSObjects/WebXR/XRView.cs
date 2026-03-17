@@ -34,5 +34,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="scale"></param>
         public void RequestViewportScale(float scale) => JSRef!.CallVoid("requestViewportScale", scale);
+        /// <summary>
+        /// The camera property of the XRView interface returns an XRCamera object representing the camera for the view, if applicable for the session's XR device. Returns null if the feature is not enabled or supported.<br/>
+        /// https://developer.mozilla.org/en-US/docs/Web/API/XRView/camera
+        /// </summary>
+        public XRCamera? Camera => JSRef!.Get<XRCamera?>("camera");
     }
 }
