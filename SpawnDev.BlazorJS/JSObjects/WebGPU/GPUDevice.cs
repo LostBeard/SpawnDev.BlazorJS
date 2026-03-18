@@ -17,7 +17,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The adapterInfo read-only property of the GPUDevice interface returns a GPUAdapterInfo object containing identifying information about the device's originating adapter.
         /// </summary>
-        public GPUAdapterInfo AdapterInfo => JSRef!.Get<GPUAdapterInfo>("adapter");
+        public GPUAdapterInfo AdapterInfo => JSRef!.Get<GPUAdapterInfo>("adapterInfo");
 
         /// <summary>
         /// A GPUSupportedFeatures object that describes additional functionality supported by the device.

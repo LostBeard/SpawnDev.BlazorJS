@@ -57,21 +57,21 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="destination"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public void CopyTo(ArrayBuffer destination, AudioDataCopyToOptions options) => JSRef!.CallVoid("copyTo", destination, options);
+        public Task CopyTo(ArrayBuffer destination, AudioDataCopyToOptions options) => JSRef!.CallVoidAsync("copyTo", destination, options);
         /// <summary>
         /// Copies the samples from the specified plane of the AudioData object to the destination.
         /// </summary>
         /// <param name="destination"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public void CopyTo(TypedArray destination, AudioDataCopyToOptions options) => JSRef!.CallVoid("copyTo", destination, options);
+        public Task CopyTo(TypedArray destination, AudioDataCopyToOptions options) => JSRef!.CallVoidAsync("copyTo", destination, options);
         /// <summary>
         /// Copies the samples from the specified plane of the AudioData object to the destination.
         /// </summary>
         /// <param name="destination"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public void CopyTo(DataView destination, AudioDataCopyToOptions options) => JSRef!.CallVoid("copyTo", destination, options);
+        public Task CopyTo(DataView destination, AudioDataCopyToOptions options) => JSRef!.CallVoidAsync("copyTo", destination, options);
         /// <summary>
         /// Creates a new AudioData object with reference to the same media resource as the original.
         /// </summary>

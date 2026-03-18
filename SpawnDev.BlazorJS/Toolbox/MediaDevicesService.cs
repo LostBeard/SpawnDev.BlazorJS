@@ -225,7 +225,7 @@ namespace SpawnDev.BlazorJS.Toolbox
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"EXCEPTION getUserMedia: {ex.Message}");
+                    // getUserMedia failed - device may not be available
                 }
             }
             finally

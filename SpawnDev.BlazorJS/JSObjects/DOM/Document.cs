@@ -168,6 +168,34 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public Selection? GetSelection() => JSRef!.Call<Selection?>("getSelection");
+        /// <summary>
+        /// Returns a list of elements with the given class name.
+        /// </summary>
+        public HTMLCollection GetElementsByClassName(string classNames) => JSRef!.Call<HTMLCollection>("getElementsByClassName", classNames);
+        /// <summary>
+        /// Returns a list of elements with the given tag name.
+        /// </summary>
+        public HTMLCollection GetElementsByTagName(string tagName) => JSRef!.Call<HTMLCollection>("getElementsByTagName", tagName);
+        /// <summary>
+        /// Creates a new empty DocumentFragment into which DOM nodes can be added to build an offscreen DOM tree.
+        /// </summary>
+        public DocumentFragment CreateDocumentFragment() => JSRef!.Call<DocumentFragment>("createDocumentFragment");
+        /// <summary>
+        /// Creates a new comment node and returns it.
+        /// </summary>
+        public Comment CreateComment(string data) => JSRef!.Call<Comment>("createComment", data);
+        /// <summary>
+        /// Imports a node from an external document.
+        /// </summary>
+        public Node ImportNode(Node node, bool deep = false) => JSRef!.Call<Node>("importNode", node, deep);
+        /// <summary>
+        /// Adopts a node from an external document. The node and its subtree are removed from the document it's in.
+        /// </summary>
+        public Node AdoptNode(Node node) => JSRef!.Call<Node>("adoptNode", node);
+        /// <summary>
+        /// Creates a new Range object.
+        /// </summary>
+        public Range CreateRange() => JSRef!.Call<Range>("createRange");
         #endregion
 
         #region Properties
@@ -489,7 +517,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (script defer src="…" and type="module") have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading.
         /// </summary>
-        public ActionEvent<ClipboardEvent> OnDOMContentLoaded { get => new ActionEvent<ClipboardEvent>("DOMContentLoaded", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<Event> OnDOMContentLoaded { get => new ActionEvent<Event>("DOMContentLoaded", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// The readystatechange event is fired when the readyState attribute of a document has changed.
         /// </summary>

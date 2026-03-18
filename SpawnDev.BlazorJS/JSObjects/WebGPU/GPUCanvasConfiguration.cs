@@ -18,5 +18,30 @@
         /// you may incur additional overhead, such as additional texture copies, depending on the platform.
         /// </summary>
         public string Format { get; set; }
+
+        /// <summary>
+        /// The GPUTextureUsage flags for textures returned by getCurrentTexture().
+        /// Defaults to GPUTextureUsage.RENDER_ATTACHMENT. Add GPUTextureUsage.COPY_SRC for screenshots/post-processing.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+        public GPUFlagsConstant? Usage { get; set; }
+
+        /// <summary>
+        /// A list of formats that views created from textures returned by getCurrentTexture() may use.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+        public string[]? ViewFormats { get; set; }
+
+        /// <summary>
+        /// The color space that values written into textures returned by getCurrentTexture() should be displayed with. "srgb" or "display-p3".
+        /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+        public string? ColorSpace { get; set; }
+
+        /// <summary>
+        /// Determines the effect that alpha values will have on the content of textures returned by getCurrentTexture(). "opaque" or "premultiplied".
+        /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+        public string? AlphaMode { get; set; }
     }
 }

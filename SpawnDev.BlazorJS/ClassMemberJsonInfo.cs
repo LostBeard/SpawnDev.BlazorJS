@@ -64,7 +64,7 @@ namespace SpawnDev.BlazorJS
             if (JsonIgnoreAttribute == null) return true;
             if (JsonIgnoreAttribute.Condition == JsonIgnoreCondition.Always) return false;
             if (JsonIgnoreAttribute.Condition == JsonIgnoreCondition.WhenWritingNull && value is null) return false;
-            if (JsonIgnoreAttribute.Condition == JsonIgnoreCondition.WhenWritingDefault && value == DefaultValue) return false;
+            if (JsonIgnoreAttribute.Condition == JsonIgnoreCondition.WhenWritingDefault && Equals(value, DefaultValue)) return false;
             return true;
         }
         /// <summary>

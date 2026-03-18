@@ -45,7 +45,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
             typeof(Uint8ClampedArray),
             typeof(Int16Array),
             typeof(Uint16Array),
-            typeof(Int16Array),
             typeof(Int32Array),
             typeof(Uint32Array),
             typeof(Float32Array),
@@ -65,7 +64,6 @@ namespace SpawnDev.BlazorJS.JsonConverters
         };
         public static List<Type> NumberTypes = new List<Type>
         {
-            typeof(byte),
             typeof(byte),
             typeof(sbyte),
             typeof(short),

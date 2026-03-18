@@ -15,7 +15,7 @@ namespace SpawnDev.BlazorJS
         public ulong DisposedFinalizer { get; set; }
         public int AliveCount => Alive.Count;
         [JsonIgnore]
-        public List<ulong> Alive { get; } = new List<ulong>();
+        public HashSet<ulong> Alive { get; } = new HashSet<ulong>();
         /// <summary>
         /// Contains tracking information for JSObjects created with the same stack trace. This is used for diagnostics purposes to track where JSObjects are being created and disposed, and can be used to identify potential leaks. This will likely be removed in future releases.
         /// </summary>

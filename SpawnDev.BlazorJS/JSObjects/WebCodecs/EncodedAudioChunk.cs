@@ -23,22 +23,22 @@ namespace SpawnDev.BlazorJS.JSObjects
         public EncodedAudioChunkType Type => JSRef!.Get<EncodedAudioChunkType>("type");
 
         /// <summary>
-        /// Returns an integer indicating the timestamp of the video in microseconds.
+        /// Returns an integer indicating the timestamp of the audio in microseconds.
         /// </summary>
         public long Timestamp => JSRef!.Get<long>("timestamp");
 
         /// <summary>
-        /// Returns an integer indicating the duration of the video in microseconds.
+        /// Returns an integer indicating the duration of the audio in microseconds.
         /// </summary>
         public long? Duration => JSRef!.Get<long?>("duration");
 
         /// <summary>
-        /// Returns the size in bytes of the encoded video data.
+        /// Returns the size in bytes of the encoded audio data.
         /// </summary>
         public long ByteLength => JSRef!.Get<long>("byteLength");
 
         /// <summary>
-        /// Copies the encoded video data to the destination buffer.
+        /// Copies the encoded audio data to the destination buffer.
         /// </summary>
         public void CopyTo(ArrayBuffer destination) => JSRef!.CallVoid("copyTo", destination);
     }

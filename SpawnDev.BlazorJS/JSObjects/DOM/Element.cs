@@ -133,6 +133,66 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="options"></param>
         /// <returns></returns>
         public ShadowRoot AttachShadow(AttachShadowRootOptions options) => JSRef!.Call<ShadowRoot>("attachShadow", options);
+        /// <summary>
+        /// Returns a boolean indicating whether the specified element has the specified attribute or not.
+        /// </summary>
+        public bool HasAttribute(string name) => JSRef!.Call<bool>("hasAttribute", name);
+        /// <summary>
+        /// Toggles a boolean attribute (removing it if present, adding it if absent). Returns true if the attribute is present after the call, false otherwise.
+        /// </summary>
+        public bool ToggleAttribute(string name) => JSRef!.Call<bool>("toggleAttribute", name);
+        /// <summary>
+        /// Toggles a boolean attribute. If force is true, adds the attribute; if false, removes it.
+        /// </summary>
+        public bool ToggleAttribute(string name, bool force) => JSRef!.Call<bool>("toggleAttribute", name, force);
+        /// <summary>
+        /// Returns true if the element would be selected by the specified selector string.
+        /// </summary>
+        public bool Matches(string selectors) => JSRef!.Call<bool>("matches", selectors);
+        /// <summary>
+        /// Scrolls the element into the visible area of the browser window.
+        /// </summary>
+        public void ScrollIntoView() => JSRef!.CallVoid("scrollIntoView");
+        /// <summary>
+        /// Scrolls the element into the visible area of the browser window. If alignToTop is true, the top of the element will be aligned with the top of the visible area; if false, the bottom will be aligned with the bottom.
+        /// </summary>
+        public void ScrollIntoView(bool alignToTop) => JSRef!.CallVoid("scrollIntoView", alignToTop);
+        /// <summary>
+        /// Parses the specified text as HTML and inserts the resulting nodes into the DOM tree at a specified position.
+        /// </summary>
+        /// <param name="position">One of "beforebegin", "afterbegin", "beforeend", "afterend".</param>
+        /// <param name="text">The HTML string to parse and insert.</param>
+        public void InsertAdjacentHTML(string position, string text) => JSRef!.CallVoid("insertAdjacentHTML", position, text);
+        /// <summary>
+        /// Inserts a given element node at a given position relative to the element it is invoked upon.
+        /// </summary>
+        /// <param name="position">One of "beforebegin", "afterbegin", "beforeend", "afterend".</param>
+        /// <param name="element">The element to insert.</param>
+        public Element? InsertAdjacentElement(string position, Element element) => JSRef!.Call<Element?>("insertAdjacentElement", position, element);
+        /// <summary>
+        /// Designates a specific element as the capture target of future pointer events.
+        /// </summary>
+        public void SetPointerCapture(int pointerId) => JSRef!.CallVoid("setPointerCapture", pointerId);
+        /// <summary>
+        /// Releases pointer capture that was previously set for a specific pointer event.
+        /// </summary>
+        public void ReleasePointerCapture(int pointerId) => JSRef!.CallVoid("releasePointerCapture", pointerId);
+        /// <summary>
+        /// Returns true if the element has pointer capture for the pointer identified by the given pointer ID.
+        /// </summary>
+        public bool HasPointerCapture(int pointerId) => JSRef!.Call<bool>("hasPointerCapture", pointerId);
+        /// <summary>
+        /// Returns a collection of DOMRect objects that indicate the bounding rectangles for each CSS border box in a client.
+        /// </summary>
+        public DOMRect[] GetClientRects() => JSRef!.Call<DOMRect[]>("getClientRects");
+        /// <summary>
+        /// Replaces the element in the children list of its parent with a set of Node or string objects.
+        /// </summary>
+        public void ReplaceWith(params Union<Node, string>[] nodes) => JSRef!.CallApplyVoid("replaceWith", nodes);
+        /// <summary>
+        /// Replaces the existing children of a node with a specified new set of children.
+        /// </summary>
+        public void ReplaceChildren(params Union<Node, string>[] nodes) => JSRef!.CallApplyVoid("replaceChildren", nodes);
         #endregion
 
         #region Properties
@@ -236,6 +296,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A number representing number of pixels the top of the element is scrolled vertically.
         /// </summary>
         public int ScrollTop { get => JSRef!.Get<int>("scrollTop"); set => JSRef!.Set("scrollTop", value); }
+        /// <summary>
+        /// A number representing the number of pixels the element is scrolled horizontally.
+        /// </summary>
+        public int ScrollLeft { get => JSRef!.Get<int>("scrollLeft"); set => JSRef!.Set("scrollLeft", value); }
         /// <summary>
         /// The Element.shadowRoot read-only property represents the shadow root hosted by the element.<br/>
         /// Use Element.attachShadow() to add a shadow root to an existing element.
@@ -394,7 +458,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Fired when a pointer is moved into the hit test boundaries of an element or one of its descendants.
         /// </summary>
-        public ActionEvent<PointerEvent> OnPointerCenter { get => new ActionEvent<PointerEvent>("pointercenter", AddEventListener, RemoveEventListener); set { } }
+        public ActionEvent<PointerEvent> OnPointerEnter { get => new ActionEvent<PointerEvent>("pointerenter", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
         /// Fired when a pointer is moved out of the hit test boundaries of an element.
         /// </summary>

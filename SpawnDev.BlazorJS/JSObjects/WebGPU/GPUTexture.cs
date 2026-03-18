@@ -57,6 +57,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         public GPUTextureView CreateView() => JSRef!.Call<GPUTextureView>("createView");
 
         /// <summary>
+        /// Creates a GPUTextureView representing a specific view of the GPUTexture with the given descriptor.
+        /// </summary>
+        public GPUTextureView CreateView(GPUTextureViewDescriptor descriptor) => JSRef!.Call<GPUTextureView>("createView", descriptor);
+
+        /// <summary>
         /// Destroys the GPUTexture.
         /// </summary>
         public void Destroy() => JSRef!.CallVoid("destroy");

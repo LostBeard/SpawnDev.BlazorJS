@@ -211,12 +211,10 @@ namespace SpawnDev.BlazorJS
                 try
                 {
                     InteropReady = JSRuntime.Invoke<bool>("blazorJSInterop.interopReadyCheck");
-                    Console.WriteLine($"InteropReadyCheck succ: {InteropReady}");
                     return InteropReady;
                 }
-                catch (Exception ex)
+                catch
                 {
-                    Console.WriteLine($"InteropReadyCheck error: {ex.Message}");
                 }
             }
             return false;

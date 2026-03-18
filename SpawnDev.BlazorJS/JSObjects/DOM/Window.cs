@@ -107,7 +107,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Window.parent property is a reference to the parent of the current window or subframe<br/>
         /// If a window does not have a parent, its parent property is a reference to itself.
         /// </summary>
-        public Element Parent => JSRef!.Get<Element>("parent");
+        public Window Parent => JSRef!.Get<Window>("parent");
         /// <summary>
         /// The Window property screen returns a reference to the screen object associated with the window. The screen object, implementing the Screen interface, is a special object for inspecting properties of the screen on which the current window is being rendered.
         /// </summary>
@@ -143,7 +143,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns a reference to the topmost window in the window hierarchy.
         /// </summary>
-        public Element Top => JSRef!.Get<Element>("top");
+        public Window? Top => JSRef!.Get<Window?>("top");
         /// <summary>
         /// Returns true if the website is in a cross-origin isolation state.<br/>
         /// Returns null if the browser does not support cross-origin isolation detection.
@@ -664,6 +664,74 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Warning: Developers should avoid using this event.
         /// </summary>
         public ActionEvent<Event> OnUnload { get => new ActionEvent<Event>("unload", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the document view is scrolled.
+        /// </summary>
+        public ActionEvent<Event> OnScroll { get => new ActionEvent<Event>("scroll", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when scrolling has completed.
+        /// </summary>
+        public ActionEvent<Event> OnScrollEnd { get => new ActionEvent<Event>("scrollend", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when the right button of the mouse is clicked (before the context menu is displayed).
+        /// </summary>
+        public ActionEvent<MouseEvent> OnContextMenu { get => new ActionEvent<MouseEvent>("contextmenu", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a mouse button is pressed.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseDown { get => new ActionEvent<MouseEvent>("mousedown", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a mouse button is released.
+        /// </summary>
+        public ActionEvent<MouseEvent> OnMouseUp { get => new ActionEvent<MouseEvent>("mouseup", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a mouse button is clicked (pressed and released).
+        /// </summary>
+        public ActionEvent<MouseEvent> OnClick { get => new ActionEvent<MouseEvent>("click", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer becomes active.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerDown { get => new ActionEvent<PointerEvent>("pointerdown", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer is no longer active.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerUp { get => new ActionEvent<PointerEvent>("pointerup", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer changes coordinates.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerMove { get => new ActionEvent<PointerEvent>("pointermove", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a pointer event is canceled.
+        /// </summary>
+        public ActionEvent<PointerEvent> OnPointerCancel { get => new ActionEvent<PointerEvent>("pointercancel", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when one or more touch points are placed on the touch surface.
+        /// </summary>
+        public ActionEvent<TouchEvent> OnTouchStart { get => new ActionEvent<TouchEvent>("touchstart", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when one or more touch points are removed from the touch surface.
+        /// </summary>
+        public ActionEvent<TouchEvent> OnTouchEnd { get => new ActionEvent<TouchEvent>("touchend", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when one or more touch points are moved along the touch surface.
+        /// </summary>
+        public ActionEvent<TouchEvent> OnTouchMove { get => new ActionEvent<TouchEvent>("touchmove", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when one or more touch points have been disrupted in an implementation-specific manner.
+        /// </summary>
+        public ActionEvent<TouchEvent> OnTouchCancel { get => new ActionEvent<TouchEvent>("touchcancel", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a wheel button of a pointing device is rotated.
+        /// </summary>
+        public ActionEvent<WheelEvent> OnWheel { get => new ActionEvent<WheelEvent>("wheel", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a drag operation is being ended (by releasing a mouse button or hitting the escape key).
+        /// </summary>
+        public ActionEvent<DragEvent> OnDrop { get => new ActionEvent<DragEvent>("drop", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when an element or text selection is being dragged over a valid drop target.
+        /// </summary>
+        public ActionEvent<DragEvent> OnDragOver { get => new ActionEvent<DragEvent>("dragover", AddEventListener, RemoveEventListener); set { } }
         #endregion
         /// <summary>
         /// Returns true if showDirectoryPicker is found

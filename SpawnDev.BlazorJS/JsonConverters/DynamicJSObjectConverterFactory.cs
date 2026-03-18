@@ -41,7 +41,17 @@ namespace SpawnDev.BlazorJS.JsonConverters
         /// </summary>
         public override void Write(Utf8JsonWriter writer, DynamicJSObject value, JsonSerializerOptions options)
         {
+            if (value == null)
+            {
+                writer.WriteNullValue();
+                return;
+            }
             var obj = value.JSObjectRef;
+            if (obj == null)
+            {
+                writer.WriteNullValue();
+                return;
+            }
             if (obj.IsJSRefUndefined)
             {
                 // cast to JSInProcessObjectReferenceUndefined so it gets picked up by the JSInProcessObjectReferenceUndefinedConverter

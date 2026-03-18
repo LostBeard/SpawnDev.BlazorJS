@@ -27,6 +27,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public float SampleRate => JSRef!.Get<float>("sampleRate");
         /// <summary>
+        /// Returns the AudioWorklet object, which can be used to create and manage AudioWorkletNode instances for custom audio processing.
+        /// </summary>
+        public AudioWorklet AudioWorklet => JSRef!.Get<AudioWorklet>("audioWorklet");
+        /// <summary>
         /// Returns the current state of the AudioContext.
         /// </summary>
         public string State => JSRef!.Get<string>("state");
@@ -103,7 +107,25 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public MediaStreamAudioDestinationNode CreateMediaStreamDestination() => JSRef!.Call<MediaStreamAudioDestinationNode>("createMediaStreamDestination");
 
-        // TODO - finish methods
+        /// <summary>
+        /// Asynchronously decodes audio file data contained in an ArrayBuffer.
+        /// The ArrayBuffer can be loaded from XMLHttpRequest, fetch(), or FileReader.
+        /// The decoded AudioBuffer is resampled to the AudioContext's sample rate,
+        /// then passed back as an AudioBuffer.
+        /// </summary>
+        /// <param name="audioData">An ArrayBuffer containing the audio data to decode (e.g., MP3, WAV, OGG, FLAC).</param>
+        /// <returns>An AudioBuffer containing the decoded PCM audio data.</returns>
+        public Task<AudioBuffer> DecodeAudioData(ArrayBuffer audioData) => JSRef!.CallAsync<AudioBuffer>("decodeAudioData", audioData);
+
+        /// <summary>
+        /// Creates an OscillatorNode, a source representing a periodic waveform. It basically generates a tone.
+        /// </summary>
+        public OscillatorNode CreateOscillator() => JSRef!.Call<OscillatorNode>("createOscillator");
+
+        /// <summary>
+        /// Creates a PeriodicWave, used to define a periodic waveform that can be used to shape the output of an OscillatorNode.
+        /// </summary>
+        public PeriodicWave CreatePeriodicWave(Float32Array real, Float32Array imag) => JSRef!.Call<PeriodicWave>("createPeriodicWave", real, imag);
 
         /// <summary>
         /// A statechange event is fired at a BaseAudioContext object when its state member changes.

@@ -29,7 +29,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A double value describing the angle, in degrees, of a cone outside of which the volume will be reduced by a constant value, defined by the coneOuterGain property.
         /// </summary>
-        public double ConeOuterAngle { get => JSRef!.Get<double>("coneInnerAngle"); set => JSRef!.Set("coneOuterAngle", value); }
+        public double ConeOuterAngle { get => JSRef!.Get<double>("coneOuterAngle"); set => JSRef!.Set("coneOuterAngle", value); }
         /// <summary>
         /// A double value describing the amount of volume reduction outside the cone defined by the coneOuterAngle attribute. Its default value is 0, meaning that no sound can be heard.
         /// </summary>

@@ -31,14 +31,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// If you wish to prevent your apps from running on fallback adapters, you should check the GPUAdapter.isFallbackAdapter attribute prior to requesting a GPUDevice.
         /// </summary>
         /// <returns>A Promise that fulfills with a GPUAdapter object instance if the request is successful. requestAdapter() will resolve to null if an appropriate adapter is not available.</returns>
-        public Task<GPUAdapter> RequestAdapter() => JSRef!.CallAsync<GPUAdapter>("requestAdapter");
+        public Task<GPUAdapter?> RequestAdapter() => JSRef!.CallAsync<GPUAdapter?>("requestAdapter");
         /// <summary>
         /// Returns a Promise that fulfills with a GPUAdapter object instance. From this you can request a GPUDevice, which is the primary interface for using WebGPU functionality.<br/>
         /// If you wish to prevent your apps from running on fallback adapters, you should check the GPUAdapter.isFallbackAdapter attribute prior to requesting a GPUDevice.
         /// </summary>
         /// <param name="options"></param>
         /// <returns>A Promise that fulfills with a GPUAdapter object instance if the request is successful. requestAdapter() will resolve to null if an appropriate adapter is not available.</returns>
-        public Task<GPUAdapter> RequestAdapter(GPURequestAdapterOptions options) => JSRef!.CallAsync<GPUAdapter>("requestAdapter", options);
+        public Task<GPUAdapter?> RequestAdapter(GPURequestAdapterOptions options) => JSRef!.CallAsync<GPUAdapter?>("requestAdapter", options);
         #endregion
 
         #region Events

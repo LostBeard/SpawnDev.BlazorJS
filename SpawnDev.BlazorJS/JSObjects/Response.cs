@@ -32,7 +32,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="data">The JSON data to be used as the response body.</param>
         /// <param name="options">An options object containing settings for the response, including the status code, status text, and headers. This is the same as the options parameter of the Response() constructor.</param>
         /// <returns></returns>
-        public static Response Json(object data, ResponseOptions? options = null) => options == null ? JS.Call<Response>("Response.redirect", data) : JS.Call<Response>("Response.redirect", data, options);
+        public static Response Json(object data, ResponseOptions? options = null) => options == null ? JS.Call<Response>("Response.json", data) : JS.Call<Response>("Response.json", data, options);
         /// <summary>
         /// The Request() constructor creates a new Request object.
         /// </summary>

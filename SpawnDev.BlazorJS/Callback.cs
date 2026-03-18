@@ -107,7 +107,7 @@ namespace SpawnDev.BlazorJS
             IsDisposed = true;
             GC.SuppressFinalize(this);
             _callback.Dispose();
-            BlazorJSRuntime.JS.DisposeCallback(_callbackId);
+            BlazorJSRuntime.JS?.DisposeCallback(_callbackId);
             OnDisposed?.Invoke();
         }
         /// <summary>

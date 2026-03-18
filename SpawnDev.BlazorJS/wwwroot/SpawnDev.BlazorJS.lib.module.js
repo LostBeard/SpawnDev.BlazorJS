@@ -363,22 +363,19 @@
                 case DotNet.JSCallResultType.JSVoidResult:
                     return null;
                 default:
-                    throw new Error(`Invalid JS call result type '${a}'.`)
+                    throw new Error(`Invalid JS call result type '${desiredType}'.`)
             }
         }
         createJSObjectReferenceMustWrapType(typeofValue) {
             switch (typeofValue) {
                 case 'object':
                     return false;
-                    break;
                 case 'symbol':
                 case 'function':
                 case 'string':
                     return true;
-                    break;
                 default:
                     return true;
-                    break;
             }
         }
         pathObjectInfo(rootObject, path) {

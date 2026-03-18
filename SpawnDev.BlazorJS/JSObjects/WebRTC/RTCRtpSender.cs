@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         /// <param name="kind">A string indicating the type of media for which the browser's send capabilities are requested. The supported media kinds are: audio and video.</param>
         /// <returns>A new object that indicates what capabilities the browser has for sending the specified media kind over an RTCPeerConnection. If the browser doesn't have any support for the given media kind, the returned value is null.</returns>
-        public static RTCRtpSenderCapabilities GetCapabilities(string kind) => JS.Call<RTCRtpSenderCapabilities>("getCapabilities");
+        public static RTCRtpSenderCapabilities GetCapabilities(string kind) => JS.Call<RTCRtpSenderCapabilities>("RTCRtpSender.getCapabilities", kind);
 
         /// <summary>
         /// The RTCRtpSender.replaceTrack() method replaces the track currently being used as the sender's source with a new MediaStreamTrack.
@@ -47,5 +47,17 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         /// <param name="mediaStreams">An array of MediaStream objects (or a single MediaStream) which identify the streams to which the sender's track should belong.</param>
         public void SetStreams(params MediaStream[] mediaStreams) => JSRef!.CallApplyVoid("setStreams", mediaStreams);
+        /// <summary>
+        /// Returns an object describing the current configuration for the encoding and transmission of media on the sender's track.
+        /// </summary>
+        public JSObject GetParameters() => JSRef!.Call<JSObject>("getParameters");
+        /// <summary>
+        /// Applies changes to parameters which configure how the sender's track is encoded and transmitted to the remote peer.
+        /// </summary>
+        public Task SetParameters(JSObject parameters) => JSRef!.CallVoidAsync("setParameters", parameters);
+        /// <summary>
+        /// Returns a Promise that resolves with an RTCStatsReport which provides statistics data for the sender.
+        /// </summary>
+        public Task<RTCStatsReport> GetStats() => JSRef!.CallAsync<RTCStatsReport>("getStats");
     }
 }

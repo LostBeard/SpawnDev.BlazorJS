@@ -20,7 +20,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Allows web applications to explicitly set default scroll restoration behavior on history navigation. This property can be either auto or manual
         /// </summary>
-        public string ScrollRestoration => JSRef!.Get<string>("scrollRestoration");
+        public string ScrollRestoration { get => JSRef!.Get<string>("scrollRestoration"); set => JSRef!.Set("scrollRestoration", value); }
         /// <summary>
         /// Returns an any value representing the state at the top of the history stack. This is a way to look at the state without having to wait for a popstate event
         /// </summary>

@@ -116,7 +116,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T Json<T>() => JSRef!.Call<T>("json");
+        public Task<T> Json<T>() => JSRef!.CallAsync<T>("json");
         /// <summary>
         /// Returns a promise that resolves with a text representation of the request body.
         /// </summary>

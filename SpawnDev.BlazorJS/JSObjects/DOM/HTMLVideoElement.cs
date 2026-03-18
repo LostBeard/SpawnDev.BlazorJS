@@ -98,11 +98,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A string that reflects the width HTML attribute, which specifies the width of the display area, in CSS pixels.
         /// </summary>
-        public string? Width { get => JSRef!.Get<string?>("width"); set => JSRef!.Set("width", value); }
+        public int Width { get => JSRef!.Get<int>("width"); set => JSRef!.Set("width", value); }
         /// <summary>
-        /// A string that reflects the height HTML attribute, which specifies the height of the display area, in CSS pixels.
+        /// An unsigned long that reflects the height HTML attribute, which specifies the height of the display area, in CSS pixels.
         /// </summary>
-        public string? Height { get => JSRef!.Get<string?>("height"); set => JSRef!.Set("height", value); }
+        public int Height { get => JSRef!.Get<int>("height"); set => JSRef!.Set("height", value); }
         /// <summary>
         /// Fired when one or both of the videoWidth and videoHeight properties have just been updated.
         /// </summary>

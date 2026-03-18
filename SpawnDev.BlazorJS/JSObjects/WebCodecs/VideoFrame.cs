@@ -87,16 +87,16 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="destination"></param>
         /// <returns></returns>
-        public int CopyTo(Union<ArrayBuffer, TypedArray, byte[], DataView> destination) => JSRef!.Call<int>("copyTo", destination);
+        public Task CopyTo(Union<ArrayBuffer, TypedArray, byte[], DataView> destination) => JSRef!.CallVoidAsync("copyTo", destination);
         /// <summary>
         /// Copies the contents of the VideoFrame to an ArrayBuffer.
         /// </summary>
         /// <param name="destination"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public int CopyTo(Union<ArrayBuffer, TypedArray, byte[], DataView> destination, VideoFrameCopyOptions options) => JSRef!.Call<int>("copyTo", destination, options);
+        public Task CopyTo(Union<ArrayBuffer, TypedArray, byte[], DataView> destination, VideoFrameCopyOptions options) => JSRef!.CallVoidAsync("copyTo", destination, options);
         /// <summary>
-        /// Clears all states and releases the reference to the media resource.
+        /// Creates a new VideoFrame object with reference to the same media resource as the original.
         /// </summary>
         /// <returns></returns>
         public VideoFrame Clone() => JSRef!.Call<VideoFrame>("clone");

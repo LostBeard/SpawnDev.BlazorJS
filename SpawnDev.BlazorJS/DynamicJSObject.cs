@@ -12,8 +12,15 @@ namespace SpawnDev.BlazorJS
     /// - obj.height_As&lt;T&gt;() -- returns obj.height as Type T<br />
     /// - obj.height_As(type) -- returns obj.height as Type type<br />
     /// </summary>
-    public class DynamicJSObject : DynamicObject
+    public class DynamicJSObject : DynamicObject, IDisposable
     {
+        /// <summary>
+        /// Dispose the underlying JSObject reference
+        /// </summary>
+        public void Dispose()
+        {
+            JSObjectRef?.Dispose();
+        }
         static BlazorJSRuntime JS => BlazorJSRuntime.JS;
         /// <summary>
         /// Explicit conversion from JSObject to DynamicJSObject

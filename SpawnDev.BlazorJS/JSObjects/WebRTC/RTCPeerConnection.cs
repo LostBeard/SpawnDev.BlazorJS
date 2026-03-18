@@ -189,14 +189,14 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <param name="trackOrKind"></param>
         /// <param name="init"></param>
         /// <returns></returns>
-        public RTCRtpTransceiver AddTransceiver(string trackOrKind, RTCRtpTransceiverOptions init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+        public RTCRtpTransceiver AddTransceiver(string trackOrKind, RTCRtpTransceiverOptions init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind, init);
         /// <summary>
         /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
         /// </summary>
         /// <param name="trackOrKind"></param>
         /// <param name="init"></param>
         /// <returns></returns>
-        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind, RTCRtpTransceiverOptions init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind);
+        public RTCRtpTransceiver AddTransceiver(MediaStreamTrack trackOrKind, RTCRtpTransceiverOptions init) => JSRef!.Call<RTCRtpTransceiver>("addTransceiver", trackOrKind, init);
         /// <summary>
         /// The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer.
         /// </summary>
@@ -230,48 +230,45 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <param name="selector">A MediaStreamTrack for which to gather statistics. If this is null (the default value), statistics will be gathered for the entire RTCPeerConnection.</param>
         /// <returns></returns>
         public Task<RTCStatsReport> GetStats(MediaStreamTrack? selector = null) => JSRef!.CallAsync<RTCStatsReport>("getStats", selector);
-        // TODO ... 
-        // unless there is a compatibility issue ...
-        // switch to ActionEvent with AddEventListener instead of using property assigning which limits usage more... 
-        // however, a lot of these events should only be handled by a single event handler but that should be up to the consuming code
         /// <summary>
-        /// An event handler which is called when the connectionState property on the RTCPeerConnection interface changes.
+        /// Returns an array of RTCRtpTransceiver objects being used to send and receive data on the connection.
         /// </summary>
-        public ActionEvent<Event> OnConnectionStateChange { get => new ActionEvent<Event>("onconnectionstatechange", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
+        public RTCRtpTransceiver[] GetTransceivers() => JSRef!.Call<RTCRtpTransceiver[]>("getTransceivers");
         /// <summary>
-        /// A datachannel event is sent to an RTCPeerConnection instance when an RTCDataChannel has been added to the connection, as a result of the remote peer calling RTCPeerConnection.createDataChannel().
+        /// Fired when the connectionState changes.
         /// </summary>
-        public ActionEvent<RTCDataChannelEvent> OnDataChannel { get => new ActionEvent<RTCDataChannelEvent>("ondatachannel", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
+        public ActionEvent<Event> OnConnectionStateChange { get => new ActionEvent<Event>("connectionstatechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// An icecandidate event is sent to an RTCPeerConnection when:<br/>
-        /// - An RTCIceCandidate has been identified and added to the local peer by a call to RTCPeerConnection.setLocalDescription(),<br/>
-        /// - Every RTCIceCandidate correlated with a particular username fragment and password combination (a generation) has been so identified and added, and<br/>
-        /// - All ICE gathering on all transports is complete.
+        /// Fired when an RTCDataChannel has been added to the connection by the remote peer.
         /// </summary>
-        public ActionEvent<RTCPeerConnectionEvent> OnIceCandidate { get => new ActionEvent<RTCPeerConnectionEvent>("onicecandidate", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
+        public ActionEvent<RTCDataChannelEvent> OnDataChannel { get => new ActionEvent<RTCDataChannelEvent>("datachannel", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// The WebRTC API event icecandidateerror is sent to an RTCPeerConnection if an error occurs while performing ICE negotiations through a STUN or TURN server. The event object is of type RTCPeerConnectionIceErrorEvent, and contains information describing the error in some amount of detail.
+        /// Fired when a new ICE candidate has been identified and added to the local peer.
         /// </summary>
-        public ActionEvent<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { get => new ActionEvent<RTCPeerConnectionIceErrorEvent>("onicecandidateerror", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
+        public ActionEvent<RTCPeerConnectionEvent> OnIceCandidate { get => new ActionEvent<RTCPeerConnectionEvent>("icecandidate", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// An iceconnectionstatechange event is sent to an RTCPeerConnection object each time the ICE connection state changes during the negotiation process. The new ICE connection state is available in the object's iceConnectionState property.
+        /// Fired when an error occurs while performing ICE negotiations through a STUN or TURN server.
         /// </summary>
-        public ActionEvent<Event> OnIceConnectionStateChange { get => new ActionEvent<Event>("oniceconnectionstatechange", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
+        public ActionEvent<RTCPeerConnectionIceErrorEvent> OnIceCandidateError { get => new ActionEvent<RTCPeerConnectionIceErrorEvent>("icecandidateerror", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// The icegatheringstatechange event is sent to the onicegatheringstatechange event handler on an RTCPeerConnection when the state of the ICE candidate gathering process changes. This signifies that the value of the connection's iceGatheringState property has changed.
+        /// Fired when the ICE connection state changes.
         /// </summary>
-        public ActionEvent<Event> OnIceGatheringStateChange { get => new ActionEvent<Event>("onicegatheringstatechange", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
+        public ActionEvent<Event> OnIceConnectionStateChange { get => new ActionEvent<Event>("iceconnectionstatechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// A negotiationneeded event is sent to the RTCPeerConnection when negotiation of the connection through the signaling channel is required. This occurs both during the initial setup of the connection as well as any time a change to the communication environment requires reconfiguring the connection.
+        /// Fired when the ICE gathering state changes.
         /// </summary>
-        public ActionEvent<Event> OnNegotiationNeeded { get => new ActionEvent<Event>("onnegotiationneeded", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
+        public ActionEvent<Event> OnIceGatheringStateChange { get => new ActionEvent<Event>("icegatheringstatechange", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// A signalingstatechange event is sent to an RTCPeerConnection to notify it that its signaling state, as indicated by the signalingState property, has changed.
+        /// Fired when negotiation or renegotiation of the connection is needed.
         /// </summary>
-        public ActionEvent<Event> OnSignalingStateChange { get => new ActionEvent<Event>("onsignalingstatechange", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
+        public ActionEvent<Event> OnNegotiationNeeded { get => new ActionEvent<Event>("negotiationneeded", AddEventListener, RemoveEventListener); set { } }
         /// <summary>
-        /// The track event is sent to the ontrack event handler on RTCPeerConnections after a new track has been added to an RTCRtpReceiver which is part of the connection.
+        /// Fired when the signaling state changes.
         /// </summary>
-        public ActionEvent<RTCTrackEvent> OnTrack { get => new ActionEvent<RTCTrackEvent>("ontrack", JSRef!.Set, (eventName, callback) => JSRef!.Set(eventName, null)); set { } }
+        public ActionEvent<Event> OnSignalingStateChange { get => new ActionEvent<Event>("signalingstatechange", AddEventListener, RemoveEventListener); set { } }
+        /// <summary>
+        /// Fired when a new track has been added to an RTCRtpReceiver which is part of the connection.
+        /// </summary>
+        public ActionEvent<RTCTrackEvent> OnTrack { get => new ActionEvent<RTCTrackEvent>("track", AddEventListener, RemoveEventListener); set { } }
     }
 }

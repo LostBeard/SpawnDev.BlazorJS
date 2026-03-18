@@ -31,5 +31,46 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("maxDrawCount")]
         public GPUSize64? MaxDrawCount { get; set; }
+
+        /// <summary>
+        /// A GPUQuerySet to write occlusion query results to. Used with BeginOcclusionQuery/EndOcclusionQuery on the encoder.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("occlusionQuerySet")]
+        public GPUQuerySet? OcclusionQuerySet { get; set; }
+
+        /// <summary>
+        /// Defines which timestamp values will be written for this pass.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("timestampWrites")]
+        public GPURenderPassTimestampWrites? TimestampWrites { get; set; }
+    }
+
+    /// <summary>
+    /// Defines timestamp write operations for a render pass.
+    /// https://www.w3.org/TR/webgpu/#dictdef-gpurenderpasstimestampwrites
+    /// </summary>
+    public class GPURenderPassTimestampWrites
+    {
+        /// <summary>
+        /// The GPUQuerySet to write timestamp values to.
+        /// </summary>
+        [JsonPropertyName("querySet")]
+        public GPUQuerySet QuerySet { get; set; }
+
+        /// <summary>
+        /// The index of the query in the query set at which to write the beginning timestamp.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("beginningOfPassWriteIndex")]
+        public int? BeginningOfPassWriteIndex { get; set; }
+
+        /// <summary>
+        /// The index of the query in the query set at which to write the ending timestamp.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("endOfPassWriteIndex")]
+        public int? EndOfPassWriteIndex { get; set; }
     }
 }

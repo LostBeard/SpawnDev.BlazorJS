@@ -26,6 +26,6 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// </summary>
         /// <param name="kind">A string indicating the type of media for which the browser's receiver capabilities are requested. The supported media kinds are: audio and video.</param>
         /// <returns>A new object that indicates what capabilities the browser has for receiving the specified media kind over an RTCPeerConnection. If the browser doesn't have any support for the given media kind, the returned value is null.</returns>
-        public static RTCRtpSenderCapabilities GetCapabilities(string kind) => JS.Call<RTCRtpSenderCapabilities>("getCapabilities");
+        public static RTCRtpSenderCapabilities GetCapabilities(string kind) => JS.Call<RTCRtpSenderCapabilities>("RTCRtpReceiver.getCapabilities", kind);
     }
 }
