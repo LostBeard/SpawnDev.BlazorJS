@@ -4,6 +4,12 @@
     /// With ActionEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events.<br/>
     /// All reference handling is done automatically when events are added and removed.<br/>
     /// Parameters of event handlers may be omitted if not required.<br/>
+    /// <br/>
+    /// <b>IMPORTANT: Every += must have a matching -= before the JSObject is disposed.</b><br/>
+    /// Failing to unsubscribe before disposal will cause the JavaScript callback to persist,<br/>
+    /// leading to memory leaks and potential calls into disposed .NET objects which can<br/>
+    /// trigger unhandled exceptions (e.g., Blazor error UI in WASM).<br/>
+    /// <br/>
     /// For example, many JSObjects have ActionEvent properties like the one below:<br/>
     /// <br/>
     /// public ActionEvent&lt;Event> OnChange { get => new ActionEvent&lt;Event>("change", AddEventListener, RemoveEventListener); set { } }<br/>

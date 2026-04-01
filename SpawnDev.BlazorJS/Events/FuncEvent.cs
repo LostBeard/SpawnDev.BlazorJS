@@ -4,7 +4,12 @@
     /// With FuncEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events.<br/>
     /// All reference handling is done automatically when events are added and removed.<br/>
     /// Parameters of event handlers may be omitted if not required.<br/>
-    /// FuncEvent works just like ActionEvent but allows a return value.
+    /// FuncEvent works just like ActionEvent but allows a return value.<br/>
+    /// <br/>
+    /// <b>IMPORTANT: Every += must have a matching -= before the JSObject is disposed.</b><br/>
+    /// Failing to unsubscribe before disposal will cause the JavaScript callback to persist,<br/>
+    /// leading to memory leaks and potential calls into disposed .NET objects which can<br/>
+    /// trigger unhandled exceptions (e.g., Blazor error UI in WASM).
     /// </summary>
     public class FuncEvent<TResult> : CallbackEvent
     {
@@ -71,7 +76,12 @@
     /// With FuncEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events.<br/>
     /// All reference handling is done automatically when events are added and removed.<br/>
     /// Parameters of event handlers may be omitted if not required.<br/>
-    /// FuncEvent works just like ActionEvent but allows a return value.
+    /// FuncEvent works just like ActionEvent but allows a return value.<br/>
+    /// <br/>
+    /// <b>IMPORTANT: Every += must have a matching -= before the JSObject is disposed.</b><br/>
+    /// Failing to unsubscribe before disposal will cause the JavaScript callback to persist,<br/>
+    /// leading to memory leaks and potential calls into disposed .NET objects which can<br/>
+    /// trigger unhandled exceptions (e.g., Blazor error UI in WASM).
     /// </summary>
     public class FuncEvent<T1, TResult> : FuncEvent<TResult>
     {
@@ -157,7 +167,12 @@
     /// With FuncEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events.<br/>
     /// All reference handling is done automatically when events are added and removed.<br/>
     /// Parameters of event handlers may be omitted if not required.<br/>
-    /// FuncEvent works just like ActionEvent but allows a return value.
+    /// FuncEvent works just like ActionEvent but allows a return value.<br/>
+    /// <br/>
+    /// <b>IMPORTANT: Every += must have a matching -= before the JSObject is disposed.</b><br/>
+    /// Failing to unsubscribe before disposal will cause the JavaScript callback to persist,<br/>
+    /// leading to memory leaks and potential calls into disposed .NET objects which can<br/>
+    /// trigger unhandled exceptions (e.g., Blazor error UI in WASM).
     /// </summary>
     public class FuncEvent<T1, T2, TResult> : FuncEvent<T1, TResult>
     {
@@ -262,7 +277,12 @@
     /// With FuncEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events.<br/>
     /// All reference handling is done automatically when events are added and removed.<br/>
     /// Parameters of event handlers may be omitted if not required.<br/>
-    /// FuncEvent works just like ActionEvent but allows a return value.
+    /// FuncEvent works just like ActionEvent but allows a return value.<br/>
+    /// <br/>
+    /// <b>IMPORTANT: Every += must have a matching -= before the JSObject is disposed.</b><br/>
+    /// Failing to unsubscribe before disposal will cause the JavaScript callback to persist,<br/>
+    /// leading to memory leaks and potential calls into disposed .NET objects which can<br/>
+    /// trigger unhandled exceptions (e.g., Blazor error UI in WASM).
     /// </summary>
     public class FuncEvent<T1, T2, T3, TResult> : FuncEvent<T1, T2, TResult>
     {
@@ -386,7 +406,12 @@
     /// With FuncEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events.<br/>
     /// All reference handling is done automatically when events are added and removed.<br/>
     /// Parameters of event handlers may be omitted if not required.<br/>
-    /// FuncEvent works just like ActionEvent but allows a return value.
+    /// FuncEvent works just like ActionEvent but allows a return value.<br/>
+    /// <br/>
+    /// <b>IMPORTANT: Every += must have a matching -= before the JSObject is disposed.</b><br/>
+    /// Failing to unsubscribe before disposal will cause the JavaScript callback to persist,<br/>
+    /// leading to memory leaks and potential calls into disposed .NET objects which can<br/>
+    /// trigger unhandled exceptions (e.g., Blazor error UI in WASM).
     /// </summary>
     public class FuncEvent<T1, T2, T3, T4, TResult> : FuncEvent<T1, T2, T3, TResult>
     {
@@ -529,7 +554,12 @@
     /// With FuncEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events.<br/>
     /// All reference handling is done automatically when events are added and removed.<br/>
     /// Parameters of event handlers may be omitted if not required.<br/>
-    /// FuncEvent works just like ActionEvent but allows a return value.
+    /// FuncEvent works just like ActionEvent but allows a return value.<br/>
+    /// <br/>
+    /// <b>IMPORTANT: Every += must have a matching -= before the JSObject is disposed.</b><br/>
+    /// Failing to unsubscribe before disposal will cause the JavaScript callback to persist,<br/>
+    /// leading to memory leaks and potential calls into disposed .NET objects which can<br/>
+    /// trigger unhandled exceptions (e.g., Blazor error UI in WASM).
     /// </summary>
     public class FuncEvent<T1, T2, T3, T4, T5, TResult> : FuncEvent<T1, T2, T3, T4, TResult>
     {
@@ -691,7 +721,12 @@
     /// With FuncEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events.<br/>
     /// All reference handling is done automatically when events are added and removed.<br/>
     /// Parameters of event handlers may be omitted if not required.<br/>
-    /// FuncEvent works just like ActionEvent but allows a return value.
+    /// FuncEvent works just like ActionEvent but allows a return value.<br/>
+    /// <br/>
+    /// <b>IMPORTANT: Every += must have a matching -= before the JSObject is disposed.</b><br/>
+    /// Failing to unsubscribe before disposal will cause the JavaScript callback to persist,<br/>
+    /// leading to memory leaks and potential calls into disposed .NET objects which can<br/>
+    /// trigger unhandled exceptions (e.g., Blazor error UI in WASM).
     /// </summary>
     public class FuncEvent<T1, T2, T3, T4, T5, T6, TResult> : FuncEvent<T1, T2, T3, T4, T5, TResult>
     {
@@ -872,7 +907,12 @@
     /// With FuncEvent the operands += and -= can be used to attach and detach .Net callbacks to Javascript events.<br/>
     /// All reference handling is done automatically when events are added and removed.<br/>
     /// Parameters of event handlers may be omitted if not required.<br/>
-    /// FuncEvent works just like ActionEvent but allows a return value.
+    /// FuncEvent works just like ActionEvent but allows a return value.<br/>
+    /// <br/>
+    /// <b>IMPORTANT: Every += must have a matching -= before the JSObject is disposed.</b><br/>
+    /// Failing to unsubscribe before disposal will cause the JavaScript callback to persist,<br/>
+    /// leading to memory leaks and potential calls into disposed .NET objects which can<br/>
+    /// trigger unhandled exceptions (e.g., Blazor error UI in WASM).
     /// </summary>
     public class FuncEvent<T1, T2, T3, T4, T5, T6, T7, TResult> : FuncEvent<T1, T2, T3, T4, T5, T6, TResult>
     {
