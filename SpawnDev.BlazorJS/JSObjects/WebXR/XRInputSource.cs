@@ -34,5 +34,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An XRSpace object defining the origin of the target ray and the direction in which it extends. This space is established using the method defined by targetRayMode.
         /// </summary>
         public XRSpace? TargetRaySpace => JSRef!.Get<XRSpace?>("targetRaySpace");
+        /// <summary>
+        /// An XRSpace whose native origin tracks the pose used to render virtual objects so they appear
+        /// to be held in the user's hand. Null if the input source is not inherently associated with a hand.
+        /// </summary>
+        public XRSpace? GripSpace => JSRef!.Get<XRSpace?>("gripSpace");
     }
 }

@@ -15,6 +15,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public XRSession Session => JSRef!.Get<XRSession>("session");
         /// <summary>
+        /// A DOMHighResTimeStamp indicating the time at which the frame's scene was computed.
+        /// Used for animation timing, frame pacing, and interpolation.
+        /// </summary>
+        public double PredictedDisplayTime => JSRef!.Get<double>("predictedDisplayTime");
+        /// <summary>
         /// An XRAnchorSet containing all anchors still tracked in the frame.
         /// </summary>
         public XRAnchorSet TrackedAnchors => JSRef!.Get<XRAnchorSet>("trackedAnchors");

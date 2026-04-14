@@ -58,6 +58,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A DOMHighResTimeStamp representing the last time the data for this gamepad was updated.
         /// </summary>
-        public double TimeStamp => JSRef!.Get<double>("timeStamp");
+        public double Timestamp => JSRef!.Get<double>("timestamp");
     }
 }

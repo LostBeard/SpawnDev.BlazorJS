@@ -18,7 +18,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         public XRInputSource[] Added => JSRef!.Get<XRInputSource[]>("added");
         /// <summary>
-        /// An array of zero or more XRInputSource objects representing the input devices newly connected or enabled for use.
+        /// An array of zero or more XRInputSource objects representing the input devices newly disconnected or no longer available.
         /// </summary>
         public XRInputSource[] Removed => JSRef!.Get<XRInputSource[]>("removed");
     }

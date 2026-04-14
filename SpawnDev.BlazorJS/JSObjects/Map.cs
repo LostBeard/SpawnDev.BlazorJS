@@ -32,7 +32,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool Delete(TKey key) => JSRef!.Call<bool>("delete");
+        public bool Delete(TKey key) => JSRef!.Call<bool>("delete", key);
         /// <summary>
         /// Sets the value for the passed key in the Map object. Returns the Map object.
         /// </summary>
@@ -106,7 +106,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool Delete<TKey>(TKey key) => JSRef!.Call<bool>("delete");
+        public bool Delete<TKey>(TKey key) => JSRef!.Call<bool>("delete", key);
         /// <summary>
         /// Sets the value for the passed key in the Map object. Returns the Map object.
         /// </summary>
