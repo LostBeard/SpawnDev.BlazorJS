@@ -221,6 +221,15 @@ namespace SpawnDev.BlazorJS.JSObjects
             return await tcs.Task;
         }
         /// <summary>
+        /// The captureStream() method returns a MediaStream which includes a CanvasCaptureMediaStreamTrack
+        /// containing a real-time video capture of the canvas's contents.
+        /// </summary>
+        /// <param name="frameRate">Frame rate for capture. If not set, a new frame is captured each time the canvas changes.</param>
+        /// <returns>A MediaStream with one video track capturing the canvas contents.</returns>
+        public MediaStream CaptureStream(double? frameRate = null) =>
+            frameRate.HasValue ? JSRef!.Call<MediaStream>("captureStream", frameRate.Value) : JSRef!.Call<MediaStream>("captureStream");
+
+        /// <summary>
         /// The HTMLCanvasElement.transferControlToOffscreen() method transfers control to an OffscreenCanvas object, either on the main thread or on a worker.
         /// </summary>
         /// <returns></returns>

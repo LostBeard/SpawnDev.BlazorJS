@@ -1,0 +1,78 @@
+# Array
+
+**Namespace:** `SpawnDev.BlazorJS.JSObjects`  
+**Inherits:** `JSObject`  
+**Source:** `JSObjects/Array.cs`  
+**MDN Reference:** [Array on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
+
+> The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a single variable name, and has members for performing common array operations. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `Array(IJSInProcessObjectReference _ref)` | Deserialization constructor |
+| `Array()` | Creates a new Array |
+| `Array(uint length)` | Creates a new Array |
+| `Array(params object[] values)` | Creates a new Array |
+| `Array(IJSInProcessObjectReference _ref)` | Deserialization constructor |
+| `Array()` | The Array() constructor creates Array objects. |
+| `Array(uint length)` | The Array() constructor creates Array objects. If the only argument passed to the Array constructor is an integer between 0 and 232 - 1 (inclusive), this returns a new JavaScript array with its length property set to that number (Note: this implies an array of arrayLength empty slots, not slots with actual undefined values - see sparse arrays). |
+| `Array(params TArrayItem[] values)` | The Array() constructor creates Array objects. A JavaScript array is initialized with the given elements, except in the case where a single argument is passed to the Array constructor and that argument is a number (see the arrayLength parameter below). Note that this special case only applies to JavaScript arrays created with the Array constructor, not array literals created with the square bracket syntax. |
+
+## Properties
+
+| Property | Type | Access | Description |
+|---|---|---|---|
+| `Length` | `int` | get | Reflects the number of elements in an array. |
+
+## Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `FirstOrDefault()` | `T` | Returns first or default |
+| `LastOrDefault()` | `T` | Returns last or default |
+| `ToList()` | `List<T>` | Returns the array as a .Net List |
+| `ToArray()` | `T[]` | Returns the array as a .Net Array |
+| `ToArray(int start, int count)` | `T[]` | Returns the array as a .Net Array |
+| `ToList(int start, int count)` | `List<T>` | Returns the array as a .Net List |
+| `IsArray(object? obj)` | `bool` | Returns true if the argument is an array, or false otherwise. |
+| `Of(params object[] values)` | `Array` | The Array.of() static method creates a new Array instance from a variable number of arguments, regardless of number or type of the arguments. |
+| `Push(object? value)` | `void` | Adds one or more elements to the end of an array, and returns the new length of the array. |
+| `Unshift(object? value)` | `void` | Adds one or more elements to the front of an array, and returns the new length of the array. |
+| `At(int index)` | `T` | Returns the array item at the given index. Accepts negative integers, which count back from the last item. |
+| `At(Type type, int index)` | `object?` | Returns the array item at the given index. Accepts negative integers, which count back from the last item. |
+| `Pop()` | `T` | Removes the last element from an array and returns that element. |
+| `Pop(Type type)` | `object?` | Removes the last element from an array and returns that element. |
+| `Shift()` | `T` | Removes the first element from an array and returns that element. |
+| `Shift(Type type)` | `object?` | Removes the first element from an array and returns that element. |
+| `SetItem(int index, object? value)` | `void` | Set the value of the item at the given index |
+| `GetItem(int index)` | `T` | Returns the array item at the given index. Returns default TArrayItem for negative numbers (unlike at()) |
+| `GetItem(Type type, int index)` | `object?` | Returns the array item at the given index. Returns default TArrayItem for negative numbers (unlike at()) |
+| `Concat(Array array)` | `Array` | Returns a new array that is the calling array joined with other array(s) and/or value(s). |
+| `Join(string separator)` | `string` | Joins all elements of an array into a string. |
+| `Map(Function function)` | `Array<TResult>` | Returns a new array containing the results of invoking a function on every element in the calling array. |
+| `Map(Func<T, TResult> mapTo)` | `Array<TResult>` | Returns a new array containing the results of invoking a function on every element in the calling array. |
+| `Filter(Func<T, bool> filter)` | `Array<T>` | Returns a new array containing all elements of the calling array for which the provided filtering function returns true. |
+| `Slice()` | `Array<T>` | Extracts a section of the calling array and returns a new array. A new array containing the extracted elements. |
+| `Slice(int start)` | `Array<T>` | Extracts a section of the calling array and returns a new array. Zero-based index at which to start extraction, converted to an integer. - Negative index counts back from the end of the array - if -array.length &lt;= start &lt; 0, start + array.length is used. - If start &lt; -array.length or start is omitted, 0 is used. - If start &gt;= array.length, nothing is extracted. A new array containing the extracted elements. |
+| `Slice(int start, int end)` | `Array<T>` | Extracts a section of the calling array and returns a new array. Zero-based index at which to start extraction, converted to an integer. - Negative index counts back from the end of the array - if -array.length &lt;= start &lt; 0, start + array.length is used. - If start &lt; -array.length or start is omitted, 0 is used. - If start &gt;= array.length, nothing is extracted. Zero-based index at which to end extraction, converted to an integer. slice() extracts up to but not including end. - Negative index counts back from the end of the array - if -array.length &lt;= end &lt; 0, end + array.length is used. - If end &lt; -array.length, 0 is used. - If end &gt;= array.length or end is omitted, array.length is used, causing all elements until the end to be extracted. - If end implies a position before or at the position that start implies, nothing is extracted. A new array containing the extracted elements. |
+| `ForEach(Action<T> mapTo)` | `void` | Calls a function for each element in the calling array. |
+| `Cast(bool disposeThis)` | `Array<T>` | Return a new reference to this array with an item type of T If true, this Array JSObject will be disposed after the new cast |
+| `Splice(int start)` | `Array` | Adds and/or removes elements from an array. Zero-based index at which to start changing the array, converted to an integer. - Negative index counts back from the end of the array - if -array.length &lt;= start &lt; 0, start + array.length is used. - If start &lt; -array.length, 0 is used. - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided. - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0. |
+| `Splice(int start, int deleteCount)` | `Array` | Adds and/or removes elements from an array. Zero-based index at which to start changing the array, converted to an integer. - Negative index counts back from the end of the array - if -array.length &lt;= start &lt; 0, start + array.length is used. - If start &lt; -array.length, 0 is used. - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided. - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0. An integer indicating the number of elements in the array to remove from start. - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0. - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below). |
+| `Splice(int start, int deleteCount, object?[] addItems)` | `Array` | Adds and/or removes elements from an array. Zero-based index at which to start changing the array, converted to an integer. - Negative index counts back from the end of the array - if -array.length &lt;= start &lt; 0, start + array.length is used. - If start &lt; -array.length, 0 is used. - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided. - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0. An integer indicating the number of elements in the array to remove from start. - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0. - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below). The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array. |
+| `Splice(int start, int deleteCount, T[] addItems)` | `Array<T>` | Adds and/or removes elements from an array. Zero-based index at which to start changing the array, converted to an integer. - Negative index counts back from the end of the array - if -array.length &lt;= start &lt; 0, start + array.length is used. - If start &lt; -array.length, 0 is used. - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided. - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0. An integer indicating the number of elements in the array to remove from start. - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0. - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below). The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array. |
+| `Sort(Func<T, T, int> compareFn)` | `Array` | Sorts the elements of an array in place and returns the reference to the same array, now sorted. The default sort order is ascending, built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values. A function that determines the order of the elements. The function is called with the following arguments: a - The first element for comparison. b - The second element for comparison. It should return a number where: - A negative value indicates that a should come before b. - A positive value indicates that a should come after b. - Zero or NaN indicates that a and b are considered equal. To memorize this, remember that (a, b) => a - b sorts numbers in ascending order. If omitted, the array elements are converted to strings, then sorted according to each character's Unicode code point value. This Array instance |
+| `GetEnumerator()` | `IEnumerator<TArrayItem>` |  |
+| `Of(params TArrayItem[] values)` | `Array` | The Array.of() static method creates a new Array instance from a variable number of arguments, regardless of number or type of the arguments. |
+| `Push(TArrayItem value)` | `void` | Adds one or more elements to the end of an array, and returns the new length of the array. |
+| `Unshift(TArrayItem value)` | `void` | Adds one or more elements to the front of an array, and returns the new length of the array. |
+| `SetItem(int index, TArrayItem value)` | `void` | Set the value at the given index |
+| `Concat(Array<TArrayItem> array)` | `Array<TArrayItem>` | Returns a new array that is the calling array joined with other array(s) and/or value(s). |
+| `Map(Func<TArrayItem, TResult> mapTo)` | `Array<TResult>` | Returns a new array containing the results of invoking a function on every element in the calling array. |
+| `Filter(Func<TArrayItem, bool> filter)` | `Array<TArrayItem>` | Returns a new array containing all elements of the calling array for which the provided filtering function returns true. |
+| `Splice(int start, int deleteCount, TArrayItem[] addItems)` | `Array<TArrayItem>` | Adds and/or removes elements from an array. Zero-based index at which to start changing the array, converted to an integer. - Negative index counts back from the end of the array - if -array.length &lt;= start &lt; 0, start + array.length is used. - If start &lt; -array.length, 0 is used. - If start &gt;= array.length, no element will be deleted, but the method will behave as an adding function, adding as many elements as provided. - If start is omitted (and splice() is called with no arguments), nothing is deleted. This is different from passing undefined, which is converted to 0. An integer indicating the number of elements in the array to remove from start. - If deleteCount is omitted, or if its value is greater than or equal to the number of elements after the position specified by start, then all the elements from start to the end of the array will be deleted. However, if you wish to pass any itemN parameter, you should pass Infinity as deleteCount to delete all elements after start, because an explicit undefined gets converted to 0. - If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below). The elements to add to the array, beginning from start. If you do not specify any elements, splice() will only remove elements from the array. |
+| `ForEach(Action<TArrayItem> fn)` | `void` | Calls a function for each element in the calling array. |
+| `Sort(Func<TArrayItem, TArrayItem, int> compareFn)` | `Array<TArrayItem>` | Sorts the elements of an array in place and returns the reference to the same array, now sorted. The default sort order is ascending, built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values. A function that determines the order of the elements. The function is called with the following arguments: a - The first element for comparison. b - The second element for comparison. It should return a number where: - A negative value indicates that a should come before b. - A positive value indicates that a should come after b. - Zero or NaN indicates that a and b are considered equal. To memorize this, remember that (a, b) => a - b sorts numbers in ascending order. If omitted, the array elements are converted to strings, then sorted according to each character's Unicode code point value. This Array instance |
+
