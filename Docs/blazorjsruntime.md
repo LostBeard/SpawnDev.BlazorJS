@@ -165,6 +165,7 @@ SpawnDev.BlazorJS is a 1:1 mapping to JavaScript. Using the wrong call type **th
 | Value (synchronous) | `JS.Call<T>()` or `JS.Get<T>()` | `JS.CallAsync<T>()` THROWS |
 | Promise (asynchronous) | `JS.CallAsync<T>()` | `JS.Call<T>()` returns a Promise object, not the value |
 | void (synchronous) | `JS.CallVoid()` | - |
+| void Promise (asynchronous) | `JS.CallVoidAsync()` | `JS.CallVoid()` won't await the Promise |
 
 **Examples of correct usage:**
 

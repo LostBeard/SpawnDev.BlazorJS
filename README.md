@@ -102,6 +102,7 @@ SpawnDev.BlazorJS is a 1:1 mapping to JavaScript. Use the correct call type or i
 | Value (sync) | `JS.Call<T>()`, `JS.Get<T>()` | `CallAsync` on sync method throws |
 | Promise (async) | `JS.CallAsync<T>()` | `Call` on Promise returns wrong type |
 | void (sync) | `JS.CallVoid()` | - |
+| void Promise (async) | `JS.CallVoidAsync()` | `CallVoid` on async method won't await |
 
 ```csharp
 // Sync JS method - use sync call
@@ -109,6 +110,9 @@ var total = JS.Call<int>("addNumbers", 20, 22);
 
 // Async JS method or Promise-returning - use async call
 var data = await JS.CallAsync<string>("fetchData");
+
+// Async void (Promise with no return value)
+await JS.CallVoidAsync("someAsyncVoidMethod");
 ```
 
 See the [BlazorJSRuntime Guide](Docs/blazorjsruntime.md) for full details.
