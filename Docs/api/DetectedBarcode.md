@@ -45,3 +45,35 @@ barcodeDetector
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/BarcodeDetector/detect)*
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+barcodeDetector
+  .detect(imageEl)
+  .then((barcodes) => {
+    barcodes.forEach((barcode) => console.log(barcode.rawValue));
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+barcodeDetector
+.detect(imageEl)
+; // then: use await instead
+barcodes.forEach((barcode) => Console.WriteLine(barcode.RawValue));
+})
+// catch: use try/catch instead
+Console.Error.WriteLine(err);
+});
+```
+

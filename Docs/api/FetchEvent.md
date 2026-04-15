@@ -71,3 +71,67 @@ self.addEventListener("fetch", (event) => {
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent)*
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+self.addEventListener("fetch", (event) => {
+  // Let the browser do its default thing
+  // for non-GET requests.
+  if (event.request.method !== "GET") return;
+
+  // Prevent the default, and handle the request ourselves.
+  event.respondWith(
+    (async () => {
+      // Try to get the response from a cache.
+      const cache = await caches.open("dynamic-v1");
+      const cachedResponse = await cache.match(event.request);
+
+      if (cachedResponse) {
+        // If we found a match in the cache, return it, but also
+        // update the entry in the cache in the background.
+        event.waitUntil(cache.add(event.request));
+        return cachedResponse;
+      }
+
+      // If we didn't find a match in the cache, use the network.
+      return fetch(event.request);
+    })(),
+  );
+});
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+self.addEventListener("fetch", (event) => {
+// Let the browser do its default thing
+// for non-GET requests.
+if (event.Request.method != "GET") return;
+
+// Prevent the default, and handle the request ourselves.
+event.RespondWith(
+(async () => {
+// Try to get the response from a cache.
+using var cache = await caches.open("dynamic-v1");
+using var cachedResponse = await cache.match(event.Request);
+
+if (cachedResponse) {
+// If we found a match in the cache, return it, but also
+// update the entry in the cache in the background.
+event.waitUntil(cache.add(event.Request));
+return cachedResponse;
+}
+
+// If we didn't find a match in the cache, use the network.
+return await JS.CallAsync<Response>("fetch", event.Request);
+})(),
+);
+});
+```
+

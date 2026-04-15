@@ -319,7 +319,7 @@ if (JS.IsScope(GlobalScope.Window | GlobalScope.DedicatedWorker))
 |---|---|---|
 | `GlobalThis` | `JSObject?` | The `globalThis` object |
 | `WindowThis` | `Window?` | Non-null when `IsWindow` is true |
-| `DedicateWorkerThis` | `DedicatedWorkerGlobalScope?` | Non-null when `IsDedicatedWorkerGlobalScope` is true |
+| `DedicatedWorkerThis` | `DedicatedWorkerGlobalScope?` | Non-null when `IsDedicatedWorkerGlobalScope` is true |
 | `SharedWorkerThis` | `SharedWorkerGlobalScope?` | Non-null when `IsSharedWorkerGlobalScope` is true |
 | `ServiceWorkerThis` | `ServiceWorkerGlobalScope?` | Non-null when `IsServiceWorkerGlobalScope` is true |
 

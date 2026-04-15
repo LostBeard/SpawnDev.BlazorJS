@@ -1,6 +1,6 @@
 # SpawnDev.BlazorJS API Reference
 
-Complete C# API documentation for browser APIs via Blazor WebAssembly. SpawnDev.BlazorJS provides over 450 strongly typed C# wrappers that mirror the [MDN Web API](https://developer.mozilla.org/en-US/docs/Web/API) surface, giving Blazor WebAssembly applications full access to every browser API without writing a single line of JavaScript.
+Complete C# API documentation for browser APIs via Blazor WebAssembly. SpawnDev.BlazorJS provides over 1,000 strongly typed C# wrappers that mirror the [MDN Web API](https://developer.mozilla.org/en-US/docs/Web/API) surface, giving Blazor WebAssembly applications full access to every browser API without writing a single line of JavaScript.
 
 > **MDN Mapping:** Every type listed in this documentation maps directly to its equivalent on [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API). Where an MDN page exists for a JavaScript API, the corresponding SpawnDev.BlazorJS wrapper implements the same properties, methods, and events with C#-idiomatic naming. When in doubt, check the MDN page for the underlying JS behavior.
 
@@ -68,7 +68,7 @@ These guides cover the foundational types and patterns that every SpawnDev.Blazo
 
 ## Web API Reference
 
-**[Complete Class Index (932 types)](api/_index.md)** - Every type documented, organized by category.
+**[Complete Class Index (1,014 types)](api/_index.md)** - Every type documented, organized by category.
 
 Organized by category, mirroring the [MDN Web API index](https://developer.mozilla.org/en-US/docs/Web/API) and the source folder structure. Each category links to a folder containing every class, interface, enum, and options type for that API.
 
@@ -91,15 +91,15 @@ Organized by category, mirroring the [MDN Web API index](https://developer.mozil
 | [MediaSession](api/MediaSession/) | 6 | [MediaSession](api/MediaSession/MediaSession.md), [MediaMetadata](api/MediaSession/MediaMetadata.md) |
 | [PaymentRequest](api/PaymentRequest/) | 6 | [PaymentRequest](api/PaymentRequest/PaymentRequest.md), [PaymentResponse](api/PaymentRequest/PaymentResponse.md) |
 | [Reporting](api/Reporting/) | 7 | [ReportingObserver](api/Reporting/ReportingObserver.md), [Report](api/Reporting/Report.md) |
-| [ShapeDetection](api/ShapeDetection/) | 5 | [BarcodeDetector](api/ShapeDetection/BarcodeDetector.md), [FaceDetector](api/ShapeDetection/FaceDetector.md) |
+| [ShapeDetection](api/ShapeDetection/) | 5 | [BarcodeDetector](api/BarcodeDetector.md), [FaceDetector](api/ShapeDetection/FaceDetector.md) |
 | [WebTransport](api/WebTransport/) | 5 | [WebTransport](api/WebTransport/WebTransport.md) |
-| [Performance](api/Performance/) | 4 | [Performance](api/Performance/Performance.md), [PerformanceEntry](api/Performance/PerformanceEntry.md) |
+| [Performance](api/Performance/) | 4 | [Performance](api/Performance.md), [PerformanceEntry](api/Performance/PerformanceEntry.md) |
 | [IntersectionObserver](api/IntersectionObserver/) | 3 | [IntersectionObserver](api/IntersectionObserver/IntersectionObserver.md) |
 | [EyeDropper](api/EyeDropper/) | 3 | [EyeDropper](api/EyeDropper/EyeDropper.md) |
 | [Compression](api/Compression/) | 2 | [CompressionStream](api/Compression/CompressionStream.md), [DecompressionStream](api/Compression/DecompressionStream.md) |
 | [PictureInPicture](api/PictureInPicture/) | 2 | [PictureInPictureWindow](api/PictureInPicture/PictureInPictureWindow.md) |
 | [IdleDetection](api/IdleDetection/) | 2 | [IdleDetector](api/IdleDetection/IdleDetector.md) |
-| [General (Root)](api/) | 450+ | [WebSocket](api/WebSocket.md), [Worker](api/Worker.md), [Blob](api/Blob.md), [File](api/File.md), [Request](api/Request.md), [Response](api/Response.md), [Navigator](api/Navigator.md), [URL](api/URL.md), [Promise](api/Promise.md), [Array](api/Array.md), [Atomics](api/Atomics.md), [Cache](api/Cache.md), [Notification](api/Notification.md), [MediaStream](api/MediaStream.md), [Gamepad](api/Gamepad.md), and [many more...](api/_index.md) |
+| [General (Root)](api/) | 530+ | [WebSocket](api/WebSocket.md), [Worker](api/Worker.md), [Blob](api/Blob.md), [File](api/File.md), [Request](api/Request.md), [Response](api/Response.md), [Navigator](api/Navigator.md), [URL](api/URL.md), [Promise](api/Promise.md), [Array](api/Array.md), [Atomics](api/Atomics.md), [Cache](api/Cache.md), [Notification](api/Notification.md), [MediaStream](api/MediaStream.md), [Gamepad](api/Gamepad.md), and [many more...](api/_index.md) |
 
 ---
 
@@ -110,7 +110,7 @@ These are library-specific types that provide the interop foundation.
 | Type | Description |
 |---|---|
 | [BlazorJSRuntime](api/BlazorJSRuntime.md) | Central interop service - global JS access, scope detection, script loading |
-| [JSObject](api/JSObject.md) | Base class for all 450+ typed JavaScript wrappers |
+| [JSObject](api/JSObject.md) | Base class for all 1,000+ typed JavaScript wrappers |
 | [Callback](api/Callback.md) | Makes .NET methods callable from JavaScript - ref-counted, disposable |
 | [ActionEvent](api/ActionEvent.md) | Event subscription with += / -= operators for Action delegates |
 | [FuncEvent](api/FuncEvent.md) | Event subscription with += / -= operators for Func delegates |

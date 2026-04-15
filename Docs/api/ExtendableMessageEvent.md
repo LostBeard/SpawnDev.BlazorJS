@@ -67,3 +67,73 @@ addEventListener("message", (event) => {
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/ExtendableMessageEvent)*
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+// in the page being controlled
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.register("service-worker.js");
+
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    // event is a MessageEvent object
+    console.log(`The service worker sent me a message: ${event.data}`);
+  });
+
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.active.postMessage("Hi service worker");
+  });
+}
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+// in the page being controlled
+if (JS.Get<Navigator>("navigator").ServiceWorker) {
+JS.Get<Navigator>("navigator").ServiceWorker.register("service-worker.js");
+
+JS.Get<Navigator>("navigator").ServiceWorker.addEventListener("message", (event) => {
+// event is a MessageEvent object
+Console.WriteLine($"The service worker sent me a message: {event.Data}");
+});
+
+JS.Get<Navigator>("navigator").ServiceWorker.ready; // then: use await instead;
+registration.active.postMessage("Hi service worker");
+});
+}
+```
+
+**JavaScript (MDN):**
+
+```js
+// in the service worker
+addEventListener("message", (event) => {
+  // event is an ExtendableMessageEvent object
+  console.log(`The client sent me a message: ${event.data}`);
+
+  event.source.postMessage("Hi client");
+});
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+// in the service worker
+addEventListener("message", (event) => {
+// event is an ExtendableMessageEvent object
+Console.WriteLine($"The client sent me a message: {event.Data}");
+
+event.Source.postMessage("Hi client");
+});
+```
+

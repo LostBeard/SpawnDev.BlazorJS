@@ -20,7 +20,7 @@
 
 | Property | Type | Access | Description |
 |---|---|---|---|
-| `BinaryType` | `string` | get | The binary data type used by the connection. "blob" - Use Blob objects for binary data. This is the default value. "arraybuffer" - Use ArrayBuffer objects for binary data. |
+| `BinaryType` | `string` | get/set | The binary data type used by the connection. "blob" - Use Blob objects for binary data. This is the default value. "arraybuffer" - Use ArrayBuffer objects for binary data. |
 | `BufferedAmount` | `int` | get | The number of bytes of queued data. |
 | `ReadyState` | `int` | get | The current state of the connection. 0 - CONNECTING - Socket has been created. The connection is not yet open. 1 - OPEN - The connection is open and ready to communicate. 2 - CLOSING - The connection is in the process of closing. 3 - CLOSED - The connection is closed or couldn't be opened. |
 | `Protocol` | `string` | get | The sub-protocol selected by the server. The sub-protocol selected by the server. |

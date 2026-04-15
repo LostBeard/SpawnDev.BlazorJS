@@ -46,3 +46,53 @@ self.addEventListener("cookiechange", (event) => {
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/ExtendableCookieChangeEvent)*
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+self.addEventListener("activate", (event) => {
+  event.waitUntil(async () => {
+    const subscriptions = await self.registration.cookies.getSubscriptions();
+
+    await self.registration.cookies.unsubscribe(subscriptions);
+
+    await self.registration.cookies.subscribe([
+      {
+        name: "COOKIE_NAME",
+      },
+    ]);
+  });
+});
+
+self.addEventListener("cookiechange", (event) => {
+  console.log(event);
+});
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+self.addEventListener("activate", (event) => {
+event.waitUntil(async () => {
+using var subscriptions = await self.registration.cookies.getSubscriptions();
+
+await self.registration.cookies.unsubscribe(subscriptions);
+
+await self.registration.cookies.subscribe([;
+{
+name: "COOKIE_NAME",
+},
+]);
+});
+});
+
+self.addEventListener("cookiechange", (event) => {
+Console.WriteLine(event);
+});
+```
+

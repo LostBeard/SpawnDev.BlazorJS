@@ -58,3 +58,70 @@ async function startCapture(displayMediaOptions) {
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia)*
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+const displayMediaOptions = {
+  video: {
+    displaySurface: "browser",
+  },
+  audio: {
+    suppressLocalAudioPlayback: false,
+  },
+  preferCurrentTab: false,
+  selfBrowserSurface: "exclude",
+  systemAudio: "include",
+  surfaceSwitching: "include",
+  monitorTypeSurfaces: "include",
+};
+
+async function startCapture(displayMediaOptions) {
+  let captureStream;
+
+  try {
+    captureStream =
+      await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+  return captureStream;
+}
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+var displayMediaOptions = {
+video: {
+displaySurface: "browser",
+},
+audio: {
+suppressLocalAudioPlayback: false,
+},
+preferCurrentTab: false,
+selfBrowserSurface: "exclude",
+systemAudio: "include",
+surfaceSwitching: "include",
+monitorTypeSurfaces: "include",
+};
+
+async Task startCapture(displayMediaOptions)
+{
+var captureStream;
+
+try {
+captureStream =
+await JS.Get<Navigator>("navigator").MediaDevices.getDisplayMedia(displayMediaOptions);
+} catch (err) {
+Console.Error.WriteLine($"Error: {err}");
+}
+return captureStream;
+}
+```
+

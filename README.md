@@ -1,9 +1,9 @@
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
-Full Blazor WebAssembly and JavaScript interop. Over 930 strongly typed C# wrappers for browser APIs - create JavaScript objects, access properties, call methods, and handle events the .NET way without writing JavaScript.
+Full Blazor WebAssembly and JavaScript interop. Over 1,000 strongly typed C# wrappers for browser APIs - create JavaScript objects, access properties, call methods, and handle events the .NET way without writing JavaScript.
 
-**[Full API Documentation](Docs/README.md)** - Complete MDN-style API reference with guides, 930+ typed wrapper references, and real C# examples.
+**[Full API Documentation](Docs/README.md)** - Complete MDN-style API reference with guides, 1,000+ typed wrapper references, and real C# examples.
 
 [Live Demo](https://blazorjs.spawndev.com/)
 
@@ -14,7 +14,15 @@ Full Blazor WebAssembly and JavaScript interop. Over 930 strongly typed C# wrapp
 
 **Note:** Version 3.x dropped support for .NET 6 and 7. Use version 2.x for those targets.
 
+**Important:** `PublishTrimmed` and `RunAOTCompilation` must be set to `false` in your project file. Trimming removes types needed for JS interop.
+
 **[SpawnDev.BlazorJS.WebWorkers](https://github.com/LostBeard/SpawnDev.BlazorJS.WebWorkers)** is now in a separate repo.
+
+### Installation
+
+```bash
+dotnet add package SpawnDev.BlazorJS
+```
 
 ---
 
@@ -57,7 +65,7 @@ var response = await JS.CallAsync<Response>("fetch", "/api/data");
 
 // Create new JS objects
 using var audio = new Audio("song.mp3");
-audio.Play();
+await audio.Play();
 
 // Typed browser API access
 using var window = JS.Get<Window>("window");
@@ -75,7 +83,7 @@ For full setup details including worker scope detection and WebWorkerService, se
 
 | Feature | Description | Docs |
 |---|---|---|
-| **930+ Typed Wrappers** | Every major browser API - DOM, WebGPU, WebRTC, WebAudio, Crypto, WebXR, and more | [API Reference](Docs/api/_index.md) |
+| **1,000+ Typed Wrappers** | Every major browser API - DOM, WebGPU, WebRTC, WebAudio, Crypto, WebXR, and more | [API Reference](Docs/api/_index.md) |
 | **BlazorJSRuntime** | Get, Set, Call, CallAsync, New - with null-conditional (`?.`) support | [Guide](Docs/blazorjsruntime.md) |
 | **JSObject** | Base class for typed JS wrappers with automatic disposal | [Guide](Docs/jsobject.md) |
 | **ActionEvent** | Type-safe event subscription with `+=` / `-=` and automatic ref counting | [Guide](Docs/events.md) |
@@ -197,8 +205,8 @@ public class Audio : JSObject
     
     public string Src { get => JSRef!.Get<string>("src"); set => JSRef!.Set("src", value); }
     public double Volume { get => JSRef!.Get<double>("volume"); set => JSRef!.Set("volume", value); }
-    public void Play() => JSRef!.CallVoid("play");
-    public void Pause() => JSRef!.CallVoid("pause");
+    public Task Play() => JSRef!.CallVoidAsync("play");
+    public Task Pause() => JSRef!.CallVoidAsync("pause");
     
     public ActionEvent OnEnded { get => new ActionEvent("ended", AddEventListener, RemoveEventListener); set { } }
 }

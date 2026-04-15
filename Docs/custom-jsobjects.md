@@ -296,14 +296,16 @@ namespace SpawnDev.BlazorJS.JSObjects
 Usage:
 
 ```csharp
-var audio = new Audio("https://example.com/song.mp3");
-audio.Volume = 0.8;
-audio.OnEnded += () => Console.WriteLine("Song finished!");
-audio.Play();
+// Use a named method - lambdas cannot be properly unsubscribed
+void OnSongEnded() => Console.WriteLine("Song finished!");
 
-// Later, clean up:
-audio.OnEnded -= () => Console.WriteLine("Song finished!");
-audio.Dispose();
+using var audio = new Audio("https://example.com/song.mp3");
+audio.Volume = 0.8;
+audio.OnEnded += OnSongEnded;
+await audio.Play();
+
+// Always unsubscribe before disposing to prevent callback leaks
+audio.OnEnded -= OnSongEnded;
 ```
 
 ---

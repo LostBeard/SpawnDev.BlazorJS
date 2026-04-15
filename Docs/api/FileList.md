@@ -57,3 +57,58 @@ fileInput.addEventListener("change", () => {
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/FileList)*
 
+## Examples
+
+### Logging filenames
+
+In this example, we log the names of all the files selected by the user.
+
+#### HTML
+
+```html
+<input id="myfiles" multiple type="file" />
+<pre class="output">Selected files:</pre>
+```
+
+#### CSS
+
+```css
+.output {
+  overflow: scroll;
+  margin: 1rem 0;
+  height: 200px;
+}
+```
+
+#### JavaScript
+
+**JavaScript (MDN):**
+
+```js
+const output = document.querySelector(".output");
+const fileInput = document.querySelector("#myfiles");
+
+fileInput.addEventListener("change", () => {
+  for (const file of fileInput.files) {
+    output.innerText += `\n${file.name}`;
+  }
+});
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+using var output = JS.Get<Document>("document").QuerySelector<HTMLElement>(".output");
+using var fileInput = JS.Get<Document>("document").QuerySelector<HTMLElement>("#myfiles");
+
+fileInput.addEventListener("change", () => {
+for (const file of fileInput.files) {
+output.innerText += $"\n{file.name}";
+}
+});
+```
+

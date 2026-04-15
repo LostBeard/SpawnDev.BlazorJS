@@ -70,3 +70,89 @@ self.addEventListener("install", (event) => {
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/ExtendableEvent)*
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+const CACHE_VERSION = 1;
+const CURRENT_CACHES = {
+  prefetch: `prefetch-cache-v${CACHE_VERSION}`,
+};
+
+self.addEventListener("install", (event) => {
+  const urlsToPrefetch = [
+    "./static/pre_fetched.txt",
+    "./static/pre_fetched.html",
+    "https://www.chromium.org/_/rsrc/1302286216006/config/customLogo.gif",
+  ];
+
+  console.log(
+    "Handling install event. Resources to pre-fetch:",
+    urlsToPrefetch,
+  );
+
+  event.waitUntil(
+    caches
+      .open(CURRENT_CACHES["prefetch"])
+      .then((cache) =>
+        cache.addAll(
+          urlsToPrefetch.map(
+            (urlToPrefetch) => new Request(urlToPrefetch, { mode: "no-cors" }),
+          ),
+        ),
+      )
+      .then(() => {
+        console.log("All resources have been fetched and cached.");
+      })
+      .catch((error) => {
+        console.error("Pre-fetching failed:", error);
+      }),
+  );
+});
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+var CACHE_VERSION = 1;
+var CURRENT_CACHES = {
+prefetch: $"prefetch-cache-v{CACHE_VERSION}",
+};
+
+self.addEventListener("install", (event) => {
+var urlsToPrefetch = [;
+"./static/pre_fetched.txt",
+"./static/pre_fetched.html",
+"https://www.chromium.org/_/rsrc/1302286216006/config/customLogo.gif",
+];
+
+console.log(
+"Handling install event. Resources to pre-fetch:",
+urlsToPrefetch,
+);
+
+event.WaitUntil(
+caches
+.open(CURRENT_CACHES["prefetch"])
+; // then: use await instead
+cache.addAll(
+urlsToPrefetch.map(
+(urlToPrefetch) => new Request(urlToPrefetch, { mode: "no-cors" }),
+),
+),
+)
+.then(() => {
+Console.WriteLine("All resources have been fetched and cached.");
+})
+// catch: use try/catch instead
+Console.Error.WriteLine("Pre-fetching failed:", error);
+}),
+);
+});
+```
+

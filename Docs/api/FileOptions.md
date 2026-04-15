@@ -32,3 +32,25 @@ const file = new File(["foo"], "foo.txt", {
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/File/File)*
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+const file = new File(["foo"], "foo.txt", {
+  type: "text/plain",
+});
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+using var file = new File(["foo"], "foo.txt", {
+type: "text/plain",
+});
+```
+

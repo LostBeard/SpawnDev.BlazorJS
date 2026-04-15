@@ -52,3 +52,76 @@ async function getFile() {
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/showOpenFilePicker)*
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+const pickerOpts = {
+  types: [
+    {
+      description: "Images",
+      accept: {
+        "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+      },
+    },
+  ],
+  excludeAcceptAllOption: true,
+  multiple: false,
+};
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+var pickerOpts = {
+types: [
+{
+description: "Images",
+accept: {
+"image/*": [".png", ".gif", ".jpeg", ".jpg"],
+},
+},
+],
+excludeAcceptAllOption: true,
+multiple: false,
+};
+```
+
+**JavaScript (MDN):**
+
+```js
+// create a reference for our file handle
+let fileHandle;
+
+async function getFile() {
+  // open file picker, destructure the one element returned array
+  [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+
+  // run code with our fileHandle
+}
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+// create a reference for our file handle
+var fileHandle;
+
+async Task getFile()
+{
+// open file picker, destructure the one element returned array
+[fileHandle] = await window.showOpenFilePicker(pickerOpts);
+
+// run code with our fileHandle
+}
+```
+

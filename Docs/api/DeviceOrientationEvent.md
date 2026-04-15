@@ -49,3 +49,25 @@ window.addEventListener("deviceorientation", (event) => {
 
 *[See full example on MDN](https://developer.mozilla.org/en-US/docs/Web/API/DeviceOrientationEvent)*
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+window.addEventListener("deviceorientation", (event) => {
+  console.log(`${event.alpha} : ${event.beta} : ${event.gamma}`);
+});
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+window.addEventListener("deviceorientation", (event) => {
+Console.WriteLine($"{event.Alpha} : {event.Beta} : {event.Gamma}");
+});
+```
+
