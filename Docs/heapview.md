@@ -217,7 +217,17 @@ gl.BufferData(GL.ARRAY_BUFFER, view, GL.STATIC_DRAW);
 
 ## Benchmarks
 
-The [HeapViewTest](https://github.com/LostBeard/HeapViewTest) project benchmarks HeapView against standard .NET byte[] transfer methods. HeapView's zero-copy approach is faster than .NET's built-in byte[] interop for transferring data between .NET and JavaScript.
+The [HeapViewTest](https://github.com/LostBeard/HeapViewTest) project benchmarks HeapView against standard .NET byte[] transfer for image data (PutImageData). Test: 8000x8000 image (256 MB), 20 iterations.
+
+| Method | Avg | Min | Max | Throughput | Description |
+|---|---|---|---|---|---|
+| **HeapView Direct** | **53.6 ms** | 22.0 ms | 113.3 ms | **4.77 GB/s** | Zero-copy. Pins .NET memory and passes it directly to PutImageData. |
+| HeapView Copy | 95.2 ms | 75.9 ms | 144.2 ms | 2.69 GB/s | Fast copy via Uint8ClampedArray constructor from pinned .NET memory. |
+| .NET Built-in | 192.8 ms | 115.6 ms | 613.3 ms | 1.33 GB/s | Default byte[] serialization. Creates a full copy in JS memory. |
+
+**HeapView Direct is 3.6x faster than .NET's built-in byte[] transfer** and achieves nearly 5 GB/s throughput on a 256 MB image. Even HeapView Copy (safe copy from pinned memory) is 2x faster than the default .NET approach.
+
+The .NET built-in method also shows high variance (115ms to 613ms) due to GC pressure from the full copy, while HeapView Direct stays more consistent.
 
 ---
 
