@@ -1,9 +1,9 @@
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
-Full Blazor WebAssembly and JavaScript interop. Over 1,000 strongly typed C# wrappers for browser APIs - create JavaScript objects, access properties, call methods, and handle events the .NET way without writing JavaScript.
+Full Blazor WebAssembly and JavaScript interop. 1,014 strongly typed C# wrappers for browser APIs - create JavaScript objects, access properties, call methods, and handle events the .NET way without writing JavaScript.
 
-**[Full API Documentation](Docs/README.md)** - Complete MDN-style API reference with guides, 1,000+ typed wrapper references, and real C# examples.
+**[Full API Documentation](Docs/README.md)** - Complete MDN-style API reference with guides, 1,014 typed wrapper references, and real C# examples.
 
 [Live Demo](https://blazorjs.spawndev.com/)
 
@@ -87,7 +87,7 @@ For full setup details including worker scope detection and WebWorkerService, se
 
 | Feature | Description | Docs |
 |---|---|---|
-| **1,000+ Typed Wrappers** | Every major browser API - DOM, WebGPU, WebRTC, WebAudio, Crypto, WebXR, and more | [API Reference](Docs/api/_index.md) |
+| **1,014 Typed Wrappers** | Every major browser API - DOM, WebGPU, WebRTC, WebAudio, Crypto, WebXR, and more | [API Reference](Docs/api/_index.md) |
 | **BlazorJSRuntime** | Get, Set, Call, CallAsync, New - with null-conditional (`?.`) support | [Guide](Docs/blazorjsruntime.md) |
 | **JSObject** | Base class for typed JS wrappers with automatic disposal | [Guide](Docs/jsobject.md) |
 | **ActionEvent** | Type-safe event subscription with `+=` / `-=` and automatic ref counting | [Guide](Docs/events.md) |
@@ -223,7 +223,7 @@ public class Audio : JSObject
 
 See the [Custom JSObject Guide](Docs/custom-jsobjects.md) for the full walkthrough.
 
-For 930+ more typed wrappers, see the [Complete API Reference](Docs/api/_index.md).
+For the complete list of all 1,014 typed wrappers, see the [Complete API Reference](Docs/api/_index.md).
 
 ---
 

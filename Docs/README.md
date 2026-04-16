@@ -1,6 +1,6 @@
 # SpawnDev.BlazorJS API Reference
 
-Complete C# API documentation for browser APIs via Blazor WebAssembly. SpawnDev.BlazorJS provides over 1,000 strongly typed C# wrappers that mirror the [MDN Web API](https://developer.mozilla.org/en-US/docs/Web/API) surface, giving Blazor WebAssembly applications full access to every browser API without writing a single line of JavaScript.
+Complete C# API documentation for browser APIs via Blazor WebAssembly. SpawnDev.BlazorJS provides 1,014 strongly typed C# wrappers that mirror the [MDN Web API](https://developer.mozilla.org/en-US/docs/Web/API) surface, giving Blazor WebAssembly applications full access to every browser API without writing a single line of JavaScript.
 
 > **MDN Mapping:** Every type listed in this documentation maps directly to its equivalent on [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API). Where an MDN page exists for a JavaScript API, the corresponding SpawnDev.BlazorJS wrapper implements the same properties, methods, and events with C#-idiomatic naming. When in doubt, check the MDN page for the underlying JS behavior.
 
@@ -110,7 +110,7 @@ These are library-specific types that provide the interop foundation.
 | Type | Description |
 |---|---|
 | [BlazorJSRuntime](api/BlazorJSRuntime.md) | Central interop service - global JS access, scope detection, script loading |
-| [JSObject](api/JSObject.md) | Base class for all 1,000+ typed JavaScript wrappers |
+| [JSObject](api/JSObject.md) | Base class for all 1,014 typed JavaScript wrappers |
 | [Callback](api/Callback.md) | Makes .NET methods callable from JavaScript - ref-counted, disposable |
 | [ActionEvent](api/ActionEvent.md) | Event subscription with += / -= operators for Action delegates |
 | [FuncEvent](api/FuncEvent.md) | Event subscription with += / -= operators for Func delegates |
