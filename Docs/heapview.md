@@ -229,6 +229,8 @@ The [HeapViewTest](https://github.com/LostBeard/HeapViewTest) project benchmarks
 
 The .NET built-in method also shows high variance (115ms to 613ms) due to GC pressure from the full copy, while HeapView Direct stays more consistent.
 
+*Results from a single desktop PC. Absolute times will vary by hardware - the relative performance difference is what matters. Run [HeapViewTest](https://github.com/LostBeard/HeapViewTest) yourself to benchmark on your machine.*
+
 ---
 
 ## See Also
