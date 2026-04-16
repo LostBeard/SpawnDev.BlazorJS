@@ -163,23 +163,30 @@ void Window_OnStorage()
 
 ## Reference Counting
 
-`ActionEvent` uses `CallbackRef` internally for reference counting. The same .NET method attached to multiple events (or the same event multiple times) shares a single `Callback` with an incremented reference count:
+The Callback reference count is for the **delegate** and has nothing to do with which JSObject or event it is used with. Every `+=` increments the ref count for that delegate; every `-=` decrements it. When it reaches 0, the Callback is disposed. The same delegate used across different events on different objects still shares one Callback:
 
 ```csharp
 // First += creates the Callback with RefCount = 1
 window.OnOnline += HandleNetworkChange;
 
-// Second += increments RefCount to 2
+// Second += on a DIFFERENT event, same delegate - RefCount = 2
 window.OnOffline += HandleNetworkChange;
 
-// First -= decrements RefCount to 1 (Callback still alive)
+// Third += on a DIFFERENT object, same delegate - RefCount = 3
+using var document = JS.Get<Document>("document");
+document.OnVisibilityChange += HandleNetworkChange;
+
+// -= from any object decrements - RefCount = 2
+document.OnVisibilityChange -= HandleNetworkChange;
+
+// RefCount = 1
 window.OnOnline -= HandleNetworkChange;
 
-// Second -= decrements RefCount to 0 (Callback is disposed)
+// RefCount = 0 - Callback is disposed
 window.OnOffline -= HandleNetworkChange;
 ```
 
-**Every `+=` MUST have a matching `-=`.** Failing to unsubscribe leaks the Callback and the .NET object reference, and can cause calls into disposed objects that trigger Blazor error UI.
+**Every `+=` MUST have a matching `-=`.** The total number of `+=` and `-=` calls must balance for each delegate. It does not matter which JSObject you use for `-=` - any reference to the same underlying JS object will work. Failing to balance leaks the Callback and the .NET object reference, and can cause calls into disposed objects that trigger Blazor error UI.
 
 ---
 
@@ -241,11 +248,11 @@ Understanding the internals helps you use ActionEvent correctly:
 
 3. **`-=` calls `CallbackRef.RefGet(delegate)` then `RefDel(delegate)`** - looks up your delegate in the same static dictionary, calls `removeEventListener` on the JS object, and decrements `RefCount`. When `RefCount` reaches 0, the `Callback` is disposed.
 
-**Key insight:** The Callback is tracked by the **delegate**, not by the JSObject instance. The JSObject is just a handle used to call `addEventListener`/`removeEventListener` on the underlying JavaScript object. This means:
+**Key insight:** The Callback reference count is purely about the **delegate** and has nothing to do with the JSObject it is used with. The JSObject is just a handle used to call `addEventListener`/`removeEventListener` on the underlying JavaScript object. This means:
 
-- You **can** dispose a JSObject, get a new reference to the same underlying JS object, and `-=` from the new reference - the static dictionary will still find and dispose the Callback.
-- What matters for unsubscription is that you pass the **same delegate** (same named method) to `-=`.
-- Disposing the JSObject does NOT automatically unsubscribe events or dispose Callbacks.
+- The `-=` does not need to happen on the same JSObject instance. Any reference to the same underlying JS object will work for calling `removeEventListener`.
+- What matters for Callback disposal is that the total number of `-=` calls matches the total number of `+=` calls for that delegate.
+- Disposing the JSObject does NOT automatically unsubscribe events or dispose Callbacks. The Callback lives in the static dictionary independently.
 
 ```csharp
 using var window1 = JS.Get<Window>("window");
