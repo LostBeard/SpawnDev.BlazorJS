@@ -215,7 +215,14 @@ gl.BufferData(GL.ARRAY_BUFFER, view, GL.STATIC_DRAW);
 
 ---
 
+## Benchmarks
+
+The [HeapViewTest](https://github.com/LostBeard/HeapViewTest) project benchmarks HeapView against standard .NET byte[] transfer methods. HeapView's zero-copy approach is faster than .NET's built-in byte[] interop for transferring data between .NET and JavaScript.
+
+---
+
 ## See Also
 
+- [HeapViewTest Benchmark](https://github.com/LostBeard/HeapViewTest) - Performance benchmarks comparing HeapView vs standard transfer
 - [TypedArrays and Data Transfer](typed-arrays.md) - Standard (copying) data transfer
 - [JSObject](jsobject.md) - Base wrapper class
