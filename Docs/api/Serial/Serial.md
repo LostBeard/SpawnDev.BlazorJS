@@ -34,15 +34,9 @@
 using var navigator = JS.Get<Navigator>("navigator");
 using var serial = navigator.Serial;
 
-// Listen for serial device connect/disconnect
-serial.OnConnect += (Event e) =>
-{
-    Console.WriteLine("Serial device connected");
-};
-serial.OnDisconnect += (Event e) =>
-{
-    Console.WriteLine("Serial device disconnected");
-};
+// Listen for serial device connect/disconnect (named methods for proper cleanup)
+serial.OnConnect += Serial_OnConnect;
+serial.OnDisconnect += Serial_OnDisconnect;
 
 // Request a serial port (requires user gesture - shows browser picker)
 using var port = await serial.RequestPort();
@@ -78,5 +72,19 @@ await port.Close();
 // List previously granted ports
 using var ports = await serial.GetPorts();
 Console.WriteLine($"Previously granted ports: {ports.Length}");
+
+// Clean up event handlers before disposal
+serial.OnConnect -= Serial_OnConnect;
+serial.OnDisconnect -= Serial_OnDisconnect;
+
+void Serial_OnConnect(Event e)
+{
+    Console.WriteLine("Serial device connected");
+}
+
+void Serial_OnDisconnect(Event e)
+{
+    Console.WriteLine("Serial device disconnected");
+}
 ```
 

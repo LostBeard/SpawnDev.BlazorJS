@@ -106,13 +106,24 @@ el.Hidden = false;
 el.Draggable = true;
 el.TabIndex = 1;
 
-// Listen for events
-el.OnChange += (e) => Console.WriteLine("Value changed");
-el.OnLoad += (e) => Console.WriteLine("Resource loaded");
-el.OnError += (e) => Console.WriteLine("Error occurred");
+// Subscribe to events using named methods (required for proper cleanup)
+el.OnChange += Element_OnChange;
+el.OnLoad += Element_OnLoad;
+el.OnError += Element_OnError;
+el.OnDragStart += Element_OnDragStart;
+el.OnDrop += Element_OnDrop;
 
-// Drag-and-drop events
-el.OnDragStart += (e) => Console.WriteLine("Drag started");
-el.OnDrop += (e) => Console.WriteLine("Dropped");
+// Unsubscribe before disposing - every += must have a matching -=
+el.OnChange -= Element_OnChange;
+el.OnLoad -= Element_OnLoad;
+el.OnError -= Element_OnError;
+el.OnDragStart -= Element_OnDragStart;
+el.OnDrop -= Element_OnDrop;
+
+void Element_OnChange(Event e) => Console.WriteLine("Value changed");
+void Element_OnLoad(Event e) => Console.WriteLine("Resource loaded");
+void Element_OnError(Event e) => Console.WriteLine("Error occurred");
+void Element_OnDragStart(DragEvent e) => Console.WriteLine("Drag started");
+void Element_OnDrop(DragEvent e) => Console.WriteLine("Dropped");
 ```
 

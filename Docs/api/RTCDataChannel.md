@@ -59,31 +59,14 @@ using var channel = pc.CreateDataChannel("file-transfer", new RTCDataChannelOpti
     MaxRetransmits = 3
 });
 
-// Handle channel open
-channel.OnOpen += (evt) =>
-{
-    Console.WriteLine($"Channel '{channel.Label}' opened");
-    channel.Send("Hello from the local peer!");
-    evt.Dispose();
-};
+// Subscribe to events using named methods (required for proper cleanup)
+channel.OnOpen += Channel_OnOpen;
+channel.OnMessage += Channel_OnMessage;
+channel.OnClose += Channel_OnClose;
 
-// Handle incoming messages
-channel.OnMessage += (evt) =>
-{
-    var data = evt.Data;
-    if (data is string textData)
-    {
-        Console.WriteLine($"Received text: {textData}");
-    }
-    evt.Dispose();
-};
-
-// Handle channel close
-channel.OnClose += (evt) =>
-{
-    Console.WriteLine("Channel closed");
-    evt.Dispose();
-};
+// Monitor buffered amount for flow control
+channel.BufferedAmountLowThreshold = 65536;
+channel.OnBufferedAmountLow += Channel_OnBufferedAmountLow;
 
 // Send binary data
 byte[] binaryData = new byte[] { 0x01, 0x02, 0x03 };
@@ -93,11 +76,38 @@ channel.Send(binaryData);
 using var float32Data = new Float32Array(new float[] { 1.0f, 2.0f, 3.0f });
 channel.Send(float32Data);
 
-// Monitor buffered amount for flow control
-channel.BufferedAmountLowThreshold = 65536;
-channel.OnBufferedAmountLow += (evt) =>
+// Clean up event handlers before disposal
+channel.OnOpen -= Channel_OnOpen;
+channel.OnMessage -= Channel_OnMessage;
+channel.OnClose -= Channel_OnClose;
+channel.OnBufferedAmountLow -= Channel_OnBufferedAmountLow;
+
+void Channel_OnOpen(Event evt)
+{
+    Console.WriteLine($"Channel '{channel.Label}' opened");
+    channel.Send("Hello from the local peer!");
+    evt.Dispose();
+}
+
+void Channel_OnMessage(MessageEvent evt)
+{
+    var data = evt.Data;
+    if (data is string textData)
+    {
+        Console.WriteLine($"Received text: {textData}");
+    }
+    evt.Dispose();
+}
+
+void Channel_OnClose(Event evt)
+{
+    Console.WriteLine("Channel closed");
+    evt.Dispose();
+}
+
+void Channel_OnBufferedAmountLow(Event evt)
 {
     // Safe to send more data
     evt.Dispose();
-};
+}
 ```

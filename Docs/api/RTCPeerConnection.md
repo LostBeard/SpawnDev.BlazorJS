@@ -101,32 +101,10 @@ using var pc = new RTCPeerConnection(new RTCConfiguration
     }
 });
 
-// Handle ICE candidates
-pc.OnIceCandidate += (evt) =>
-{
-    var candidate = evt.Candidate;
-    if (candidate != null)
-    {
-        // Send candidate to remote peer via signaling
-        SendToRemotePeer(candidate);
-    }
-    evt.Dispose();
-};
-
-// Handle incoming data channels
-pc.OnDataChannel += (evt) =>
-{
-    using var channel = evt.Channel;
-    Console.WriteLine($"Remote data channel: {channel.Label}");
-    evt.Dispose();
-};
-
-// Handle connection state
-pc.OnConnectionStateChange += (evt) =>
-{
-    Console.WriteLine($"Connection state: {pc.ConnectionState}");
-    evt.Dispose();
-};
+// Subscribe to events using named methods (required for proper cleanup)
+pc.OnIceCandidate += Pc_OnIceCandidate;
+pc.OnDataChannel += Pc_OnDataChannel;
+pc.OnConnectionStateChange += Pc_OnConnectionStateChange;
 
 // Create a data channel
 using var dataChannel = pc.CreateDataChannel("chat", new RTCDataChannelOptions
@@ -155,4 +133,33 @@ await pc.AddIceCandidate(new RTCIceCandidateInfo
     SdpMid = sdpMid,
     SdpMLineIndex = sdpMLineIndex
 });
+
+// Clean up event handlers before disposal
+pc.OnIceCandidate -= Pc_OnIceCandidate;
+pc.OnDataChannel -= Pc_OnDataChannel;
+pc.OnConnectionStateChange -= Pc_OnConnectionStateChange;
+
+void Pc_OnIceCandidate(RTCPeerConnectionIceEvent evt)
+{
+    var candidate = evt.Candidate;
+    if (candidate != null)
+    {
+        // Send candidate to remote peer via signaling
+        SendToRemotePeer(candidate);
+    }
+    evt.Dispose();
+}
+
+void Pc_OnDataChannel(RTCDataChannelEvent evt)
+{
+    using var channel = evt.Channel;
+    Console.WriteLine($"Remote data channel: {channel.Label}");
+    evt.Dispose();
+}
+
+void Pc_OnConnectionStateChange(Event evt)
+{
+    Console.WriteLine($"Connection state: {pc.ConnectionState}");
+    evt.Dispose();
+}
 ```

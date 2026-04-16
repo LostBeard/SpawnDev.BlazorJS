@@ -95,13 +95,15 @@ using var gpuCtx = gpuCanvas.GetWebGPUContext();
 using var workerCanvas = new HTMLCanvasElement(canvasRef);
 using var offscreen = workerCanvas.TransferControlToOffscreen();
 
-// Listen for context loss events
-canvas.OnWebGLContextLost += (e) =>
-{
-    Console.WriteLine("WebGL context lost");
-};
+// Subscribe to context events using named methods (required for proper cleanup)
+canvas.OnWebGLContextLost += Canvas_OnWebGLContextLost;
 
 // Download canvas as an image file
 canvas.DownloadAsImage("screenshot.png");
+
+// Unsubscribe before disposing - every += must have a matching -=
+canvas.OnWebGLContextLost -= Canvas_OnWebGLContextLost;
+
+void Canvas_OnWebGLContextLost(WebGLContextEvent e) => Console.WriteLine("WebGL context lost");
 ```
 

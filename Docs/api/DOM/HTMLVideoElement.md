@@ -62,14 +62,12 @@ video2.Controls = true;
 video2.Muted = true;
 video2.AutoPlay = true;
 
-// Listen for metadata loaded to get video dimensions
-video.OnLoadedMetadata += (e) =>
-{
-    int width = video.VideoWidth;
-    int height = video.VideoHeight;
-    double? duration = video.Duration;
-    Console.WriteLine($"Video: {width}x{height}, {duration}s");
-};
+// Subscribe to events using named methods (required for proper cleanup)
+video.OnLoadedMetadata += Video_OnLoadedMetadata;
+video.OnPlay += Video_OnPlay;
+video.OnPause += Video_OnPause;
+video.OnEnded += Video_OnEnded;
+video.OnTimeUpdate += Video_OnTimeUpdate;
 
 // Play and pause
 await video.Play();
@@ -84,11 +82,25 @@ video.PlaybackRate = 2.0;
 // Set volume (0.0 to 1.0)
 video.Volume = 0.5;
 
-// Listen for playback events (inherited from HTMLMediaElement)
-video.OnPlay += (e) => Console.WriteLine("Playing");
-video.OnPause += (e) => Console.WriteLine("Paused");
-video.OnEnded += (e) => Console.WriteLine("Playback ended");
-video.OnTimeUpdate += (e) => Console.WriteLine($"Time: {video.CurrentTime}");
+// Unsubscribe before disposing - every += must have a matching -=
+video.OnLoadedMetadata -= Video_OnLoadedMetadata;
+video.OnPlay -= Video_OnPlay;
+video.OnPause -= Video_OnPause;
+video.OnEnded -= Video_OnEnded;
+video.OnTimeUpdate -= Video_OnTimeUpdate;
+
+void Video_OnLoadedMetadata(Event e)
+{
+    int width = video.VideoWidth;
+    int height = video.VideoHeight;
+    double? duration = video.Duration;
+    Console.WriteLine($"Video: {width}x{height}, {duration}s");
+}
+
+void Video_OnPlay(Event e) => Console.WriteLine("Playing");
+void Video_OnPause(Event e) => Console.WriteLine("Paused");
+void Video_OnEnded(Event e) => Console.WriteLine("Playback ended");
+void Video_OnTimeUpdate(Event e) => Console.WriteLine($"Time: {video.CurrentTime}");
 
 // Use a MediaStream as source (e.g. from getUserMedia)
 video.SrcObject = mediaStream;

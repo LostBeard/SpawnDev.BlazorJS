@@ -32,15 +32,21 @@
 using var device = await bluetooth.RequestDevice(options);
 Console.WriteLine($"Name: {device.Name}, ID: {device.Id}");
 
-device.OnGATTServerDisconnected += (Event e) =>
-{
-    Console.WriteLine("Device disconnected");
-};
+// Subscribe using a named method (required for proper cleanup)
+device.OnGATTServerDisconnected += Device_OnGATTServerDisconnected;
 
 using var gatt = device.Gatt;
 if (gatt != null)
 {
     await gatt.Connect();
     // Discover services and characteristics...
+}
+
+// Clean up event handler before disposal
+device.OnGATTServerDisconnected -= Device_OnGATTServerDisconnected;
+
+void Device_OnGATTServerDisconnected(Event e)
+{
+    Console.WriteLine("Device disconnected");
 }
 ```

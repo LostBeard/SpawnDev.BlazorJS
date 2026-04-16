@@ -118,10 +118,15 @@ customOsc.Start();
 // Detune for slight pitch variation
 customOsc.Detune.Value = 50; // 50 cents sharp (half a semitone)
 
-// Handle the ended event
-osc.OnEnded += (evt) =>
+// Handle the ended event (named method for proper cleanup)
+osc.OnEnded += Osc_OnEnded;
+
+// Clean up before disposal
+osc.OnEnded -= Osc_OnEnded;
+
+void Osc_OnEnded(Event evt)
 {
     Console.WriteLine("Oscillator finished playing");
     evt.Dispose();
-};
+}
 ```

@@ -123,16 +123,21 @@ source.Disconnect();
 source.Connect(filter);
 filter.Connect(audioCtx.Destination);
 
-// Monitor state changes
-audioCtx.OnStateChange += (evt) =>
-{
-    Console.WriteLine($"Audio context state: {audioCtx.State}");
-    evt.Dispose();
-};
+// Monitor state changes (named method for proper cleanup)
+audioCtx.OnStateChange += AudioCtx_OnStateChange;
 
 // Suspend to save battery
 await audioCtx.Suspend();
 
+// Clean up event handler before disposal
+audioCtx.OnStateChange -= AudioCtx_OnStateChange;
+
 // Close when completely done
 await audioCtx.Close();
+
+void AudioCtx_OnStateChange(Event evt)
+{
+    Console.WriteLine($"Audio context state: {audioCtx.State}");
+    evt.Dispose();
+}
 ```

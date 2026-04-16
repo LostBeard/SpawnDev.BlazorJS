@@ -206,6 +206,31 @@ string? Window_OnBeforeUnload(BeforeUnloadEvent e)
 
 ---
 
+## Named Methods vs Lambdas
+
+Every `+=` creates an underlying `Callback` that is reference-counted by the delegate instance you pass in. To properly dispose that `Callback`, you must `-=` with the **same delegate instance**. This has an important consequence:
+
+**Named methods** - can be unsubscribed because the same method reference is used for both `+=` and `-=`:
+```csharp
+ws.OnMessage += HandleMessage;   // creates Callback, ref count = 1
+ws.OnMessage -= HandleMessage;   // same delegate - ref count = 0, Callback disposed
+
+void HandleMessage(MessageEvent e) { /* ... */ }
+```
+
+**Lambdas** - cannot be unsubscribed because each lambda expression creates a new delegate instance:
+```csharp
+ws.OnMessage += (e) => Console.WriteLine(e.Data);   // creates Callback
+ws.OnMessage -= (e) => Console.WriteLine(e.Data);   // DIFFERENT delegate - does nothing!
+// The original Callback is now leaked - it can never be disposed
+```
+
+**When lambdas are OK:** If the event subscription lives for the entire lifetime of the application and never needs to be removed, a lambda is fine - the `Callback` will be cleaned up when the app exits. This is common for global event handlers set up once in `Program.cs` or long-lived singleton services.
+
+**When named methods are required:** Any time you need to unsubscribe - components that dispose, short-lived objects, anything with a cleanup lifecycle. This is the more common case.
+
+---
+
 ## Proper Disposal Pattern
 
 Always unsubscribe from all events before disposing the parent object:

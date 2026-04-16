@@ -66,53 +66,13 @@ using var recorder = new MediaRecorder(stream, new MediaRecorderOptions
     MimeType = "audio/webm;codecs=opus"
 });
 
-// Collect recorded chunks via the OnDataAvailable event
+// Subscribe to events using named methods (required for proper cleanup)
 var chunks = new List<Blob>();
-recorder.OnDataAvailable += (BlobEvent e) =>
-{
-    using (e)
-    {
-        using var data = e.Data;
-        if (data != null)
-        {
-            chunks.Add(data);
-        }
-    }
-};
-
-// Handle recording stop - combine chunks into a final Blob
-recorder.OnStop += (Event e) =>
-{
-    using (e)
-    {
-        using var blob = new Blob(chunks.ToArray(), new BlobOptions { Type = "audio/webm" });
-        foreach (var chunk in chunks) chunk.Dispose();
-        chunks.Clear();
-
-        // Create an object URL for playback
-        string audioUrl = URL.CreateObjectURL(blob);
-        Console.WriteLine($"Recording available at: {audioUrl}");
-    }
-};
-
-// Monitor recording state changes
-recorder.OnStart += (Event e) =>
-{
-    using (e)
-    Console.WriteLine($"Recording started - state: {recorder.State}");
-};
-
-recorder.OnPause += (Event e) =>
-{
-    using (e)
-    Console.WriteLine("Recording paused");
-};
-
-recorder.OnResume += (Event e) =>
-{
-    using (e)
-    Console.WriteLine("Recording resumed");
-};
+recorder.OnDataAvailable += Recorder_OnDataAvailable;
+recorder.OnStop += Recorder_OnStop;
+recorder.OnStart += Recorder_OnStart;
+recorder.OnPause += Recorder_OnPause;
+recorder.OnResume += Recorder_OnResume;
 
 // Start recording (optionally with a timeslice in ms)
 recorder.Start(1000); // fire OnDataAvailable every 1000ms
@@ -132,5 +92,56 @@ recorder.RequestData();
 
 // Stop recording (triggers final OnDataAvailable then OnStop)
 recorder.Stop();
+
+// Unsubscribe before disposing - every += must have a matching -=
+recorder.OnDataAvailable -= Recorder_OnDataAvailable;
+recorder.OnStop -= Recorder_OnStop;
+recorder.OnStart -= Recorder_OnStart;
+recorder.OnPause -= Recorder_OnPause;
+recorder.OnResume -= Recorder_OnResume;
+
+void Recorder_OnDataAvailable(BlobEvent e)
+{
+    using (e)
+    {
+        using var data = e.Data;
+        if (data != null)
+        {
+            chunks.Add(data);
+        }
+    }
+}
+
+void Recorder_OnStop(Event e)
+{
+    using (e)
+    {
+        using var blob = new Blob(chunks.ToArray(), new BlobOptions { Type = "audio/webm" });
+        foreach (var chunk in chunks) chunk.Dispose();
+        chunks.Clear();
+
+        // Create an object URL for playback
+        string audioUrl = URL.CreateObjectURL(blob);
+        Console.WriteLine($"Recording available at: {audioUrl}");
+    }
+}
+
+void Recorder_OnStart(Event e)
+{
+    using (e)
+    Console.WriteLine($"Recording started - state: {recorder.State}");
+}
+
+void Recorder_OnPause(Event e)
+{
+    using (e)
+    Console.WriteLine("Recording paused");
+}
+
+void Recorder_OnResume(Event e)
+{
+    using (e)
+    Console.WriteLine("Recording resumed");
+}
 ```
 

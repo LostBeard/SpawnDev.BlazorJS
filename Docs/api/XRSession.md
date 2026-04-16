@@ -48,13 +48,21 @@
 using var session = await xr.RequestSession("immersive-vr");
 using var refSpace = await session.RequestReferenceSpace("local-floor");
 
-session.OnEnd += (XRSessionEvent e) =>
+// Subscribe using named methods (required for proper cleanup)
+session.OnEnd += Session_OnEnd;
+session.OnSelect += Session_OnSelect;
+
+// Clean up event handlers before disposal
+session.OnEnd -= Session_OnEnd;
+session.OnSelect -= Session_OnSelect;
+
+void Session_OnEnd(XRSessionEvent e)
 {
     Console.WriteLine("XR session ended");
-};
+}
 
-session.OnSelect += (XRInputSourceEvent e) =>
+void Session_OnSelect(XRInputSourceEvent e)
 {
     Console.WriteLine("User selected something");
-};
+}
 ```

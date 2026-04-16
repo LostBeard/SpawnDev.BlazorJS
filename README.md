@@ -69,7 +69,11 @@ await audio.Play();
 
 // Typed browser API access
 using var window = JS.Get<Window>("window");
-window.OnResize += () => Console.WriteLine("Window resized!");
+window.OnResize += Window_OnResize;
+// ... later, before disposing:
+window.OnResize -= Window_OnResize;
+
+void Window_OnResize() => Console.WriteLine("Window resized!");
 
 // Null-conditional member access
 var size = JS.Get<int?>("fruit.options?.size");
@@ -133,13 +137,18 @@ See the [BlazorJSRuntime Guide](Docs/blazorjsruntime.md) for full details.
 ```csharp
 using var ws = new WebSocket("wss://echo.websocket.org");
 ws.BinaryType = "arraybuffer";
-ws.OnOpen += () => ws.Send("Hello!");
-ws.OnMessage += (MessageEvent msg) =>
-{
-    var data = msg.Data;
-    Console.WriteLine($"Received: {data}");
-};
-ws.OnClose += (CloseEvent e) => Console.WriteLine($"Closed: {e.Code}");
+ws.OnOpen += WS_OnOpen;
+ws.OnMessage += WS_OnMessage;
+ws.OnClose += WS_OnClose;
+
+// ... when done, always unsubscribe before disposing:
+ws.OnOpen -= WS_OnOpen;
+ws.OnMessage -= WS_OnMessage;
+ws.OnClose -= WS_OnClose;
+
+void WS_OnOpen() => ws.Send("Hello!");
+void WS_OnMessage(MessageEvent msg) => Console.WriteLine($"Received: {msg.Data}");
+void WS_OnClose(CloseEvent e) => Console.WriteLine($"Closed: {e.Code}");
 ```
 
 ### Fetch API

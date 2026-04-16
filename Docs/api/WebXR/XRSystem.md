@@ -40,11 +40,8 @@ Console.WriteLine($"Immersive VR supported: {vrSupported}");
 bool inlineSupported = await xr.IsSessionSupported(XRSessionMode.Inline);
 Console.WriteLine($"Inline session supported: {inlineSupported}");
 
-// Listen for VR device connect/disconnect events
-xr.OnDeviceChange += (Event e) =>
-{
-    Console.WriteLine("XR device availability changed");
-};
+// Listen for VR device connect/disconnect events (named method for proper cleanup)
+xr.OnDeviceChange += Xr_OnDeviceChange;
 
 // Request an immersive VR session (requires user gesture)
 if (vrSupported)
@@ -53,6 +50,14 @@ if (vrSupported)
     Console.WriteLine("VR session started");
     // Use session for rendering - see XRSession example
     await session.End();
+}
+
+// Clean up event handler before disposal
+xr.OnDeviceChange -= Xr_OnDeviceChange;
+
+void Xr_OnDeviceChange(Event e)
+{
+    Console.WriteLine("XR device availability changed");
 }
 ```
 

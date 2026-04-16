@@ -60,30 +60,36 @@ using var buffer = await FileReader.ReadAsArrayBufferAsync(blob);
 // Or use the instance-based event-driven approach for progress tracking
 using var reader = new FileReader();
 
-reader.OnLoad += (e) =>
+// Subscribe to events using named methods (required for proper cleanup)
+reader.OnLoad += Reader_OnLoad;
+reader.OnError += Reader_OnError;
+reader.OnProgress += Reader_OnProgress;
+
+// Start reading (triggers OnLoad/OnError when done)
+reader.ReadAsText(blob);
+// reader.ReadAsDataURL(blob);
+// reader.ReadAsArrayBuffer(blob);
+
+// Unsubscribe before disposing - every += must have a matching -=
+reader.OnLoad -= Reader_OnLoad;
+reader.OnError -= Reader_OnError;
+reader.OnProgress -= Reader_OnProgress;
+
+void Reader_OnLoad(ProgressEvent e)
 {
-    // Read completed - get the result
     string result = reader.ResultAs<string>();
     Console.WriteLine($"Read complete: {result.Length} chars");
-};
+}
 
-reader.OnError += (e) =>
-{
-    Console.WriteLine("Error reading file");
-};
+void Reader_OnError(ProgressEvent e) => Console.WriteLine("Error reading file");
 
-reader.OnProgress += (e) =>
+void Reader_OnProgress(ProgressEvent e)
 {
     if (e.LengthComputable)
     {
         double percent = (double)e.Loaded / e.Total * 100;
         Console.WriteLine($"Progress: {percent:F1}%");
     }
-};
-
-// Start reading (triggers OnLoad/OnError when done)
-reader.ReadAsText(blob);
-// reader.ReadAsDataURL(blob);
-// reader.ReadAsArrayBuffer(blob);
+}
 ```
 

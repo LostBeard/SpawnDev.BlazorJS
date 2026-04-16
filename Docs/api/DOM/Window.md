@@ -229,19 +229,19 @@ window.RequestAnimationFrame((timestamp) =>
     Console.WriteLine($"Frame at {timestamp}ms");
 });
 
-// Listen for window events
-window.OnResize += (e) =>
-{
-    Console.WriteLine($"Resized to {window.InnerWidth}x{window.InnerHeight}");
-};
-
-window.OnStorage += (e) =>
-{
-    Console.WriteLine($"Storage key changed: {e.Key}");
-};
+// Subscribe to window events using named methods (required for proper cleanup)
+window.OnResize += Window_OnResize;
+window.OnStorage += Window_OnStorage;
 
 // Fetch API (via window or global)
 using var response = await JS.CallAsync<Response>("fetch", "/api/data");
 string json = await response.Text();
+
+// Unsubscribe before disposing - every += must have a matching -=
+window.OnResize -= Window_OnResize;
+window.OnStorage -= Window_OnStorage;
+
+void Window_OnResize(UIEvent e) => Console.WriteLine($"Resized to {window.InnerWidth}x{window.InnerHeight}");
+void Window_OnStorage(StorageEvent e) => Console.WriteLine($"Storage key changed: {e.Key}");
 ```
 

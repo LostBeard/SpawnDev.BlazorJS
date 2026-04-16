@@ -86,18 +86,25 @@ session.RequestAnimationFrame((double time, XRFrame? xrFrame) =>
     }
 });
 
-// Listen for controller input events
-session.OnSelect += (XRInputSourceEvent e) =>
-{
-    Console.WriteLine("Controller select action triggered");
-};
+// Listen for controller input events (named methods for proper cleanup)
+session.OnSelect += Session_OnSelect;
+session.OnEnd += Session_OnEnd;
 
-session.OnEnd += (XRSessionEvent e) =>
-{
-    Console.WriteLine("XR session ended");
-};
+// Clean up event handlers before ending
+session.OnSelect -= Session_OnSelect;
+session.OnEnd -= Session_OnEnd;
 
 // End the session when done
 await session.End();
+
+void Session_OnSelect(XRInputSourceEvent e)
+{
+    Console.WriteLine("Controller select action triggered");
+}
+
+void Session_OnEnd(XRSessionEvent e)
+{
+    Console.WriteLine("XR session ended");
+}
 ```
 

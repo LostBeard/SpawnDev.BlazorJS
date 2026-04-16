@@ -55,16 +55,24 @@ recognition.Lang = "en-US";
 recognition.Continuous = true;
 recognition.InterimResults = true;
 
-recognition.OnResult += (SpeechRecognitionEvent e) =>
+// Subscribe using named methods (required for proper cleanup)
+recognition.OnResult += Recognition_OnResult;
+recognition.OnError += Recognition_OnError;
+
+recognition.Start();
+
+// Clean up event handlers before disposal
+recognition.OnResult -= Recognition_OnResult;
+recognition.OnError -= Recognition_OnError;
+
+void Recognition_OnResult(SpeechRecognitionEvent e)
 {
     // Process results
     Console.WriteLine("Speech recognized");
-};
+}
 
-recognition.OnError += (SpeechRecognitionErrorEvent e) =>
+void Recognition_OnError(SpeechRecognitionErrorEvent e)
 {
     Console.WriteLine($"Error: {e.Error}");
-};
-
-recognition.Start();
+}
 ```

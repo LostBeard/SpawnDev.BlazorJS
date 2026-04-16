@@ -34,8 +34,21 @@
 ## Example
 
 ```csharp
-// Handle ICE candidates
-pc.OnIceCandidate += (evt) =>
+// Subscribe using a named method (required for proper cleanup)
+pc.OnIceCandidate += Pc_OnIceCandidate;
+
+// Add a remote ICE candidate
+await pc.AddIceCandidate(new RTCIceCandidateInfo
+{
+    Candidate = "candidate:842163049 1 udp 1677729535 ...",
+    SdpMid = "0",
+    SdpMLineIndex = 0
+});
+
+// Clean up event handler before disposal
+pc.OnIceCandidate -= Pc_OnIceCandidate;
+
+void Pc_OnIceCandidate(RTCPeerConnectionIceEvent evt)
 {
     using var candidate = evt.Candidate;
     if (candidate != null)
@@ -56,13 +69,5 @@ pc.OnIceCandidate += (evt) =>
         SendToRemotePeer(info);
     }
     evt.Dispose();
-};
-
-// Add a remote ICE candidate
-await pc.AddIceCandidate(new RTCIceCandidateInfo
-{
-    Candidate = "candidate:842163049 1 udp 1677729535 ...",
-    SdpMid = "0",
-    SdpMLineIndex = 0
-});
+}
 ```

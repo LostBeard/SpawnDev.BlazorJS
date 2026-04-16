@@ -59,33 +59,11 @@ recognition.Continuous = true;
 recognition.InterimResults = true;
 recognition.MaxAlternatives = 1;
 
-// Handle recognition results
-recognition.OnResult += (SpeechRecognitionEvent e) =>
-{
-    using var results = e.Results;
-    var index = e.ResultIndex;
-    using var result = results[index];
-    using var alternative = result[0];
-    Console.WriteLine($"Recognized: {alternative.Transcript} (confidence: {alternative.Confidence})");
-};
-
-// Handle errors
-recognition.OnError += (SpeechRecognitionErrorEvent e) =>
-{
-    Console.WriteLine($"Speech recognition error: {e.Error}");
-};
-
-// Handle when recognition ends
-recognition.OnEnd += (Event e) =>
-{
-    Console.WriteLine("Speech recognition ended");
-    // Restart if continuous listening is desired
-};
-
-recognition.OnStart += (Event e) =>
-{
-    Console.WriteLine("Listening for speech...");
-};
+// Subscribe to events using named methods (required for proper cleanup)
+recognition.OnResult += Recognition_OnResult;
+recognition.OnError += Recognition_OnError;
+recognition.OnEnd += Recognition_OnEnd;
+recognition.OnStart += Recognition_OnStart;
 
 // Start listening (requires microphone permission)
 recognition.Start();
@@ -95,5 +73,36 @@ recognition.Start();
 
 // Or abort without returning results
 // recognition.Abort();
+
+// Clean up event handlers before disposal
+recognition.OnResult -= Recognition_OnResult;
+recognition.OnError -= Recognition_OnError;
+recognition.OnEnd -= Recognition_OnEnd;
+recognition.OnStart -= Recognition_OnStart;
+
+void Recognition_OnResult(SpeechRecognitionEvent e)
+{
+    using var results = e.Results;
+    var index = e.ResultIndex;
+    using var result = results[index];
+    using var alternative = result[0];
+    Console.WriteLine($"Recognized: {alternative.Transcript} (confidence: {alternative.Confidence})");
+}
+
+void Recognition_OnError(SpeechRecognitionErrorEvent e)
+{
+    Console.WriteLine($"Speech recognition error: {e.Error}");
+}
+
+void Recognition_OnEnd(Event e)
+{
+    Console.WriteLine("Speech recognition ended");
+    // Restart if continuous listening is desired
+}
+
+void Recognition_OnStart(Event e)
+{
+    Console.WriteLine("Listening for speech...");
+}
 ```
 

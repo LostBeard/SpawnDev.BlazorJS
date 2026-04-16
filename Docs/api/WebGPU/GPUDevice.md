@@ -53,11 +53,8 @@
 // Acquire a device (assumes adapter already obtained - see GPU example)
 using var device = await adapter.RequestDevice();
 
-// Listen for uncaptured GPU errors
-device.OnUncapturedError += (GPUUncapturedErrorEvent e) =>
-{
-    Console.WriteLine($"GPU error: {e.Error.Message}");
-};
+// Listen for uncaptured GPU errors (named method for proper cleanup)
+device.OnUncapturedError += Device_OnUncapturedError;
 
 // Create a GPU buffer for storing data
 using var buffer = device.CreateBuffer(new GPUBufferDescriptor
@@ -87,7 +84,15 @@ device.Queue.Submit(new[] { commandBuffer });
 using var limits = device.Limits;
 Console.WriteLine($"Max buffer size: {limits.MaxBufferSize}");
 
+// Clean up event handler before disposal
+device.OnUncapturedError -= Device_OnUncapturedError;
+
 // Destroy the device when done
 device.Destroy();
+
+void Device_OnUncapturedError(GPUUncapturedErrorEvent e)
+{
+    Console.WriteLine($"GPU error: {e.Error.Message}");
+}
 ```
 

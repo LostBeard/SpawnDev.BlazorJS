@@ -99,30 +99,40 @@ if (videoTrack != null)
 using var audioTrack = stream.GetFirstAudioTrack();
 if (audioTrack != null)
 {
-    audioTrack.OnEnded += (evt) =>
-    {
-        Console.WriteLine("Audio track ended");
-        evt.Dispose();
-    };
-
-    audioTrack.OnMute += (evt) =>
-    {
-        Console.WriteLine("Audio track muted (technical issue)");
-        evt.Dispose();
-    };
-
-    audioTrack.OnUnMute += (evt) =>
-    {
-        Console.WriteLine("Audio track unmuted");
-        evt.Dispose();
-    };
+    // Subscribe using named methods (required for proper cleanup)
+    audioTrack.OnEnded += AudioTrack_OnEnded;
+    audioTrack.OnMute += AudioTrack_OnMute;
+    audioTrack.OnUnMute += AudioTrack_OnUnMute;
 
     // Clone the track for use in a second context
     using var audioClone = audioTrack.Clone();
     Console.WriteLine($"Clone ID: {audioClone.Id}"); // Different from original
 
+    // Clean up event handlers before stopping
+    audioTrack.OnEnded -= AudioTrack_OnEnded;
+    audioTrack.OnMute -= AudioTrack_OnMute;
+    audioTrack.OnUnMute -= AudioTrack_OnUnMute;
+
     // Stop the track when done
     audioTrack.Stop();
     Console.WriteLine($"ReadyState: {audioTrack.ReadyState}"); // "ended"
+}
+
+void AudioTrack_OnEnded(Event evt)
+{
+    Console.WriteLine("Audio track ended");
+    evt.Dispose();
+}
+
+void AudioTrack_OnMute(Event evt)
+{
+    Console.WriteLine("Audio track muted (technical issue)");
+    evt.Dispose();
+}
+
+void AudioTrack_OnUnMute(Event evt)
+{
+    Console.WriteLine("Audio track unmuted");
+    evt.Dispose();
 }
 ```

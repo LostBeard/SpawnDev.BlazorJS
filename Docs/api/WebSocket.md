@@ -58,8 +58,28 @@ using var ws = new WebSocket("wss://echo.websocket.org");
 // Use arraybuffer for binary data instead of the default blob
 ws.BinaryType = "arraybuffer";
 
-// Handle connection opened
-ws.OnOpen += (Event e) =>
+// Subscribe to events using named methods (required for proper cleanup)
+ws.OnOpen += WS_OnOpen;
+ws.OnMessage += WS_OnMessage;
+ws.OnError += WS_OnError;
+ws.OnClose += WS_OnClose;
+
+// Check connection state before sending
+if (ws.ReadyState == 1) // OPEN
+{
+    ws.Send("Another message");
+}
+
+// Unsubscribe before disposing - every += must have a matching -=
+ws.OnOpen -= WS_OnOpen;
+ws.OnMessage -= WS_OnMessage;
+ws.OnError -= WS_OnError;
+ws.OnClose -= WS_OnClose;
+
+// Close with a code and reason
+ws.Close(1000, "Done");
+
+void WS_OnOpen(Event e)
 {
     Console.WriteLine($"Connected to {ws.Url}");
     ws.Send("Hello Server!");
@@ -69,37 +89,25 @@ ws.OnOpen += (Event e) =>
     ws.Send(bytes);
 
     e.Dispose();
-};
+}
 
-// Handle incoming messages
-ws.OnMessage += (MessageEvent e) =>
+void WS_OnMessage(MessageEvent e)
 {
     var data = e.DataAs<string>();
     Console.WriteLine($"Received: {data}");
     e.Dispose();
-};
+}
 
-// Handle errors
-ws.OnError += (Event e) =>
+void WS_OnError(Event e)
 {
     Console.WriteLine("WebSocket error occurred");
     e.Dispose();
-};
+}
 
-// Handle connection closed
-ws.OnClose += (CloseEvent e) =>
+void WS_OnClose(CloseEvent e)
 {
     Console.WriteLine($"Disconnected: code={e.Code} reason={e.Reason}");
     e.Dispose();
-};
-
-// Check connection state before sending
-if (ws.ReadyState == 1) // OPEN
-{
-    ws.Send("Another message");
 }
-
-// Close with a code and reason
-ws.Close(1000, "Done");
 ```
 

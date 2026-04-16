@@ -187,13 +187,22 @@ if (el != null)
     // Insert adjacent HTML
     el.InsertAdjacentHTML("beforeend", "<p>Added paragraph</p>");
 
-    // Listen for events
-    el.OnClick += (e) => Console.WriteLine($"Clicked at {e.ClientX},{e.ClientY}");
-    el.OnKeyDown += (e) => Console.WriteLine($"Key: {e.Key}");
-    el.OnScroll += (e) => Console.WriteLine("Scrolling");
+    // Subscribe to events using named methods (required for proper cleanup)
+    el.OnClick += Element_OnClick;
+    el.OnKeyDown += Element_OnKeyDown;
+    el.OnScroll += Element_OnScroll;
 
     // Request fullscreen
     await el.RequestFullscreen();
+
+    // Unsubscribe before disposing - every += must have a matching -=
+    el.OnClick -= Element_OnClick;
+    el.OnKeyDown -= Element_OnKeyDown;
+    el.OnScroll -= Element_OnScroll;
 }
+
+void Element_OnClick(PointerEvent e) => Console.WriteLine($"Clicked at {e.ClientX},{e.ClientY}");
+void Element_OnKeyDown(KeyboardEvent e) => Console.WriteLine($"Key: {e.Key}");
+void Element_OnScroll(Event e) => Console.WriteLine("Scrolling");
 ```
 

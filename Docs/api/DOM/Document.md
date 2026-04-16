@@ -168,24 +168,21 @@ using var focused = document.ActiveElement;
 // Check focus state
 bool hasFocus = document.HasFocus();
 
-// Listen for document-level events
-document.OnVisibilityChange += (e) =>
-{
-    string state = document.VisibilityState;
-    Console.WriteLine($"Visibility: {state}");
-};
-
-document.OnKeyDown += (e) =>
-{
-    Console.WriteLine($"Key pressed: {e.Key}");
-};
-
-document.OnDOMContentLoaded += (e) =>
-{
-    Console.WriteLine("DOM content loaded");
-};
+// Subscribe to document-level events using named methods (required for proper cleanup)
+document.OnVisibilityChange += Document_OnVisibilityChange;
+document.OnKeyDown += Document_OnKeyDown;
+document.OnDOMContentLoaded += Document_OnDOMContentLoaded;
 
 // Exit fullscreen
 await document.ExitFullscreen();
+
+// Unsubscribe before disposing - every += must have a matching -=
+document.OnVisibilityChange -= Document_OnVisibilityChange;
+document.OnKeyDown -= Document_OnKeyDown;
+document.OnDOMContentLoaded -= Document_OnDOMContentLoaded;
+
+void Document_OnVisibilityChange(Event e) => Console.WriteLine($"Visibility: {document.VisibilityState}");
+void Document_OnKeyDown(KeyboardEvent e) => Console.WriteLine($"Key pressed: {e.Key}");
+void Document_OnDOMContentLoaded(Event e) => Console.WriteLine("DOM content loaded");
 ```
 

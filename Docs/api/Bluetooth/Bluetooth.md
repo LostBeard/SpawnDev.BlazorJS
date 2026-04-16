@@ -60,14 +60,19 @@ if (gatt != null)
     server.Disconnect();
 }
 
-// Listen for disconnection
-device.OnGATTServerDisconnected += (Event e) =>
-{
-    Console.WriteLine("Bluetooth device disconnected");
-};
+// Listen for disconnection (named method for proper cleanup)
+device.OnGATTServerDisconnected += Device_OnGATTServerDisconnected;
 
 // List previously paired devices
 using var devices = await bluetooth.GetDevices();
 Console.WriteLine($"Previously paired devices: {devices.Length}");
+
+// Clean up event handler before disposal
+device.OnGATTServerDisconnected -= Device_OnGATTServerDisconnected;
+
+void Device_OnGATTServerDisconnected(Event e)
+{
+    Console.WriteLine("Bluetooth device disconnected");
+}
 ```
 

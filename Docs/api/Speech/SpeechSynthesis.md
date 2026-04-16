@@ -66,11 +66,8 @@ if (englishVoices.Count > 0)
     foreach (var v in englishVoices) v.Dispose();
 }
 
-// Listen for speech events
-utterance.OnEnd += (SpeechSynthesisEvent e) =>
-{
-    Console.WriteLine("Finished speaking");
-};
+// Listen for speech events (named method for proper cleanup)
+utterance.OnEnd += Utterance_OnEnd;
 
 // Speak the utterance
 speechSynthesis.Speak(utterance);
@@ -82,5 +79,13 @@ Console.WriteLine($"Speaking: {speechSynthesis.Speaking}");
 
 // Cancel all queued utterances
 // speechSynthesis.Cancel();
+
+// Clean up event handler before disposal
+utterance.OnEnd -= Utterance_OnEnd;
+
+void Utterance_OnEnd(SpeechSynthesisEvent e)
+{
+    Console.WriteLine("Finished speaking");
+}
 ```
 

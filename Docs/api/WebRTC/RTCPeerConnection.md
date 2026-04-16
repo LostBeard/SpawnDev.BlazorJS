@@ -91,22 +91,10 @@ using var pc = new RTCPeerConnection(new RTCConfiguration
     }
 });
 
-// Listen for ICE candidates to send to the remote peer via signaling
-pc.OnIceCandidate += (RTCPeerConnectionEvent e) =>
-{
-    using var candidate = e.Candidate;
-    if (candidate != null)
-    {
-        Console.WriteLine($"New ICE candidate: {candidate.Candidate}");
-        // Send candidate to remote peer via your signaling channel
-    }
-};
-
-// Listen for connection state changes
-pc.OnConnectionStateChange += (Event e) =>
-{
-    Console.WriteLine($"Connection state: {pc.ConnectionState}");
-};
+// Subscribe to events using named methods (required for proper cleanup)
+pc.OnIceCandidate += Pc_OnIceCandidate;
+pc.OnConnectionStateChange += Pc_OnConnectionStateChange;
+pc.OnDataChannel += Pc_OnDataChannel;
 
 // Create a data channel for sending messages
 using var dataChannel = pc.CreateDataChannel("chat");
@@ -120,19 +108,33 @@ Console.WriteLine($"Local SDP offer created, signaling state: {pc.SignalingState
 // then receive the remote answer and apply it:
 // await pc.SetRemoteDescription(remoteAnswer);
 
-// Listen for data channels created by the remote peer
-pc.OnDataChannel += (RTCDataChannelEvent e) =>
-{
-    using var channel = e.Channel;
-    Console.WriteLine($"Remote opened data channel: {channel.Label}");
-};
-
 // Clean up event handlers before disposal
-pc.OnIceCandidate -= iceHandler;
-pc.OnConnectionStateChange -= stateHandler;
-pc.OnDataChannel -= channelHandler;
+pc.OnIceCandidate -= Pc_OnIceCandidate;
+pc.OnConnectionStateChange -= Pc_OnConnectionStateChange;
+pc.OnDataChannel -= Pc_OnDataChannel;
 
 // Close the connection when done
 pc.Close();
+
+void Pc_OnIceCandidate(RTCPeerConnectionEvent e)
+{
+    using var candidate = e.Candidate;
+    if (candidate != null)
+    {
+        Console.WriteLine($"New ICE candidate: {candidate.Candidate}");
+        // Send candidate to remote peer via your signaling channel
+    }
+}
+
+void Pc_OnConnectionStateChange(Event e)
+{
+    Console.WriteLine($"Connection state: {pc.ConnectionState}");
+}
+
+void Pc_OnDataChannel(RTCDataChannelEvent e)
+{
+    using var channel = e.Channel;
+    Console.WriteLine($"Remote opened data channel: {channel.Label}");
+}
 ```
 

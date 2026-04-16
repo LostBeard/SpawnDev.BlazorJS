@@ -53,11 +53,16 @@ oscillator.Start();
 // Schedule stop after 2 seconds
 oscillator.Stop(audioCtx.CurrentTime + 2.0f);
 
-// Listen for when the oscillator finishes playing
-oscillator.OnEnded += (Event e) =>
+// Listen for when the oscillator finishes playing (named method for proper cleanup)
+oscillator.OnEnded += Oscillator_OnEnded;
+
+// Clean up before disposal
+oscillator.OnEnded -= Oscillator_OnEnded;
+
+void Oscillator_OnEnded(Event e)
 {
     Console.WriteLine("Oscillator finished playing");
-};
+}
 
 // Alternative: create via constructor with options
 using var osc2 = new OscillatorNode(audioCtx);
