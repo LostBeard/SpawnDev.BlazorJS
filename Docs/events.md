@@ -117,25 +117,46 @@ videoEl.Dispose();
 
 ---
 
-## Optional Parameters
+## Optional Parameters - Zero-Cost Event Notifications
 
-Event handler parameters are optional, just like in JavaScript. If you do not need the event arguments, you can omit them entirely. This improves performance because unused arguments are not deserialized from JavaScript.
+Event handler parameters are optional. This is not just a convenience feature - it is a **performance optimization**. When you omit the event arguments, the JS interop layer skips serialization of the event object entirely. No `IJSInProcessObjectReference` is created, no JSON is marshaled, no object needs disposal. You get a pure notification that the event fired with zero interop overhead per invocation.
+
+This works because `ActionEvent<T1>` inherits from `ActionEvent`. The base class has `operator +(ActionEvent, Action)` (parameterless), and the subclass adds `operator +(ActionEvent<T1>, Action<T1>)` (typed). Both are valid for the same event property.
 
 ```csharp
-// Full event arguments
+// FULL ARGUMENTS - event object is deserialized from JS into .NET
+// Use when you need the event data
 void Window_OnStorage(StorageEvent e)
 {
     Console.WriteLine($"Key: {e.Key}, NewValue: {e.NewValue}");
 }
 
-// No arguments - still works with ActionEvent<StorageEvent>
+// NO ARGUMENTS - zero interop cost, just a notification
+// Use when you only need to know the event fired
 void Window_OnStorage()
 {
     Console.WriteLine("Storage changed");
 }
 
-// Both are valid for:
+// Both are valid for ActionEvent<StorageEvent>:
 window.OnStorage += Window_OnStorage;
+```
+
+**When this matters most:** High-frequency events like `OnMouseMove`, `OnScroll`, `OnTimeUpdate`, or `OnResize` where you might only need the notification (e.g., to trigger a re-render or set a flag) without the event payload. Skipping the `MouseEvent` or `Event` deserialization on every mouse move is a significant win.
+
+```csharp
+// High-frequency - skip serialization since we don't need the event data
+void HandleMouseMove()
+{
+    needsRedraw = true;
+}
+
+// Only use the typed version when you actually need the coordinates
+void HandleMouseMove(MouseEvent e)
+{
+    cursorX = e.ClientX;
+    cursorY = e.ClientY;
+}
 ```
 
 ---
