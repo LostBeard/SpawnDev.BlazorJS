@@ -30,7 +30,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// A string that may be used by the web application to provide a hint as to what type of content the track contains to guide how it should be treated by API consumers.
         /// </summary>
-        public string ContentHint => JSRef!.Get<string>("contentHint");
+        public string ContentHint { get => JSRef!.Get<string>("contentHint"); set => JSRef!.Set("contentHint", value); }
         /// <summary>
         /// Returns a string containing a user agent-assigned label that identifies the track source, as in "internal microphone". The string may be left empty and is empty as long as no source has been connected. When the track is disassociated from its source, the label is not changed.
         /// </summary>
