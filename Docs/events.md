@@ -231,9 +231,39 @@ ws.OnMessage -= (e) => Console.WriteLine(e.Data);   // DIFFERENT delegate - does
 
 ---
 
+## How It Works Under the Hood
+
+Understanding the internals helps you use ActionEvent correctly:
+
+1. **`CallbackRef` is static.** All ActionEvent/FuncEvent instances share a single static `CallbackRef` that tracks Callbacks in a `Dictionary<Delegate, Callback>`, keyed by the delegate (your method).
+
+2. **`+=` calls `CallbackRef.RefAdd(delegate)`** - looks up your delegate in the static dictionary. If found, increments `RefCount`. If not, creates a new `Callback` and stores it. Then calls `addEventListener` on the JS object.
+
+3. **`-=` calls `CallbackRef.RefGet(delegate)` then `RefDel(delegate)`** - looks up your delegate in the same static dictionary, calls `removeEventListener` on the JS object, and decrements `RefCount`. When `RefCount` reaches 0, the `Callback` is disposed.
+
+**Key insight:** The Callback is tracked by the **delegate**, not by the JSObject instance. The JSObject is just a handle used to call `addEventListener`/`removeEventListener` on the underlying JavaScript object. This means:
+
+- You **can** dispose a JSObject, get a new reference to the same underlying JS object, and `-=` from the new reference - the static dictionary will still find and dispose the Callback.
+- What matters for unsubscription is that you pass the **same delegate** (same named method) to `-=`.
+- Disposing the JSObject does NOT automatically unsubscribe events or dispose Callbacks.
+
+```csharp
+using var window1 = JS.Get<Window>("window");
+window1.OnResize += HandleResize;
+window1.Dispose(); // The Callback is still alive in the static dictionary
+
+// Later, get a new reference to the same JS window object
+using var window2 = JS.Get<Window>("window");
+window2.OnResize -= HandleResize; // This works! Same delegate = same Callback found and disposed
+
+void HandleResize() => Console.WriteLine("Resized");
+```
+
+---
+
 ## Proper Disposal Pattern
 
-Always unsubscribe from all events before disposing the parent object:
+Unsubscribe from events to dispose their underlying Callbacks. This can be done from any JSObject reference to the same underlying JavaScript object - it does not have to be the same JSObject instance you used for `+=`:
 
 ```csharp
 @implements IDisposable
