@@ -242,11 +242,11 @@ ws.OnMessage -= (e) => Console.WriteLine(e.Data);   // DIFFERENT delegate - does
 
 Understanding the internals helps you use ActionEvent correctly:
 
-1. **`CallbackRef` is static.** All ActionEvent/FuncEvent instances share a single static `CallbackRef` that tracks Callbacks in a `Dictionary<Delegate, Callback>`, keyed by the delegate (your method).
+1. **`CallbackRef` is static.** All ActionEvent/FuncEvent instances share a single static `CallbackRef` instance. It maintains a `Dictionary<Delegate, Callback>` keyed by the delegate (your method). Each `Callback` in the dictionary contains: a `DotNetObjectReference<Callback>` (the .NET-to-JS bridge), a unique `_callbackId`, parameter type info (`_paramTypes`), return type info (`_returnVoid`), and a `RefCount`. This is the full interop object that JavaScript calls back into.
 
-2. **`+=` calls `CallbackRef.RefAdd(delegate)`** - looks up your delegate in the static dictionary. If found, increments `RefCount`. If not, creates a new `Callback` and stores it. Then calls `addEventListener` on the JS object.
+2. **`+=` calls `CallbackRef.RefAdd(delegate)`** - looks up your delegate in the dictionary. If found, increments `RefCount`. If not found, creates a new `Callback` (with its `DotNetObjectReference`, unique ID, and parameter types) and stores it. Then calls `addEventListener` on the JS object, passing the `Callback`.
 
-3. **`-=` calls `CallbackRef.RefGet(delegate)` then `RefDel(delegate)`** - looks up your delegate in the same static dictionary, calls `removeEventListener` on the JS object, and decrements `RefCount`. When `RefCount` reaches 0, the `Callback` is disposed.
+3. **`-=` calls `CallbackRef.RefGet(delegate)` then `RefDel(delegate)`** - looks up your delegate in the same dictionary, calls `removeEventListener` on the JS object (passing the same `Callback`), and decrements `RefCount`. When `RefCount` reaches 0, the `Callback` disposes its `DotNetObjectReference` and notifies the JS side to clean up via `DisposeCallback(_callbackId)`.
 
 **Key insight:** The Callback reference count is purely about the **delegate** and has nothing to do with the JSObject it is used with. The JSObject is just a handle used to call `addEventListener`/`removeEventListener` on the underlying JavaScript object. This means:
 
