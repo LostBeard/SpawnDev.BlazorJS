@@ -75,3 +75,97 @@ if (path != null)
 }
 ```
 
+## Examples
+
+### Return directory handle
+
+The following example returns a directory handle with the specified name; if the directory does not already exist it is created.
+
+```js
+const dirName = "directoryToGetName";
+
+// assuming we have a directory handle: 'currentDirHandle'
+const subDir = await currentDirHandle.getDirectoryHandle(dirName, {
+  create: true,
+});
+```
+
+### Return file path
+
+The following asynchronous function uses `resolve()` to find the path to a chosen file, relative to a specified directory handle.
+
+```js
+async function returnPathDirectories(directoryHandle) {
+  // Get a file handle by showing a file picker:
+  const handle = await self.showOpenFilePicker();
+  if (!handle) {
+    // User cancelled, or otherwise failed to open a file.
+    return;
+  }
+
+  // Check if handle exists inside our directory handle
+  const relativePaths = await directoryHandle.resolve(handle);
+
+  if (relativePaths === null) {
+    // Not inside directory handle
+  } else {
+    // relativePath is an array of names, giving the relative path
+
+    for (const name of relativePaths) {
+      // log each entry
+      console.log(name);
+    }
+  }
+}
+```
+
+### Return handles for all files in a directory
+
+The following example scans recursively through a directory to return {{domxref('FileSystemFileHandle')}} objects for each file in that directory:
+
+**JavaScript (MDN):**
+
+```js
+async function* getFilesRecursively(entry) {
+  if (entry.kind === "file") {
+    const file = await entry.getFile();
+    if (file !== null) {
+      file.relativePath = getRelativePath(entry);
+      yield file;
+    }
+  } else if (entry.kind === "directory") {
+    for await (const handle of entry.values()) {
+      yield* getFilesRecursively(handle);
+    }
+  }
+}
+for await (const fileHandle of getFilesRecursively(directoryHandle)) {
+  console.log(fileHandle);
+}
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+async function* getFilesRecursively(entry) {
+if (entry.kind == "file") {
+using var file = await entry.getFile();
+if (file != null) {
+file.relativePath = getRelativePath(entry);
+yield file;
+}
+} else if (entry.kind == "directory") {
+for await (const handle of entry.Values()) {
+yield* getFilesRecursively(handle);
+}
+}
+}
+for await (const fileHandle of getFilesRecursively(directoryHandle)) {
+Console.WriteLine(fileHandle);
+}
+```
+

@@ -28,3 +28,67 @@
 | `ToFileSystemDirectoryEntry(bool moveJSRef)` | `FileSystemDirectoryEntry?` | Returns a FileSystemDirectoryEntry JSObject for this entry if this entry IsDirectory |
 | `ToFileSystemFileEntry(bool moveJSRef)` | `FileSystemFileEntry?` | Returns a FileSystemFileEntry JSObject for this entry if this entry IsFile |
 
+## Examples
+
+**JavaScript (MDN):**
+
+```js
+// Taking care of the browser-specific prefixes.
+window.requestFileSystem =
+  window.requestFileSystem || window.webkitRequestFileSystem;
+
+// …
+
+// Opening a file system with temporary storage
+window.requestFileSystem(
+  TEMPORARY,
+  1024 * 1024 /* 1MB */,
+  (fs) => {
+    fs.root.getFile(
+      "log.txt",
+      {},
+      (fileEntry) => {
+        fileEntry.remove(() => {
+          console.log("File removed.");
+        }, onError);
+      },
+      onError,
+    );
+  },
+  onError,
+);
+```
+
+**C# (SpawnDev.BlazorJS):**
+
+```csharp
+// Requires: builder.Services.AddBlazorJSRuntime();
+// Inject BlazorJSRuntime in your component or service:
+// [Inject] BlazorJSRuntime JS { get; set; }
+
+// Taking care of the browser-specific prefixes.
+window.requestFileSystem =;
+window.requestFileSystem || window.webkitRequestFileSystem;
+
+// …
+
+// Opening a file system with temporary storage
+window.requestFileSystem(
+TEMPORARY,
+1024 * 1024 /* 1MB */,
+(fs) => {
+fs.root.getFile(
+"log.txt",
+{},
+(fileEntry) => {
+fileEntry.remove(() => {
+Console.WriteLine("File removed.");
+}, onError);
+},
+onError,
+);
+},
+onError,
+);
+```
+
