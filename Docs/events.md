@@ -121,6 +121,8 @@ videoEl.Dispose();
 
 Event handler parameters are optional. This is not just a convenience feature - it is a **performance optimization**. When you omit the event arguments, the JS interop layer skips serialization of the event object entirely. No `IJSInProcessObjectReference` is created, no JSON is marshaled, no object needs disposal. You get a pure notification that the event fired with zero interop overhead per invocation.
 
+This optimization happens on the **JavaScript side**. Each `Callback` carries a `_paramTypes` array that tells the JS interop bridge exactly how many arguments the .NET handler expects. When the JS event fires, the bridge loops `for (i = 0; i < paramTypes.length; i++)` and only serializes that many arguments to send to .NET. A zero-parameter handler means `paramTypes.length` is 0 - the loop never executes and the JS event object is never touched.
+
 This works because `ActionEvent<T1>` inherits from `ActionEvent`. The base class has `operator +(ActionEvent, Action)` (parameterless), and the subclass adds `operator +(ActionEvent<T1>, Action<T1>)` (typed). Both are valid for the same event property.
 
 ```csharp
