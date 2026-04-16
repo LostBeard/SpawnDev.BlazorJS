@@ -100,6 +100,25 @@ await Task.Delay(100);  // copy is independent, still valid
 gl.BufferData(GL.ARRAY_BUFFER, copy, GL.STATIC_DRAW);
 ```
 
+### As\<T\>() Views Share the Entire WASM Heap ArrayBuffer
+
+An `As<T>()` view is a TypedArray whose backing `ArrayBuffer` is the **entire WebAssembly linear memory** - potentially hundreds of megabytes. The view only covers your pinned data via `byteOffset` and `byteLength`, but some JavaScript APIs do not respect those bounds. They may read or transmit the entire backing ArrayBuffer instead of just your view's range.
+
+**Use `To<T>()` when passing data to APIs that may inspect the backing ArrayBuffer:**
+- `new Blob([data])` / `new File([data], ...)`
+- `new Response(data)`
+- `dataChannel.send(data)` (WebRTC)
+- `postMessage(data)` with transfer
+- Any API where you're unsure whether it respects `byteOffset`/`byteLength`
+
+**`As<T>()` is safe for APIs that respect TypedArray view bounds:**
+- `gl.bufferData()` / `gl.texImage2D()` (WebGL)
+- `device.queue.writeBuffer()` (WebGPU)
+- `putImageData()` (Canvas 2D)
+- `audioBuffer.copyToChannel()` (Web Audio)
+
+This is a known issue with WASM heap views, documented at [Uint8ArrayCheck](https://github.com/LostBeard/Uint8ArrayCheck). Microsoft encountered the same problem when they briefly tried optimizing byte[] interop by returning WASM heap views - some APIs would see a 256MB ArrayBuffer instead of the intended 4KB view.
+
 ### Heap Priming
 
 The first `HeapView` creation in a session calls `PrimeHeap()`, which allocates a 16MB temporary buffer to force the runtime to grow the heap early. This reduces the likelihood of heap resizes during pinned operations. You can call `HeapView.PrimeHeap()` manually with a custom size if needed.
