@@ -8,13 +8,23 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class XRRenderStateInit
     {
         /// <summary>
-        /// The depthNear attribute defines the distance, in meters, of the near clip plane from the viewer. The depthFar attribute defines the distance, in meters, of the far clip plane from the viewer.
+        /// The depthNear attribute defines the distance, in meters, of the near clip plane from the viewer.
+        /// Leave unset to keep the session's current value (spec default: 0.1). Setting a non-null value
+        /// updates the session; setting 0.0 explicitly will make the projection matrix NaN and silently
+        /// blank the scene, so prefer a typical near-clip distance like 0.01 - 0.1 meters.
         /// </summary>
-        public double DepthNear { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public double? DepthNear { get; set; }
         /// <summary>
-        /// depthNear and depthFar are used in the computation of the projectionMatrix of XRViews. When the projectionMatrix is used during rendering, only geometry with a distance to the viewer that falls between depthNear and depthFar will be drawn. They also determine how the values of an XRWebGLLayer depth buffer are interpreted. depthNear MAY be greater than depthFar.
+        /// The depthFar attribute defines the distance, in meters, of the far clip plane from the viewer.
+        /// Leave unset to keep the session's current value (spec default: 1000.0). depthNear and depthFar
+        /// are used in the computation of the projectionMatrix of XRViews. When the projectionMatrix is
+        /// used during rendering, only geometry with a distance to the viewer that falls between depthNear
+        /// and depthFar will be drawn. They also determine how the values of an XRWebGLLayer depth buffer
+        /// are interpreted. depthNear MAY be greater than depthFar.
         /// </summary>
-        public double DepthFar { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public double? DepthFar { get; set; }
         /// <summary>
         /// The passthroughFullyObscured attribute is a hint to the XRSystem from the author to indicate that they intend to completely cover the viewport with virtual content. The author SHOULD set this flag back to false once the viewport is no longer covered by opaque pixels.
         /// </summary>
