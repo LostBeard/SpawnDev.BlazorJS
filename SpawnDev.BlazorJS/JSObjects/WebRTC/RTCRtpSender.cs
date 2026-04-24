@@ -48,13 +48,23 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <param name="mediaStreams">An array of MediaStream objects (or a single MediaStream) which identify the streams to which the sender's track should belong.</param>
         public void SetStreams(params MediaStream[] mediaStreams) => JSRef!.CallApplyVoid("setStreams", mediaStreams);
         /// <summary>
-        /// Returns an object describing the current configuration for the encoding and transmission of media on the sender's track.
+        /// Returns the current sender parameters including per-encoding simulcast
+        /// configuration (<see cref="RTCRtpSendParameters.Encodings"/>), codec and
+        /// header-extension negotiation state, and the <see cref="RTCRtpSendParameters.TransactionId"/>
+        /// that must be round-tripped on subsequent <see cref="SetParameters(RTCRtpSendParameters)"/>
+        /// calls to prevent lost-update races.
         /// </summary>
-        public JSObject GetParameters() => JSRef!.Call<JSObject>("getParameters");
+        public RTCRtpSendParameters GetParameters() => JSRef!.Call<RTCRtpSendParameters>("getParameters");
         /// <summary>
-        /// Applies changes to parameters which configure how the sender's track is encoded and transmitted to the remote peer.
+        /// Apply changes to the sender parameters (typically simulcast encodings).
+        /// The caller should <see cref="GetParameters"/> first, modify what they
+        /// want to change (most commonly the <see cref="RTCRtpSendParameters.Encodings"/>
+        /// array), and pass the whole object back - the untouched fields must
+        /// round-trip verbatim. The <see cref="RTCRtpSendParameters.TransactionId"/>
+        /// prevents concurrent get/set races; setParameters rejects if it doesn't
+        /// match the value from the last getParameters.
         /// </summary>
-        public Task SetParameters(JSObject parameters) => JSRef!.CallVoidAsync("setParameters", parameters);
+        public Task SetParameters(RTCRtpSendParameters parameters) => JSRef!.CallVoidAsync("setParameters", parameters);
         /// <summary>
         /// Returns a Promise that resolves with an RTCStatsReport which provides statistics data for the sender.
         /// </summary>

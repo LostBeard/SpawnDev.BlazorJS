@@ -1,6 +1,6 @@
 # JSObject
 
-`JSObject` is the base class for all 1,014 typed JavaScript wrappers in SpawnDev.BlazorJS. It wraps an `IJSInProcessObjectReference` and provides strongly typed access to JavaScript object properties, methods, and events.
+`JSObject` is the base class for all 1,021 typed JavaScript wrappers in SpawnDev.BlazorJS. It wraps an `IJSInProcessObjectReference` and provides strongly typed access to JavaScript object properties, methods, and events.
 
 **Namespace:** `SpawnDev.BlazorJS`
 

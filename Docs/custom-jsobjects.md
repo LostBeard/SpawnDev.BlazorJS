@@ -6,7 +6,7 @@ This guide walks through building your own JSObject wrappers to use JavaScript l
 
 ## When to Build a Custom Wrapper
 
-SpawnDev.BlazorJS includes 1,014 wrappers for standard browser APIs. Build a custom wrapper when you need to use:
+SpawnDev.BlazorJS includes 1,021 wrappers for standard browser APIs. Build a custom wrapper when you need to use:
 
 - A third-party JavaScript library (Socket.IO, Three.js, PixiJS, SimplePeer, etc.)
 - A custom JavaScript class from your own code

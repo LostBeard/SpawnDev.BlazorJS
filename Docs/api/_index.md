@@ -1,6 +1,6 @@
 # API Reference - Complete Class Index
 
-**Total types documented:** 1014
+**Total types documented:** 1021
 
 This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by category (matching the source folder structure).
 

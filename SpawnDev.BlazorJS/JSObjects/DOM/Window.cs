@@ -86,7 +86,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The Window interface's opener property returns a reference to the window that opened the window, either with open(), or by navigating a link with a target attribute.
         /// </summary>
-        public Window Opener => JSRef!.Get<Window>("opener");
+        public Window? Opener => JSRef!.Get<Window?>("opener");
         /// <summary>
         /// The Window.outerHeight read-only property returns the height in pixels of the whole browser window, including any sidebar, window chrome, and window-resizing borders/handles.
         /// </summary>
