@@ -24,15 +24,4 @@ namespace SpawnDev.BlazorJS.JSObjects.WebRTC
         /// <param name="_ref"></param>
         public RTCIdentityAssertion(IJSInProcessObjectReference _ref) : base(_ref) { }
     }
-    /// <summary>
-    /// The RTCSctpTransport interface provides information which describes a Stream Control Transmission Protocol (SCTP) transport.
-    /// </summary>
-    public class RTCSctpTransport : JSObject
-    {
-        /// <summary>
-        /// Deserialization constructor
-        /// </summary>
-        /// <param name="_ref"></param>
-        public RTCSctpTransport(IJSInProcessObjectReference _ref) : base(_ref) { }
-    }
 }
