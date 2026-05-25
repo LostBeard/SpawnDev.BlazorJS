@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -43,6 +44,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <returns></returns>
         public ReadableStreamDefaultReader GetReader() => JSRef!.Call<ReadableStreamDefaultReader>("getReader");
+        /// <summary>
+        /// Creates a reader and locks the stream to it. While the stream is locked, no other reader can be acquired until this one is released.
+        /// </summary>
+        /// <returns></returns>
+        public ReadableStreamBYOBReader GetReaderBYOB() => JSRef!.Call<ReadableStreamBYOBReader>("getReader", new ReadableStreamGetReaderOptions { Mode = "byob" });
         /// <summary>
         /// The pipeTo() method of the ReadableStream interface pipes the current ReadableStream to a given WritableStream and returns a Promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.<br/>
         /// Piping a stream will generally lock it for the duration of the pipe, preventing other readers from locking it.<br/>

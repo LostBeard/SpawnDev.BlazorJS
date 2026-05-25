@@ -4,6 +4,13 @@
 // https://webidl.spec.whatwg.org/#ArrayBufferView
 // typedef (TypedArray or DataView) ArrayBufferView;
 
+global using ArrayBufferView = SpawnDev.BlazorJS.Union
+    <
+    SpawnDev.BlazorJS.JSObjects.TypedArray,
+    SpawnDev.BlazorJS.JSObjects.DataView,
+    byte[]
+    >;
+
 // https://html.spec.whatwg.org/multipage/imagebitmap-and-animations.html#imagedataarray
 
 // https://webidl.spec.whatwg.org/#AllowSharedBufferSource
