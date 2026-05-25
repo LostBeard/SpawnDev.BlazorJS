@@ -25,36 +25,36 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Returns the maximum age for incoming datagrams in milliseconds.
         /// </summary>
-        public float IncomingMaxAge
+        public double IncomingMaxAge
         {
-            get => JSRef!.Get<float>("incomingMaxAge");
+            get => JSRef!.Get<double>("incomingMaxAge");
             set => JSRef!.Set("incomingMaxAge", value);
         }
 
         /// <summary>
         /// Returns the maximum age for outgoing datagrams in milliseconds.
         /// </summary>
-        public float OutgoingMaxAge
+        public double OutgoingMaxAge
         {
-            get => JSRef!.Get<float>("outgoingMaxAge");
+            get => JSRef!.Get<double>("outgoingMaxAge");
             set => JSRef!.Set("outgoingMaxAge", value);
         }
 
         /// <summary>
         /// Returns the high water mark for incoming datagrams.
         /// </summary>
-        public float IncomingHighWaterMark
+        public double IncomingHighWaterMark
         {
-            get => JSRef!.Get<float>("incomingHighWaterMark");
+            get => JSRef!.Get<double>("incomingHighWaterMark");
             set => JSRef!.Set("incomingHighWaterMark", value);
         }
 
         /// <summary>
         /// Returns the high water mark for outgoing datagrams.
         /// </summary>
-        public float OutgoingHighWaterMark
+        public double OutgoingHighWaterMark
         {
-            get => JSRef!.Get<float>("outgoingHighWaterMark");
+            get => JSRef!.Get<double>("outgoingHighWaterMark");
             set => JSRef!.Set("outgoingHighWaterMark", value);
         }
     }

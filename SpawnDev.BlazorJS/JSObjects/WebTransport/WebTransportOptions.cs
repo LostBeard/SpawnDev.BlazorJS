@@ -23,6 +23,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A list of server certificate hashes.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<object>? ServerCertificateHashes { get; set; }
+        public List<WebTransportHash>? ServerCertificateHashes { get; set; }
+
+        /// <summary>
+        /// A string indicating the application's preference that the congestion control algorithm used when sending data over this connection be tuned for either throughput or low-latency. This is a hint to the user agent. The allowed values are: default (default), throughput, and low-latency.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? CongestionControl { get; set; }
     }
 }
