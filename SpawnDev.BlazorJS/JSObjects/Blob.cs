@@ -79,6 +79,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public Task<ArrayBuffer> ArrayBuffer() => JSRef!.CallAsync<ArrayBuffer>("arrayBuffer");
         /// <summary>
+        /// Returns a promise that resolves with a Uint8Array containing the contents of the Blob.
+        /// </summary>
+        /// <returns></returns>
+        public Task<Uint8Array> Bytes() => JSRef!.CallAsync<Uint8Array>("bytes");
+        /// <summary>
         /// The Blob interface's slice() method creates and returns a new Blob object which contains data from a subset of the blob on which it's called.
         /// </summary>
         /// <param name="startPos">An index into the Blob indicating the first byte to include in the new Blob. If you specify a negative value, it's treated as an offset from the end of the Blob toward the beginning. For example, -10 would be the 10th from last byte in the Blob. The default value is 0. If you specify a value for start that is larger than the size of the source Blob, the returned Blob has size 0 and contains no data.</param>
