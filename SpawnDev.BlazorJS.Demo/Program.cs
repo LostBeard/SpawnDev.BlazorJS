@@ -18,6 +18,7 @@ builder.Services.AddSingleton<FileSystemAPIService>();
 builder.Services.AddSingleton<TypedArrayTests>();
 builder.Services.AddSingleton<MediaTests>();
 builder.Services.AddSingleton<CacheTests>();
+builder.Services.AddSingleton<BlobStreamTests>();
 
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
