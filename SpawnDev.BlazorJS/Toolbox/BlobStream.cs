@@ -83,7 +83,8 @@ namespace SpawnDev.BlazorJS.Toolbox
             var bytesRead = (int)(subBlob?.Size ?? 0);
             if (bytesRead > 0 && subBlob != null)
             {
-                using var subUint8Array = await subBlob.Bytes();
+                using var subArrayBuffer = await subBlob.ArrayBuffer();
+                using var subUint8Array = new Uint8Array(subArrayBuffer);
                 // get a heap view of the destination in buffer using the offset and count
                 using var heapView = HeapView.Create(buffer);
                 using var typedArray = heapView.As<Uint8Array>();
