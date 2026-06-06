@@ -5,8 +5,8 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.9</Version>
-		<PackageReleaseNotes>v3.5.9: Use ArrayBuffer for Blob bytes.</PackageReleaseNotes>
+		<Version>3.5.10</Version>
+		<PackageReleaseNotes>v3.5.10: ReadBlobStream overloads on FileSystemFileHandle. FileSystemHandleWritableStream Write Uint8Array and HeapView use.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
