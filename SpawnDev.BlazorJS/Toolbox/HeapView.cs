@@ -339,6 +339,38 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
+        /// <returns></returns>
+        public static HeapView Create<T>(ReadOnlyMemory<T> data) where T : struct
+        {
+            if (MemoryMarshal.TryGetArray(data, out ArraySegment<T> segment))
+            {
+                var underlyingArray = segment.Array!;
+                int offset = segment.Offset;
+                int length = segment.Count;
+                var ret = new HeapView<T>(underlyingArray, offset, length);
+                return ret;
+            }
+            throw new NotSupportedException();
+        }
+        /// <summary>
+        /// Creates a new HeapView of the provided array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static HeapView Create<T>(ArraySegment<T> data) where T : struct
+        {
+            var underlyingArray = data.Array!;
+            int offset = data.Offset;
+            int length = data.Count;
+            var ret = new HeapView<T>(underlyingArray, offset, length);
+            return ret;
+        }
+        /// <summary>
+        /// Creates a new HeapView of the provided array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
         /// <param name="offset">Start index in the data</param>
         /// <param name="length">The number of elements to include</param>
         /// <returns></returns>
