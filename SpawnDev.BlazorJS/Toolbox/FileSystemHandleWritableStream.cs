@@ -140,7 +140,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             throw new NotImplementedException();
         }
         long _PositionReal = 0;
-        ///<inheritdoc/>
+        /// <inheritdoc/>
         public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             if (FSStream == null) throw new Exception("Invalid state");
@@ -157,17 +157,42 @@ namespace SpawnDev.BlazorJS.Toolbox
                 _PositionReal = Position;
             }
             Writer ??= FSStream.GetWriter();
-            if (offset != 0 || count != buffer.Length)
-            {
-                var tmp = new byte[count];
-                System.Array.Copy(buffer, offset, tmp, 0, count);
-                await Writer.Write(tmp);
-            }
-            else
-            {
-                await Writer.Write(buffer);
-            }
+            // use HeapView to create fast copy of the buffer source region to a new Uint8Array
+            using var bufferView = new HeapView<byte>(buffer, offset, count);
+            using var tmpUint8Array = bufferView.To<Uint8Array>();
+            await Writer.Write(tmpUint8Array);
             _Position += count;
+            _PositionReal = _Position;
+            if (Position > Length)
+            {
+                _Length = Position;
+            }
+        }
+        /// <summary>
+        /// Write a Uint8Array to the stream
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task WriteAsync(Uint8Array buffer, CancellationToken cancellationToken)
+        {
+            if (FSStream == null) throw new Exception("Invalid state");
+            // seek if needed
+            if (_PositionReal != Position)
+            {
+                if (Writer != null)
+                {
+                    Writer.ReleaseLock();
+                    Writer.Dispose();
+                    Writer = null;
+                }
+                await FSStream.Seek((ulong)Position);
+                _PositionReal = Position;
+            }
+            Writer ??= FSStream.GetWriter();
+            await Writer.Write(buffer);
+            _Position += buffer.Length;
             _PositionReal = _Position;
             if (Position > Length)
             {

@@ -285,7 +285,8 @@ namespace SpawnDev.BlazorJS.Toolbox
             return ret.ReadBytes();
         }
         /// <summary>
-        /// Read a Stream from the file
+        /// Read the file as an ArrayBufferStream Stream.<br/>
+        /// Note: The entire contents of file is read into memory.
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
@@ -293,6 +294,18 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             var arrayBuffer = await _this.ReadArrayBuffer();
             var stream = new ArrayBufferStream(arrayBuffer);
+            return stream;
+        }
+        /// <summary>
+        /// Read the file as an BlobStream Stream.<br/>
+        /// Note: This allows streaming the file directly from disk.
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <returns></returns>
+        public static async Task<BlobStream> ReadBlobStream(this FileSystemFileHandle _this)
+        {
+            var file = await _this!.GetFile();
+            var stream = new BlobStream(file);
             return stream;
         }
         /// <summary>

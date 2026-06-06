@@ -729,6 +729,20 @@ namespace SpawnDev.BlazorJS.Toolbox
             var file = await fileHandle.GetFile();
             return file;
         }
+        /// <summary>
+        /// Read the data from the file as BlobStream
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        public static async Task<BlobStream> ReadBlobStream(this FileSystemDirectoryHandle _this, string path)
+        {
+            using var fileHandle = await _this.GetPathFileHandle(path, false);
+            if (fileHandle == null) throw new FileNotFoundException();
+            var file = await fileHandle.GetFile();
+            return new BlobStream(file);
+        }
         #endregion
     }
 }
