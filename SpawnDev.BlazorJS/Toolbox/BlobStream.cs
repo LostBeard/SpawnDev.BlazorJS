@@ -5,8 +5,14 @@ namespace SpawnDev.BlazorJS.Toolbox
     /// <summary>
     /// Provides access to a Blob as a read-only Stream
     /// </summary>
-    public class BlobStream : Stream
+    public class BlobStream : Stream, IJSReadStream
     {
+        /// <summary>
+        /// False - a Blob's bytes are fetched via the async <c>Blob.arrayBuffer()</c> Promise, so synchronous
+        /// <see cref="Read(byte[], int, int)"/> is not supported (it throws). Use <see cref="ReadAsync(byte[], int, int, System.Threading.CancellationToken)"/>
+        /// or <see cref="ReadUint8ArrayAsync(int, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        public bool CanReadSync => false;
         /// <inheritdoc/>
         public override bool CanRead => Source != null;
         /// <inheritdoc/>
@@ -116,6 +122,16 @@ namespace SpawnDev.BlazorJS.Toolbox
             var ret = Source.Slice(_Position, end);
             _Position = end;
             return ret;
+        }
+        /// <inheritdoc/>
+        public async Task<Uint8Array> ReadUint8ArrayAsync(int count, System.Threading.CancellationToken cancellationToken = default)
+        {
+            using var subBlob = ReadBlob(count);
+            if (subBlob == null || subBlob.Size == 0) return new Uint8Array(0);
+            // Blob.arrayBuffer() is async; the resulting Uint8Array references the ArrayBuffer in JS, so the
+            // buffer stays alive via that JS reference after the .NET ArrayBuffer wrapper is disposed.
+            using var arrayBuffer = await subBlob.ArrayBuffer();
+            return new Uint8Array(arrayBuffer);
         }
         /// <summary>
         /// Not supported.

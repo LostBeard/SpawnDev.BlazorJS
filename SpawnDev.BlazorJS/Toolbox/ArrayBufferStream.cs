@@ -5,8 +5,13 @@ namespace SpawnDev.BlazorJS.Toolbox
     /// <summary>
     /// Provides access to an ArrayBuffer as a Stream
     /// </summary>
-    public class ArrayBufferStream : Stream
+    public class ArrayBufferStream : Stream, IJSReadStream
     {
+        /// <summary>
+        /// True - the entire buffer is already resident in JS memory, so synchronous
+        /// <see cref="Read(byte[], int, int)"/> works (unlike a Blob- or network-backed stream).
+        /// </summary>
+        public bool CanReadSync => true;
         /// <summary>
         /// True if the underlying buffer is a SharedArrayBuffer instead of an ArrayBuffer
         /// </summary>
@@ -246,6 +251,10 @@ namespace SpawnDev.BlazorJS.Toolbox
             _Position = end;
             return ret;
         }
+        /// <inheritdoc/>
+        public Task<Uint8Array> ReadUint8ArrayAsync(int count, System.Threading.CancellationToken cancellationToken = default)
+            // The buffer is already in JS memory; return a zero-copy SubArray view (no .NET copy, no async wait).
+            => Task.FromResult(ReadUint8Array(count, subArray: true) ?? new Uint8Array(0));
         /// <inheritdoc/>
         public override void Write(byte[] buffer, int offset, int count)
         {
