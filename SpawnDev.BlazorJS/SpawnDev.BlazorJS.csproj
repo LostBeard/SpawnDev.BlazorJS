@@ -5,7 +5,7 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.12-local.1</Version>
+		<Version>3.5.12</Version>
 		<PackageReleaseNotes>v3.5.12: IJSReadStream - a Stream whose data can be read while staying in JS (returned as a Uint8Array, no .NET copy). Lets a consumer that hands data back to JS (e.g. uploading model weights to a GPU buffer via IBrowserMemoryBuffer.CopyFromJS) keep it JS-side end to end. Includes a CanReadSync flag (false on async-only JS-backed streams like Blob in Blazor WASM). Implemented on BlobStream (CanReadSync=false) and ArrayBufferStream (CanReadSync=true). v3.5.11: HeapView support for ReadOnlyMemory and ArraySegment</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
