@@ -16,93 +16,172 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Creates a new Number
         /// </summary>
-        /// <param name="value"></param>
-        public Number(Union<int, uint, float, double, long, ulong, byte, short, ushort> value) : base(JS.New(nameof(Number), value)) { }
+        public Number(int value) : this((double)value) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
+        public Number(uint value) : this((double)value) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
+        public Number(long value) : this((double)value) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
+        public Number(ulong value) : this((double)value) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
+        public Number(byte value) : this((double)value) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
+        public Number(short value) : this((double)value) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
+        public Number(ushort value) : this((double)value) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
+        public Number(Half value) : this((double)value) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
+        public Number(double value) : base(new Float64Array(1).Using(float64Array => {
+            float64Array.Write([value]);
+            var firstValue = float64Array.JSRef!.Get<Number>(0);
+            return firstValue;
+
+        }).JSRefMove<IJSInProcessObjectReference>()) 
+        { }
         /// <summary>
         /// Returns the value of the object as a float
         /// </summary>
         /// <returns></returns>
-        public float ValueOfFloat() => JSRef!.Call<float>("valueOf");
+        public float ValueOfFloat() => (float)ValueOfDouble();
         /// <summary>
         /// Returns the value of the object as a double
         /// </summary>
         /// <returns></returns>
-        public double ValueOfDouble() => JSRef!.Call<double>("valueOf");
+        public double ValueOfDouble()
+        {
+            using var float64Array = new Float64Array(1);
+            float64Array.JSRef!.Set(0, this);
+            var safeDouble = float64Array.Read<double>();
+            return safeDouble[0];
+        }
+
+        public static Number FromDouble(double value)
+        {
+            using var float64Array = new Float64Array(1);
+            float64Array.Write<double>([value]);
+            var firstValue = float64Array.JSRef!.Get<Number>(0);
+            return firstValue;
+        }
         /// <summary>
         /// Returns the value of the object as an int
         /// </summary>
         /// <returns></returns>
-        public int ValueOfInt32() => JSRef!.Call<int>("valueOf");
+        public int ValueOfInt32() => (int)ValueOfDouble();
         /// <summary>
         /// Returns the value of the object as a uint
         /// </summary>
         /// <returns></returns>
-        public uint ValueOfUint32() => JSRef!.Call<uint>("valueOf");
+        public uint ValueOfUint32() => (uint)ValueOfDouble();
         /// <summary>
         /// Returns the value of the object as a short
         /// </summary>
         /// <returns></returns>
-        public short ValueOfInt16() => JSRef!.Call<short>("valueOf");
+        public short ValueOfInt16() => (short)ValueOfDouble();
         /// <summary>
         /// Returns the value of the object as a ushort
         /// </summary>
         /// <returns></returns>
-        public ushort ValueOfUint16() => JSRef!.Call<ushort>("valueOf");
+        public ushort ValueOfUint16() => (ushort)ValueOfDouble();
         /// <summary>
         /// Returns the value of the object as a long
         /// </summary>
         /// <returns></returns>
-        public long ValueOfInt64() => JSRef!.Call<long>("valueOf");
+        public long ValueOfInt64() => (long)ValueOfDouble();
         /// <summary>
         /// Returns the value of the object as a ulong
         /// </summary>
         /// <returns></returns>
-        public ulong ValueOfUint64() => JSRef!.Call<ulong>("valueOf");
+        public ulong ValueOfUint64() => (ulong)ValueOfDouble();
         /// <summary>
         /// Returns the value of the object as a byte
         /// </summary>
         /// <returns></returns>
-        public byte ValueOfByte() => JSRef!.Call<byte>("valueOf");
+        public byte ValueOfByte() => (byte)ValueOfDouble();
+        /// <summary>
+        /// Returns the value of the object as a Half
+        /// </summary>
+        /// <returns></returns>
+        public Half ValueOfHalf() => (Half)ValueOfDouble();
         /// <summary>
         /// Implicit conversion to long
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator long(Number number) => number.ValueOfInt64();
+
+        public static implicit operator Number(long number) => new Number(number);
         /// <summary>
         /// Implicit conversion to ulong
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator ulong(Number number) => number.ValueOfUint64();
+
+        public static implicit operator Number(ulong number) => new Number(number);
         /// <summary>
         /// Implicit conversion to float
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator float(Number number) => number.ValueOfFloat();
+
+        public static implicit operator Number(float number) => new Number(number);
         /// <summary>
         /// Implicit conversion to double
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator double(Number number) => number.ValueOfDouble();
+
+        public static implicit operator Number(double number) => new Number(number);
         /// <summary>
         /// Implicit conversion to short
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator short(Number number) => number.ValueOfInt16();
+
+        public static implicit operator Number(short number) => new Number(number);
         /// <summary>
         /// Implicit conversion to ushort
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator ushort(Number number) => number.ValueOfUint16();
+
+        public static implicit operator Number(ushort number) => new Number(number);
         /// <summary>
         /// Implicit conversion to byte
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator byte(Number number) => number.ValueOfByte();
+
+        public static implicit operator Number(byte number) => new Number(number);
         /// <summary>
         /// Implicit conversion to int
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator int(Number number) => number.ValueOfInt32();
+
+        public static implicit operator Number(int number) => new Number(number);
+        /// <summary>
+        /// Implicit conversion to Half
+        /// </summary>
+        /// <param name="number"></param>
+        public static implicit operator Half(Number number) => number.ValueOfHalf();
+
+        public static implicit operator Number(Half number) => new Number(number);
         /// <summary>
         /// Implicit conversion to uint
         /// </summary>
