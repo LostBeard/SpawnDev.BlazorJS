@@ -15,6 +15,75 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
         }
 
         [TestMethod]
+        public void DoubleInfinityTest()
+        {
+            {
+                var sourceValue = double.NegativeZero;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                var readbackValue = JS.Get<Number>("_sourceValue");
+                if (sourceValue != (double)readbackValue) throw new Exception("-0 failed");
+            }
+            {
+                var sourceValue = double.PositiveInfinity;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                var readbackValue = JS.Get<Number>("_sourceValue");
+                if (sourceValue != readbackValue) throw new Exception("+inf failed");
+            }
+            {
+                var sourceValue = double.NegativeInfinity;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                var readbackValue = JS.Get<Number>("_sourceValue");
+                if (sourceValue != readbackValue) throw new Exception("-inf failed");
+            }
+        }
+
+        [TestMethod]
+        public void FloatInfinityTest()
+        {
+            {
+                var sourceValue = float.NegativeZero;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                var readbackValue = JS.Get<Number>("_sourceValue");
+                if (sourceValue != readbackValue) throw new Exception("-0 failed");
+            }
+            {
+                var sourceValue = float.PositiveInfinity;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                var readbackValue = JS.Get<Number>("_sourceValue");
+                if (sourceValue != readbackValue) throw new Exception("+inf failed");
+            }
+            {
+                var sourceValue = float.NegativeInfinity;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                var readbackValue = JS.Get<Number>("_sourceValue");
+                if (sourceValue != readbackValue) throw new Exception("-inf failed");
+            }
+        }
+
+        [TestMethod]
+        public void HalfInfinityTest()
+        {
+            {
+                var sourceValue = Half.NegativeZero;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                var readbackValue = JS.Get<Number>("_sourceValue");
+                if (sourceValue != readbackValue) throw new Exception("-0 failed");
+            }
+            {
+                var sourceValue = Half.PositiveInfinity;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                var readbackValue = JS.Get<Number>("_sourceValue");
+                if (sourceValue != readbackValue) throw new Exception("+inf failed");
+            }
+            {
+                var sourceValue = Half.NegativeInfinity;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                var readbackValue = JS.Get<Number>("_sourceValue");
+                if (sourceValue != readbackValue) throw new Exception("-inf failed");
+            }
+        }
+
+        [TestMethod]
         public void IJSInProcessObjectReferenceCallbackArgTest()
         {
             using var w = JS.Get<Window>("window");
