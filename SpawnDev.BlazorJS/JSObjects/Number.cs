@@ -36,6 +36,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Creates a new Number
         /// </summary>
+        public Number(sbyte value) : this((double)value) { }
+        /// <summary>
+        /// Creates a new Number
+        /// </summary>
         public Number(short value) : this((double)value) { }
         /// <summary>
         /// Creates a new Number
@@ -48,13 +52,25 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// Creates a new Number
         /// </summary>
-        public Number(double value) : base(new Float64Array(1).Using(float64Array => {
-            float64Array.Write([value]);
-            var firstValue = float64Array.JSRef!.Get<Number>(0);
-            return firstValue;
-
-        }).JSRefMove<IJSInProcessObjectReference>()) 
-        { }
+        public Number(double value) : base(FromDouble(value)) { }
+        /// <summary>
+        /// Internal method that gets the underlying IJSInProcessObjectReference for this Number
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static IJSInProcessObjectReference FromDouble(double value)
+        {
+            if (double.IsNaN(value))
+            {
+                return JS.Get<IJSInProcessObjectReference>("Number.NaN");
+            }
+            else
+            {
+                using var float64Array = new Float64Array(1);
+                float64Array.Write([value]);
+                return float64Array.JSRef!.Get<IJSInProcessObjectReference>(0);
+            }
+        }
         /// <summary>
         /// Returns the value of the object as a float
         /// </summary>
@@ -66,18 +82,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public double ValueOfDouble()
         {
+            var isNaN = IsNaN(this);
+            if (isNaN) return double.NaN;
             using var float64Array = new Float64Array(1);
             float64Array.JSRef!.Set(0, this);
             var safeDouble = float64Array.Read<double>();
             return safeDouble[0];
-        }
-
-        public static Number FromDouble(double value)
-        {
-            using var float64Array = new Float64Array(1);
-            float64Array.Write<double>([value]);
-            var firstValue = float64Array.JSRef!.Get<Number>(0);
-            return firstValue;
         }
         /// <summary>
         /// Returns the value of the object as an int
@@ -115,6 +125,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns></returns>
         public byte ValueOfByte() => (byte)ValueOfDouble();
         /// <summary>
+        /// Returns the value of the object as a sbyte
+        /// </summary>
+        /// <returns></returns>
+        public sbyte ValueOfSByte() => (sbyte)ValueOfDouble();
+        /// <summary>
         /// Returns the value of the object as a Half
         /// </summary>
         /// <returns></returns>
@@ -124,69 +139,110 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator long(Number number) => number.ValueOfInt64();
-
+        /// <summary>
+        /// Implicit conversion from long
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator Number(long number) => new Number(number);
         /// <summary>
         /// Implicit conversion to ulong
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator ulong(Number number) => number.ValueOfUint64();
-
+        /// <summary>
+        /// Implicit conversion from ulong
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator Number(ulong number) => new Number(number);
         /// <summary>
         /// Implicit conversion to float
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator float(Number number) => number.ValueOfFloat();
-
+        /// <summary>
+        /// Implicit conversion from float
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator Number(float number) => new Number(number);
         /// <summary>
         /// Implicit conversion to double
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator double(Number number) => number.ValueOfDouble();
-
+        /// <summary>
+        /// Implicit conversion from double
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator Number(double number) => new Number(number);
         /// <summary>
         /// Implicit conversion to short
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator short(Number number) => number.ValueOfInt16();
-
+        /// <summary>
+        /// Implicit conversion from short
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator Number(short number) => new Number(number);
         /// <summary>
         /// Implicit conversion to ushort
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator ushort(Number number) => number.ValueOfUint16();
-
+        /// <summary>
+        /// Implicit conversion from ushort
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator Number(ushort number) => new Number(number);
         /// <summary>
         /// Implicit conversion to byte
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator byte(Number number) => number.ValueOfByte();
-
+        /// <summary>
+        /// Implicit conversion from byte
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator Number(byte number) => new Number(number);
+        /// Implicit conversion to sbyte
+        /// </summary>
+        /// <param name="number"></param>
+        public static implicit operator sbyte(Number number) => number.ValueOfSByte();
+        /// <summary>
+        /// Implicit conversion from sbyte
+        /// </summary>
+        /// <param name="number"></param>
+        public static implicit operator Number(sbyte number) => new Number(number);
         /// <summary>
         /// Implicit conversion to int
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator int(Number number) => number.ValueOfInt32();
-
+        /// <summary>
+        /// Implicit conversion from int
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator Number(int number) => new Number(number);
         /// <summary>
         /// Implicit conversion to Half
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator Half(Number number) => number.ValueOfHalf();
-
+        /// <summary>
+        /// Implicit conversion from Half
+        /// </summary>
+        /// <param name="number"></param>
         public static implicit operator Number(Half number) => new Number(number);
         /// <summary>
         /// Implicit conversion to uint
         /// </summary>
         /// <param name="number"></param>
         public static implicit operator uint(Number number) => number.ValueOfUint32();
+        /// <summary>
+        /// Implicit conversion from uint
+        /// </summary>
+        /// <param name="number"></param>
+        public static implicit operator Number(uint number) => new Number(number);
         /// <summary>
         /// The Number.isNaN() static method determines whether the passed value is the number value NaN, and returns false if the input is not of the Number type. It is a more robust version of the original, global isNaN() function.
         /// </summary>

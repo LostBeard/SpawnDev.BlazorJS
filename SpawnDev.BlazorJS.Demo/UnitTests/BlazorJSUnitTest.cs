@@ -18,22 +18,28 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
         public void DoubleInfinityTest()
         {
             {
+                var sourceValue = double.NaN;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                double readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("NaN failed");
+            }
+            {
                 var sourceValue = double.NegativeZero;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("-0 failed");
+                double readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("-0 failed");
             }
             {
                 var sourceValue = double.PositiveInfinity;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("+inf failed");
+                double readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("+inf failed");
             }
             {
                 var sourceValue = double.NegativeInfinity;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("-inf failed");
+                double readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("-inf failed");
             }
         }
 
@@ -41,22 +47,28 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
         public void FloatInfinityTest()
         {
             {
+                var sourceValue = float.NaN;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                float readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("NaN failed");
+            }
+            {
                 var sourceValue = float.NegativeZero;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("-0 failed");
+                float readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("-0 failed");
             }
             {
                 var sourceValue = float.PositiveInfinity;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("+inf failed");
+                float readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("+inf failed");
             }
             {
                 var sourceValue = float.NegativeInfinity;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("-inf failed");
+                float readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("-inf failed");
             }
         }
 
@@ -64,28 +76,34 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
         public void HalfInfinityTest()
         {
             {
+                var sourceValue = Half.NaN;
+                JS.Set("_sourceValue", (Number)sourceValue);
+                Half readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("NaN failed");
+            }
+            {
                 var sourceValue = Half.Zero;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("0 failed");
+                Half readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("0 failed");
             }
             {
                 var sourceValue = Half.NegativeZero;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("-0 failed");
+                Half readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("-0 failed");
             }
             {
                 var sourceValue = Half.PositiveInfinity;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("+inf failed");
+                Half readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("+inf failed");
             }
             {
                 var sourceValue = Half.NegativeInfinity;
                 JS.Set("_sourceValue", (Number)sourceValue);
-                var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != readbackValue) throw new Exception("-inf failed");
+                Half readbackValue = JS.Get<Number>("_sourceValue");
+                if (!BitConverter.GetBytes(sourceValue).SequenceEqual(BitConverter.GetBytes(readbackValue))) throw new Exception("-inf failed");
             }
         }
 
