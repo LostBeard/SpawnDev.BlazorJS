@@ -21,7 +21,7 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
                 var sourceValue = double.NegativeZero;
                 JS.Set("_sourceValue", (Number)sourceValue);
                 var readbackValue = JS.Get<Number>("_sourceValue");
-                if (sourceValue != (double)readbackValue) throw new Exception("-0 failed");
+                if (sourceValue != readbackValue) throw new Exception("-0 failed");
             }
             {
                 var sourceValue = double.PositiveInfinity;
