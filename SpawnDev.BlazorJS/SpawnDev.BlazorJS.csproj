@@ -5,7 +5,7 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.14-local.4</Version>
+		<Version>3.5.14</Version>
 		<PackageReleaseNotes>v3.5.14: HeapView disposal fixes + IJSWriteStream and a JS-side Stream.CopyTo/CopyToAsync fast path + FileSystemHandleWritableStream async commit (DisposeAsync/CloseAsync await the OPFS close). See CHANGELOG.md.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
