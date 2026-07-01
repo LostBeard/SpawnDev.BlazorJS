@@ -166,67 +166,111 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(sbyte[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(sbyte[] array, long targetOffset = 0)
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(byte[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(byte[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(short[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(short[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(ushort[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(ushort[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(int[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(int[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(uint[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(uint[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(long[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(long[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(ulong[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(ulong[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(Half[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(Half[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(float[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(float[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>
         /// <param name="array"></param>
         /// <param name="targetOffset"></param>
-        public void Set(double[] array, long targetOffset = 0) => JSRef!.CallVoid("set", (HeapView)array, targetOffset);
+        public void Set(double[] array, long targetOffset = 0) 
+        {
+            using var heapView = (HeapView)array;
+            JSRef!.CallVoid("set", heapView, targetOffset);
+        }
         /// <summary>
         /// The set() method of TypedArray instances stores multiple values in the typed array, reading input values from a specified array.
         /// </summary>

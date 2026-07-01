@@ -63,13 +63,23 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public string Decode(byte[] data) => Decode((Uint8Array)(HeapView)data);
+        public string Decode(byte[] data) 
+        {
+            using var heapView = (HeapView)data;
+            using var uint8Array = (Uint8Array)heapView;
+            return Decode(uint8Array);
+        }
         /// <summary>
         /// Returns a string containing the text decoded with the method of the specific TextDecoder object.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public StringPrimitive DecodeToPrimitive(byte[] data) => DecodeToPrimitive((Uint8Array)(HeapView)data);
+        public StringPrimitive DecodeToPrimitive(byte[] data) 
+        {
+            using var heapView = (HeapView)data;
+            using var uint8Array = (Uint8Array)heapView;
+            return DecodeToPrimitive(uint8Array);
+        }
         /// <summary>
         /// A Boolean indicating whether the error mode is fatal.
         /// </summary>

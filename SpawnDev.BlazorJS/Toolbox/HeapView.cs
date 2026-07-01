@@ -283,6 +283,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         }
         /// <summary>
         /// Returns a JSObject based on the ElementType<br/>
+        /// Text data returns a StringPrimitive<br/>
+        /// Binary data types return a TypedArray based on ElementType
         /// </summary>
         /// <returns></returns>
         public JSObject AsNativeView()
@@ -683,7 +685,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="options"></param>
         public override void Write(Utf8JsonWriter writer, HeapView value, JsonSerializerOptions options)
         {
-            JsonSerializer.Serialize(writer, (object?)value?.AsNativeView(), options);
+            var data = (object?)value?.AsNativeView();
+            JsonSerializer.Serialize(writer, data, options);
         }
     }
 }
