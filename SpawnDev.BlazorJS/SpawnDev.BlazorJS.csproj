@@ -5,8 +5,8 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.14-local.1</Version>
-		<PackageReleaseNotes>v3.5.14: Fixed missing HeapView disposal issues. See CHANGELOG.md.</PackageReleaseNotes>
+		<Version>3.5.14-local.3</Version>
+		<PackageReleaseNotes>v3.5.14: HeapView disposal fixes + IJSWriteStream and a JS-side Stream.CopyTo/CopyToAsync fast path. See CHANGELOG.md.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>

@@ -21,6 +21,7 @@ builder.Services.AddSingleton<CacheTests>();
 builder.Services.AddSingleton<BlobStreamTests>();
 builder.Services.AddSingleton<HeapViewTests>();
 builder.Services.AddSingleton<JSReadStreamTests>();
+builder.Services.AddSingleton<JSWriteStreamTests>();
 
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");

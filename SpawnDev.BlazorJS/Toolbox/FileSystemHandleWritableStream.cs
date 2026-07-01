@@ -22,8 +22,14 @@ namespace SpawnDev.BlazorJS.Toolbox
     /// Creates an asynchronously writable Stream from a writable FileSystemHandle<br/>
     /// IMPORTANT: Only asynchronous writes will work, synchronous writes will throw an exception<br/>
     /// </summary>
-    public class FileSystemHandleWritableStream : Stream, IDisposable
+    public class FileSystemHandleWritableStream : JSWriteStreamBase
     {
+        /// <summary>
+        /// False - an OPFS/disk <c>FileSystemWritableFileStream.write()</c> is async, so synchronous
+        /// <see cref="WriteUint8Array(Uint8Array)"/> is not supported (it throws). Use
+        /// <see cref="WriteUint8ArrayAsync(Uint8Array, CancellationToken)"/>.
+        /// </summary>
+        public override bool CanWriteSync => false;
         /// <summary>
         /// Returns true when the Writer is ready and no longer applying back pressure
         /// </summary>
@@ -199,6 +205,16 @@ namespace SpawnDev.BlazorJS.Toolbox
                 _Length = Position;
             }
         }
+        /// <inheritdoc/>
+        public override Task WriteUint8ArrayAsync(Uint8Array data, CancellationToken cancellationToken = default)
+            => WriteAsync(data, cancellationToken);
+        /// <summary>
+        /// Not supported - an OPFS/disk write is async (<see cref="CanWriteSync"/> is false). Use
+        /// <see cref="WriteUint8ArrayAsync(Uint8Array, CancellationToken)"/>.
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        public override void WriteUint8Array(Uint8Array data)
+            => throw new NotSupportedException($"{nameof(FileSystemHandleWritableStream)}.WriteUint8Array not supported (the OPFS/disk write is async). Use WriteUint8ArrayAsync.");
         ///<inheritdoc/>
         protected override void Dispose(bool disposing)
         {

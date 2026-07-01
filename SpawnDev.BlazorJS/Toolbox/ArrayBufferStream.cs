@@ -5,13 +5,19 @@ namespace SpawnDev.BlazorJS.Toolbox
     /// <summary>
     /// Provides access to an ArrayBuffer as a Stream
     /// </summary>
-    public class ArrayBufferStream : Stream, IJSReadStream
+    public class ArrayBufferStream : JSReadWriteStreamBase
     {
         /// <summary>
         /// True - the entire buffer is already resident in JS memory, so synchronous
         /// <see cref="Read(byte[], int, int)"/> works (unlike a Blob- or network-backed stream).
         /// </summary>
-        public bool CanReadSync => true;
+        public override bool CanReadSync => true;
+        /// <summary>
+        /// True when the stream is writable synchronously - the buffer is a JS <c>ArrayBuffer</c> already
+        /// resident in memory, so <see cref="WriteUint8Array(Uint8Array)"/> works without an async round trip
+        /// (unlike an OPFS-backed <see cref="FileSystemHandleWritableStream"/>). False if disposed or read-only.
+        /// </summary>
+        public override bool CanWriteSync => CanWrite;
         /// <summary>
         /// True if the underlying buffer is a SharedArrayBuffer instead of an ArrayBuffer
         /// </summary>
@@ -252,9 +258,30 @@ namespace SpawnDev.BlazorJS.Toolbox
             return ret;
         }
         /// <inheritdoc/>
-        public Task<Uint8Array> ReadUint8ArrayAsync(int count, System.Threading.CancellationToken cancellationToken = default)
+        public override Task<Uint8Array> ReadUint8ArrayAsync(int count, System.Threading.CancellationToken cancellationToken = default)
             // The buffer is already in JS memory; return a zero-copy SubArray view (no .NET copy, no async wait).
             => Task.FromResult(ReadUint8Array(count, subArray: true) ?? new Uint8Array(0));
+        /// <summary>
+        /// <see cref="IJSReadStream.ReadUint8Array(int)"/> - synchronous read (the buffer is already in JS
+        /// memory). Returns a zero-copy SubArray view; empty <see cref="Uint8Array"/> at end of stream.
+        /// </summary>
+        public override Uint8Array ReadUint8Array(int count) => ReadUint8Array(count, subArray: true) ?? new Uint8Array(0);
+        /// <inheritdoc/>
+        public override void WriteUint8Array(Uint8Array data)
+        {
+            if (Source == null) throw new ObjectDisposedException(nameof(Source));
+            if (ReadOnly) throw new NotSupportedException("Stream is in read-only mode");
+            // The buffer is already in JS memory; copy JS-side directly, no .NET hop.
+            Source.Set(data, _Position);
+            _Position += data.Length;
+        }
+        /// <inheritdoc/>
+        public override Task WriteUint8ArrayAsync(Uint8Array data, System.Threading.CancellationToken cancellationToken = default)
+        {
+            // Synchronous under the hood (data already in JS memory); no async wait needed.
+            WriteUint8Array(data);
+            return Task.CompletedTask;
+        }
         /// <inheritdoc/>
         public override void Write(byte[] buffer, int offset, int count)
         {

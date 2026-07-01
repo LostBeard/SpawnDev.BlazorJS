@@ -37,5 +37,15 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <see cref="Uint8Array"/> and should dispose it.
         /// </summary>
         Task<Uint8Array> ReadUint8ArrayAsync(int count, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Synchronously reads up to <paramref name="count"/> bytes starting at the current
+        /// <see cref="System.IO.Stream.Position"/> and returns them as a JS <see cref="Uint8Array"/> - the data
+        /// stays in JS, never copied into .NET. Only valid when <see cref="CanReadSync"/> is true; otherwise
+        /// throws (the underlying JS read is async-only). Advances <see cref="System.IO.Stream.Position"/> by the
+        /// number of bytes read. Returns an empty <see cref="Uint8Array"/> (length 0) at end of stream. The
+        /// caller owns the returned <see cref="Uint8Array"/> and should dispose it.
+        /// </summary>
+        Uint8Array ReadUint8Array(int count);
     }
 }

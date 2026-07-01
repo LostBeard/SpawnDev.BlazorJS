@@ -5,14 +5,14 @@ namespace SpawnDev.BlazorJS.Toolbox
     /// <summary>
     /// Provides access to a Blob as a read-only Stream
     /// </summary>
-    public class BlobStream : Stream, IJSReadStream
+    public class BlobStream : JSReadStreamBase
     {
         /// <summary>
         /// False - a Blob's bytes are fetched via the async <c>Blob.arrayBuffer()</c> Promise, so synchronous
         /// <see cref="Read(byte[], int, int)"/> is not supported (it throws). Use <see cref="ReadAsync(byte[], int, int, System.Threading.CancellationToken)"/>
         /// or <see cref="ReadUint8ArrayAsync(int, System.Threading.CancellationToken)"/>.
         /// </summary>
-        public bool CanReadSync => false;
+        public override bool CanReadSync => false;
         /// <inheritdoc/>
         public override bool CanRead => Source != null;
         /// <inheritdoc/>
@@ -124,7 +124,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             return ret;
         }
         /// <inheritdoc/>
-        public async Task<Uint8Array> ReadUint8ArrayAsync(int count, System.Threading.CancellationToken cancellationToken = default)
+        public override async Task<Uint8Array> ReadUint8ArrayAsync(int count, System.Threading.CancellationToken cancellationToken = default)
         {
             using var subBlob = ReadBlob(count);
             if (subBlob == null || subBlob.Size == 0) return new Uint8Array(0);
@@ -133,6 +133,13 @@ namespace SpawnDev.BlazorJS.Toolbox
             using var arrayBuffer = await subBlob.ArrayBuffer();
             return new Uint8Array(arrayBuffer);
         }
+        /// <summary>
+        /// Not supported - a Blob's bytes are fetched via the async <c>Blob.arrayBuffer()</c> Promise
+        /// (<see cref="CanReadSync"/> is false). Use <see cref="ReadUint8ArrayAsync(int, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        public override Uint8Array ReadUint8Array(int count)
+            => throw new NotSupportedException($"{nameof(BlobStream)}.ReadUint8Array not supported (Blob.arrayBuffer() is async). Use ReadUint8ArrayAsync.");
         /// <summary>
         /// Not supported.
         /// </summary>
