@@ -8,6 +8,8 @@
 
 **JS-side `Stream.CopyTo`/`CopyToAsync` fast path.** `BlobStream` and `ArrayBufferStream` override the standard `Stream.CopyTo(Stream, int)` / `CopyToAsync(Stream, int, CancellationToken)`: when the destination is an `IJSWriteStream`, the copy pumps `Uint8Array` chunks JS-side (never through the .NET heap); otherwise it defers to the base managed copy. Standard `source.CopyToAsync(dest)` transparently gets the zero-copy path — no new API to learn.
 
+**`FileSystemHandleWritableStream` async commit.** The OPFS/disk `close()` — which flushes the buffered bytes to disk — is async, but `Stream.Dispose` is synchronous and fire-and-forgot it, so a plain `using` could return before the file was actually written (a read-back saw an empty/short file, browser-timing dependent; a hard failure on Firefox, masked by faster timing on Chromium). Added `DisposeAsync()` (override) + `CloseAsync()` that **await** the commit; `await using` / `await CloseAsync()` now guarantees the bytes are on disk. The synchronous `Dispose` remains a best-effort fallback (documented). **Consumers that save to OPFS/disk and read back (e.g. via `ArrayView<T>.CopyToStreamAsync`) must `await using` the writable stream or call `CloseAsync()`.**
+
 Why: the mirror of `IJSReadStream` — lets a consumer holding data JS-side (a GPU readback, a fetched buffer) write it straight to OPFS/disk/an in-memory buffer with zero JS↔.NET copy. Consumed by **SpawnDev.ILGPU** (`ArrayView<T>.CopyToStreamAsync`, the chunked accelerator save — mirror of `CopyFromStreamAsync`).
 
 ## 3.5.12 (2026-06-08) — IJSReadStream

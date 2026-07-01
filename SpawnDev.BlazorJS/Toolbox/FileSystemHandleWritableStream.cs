@@ -215,16 +215,64 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <exception cref="NotSupportedException"></exception>
         public override void WriteUint8Array(Uint8Array data)
             => throw new NotSupportedException($"{nameof(FileSystemHandleWritableStream)}.WriteUint8Array not supported (the OPFS/disk write is async). Use WriteUint8ArrayAsync.");
+        bool _committed = false;
+        /// <summary>
+        /// Flushes and commits the file to disk, AWAITING the underlying OPFS/disk <c>close()</c> Promise -
+        /// which is what actually writes the buffered bytes. Prefer this (or <c>await using</c>) over a plain
+        /// <c>using</c>: the synchronous <see cref="Dispose(bool)"/> cannot await the async commit, so a plain
+        /// <c>using</c> can return before the file is written (browser-timing dependent - a subsequent read can
+        /// see an empty/short file, notably on Firefox). Idempotent.
+        /// </summary>
+        public async Task CloseAsync()
+        {
+            if (_committed) return;
+            _committed = true;
+            if (Writer != null)
+            {
+                // Writer.Close() flushes queued writes, closes the underlying stream (the commit), and
+                // releases the lock - all awaited.
+                await Writer.Close().ConfigureAwait(false);
+                Writer.Dispose();
+                Writer = null;
+            }
+            else if (FSStream != null)
+            {
+                await FSStream.Close().ConfigureAwait(false);
+            }
+            FSStream?.Dispose();
+            FSStream = null;
+        }
+        /// <summary>
+        /// Commits the file (awaiting the OPFS <c>close()</c>) and then releases resources. Use
+        /// <c>await using</c> or call <see cref="CloseAsync"/> explicitly when the written bytes must be
+        /// readable afterward - the synchronous <see cref="Dispose(bool)"/> does NOT await the commit.
+        /// </summary>
+        public override async ValueTask DisposeAsync()
+        {
+            await CloseAsync().ConfigureAwait(false);
+            Dispose();
+        }
         ///<inheritdoc/>
+        /// <remarks>
+        /// WARNING: synchronous disposal CANNOT await the OPFS/disk <c>close()</c> commit - it fires it and
+        /// returns, so the written bytes are not guaranteed on disk when this returns. Prefer
+        /// <see cref="DisposeAsync"/> (<c>await using</c>) or <see cref="CloseAsync"/> whenever the file is
+        /// read back afterward. This sync path exists only as a best-effort fallback.
+        /// </remarks>
         protected override void Dispose(bool disposing)
         {
+            if (_committed)
+            {
+                base.Dispose(disposing);
+                return;
+            }
             if (Writer != null)
             {
                 Writer.ReleaseLock();
                 Writer.Dispose();
                 Writer = null!;
             }
-            FSStream?.Close();
+            FSStream?.Close();   // fire-and-forget: commit NOT awaited - see the remarks / use DisposeAsync
             FSStream?.Dispose();
             FSStream = null!;
             base.Dispose(disposing);

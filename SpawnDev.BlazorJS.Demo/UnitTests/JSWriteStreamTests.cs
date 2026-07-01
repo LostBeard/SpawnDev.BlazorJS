@@ -118,7 +118,8 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             try
             {
                 // Write the GPU-save-style path: Uint8Array straight to OPFS, chunk by chunk, JS-side.
-                using (var ws = await fileHandle.GetWritableStream())
+                // await using so the OPFS close() commit is awaited before the read-back below.
+                await using (var ws = await fileHandle.GetWritableStream())
                 {
                     IJSWriteStream js = ws;
                     if (js.CanWriteSync) throw new Exception("FileSystemHandleWritableStream.CanWriteSync should be false (OPFS write is async)");
@@ -167,7 +168,8 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             {
                 using var srcU8 = new Uint8Array(Data);
                 using var source = new ArrayBufferStream(srcU8);
-                using (var dest = await fileHandle.GetWritableStream())
+                // await using so the OPFS close() commit is awaited before the read-back below.
+                await using (var dest = await fileHandle.GetWritableStream())
                 {
                     await source.CopyToAsync(dest, bufferSize: 137); // odd chunk to stress the loop
                 }
