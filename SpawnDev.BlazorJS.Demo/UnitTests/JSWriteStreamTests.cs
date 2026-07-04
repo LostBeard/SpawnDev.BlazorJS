@@ -184,5 +184,100 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
                 await root.RemoveEntry(fileName);
             }
         }
+
+        // Regression guard for the OPFS swap-leak / partial-commit fix (2026-07-04). createWritable() allocates a
+        // swap file and (keepExistingData:false) truncates on open; the original is only replaced atomically on
+        // close(). WriteAndCommit must ABORT the writable when the write action throws (e.g. QuotaExceededError
+        // mid-write) - releasing the swap AND leaving the original content intact - and must RETHROW the original
+        // error. If a regression made it Close() on error instead, the truncated/partial write would COMMIT and the
+        // original would be lost - this test catches exactly that.
+        [TestMethod]
+        public async Task WriteAndCommit_ThrowingWrite_AbortsWithoutCommitting_AndRethrows()
+        {
+            if (!StorageManager.Supported) return;
+            using var storage = JS.Get<StorageManager>("navigator.storage");
+            using var root = await storage.GetDirectory();
+            var fileName = "writeandcommit_throw_" + Guid.NewGuid().ToString() + ".bin";
+            using var fileHandle = await root.GetFileHandle(fileName, true);
+            if (fileHandle.JSRef!.IsUndefined("createWritable")) return;
+            try
+            {
+                using (var orig = new Uint8Array(Data)) await fileHandle.Write(orig);   // commit known original content
+
+                using var stream = await fileHandle.CreateWritable();                   // truncates via swap
+                bool threw = false;
+                try
+                {
+                    await stream.WriteAndCommit(async () =>
+                    {
+                        using var half = new Uint8Array(Data.Take(400).ToArray());
+                        await stream.Write(half);                                        // partial data into the swap
+                        throw new InvalidOperationException("simulated QuotaExceededError mid-write");
+                    });
+                }
+                catch (InvalidOperationException ex) when (ex.Message.Contains("simulated")) { threw = true; }
+                if (!threw) throw new Exception("WriteAndCommit must RETHROW the write action's exception, not swallow it");
+
+                // Original intact => the failed write was ABORTED (swap discarded), not Close()d (which would have
+                // committed the truncated/partial write).
+                using var file = await fileHandle.GetFile();
+                using var ab = await file.ArrayBuffer();
+                using var rb = new Uint8Array(ab);
+                AssertEqual(rb.ReadBytes(), Data);
+            }
+            finally { await root.RemoveEntry(fileName); }
+        }
+
+        // Happy-path guard: WriteAndCommit (the primitive every FileSystemFileHandle.Write overload now routes
+        // through) commits normally when the write succeeds.
+        [TestMethod]
+        public async Task FileSystemFileHandle_Write_RoundTrips_ViaWriteAndCommit()
+        {
+            if (!StorageManager.Supported) return;
+            using var storage = JS.Get<StorageManager>("navigator.storage");
+            using var root = await storage.GetDirectory();
+            var fileName = "fshandle_write_" + Guid.NewGuid().ToString() + ".bin";
+            using var fileHandle = await root.GetFileHandle(fileName, true);
+            if (fileHandle.JSRef!.IsUndefined("createWritable")) return;
+            try
+            {
+                using (var src = new Uint8Array(Data)) await fileHandle.Write(src);
+                using var file = await fileHandle.GetFile();
+                using var ab = await file.ArrayBuffer();
+                using var rb = new Uint8Array(ab);
+                AssertEqual(rb.ReadBytes(), Data);
+            }
+            finally { await root.RemoveEntry(fileName); }
+        }
+
+        // FileSystemHandleWritableStream.AbortAsync must DISCARD uncommitted writes: after writing to the swap and
+        // aborting (instead of CloseAsync), the original file content must survive. Proves the error-path teardown
+        // the Stream copy path relies on.
+        [TestMethod]
+        public async Task FileSystemHandleWritableStream_AbortAsync_DiscardsUncommittedWrite()
+        {
+            if (!StorageManager.Supported) return;
+            using var storage = JS.Get<StorageManager>("navigator.storage");
+            using var root = await storage.GetDirectory();
+            var fileName = "abortasync_" + Guid.NewGuid().ToString() + ".bin";
+            using var fileHandle = await root.GetFileHandle(fileName, true);
+            if (fileHandle.JSRef!.IsUndefined("createWritable")) return;
+            try
+            {
+                using (var orig = new Uint8Array(Data)) await fileHandle.Write(orig);   // commit known original content
+
+                var ws = await fileHandle.GetWritableStream();                          // keepExistingData:false => truncates
+                using (var newData = new Uint8Array(Enumerable.Repeat((byte)0xAB, 512).ToArray()))
+                    await ws.WriteUint8ArrayAsync(newData);                             // buffered in the swap, NOT committed
+                await ws.AbortAsync();                                                  // discard (not CloseAsync)
+                ws.Dispose();
+
+                using var file = await fileHandle.GetFile();
+                using var ab = await file.ArrayBuffer();
+                using var rb = new Uint8Array(ab);
+                AssertEqual(rb.ReadBytes(), Data);   // original survives => AbortAsync discarded the swap
+            }
+            finally { await root.RemoveEntry(fileName); }
+        }
     }
 }

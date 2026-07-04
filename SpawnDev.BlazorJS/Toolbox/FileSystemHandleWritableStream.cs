@@ -243,6 +243,33 @@ namespace SpawnDev.BlazorJS.Toolbox
             FSStream = null;
         }
         /// <summary>
+        /// Aborts the write WITHOUT committing: releases the underlying OPFS swap file and discards any buffered
+        /// bytes. Call this instead of <see cref="CloseAsync"/> when the write FAILED (e.g. a
+        /// <c>QuotaExceededError</c> mid-copy). Committing on failure would persist a partial/garbage file, and -
+        /// worse - a stream left neither closed nor aborted leaks the temporary swap file <c>createWritable()</c>
+        /// allocated until JS garbage collection; under a retry loop that compounds into a runaway that exhausts
+        /// origin storage. Idempotent, and marks the stream committed so no later close/abort runs.
+        /// </summary>
+        public async Task AbortAsync()
+        {
+            if (_committed) return;
+            _committed = true;
+            if (Writer != null)
+            {
+                try { Writer.ReleaseLock(); } catch { }
+                Writer.Dispose();
+                Writer = null;
+            }
+            if (FSStream != null)
+            {
+                // Best-effort: abort() discards the swap file. Swallow any abort error - the write failure that
+                // sent us here is the exception the caller must see.
+                try { await FSStream.Abort().ConfigureAwait(false); } catch { }
+                FSStream.Dispose();
+                FSStream = null;
+            }
+        }
+        /// <summary>
         /// Commits the file (awaiting the OPFS <c>close()</c>) and then releases resources. Use
         /// <c>await using</c> or call <see cref="CloseAsync"/> explicitly when the written bytes must be
         /// readable afterward - the synchronous <see cref="Dispose(bool)"/> does NOT await the commit.

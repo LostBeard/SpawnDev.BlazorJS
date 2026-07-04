@@ -32,6 +32,36 @@ namespace SpawnDev.BlazorJS.Toolbox
             await fileStream.Seek((ulong)size);
             return size;
         }
+        /// <summary>
+        /// Runs a write action against an OPFS/File-System-Access writable stream and then commits it with
+        /// <c>close()</c>. If the write action OR the close throws (most importantly the browser's
+        /// <c>QuotaExceededError</c> mid-write), the stream is <c>abort()</c>ed first, then the original
+        /// exception is rethrown.
+        /// <para>
+        /// Why this matters: <c>createWritable()</c> allocates a temporary swap file that holds the in-progress
+        /// data. A stream that is neither closed nor aborted leaks that swap file until JS garbage collection.
+        /// Under a retry loop (e.g. a torrent re-saving a piece whose write keeps failing) the leak compounds
+        /// one swap file per attempt into a runaway that exhausts the origin's storage quota - which then makes
+        /// EVERY subsequent write fail, so the loop never recovers. Aborting on failure releases the swap
+        /// immediately. Every write path in this library routes through here so no caller can leak.
+        /// </para>
+        /// </summary>
+        /// <param name="stream">The writable stream to commit or abort.</param>
+        /// <param name="writeAction">The write(s) to perform before committing.</param>
+        public static async Task WriteAndCommit(this FileSystemWritableFileStream stream, Func<Task> writeAction)
+        {
+            try
+            {
+                await writeAction();
+                await stream.Close();
+            }
+            catch
+            {
+                // Best-effort release of the swap file; the write failure is the error the caller must see.
+                try { await stream.Abort(); } catch { }
+                throw;
+            }
+        }
         #region Write
         /// <summary>
         /// Asynchronously write a stream to the file
@@ -41,8 +71,18 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public static async Task Write(this FileSystemFileHandle _this, Stream stream)
         {
-            using var handleStream = await FileSystemHandleWritableStream.Create(_this);
-            await stream.CopyToAsync(handleStream);
+            var handleStream = await FileSystemHandleWritableStream.Create(_this);
+            try
+            {
+                await stream.CopyToAsync(handleStream);
+                await handleStream.CloseAsync();   // AWAIT the commit (not the sync fire-and-forget Dispose)
+            }
+            catch
+            {
+                await handleStream.AbortAsync();    // release swap + discard the partial on failure (e.g. quota)
+                throw;
+            }
+            finally { handleStream.Dispose(); }
         }
         /// <summary>
         /// Replace the contents of a file with an ArrayBuffer
@@ -53,8 +93,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemFileHandle _this, ArrayBuffer data)
         {
             using var stream = await _this!.CreateWritable();
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(() => stream.Write(data));
         }
         /// <summary>
         /// Replace the contents of a file with a Blob
@@ -65,8 +104,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemFileHandle _this, Blob data)
         {
             using var stream = await _this.CreateWritable();
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(() => stream.Write(data));
         }
         /// <summary>
         /// Replace the contents of a file with a TypedArray
@@ -77,8 +115,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemFileHandle _this, TypedArray data)
         {
             using var stream = await _this.CreateWritable();
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(() => stream.Write(data));
         }
         /// <summary>
         /// Replace the contents of a file with a byte array
@@ -89,8 +126,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemFileHandle _this, byte[] data)
         {
             using var stream = await _this.CreateWritable();
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(() => stream.Write(data));
         }
         /// <summary>
         /// Replace the contents of a file with a DataView
@@ -100,10 +136,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public static async Task Write(this FileSystemFileHandle _this, DataView data)
         {
-
             using var stream = await _this.CreateWritable();
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(() => stream.Write(data));
         }
         /// <summary>
         /// Replace the contents of a file with an string
@@ -114,8 +148,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemFileHandle _this, string data)
         {
             using var stream = await _this.CreateWritable();
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(() => stream.Write(data));
         }
         /// <summary>
         /// Replace the contents of a file with JSON
@@ -128,8 +161,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             var json = JsonSerializer.Serialize(data, jsonSerializerOptions);
             using var stream = await _this!.CreateWritable();
-            await stream.Write(json);
-            await stream.Close();
+            await stream.WriteAndCommit(() => stream.Write(json));
         }
         /// <summary>
         /// Process FileSystemWriteOptions
@@ -140,8 +172,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Write(this FileSystemFileHandle _this, FileSystemWriteOptions data)
         {
             using var stream = await _this.CreateWritable();
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(() => stream.Write(data));
         }
         #endregion
         #region Append
@@ -154,9 +185,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, ArrayBuffer data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
-            await stream.SeekToEnd(_this);
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(async () => { await stream.SeekToEnd(_this); await stream.Write(data); });
         }
         /// <summary>
         /// Append data to the end of the file
@@ -166,8 +195,18 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <returns></returns>
         public static async Task Append(this FileSystemFileHandle _this, Stream stream)
         {
-            using var handleStream = await FileSystemHandleWritableStream.Create(_this, true);
-            await stream.CopyToAsync(handleStream);
+            var handleStream = await FileSystemHandleWritableStream.Create(_this, true);
+            try
+            {
+                await stream.CopyToAsync(handleStream);
+                await handleStream.CloseAsync();   // AWAIT the commit (not the sync fire-and-forget Dispose)
+            }
+            catch
+            {
+                await handleStream.AbortAsync();    // release swap + discard the partial on failure (e.g. quota)
+                throw;
+            }
+            finally { handleStream.Dispose(); }
         }
         /// <summary>
         /// Append data to the end of the file
@@ -178,9 +217,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, Blob data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
-            await stream.SeekToEnd(_this);
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(async () => { await stream.SeekToEnd(_this); await stream.Write(data); });
         }
         /// <summary>
         /// Append data to the end of the file
@@ -191,9 +228,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, TypedArray data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
-            await stream.SeekToEnd(_this);
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(async () => { await stream.SeekToEnd(_this); await stream.Write(data); });
         }
         /// <summary>
         /// Append data to the end of the file
@@ -204,9 +239,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, byte[] data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
-            await stream.SeekToEnd(_this);
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(async () => { await stream.SeekToEnd(_this); await stream.Write(data); });
         }
         /// <summary>
         /// Append data to the end of the file
@@ -217,9 +250,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, DataView data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
-            await stream.SeekToEnd(_this);
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(async () => { await stream.SeekToEnd(_this); await stream.Write(data); });
         }
         /// <summary>
         /// Append data to the end of the file
@@ -230,9 +261,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, string data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
-            await stream.SeekToEnd(_this);
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(async () => { await stream.SeekToEnd(_this); await stream.Write(data); });
         }
         /// <summary>
         /// Append data to the end of the file
@@ -243,9 +272,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         public static async Task Append(this FileSystemFileHandle _this, FileSystemWriteOptions data)
         {
             using var stream = await _this.CreateWritable(new FileSystemCreateWritableOptions { KeepExistingData = true });
-            await stream.SeekToEnd(_this);
-            await stream.Write(data);
-            await stream.Close();
+            await stream.WriteAndCommit(async () => { await stream.SeekToEnd(_this); await stream.Write(data); });
         }
         #endregion
         /// <summary>

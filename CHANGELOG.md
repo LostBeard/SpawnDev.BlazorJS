@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.5.15 — OPFS writable abort-on-throw (swap-file leak fix)
+
+**OPFS write hazard fixed at the source.** `FileSystemFileHandle.createWritable()` allocates a temporary swap file; a stream that is neither `Close()`d (commit) nor `Abort()`ed (discard) leaks that swap until JS garbage collection. Every `FileSystemFileHandle` / `FileSystemDirectoryHandle` `Write`/`Append`/`WriteJSON` overload used the `CreateWritable → Write → Close` pattern, so a mid-write throw — most importantly the browser's `QuotaExceededError` when the origin is out of space — skipped `Close()` and abandoned the writable, leaking its swap. Under a retry loop (a torrent re-saving a piece whose write keeps failing) that compounds one leaked swap per attempt into a runaway that exhausts origin storage, which then makes every subsequent write fail so it never recovers.
+
+- New `FileSystemWritableFileStream.WriteAndCommit(this stream, Func<Task> writeAction)` (namespace `SpawnDev.BlazorJS.Toolbox`): runs the write, `Close()`s on success, and on any throw `Abort()`s the stream (releasing the swap) then rethrows the original exception. Every `Write`/`Append`/`WriteJSON` overload on `FileSystemFileHandle` now routes through it; the `FileSystemDirectoryHandle` overloads delegate to the fixed file-handle primitives (duplication removed).
+- New `FileSystemHandleWritableStream.AbortAsync()`; the `Write(Stream)` / `Append(Stream)` copy paths now `CloseAsync()` (awaiting the commit) on success and `AbortAsync()` (releasing the swap, discarding the partial) on failure.
+
+Fixes a storage-exhaustion runaway observed on browser model downloads (the WebTorrent OPFS piece store). Applies to every OPFS consumer, not just WebTorrent. Regression guards (Chromium + Firefox): `JSWriteStreamTests.WriteAndCommit_ThrowingWrite_AbortsWithoutCommitting_AndRethrows`, `FileSystemFileHandle_Write_RoundTrips_ViaWriteAndCommit`, `FileSystemHandleWritableStream_AbortAsync_DiscardsUncommittedWrite`.
+
 ## 3.5.14 — HeapView disposal fixes + IJSWriteStream
 
 **HeapView disposal.** `TypedArray.Set(T[])`, `TextDecoder.Decode(byte[])`/`DecodeToPrimitive(byte[])`, and `CanvasRenderingContext2D.PutImageBytes` now dispose the pinned `HeapView` / intermediate TypedArray views deterministically instead of leaking them to the finalizer (reduces GC pressure under heavy workloads). Fixed a `HeapViewConverter.Write` use-after-free where the intermediate view was disposed before the interop revive stage resolved it (serialized `Uint8Array` came back null); regression guard `HeapViewTests.HeapViewSerializationTest`.
