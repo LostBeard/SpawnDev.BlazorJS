@@ -102,6 +102,12 @@ namespace PlaywrightTestRunner
         public async Task RunAllTestsInTable_ShouldSucceed()
         {
             var testPage = new Uri(new Uri(BaseUrl), UnitTestPage).ToString();
+            // Echo benchmark/diagnostic browser-console lines into the test output so fixed-workload
+            // perf tests (e.g. InteropPerfTests' [InteropPerf] lines) are visible in CI logs.
+            Page.Console += (_, msg) =>
+            {
+                if (msg.Text.StartsWith("[InteropPerf]")) Console.WriteLine(msg.Text);
+            };
             await Page.GotoAsync(testPage);
 
             // get the table
@@ -123,6 +129,15 @@ namespace PlaywrightTestRunner
                 // get the specific row by index
                 var currentRow = rows.Nth(i);
 
+                // get test type name
+                var typeName = await currentRow.Locator(".test-type-name").TextContentAsync();
+
+                // get test method name
+                var methodName = await currentRow.Locator(".test-method-name").TextContentAsync();
+
+                // announce BEFORE running so a hung/timed-out row is identifiable from the log
+                Console.WriteLine($"[TestRunner] row {i}: {typeName}.{methodName}");
+
                 // find the button within THIS specific row
                 var runButton = currentRow.GetByRole(AriaRole.Button, new() { Name = "Run" });
 
@@ -131,12 +146,6 @@ namespace PlaywrightTestRunner
 
                 // assert that the row eventually gets the class 'test-state-done'
                 await Expect(currentRow).ToHaveClassAsync(new Regex("test-state-done"), new() { Timeout = 15000 });
-
-                // get test type name
-                var typeName = await currentRow.Locator(".test-type-name").TextContentAsync();
-
-                // get test method name
-                var methodName = await currentRow.Locator(".test-method-name").TextContentAsync();
 
                 // current state text
                 var stateMessage = await currentRow.Locator(".test-state").TextContentAsync();

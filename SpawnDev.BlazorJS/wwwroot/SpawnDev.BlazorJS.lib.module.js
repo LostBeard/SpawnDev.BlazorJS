@@ -2,6 +2,15 @@
     // helper function used in place of 'in' operator for checking if a property exists to allow a consistent operation regardless of obj's type
     function _in(key, obj) {
         if (obj === null || obj === void 0) return false;
+        // Fast path: objects and functions support the 'in' operator directly - no Object() wrapper
+        // allocation, no try/catch (which blocks JIT optimization of this hot helper). This helper is
+        // on the per-interop-call path (pathObjectInfo + the JSON reviver), so it must stay lean.
+        var t = typeof obj;
+        if (t === 'object' || t === 'function') {
+            try { return key in obj; } catch { return false; }
+        }
+        // Primitives (string/number/boolean/symbol/bigint): box to check prototype properties,
+        // exactly as before.
         try {
             return key in Object(obj);
         } catch { }
@@ -60,29 +69,36 @@
         ObjectPropertyKeys(obj, key, hasOwnProperty) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
             var { target, shortCircuit } = this.pathObjectInfo(obj, key);
+            // Set-based dedup: the previous keys.indexOf(k) membership test made this O(n^2)
+            // for objects with many properties. Same output, same order.
             var keys = [];
+            var seen = new Set();
             if (hasOwnProperty && target.hasOwnProperty) {
                 for (var k in target) {
                     if (typeof k !== 'string') continue;
                     if (target.hasOwnProperty(k)) {
                         keys.push(k);
+                        seen.add(k);
                     }
                 }
                 var ownKeys = Reflect.ownKeys(target).filter(o => typeof o === 'string');
                 for (var k of ownKeys) {
-                    if (keys.indexOf(k) == -1 && target.hasOwnProperty(k)) {
+                    if (!seen.has(k) && target.hasOwnProperty(k)) {
                         keys.push(k);
+                        seen.add(k);
                     }
                 }
             } else {
                 for (var k in target) {
                     if (typeof k !== 'string') continue;
                     keys.push(k);
+                    seen.add(k);
                 }
                 var ownKeys = Reflect.ownKeys(target).filter(o => typeof o === 'string');
                 for (var k of ownKeys) {
-                    if (keys.indexOf(k) == -1) {
+                    if (!seen.has(k)) {
                         keys.push(k);
+                        seen.add(k);
                     }
                 }
             }
@@ -234,29 +250,36 @@
         // returns string[]
         ObjectKeys(obj, hasOwnProperty) {
             if (obj === void 0 || obj === null) throw new Error('obj null or undefined');
+            // Set-based dedup: the previous keys.indexOf(k) membership test made this O(n^2)
+            // for objects with many properties. Same output, same order.
             var keys = [];
+            var seen = new Set();
             if (hasOwnProperty && obj.hasOwnProperty) {
                 for (var k in obj) {
                     if (obj.hasOwnProperty(k)) {
                         if (typeof k !== 'string') continue;
                         keys.push(k);
+                        seen.add(k);
                     }
                 }
                 var ownKeys = Reflect.ownKeys(obj).filter(o => typeof o === 'string');
                 for (var k of ownKeys) {
-                    if (keys.indexOf(k) == -1 && obj.hasOwnProperty(k)) {
+                    if (!seen.has(k) && obj.hasOwnProperty(k)) {
                         keys.push(k);
+                        seen.add(k);
                     }
                 }
             } else {
                 for (var k in obj) {
                     if (typeof k !== 'string') continue;
                     keys.push(k);
+                    seen.add(k);
                 }
                 var ownKeys = Reflect.ownKeys(obj).filter(o => typeof o === 'string');
                 for (var k of ownKeys) {
-                    if (keys.indexOf(k) == -1) {
+                    if (!seen.has(k)) {
                         keys.push(k);
+                        seen.add(k);
                     }
                 }
             }
@@ -293,13 +316,31 @@
         // Invoke and InvokeAsync call other Javascript BlazorJSInterop methods and prepare the return value for C#
         Invoke(fnName, args, returnType) {
             this.runtimeReady = true;
-            var ret = this[fnName](...args);
+            // Arity fast-path: avoid the spread's intermediate array/iterator work on the hot path.
+            // Every BlazorJS interop call comes through here; interop methods take 1-4 args.
+            var fn = this[fnName];
+            var ret;
+            switch (args.length) {
+                case 1: ret = fn.call(this, args[0]); break;
+                case 2: ret = fn.call(this, args[0], args[1]); break;
+                case 3: ret = fn.call(this, args[0], args[1], args[2]); break;
+                case 4: ret = fn.call(this, args[0], args[1], args[2], args[3]); break;
+                default: ret = fn.apply(this, args); break;
+            }
             if (returnType === void 0 || returnType === null) return;
             return this.serializeToDotNet(ret, returnType);
         }
         async InvokeAsync(fnName, args, returnType) {
             this.runtimeReady = true;
-            var ret = await this[fnName](...args);
+            var fn = this[fnName];
+            var ret;
+            switch (args.length) {
+                case 1: ret = await fn.call(this, args[0]); break;
+                case 2: ret = await fn.call(this, args[0], args[1]); break;
+                case 3: ret = await fn.call(this, args[0], args[1], args[2]); break;
+                case 4: ret = await fn.call(this, args[0], args[1], args[2], args[3]); break;
+                default: ret = await fn.apply(this, args); break;
+            }
             if (returnType === void 0 || returnType === null) return;
             return this.serializeToDotNet(ret, returnType);
         }
@@ -383,6 +424,18 @@
                 // callers must call with the globalThis if they wish to use it as the rootObject.
                 throw new DOMException('blazorJSInterop.pathObjectInfo error: rootObject cannot be null');
             }
+            // Fast path: a string key with no '.' can never path-walk, and the split branch would
+            // resolve it identically to a direct access - so skip the _in() existence probe (which
+            // costs a try/catch + possible Object() boxing) entirely. This is the overwhelmingly
+            // common case (single-property get/set/call), and it is on EVERY interop call.
+            if (typeof path === 'string' && path.indexOf('.') === -1) {
+                return {
+                    shortCircuit: false,
+                    parent: rootObject,
+                    propertyName: path,
+                    target: rootObject[path],
+                };
+            }
             var parent = rootObject;
             var target;
             var propertyName;
@@ -425,7 +478,11 @@
         customReviverfunction(key, value) {
             var _this = this;
             if (value && typeof value === 'object') {
-                if (_in('_callbackId', value)) {
+                // This reviver runs for EVERY object node of EVERY JSON.parse on EVERY interop call
+                // (DotNet.attachReviver), so it is the hottest code in the module. The values here are
+                // always plain JSON.parse products (objects/arrays), so the direct 'in' operator is
+                // safe - no _in() helper (try/catch + boxing) needed on this path.
+                if ('_callbackId' in value) {
                     var _callbackId = value._callbackId;
                     var callback = _this.callbacks[_callbackId];
                     if (callback) return callback;
@@ -453,7 +510,7 @@
                     _this.callbacks[_callbackId] = callback;
                     return callback;
                 }
-                else if (_in('_callbackAsyncId', value)) {
+                else if ('_callbackAsyncId' in value) {
                     var _callbackId = value._callbackAsyncId;
                     var callback = _this.asyncCallbacks[_callbackId];
                     if (callback) return callback;
@@ -482,13 +539,13 @@
                     _this.asyncCallbacks[_callbackId] = callback;
                     return callback;
                 }
-                else if (_in('__wrappedJSObject', value)) {
+                else if ('__wrappedJSObject' in value) {
                     return value.__wrappedJSObject;
                 }
-                else if (_in('__undefinedref__', value)) {
+                else if ('__undefinedref__' in value) {
                     return;
                 }
-                else if (_in('$bigint', value)) {
+                else if ('$bigint' in value) {
                     return BigInt(value.$bigint);
                 }
             }
