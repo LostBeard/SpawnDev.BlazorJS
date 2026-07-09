@@ -45,40 +45,5 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             var cacheDeleted = await caches.Delete(cacheName);
             if (!cacheDeleted) throw new Exception("Failed to delete cache");
         }
-
-
-
-        [TestMethod]
-        public async Task SafeWrap()
-        {
-            var url = "https://www.googleapis.com/auth/youtube";
-
-            var window = new Window();
-            var popup = window.Open(url, "Google Auth", "height=800,width=1200");
-
-            popup = JS.Call<Window>("createTransparentProxy", popup);
-
-            //var popup = JS.Call<Window>("openSafe", url, "Google Auth", "height=800,width=1200");
-
-
-            if (popup is not null)
-            {
-                try
-                {
-                    popup.Focus();
-                    while (!popup.Closed)
-                        await Task.Delay(1000);
-                    JS.Log($"WithoutCrossOriginWindow2(): popup was closed");
-                }
-                catch (Exception ex)
-                {
-                    JS.Log($"WithoutCrossOriginWindow2(): popup closed access exception: {ex.ToString()}");
-                }
-            }
-            else
-            {
-                JS.Log($"WithoutCrossOriginWindow2(): popup was null");
-            }
-        }
     }
 }
