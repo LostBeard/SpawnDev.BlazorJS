@@ -8,7 +8,7 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
     {
 
         [TestMethod]
-        public async Task SafeWrapTest()
+        public async Task CrossOriginWindowTest()
         {
             var url = "https://www.googleapis.com/auth/youtube";
 
@@ -16,22 +16,29 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
 
             var popup = window.Open(url, "Google Auth", "height=800,width=1200");
 
-            await Task.Delay(2000);
-
-            // Close the popup in 5 seconds
-            _ = Async.RunAsync(async () =>
+            if (popup is not null)
             {
-                await Task.Delay(5000);
-                try
-                {
-                    popup!.Close();
-                }
-                catch { }
-            });
+                await Task.Delay(2000);
 
-            popup!.Focus();
-            while (!popup.Closed)
-                await Task.Delay(1000);
+                // Close the popup in 5 seconds
+                _ = Async.RunAsync(async () =>
+                {
+                    await Task.Delay(5000);
+                    try
+                    {
+                        popup!.Close();
+                    }
+                    catch { }
+                });
+
+                popup!.Focus();
+                while (!popup.Closed)
+                    await Task.Delay(1000);
+            }
+            else
+            {
+                throw new UnsupportedTestException("Failed to open popup. User interaction is required. Run test manually.");
+            }
         }
     }
 }
