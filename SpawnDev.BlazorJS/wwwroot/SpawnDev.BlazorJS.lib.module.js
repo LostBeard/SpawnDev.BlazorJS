@@ -7,7 +7,7 @@
     Object.prototype.hasOwnProperty = function (prop) {
         try {
             // Attempt the normal engine execution
-            return originalHasOwnPropertyPrototype.apply(this, arguments);
+            return originalHasOwnPropertyPrototype.apply(this, [prop]);
         } catch (error) {
             // Catch DOMException / SecurityError (e.g., cross-origin window access)
             if (error instanceof DOMException || error.name === 'SecurityError') {
