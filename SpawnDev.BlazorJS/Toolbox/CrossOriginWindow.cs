@@ -25,6 +25,16 @@ namespace SpawnDev.BlazorJS.Toolbox
             _proxy = null!;
         }
         /// <summary>
+        /// Location setter
+        /// </summary>
+        public string LocationHref
+        {
+            set
+            {
+                _proxy.JSRef!.Set("window.location.href", value);
+            }
+        }
+        /// <summary>
         /// The Window.closed read-only property indicates whether the referenced window is closed or not.
         /// </summary>
         public bool Closed => _proxy.JSRef!.Get<bool>("window.closed");

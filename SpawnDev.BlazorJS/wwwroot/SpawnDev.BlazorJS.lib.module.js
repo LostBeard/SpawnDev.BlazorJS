@@ -1,4 +1,23 @@
 (function () {
+    // Blazor Wasm's JS interop reviver can throw an exception when reviving a JS 
+    // object like a cross-origin window simply by looking for a property that 
+    // does not exist like '__internalId'.
+    // This patch simply allows the revive to work without crashing
+    const originalHasOwnPropertyPrototype = Object.prototype.hasOwnProperty;
+    Object.prototype.hasOwnProperty = function (prop) {
+        try {
+            // Attempt the normal engine execution
+            return originalHasOwnPropertyPrototype.apply(this, arguments);
+        } catch (error) {
+            // Catch DOMException / SecurityError (e.g., cross-origin window access)
+            if (error instanceof DOMException || error.name === 'SecurityError') {
+                // Return false so Blazor treats it as a non-existent property
+                return false;
+            }
+            // Re-throw genuine, unrelated engine errors
+            throw error;
+        }
+    };
     // helper function used in place of 'in' operator for checking if a property exists to allow a consistent operation regardless of obj's type
     function _in(key, obj) {
         if (obj === null || obj === void 0) return false;
