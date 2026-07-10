@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static SpawnDev.BlazorJS.JSObject;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
@@ -40,6 +39,50 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <param name="data"></param>
         /// <param name="offset">Start index in the data</param>
         public HeapView(TElement[] data, long offset = 0) : this(data, offset, data.Length - offset) { }
+    }
+    /// <inheritdoc/>
+    [JsonConverter(typeof(HeapViewConverter))]
+    public sealed class HeapViewPtr<TElement> : HeapView where TElement : struct
+    {
+        /// <summary>
+        /// Create a HeapView of a region of .Net memory.<br/>
+        /// The memory should already be pinned.
+        /// </summary>
+        /// <param name="dataPtr"></param>
+        /// <param name="length">The number of elements to include</param>
+        public HeapViewPtr(nint dataPtr, long length) : base(typeof(TElement[]), typeof(TElement))
+        {
+            if (length < 0) throw new ArgumentOutOfRangeException(nameof(length));
+            ElementSize = Marshal.SizeOf<TElement>();
+            Offset = 0;
+            handle = default;
+            Pointer = new IntPtr(dataPtr.ToInt64() + (Offset * ElementSize));
+            Address = Pointer.ToInt64();
+            Length = length;
+            ByteLength = ElementSize * Length;
+        }
+    }
+    /// <inheritdoc/>
+    [JsonConverter(typeof(HeapViewConverter))]
+    public sealed class HeapViewPtr : HeapView
+    {
+        /// <summary>
+        /// Create a HeapView of a region of .Net memory.<br/>
+        /// The memory should already be pinned.
+        /// </summary>
+        /// <param name="dataPtr"></param>
+        /// <param name="length">The number of elements to include</param>
+        public HeapViewPtr(nint dataPtr, long length) : base(typeof(byte[]), typeof(byte))
+        {
+            if (length < 0) throw new ArgumentOutOfRangeException(nameof(length));
+            ElementSize = 1;
+            Offset = 0;
+            handle = default;
+            Pointer = new IntPtr(dataPtr.ToInt64() + (Offset * ElementSize));
+            Address = Pointer.ToInt64();
+            Length = length;
+            ByteLength = ElementSize * Length;
+        }
     }
     /// <inheritdoc/>
     [JsonConverter(typeof(HeapViewConverter))]
@@ -89,6 +132,14 @@ namespace SpawnDev.BlazorJS.Toolbox
     [JsonConverter(typeof(HeapViewConverter))]
     public class HeapView : IDisposable
     {
+        /// <summary>
+        /// The data size to use for heap priming
+        /// </summary>
+        public static int DefaultHeapPrimeSize = 16 * 1024 * 1024;
+        /// <summary>
+        /// When true, the PrimeHeap will be used when new instance
+        /// </summary>
+        public static bool UsePrimer = true;
         static int InstanceCount = 0;
         /// <summary>
         /// New instance
@@ -97,7 +148,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             DataType = dataType;
             ElementType = elementType;
-            if (InstanceCount == 0)
+            // only prime the heap when there are no outstanding instances to prevent detaching them
+            if (UsePrimer && InstanceCount == 0)
             {
                 PrimeHeap();
             }
@@ -105,10 +157,11 @@ namespace SpawnDev.BlazorJS.Toolbox
             _disposableTracker = IDisposableTracker.DisposableCreated(this);
         }
         /// <summary>
-        /// Allocates memory on the heap and then releases it to delay heap growth after this call
+        /// Allocates memory on the heap and then releases it to delay heap growth after this call.<br/>
+        /// When the heap ArrayBuffer resizes all existing views become detached.
         /// </summary>
         /// <param name="preAllocateSize"></param>
-        public static void PrimeHeap(int preAllocateSize = 16 * 1024 * 1024)
+        public static void PrimeHeap(int preAllocateSize)
         {
             try
             {
@@ -127,6 +180,11 @@ namespace SpawnDev.BlazorJS.Toolbox
             }
             catch { }
         }
+        /// <summary>
+        /// Allocates memory on the heap and then releases it to delay heap growth after this call.<br/>
+        /// When the heap ArrayBuffer resizes all existing views become detached.
+        /// </summary>
+        public static void PrimeHeap() => PrimeHeap(DefaultHeapPrimeSize);
         /// <summary>
         /// Explicit conversion to HeapView
         /// </summary>
@@ -435,7 +493,7 @@ namespace SpawnDev.BlazorJS.Toolbox
             IDisposableTracker.DisposableDisposed(_disposableTracker, disposing);
             if (InstanceCount > 0) InstanceCount--;
             Address = 0;
-            handle.Free();
+            if (handle.IsAllocated) handle.Free();
             Pointer = IntPtr.Zero;
             var disposables = DisposableViews.ToList();
             DisposableViews.Clear();

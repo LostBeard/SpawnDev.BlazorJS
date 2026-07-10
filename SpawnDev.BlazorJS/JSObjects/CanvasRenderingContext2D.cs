@@ -279,8 +279,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             // using a HeapView prevents a copy of the data from being made before the draw.
             using var srcHeapView = (HeapView)srcBytes;
-            using var unit8ClampedArray = srcHeapView.As<Uint8ClampedArray>();
-            using var imageData = new ImageData(unit8ClampedArray, (uint)srcWidth, (uint)srcHeight);
+            using var uint8ClampedArray = srcHeapView.As<Uint8ClampedArray>();
+            using var imageData = new ImageData(uint8ClampedArray, (uint)srcWidth, (uint)srcHeight);
             PutImageData(imageData, dx, dy);
         }
 
@@ -291,8 +291,8 @@ namespace SpawnDev.BlazorJS.JSObjects
         {
             // using a HeapView prevents a copy of the data from being made before the draw.
             using var srcHeapView = (HeapView)imageBytes;
-            using var unit8ClampedArray = srcHeapView.As<Uint8ClampedArray>();
-            using var imageData = new ImageData(unit8ClampedArray, (uint)srcWidth, (uint)srcHeight);
+            using var uint8ClampedArray = srcHeapView.As<Uint8ClampedArray>();
+            using var imageData = new ImageData(uint8ClampedArray, (uint)srcWidth, (uint)srcHeight);
             PutImageData(imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
         }
 
