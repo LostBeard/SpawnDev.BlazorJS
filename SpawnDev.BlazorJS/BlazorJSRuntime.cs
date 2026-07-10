@@ -512,15 +512,48 @@ namespace SpawnDev.BlazorJS
         /// <summary>
         /// Writes the data to the console using console.log
         /// </summary>
-        public void Log(params object?[] args) => CallApplyVoid("console.log", args);
+        public void Log(params object?[] args)
+        {
+            if (IsBrowser)
+            {
+                CallApplyVoid("console.log", args);
+            }
+            else
+            {
+                var lines = string.Join(Environment.NewLine, args.Select(o => o?.ToString() ?? ""));
+                Console.WriteLine(lines);
+            }
+        }
         /// <summary>
         /// Writes the data to the console using console.error
         /// </summary>
-        public void LogError(params object?[] args) => CallApplyVoid("console.error", args);
+        public void LogError(params object?[] args)
+        {
+            if (IsBrowser)
+            {
+                CallApplyVoid("console.error", args);
+            }
+            else
+            {
+                var lines = string.Join(Environment.NewLine, args.Select(o => o?.ToString() ?? ""));
+                Console.Error.WriteLine(lines);
+            }
+        }
         /// <summary>
         /// Writes the data to the console using console.warn
         /// </summary>
-        public void LogWarn(params object?[] args) => CallApplyVoid("console.warn", args);
+        public void LogWarn(params object?[] args)
+        {
+            if (IsBrowser)
+            {
+                CallApplyVoid("console.warn", args);
+            }
+            else
+            {
+                var lines = string.Join(Environment.NewLine, args.Select(o => o?.ToString() ?? ""));
+                Console.WriteLine(lines);
+            }
+        }
         /// <summary>
         /// Calls fetch
         /// </summary>
