@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.5.21 — HeapView priming throttle (once per grow-epoch)
+
+`HeapViewPtr`/`HeapView` prime the WASM heap (pre-allocate ~16 MB + a forced compacting GC) so a `memory.grow` can't detach a heap view mid-use. Priming ran whenever no view was outstanding — which for **sequential** views (the zero-copy `CopyFrom` upload path) meant a forced compacting GC on **every** call. A hot loop (e.g. 100 uploads) then paid 100 forced GCs and could time out.
+
+Because `memory.grow` is one-way (the heap never shrinks), a single prime's headroom **persists** until something grows the heap. `HeapView` now records the heap byteLength right after each prime (`_lastPrimedHeapSize`) and **skips priming while the heap hasn't grown since** — re-priming only when a grow has consumed the reserved headroom. Net: priming happens ~once per grow-epoch instead of per view, hot `CopyFrom` loops no longer stall, and the detach protection is unchanged. `UsePrimer` (default true) and `DefaultHeapPrimeSize` (16 MB) still apply.
+
 ## 3.5.15 — OPFS writable abort-on-throw (swap-file leak fix)
 
 **OPFS write hazard fixed at the source.** `FileSystemFileHandle.createWritable()` allocates a temporary swap file; a stream that is neither `Close()`d (commit) nor `Abort()`ed (discard) leaks that swap until JS garbage collection. Every `FileSystemFileHandle` / `FileSystemDirectoryHandle` `Write`/`Append`/`WriteJSON` overload used the `CreateWritable → Write → Close` pattern, so a mid-write throw — most importantly the browser's `QuotaExceededError` when the origin is out of space — skipped `Close()` and abandoned the writable, leaking its swap. Under a retry loop (a torrent re-saving a piece whose write keeps failing) that compounds one leaked swap per attempt into a runaway that exhausts origin storage, which then makes every subsequent write fail so it never recovers.

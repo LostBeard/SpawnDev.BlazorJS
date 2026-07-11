@@ -5,8 +5,8 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.20</Version>
-		<PackageReleaseNotes>v3.5.20: HeapView configurable primer. See CHANGELOG.md.</PackageReleaseNotes>
+		<Version>3.5.21</Version>
+		<PackageReleaseNotes>v3.5.21: HeapView priming throttle — prime the heap at most once per grow-epoch (skip while the reserved headroom is intact) instead of per view, so hot zero-copy CopyFrom loops no longer pay a forced compacting GC per upload. See CHANGELOG.md.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>

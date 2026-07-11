@@ -141,6 +141,10 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         public static bool UsePrimer = true;
         static int InstanceCount = 0;
+        // The heap ArrayBuffer byteLength captured right after the last PrimeHeap. WASM memory.grow is one-way
+        // (the heap never shrinks), so the headroom a prime reserves PERSISTS until something grows the heap.
+        // -1 = never primed. Used to skip re-priming while the reserved headroom is still intact.
+        static long _lastPrimedHeapSize = -1;
         /// <summary>
         /// New instance
         /// </summary>
@@ -148,10 +152,19 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             DataType = dataType;
             ElementType = elementType;
-            // only prime the heap when there are no outstanding instances to prevent detaching them
+            // Prime only when no view is outstanding (the prime's compacting GC would detach an outstanding view)
+            // AND the heap has GROWN since our last prime. If it hasn't grown, the ~16MB of headroom the last
+            // prime reserved is still available (memory.grow is one-way), so re-priming would just burn a forced
+            // compacting GC for nothing — that per-view GC made hot CopyFrom loops (100+ uploads) time out. So we
+            // prime at most once per grow-epoch: heap grew -> headroom was consumed by a grow -> re-establish it.
             if (UsePrimer && InstanceCount == 0)
             {
-                PrimeHeap();
+                long heapSize = GetHeapBufferSize();
+                if (_lastPrimedHeapSize < 0 || heapSize > _lastPrimedHeapSize)
+                {
+                    PrimeHeap();
+                    _lastPrimedHeapSize = GetHeapBufferSize();
+                }
             }
             InstanceCount++;
             _disposableTracker = IDisposableTracker.DisposableCreated(this);
