@@ -1,4 +1,5 @@
 ﻿using SpawnDev.Blazor.UnitTesting;
+using SpawnDev.BlazorJS.JSObjects;
 using SpawnDev.BlazorJS.Toolbox;
 using System.Text;
 
@@ -30,6 +31,21 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
 
             if (length != heapViewList.Count) throw new Exception("Invalid readback length");
             if (anyNull) throw new Exception("NULL values found");
+        }
+        [TestMethod]
+        public async Task HeapViewTest1()
+        {
+            var textDataBytes = new byte[16 * 1024 * 1024];
+            using var heapView = (HeapView)textDataBytes;
+            using var heapu8 = heapView.As<Uint8Array>();
+            JS.Set("_heapView1", heapu8);
+            textDataBytes[0] = 42;
+            // force a heap growth to verify the heapu8 will recreate using the new heap when it is revived
+            HeapView.ForceHeapGrowth();
+            JS.Set("_heapView2", heapu8);
+            // at this point _heapView2 is valid until the next heap growth and _heapView1 is now ivalid due to the heap resize we forced
+            if (heapu8.ByteLength != textDataBytes.Length) throw new Exception("Uint8Array view of the heap not valid.");
+            // _heapView1 and _heapView2 can be viewed in devtools console to verify
         }
     }
 }

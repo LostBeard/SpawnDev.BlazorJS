@@ -90,7 +90,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Uint8Array() constructor creates Uint8Array objects.
         /// </summary>
         /// <param name="sourceBytes"></param>
-        public Uint8Array(byte[] sourceBytes) : base(JS.New(nameof(Uint8Array), (ArrayBuffer)sourceBytes)) { }
+        public Uint8Array(byte[] sourceBytes) : base(((ArrayBuffer)sourceBytes).Using(arrayBuffer => JS.New(nameof(Uint8Array), arrayBuffer))) { }
         /// <summary>
         /// The Uint8Array() constructor creates Uint8Array objects.
         /// </summary>

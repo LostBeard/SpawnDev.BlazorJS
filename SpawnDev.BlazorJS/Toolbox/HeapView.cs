@@ -5,6 +5,14 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
+    //public class HeapView
+    //{
+
+    //}
+    //public class HeapViewInfo
+    //{
+
+    //}
     /// <inheritdoc/>
     [JsonConverter(typeof(HeapViewConverter))]
     public sealed class HeapView<TElement> : HeapView where TElement : struct
@@ -139,7 +147,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// <summary>
         /// When true, the PrimeHeap will be used when new instance
         /// </summary>
-        public static bool UsePrimer = true;
+        public static bool UsePrimer = false;
         static int InstanceCount = 0;
         // The heap ArrayBuffer byteLength captured right after the last PrimeHeap. WASM memory.grow is one-way
         // (the heap never shrinks), so the headroom a prime reserves PERSISTS until something grows the heap.
@@ -719,6 +727,26 @@ namespace SpawnDev.BlazorJS.Toolbox
         {
             DisposableViews.Add(disposable);
             return disposable;
+        }
+        /// <summary>
+        /// This is method forces the .Net heap to grow by requesting more and more space until it grows.<br/>
+        /// Primarily used for testing.
+        /// </summary>
+        public static void ForceHeapGrowth()
+        {
+            var heapSize = HeapView.GetHeapBuffer().Using(o => o.ByteLength);
+            long heapSizeNow = heapSize;
+            var dataSize = 5_000_000;
+            var i = 0;
+            List<byte[]> datas = new List<byte[]>();
+            while (heapSize == heapSizeNow)
+            {
+                i++;
+                var textDataBytes3 = new byte[dataSize * i];
+                textDataBytes3[5] = 0xaa;
+                datas.Add(textDataBytes3);
+                heapSizeNow = HeapView.GetHeapBuffer().Using(o => o.ByteLength);
+            }
         }
     }
     /// <summary>

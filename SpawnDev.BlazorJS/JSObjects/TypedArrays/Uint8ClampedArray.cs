@@ -83,7 +83,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects.
         /// </summary>
         /// <param name="array"></param>
-        public Uint8ClampedArray(byte[] array) : base(JS.New(nameof(Uint8ClampedArray), (ArrayBuffer)array)) { }
+        public Uint8ClampedArray(byte[] array) : base(((ArrayBuffer)array).Using(arrayBuffer => JS.New(nameof(Uint8ClampedArray), arrayBuffer))) { }
         /// <summary>
         /// The Uint8ClampedArray() constructor creates Uint8ClampedArray objects.
         /// </summary>
