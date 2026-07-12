@@ -340,7 +340,7 @@
         heapViewTagger(value) {
             const runtimeModule = globalThis.Blazor?.runtime?.Module || globalThis.Module;
             const liveBuffer = runtimeModule.HEAPU8.buffer;
-            if (ArrayBuffer.isView(value)) {
+            if (_in('buffer', value)) {
                 // if it is attached to the current heap make sure it has heapViewInfo
                 if (value.buffer === liveBuffer && !value._heapViewInfo) {
                     // this ArrayBuffer view is a view on the .Net heap and needs info saved
@@ -370,16 +370,13 @@
             // - first check for an existing view replacement and if it is not itself detached use that
             // - if there is no existing replacement or it is detached we create a new replacement and use that
             var heapViewInfo = value._heapViewInfo;
-            //const heapSizeUnchanged = liveBufferByteLength === heapViewInfo.heapSize;
             const valueIsValidView = heapViewInfo.byteLength === value.byteLength && (value.buffer?.byteLength ?? 0) > 0;
-            //console.log('valueIsValidView', valueIsValidView);
             if (valueIsValidView) {
                 // return the view that is still valid
                 return value;
             }
             // check if it already has a valid override view
             const overrideViewIsValid = heapViewInfo.byteLength === value._overrideView?.byteLength && (value._overrideView?.buffer?.byteLength ?? 0) > 0;
-            //console.log('overrideViewIsValid', overrideViewIsValid);
             if (overrideViewIsValid) {
                 // return the already existing and still valid override view
                 return value._overrideView;

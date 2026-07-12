@@ -81,5 +81,34 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
                 if (!BitConverter.GetBytes(d).SequenceEqual(BitConverter.GetBytes(rb))) throw new Exception($"(Number) round-trip failed for {d}");
             }
         }
+        /// <summary>
+        /// Mirrors SpawnDev.ILGPU's zero-copy host->GPU upload (WasmMemoryBuffer / WebGLMemoryBuffer):
+        /// a HeapViewPtr over a raw heap pointer, viewed As&lt;Uint8Array&gt;, used as the SOURCE of another
+        /// typed array's .Set(), in a many-iteration loop with heap growth between iters (the ManyDispatches
+        /// stress). Regression repro for the 3.5.22+ re-attach rework interacting with the HeapViewPtr
+        /// upload pattern under heap growth.
+        /// </summary>
+        [TestMethod]
+        public void HeapViewPtrUploadLoopTest()
+        {
+            var srcBytes = new byte[1024];
+            for (var i = 0; i < srcBytes.Length; i++) srcBytes[i] = (byte)(i * 7);
+            var handle = System.Runtime.InteropServices.GCHandle.Alloc(srcBytes, System.Runtime.InteropServices.GCHandleType.Pinned);
+            try
+            {
+                var ptr = handle.AddrOfPinnedObject();
+                using var dst = new Uint8Array(srcBytes.Length);
+                for (var iter = 0; iter < 100; iter++)
+                {
+                    using var heapView = new HeapViewPtr(ptr, srcBytes.Length);
+                    using var srcView = heapView.As<Uint8Array>();
+                    dst.Set(srcView);
+                    if ((iter & 7) == 0) HeapView.ForceHeapGrowth();
+                }
+                var readback = dst.ToArray();
+                if (!readback.SequenceEqual(srcBytes)) throw new Exception("HeapViewPtr upload loop content mismatch");
+            }
+            finally { handle.Free(); }
+        }
     }
 }
