@@ -5,14 +5,38 @@ using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.Toolbox
 {
-    //public class HeapView
-    //{
+    public class HeapViewInit
+    {
+        [JsonPropertyName("_heapViewInfo")]
+        public HeapViewInfo HeapViewInfo { get; set; }
+        public HeapViewInit() { }
+        public HeapViewInit(string viewType, long address, long byteLength, long heapSize = 0)
+        {
+            HeapViewInfo = new HeapViewInfo(viewType, address, byteLength, heapSize);
+        }
+    }
+    public class HeapViewInfo
+    {
+        [JsonPropertyName("viewType")]
+        public string ViewType { get; set; }
 
-    //}
-    //public class HeapViewInfo
-    //{
+        [JsonPropertyName("address")]
+        public long Address { get; set; }
 
-    //}
+        [JsonPropertyName("byteLength")]
+        public long ByteLength { get; set; }
+
+        [JsonPropertyName("heapSize")]
+        public long HeapSize { get; set; }
+        public HeapViewInfo() { }
+        public HeapViewInfo(string viewType, long address, long byteLength, long heapSize = 0)
+        {
+            ViewType = viewType;
+            Address = address;
+            ByteLength = byteLength;
+            HeapSize = heapSize;
+        }
+    }
     /// <inheritdoc/>
     [JsonConverter(typeof(HeapViewConverter))]
     public sealed class HeapView<TElement> : HeapView where TElement : struct
@@ -675,8 +699,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         public TTypedArray As<TTypedArray>(long byteOffset, long elementCount) where TTypedArray : TypedArray
         {
-            using var heapBuffer = GetHeapBuffer();
-            var typedArray = (TTypedArray)Activator.CreateInstance(typeof(TTypedArray), heapBuffer, Address + byteOffset, elementCount)!;
+            var viewType = typeof(TTypedArray).Name;
+            var typedArray = JS.ReturnMe<TTypedArray>(new HeapViewInit(viewType, Address + byteOffset, elementCount * ElementSize));
             ToDispose(typedArray);
             return typedArray;
         }
@@ -690,8 +714,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         public TypedArray As(Type typedArrayType, long byteOffset, long elementCount)
         {
-            using var heapBuffer = GetHeapBuffer();
-            var typedArray = (TypedArray)Activator.CreateInstance(typedArrayType, heapBuffer, Address + byteOffset, elementCount)!;
+            var viewType = typedArrayType.Name;
+            var typedArray = (TypedArray)JS.ReturnMe(typedArrayType, new HeapViewInit(viewType, Address + byteOffset, elementCount * ElementSize))!;
             ToDispose(typedArray);
             return typedArray;
         }
@@ -704,8 +728,7 @@ namespace SpawnDev.BlazorJS.Toolbox
         /// </summary>
         public DataView AsDataView(long byteOffset, long byteLength)
         {
-            using var heapBuffer = GetHeapBuffer();
-            var jsView = new DataView(heapBuffer, Address + byteOffset, byteLength)!;
+            var jsView = JS.ReturnMe<DataView>(new HeapViewInit(typeof(DataView).Name, Address + byteOffset, byteLength))!;
             ToDispose(jsView);
             return jsView;
         }
@@ -729,24 +752,34 @@ namespace SpawnDev.BlazorJS.Toolbox
             return disposable;
         }
         /// <summary>
-        /// This is method forces the .Net heap to grow by requesting more and more space until it grows.<br/>
+        /// This is method tries to force the .Net heap to grow by requesting more and more space until it grows.<br/>
         /// Primarily used for testing.
         /// </summary>
-        public static void ForceHeapGrowth()
+        public static bool ForceHeapGrowth()
         {
             var heapSize = HeapView.GetHeapBuffer().Using(o => o.ByteLength);
             long heapSizeNow = heapSize;
             var dataSize = 5_000_000;
             var i = 0;
-            List<byte[]> datas = new List<byte[]>();
+            var datas = new List<byte[]>();
             while (heapSize == heapSizeNow)
             {
-                i++;
-                var textDataBytes3 = new byte[dataSize * i];
-                textDataBytes3[5] = 0xaa;
-                datas.Add(textDataBytes3);
-                heapSizeNow = HeapView.GetHeapBuffer().Using(o => o.ByteLength);
+                try
+                {
+                    i++;
+                    var textDataBytes3 = new byte[dataSize];
+                    textDataBytes3[5] = 0xaa;
+                    datas.Add(textDataBytes3);
+                    heapSizeNow = HeapView.GetHeapBuffer().Using(o => o.ByteLength);
+                }
+                catch
+                {
+                    break;
+                }
             }
+            datas.Clear();
+            GC.Collect(2, GCCollectionMode.Forced, blocking: true, compacting: true);
+            return heapSize != heapSizeNow;
         }
     }
     /// <summary>

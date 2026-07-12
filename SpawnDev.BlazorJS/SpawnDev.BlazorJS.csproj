@@ -5,8 +5,8 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.22</Version>
-		<PackageReleaseNotes>v3.5.22: Removed the need for heap priming in HeapView by tagging JS views of the .Net heap ArrayBuffer and the .Net heap ArrayBuffer itself on JS to .Net serialization and then replacing detached views on revive. See CHANGELOG.md.</PackageReleaseNotes>
+		<Version>3.5.23</Version>
+		<PackageReleaseNotes>v3.5.23: HeapView re-attach hardening. See CHANGELOG.md.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>
