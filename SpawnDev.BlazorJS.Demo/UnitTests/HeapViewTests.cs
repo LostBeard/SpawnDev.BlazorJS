@@ -51,5 +51,35 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
                 // _heapView1 and _heapView2 can be viewed in devtools console to verify
             }
         }
+        /// <summary>
+        /// Regression guard: HeapView.As&lt;TView&gt;() must size the JS view by the TARGET view element size,
+        /// not the source HeapView element size. A cross-type view (source elem size != target elem size) must
+        /// still yield exactly the source bytes - not an over-sized view that reads past the pinned data / throws
+        /// "offset is out of bounds". This is the path TypedArray.Write&lt;T&gt; uses (HeapView&lt;T&gt; -&gt; As&lt;Uint8Array&gt;),
+        /// which byte-&gt;byte tests can't exercise.
+        /// </summary>
+        [TestMethod]
+        public void HeapViewCrossTypeAsTest()
+        {
+            var doubles = new double[] { double.NegativeZero, double.PositiveInfinity, double.NegativeInfinity, 3.14159265358979, -2.5e300, 0.0 };
+            var expected = new byte[doubles.Length * sizeof(double)];
+            for (var i = 0; i < doubles.Length; i++)
+            {
+                BitConverter.GetBytes(doubles[i]).CopyTo(expected, i * sizeof(double));
+            }
+            // HeapView<double> (source elem size 8) viewed As<Uint8Array> (target elem size 1)
+            using var heapView = HeapView.Create(doubles);
+            using var u8 = heapView.As<Uint8Array>();
+            if (u8.Length != expected.Length) throw new Exception($"As<Uint8Array> length {u8.Length} != expected {expected.Length}");
+            var actual = u8.ToArray();
+            if (!actual.SequenceEqual(expected)) throw new Exception("Cross-type As<Uint8Array> byte content mismatch");
+            // The exact failing round-trip: (Number)double boxing -> Float64Array.Write([value]) -> As<Uint8Array>
+            foreach (var d in doubles)
+            {
+                JS.Set("_crossTypeNumber", (Number)d);
+                double rb = JS.Get<Number>("_crossTypeNumber");
+                if (!BitConverter.GetBytes(d).SequenceEqual(BitConverter.GetBytes(rb))) throw new Exception($"(Number) round-trip failed for {d}");
+            }
+        }
     }
 }

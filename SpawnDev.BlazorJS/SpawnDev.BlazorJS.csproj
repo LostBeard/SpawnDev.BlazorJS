@@ -5,8 +5,8 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.23</Version>
-		<PackageReleaseNotes>v3.5.23: HeapView re-attach hardening. See CHANGELOG.md.</PackageReleaseNotes>
+		<Version>3.5.24</Version>
+		<PackageReleaseNotes>v3.5.24: Fix HeapView.As&lt;TView&gt;() cross-type view sizing regression from 3.5.23 (RangeError: offset is out of bounds on TypedArray.Write of multi-byte types). See CHANGELOG.md.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>

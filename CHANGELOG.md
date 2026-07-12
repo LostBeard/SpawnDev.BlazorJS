@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.5.24 — Fix HeapView.As&lt;TView&gt;() cross-type view sizing (regression from 3.5.23)
+
+3.5.23 moved the `HeapView.As<TView>()` view build from a C#-side `new TView(heapBuffer, addr, elementCount)` (constructor takes an **element count**) to a JS-reviver build driven by a `HeapViewInit` descriptor that carries a **byteLength** (the reviver does `length = byteLength / targetView.BYTES_PER_ELEMENT`). The descriptor byteLength was computed as `elementCount * ElementSize`, where `ElementSize` is the **source** `HeapView`'s element size — but `elementCount` is already in **target-view** elements. When the two element sizes differ (a cross-type view), the descriptor was over-sized.
+
+The most common cross-type view is `TypedArray.Write<T>`, which pins the source as `HeapView<T>` (e.g. `HeapView<double>`, element size 8) and views it `As<Uint8Array>` (element size 1). For a single `double`, `elementCount = 8` but the buggy byteLength was `8 * 8 = 64` for 8 real bytes → the reviver built `new Uint8Array(heap, addr, 64)`, reading 56 bytes past the pinned data and throwing `RangeError: offset is out of bounds` when the pinned region sat near the heap end. Surfaced through `(Number)someDouble` boxing (`Float64Array.Write([value])`).
+
+**Fix:** size the descriptor byteLength by the **target** view's element size — `elementCount * TypedArray.GetTypedArrayElementSize<TView>()` (generic) / `GetTypedArrayElementSize(typedArrayType)` (non-generic). `AsDataView` was already correct (it passes a real byteLength; DataView element size is 1). Same-type views were unaffected (source == target size), which is why the 3.5.23 benchmark and byte→byte tests passed. Regression guard: `HeapViewTests.HeapViewCrossTypeAsTest` (Chromium + Firefox) — `HeapView<double>.As<Uint8Array>()` byte content vs `BitConverter`, plus the `(Number)double` round-trip.
+
+## 3.5.23 — HeapView re-attach hardening
+
+Hardens the 3.5.22 re-attach path: the reviver reuses a still-valid replacement view (`_overrideView`) instead of rebuilding on every revive, and validates a candidate view (matching byteLength + non-detached buffer) before deciding to recreate — so repeated heap growth keeps re-attaching correctly and a still-attached view is returned as-is. `HeapView.ForceHeapGrowth()` added (grows the WASM heap in steps until the backing `ArrayBuffer` swaps) to deterministically exercise the detach/re-attach path in tests.
+
+## 3.5.22 — HeapView detach handled by tag + re-attach on revive (priming no longer needed)
+
+Removes the need for heap **priming** to protect against detached heap views. Instead, a JS TypedArray/DataView that views the .NET heap `ArrayBuffer` (and the heap `ArrayBuffer` itself) is **tagged** with its view info (`viewType` / `address` / `byteLength`) on JS→.NET serialization; on .NET→JS revive (and on the return path) a **detached** tagged view is transparently replaced with a fresh view built against the current live `HEAPU8.buffer` at the same address. Because `memory.grow` preserves existing byte offsets and pinned arrays don't move, re-creating the view at the same address on the new buffer is always valid. A `memory.grow` (heap resize) is therefore no longer a hazard — the view re-attaches on next use rather than being pre-protected by a forced-GC prime. `HeapView.UsePrimer` now defaults to **false**.
+
 ## 3.5.21 — HeapView priming throttle (once per grow-epoch)
 
 `HeapViewPtr`/`HeapView` prime the WASM heap (pre-allocate ~16 MB + a forced compacting GC) so a `memory.grow` can't detach a heap view mid-use. Priming ran whenever no view was outstanding — which for **sequential** views (the zero-copy `CopyFrom` upload path) meant a forced compacting GC on **every** call. A hot loop (e.g. 100 uploads) then paid 100 forced GCs and could time out.

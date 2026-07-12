@@ -700,7 +700,10 @@ namespace SpawnDev.BlazorJS.Toolbox
         public TTypedArray As<TTypedArray>(long byteOffset, long elementCount) where TTypedArray : TypedArray
         {
             var viewType = typeof(TTypedArray).Name;
-            var typedArray = JS.ReturnMe<TTypedArray>(new HeapViewInit(viewType, Address + byteOffset, elementCount * ElementSize));
+            // byteLength must be sized by the TARGET view's element size, not the HeapView's source ElementSize -
+            // they differ for cross-type views (e.g. HeapView<double>.As<Uint8Array>()). Using the source size
+            // over-sized the descriptor (elementCount * 8 instead of * 1) -> reviver built an oversized/OOB view.
+            var typedArray = JS.ReturnMe<TTypedArray>(new HeapViewInit(viewType, Address + byteOffset, elementCount * TypedArray.GetTypedArrayElementSize<TTypedArray>()));
             ToDispose(typedArray);
             return typedArray;
         }
@@ -715,7 +718,8 @@ namespace SpawnDev.BlazorJS.Toolbox
         public TypedArray As(Type typedArrayType, long byteOffset, long elementCount)
         {
             var viewType = typedArrayType.Name;
-            var typedArray = (TypedArray)JS.ReturnMe(typedArrayType, new HeapViewInit(viewType, Address + byteOffset, elementCount * ElementSize))!;
+            // byteLength sized by the TARGET view's element size, not the HeapView's source ElementSize (see As<TTypedArray> above).
+            var typedArray = (TypedArray)JS.ReturnMe(typedArrayType, new HeapViewInit(viewType, Address + byteOffset, elementCount * TypedArray.GetTypedArrayElementSize(typedArrayType)))!;
             ToDispose(typedArray);
             return typedArray;
         }
