@@ -5,8 +5,8 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.25</Version>
-		<PackageReleaseNotes>v3.5.25 Fixed chance of causing a secutiry exceptio nwhen handlign a cross-origin window. See CHANGELOG.md.</PackageReleaseNotes>
+		<Version>3.5.26</Version>
+		<PackageReleaseNotes>v3.5.26 Changed ArrayBuffer view check to avodi triggering dotnet.native.js warning. See CHANGELOG.md.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>

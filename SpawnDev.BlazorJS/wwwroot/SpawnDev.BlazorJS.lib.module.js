@@ -340,7 +340,7 @@
         heapViewTagger(value) {
             const runtimeModule = globalThis.Blazor?.runtime?.Module || globalThis.Module;
             const liveBuffer = runtimeModule.HEAPU8.buffer;
-            if (_in('buffer', value)) {
+            if (this.arrayBufferIsView(value)) {
                 // if it is attached to the current heap make sure it has heapViewInfo
                 if (value.buffer === liveBuffer && !value._heapViewInfo) {
                     // this ArrayBuffer view is a view on the .Net heap and needs info saved
@@ -510,6 +510,13 @@
                 propertyName,   // any
                 target,         // any
             };
+        }
+        arrayBufferIsView(obj) {
+            try {
+                return ArrayBuffer.isView(obj);
+            } catch {
+                return false;
+            }
         }
         customReviverfunction(key, value) {
             var _this = this;
