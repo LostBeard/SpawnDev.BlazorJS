@@ -1,4 +1,4 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// Base class for parameter types used when calling SubtleCrypto.encrypt
@@ -8,6 +8,6 @@
         /// <summary>
         /// A string.
         /// </summary>
-        public virtual string Name { get; set; }
+        public required virtual string Name { get; set; }
     }
 }

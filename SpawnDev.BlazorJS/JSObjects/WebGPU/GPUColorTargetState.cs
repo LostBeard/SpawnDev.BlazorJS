@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -12,7 +12,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Gets or sets the format string used to define the output representation.
         /// </summary>
         [JsonPropertyName("format")]
-        public EnumString<GPUTextureFormat> Format { get; set; }
+        public required EnumString<GPUTextureFormat> Format { get; set; }
 
         /// <summary>
         /// The blending behavior for this color target. If left undefined, disables blending for this color target.

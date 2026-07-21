@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -18,6 +18,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The resource to bind, which may be a GPUSampler, GPUTexture, GPUTextureView, GPUBuffer, GPUBufferBinding, or GPUExternalTexture.
         /// </summary>
         [JsonPropertyName("resource")]
-        public GPUBindingResource Resource { get; set; }
+        public required GPUBindingResource Resource { get; set; }
     }
 }

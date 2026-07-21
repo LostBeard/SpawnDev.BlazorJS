@@ -1,4 +1,4 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// The AesCtrParams dictionary of the Web Crypto API represents the object that should be passed as the algorithm parameter into SubtleCrypto.encrypt(), SubtleCrypto.decrypt(), SubtleCrypto.wrapKey(), or SubtleCrypto.unwrapKey(), when using the AES-CTR algorithm.<br/>
@@ -7,9 +7,18 @@
     public class AesCtrParams : EncryptParams
     {
         /// <summary>
-        /// A string. This should be set to AES-CTR.
+        /// Creates a new instance. The algorithm name is fixed by this type, so a caller does
+        /// not supply it even though the base declares it required.
         /// </summary>
-        public override string Name { get; set; } = "AES-CTR";
+        [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
+        public AesCtrParams()
+        {
+            Name = "AES-CTR";
+        }
+        // Name is inherited from the base and set in the constructor above. It is deliberately NOT
+        // overridden here: an override auto-property would reintroduce CS8618, because nullable
+        // analysis does not count assigning a VIRTUAL property in a constructor as definite
+        // assignment. The base declares it required, which is what makes the base warning free.
         /// <summary>
         /// An ArrayBuffer, a TypedArray, or a DataView — the initial value of the counter block. This must be 16 bytes long (the AES block size). The rightmost length bits of this block are used for the counter, and the rest is used for the nonce. For example, if length is set to 64, then the first half of counter is the nonce and the second half is used for the counter.
         /// </summary>

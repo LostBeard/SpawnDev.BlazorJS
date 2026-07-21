@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -9,9 +9,18 @@ namespace SpawnDev.BlazorJS.JSObjects
     public class AesGcmParams : EncryptParams
     {
         /// <summary>
-        /// A string. This should be set to AES-GCM.
+        /// Creates a new instance. The algorithm name is fixed by this type, so a caller does
+        /// not supply it even though the base declares it required.
         /// </summary>
-        public override string Name { get; set; } = "AES-GCM";
+        [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
+        public AesGcmParams()
+        {
+            Name = "AES-GCM";
+        }
+        // Name is inherited from the base and set in the constructor above. It is deliberately NOT
+        // overridden here: an override auto-property would reintroduce CS8618, because nullable
+        // analysis does not count assigning a VIRTUAL property in a constructor as definite
+        // assignment. The base declares it required, which is what makes the base warning free.
         /// <summary>
         /// An ArrayBuffer, a TypedArray, or a DataView with the initialization vector. This must be unique for every encryption operation carried out with a given key. Put another way: never reuse an IV with the same key. The AES-GCM specification recommends that the IV should be 96 bits long, and typically contains bits from a random number generator. Section 8.2 of the specification outlines methods for constructing IVs. Note that the IV does not have to be secret, just unique: so it is OK, for example, to transmit it in the clear alongside the encrypted message.
         /// </summary>

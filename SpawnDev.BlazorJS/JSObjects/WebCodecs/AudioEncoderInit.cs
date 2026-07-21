@@ -11,12 +11,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A callback which takes a EncodedAudioChunk object as the first argument, and an optional metadata object dictionary as the second.
         /// </summary>
         [JsonPropertyName("output")]
-        public ActionCallback<EncodedAudioChunk, EncodedAudioChunkMetadata> Output { get; set; }
+        public required ActionCallback<EncodedAudioChunk, EncodedAudioChunkMetadata> Output { get; set; }
 
         /// <summary>
         /// A callback which takes an Error object as the only argument.
         /// </summary>
         [JsonPropertyName("error")]
-        public ActionCallback<DOMException> Error { get; set; }
+        public required ActionCallback<DOMException> Error { get; set; }
     }
 }

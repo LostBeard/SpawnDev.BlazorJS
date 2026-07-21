@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -8,11 +8,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class AesKeyGenParams : KeyGenParams
     {
-        /// <summary>
-        /// A string. This should be set to AES-CBC, AES-CTR, AES-GCM, or AES-KW, depending on the algorithm you want to use.
-        /// </summary>
-        [JsonPropertyName("name")]
-        public override string Name { get; set; }
         /// <summary>
         /// A Number — the length in bits of the key to generate. This must be one of: 128, 192, or 256.
         /// </summary>

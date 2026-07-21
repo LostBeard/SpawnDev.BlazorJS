@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -7,11 +7,6 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// </summary>
     public class HmacKeyGenParams : KeyGenParams
     {
-        /// <summary>
-        /// A string. This should be set to HMAC.
-        /// </summary>
-        [JsonPropertyName("name")]
-        public override string Name { get; set; }
         /// <summary>
         /// A string representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
         /// </summary>

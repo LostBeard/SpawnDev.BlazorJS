@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -11,7 +11,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// An ArrayBuffer, TypedArray, or DataView representing the existing credential ID.
         /// </summary>
-        public BufferSource Id { get; set; }
+        public required BufferSource Id { get; set; }
         /// <summary>
         /// An Array of strings representing allowed transports. Possible transports are: "ble", "hybrid", "internal", "nfc", and "usb" (see getTransports() for more details).
         /// </summary>

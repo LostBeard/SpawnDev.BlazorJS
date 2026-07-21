@@ -1,4 +1,4 @@
-﻿using SpawnDev.BlazorJS.JSObjects;
+using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
 {
@@ -8,9 +8,18 @@ namespace SpawnDev.BlazorJS.RemoteJSRuntime.AsyncObjects
     public class EcdhKeyDeriveParamsAsync : KeyDeriveParams
     {
         /// <summary>
-        /// A string. This should be set to ECDH.
+        /// Creates a new instance. The algorithm name is fixed by this type, so a caller does
+        /// not supply it even though the base declares it required.
         /// </summary>
-        public override string Name { get; set; } = "ECDH";
+        [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
+        public EcdhKeyDeriveParamsAsync()
+        {
+            Name = "ECDH";
+        }
+        // Name is inherited from the base and set in the constructor above. It is deliberately NOT
+        // overridden here: an override auto-property would reintroduce CS8618, because nullable
+        // analysis does not count assigning a VIRTUAL property in a constructor as definite
+        // assignment. The base declares it required, which is what makes the base warning free.
         /// <summary>
         /// A CryptoKey object representing the public key of the other entity.
         /// </summary>

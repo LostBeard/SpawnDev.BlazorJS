@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -13,6 +13,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// For HKDF: Pass the string HKDF.
         /// </summary>
         [JsonPropertyName("name")]
-        public virtual string Name { get; set; }
+        public required virtual string Name { get; set; }
     }
 }

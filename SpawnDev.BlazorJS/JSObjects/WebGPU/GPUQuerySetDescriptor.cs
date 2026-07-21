@@ -1,4 +1,4 @@
-﻿namespace SpawnDev.BlazorJS.JSObjects
+namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
     /// A GPUQuerySetDescriptor specifies the options to use in creating a GPUQuerySet.<br/>
@@ -9,7 +9,7 @@
         /// <summary>
         /// The type of queries managed by GPUQuerySet.
         /// </summary>
-        public EnumString<GPUQueryType> Type { get; set; }
+        public required EnumString<GPUQueryType> Type { get; set; }
         /// <summary>
         /// The number of queries managed by GPUQuerySet.
         /// </summary>

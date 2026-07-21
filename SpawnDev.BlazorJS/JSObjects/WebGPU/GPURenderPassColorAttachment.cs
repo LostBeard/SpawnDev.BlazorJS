@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -14,7 +14,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// "load": Loads the existing value for this attachment into the render pass.
         /// </summary>
         [JsonPropertyName("loadOp")]
-        public EnumString<GPULoadOp> LoadOp { get; set; }
+        public required EnumString<GPULoadOp> LoadOp { get; set; }
 
         /// <summary>
         ///An enumerated value indicating the store operation to perform on view after executing the render pass.
@@ -22,13 +22,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         ///"store": Stores the resulting value of the render pass for this attachment.
         /// </summary>
         [JsonPropertyName("storeOp")]
-        public EnumString<GPUStoreOp> StoreOp { get; set; }
+        public required EnumString<GPUStoreOp> StoreOp { get; set; }
 
         /// <summary>
         /// A GPUTextureView object representing the texture subresource that will be output to for this color attachment.
         /// </summary>
         [JsonPropertyName("view")]
-        public Union<GPUTexture, GPUTextureView> View { get; set; }
+        public required Union<GPUTexture, GPUTextureView> View { get; set; }
 
         /// <summary>
         /// Describes the texture subresource that will receive the resolved output for this color attachment if view is multisampled. 
@@ -36,7 +36,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("resolveTarget")]
-        public Union<GPUTexture, GPUTextureView> ResolveTarget { get; set; }
+        // nullable because this property's own JsonIgnore(WhenWritingNull) says it is omitted when null,
+        // and resolveTarget IS optional per the WebGPU spec - DepthSlice just below carries the same
+        // attribute pair and is correctly nullable
+        public Union<GPUTexture, GPUTextureView>? ResolveTarget { get; set; }
 
         /// <summary>
         /// Indicates the depth slice index of "3d" view that will be output to for this color attachment.

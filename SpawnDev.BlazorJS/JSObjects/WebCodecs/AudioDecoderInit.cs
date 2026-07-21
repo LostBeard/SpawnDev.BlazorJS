@@ -11,12 +11,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A callback which takes a AudioData object as the first argument.
         /// </summary>
         [JsonPropertyName("output")]
-        public ActionCallback<AudioData> Output { get; set; }
+        public required ActionCallback<AudioData> Output { get; set; }
 
         /// <summary>
         /// A callback which takes an Error object as the only argument.
         /// </summary>
         [JsonPropertyName("error")]
-        public ActionCallback<DOMException> Error { get; set; }
+        public required ActionCallback<DOMException> Error { get; set; }
     }
 }

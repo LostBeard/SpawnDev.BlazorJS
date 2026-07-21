@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
 {
@@ -34,7 +34,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// An ArrayBuffer, TypedArray, or DataView provided by the relying party's server and used as a cryptographic challenge. This value will be signed by the authenticator and the signature will be sent back as part of AuthenticatorAttestationResponse.attestationObject.<br/>
         /// 32 byte challenge. Must be randomly generated on the server.
         /// </summary>
-        public Union<ArrayBuffer, Uint8Array, DataView, byte[]> Challenge { get; set; }
+        public required Union<ArrayBuffer, Uint8Array, DataView, byte[]> Challenge { get; set; }
         /// <summary>
         /// An Array of objects describing existing credentials that are already mapped to this user account (as identified by user.id). This is provided by the relying party, and checked by the user agent to avoid creating a new public key credential on an authenticator that already has a credential mapped to the specified user account. for an existing user who already has some. 
         /// </summary>
