@@ -5,6 +5,14 @@
     /// </summary>
     public static class LockManagerExtensions
     {
+        // A LockManager snapshot comes from Javascript, where "held" and "pending" can be absent and a
+        // LockInfo can carry no clientId. These two keep that reality in one place so each query below
+        // reads as the question it is asking.
+        private static IEnumerable<LockInfo> OrEmpty(this LockInfo[]? locks) => locks ?? Enumerable.Empty<LockInfo>();
+
+        private static string[] ClientIds(this IEnumerable<LockInfo> locks)
+            => locks.Select(o => o.ClientId).Where(id => id != null).Select(id => id!).Distinct().ToArray();
+
         private static void ContinueWith(TaskCompletionSource lockWait, Task t)
         {
             if (!t.IsCompletedSuccessfully && !lockWait.Task.IsCompleted)
@@ -139,7 +147,10 @@
         public static async Task<string[]> QueryClientIds(this LockManager _this)
         {
             var state = await _this.Query();
-            return state.Held.Select(o => o.ClientId).Concat(state.Pending.Select(o => o.ClientId)).Distinct().ToArray();
+            // held/pending may be absent from the Javascript snapshot, and a LockInfo may carry no
+            // clientId; the declared string[] promises neither is in the result, so honour that here
+            // rather than by annotation
+            return state.Held.OrEmpty().Concat(state.Pending.OrEmpty()).ClientIds();
         }
         /// <summary>
         /// Returns an array of clientIds that are holding a given lock name
@@ -150,7 +161,7 @@
         public static async Task<string[]> QueryClientIdsHolding(this LockManager _this, string lockName)
         {
             var state = await _this.Query();
-            return state.Held.Where(o => o.Name == lockName).Select(o => o.ClientId).Distinct().ToArray();
+            return state.Held.OrEmpty().Where(o => o.Name == lockName).ClientIds();
         }
         /// <summary>
         /// Returns an array of clientIds that are pending a given lock name
@@ -161,7 +172,7 @@
         public static async Task<string[]> QueryClientIdsPending(this LockManager _this, string lockName)
         {
             var state = await _this.Query();
-            return state.Pending.Where(o => o.Name == lockName).Select(o => o.ClientId).Distinct().ToArray();
+            return state.Pending.OrEmpty().Where(o => o.Name == lockName).ClientIds();
         }
         /// <summary>
         /// Returns the clientId of the first holder of a given lock name, or null if none
@@ -172,7 +183,7 @@
         public static async Task<string?> QueryClientIdHolding(this LockManager _this, string lockName)
         {
             var state = await _this.Query();
-            return state.Held.FirstOrDefault(o => o.Name == lockName)?.ClientId;
+            return state.Held.OrEmpty().FirstOrDefault(o => o.Name == lockName)?.ClientId;
         }
         /// <summary>
         /// Returns the clientId of this instance

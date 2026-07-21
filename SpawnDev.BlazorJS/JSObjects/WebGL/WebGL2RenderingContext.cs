@@ -1,4 +1,4 @@
-﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop;
 using SpawnDev.BlazorJS.Toolbox;
 
 namespace SpawnDev.BlazorJS.JSObjects
@@ -35,36 +35,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         #endregion
 
         #region Buffers - https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext#buffers
-        /// <summary>
-        /// The WebGL2RenderingContext.bufferData() method of the WebGL API creates and initializes the buffer object's data store.
-        /// </summary>
-        /// <param name="target">
-        /// A GLenum specifying the binding point (target).<br/>
-        /// Possible values:<br/>
-        /// gl.ARRAY_BUFFER - Buffer containing vertex attributes, such as vertex coordinates, texture coordinate data, or vertex color data.<br/>
-        /// gl.ELEMENT_ARRAY_BUFFER - Buffer used for element indices.<br/>
-        /// gl.COPY_READ_BUFFER - Buffer for copying from one buffer object to another.<br/>
-        /// gl.COPY_WRITE_BUFFER - Buffer for copying from one buffer object to another.<br/>
-        /// gl.TRANSFORM_FEEDBACK_BUFFER - Buffer for transform feedback operations.<br/>
-        /// gl.UNIFORM_BUFFER - Buffer used for storing uniform blocks.<br/>
-        /// gl.PIXEL_PACK_BUFFER - Buffer used for pixel transfer operations.<br/>
-        /// gl.PIXEL_UNPACK_BUFFER - Buffer used for pixel transfer operations.<br/>
-        /// </param>
-        /// <param name="size">A GLsizeiptr setting the size in bytes of the buffer object's data store. One of size and srcData must be provided.</param>
-        /// <param name="usage">
-        /// A GLenum specifying the intended usage pattern of the data store for optimization purposes.<br/>
-        /// Possible values:<br/>
-        /// gl.STATIC_DRAW - The contents are intended to be specified once by the application, and used many times as the source for WebGL drawing and image specification commands.<br/>
-        /// gl.DYNAMIC_DRAW - The contents are intended to be respecified repeatedly by the application, and used many times as the source for WebGL drawing and image specification commands.<br/>
-        /// gl.STREAM_DRAW - The contents are intended to be specified once by the application, and used at most a few times as the source for WebGL drawing and image specification commands.<br/>
-        /// gl.STATIC_READ - The contents are intended to be specified once by reading data from WebGL, and queried many times by the application.<br/>
-        /// gl.DYNAMIC_READ - The contents are intended to be respecified repeatedly by reading data from WebGL, and queried many times by the application.<br/>
-        /// gl.STREAM_READ - The contents are intended to be specified once by reading data from WebGL, and queried at most a few times by the application<br/>
-        /// gl.STATIC_COPY - The contents are intended to be specified once by reading data from WebGL, and used many times as the source for WebGL drawing and image specification commands.<br/>
-        /// gl.DYNAMIC_COPY - The contents are intended to be respecified repeatedly by reading data from WebGL, and used many times as the source for WebGL drawing and image specification commands.<br/>
-        /// gl.STREAM_COPY - The contents are intended to be specified once by reading data from WebGL, and used at most a few times as the source for WebGL drawing and image specification commands.
-        /// </param>
-        public void BufferData(GLenum target, GLsizeiptr size, GLenum usage) => JSRef!.CallVoid("bufferData", target, size, usage);
+        // The (target, size, usage) overload of BufferData is inherited from WebGLRenderingContext.
+        // It was redeclared here identically, which only hid the base method (CS0108). The WebGL2 only
+        // overloads below (srcOffset / length) are genuine additions and stay.
         /// <summary>
         /// The WebGL2RenderingContext.bufferData() method of the WebGL API creates and initializes the buffer object's data store.
         /// </summary>

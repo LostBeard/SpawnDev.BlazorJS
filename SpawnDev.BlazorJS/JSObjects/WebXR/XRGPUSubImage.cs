@@ -19,9 +19,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// The GPU texture for the depth/stencil attachment, or null if not requested.
         /// </summary>
         public GPUTexture? DepthStencilTexture => JSRef!.Get<GPUTexture?>("depthStencilTexture");
-        /// <summary>
-        /// The viewport describing the region of the texture to render into.
-        /// </summary>
-        public XRViewport Viewport => JSRef!.Get<XRViewport>("viewport");
+        // Viewport is inherited from XRSubImage. It was redeclared here identically - same type, same
+        // Javascript key, same body - which only hid the base member (CS0108) without changing behaviour.
     }
 }
