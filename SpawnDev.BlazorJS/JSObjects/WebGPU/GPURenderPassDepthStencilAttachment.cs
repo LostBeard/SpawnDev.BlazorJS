@@ -11,7 +11,12 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A GPUTextureView that will be used as the depth-stencil attachment for a render pass.
         /// </summary>
         [JsonPropertyName("view")]
-        public required Union<GPUTextureView, GPUTexture> View { get; set; }
+        // NOT `required`, for the same reason as GPURenderPassColorAttachment.View: a render pass
+        // attachment is commonly built once and has its view reassigned when the target is recreated
+        // (canvas resize, swap-chain change). No current construction site omits it, but the failure
+        // mode is identical, and a lost compile-time check on a field everyone already sets costs far
+        // less than breaking that pattern later.
+        public Union<GPUTextureView, GPUTexture>? View { get; set; }
 
         /// <summary>
         /// An object (see Depth stencil attachment depth clear value object structure) defining the clear value 

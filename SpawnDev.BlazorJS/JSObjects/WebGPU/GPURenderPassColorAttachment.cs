@@ -28,7 +28,14 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// A GPUTextureView object representing the texture subresource that will be output to for this color attachment.
         /// </summary>
         [JsonPropertyName("view")]
-        public required Union<GPUTexture, GPUTextureView> View { get; set; }
+        // NOT `required`, even though the WebGPU spec marks view as a required member. Required in
+        // WebIDL means "must be present when the descriptor reaches the API", which is NOT the same as
+        // "must be assigned in a C# object initializer". Real renderers build this attachment ONCE and
+        // swap the view every frame as the swap-chain texture changes (SpawnScene, AubsCraft and the
+        // WebGPU compute demo all do exactly that), so requiring it at construction breaks a correct
+        // and deliberate pattern. LoadOp and StoreOp stay required - they are stable per pass and every
+        // known construction site sets them.
+        public Union<GPUTexture, GPUTextureView>? View { get; set; }
 
         /// <summary>
         /// Describes the texture subresource that will receive the resolved output for this color attachment if view is multisampled. 
