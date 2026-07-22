@@ -1,6 +1,8 @@
 # SpawnDev.BlazorJS
 [![NuGet](https://img.shields.io/nuget/dt/SpawnDev.BlazorJS.svg?label=SpawnDev.BlazorJS)](https://www.nuget.org/packages/SpawnDev.BlazorJS) 
 
+> 💜 **Built and maintained by one independent developer** — no company, no overhead, just code. If SpawnDev.BlazorJS saves you time, please consider [**sponsoring its development »**](https://github.com/sponsors/LostBeard). Sponsorship is what keeps it alive and maintained.
+
 Full Blazor WebAssembly and JavaScript interop. 1,021 strongly typed C# wrappers for browser APIs - create JavaScript objects, access properties, call methods, and handle events the .NET way without writing JavaScript.
 
 **[Full API Documentation](Docs/README.md)** - Complete MDN-style API reference with guides, 1,021 typed wrapper references, and real C# examples.
