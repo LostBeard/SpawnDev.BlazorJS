@@ -200,6 +200,10 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Properties
         /// <summary>
+        /// Add an array of constructed stylesheets to be used by the document. These stylesheets may also be shared with shadow DOM subtrees of the same document.
+        /// </summary>
+        public Array<CSSStyleSheet> AdoptedStyleSheets => JSRef!.Get<Array<CSSStyleSheet>>("adoptedStyleSheets");
+        /// <summary>
         /// The activeElement read-only property of the Document interface returns the Element within the DOM that currently has focus.
         /// </summary>
         public Element? ActiveElement => JSRef!.Get<Element?>("activeElement");
