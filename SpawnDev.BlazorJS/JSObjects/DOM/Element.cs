@@ -197,6 +197,10 @@ namespace SpawnDev.BlazorJS.JSObjects
 
         #region Properties
         /// <summary>
+        /// Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element.
+        /// </summary>
+        public NamedNodeMap Attributes => JSRef!.Get<NamedNodeMap>("attributes");
+        /// <summary>
         /// Returns a HTMLSlotElement representing the &lt;slot> the node is inserted in.
         /// </summary>
         public HTMLSlotElement? AssignedSlot { get => JSRef!.Get<HTMLSlotElement?>("assignedSlot"); set => JSRef!.Set("assignedSlot", value); }

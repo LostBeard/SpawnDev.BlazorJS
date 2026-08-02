@@ -23,6 +23,18 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Returns the amount of child elements the DocumentFragment has.
         /// </summary>
         public int ChildElementCount => JSRef!.Get<int>("childElementCount");
+        /// <summary>
+        /// Returns the Element that is the first child of the DocumentFragment object, or null if there is none.
+        /// </summary>
+        public Element? FirstElementChild => JSRef!.Get<Element>("firstElementChild");
+        /// <summary>
+        /// Returns the Element that is the last child of the DocumentFragment object, or null if there is none.
+        /// </summary>
+        public Element? LastElementChild => JSRef!.Get<Element>("lastElementChild");
+        /// <summary>
+        /// Returns the amount of child elements the DocumentFragment has.
+        /// </summary>
+        public HTMLCollection Children => JSRef!.Get<HTMLCollection>("children");
         #endregion
 
         #region Methods
