@@ -14,6 +14,21 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             JS = js;
         }
 
+        /// <summary>
+        /// Regression guard: DOMParser.ParseFromString once passed the input string AS the method name
+        /// (Call&lt;Document&gt;(input, mimeType) instead of Call&lt;Document&gt;("parseFromString", input,
+        /// mimeType)), throwing "target[name] is not a function" at runtime while compiling clean.
+        /// </summary>
+        [TestMethod]
+        public void DOMParserParseFromStringTest()
+        {
+            using var parser = new DOMParser();
+            using var doc = parser.ParseFromString("<div id=\"blazorjs-domparser-test\">hello dom</div>", "text/html");
+            using var el = doc.GetElementById("blazorjs-domparser-test");
+            if (el == null) throw new Exception("ParseFromString did not produce a document containing the parsed element");
+            if (el.TextContent != "hello dom") throw new Exception($"Expected parsed textContent 'hello dom', got '{el.TextContent}'");
+        }
+
         [TestMethod]
         public void DoubleInfinityTest()
         {

@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.5.27 — Fix DOMParser.ParseFromString method-name bug
+
+`DOMParser.ParseFromString` passed the input HTML string *as the method name*
+(`JSRef.Call<Document>(input, mimeType)` instead of `JSRef.Call<Document>("parseFromString", input, mimeType)`),
+so every call threw `TypeError: target[name] is not a function` at runtime while compiling clean. This is the
+parallel of the same fix in SpawnDev.SpawnJS 1.1.2 (the two JSObject wrappers are kept in sync). Regression
+guard: `BlazorJSUnitTest.DOMParserParseFromStringTest`.
+
 ## 3.5.24 — Fix HeapView.As&lt;TView&gt;() cross-type view sizing (regression from 3.5.23)
 
 3.5.23 moved the `HeapView.As<TView>()` view build from a C#-side `new TView(heapBuffer, addr, elementCount)` (constructor takes an **element count**) to a JS-reviver build driven by a `HeapViewInit` descriptor that carries a **byteLength** (the reviver does `length = byteLength / targetView.BYTES_PER_ELEMENT`). The descriptor byteLength was computed as `elementCount * ElementSize`, where `ElementSize` is the **source** `HeapView`'s element size — but `elementCount` is already in **target-view** elements. When the two element sizes differ (a cross-type view), the descriptor was over-sized.

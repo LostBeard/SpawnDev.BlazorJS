@@ -32,6 +32,6 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// - application/xhtml+xml<br/>
         /// - image/svg+xml</param>
         /// <returns></returns>
-        public Document ParseFromString(string input, string mimeType) =>JSRef!.Call<Document>(input, mimeType);
+        public Document ParseFromString(string input, string mimeType) =>JSRef!.Call<Document>("parseFromString", input, mimeType);
     }
 }
