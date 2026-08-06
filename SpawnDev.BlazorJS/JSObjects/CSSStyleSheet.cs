@@ -35,9 +35,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// If this stylesheet is imported into the document using an @import rule, the ownerRule property returns the corresponding CSSImportRule; otherwise, this property's value is null.
         /// </summary>
-        public CSSRuleList OwnerRule
+        public CSSImportRule OwnerRule
         {
-            get => JSRef!.Get<CSSRuleList>("ownerRule");
+            get => JSRef!.Get<CSSImportRule>("ownerRule");
         }
 
         /// <summary>
