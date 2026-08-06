@@ -1,4 +1,3 @@
-// <auto-ported> from SpawnDev.BlazorJS by Tools/PortJSObjects.cs - do not hand edit
 using Microsoft.JSInterop;
 
 namespace SpawnDev.BlazorJS.JSObjects
