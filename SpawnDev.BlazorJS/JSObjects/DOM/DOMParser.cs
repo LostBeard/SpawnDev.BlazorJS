@@ -33,5 +33,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// - image/svg+xml</param>
         /// <returns></returns>
         public Document ParseFromString(string input, string mimeType) =>JSRef!.Call<Document>("parseFromString", input, mimeType);
+        /// <summary>
+        /// The parseFromString() method of the DOMParser interface parses an input containing either HTML or XML, returning a Document with the type given in the contentType property.<br/>
+        /// This overload takes a <see cref="TrustedHTML"/> produced by a Trusted Type policy. parseFromString is a Trusted Types injection sink: on a page whose CSP enforces <c>require-trusted-types-for 'script'</c> (e.g. YouTube, Gmail) the string overload throws <c>TypeError: This document requires 'TrustedHTML'</c>, so code that may run on such a page must pass a TrustedHTML instead.
+        /// </summary>
+        /// <param name="input">A TrustedHTML instance produced by a Trusted Type policy.</param>
+        /// <param name="mimeType">A string that specifies whether the XML parser or the HTML parser is used to parse the string.</param>
+        /// <returns></returns>
+        public Document ParseFromString(TrustedHTML input, string mimeType) => JSRef!.Call<Document>("parseFromString", input, mimeType);
     }
 }

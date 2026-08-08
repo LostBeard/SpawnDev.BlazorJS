@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.5.28 — Add Trusted Types wrappers + DOMParser(TrustedHTML) overload
+
+`DOMParser.parseFromString` is a Trusted Types injection sink: on a page whose CSP enforces
+`require-trusted-types-for 'script'` (e.g. YouTube, Gmail) it throws `This document requires 'TrustedHTML'`
+for a plain string, breaking any wrapper-based DOM rendering that parses markup. Adds the Trusted Types
+wrappers - `TrustedTypePolicyFactory` (`window.trustedTypes`), `TrustedTypePolicy`, `TrustedHTML`,
+`TrustedScript`, `TrustedScriptURL`, `TrustedTypePolicyOptions` - and a
+`DOMParser.ParseFromString(TrustedHTML, mimeType)` overload so callers can produce and pass a policy-approved
+value. `CreatePolicy` takes `Callback`s (not `new Function`, which such a page's `unsafe-eval` block also
+refuses). Kept in sync with the same addition in SpawnDev.SpawnJS 1.1.9.
+
 ## 3.5.27 — Fix DOMParser.ParseFromString method-name bug
 
 `DOMParser.ParseFromString` passed the input HTML string *as the method name*

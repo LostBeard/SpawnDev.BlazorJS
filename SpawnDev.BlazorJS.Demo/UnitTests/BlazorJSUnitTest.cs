@@ -29,6 +29,31 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             if (el.TextContent != "hello dom") throw new Exception($"Expected parsed textContent 'hello dom', got '{el.TextContent}'");
         }
 
+        /// <summary>
+        /// Trusted Types wrappers: create a policy, approve an HTML string, confirm the factory recognises the
+        /// produced value as TrustedHTML, and parse it via the DOMParser TrustedHTML overload. Also exercises
+        /// the options record (a Dictionary with a Callback value) marshalling as <c>{ createHTML: fn }</c>.
+        /// Chrome exposes <c>window.trustedTypes</c> even without CSP enforcement, so this runs the real path.
+        /// </summary>
+        [TestMethod]
+        public void TrustedTypesPolicyParsesHtmlTest()
+        {
+            using var factory = JS.Get<TrustedTypePolicyFactory?>("trustedTypes");
+            if (factory == null) return; // browser without Trusted Types support - nothing to verify
+            using var createHtml = Callback.Create<string, string>(s => s);
+            using var policy = factory.CreatePolicy("spawndev-blazorjs-test",
+                new TrustedTypePolicyOptions { CreateHTML = createHtml });
+            using var trusted = policy.CreateHTML("<b id=\"tt-b\">hi <i id=\"tt-i\">there</i></b>");
+            if (!factory.IsHTML(trusted)) throw new Exception("factory did not recognise the produced value as TrustedHTML");
+            using var parser = new DOMParser();
+            using var doc = parser.ParseFromString(trusted, "text/html");
+            using var b = doc.GetElementById("tt-b");
+            if (b == null) throw new Exception("TrustedHTML parse did not produce the expected element");
+            using var i = doc.GetElementById("tt-i");
+            if (i == null) throw new Exception("TrustedHTML parse did not produce the nested element");
+            if (i.TextContent != "there") throw new Exception($"Expected nested text 'there', got '{i.TextContent}'");
+        }
+
         [TestMethod]
         public void DoubleInfinityTest()
         {
