@@ -5,8 +5,8 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.28</Version>
-		<PackageReleaseNotes>v3.5.26 Changed ArrayBuffer view check to avodi triggering dotnet.native.js warning. See CHANGELOG.md.</PackageReleaseNotes>
+		<Version>3.5.29</Version>
+		<PackageReleaseNotes>v3.5.29 Fixed FileSystemHandle.IsSameEntry return value.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>

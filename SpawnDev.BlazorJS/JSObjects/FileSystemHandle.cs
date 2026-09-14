@@ -26,7 +26,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// </summary>
         /// <param name="fsHandle"></param>
         /// <returns></returns>
-        public bool IsSameEntry(FileSystemHandle fsHandle) => JSRef!.Call<bool>("isSameEntry", fsHandle);
+        public Task<bool> IsSameEntry(FileSystemHandle fsHandle) => JSRef!.CallAsync<bool>("isSameEntry", fsHandle);
         /// <summary>
         /// Returns a FileSystemDirectoryHandle or FileSystemFileHandle based on the FileSystemHandle.Kind
         /// </summary>
