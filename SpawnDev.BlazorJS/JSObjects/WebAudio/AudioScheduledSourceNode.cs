@@ -20,6 +20,12 @@ namespace SpawnDev.BlazorJS.JSObjects
             else JSRef!.CallVoid("start", when);
         }
         /// <summary>
+        /// Double-time overload - AudioContext.currentTime is a double; casting to
+        /// float before stop/start can round the when into the past and throw
+        /// InvalidStateError, leaving a started oscillator running forever.
+        /// </summary>
+        public void Start(double when) => JSRef!.CallVoid("start", when);
+        /// <summary>
         /// Schedules the node to stop playing at the specified time. If no time is specified, the node stops playing at once.
         /// </summary>
         /// <param name="when">The time, in seconds, at which the sound should stop playing. This value is specified in the same time coordinate system as the AudioContext is using for its currentTime attribute. Omitting this parameter, specifying a value of 0, or passing a negative value causes the sound to stop playback immediately.</param>
@@ -28,6 +34,8 @@ namespace SpawnDev.BlazorJS.JSObjects
             if (when == null) JSRef!.CallVoid("stop");
             else JSRef!.CallVoid("stop", when);
         }
+        /// <summary>Double-time overload - see <see cref="Start(double)"/>.</summary>
+        public void Stop(double when) => JSRef!.CallVoid("stop", when);
         /// <summary>
         /// Fired when the source node has stopped playing, either because it's reached a predetermined stop time, the full duration of the audio has been performed, or because the entire buffer has been played.
         /// </summary>
