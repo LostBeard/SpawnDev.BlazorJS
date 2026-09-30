@@ -1,4 +1,11 @@
-# Changelog
+﻿# Changelog
+
+## Unreleased - `GPUCopyExternalImageSourceInfo.FlipY`
+
+`GPUCopyExternalImageSourceInfo.Flip` serialized as `flip`, which is not a WebGPU member, so
+`copyExternalImageToTexture` silently ignored it and never flipped. Added `FlipY` (spec name `flipY`); `Flip` is now an
+`[Obsolete]` alias that forwards to `FlipY` and is not serialized. Same fix in SpawnDev.SpawnJS.
+Test: `BlazorJSUnitTest.GPUCopyExternalImageSourceInfoFlipYTest` (red-checked with the old `flip` wire name).
 
 ## 3.5.28 — Add Trusted Types wrappers + DOMParser(TrustedHTML) overload
 

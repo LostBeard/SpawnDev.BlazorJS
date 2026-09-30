@@ -54,6 +54,33 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             if (i.TextContent != "there") throw new Exception($"Expected nested text 'there', got '{i.TextContent}'");
         }
 
+        /// <summary>
+        /// WebGPU spells the member "flipY". The wrapper property was named Flip, so it serialized as "flip", which
+        /// copyExternalImageToTexture silently ignores: a requested flip never happened. Both FlipY and the obsolete
+        /// Flip alias must reach JavaScript as "flipY", and "flip" must never be written.
+        /// </summary>
+        [TestMethod]
+        public void GPUCopyExternalImageSourceInfoFlipYTest()
+        {
+            const string key = "_gpuCopyExternalImageSourceInfoFlipYTest";
+            using var canvas = new OffscreenCanvas(1, 1);
+            try
+            {
+                JS.Set(key, new GPUCopyExternalImageSourceInfo { Source = canvas, FlipY = true });
+                if (JS.Get<bool?>($"{key}.flipY") != true) throw new Exception("FlipY must serialize as the WebGPU member \"flipY\"");
+                if (!JS.IsUndefined($"{key}.flip")) throw new Exception("\"flip\" is not a GPUCopyExternalImageSourceInfo member");
+#pragma warning disable CS0618 // the obsolete alias must still reach "flipY"
+                JS.Set(key, new GPUCopyExternalImageSourceInfo { Source = canvas, Flip = true });
+#pragma warning restore CS0618
+                if (JS.Get<bool?>($"{key}.flipY") != true) throw new Exception("the obsolete Flip alias must forward to \"flipY\"");
+                if (!JS.IsUndefined($"{key}.flip")) throw new Exception("the obsolete Flip alias must not be written as \"flip\"");
+            }
+            finally
+            {
+                JS.Delete(key);
+            }
+        }
+
         [TestMethod]
         public void DoubleInfinityTest()
         {
