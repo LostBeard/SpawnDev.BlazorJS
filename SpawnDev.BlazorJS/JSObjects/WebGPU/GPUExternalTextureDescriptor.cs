@@ -1,3 +1,5 @@
+﻿using System.Text.Json.Serialization;
+
 namespace SpawnDev.BlazorJS.JSObjects
 {
     /// <summary>
@@ -13,6 +15,9 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The color space the image contents of source will be converted into when reading.
         /// </summary>
-        public PredefinedColorSpace ColorSpace = PredefinedColorSpace.Srgb;
+        /// <remarks>Was a public FIELD, which System.Text.Json does not serialize, so a requested color space never
+        /// reached the browser. Optional; the spec default is "srgb", so unset is omitted.</remarks>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public PredefinedColorSpace? ColorSpace { get; set; }
     }
 }

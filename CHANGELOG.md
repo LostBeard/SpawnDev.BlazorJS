@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## Unreleased - WebGPU optional members (`colorSpace`, sampler `type`)
+
+`GPUExternalTextureDescriptor.ColorSpace` was a public FIELD, which System.Text.Json never serializes, so a requested
+color space never reached `importExternalTexture`; it is now an omitted-when-unset `PredefinedColorSpace?` property.
+`GPUSamplerBindingLayout.Type` serialized as `null` when unset (an invalid enum value; spec default "filtering"); now
+omitted when unset. Parallel of SpawnDev.SpawnJS ac3a6ae. Test: `BlazorJSUnitTest.WebGPUOptionalMembersTest`
+(red-checked with the old wrappers).
+
 ## Unreleased - `GPUCopyExternalImageSourceInfo.FlipY`
 
 `GPUCopyExternalImageSourceInfo.Flip` serialized as `flip`, which is not a WebGPU member, so

@@ -81,6 +81,34 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             }
         }
 
+        /// <summary>
+        /// Optional WebGPU dictionary members must reach JS correctly: GPUExternalTextureDescriptor.ColorSpace was a public
+        /// FIELD (never serialized) and GPUSamplerBindingLayout.Type serialized as null when unset (an invalid enum value).
+        /// Parallel of the SpawnJS fix (ac3a6ae).
+        /// </summary>
+        [TestMethod]
+        public void WebGPUOptionalMembersTest()
+        {
+            const string key = "_webGPUOptionalMembersTest";
+            try
+            {
+                JS.Set(key, new GPUSamplerBindingLayout());
+                if (!JS.IsUndefined($"{key}.type")) throw new Exception("unset GPUSamplerBindingLayout.type was written (as null)");
+                JS.Set(key, new GPUSamplerBindingLayout { Type = "comparison" });
+                if (JS.Get<string>($"{key}.type") != "comparison") throw new Exception("GPUSamplerBindingLayout.type lost");
+                using var video = new HTMLVideoElement();
+                JS.Set(key, new GPUExternalTextureDescriptor { Source = video, ColorSpace = PredefinedColorSpace.DisplayP3 });
+                var cs = JS.Get<string?>($"{key}.colorSpace");
+                if (cs != "display-p3") throw new Exception($"GPUExternalTextureDescriptor.colorSpace = '{cs}', expected 'display-p3'");
+                JS.Set(key, new GPUExternalTextureDescriptor { Source = video });
+                if (!JS.IsUndefined($"{key}.colorSpace")) throw new Exception("unset GPUExternalTextureDescriptor.colorSpace was written");
+            }
+            finally
+            {
+                JS.Delete(key);
+            }
+        }
+
         [TestMethod]
         public void DoubleInfinityTest()
         {
