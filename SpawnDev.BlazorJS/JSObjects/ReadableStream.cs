@@ -80,6 +80,58 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <returns>The readable side of the transformStream.</returns>
         public ReadableStream PipeThrough(TransformStream transformStream, PipeThroughOptions options) => JSRef!.Call<ReadableStream>("pipeThrough", transformStream, options);
         /// <summary>
+        /// Pipes the current stream through a CompressionStream (bytes in, compressed bytes out). pipeThrough() takes any {writable, readable} pair, and a CompressionStream is one but is not a TransformStream.
+        /// </summary>
+        /// <param name="transformStream">The CompressionStream to pipe through.</param>
+        /// <returns>The readable side of the transformStream.</returns>
+        public ReadableStream PipeThrough(CompressionStream transformStream) => JSRef!.Call<ReadableStream>("pipeThrough", transformStream);
+        /// <summary>
+        /// Pipes the current stream through a CompressionStream (bytes in, compressed bytes out). pipeThrough() takes any {writable, readable} pair, and a CompressionStream is one but is not a TransformStream.
+        /// </summary>
+        /// <param name="transformStream">The CompressionStream to pipe through.</param>
+        /// <param name="options">The options that should be used when piping to the writable stream.</param>
+        /// <returns>The readable side of the transformStream.</returns>
+        public ReadableStream PipeThrough(CompressionStream transformStream, PipeThroughOptions options) => JSRef!.Call<ReadableStream>("pipeThrough", transformStream, options);
+        /// <summary>
+        /// Pipes the current stream through a DecompressionStream (compressed bytes in, bytes out). pipeThrough() takes any {writable, readable} pair, and a DecompressionStream is one but is not a TransformStream.
+        /// </summary>
+        /// <param name="transformStream">The DecompressionStream to pipe through.</param>
+        /// <returns>The readable side of the transformStream.</returns>
+        public ReadableStream PipeThrough(DecompressionStream transformStream) => JSRef!.Call<ReadableStream>("pipeThrough", transformStream);
+        /// <summary>
+        /// Pipes the current stream through a DecompressionStream (compressed bytes in, bytes out). pipeThrough() takes any {writable, readable} pair, and a DecompressionStream is one but is not a TransformStream.
+        /// </summary>
+        /// <param name="transformStream">The DecompressionStream to pipe through.</param>
+        /// <param name="options">The options that should be used when piping to the writable stream.</param>
+        /// <returns>The readable side of the transformStream.</returns>
+        public ReadableStream PipeThrough(DecompressionStream transformStream, PipeThroughOptions options) => JSRef!.Call<ReadableStream>("pipeThrough", transformStream, options);
+        /// <summary>
+        /// Pipes the current stream through a TextDecoderStream (bytes in, strings out). pipeThrough() takes any {writable, readable} pair, and a TextDecoderStream is one but is not a TransformStream.
+        /// </summary>
+        /// <param name="transformStream">The TextDecoderStream to pipe through.</param>
+        /// <returns>The readable side of the transformStream.</returns>
+        public ReadableStream PipeThrough(TextDecoderStream transformStream) => JSRef!.Call<ReadableStream>("pipeThrough", transformStream);
+        /// <summary>
+        /// Pipes the current stream through a TextDecoderStream (bytes in, strings out). pipeThrough() takes any {writable, readable} pair, and a TextDecoderStream is one but is not a TransformStream.
+        /// </summary>
+        /// <param name="transformStream">The TextDecoderStream to pipe through.</param>
+        /// <param name="options">The options that should be used when piping to the writable stream.</param>
+        /// <returns>The readable side of the transformStream.</returns>
+        public ReadableStream PipeThrough(TextDecoderStream transformStream, PipeThroughOptions options) => JSRef!.Call<ReadableStream>("pipeThrough", transformStream, options);
+        /// <summary>
+        /// Pipes the current stream through a TextEncoderStream (strings in, UTF-8 bytes out). pipeThrough() takes any {writable, readable} pair, and a TextEncoderStream is one but is not a TransformStream.
+        /// </summary>
+        /// <param name="transformStream">The TextEncoderStream to pipe through.</param>
+        /// <returns>The readable side of the transformStream.</returns>
+        public ReadableStream PipeThrough(TextEncoderStream transformStream) => JSRef!.Call<ReadableStream>("pipeThrough", transformStream);
+        /// <summary>
+        /// Pipes the current stream through a TextEncoderStream (strings in, UTF-8 bytes out). pipeThrough() takes any {writable, readable} pair, and a TextEncoderStream is one but is not a TransformStream.
+        /// </summary>
+        /// <param name="transformStream">The TextEncoderStream to pipe through.</param>
+        /// <param name="options">The options that should be used when piping to the writable stream.</param>
+        /// <returns>The readable side of the transformStream.</returns>
+        public ReadableStream PipeThrough(TextEncoderStream transformStream, PipeThroughOptions options) => JSRef!.Call<ReadableStream>("pipeThrough", transformStream, options);
+        /// <summary>
         /// The tee() method of the ReadableStream interface tees the current readable stream, returning a two-element array containing the two resulting branches as new ReadableStream instances.
         /// This is useful for allowing two readers to read a stream sequentially or simultaneously, perhaps at different speeds.For example, you might do this in a ServiceWorker if you want to fetch a response from the server and stream it to the browser, but also stream it to the ServiceWorker cache.Since a response body cannot be consumed more than once, you'd need two copies to do this.
         /// A teed stream will partially signal backpressure at the rate of the faster consumer of the two ReadableStream branches, and unread data is enqueued internally on the slower consumed ReadableStream without any limit or backpressure. That is, when both branches have an unread element in their internal queue, then the original ReadableStream's controller's internal queue will start to fill up, and once its desiredSize ≤ 0 or byte stream controller desiredSize ≤ 0, then the controller will stop calling pull(controller) on the underlying source passed to ReadableStream(). If only one branch is consumed, then the entire body will be enqueued in memory.Therefore, you should not use the built-in tee() to read very large streams in parallel at different speeds.Instead, search for an implementation that fully backpressures to the speed of the slower consumed branch.

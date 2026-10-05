@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## Unreleased - `ReadableStream.PipeThrough` for CompressionStream and friends, `TextEncoderStream`
+
+`pipeThrough()` takes any `{ writable, readable }` pair, but `PipeThrough` only had `TransformStream` overloads, so
+`blob.Stream().PipeThrough(new CompressionStream("gzip"))` did not compile. Added overloads (with and without
+`PipeThroughOptions`) for `CompressionStream`, `DecompressionStream`, `TextDecoderStream` and the new `TextEncoderStream`
+wrapper. Parallel of SpawnDev.SpawnJS 3.0.1 (16cab4f). Tests: `StreamPipeThroughTests` (gzip, deflate-raw with options,
+UTF-8 text round trips, byte-checked; mutation-checked in the Chromium lane).
+
 ## Unreleased - WebGPU optional members (`colorSpace`, sampler `type`)
 
 `GPUExternalTextureDescriptor.ColorSpace` was a public FIELD, which System.Text.Json never serializes, so a requested
