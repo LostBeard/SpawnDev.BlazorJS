@@ -1,5 +1,14 @@
 ﻿# Changelog
 
+## Unreleased - `PointerEvent.Width` / `Height` are `double`; `DataTransfer.Types`, `new DataTransfer()`
+
+`PointerEvent.Width` / `Height` were `int`, but the DOM values are doubles in CSS px and a touch contact is fractional:
+reading a 23.5 px contact THREW `JsonException` (FormatInt32) - measured in the new test. Now `double`
+(source-breaking for a caller that kept them in an `int`). Added `DataTransfer.Types` and the parameterless
+`DataTransfer()` constructor SpawnJS already had. Parallel of SpawnDev.SpawnJS 3.0.2. Tests:
+`BlazorJSUnitTest.PointerEventFractionalSizeTest` (red: the JsonException above) and `DataTransferTypesTest`; full
+table passes in Chromium and Firefox.
+
 ## Unreleased - `ReadableStream.PipeThrough` for CompressionStream and friends, `TextEncoderStream`
 
 `pipeThrough()` takes any `{ writable, readable }` pair, but `PipeThrough` only had `TransformStream` overloads, so

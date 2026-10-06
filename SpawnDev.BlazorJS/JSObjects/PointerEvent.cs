@@ -34,11 +34,11 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <summary>
         /// The width (magnitude on the X axis), in CSS pixels, of the contact geometry of the pointer.
         /// </summary>
-        public int Width => JSRef!.Get<int>("width");
+        public double Width => JSRef!.Get<double>("width");   // a double in the DOM: int threw JsonException on a fractional touch contact
         /// <summary>
         /// The height (magnitude on the Y axis), in CSS pixels, of the contact geometry of the pointer.
         /// </summary>
-        public int Height => JSRef!.Get<int>("height");
+        public double Height => JSRef!.Get<double>("height");   // a double in the DOM: int threw JsonException on a fractional touch contact
         /// <summary>
         /// The normalized pressure of the pointer input in the range 0 to 1, where 0 and 1 represent the minimum and maximum pressure the hardware is capable of detecting, respectively.
         /// </summary>

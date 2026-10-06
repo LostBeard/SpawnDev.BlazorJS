@@ -14,6 +14,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// <param name="_ref"></param>
         public DataTransfer(IJSInProcessObjectReference _ref) : base(_ref) { }
         /// <summary>
+        /// Creates a new, empty DataTransfer (as SpawnDev.SpawnJS's DataTransfer can).
+        /// </summary>
+        public DataTransfer() : base(JS.New(nameof(DataTransfer))) { }
+        /// <summary>
         /// Gives a DataTransferItemList object which is a list of all of the drag data.
         /// </summary>
         public DataTransferItemList Items => JSRef!.Get<DataTransferItemList>("items");
@@ -29,6 +33,10 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Provides all of the types of operations that are possible. Must be one of none, copy, copyLink, copyMove, link, linkMove, move, all or uninitialized.
         /// </summary>
         public string EffectAllowed { get => JSRef!.Get<string>("effectAllowed"); set => JSRef!.Set("effectAllowed", value); }
+        /// <summary>
+        /// The formats that were set in dragstart, in the order they were added ("Files" when files are being dragged).
+        /// </summary>
+        public string[] Types => JSRef!.Get<string[]>("types");
         /// <summary>
         /// Set the image to be used for dragging if a custom one is desired.
         /// </summary>
