@@ -1,6 +1,10 @@
 ﻿# Changelog
 
-## Unreleased - `PointerEvent.Width` / `Height` are `double`; `DataTransfer.Types`, `new DataTransfer()`
+## 3.5.30 - 2026-10-06
+
+Released together: the four entries below, and double `Start` / `Stop` overloads on `AudioScheduledSourceNode` (10333c5). Full test table passes in Chromium and Firefox.
+
+### `PointerEvent.Width` / `Height` are `double`; `DataTransfer.Types`, `new DataTransfer()`
 
 `PointerEvent.Width` / `Height` were `int`, but the DOM values are doubles in CSS px and a touch contact is fractional:
 reading a 23.5 px contact THREW `JsonException` (FormatInt32) - measured in the new test. Now `double`
@@ -9,7 +13,7 @@ reading a 23.5 px contact THREW `JsonException` (FormatInt32) - measured in the 
 `BlazorJSUnitTest.PointerEventFractionalSizeTest` (red: the JsonException above) and `DataTransferTypesTest`; full
 table passes in Chromium and Firefox.
 
-## Unreleased - `ReadableStream.PipeThrough` for CompressionStream and friends, `TextEncoderStream`
+### `ReadableStream.PipeThrough` for CompressionStream and friends, `TextEncoderStream`
 
 `pipeThrough()` takes any `{ writable, readable }` pair, but `PipeThrough` only had `TransformStream` overloads, so
 `blob.Stream().PipeThrough(new CompressionStream("gzip"))` did not compile. Added overloads (with and without
@@ -17,7 +21,7 @@ table passes in Chromium and Firefox.
 wrapper. Parallel of SpawnDev.SpawnJS 3.0.1 (16cab4f). Tests: `StreamPipeThroughTests` (gzip, deflate-raw with options,
 UTF-8 text round trips, byte-checked; mutation-checked in the Chromium lane).
 
-## Unreleased - WebGPU optional members (`colorSpace`, sampler `type`)
+### WebGPU optional members (`colorSpace`, sampler `type`)
 
 `GPUExternalTextureDescriptor.ColorSpace` was a public FIELD, which System.Text.Json never serializes, so a requested
 color space never reached `importExternalTexture`; it is now an omitted-when-unset `PredefinedColorSpace?` property.
@@ -25,7 +29,7 @@ color space never reached `importExternalTexture`; it is now an omitted-when-uns
 omitted when unset. Parallel of SpawnDev.SpawnJS ac3a6ae. Test: `BlazorJSUnitTest.WebGPUOptionalMembersTest`
 (red-checked with the old wrappers).
 
-## Unreleased - `GPUCopyExternalImageSourceInfo.FlipY`
+### `GPUCopyExternalImageSourceInfo.FlipY`
 
 `GPUCopyExternalImageSourceInfo.Flip` serialized as `flip`, which is not a WebGPU member, so
 `copyExternalImageToTexture` silently ignored it and never flipped. Added `FlipY` (spec name `flipY`); `Flip` is now an
