@@ -103,7 +103,7 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// With the user's permission through a prompt, turns on a camera and/or a microphone on the system and provides a MediaStream containing a video track and/or an audio track with the input.
         /// </summary>
         /// <returns>A Task whose fulfillment handler receives a MediaStream object when the requested media has successfully been obtained.</returns>
-        public Task<MediaStream?> GetUserMedia(bool video, bool audio) => GetUserMedia(new { video = video, audio = audio });
+        public Task<MediaStream?> GetUserMedia(bool video, bool audio) => GetUserMedia(new MediaStreamConstraints { Video = video, Audio = audio });
         /// <summary>
         /// With the user's permission through a prompt, turns on a camera and/or a microphone on the system and provides a MediaStream containing a video track and/or an audio track with the input.
         /// </summary>

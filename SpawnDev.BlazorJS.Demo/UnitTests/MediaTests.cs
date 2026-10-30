@@ -1,3 +1,4 @@
+using SpawnDev.Blazor.UnitTesting;
 using SpawnDev.BlazorJS.JSObjects;
 
 namespace SpawnDev.BlazorJS.Demo.UnitTests
@@ -10,7 +11,7 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
             JS = js;
         }
 
-        //[TestMethod]
+        [TestMethod]
         public async Task EnumerateDevicesTest()
         {
             using var navigator = JS.Get<Navigator>("navigator");
@@ -32,12 +33,13 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
         }
 
         /// <summary>
-        /// This test may fail even if things are working as expected<br/>
-        /// disabled until a better etst can  be written
+        /// Opens the camera through MediaDevices.GetUserMedia(bool video, bool audio). It was disabled as unreliable: the
+        /// runner set its fake media flags in a PLAYWRIGHT_ARGS environment variable that Playwright never reads, so
+        /// the browser had no camera. The flags are in PlaywrightTestRunner/playwright.runsettings now.
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        //[TestMethod]
+        [TestMethod]
         public async Task GetUserMediaTest()
         {
             using var navigator = JS.Get<Navigator>("navigator");
@@ -47,8 +49,8 @@ namespace SpawnDev.BlazorJS.Demo.UnitTests
                 throw new Exception("navigator.mediaDevices not supported");
             }
 
-            // This relies on the fake webcam args we added to Playwright/Browser
-            using var stream = await mediaDevices.GetUserMedia(new { video = true });
+            // the (bool, bool) overload: it sent an anonymous object before 3.5.31 (now MediaStreamConstraints)
+            using var stream = await mediaDevices.GetUserMedia(true, false);
 
             if (stream == null)
             {

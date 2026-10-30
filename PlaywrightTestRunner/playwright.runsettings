@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Browser launch options for the Playwright test runner (Microsoft.Playwright.NUnit reads them from here; it never read
+  the PLAYWRIGHT_ARGS environment variable GlobalSetup used to set). The fake media flags give Chromium a fake camera
+  and microphone and skip the permission prompt, so MediaTests can open a real MediaStream; the Firefox prefs do the
+  same for Firefox (without them getUserMedia waits on a permission prompt and the test never finishes).
+-->
+<RunSettings>
+  <Playwright>
+    <LaunchOptions>
+      <Args>["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"]</Args>
+      <FirefoxUserPrefs>{"media.navigator.streams.fake": true, "media.navigator.permission.disabled": true}</FirefoxUserPrefs>
+    </LaunchOptions>
+  </Playwright>
+</RunSettings>

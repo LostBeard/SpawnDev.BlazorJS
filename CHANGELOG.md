@@ -1,5 +1,23 @@
 ﻿# Changelog
 
+## Unreleased (3.5.31)
+
+### `MediaDevices.GetUserMedia(bool video, bool audio)` sends `MediaStreamConstraints`
+
+It passed an anonymous `new { video, audio }`. Parallel of SpawnDev.SpawnJS 3.0.7, where a trimmed app sent that
+object as `{}` and `getUserMedia` rejected it ("At least one of audio and video must be requested"). BlazorJS apps
+publish untrimmed, so it worked here, but the wrappers stay parallel and typed.
+
+### Tests: the media tests run again
+
+`PlaywrightTestRunner` set its fake camera flags as a `PLAYWRIGHT_ARGS` environment variable, which
+Microsoft.Playwright.NUnit never reads, so the browser had no camera and `MediaTests` was commented out as unreliable
+(it also no longer compiled: no `using SpawnDev.Blazor.UnitTesting`). The flags (Chromium) and the fake-media prefs
+(Firefox) are in `PlaywrightTestRunner/playwright.runsettings` now, the context grants camera and microphone on
+Chromium, and `EnumerateDevicesTest` / `GetUserMediaTest` run again (the latter through `GetUserMedia(true, false)`).
+A row that never finishes is reported by test name. Full table green in Chromium and Firefox; without the Chromium
+flags `GetUserMediaTest` fails ("NotSupportedError"), and without the Firefox prefs it never finishes.
+
 ## 3.5.30 - 2026-10-06
 
 Released together: the four entries below, and double `Start` / `Stop` overloads on `AudioScheduledSourceNode` (10333c5). Full test table passes in Chromium and Firefox.

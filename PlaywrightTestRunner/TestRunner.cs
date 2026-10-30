@@ -28,6 +28,9 @@ namespace PlaywrightTestRunner
             {
                 // required to use the included self signed certificate
                 IgnoreHTTPSErrors = true,
+                // MediaTests open the fake camera / microphone (playwright.runsettings); Firefox does not take
+                // these permission names
+                Permissions = BrowserName == "chromium" ? new[] { "camera", "microphone" } : null,
             };
         }
         /// <summary>
@@ -129,14 +132,22 @@ namespace PlaywrightTestRunner
                 // click the button to start the process for this row
                 await runButton.ClickAsync();
 
-                // assert that the row eventually gets the class 'test-state-done'
-                await Expect(currentRow).ToHaveClassAsync(new Regex("test-state-done"), new() { Timeout = 15000 });
-
                 // get test type name
                 var typeName = await currentRow.Locator(".test-type-name").TextContentAsync();
 
                 // get test method name
                 var methodName = await currentRow.Locator(".test-method-name").TextContentAsync();
+
+                // assert that the row eventually gets the class 'test-state-done' (name the test if it never does:
+                // the bare locator timeout only said "row 54")
+                try
+                {
+                    await Expect(currentRow).ToHaveClassAsync(new Regex("test-state-done"), new() { Timeout = 15000 });
+                }
+                catch (PlaywrightException ex)
+                {
+                    throw new Exception($"Timed out - {typeName}.{methodName} (row {i}) never finished", ex);
+                }
 
                 // current state text
                 var stateMessage = await currentRow.Locator(".test-state").TextContentAsync();

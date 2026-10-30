@@ -8,7 +8,8 @@
         {
             // This tells Playwright to run in headed mode for the entire test run
             //Environment.SetEnvironmentVariable("HEADED", "1");
-            Environment.SetEnvironmentVariable("PLAYWRIGHT_ARGS", "--use-fake-ui-for-media-stream --use-fake-device-for-media-stream");
+            // The fake media flags live in playwright.runsettings (LaunchOptions.Args): Microsoft.Playwright.NUnit
+            // never read a PLAYWRIGHT_ARGS environment variable, so setting one here launched Chromium without them.
         }
     }
 }

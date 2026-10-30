@@ -6,6 +6,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
+		<!-- browser launch options (fake media devices): see playwright.runsettings -->
+		<RunSettingsFilePath>$(MSBuildProjectDirectory)\playwright.runsettings</RunSettingsFilePath>
 	</PropertyGroup>
 
 	<ItemGroup>
