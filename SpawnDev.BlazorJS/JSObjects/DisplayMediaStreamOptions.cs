@@ -35,6 +35,13 @@ namespace SpawnDev.BlazorJS.JSObjects
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public EnumString<SystemAudioPreferenceEnum>? SystemAudio { get; set; }
         /// <summary>
+        /// An enumerated value specifying which audio the browser should offer with a WINDOW capture: exclude (none), system (all system audio)
+        /// or window (only the captured window's application). Chromium shipped it around Chrome 141; browsers without it ignore the member.
+        /// ⚠ Non-standard 🧪 Experimental
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public EnumString<WindowAudioPreferenceEnum>? WindowAudio { get; set; }
+        /// <summary>
         /// A boolean; a value of true instructs the browser to offer the current tab as the most prominent capture source, i.e. as a separate "This Tab" option in the "Choose what to share" options presented to the user. This is useful as many app types generally just want to share the current tab. For example, a slide deck app might want to let the user stream the current tab containing the presentation to a virtual conference. A default value is not mandated by the spec; see the Browser compatibility section for browser-specific defaults.<br/>
         /// ⚠ Non-standard 🧪 Experimental
         /// </summary>
