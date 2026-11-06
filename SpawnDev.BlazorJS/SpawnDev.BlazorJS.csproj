@@ -5,8 +5,8 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>3.5.30</Version>
-		<PackageReleaseNotes>v3.5.30 PointerEvent.Width/Height are double (int threw on a fractional touch contact), DataTransfer.Types + new DataTransfer(); ReadableStream.PipeThrough for CompressionStream / DecompressionStream / TextDecoderStream / TextEncoderStream (+ TextEncoderStream); WebGPU GPUExternalTextureDescriptor.ColorSpace and sampler type serialize correctly; GPUCopyExternalImageSourceInfo.FlipY; AudioScheduledSourceNode double Start/Stop overloads.</PackageReleaseNotes>
+		<Version>3.5.31</Version>
+		<PackageReleaseNotes>v3.5.31 EncodedAudioChunkType, EncodedVideoChunkType and GPUStencilOperation reach Javascript as their strings ("key", "increment-clamp"); they were sent as C# names ("Key") and the browser refused new EncodedAudioChunk / EncodedVideoChunk. DisplayMediaStreamOptions.WindowAudio (exclude / system / window). MediaDevices.GetUserMedia(bool, bool) sends MediaStreamConstraints. v3.5.30 PointerEvent.Width/Height are double (int threw on a fractional touch contact), DataTransfer.Types + new DataTransfer(); ReadableStream.PipeThrough for CompressionStream / DecompressionStream / TextDecoderStream / TextEncoderStream (+ TextEncoderStream); WebGPU GPUExternalTextureDescriptor.ColorSpace and sampler type serialize correctly; GPUCopyExternalImageSourceInfo.FlipY; AudioScheduledSourceNode double Start/Stop overloads.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<EmbedAllSources>true</EmbedAllSources>

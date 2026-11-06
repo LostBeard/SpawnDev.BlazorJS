@@ -1,6 +1,25 @@
 ﻿# Changelog
 
-## Unreleased (3.5.31)
+## 3.5.31 - 2026-11-05
+
+Full test table passes in Chromium and Firefox.
+
+### `EncodedAudioChunkType`, `EncodedVideoChunkType` and `GPUStencilOperation` reach Javascript as their strings
+
+They carried `[JsonConverter(typeof(JsonStringEnumConverter))]`, which ignores `[JsonPropertyName]` on enum members, so
+they were written as their C# names: `new EncodedAudioChunk(new EncodedAudioChunkInit { Type = EncodedAudioChunkType.Key })`
+threw ("The provided value 'Key' is not a valid enum value of type EncodedAudioChunkType"), and a bare stencil op went out
+as `"IncrementClamp"` instead of `"increment-clamp"`. They use `EnumStringConverterFactory` now, which reads
+`[JsonPropertyName]`. These were the last enums on `JsonStringEnumConverter`. Parallel of SpawnDev.SpawnJS 3.0.7.
+Tests: `EnumStringTests` (both chunk types both ways, stencil ops bare and inside `GPUStencilFaceState`); red-checked:
+with the old attribute the chunk test fails on `'Key'` and the stencil test on `'Keep'`.
+
+### `DisplayMediaStreamOptions.WindowAudio` (exclude / system / window)
+
+`getDisplayMedia`'s `windowAudio` option (Chromium, about Chrome 141) chooses which audio a WINDOW capture offers;
+`"window"` keeps other applications' sound out. Parallel of SpawnDev.SpawnJS 3.0.8. Test:
+`EnumStringTests.DisplayMediaStreamOptionsWindowAudioStrings` (each value crosses as its string; unset stays absent).
+
 
 ### `MediaDevices.GetUserMedia(bool video, bool audio)` sends `MediaStreamConstraints`
 

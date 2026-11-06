@@ -1,3 +1,4 @@
+using SpawnDev.BlazorJS.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
@@ -5,7 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// https://www.w3.org/TR/webgpu/#enumdef-gpustenciloperation
     /// </summary>
-    [JsonConverter(typeof(JsonStringEnumConverter))]
+    [JsonConverter(typeof(EnumStringConverterFactory))]
     public enum GPUStencilOperation
     {
         /// <summary>

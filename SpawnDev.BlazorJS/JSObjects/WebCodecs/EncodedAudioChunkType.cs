@@ -1,3 +1,4 @@
+using SpawnDev.BlazorJS.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace SpawnDev.BlazorJS.JSObjects
@@ -5,7 +6,7 @@ namespace SpawnDev.BlazorJS.JSObjects
     /// <summary>
     /// The type of the chunk.
     /// </summary>
-    [JsonConverter(typeof(JsonStringEnumConverter))]
+    [JsonConverter(typeof(EnumStringConverterFactory))]
     public enum EncodedAudioChunkType
     {
         /// <summary>
