@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `IDBDatabaseInfo` | `class` | get/set | Returned as elements in an array from the Promise returned by IDBFactory.databases() |
 | `Version` | `long` | get | The database version. |
+| `Name` | `string` | get/set | The database name. |
 

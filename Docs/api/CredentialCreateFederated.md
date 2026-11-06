@@ -16,6 +16,7 @@
 | `Origin` | `string` | get | A string representing the credential's origin. FederatedCredential objects are origin-bound, which means that they will only be usable on the specified origin they were intended to be used on. |
 | `Protocol` | `string?` | get |  |
 | `Provider` | `string` | get | A string representing the credentials' federated identity provider (for example "https://www.facebook.com" or "https://accounts.google.com"). |
+| `IconURL` | `string?` | get/set | A string representing the URL of an icon or avatar to be associated with the credential. |
 
 ## Examples
 

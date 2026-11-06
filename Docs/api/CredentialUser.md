@@ -13,6 +13,7 @@
 | `CredentialUser` | `class` | get | An object describing the user account for which the credential is generated. Used for property CredentialCreatePublicKey.User https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#user |
 | `Id` | `Union<ArrayBuffer, Uint8Array, DataView, byte[]>` | get | An ArrayBuffer, TypedArray, or DataView representing a unique ID for the user account. This value has a maximum length of 64 bytes, and is not intended to be displayed to the user. A unique user id of type BufferSource. This value cannot exceed 64 bytes. |
 | `Name` | `string` | get | A string providing a human-friendly identifier for the user's account, to help distinguish between different accounts with similar displayNames. This could be an email address (such as "john.doe@example.com"), phone number (for example "+12345678901"), or some other kind of user account identifier (for example "johndoe667"). |
+| `DisplayName` | `string` | get/set | A string providing a human-friendly user display name (example: "John Doe"), which will have been set by user during initial registration with the relying party. |
 
 ## Examples
 

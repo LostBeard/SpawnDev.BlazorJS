@@ -25,4 +25,5 @@
 | `Recipient` | `string?` | get |  |
 | `Region` | `string?` | get |  |
 | `SortingCode` | `string?` | get |  |
+| `Error` | `string?` | get/set | A string containing an error message explaining why the selected payment method was invalid. |
 

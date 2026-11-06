@@ -11,6 +11,7 @@
 | Signature | Description |
 |---|---|
 | `WritableStream(IJSInProcessObjectReference _ref)` | Deserialization constructor. |
+| `WritableStream(UnderlyingSink? sink = null)` | Creates a new instance |
 
 ## Properties
 
@@ -26,6 +27,7 @@
 | `Abort(string reason)` | `Task` | Aborts with a reason string. |
 | `Close()` | `Task` | Closes the stream. |
 | `GetWriter()` | `WritableStreamDefaultWriter` | Gets a writer and locks the stream. |
+| `Abort(string? reason = null)` | `Task` | Aborts the stream, signaling that the producer can no longer successfully write to the stream and it is to be immediately moved to an error state, with any queued writes discarded. |
 
 ## Example
 

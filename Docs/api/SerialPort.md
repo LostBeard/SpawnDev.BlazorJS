@@ -18,6 +18,7 @@
 |---|---|---|
 | `Readable` | `ReadableStream` | A `ReadableStream` for receiving data from the serial port. |
 | `Writable` | `WritableStream` | A `WritableStream` for sending data to the serial port. |
+| `Connected` | `bool` | Returns a boolean value that indicates whether the port is logically connected to the device. |
 
 ## Methods
 
@@ -29,6 +30,14 @@
 | `SetSignals(SerialOutputSignals signals)` | `Task` | Sets output control signals (DTR, RTS, break). |
 | `GetSignals()` | `Task<SerialInputSignals>` | Gets input control signals (CTS, DSR, DCD, RI). |
 | `Forget()` | `Task` | Revokes the app's permission to access the port. |
+| `SetSignals()` | `Task` | The setSignals() method of the SerialPort interface sets control signals on the port and returns a Promise that resolves when they are set. |
+
+## Events
+
+| Event | Type | Description |
+|---|---|---|
+| `OnConnect` | `ActionEvent<Event>` | Fired when the port connects to the device. |
+| `OnDisconnect` | `ActionEvent<Event>` | Fired when the port disconnects from the device. |
 
 ## Example
 

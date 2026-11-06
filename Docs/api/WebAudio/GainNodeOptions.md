@@ -14,4 +14,5 @@
 | `ChannelCount` | `int?` | get |  |
 | `ChannelCountMode` | `ChannelCountMode?` | get |  |
 | `ChannelInterpretation` | `ChannelInterpretation?` | get |  |
+| `Gain` | `float?` | get/set | The amount of gain to apply. This parameter is a- rate and it's nominal range is (-∞,+∞). The default is 1. |
 

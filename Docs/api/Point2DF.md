@@ -10,4 +10,6 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `Point2DF` | `class` | get/set | Represents a point in 2D space with float coordinates |
+| `X` | `float` | get/set | X |
+| `Y` | `float` | get/set | Y |
 

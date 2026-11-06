@@ -13,4 +13,5 @@
 | `RTCIceServer` | `class` | get | Describes one server which may be used by the ICE agent; these are typically STUN and/or TURN servers. If this isn't specified, the connection attempt will be made with no STUN or TURN server available, which limits the connection to local peers. https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/RTCPeerConnection#iceservers |
 | `Urls` | `Union<string, string[]>?` | get |  |
 | `Username` | `string?` | get |  |
+| `Credential` | `string?` | get/set | The credential to use when logging into the server. This is only used if the object represents a TURN server. |
 

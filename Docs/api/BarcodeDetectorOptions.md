@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `BarcodeDetectorOptions` | `class` | get | An options object containing a series of BarcodeFormats to search for in the subsequent detect() calls. https://developer.mozilla.org/en-US/docs/Web/API/BarcodeDetector/BarcodeDetector#options |
+| `Formats` | `List<string>?` | get/set | An Array of barcode formats as strings. To see a full list of supported formats see the Barcode Detection API. |
 
 ## Examples
 

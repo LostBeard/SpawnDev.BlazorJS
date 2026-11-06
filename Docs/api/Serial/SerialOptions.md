@@ -16,6 +16,7 @@
 | `FlowControl` | `EnumString<FlowControlType>?` | get |  |
 | `Parity` | `EnumString<ParityType>?` | get |  |
 | `StopBits` | `int?` | get |  |
+| `BaudRate` | `int` | get/set | A positive, non-zero value indicating the baud rate at which serial communication should be established. |
 
 ## Examples
 

@@ -13,4 +13,5 @@
 | `MipLevel` | `GPUIntegerCoordinate?` | get |  |
 | `Origin` | `GPUOrigin3D?` | get |  |
 | `Aspect` | `EnumString<GPUTextureAspect>?` | get |  |
+| `Texture` | `GPUTexture` | get/set | Texture to copy to/from. |
 

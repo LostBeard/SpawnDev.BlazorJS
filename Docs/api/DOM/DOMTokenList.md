@@ -34,6 +34,7 @@
 | `Toggle(string token)` | `bool` | The toggle() method of the DOMTokenList interface removes an existing token from the list and returns false. If the token doesn't exist it's added and the function returns true. A string representing the token you want to toggle. |
 | `Keys()` | `List<int>` | Returns an iterator, allowing you to go through all keys of the key/value pairs contained in this object. |
 | `Values()` | `List<string>` | Returns an iterator, allowing you to go through all values of the key/value pairs contained in this object. |
+| `Entries()` | `List<(int, string)>` | Returns an iterator, allowing you to go through all key/value pairs contained in this object. |
 
 ## Examples
 

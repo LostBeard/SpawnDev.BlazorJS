@@ -27,6 +27,12 @@
 | `StyleSheets` | `StyleSheetList` | get | Returns the style sheets associated with the ShadowRoot. |
 | `ShadowRootMode` | `string` | get | Returns the shadow root's mode, either "open" or "closed". |
 | `ShadowHost` | `Element` | get | Returns the shadow root's host element. |
+| `AdoptedStyleSheets` | `Array<CSSStyleSheet>` | get | Add an array of constructed stylesheets to be used by the shadow DOM subtree. These may be shared with other DOM subtrees that share the same parent Document node, and the document itself. |
+| `Clonable` | `bool` | get | A boolean that indicates whether the shadow root is clonable. |
+| `CustomElementRegistry` | `CustomElementRegistry?` | get | Returns the CustomElementRegistry object associated with this shadow root, or null if one has not been set. |
+| `FullscreenElement` | `Element?` | get | The Document.fullscreenElement read-only property returns the Element that is currently being presented in fullscreen mode in this document, or null if fullscreen mode is not currently in use. |
+| `PictureInPictureElement` | `Element?` | get | The Document.pictureInPictureElement read-only property returns the Element that is currently being presented in picture-in-picture mode in this document, or null if picture-in-picture mode is not currently in use. |
+| `PointerLockElement` | `Element?` | get | The read-only pointerLockElement property of the Document interface provides the element set as the target for mouse events while the pointer is locked. It is null if lock is pending, pointer is unlocked, or the target is in another document. |
 
 ## Examples
 

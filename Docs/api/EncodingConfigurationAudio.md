@@ -13,4 +13,5 @@
 | `Channels` | `int?` | get |  |
 | `Bitrate` | `float?` | get |  |
 | `Samplerate` | `float?` | get |  |
+| `ContentType` | `string?` | get/set | String containing a valid audio MIME type, and (optionally) a codecs parameter. |
 

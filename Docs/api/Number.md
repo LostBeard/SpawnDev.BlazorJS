@@ -13,6 +13,16 @@
 |---|---|
 | `Number(IJSInProcessObjectReference _ref)` | Deserialization constructor |
 | `Number(Union<int, uint, float, double, long, ulong, byte, short, ushort> value)` | Creates a new Number |
+| `Number(int value)` | Creates a new Number |
+| `Number(uint value)` | Creates a new Number |
+| `Number(long value)` | Creates a new Number |
+| `Number(ulong value)` | Creates a new Number |
+| `Number(byte value)` | Creates a new Number |
+| `Number(sbyte value)` | Creates a new Number |
+| `Number(short value)` | Creates a new Number |
+| `Number(ushort value)` | Creates a new Number |
+| `Number(Half value)` | Creates a new Number |
+| `Number(double value)` | Creates a new Number |
 
 ## Properties
 
@@ -52,4 +62,6 @@
 | `IsInteger(object value)` | `bool` | The Number.isInteger() static method determines whether the passed value is an integer. |
 | `IsSafeInteger(object value)` | `bool` | The Number.isSafeInteger() static method determines whether the provided value is a number that is a safe integer. |
 | `IsFinite(object value)` | `bool` | The Number.isFinite() static method determines whether the passed value is a finite number - that is, it checks that a given value is a number, and the number is neither positive Infinity, negative Infinity, nor NaN. |
+| `ValueOfSByte()` | `sbyte` | Returns the value of the object as a sbyte |
+| `ValueOfHalf()` | `Half` | Returns the value of the object as a Half |
 

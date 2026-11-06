@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `CountQueuingStrategyOptions` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/CountQueuingStrategy/CountQueuingStrategy#options |
+| `HighWaterMark` | `int` | get/set | The total number of chunks that can be contained in the internal queue before backpressure is applied. |
 
 ## Examples
 

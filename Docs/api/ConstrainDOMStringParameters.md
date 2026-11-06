@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `ConstrainDOMStringParameters` | `class` | get | https://www.w3.org/TR/mediacapture-streams/#dom-constraindomstringparameters |
 | `Ideal` | `string?` | get |  |
+| `Exact` | `string?` | get/set | A string specifying a specific, required, value the property must have to be considered acceptable. |
 

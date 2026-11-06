@@ -45,6 +45,7 @@
 | `ScrollLeft` | `int` | get | A number representing the number of pixels the element is scrolled horizontally. |
 | `ShadowRoot` | `ShadowRoot?` | get | The Element.shadowRoot read-only property represents the shadow root hosted by the element. Use Element.attachShadow() to add a shadow root to an existing element. |
 | `TagName` | `string` | get | Returns a string with the name of the tag for the given element. |
+| `Attributes` | `NamedNodeMap` | get | Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element. |
 
 ## Methods
 

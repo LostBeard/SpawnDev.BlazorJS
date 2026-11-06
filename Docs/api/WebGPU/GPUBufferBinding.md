@@ -12,4 +12,5 @@
 | `GPUBufferBinding` | `class` | get | A GPUBufferBinding describes a buffer and optional range to bind as a resource. https://www.w3.org/TR/webgpu/#dictdef-gpubufferbinding |
 | `Offset` | `GPUSize64?` | get |  |
 | `Size` | `GPUSize64?` | get |  |
+| `Buffer` | `GPUBuffer` | get/set | The GPUBuffer to bind. |
 

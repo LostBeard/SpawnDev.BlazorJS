@@ -13,6 +13,8 @@
 | `TransformStream()` | Creates a pass-through transform stream with default queuing strategy. |
 | `TransformStream(TransformStreamCallbacks transformer)` | Creates with custom transform logic. |
 | `TransformStream(IJSInProcessObjectReference _ref)` | Deserialization constructor. |
+| `TransformStream(TransformStreamCallbacks transformer, QueueingStrategy writableStrategy)` | The TransformStream() constructor creates a new TransformStream object which represents a pair of streams: a WritableStream representing the writable side, and a ReadableStream representing the readable side. |
+| `TransformStream(TransformStreamCallbacks transformer, QueueingStrategy writableStrategy, QueueingStrategy readableStrategy)` | The TransformStream() constructor creates a new TransformStream object which represents a pair of streams: a WritableStream representing the writable side, and a ReadableStream representing the readable side. |
 
 ## Properties
 

@@ -14,6 +14,7 @@
 | `Id` | `string?` | get/set |  |
 | `Multiple` | `bool?` | get |  |
 | `Types` | `IEnumerable<FilePickerType>?` | get |  |
+| `ExcludeAcceptAllOption` | `bool?` | get/set | A boolean value that defaults to false. By default the picker should include an option to not apply any file type filters (instigated with the type option below). Setting this option to true means that option is not available. |
 
 ## Examples
 

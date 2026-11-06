@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `BlobOptions` | `class` | get | Options used when creating a new Blob https://developer.mozilla.org/en-US/docs/Web/API/Blob/Blob#options |
 | `Endings` | `string?` | get |  |
+| `Type` | `string?` | get/set | The MIME type of the data that will be stored into the blob. The default value is the empty string, (""). |
 
 ## Examples
 

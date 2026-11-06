@@ -14,6 +14,7 @@
 | `PreventAbort` | `bool?` | get/set |  |
 | `PreventCancel` | `bool?` | get/set |  |
 | `Signal` | `AbortSignal?` | get |  |
+| `PreventClose` | `bool?` | get/set | If this is set to true, closing the source ReadableStream will no longer cause the destination WritableStream to be closed. |
 
 ## Examples
 

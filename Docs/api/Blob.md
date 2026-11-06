@@ -42,6 +42,7 @@
 | `ToObjectURL()` | `string` | Returns an ObjectURL created using URL.CreateObjectURL |
 | `ToDataURLAsync()` | `Task<string>` | Returns the blob as a data url string |
 | `StartDownload(string fileName)` | `Task` | Start download of the blob |
+| `Bytes()` | `Task<Uint8Array>` | Returns a promise that resolves with a Uint8Array containing the contents of the Blob. |
 
 ## Example
 

@@ -13,6 +13,7 @@
 | `WebGLShaderPrecisionFormat` | `class` | get | The WebGLShaderPrecisionFormat interface is part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getShaderPrecisionFormat() method. https://developer.mozilla.org/en-US/docs/Web/API/WebGLShaderPrecisionFormat |
 | `RangeMax` | `int` | get |  |
 | `Precision` | `int` | get |  |
+| `RangeMin` | `int` | get/set | The base 2 log of the absolute value of the minimum value that can be represented. |
 
 ## Examples
 

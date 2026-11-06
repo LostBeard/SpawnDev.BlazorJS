@@ -10,4 +10,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `RequestFullscreenOptions` | `class` | get | Options for Element.RequestFullscreen() |
+| `NavigationUI` | `string?` | get/set | Options hide, show, auto (default) |
 

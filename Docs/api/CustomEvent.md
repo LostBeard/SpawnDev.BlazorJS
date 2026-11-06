@@ -109,3 +109,11 @@ void OnDataReady(CustomEvent e)
 }
 // Note: Use AddEventListener on the document or a shared EventTarget
 ```
+
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `CustomEvent(string type)` | The CustomEvent() constructor creates a new CustomEvent object. |
+| `CustomEvent(string type, CustomEventOptions options)` | The CustomEvent() constructor creates a new CustomEvent object. |
+

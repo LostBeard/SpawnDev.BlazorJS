@@ -16,3 +16,9 @@
 | `AdditionalData` | `BufferSource?` | get |  |
 | `TagLength` | `int?` | get |  |
 
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `AesGcmParams()` | Creates a new instance. The algorithm name is fixed by this type, so a caller does not supply it even though the base declares it required. |
+

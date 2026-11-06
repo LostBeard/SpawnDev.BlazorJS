@@ -36,6 +36,8 @@
 | `SrcSet` | `string?` | get | A string reflecting the srcset HTML attribute. This specifies a list of candidate images, separated by commas (',', U+002C COMMA). Each candidate image is a URL followed by a space, followed by a specially-formatted string indicating the size of the image. The size may be specified either the width or a size multiple. Read the srcset page for specifics on the format of the size substring. |
 | `UseMap` | `string?` | get | A string reflecting the usemap HTML attribute, containing the page-local URL of the map element describing the image map to use. The page-local URL is a pound (hash) symbol (#) followed by the ID of the map element, such as #my-map-element. The map in turn contains area elements indicating the clickable areas in the image. |
 | `Width` | `int` | get | An integer value that reflects the width HTML attribute, indicating the rendered width of the image in CSS pixels. |
+| `X` | `int` | get | An integer indicating the horizontal offset of the left border edge of the image's CSS layout box relative to the origin of the html element's containing block. |
+| `Y` | `int` | get | The integer vertical offset of the top border edge of the image's CSS layout box relative to the origin of the html element's containing block. |
 
 ## Methods
 

@@ -15,6 +15,7 @@
 | `OptionalServices` | `IEnumerable<string>?` | get |  |
 | `OptionalManufacturerData` | `IEnumerable<int>?` | get |  |
 | `AcceptAllDevices` | `bool?` | get |  |
+| `Filters` | `IEnumerable<BluetoothDeviceFilter>?` | get/set | An array of filter objects indicating the properties of devices that will be matched. To match a filter object, a device must match all the values of the filter: all its specified services, name, namePrefix, and so on. |
 
 ## Examples
 

@@ -38,6 +38,23 @@ public HTMLCanvasElement() // creates via document.createElement("canvas")
 | `ToDataURL(string type, double quality)` | `string` | Get a data URI of the canvas content. |
 | `ToDataURL()` | `string` | Get a data URI (default PNG). |
 | `TransferControlToOffscreen()` | `OffscreenCanvas` | Transfer control to an OffscreenCanvas for worker rendering. |
+| `GetContext<TContext>(string contextType, object? contextAttributes = null)` | `TContext?` | Returns a drawing context on the canvas, or null if the context identifier is not supported, or the canvas has already been set to a different context mode. |
+| `GetImageBitmapRenderingContext(ImageBitmapRenderingContextSettings? contextAttributes = null)` | `ImageBitmapRenderingContext` | Calls canvas.getContext("bitmaprenderer"), leading to the creation of a ImageBitmapRenderingContextSettings object. |
+| `Get2DContext(CanvasRenderingContext2DSettings? contextAttributes = null)` | `CanvasRenderingContext2D` | Calls canvas.getContext("2d"), leading to the creation of a CanvasRenderingContext2D object representing a two-dimensional rendering context. |
+| `GetWebGLContext(WebGLContextAttributes? contextAttributes = null)` | `WebGLRenderingContext` | Calls canvas.getContext("webgl") which will create a WebGLRenderingContext object representing a three-dimensional rendering context. This context is only available on browsers that implement WebGL version 1 (OpenGL ES 2.0). |
+| `GetWebGL2Context(WebGLContextAttributes? contextAttributes = null)` | `WebGL2RenderingContext` | Calls canvas.getContext("webgl2") which will create a WebGL2RenderingContext object representing a three-dimensional rendering context. This context is only available on browsers that implement WebGL version 2 (OpenGL ES 3.0). |
+| `GetWebGPUContext()` | `GPUCanvasContext` | Calls canvas.getContext("webgpu") which will create a GPUCanvasContext object representing a three-dimensional rendering context for WebGPU render pipelines. This context is only available on browsers that implement The WebGPU API. |
+| `GetImageBitmapRenderingContext()` | `ImageBitmapRenderingContext` | Calls canvas.getContext("bitmaprenderer") which will create an ImageBitmapRenderingContext which only provides functionality to replace the content of the canvas with a given ImageBitmap. |
+| `ToDataURL(string type = "image/png")` | `string` | Returns a data-URL containing a representation of the image in the format specified by the type parameter (defaults to png). The returned image is in a resolution of 96dpi. |
+| `ToDataURL(string type, float encoderOptions)` | `string` | Returns a data-URL containing a representation of the image in the format specified by the type parameter (defaults to png). The returned image is in a resolution of 96dpi. |
+| `ToBlob(ActionCallback<Blob?> callback)` | `void` | The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent. The desired file format and image quality may be specified. If the file format is not specified, or if the given format is not supported, then the data will be exported as image/png. Browsers are required to support image/png; many will support additional formats including image/jpeg and image/webp. The created image will have a resolution of 96dpi for file formats that support encoding resolution metadata. |
+| `ToBlob(ActionCallback<Blob?> callback, string type)` | `void` | The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent. The desired file format and image quality may be specified. If the file format is not specified, or if the given format is not supported, then the data will be exported as image/png. Browsers are required to support image/png; many will support additional formats including image/jpeg and image/webp. The created image will have a resolution of 96dpi for file formats that support encoding resolution metadata. |
+| `ToBlob(ActionCallback<Blob?> callback, string type, float quality)` | `void` | The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent. The desired file format and image quality may be specified. If the file format is not specified, or if the given format is not supported, then the data will be exported as image/png. Browsers are required to support image/png; many will support additional formats including image/jpeg and image/webp. The created image will have a resolution of 96dpi for file formats that support encoding resolution metadata. |
+| `ToBlobAsync()` | `Task<Blob>` | The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent. |
+| `ToBlobAsync(string type)` | `Task<Blob>` | The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent. |
+| `ToBlobAsync(string type, float quality)` | `Task<Blob>` | The HTMLCanvasElement.toBlob() method creates a Blob object representing the image contained in the canvas. This file may be cached on the disk or stored in memory at the discretion of the user agent. |
+| `CaptureStream(double? frameRate = null)` | `MediaStream` | The captureStream() method returns a MediaStream which includes a CanvasCaptureMediaStreamTrack containing a real-time video capture of the canvas's contents. |
+| `DownloadAsImage(string fileName, bool appendToBody = false)` | `void` | Initiates a download of the canvas content as an image file. |
 
 ## Example - 2D Context
 
@@ -93,3 +110,27 @@ string dataUrl = canvas!.ToDataURL("image/png", 1.0);
 // As Blob
 using var blob = await canvas.ToBlobAsync("image/jpeg", 0.95);
 ```
+
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `HTMLCanvasElement()` | Creates a new HTMLCanvasElement using Document.CreateElement |
+| `HTMLCanvasElement(ElementReference elementReference)` | Creates a new HTMLCanvasElement from an ElementReference |
+| `HTMLCanvasElement(int width, int height)` | Creates a new HTMLCanvasElement using Document.CreateElement and sets the initial width and height |
+
+## Static Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `Color4ToHexString(byte r, byte g, byte b, byte a)` | `string` | Converts RGBA values to a hex string. |
+
+## Events
+
+| Event | Type | Description |
+|---|---|---|
+| `OnContextLost` | `ActionEvent<Event>` | Fired if the user agent detects that the backing storage associated with a CanvasRenderingContext2D context is lost. |
+| `OnContextRestored` | `ActionEvent<Event>` | Fired if the user agent restores the backing storage for a CanvasRenderingContext2D. |
+| `OnWebGLContextRestored` | `ActionEvent<WebGLContextEvent>` | Fired if the user agent restores the rendering context |
+| `OnWebGLContextLost` | `ActionEvent<WebGLContextEvent>` | Fired if the user agent detects that the backing rendering context is lost. |
+

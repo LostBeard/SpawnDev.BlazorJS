@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `AudioDecoderSupport` | `class` | get/set | Result of AudioDecoder.isConfigSupported |
 | `Config` | `AudioDecoderConfig` | get |  |
+| `Supported` | `bool` | get/set | If the configuration is supported. |
 

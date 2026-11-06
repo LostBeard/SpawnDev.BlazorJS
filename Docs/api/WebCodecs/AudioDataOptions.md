@@ -17,4 +17,5 @@
 | `Timestamp` | `long` | get/set | An integer indicating the data's time in microseconds. |
 | `Data` | `TypedArray` | get | A typed array of the audio data for this sample. |
 | `Transfer` | `IEnumerable<ArrayBuffer>?` | get |  |
+| `Format` | `string` | get/set | One of: "u8" "s16" "s32" "f32" "u8-planar" "s16-planar" "s32-planar" "f32-planar" |
 

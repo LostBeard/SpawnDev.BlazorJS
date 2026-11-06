@@ -18,4 +18,5 @@
 | `Layout` | `string?` | get |  |
 | `MipLevels` | `int?` | get |  |
 | `Orientation` | `DOMPointReadOnly?` | get |  |
+| `Space` | `XRSpace` | get/set | An XRSpace object defining the layer's spatial relationship with the user's physical environment. |
 

@@ -54,6 +54,8 @@ public HTMLInputElement(IJSInProcessObjectReference _ref)
 | `ValueAsDate` | `DateTime?` | Get/set the value as a DateTime. |
 | `ValueAsNumber` | `double` | Get/set the value as a number. |
 | `Width` | `int` | Width (for type="image"). |
+| `WillValidate` | `bool` | Returns a boolean value that is true if the element is a candidate for constraint validation and does not satisfy its constraints. |
+| `ValidationMessage` | `string` | Returns the error message that would be shown to the user if the element was to be checked for validity. |
 
 ## Methods
 
@@ -69,6 +71,9 @@ public HTMLInputElement(IJSInProcessObjectReference _ref)
 | `CheckValidity()` | `bool` | Check if the input satisfies its constraints. |
 | `ReportValidity()` | `bool` | Check validity and show validation UI. |
 | `SetCustomValidity(string message)` | `void` | Set a custom validation message. |
+| `SetSelectionRange(int start, int end, string? direction = null)` | `void` | Sets the selection range for a text input element. |
+| `SetRangeText(string replacement)` | `void` | Replaces a range of text in the input. |
+| `ShowPicker()` | `void` | Shows a picker for date, time, color, or file inputs. |
 
 ## Events
 
@@ -78,6 +83,12 @@ public HTMLInputElement(IJSInProcessObjectReference _ref)
 | `OnChange` | `ActionEvent<Event>` | Fired when a change is committed (blur or Enter). |
 | `OnInvalid` | `ActionEvent<Event>` | Fired when the element fails validation. |
 | `OnSelect` | `ActionEvent<Event>` | Fired when text is selected. |
+
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `HTMLInputElement(ElementReference elementReference)` | Get an instance from an ElementReference |
 
 ## Example
 

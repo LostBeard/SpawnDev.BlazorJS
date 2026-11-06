@@ -41,6 +41,14 @@
 |---|---|---|
 | `OnDeviceChange` | `ActionEvent<Event>` | Fired when a media input or output device is attached to or removed from the user's computer. |
 
+## Constants
+
+| Name | Value | Description |
+|---|---|---|
+| `VIDEO_INPUT` | `"videoinput"` | videoinput |
+| `AUDIO_INPUT` | `"audioinput"` | audioinput |
+| `AUDIO_OUTPUT` | `"audiooutput"` | audiooutput |
+
 ## Example
 
 ```csharp

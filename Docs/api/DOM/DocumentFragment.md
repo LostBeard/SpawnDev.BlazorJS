@@ -19,6 +19,9 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `ChildElementCount` | `int` | get/set | Returns the amount of child elements the DocumentFragment has. |
+| `FirstElementChild` | `Element?` | get | Returns the Element that is the first child of the DocumentFragment object, or null if there is none. |
+| `LastElementChild` | `Element?` | get | Returns the Element that is the last child of the DocumentFragment object, or null if there is none. |
+| `Children` | `HTMLCollection` | get | Returns the amount of child elements the DocumentFragment has. |
 
 ## Methods
 

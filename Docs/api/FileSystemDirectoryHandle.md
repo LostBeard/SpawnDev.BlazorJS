@@ -28,6 +28,9 @@
 | `ValuesList()` | `Task<List<FileSystemHandle>>` | Returns Values as a List FileSystemHandle types are resolved to FileSystemFileHandle, or FileSystemDirectoryHandle depending on their type |
 | `Keys()` | `AsyncIterator<string>` | Returns a new async iterator containing the keys for each item in FileSystemDirectoryHandle. |
 | `KeysList()` | `Task<List<string>>` | Returns a new async iterator containing the keys for each item in FileSystemDirectoryHandle. |
+| `Entries()` | `AsyncIterator<(string, FileSystemHandle)>` | Returns a new async iterator of a given object's own enumerable property [key, value] pairs. |
+| `EntriesList()` | `Task<List<(string, FileSystemHandle)>>` | Returns Entries as a List FileSystemHandle types are resolved to FileSystemFileHandle, or FileSystemDirectoryHandle depending on their type |
+| `EntriesEnumerable()` | `IAsyncEnumerable<(string, FileSystemHandle)>` | Returns a new async iterator of a given object's own enumerable property [key, value] pairs. |
 
 ## Example
 

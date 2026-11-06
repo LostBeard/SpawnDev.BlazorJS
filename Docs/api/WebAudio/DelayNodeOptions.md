@@ -15,6 +15,7 @@
 | `ChannelCount` | `int?` | get |  |
 | `ChannelCountMode` | `string?` | get |  |
 | `ChannelInterpretation` | `string?` | get |  |
+| `DelayTime` | `float?` | get/set | The initial delay time for the node, in seconds. The default is 0. |
 
 ## Examples
 

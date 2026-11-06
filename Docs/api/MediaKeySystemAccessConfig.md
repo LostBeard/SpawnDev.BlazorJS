@@ -16,4 +16,5 @@
 | `SessionTypes` | `List<string>?` | get |  |
 | `AudioCapabilities` | `MediaKeyCapabilities[]?` | get |  |
 | `VideoCapabilities` | `MediaKeyCapabilities[]?` | get |  |
+| `InitDataTypes` | `List<string>?` | get/set | InitDataTypes |
 

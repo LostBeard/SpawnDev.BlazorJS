@@ -22,4 +22,5 @@
 | `KeepAlive` | `bool?` | get |  |
 | `Signal` | `AbortSignal?` | get |  |
 | `Priority` | `string?` | get |  |
+| `Method` | `string?` | get/set | The request method, e.g., GET, POST. The default is GET |
 

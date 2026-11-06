@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `VideoEncoderSupport` | `class` | get/set | Result of VideoEncoder.isConfigSupported |
 | `Config` | `VideoEncoderConfig` | get |  |
+| `Supported` | `bool` | get/set | If the configuration is supported. |
 

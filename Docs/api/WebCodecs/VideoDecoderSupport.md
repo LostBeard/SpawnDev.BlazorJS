@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `VideoDecoderSupport` | `class` | get/set | Result of VideoDecoder.isConfigSupported |
 | `Config` | `VideoDecoderConfig` | get |  |
+| `Supported` | `bool` | get/set | If the configuration is supported. |
 

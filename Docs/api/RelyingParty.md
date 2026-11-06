@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `RelyingParty` | `class` | get | An object describing the relying party that requested the credential creation. Used for property CredentialCreatePublicKey.Rp https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#rp |
 | `Id` | `string?` | get |  |
+| `Name` | `string` | get/set | A string representing the name of the relying party (e.g. "Facebook"). This is the name the user will be presented with when creating or validating a WebAuthn operation. |
 
 ## Methods
 

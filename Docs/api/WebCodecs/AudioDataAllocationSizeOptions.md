@@ -13,6 +13,7 @@
 | `AudioDataAllocationSizeOptions` | `class` | get | Options used for AudioData.AllocationSize() https://developer.mozilla.org/en-US/docs/Web/API/AudioData/allocationSize#options |
 | `FrameOffset` | `int?` | get |  |
 | `FrameCount` | `int?` | get |  |
+| `PlaneIndex` | `int` | get/set | The index of the plane to return the size of. |
 
 ## Examples
 

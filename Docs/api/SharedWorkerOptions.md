@@ -14,6 +14,7 @@
 | `Credentials` | `string?` | get |  |
 | `Name` | `string?` | get |  |
 | `SameSiteCookies` | `string?` | get |  |
+| `Type` | `string?` | get/set | A string specifying the type of worker to create. The value can be classic or module. If not specified, the default used is classic. |
 
 ## Examples
 

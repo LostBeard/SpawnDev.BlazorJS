@@ -26,4 +26,5 @@
 | `M43` | `double` | get/set | A double representing the m43 component of the matrix. |
 | `M44` | `double` | get/set | A double representing the m44 component of the matrix. |
 | `Is2D` | `bool` | get | A boolean value indicating whether the matrix is 2D or 3D. |
+| `M11` | `double` | get/set | A double representing the m11 component of the matrix. |
 

@@ -37,6 +37,8 @@
 | `RelatedTarget` | `EventTarget?` | get | The secondary target for the event, if there is one. |
 | `ScreenX` | `double` | get | The X coordinate of the mouse pointer in screen coordinates. |
 | `ScreenY` | `double` | get | The Y coordinate of the mouse pointer in screen coordinates. |
+| `X` | `double` | get | Alias for MouseEvent.clientX. |
+| `Y` | `double` | get | Alias for MouseEvent.clientY. |
 
 ## Methods
 

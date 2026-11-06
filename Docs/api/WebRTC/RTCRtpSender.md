@@ -31,4 +31,5 @@
 | `GetParameters()` | `JSObject` | Returns an object describing the current configuration for the encoding and transmission of media on the sender's track. |
 | `SetParameters(JSObject parameters)` | `Task` | Applies changes to parameters which configure how the sender's track is encoded and transmitted to the remote peer. |
 | `GetStats()` | `Task<RTCStatsReport>` | Returns a Promise that resolves with an RTCStatsReport which provides statistics data for the sender. |
+| `SetParameters(RTCRtpSendParameters parameters)` | `Task` | Apply changes to the sender parameters (typically simulcast encodings). The caller should GetParameters first, modify what they want to change (most commonly the Encodings array), and pass the whole object back - the untouched fields must round-trip verbatim. The TransactionId prevents concurrent get/set races; setParameters rejects if it doesn't match the value from the last getParameters. |
 

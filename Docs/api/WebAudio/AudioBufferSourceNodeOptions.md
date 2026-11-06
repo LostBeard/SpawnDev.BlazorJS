@@ -19,4 +19,5 @@
 | `ChannelCount` | `int?` | get |  |
 | `ChannelCountMode` | `string?` | get |  |
 | `ChannelInterpretation` | `string?` | get |  |
+| `Buffer` | `AudioBuffer?` | get/set | An instance of AudioBuffer to be played. |
 

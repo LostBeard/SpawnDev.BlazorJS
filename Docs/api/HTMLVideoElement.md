@@ -59,6 +59,12 @@ public HTMLVideoElement(IJSInProcessObjectReference _ref)
 | `RequestPictureInPicture()` | `Task` | Request Picture-in-Picture mode. |
 | `GetVideoPlaybackQuality()` | `VideoPlaybackQuality` | Get playback quality statistics. |
 | `CaptureStream()` | `MediaStream` | Capture the video as a MediaStream. |
+| `RequestVideoFrameCallback(ActionCallback callback)` | `void` | The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources. |
+| `RequestVideoFrameCallback(ActionCallback<double> callback)` | `void` | The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources. |
+| `RequestVideoFrameCallback(ActionCallback<double, VideoFrameMetadata> callback)` | `void` | The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources. |
+| `RequestVideoFrameCallback(Action callback)` | `void` | The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources. |
+| `RequestVideoFrameCallback(Action<double> callback)` | `void` | The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources. |
+| `RequestVideoFrameCallback(Action<double, VideoFrameMetadata> callback)` | `void` | The HTMLVideoElement.requestVideoFrameCallback() method allows web authors to register a callback that runs in the rendering steps when a new video frame is sent to the compositor. This allows developers to perform efficient per-video-frame operations on video, such as video processing and painting to a canvas, video analysis, or synchronization with external audio sources. |
 
 ## Events
 
@@ -85,6 +91,9 @@ public HTMLVideoElement(IJSInProcessObjectReference _ref)
 | `OnDurationChange` | `ActionEvent<Event>` | Fired when duration changes. |
 | `OnEmptied` | `ActionEvent<Event>` | Fired when the media becomes empty. |
 | `OnSuspend` | `ActionEvent<Event>` | Fired when loading is suspended. |
+| `OnResize` | `ActionEvent<Event>` | Fired when one or both of the videoWidth and videoHeight properties have just been updated. |
+| `OnEnterPictureInPicture` | `ActionEvent<PictureInPictureEvent>` | Fired when the HTMLVideoElement enters picture-in-picture mode successfully. |
+| `OnLeavePictureInPicture` | `ActionEvent<PictureInPictureEvent>` | Fired when the HTMLVideoElement leaves picture-in-picture mode successfully. |
 
 ## Example - From SpawnDev.BlazorJS README
 
@@ -126,3 +135,18 @@ using var stream = await navigator.MediaDevices.GetUserMedia(
 video.SrcObject = stream;
 await video.Play();
 ```
+
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `HTMLVideoElement(ElementReference elementReference)` | Get an instance from an ElementReference |
+| `HTMLVideoElement()` | Create a new instance of HTMLVideoElement |
+
+## Properties
+
+| Property | Type | Access | Description |
+|---|---|---|---|
+| `SupportsRequestVideoFrameCallback` | `bool` | get | Returns true if RequestVideoFrameCallback is defined |
+| `DisablePictureInPicture` | `bool` | get | Indicates if the user agent should suggest the picture-in-picture to users, or not. |
+

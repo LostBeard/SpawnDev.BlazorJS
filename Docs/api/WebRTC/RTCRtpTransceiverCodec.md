@@ -14,6 +14,7 @@
 | `ClockRate` | `int` | get | A positive integer specifying the codec's clock rate in Hertz (Hz). The IANA maintains a list of codecs and their parameters, including their clock rates. |
 | `MimeType` | `string` | get | A string indicating the codec's MIME media type and subtype. The MIME type strings used by RTP differ from those used elsewhere. See RFC 3555, section 4 for the complete IANA registry of these types. Also see Codecs used by WebRTC for details about potential codecs that might be referenced here. |
 | `SdpFmtpLine` | `string?` | get |  |
+| `Channels` | `int?` | get/set | A positive integer value indicating the maximum number of channels supported by the codec; for example, a codec that supports only mono sound would have a value of 1; stereo codecs would have a 2, etc. |
 
 ## Examples
 

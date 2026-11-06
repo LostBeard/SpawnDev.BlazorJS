@@ -14,6 +14,7 @@
 | `ColorFormat` | `uint?` | get |  |
 | `DepthFormat` | `uint?` | get |  |
 | `ScaleFactor` | `float?` | get |  |
+| `TextureType` | `string?` | get/set | A string defining the type of texture the layer will have. |
 
 ## Examples
 

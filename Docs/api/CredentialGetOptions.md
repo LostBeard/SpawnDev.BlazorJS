@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `CredentialGetOptions` | `abstract class` | get | Options used for CredentialsContainer.Get() https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#options |
 | `Mediation` | `string?` | get |  |
+| `Signal` | `AbortSignal?` | get/set | An AbortSignal object instance that allows an ongoing get() operation to be aborted. An aborted operation may complete normally (generally if the abort was received after the operation finished) or reject with an "AbortError" DOMException. |
 
 ## Examples
 

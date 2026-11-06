@@ -18,6 +18,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `Size` | `int` | get | Returns the number of items in the RTCStatsReport object. |
+| `Entries` | `(string, RTCStats)[]` | get | Returns a new Iterator object that contains a two-member array of [id, statistic-dictionary] for each element in the RTCStatsReport object, in insertion order. |
 
 ## Methods
 

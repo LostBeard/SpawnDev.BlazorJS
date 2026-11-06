@@ -15,4 +15,5 @@
 | `DisplayWidth` | `int?` | get |  |
 | `DisplayHeight` | `int?` | get |  |
 | `VisibleRect` | `VideoFrameRect?` | get |  |
+| `Duration` | `long?` | get/set | An integer representing the duration of the frame in microseconds. |
 

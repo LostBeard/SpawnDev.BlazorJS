@@ -14,6 +14,7 @@
 | `ProductId` | `int?` | get |  |
 | `UsagePage` | `int?` | get |  |
 | `Usage` | `int?` | get |  |
+| `VendorId` | `int?` | get/set | An integer representing the vendorId of the requested HID device |
 
 ## Examples
 

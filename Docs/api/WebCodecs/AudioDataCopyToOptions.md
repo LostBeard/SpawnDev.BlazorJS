@@ -13,6 +13,7 @@
 | `AudioDataCopyToOptions` | `class` | get | Options used fpr AudioData.CopyTo() https://developer.mozilla.org/en-US/docs/Web/API/AudioData/copyTo#options |
 | `FrameOffset` | `int?` | get |  |
 | `FrameCount` | `int?` | get |  |
+| `PlaneIndex` | `int` | get/set | The index of the plane to copy from. |
 
 ## Examples
 

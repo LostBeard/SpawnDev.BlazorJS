@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `MediaStreamTrackGeneratorOptions` | `class` | get | Options for the MediaStreamTrackProcessor constructor. https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrackGenerator/MediaStreamTrackGenerator#options |
+| `Kind` | `string` | get/set | The kind of media frames that the MediaStreamTrackGenerator will produce. This can be: "audio" "video" |
 
 ## Examples
 

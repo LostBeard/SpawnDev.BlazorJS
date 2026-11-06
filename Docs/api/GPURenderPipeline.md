@@ -23,6 +23,7 @@
 | Method | Return Type | Description |
 |--------|-------------|-------------|
 | `GetBindGroupLayout(int index)` | `GPUBindGroupLayout` | Returns the `GPUBindGroupLayout` at the given index. Useful when using `"auto"` layout. |
+| `GetBindGroupLayout(ulong index)` | `GPUBindGroupLayout` | Gets a GPUBindGroupLayout that is compatible with the GPUPipelineBase’s GPUBindGroupLayout at index. |
 
 ## GPURenderPipelineDescriptor
 

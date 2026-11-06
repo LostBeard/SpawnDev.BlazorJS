@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `PaymentCurrencyAmount` | `class` | get/set | https://developer.mozilla.org/en-US/docs/Web/API/PaymentRequestEvent/total#value |
 | `Value` | `string` | get | A string containing a decimal monetary value, e.g., 2.55. |
+| `Currency` | `string` | get/set | A string containing a three-letter ISO 4217 standard currency code representing the currency of the payment. Examples include USD, CAN, and GBP. |
 
 ## Examples
 

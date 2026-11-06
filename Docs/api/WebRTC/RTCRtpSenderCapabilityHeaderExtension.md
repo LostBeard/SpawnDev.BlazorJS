@@ -10,4 +10,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `RTCRtpSenderCapabilityHeaderExtension` | `class` | get | The RTCRtpSenderCapabilityHeaderExtension dictionary provides information about a supported RTP header extension. |
+| `Uri` | `string` | get/set | Uri |
 

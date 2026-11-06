@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `IDBObjectStoreCreateIndexOptions` | `class` | get | Options for IDBObjectStore.CreateIndex https://developer.mozilla.org/en-US/docs/Web/API/IDBObjectStore/createIndex#options |
 | `MultiEntry` | `bool?` | get |  |
+| `Unique` | `bool?` | get/set | If true, the index will not allow duplicate values for a single key. Defaults to false. |
 
 ## Examples
 

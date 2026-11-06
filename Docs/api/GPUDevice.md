@@ -21,6 +21,7 @@
 | `Limits` | `GPUSupportedLimits` | The limits of this device. |
 | `Lost` | `Task<GPUDeviceLostInfo>` | A promise that resolves when the device is lost. |
 | `Label` | `string?` | A label for debugging. |
+| `AdapterInfo` | `GPUAdapterInfo` | The adapterInfo read-only property of the GPUDevice interface returns a GPUAdapterInfo object containing identifying information about the device's originating adapter. |
 
 ## Methods
 
@@ -87,6 +88,12 @@
 | Event | Type | Description |
 |-------|------|-------------|
 | `OnUncapturedError` | `ActionEvent<GPUUncapturedErrorEvent>` | Fired when an error occurs outside any error scope. |
+
+## Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `PushErrorScope(EnumString<GPUErrorFilter> filter)` | `void` | The pushErrorScope() method of the GPUDevice interface pushes a new GPU error scope onto the device's error scope stack, allowing you to capture errors of a particular type. Once you are done capturing errors, you can end capture by invoking GPUDevice.popErrorScope(). This pops the scope from the stack and returns a Promise that resolves to an object describing the first error captured in the scope, or null if no errors were captured. |
 
 ## Example
 

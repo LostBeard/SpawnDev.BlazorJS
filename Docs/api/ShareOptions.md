@@ -13,4 +13,5 @@
 | `Text` | `string?` | get |  |
 | `Title` | `string?` | get |  |
 | `Files` | `File[]?` | get |  |
+| `Url` | `string?` | get/set | A string representing a URL to be shared. |
 

@@ -16,6 +16,7 @@
 | `SubclassCode` | `int?` | get |  |
 | `ProtocolCode` | `int?` | get |  |
 | `SerialNumber` | `string?` | get |  |
+| `VendorId` | `int?` | get/set | Vendor ID of the USB device. |
 
 ## Examples
 

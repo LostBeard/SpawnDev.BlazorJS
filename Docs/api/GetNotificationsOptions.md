@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `GetNotificationsOptions` | `class` | get | An object containing options to filter the notifications returned. https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/getNotifications#options |
+| `Tag` | `string?` | get/set | A string representing a notification tag. If specified, only notifications that have this tag will be returned. |
 
 ## Examples
 

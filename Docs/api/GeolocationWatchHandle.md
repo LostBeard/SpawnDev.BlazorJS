@@ -19,4 +19,5 @@
 |---|---|---|
 | `Start()` | `void` | Start watching the device position |
 | `Stop()` | `void` | Stop watching the device position |
+| `Dispose()` | `void` |  |
 

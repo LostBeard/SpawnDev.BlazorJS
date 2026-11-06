@@ -17,4 +17,5 @@
 | `DisplayAspectHeight` | `int?` | get |  |
 | `HardwareAcceleration` | `string?` | get |  |
 | `OptimizeForLatency` | `bool?` | get |  |
+| `Codec` | `string` | get/set | A string containing the codec string. |
 

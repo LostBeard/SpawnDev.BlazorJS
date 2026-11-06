@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `RTCSessionDescription` | `class` | get/set | The RTCSessionDescription interface describes one end of a connection-or potential connection-and how it's configured. Each RTCSessionDescription consists of a description type indicating which part of the offer/answer negotiation process it describes and of the SDP descriptor of the session. https://developer.mozilla.org/en-US/docs/Web/API/RTCSessionDescription |
 | `Sdp` | `string` | get |  |
+| `Type` | `string` | get/set | An enum describing the session description's type. |
 
 ## Examples
 

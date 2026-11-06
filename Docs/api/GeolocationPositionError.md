@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `GeolocationPositionError` | `class` | get | The GeolocationPositionError interface represents the reason of an error occurring when using the geolocating device. |
 | `Message` | `string?` | get | Returns a human-readable string describing the details of the error. Specifications note that this is primarily intended for debugging use and not to be shown directly in a user interface. |
+| `Code` | `ushort` | get/set | Returns an unsigned short representing the error code. The following values are possible: 1 - PERMISSION_DENIED 2 - POSITION_UNAVAILABLE 3 - TIMEOUT |
 

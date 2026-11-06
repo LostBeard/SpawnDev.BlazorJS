@@ -13,4 +13,5 @@
 | `PowerPreference` | `string?` | get/set |  |
 | `ForceFallbackAdapter` | `bool?` | get/set |  |
 | `XrCompatible` | `bool?` | get |  |
+| `FeatureLevel` | `string?` | get/set | "Feature level" for the adapter request. The allowed feature level string values are: "core" and "compatibility" Defaults to "core". |
 

@@ -28,6 +28,9 @@
 | `IceGatheringState` | `string` | ICE gathering state: `"new"`, `"gathering"`, `"complete"`. |
 | `IceConnectionState` | `string` | ICE connection state: `"new"`, `"checking"`, `"connected"`, `"completed"`, `"failed"`, `"disconnected"`, `"closed"`. |
 | `ConnectionState` | `string` | Overall connection state: `"new"`, `"connecting"`, `"connected"`, `"disconnected"`, `"failed"`, `"closed"`. |
+| `PeerIdentity` | `Task<RTCIdentityAssertion>` | Returns a Promise that resolves to an RTCIdentityAssertion which contains a string identifying the remote peer. Once this promise resolves successfully, the resulting identity is the target peer identity and will not change for the duration of the connection. |
+| `CanTrickleIceCandidates` | `bool` | The read-only RTCPeerConnection property canTrickleIceCandidates returns a boolean value which indicates whether or not the remote peer can accept trickled ICE candidates. |
+| `Sctp` | `RTCSctpTransport?` | Returns an RTCSctpTransport object describing the SCTP transport layer over which SCTP data is being sent and received. If SCTP hasn't been negotiated, this value is null. |
 
 ## Methods
 
@@ -88,6 +91,29 @@
 | `OnDataChannel` | `ActionEvent<RTCDataChannelEvent>` | Fired when the remote peer creates a data channel. |
 | `OnNegotiationNeeded` | `ActionEvent<Event>` | Fired when renegotiation is needed. |
 | `OnIceGatheringStateChange` | `ActionEvent<Event>` | Fired when the ICE gathering state changes. |
+| `OnIceCandidateError` | `ActionEvent<RTCPeerConnectionIceErrorEvent>` | Fired when an error occurs while performing ICE negotiations through a STUN or TURN server. |
+
+## Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `AddIceCandidatePromise(RTCIceCandidate candidate)` | `Promise` | When a website or app using RTCPeerConnection receives a new ICE candidate from the remote peer over its signaling channel, it delivers the newly-received candidate to the browser's ICE agent by calling RTCPeerConnection.addIceCandidate(). This adds this new remote candidate to the RTCPeerConnection's remote description, which describes the state of the remote end of the connection. |
+| `AddIceCandidate(string candidate)` | `Task` | When a website or app using RTCPeerConnection receives a new ICE candidate from the remote peer over its signaling channel, it delivers the newly-received candidate to the browser's ICE agent by calling RTCPeerConnection.addIceCandidate(). This adds this new remote candidate to the RTCPeerConnection's remote description, which describes the state of the remote end of the connection. |
+| `CreateDataChannel(string label, RTCDataChannelOptions? options = null)` | `RTCDataChannel` | The createDataChannel() method on the RTCPeerConnection interface creates a new channel linked with the remote peer, over which any kind of data may be transmitted. This can be useful for back-channel content, such as images, file transfer, text chat, game update packets, and so forth. |
+| `SetLocalDescription()` | `Task` | The RTCPeerConnection method setLocalDescription() changes the local description associated with the connection. This description specifies the properties of the local end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously. |
+| `SetRemoteDescriptionPromise(RTCSessionDescription desc)` | `Promise` | The RTCPeerConnection method setRemoteDescription() sets the specified session description as the remote peer's current offer or answer. The description specifies the properties of the remote end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously. |
+| `RestartIce()` | `void` | The WebRTC API's RTCPeerConnection interface offers the restartIce() method to allow a web application to easily request that ICE candidate gathering be redone on both ends of the connection. This simplifies the process by allowing the same method to be used by either the caller or the receiver to trigger an ICE restart. |
+| `AddTrack(MediaStreamTrack track)` | `RTCRtpSender` | The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer. |
+| `AddTransceiver(MediaStreamTrack trackOrKind, RTCRtpTransceiverOptions init)` | `RTCRtpTransceiver` | The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer. |
+| `AddTrack(MediaStreamTrack track, params MediaStream[] mediaStreams)` | `RTCRtpSender` | The RTCPeerConnection method addTrack() adds a new media track to the set of tracks which will be transmitted to the other peer. |
+| `GetStats(MediaStreamTrack? selector = null)` | `Task<RTCStatsReport>` | Returns a Promise which resolves with data providing statistics about either the overall connection or about the specified MediaStreamTrack. |
+
+## Static Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `GenerateCertificate(RsaHashedKeyGenParams keygenAlgorithm)` | `RTCCertificate` | Creates an X.509 certificate and its corresponding private key, returning a Promise that resolves with the new RTCCertificate once it is generated. |
+| `GenerateCertificate(string keygenAlgorithm)` | `RTCCertificate` | Creates an X.509 certificate and its corresponding private key, returning a Promise that resolves with the new RTCCertificate once it is generated. |
 
 ## Example
 

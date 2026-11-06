@@ -13,4 +13,5 @@
 | `SampleRate` | `int?` | get |  |
 | `NumberOfChannels` | `int?` | get |  |
 | `Bitrate` | `int?` | get |  |
+| `Codec` | `string` | get/set | A string containing the codec string. |
 

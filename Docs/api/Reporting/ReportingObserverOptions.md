@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `ReportingObserverOptions` | `class` | get | Options utilized when creating a new ReportingObserver. https://developer.mozilla.org/en-US/docs/Web/API/ReportingObserver/ReportingObserver#options |
 | `Buffered` | `bool?` | get |  |
+| `Types` | `string[]?` | get/set | An array of strings representing the types of reports to be collected by the observer. If not specified, all available report types will be collected. |
 
 ## Examples
 

@@ -23,6 +23,7 @@
 | `IsStatic` | `bool?` | get |  |
 | `Layout` | `string?` | get |  |
 | `MipLevels` | `int?` | get |  |
+| `AspectRatio` | `float?` | get/set | A number indicating the ratio of the visible cylinder section. It is the ratio of the width of the visible section of the cylinder divided by its height. The width is calculated by multiplying the radius with the centralAngle. The default value is 2.0. |
 
 ## Examples
 

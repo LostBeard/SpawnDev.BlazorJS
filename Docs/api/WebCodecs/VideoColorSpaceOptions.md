@@ -14,6 +14,7 @@
 | `Transfer` | `string?` | get |  |
 | `Matrix` | `string?` | get |  |
 | `FullRange` | `bool?` | get |  |
+| `Primaries` | `string?` | get/set | A string representing the video color primaries, described on the page for the VideoColorSpace.primaries property. |
 
 ## Examples
 

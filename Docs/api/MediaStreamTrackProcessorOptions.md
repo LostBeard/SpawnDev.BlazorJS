@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `MediaStreamTrackProcessorOptions` | `class` | get | MediaStreamTrackProcessor constructor options. https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrackProcessor/MediaStreamTrackProcessor#options |
 | `MaxBufferSize` | `int?` | get |  |
+| `Track` | `MediaStreamTrack` | get/set | The MediaStreamTrack to be processed. |
 
 ## Examples
 

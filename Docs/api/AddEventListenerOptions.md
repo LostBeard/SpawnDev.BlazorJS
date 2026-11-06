@@ -14,6 +14,7 @@
 | `Once` | `bool?` | get |  |
 | `Passive` | `bool?` | get |  |
 | `Signal` | `AbortSignal?` | get |  |
+| `Capture` | `bool` | get/set | A boolean value indicating that events of this type will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree. If not specified, defaults to false. |
 
 ## Examples
 

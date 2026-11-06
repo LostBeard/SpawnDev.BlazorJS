@@ -16,4 +16,5 @@
 | `Texture` | `GPUTextureBindingLayout?` | get/set |  |
 | `StorageTexture` | `GPUStorageTextureBindingLayout?` | get/set |  |
 | `ExternalTexture` | `GPUExternalTextureBindingLayout?` | get |  |
+| `Binding` | `GPUSize32` | get/set | A number representing a unique identifier for this particular entry, which matches the binding value of a corresponding GPUBindGroup entry. In addition, it matches the n index value of the corresponding @binding(n) attribute in the shader (GPUShaderModule) used in the related pipeline. |
 

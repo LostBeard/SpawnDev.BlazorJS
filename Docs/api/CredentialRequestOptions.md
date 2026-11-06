@@ -31,6 +31,7 @@
 | `AuthenticationExtensionsClientInputs` | `class` | get | Contains the client extension input values for authentication extensions. |
 | `UserVerificationRequirement` | `class` | get | Constants for user verification requirement values |
 | `AuthenticatorTransport` | `class` | get | Constants for authenticator transport values |
+| `Mediation` | `string?` | get/set | The mediation requirements for the request. Can be one of: "silent", "optional", "required", or "conditional" |
 
 ## Methods
 

@@ -11,6 +11,7 @@
 | Signature | Description |
 |---|---|
 | `AudioEncoder(IJSInProcessObjectReference _ref)` | Deserialization constructor. |
+| `AudioEncoder(AudioEncoderInit init)` | Creates a new AudioEncoder. |
 
 ## Properties
 
@@ -24,6 +25,7 @@
 | Method | Return Type | Description |
 |---|---|---|
 | `IsConfigSupported(object config)` | `Task<object>` | Checks whether the given configuration is supported. |
+| `IsConfigSupported(AudioEncoderConfig config)` | `Task<AudioEncoderSupport>` | Checks if the given config is supported. |
 
 ## Methods
 
@@ -34,6 +36,14 @@
 | `Flush()` | `Task` | Flushes all pending encodes. |
 | `Reset()` | `void` | Resets the encoder, discarding pending work. |
 | `Close()` | `void` | Closes the encoder permanently. |
+| `Configure(AudioEncoderConfig config)` | `void` | Configures the encoder. |
+| `Encode(AudioData data)` | `void` | Enqueues a frame to be encoded. |
+
+## Events
+
+| Event | Type | Description |
+|---|---|---|
+| `OnDequeue` | `ActionEvent<Event>` | Fires when the encode queue size decreases. |
 
 ## Example
 

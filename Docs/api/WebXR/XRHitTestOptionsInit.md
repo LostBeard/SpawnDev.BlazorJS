@@ -13,6 +13,7 @@
 | `XRHitTestOptionsInit` | `class` | get | An XRHitTestOptionsInit dictionary represents a set of configurable values that affect the behavior of the hit test being performed. https://www.w3.org/TR/webxr-hit-test-1/#dictdef-xrhittestoptionsinit https://developer.mozilla.org/en-US/docs/Web/API/XRSession/requestHitTestSource#options |
 | `EntityTypes` | `IEnumerable<string>?` | get |  |
 | `OffsetRay` | `XRRay?` | get |  |
+| `Space` | `XRSpace` | get/set | The XRSpace that will be tracked by the hit test source. |
 
 ## Examples
 

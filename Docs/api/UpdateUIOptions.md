@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `UpdateUIOptions` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/BackgroundFetchUpdateUIEvent/updateUI#options |
 | `Title` | `string?` | get |  |
+| `Icons` | `List<IconInfo>?` | get/set | A list of one or more image resources, containing icons for use in the user interface. |
 
 ## Examples
 

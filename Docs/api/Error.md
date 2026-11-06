@@ -12,6 +12,11 @@
 |---|---|
 | `JSException(Error error)` | Creates a new Exception to represent a Javascript Error |
 | `JSException(string message, string? name)` | Creates a new Exception to represent a Javascript Error |
+| `Error()` | Creates a new Error |
+| `Error(string message)` | Creates a new Error |
+| `Error(string message, ErrorOptions options)` | Creates a new Error |
+| `Error(string message, string fileName)` | Creates a new Error |
+| `Error(string message, string fileName, int lineNumber)` | Creates a new Error |
 
 ## Properties
 

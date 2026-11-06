@@ -13,6 +13,7 @@
 | `PaymentItem` | `class` | get/set | https://developer.mozilla.org/en-US/docs/Web/API/PaymentRequestEvent/modifiers#total |
 | `Amount` | `PaymentCurrencyAmount` | get/set | A PaymentCurrencyAmount object (see total > Value). |
 | `Pending` | `bool` | get | A boolean. When set to true it means that the amount member is not final. This is commonly used to show items such as shipping or tax amounts that depend upon selection of shipping address or shipping option. |
+| `Label` | `string` | get/set | A string containing a human-readable description of the item, which may be displayed to the user. |
 
 ## Examples
 

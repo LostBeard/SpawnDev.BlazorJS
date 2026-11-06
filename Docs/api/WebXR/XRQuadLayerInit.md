@@ -22,6 +22,7 @@
 | `IsStatic` | `bool?` | get |  |
 | `Layout` | `string?` | get |  |
 | `MipLevels` | `int?` | get |  |
+| `Height` | `float?` | get/set | A number specifying the height of the layer in meters. The default value is 1.0. |
 
 ## Examples
 

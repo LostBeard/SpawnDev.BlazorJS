@@ -12,4 +12,5 @@
 | `XRSessionInit` | `class` | get/set | https://www.w3.org/TR/webxr/#dictdef-xrsessioninit |
 | `OptionalFeatures` | `IEnumerable<string>?` | get/set |  |
 | `DomOverlay` | `XRDOMOverlayInit?` | get |  |
+| `RequiredFeatures` | `IEnumerable<string>?` | get/set |  |
 

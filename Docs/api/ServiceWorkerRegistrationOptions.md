@@ -13,6 +13,7 @@
 | `ServiceWorkerRegistrationOptions` | `class` | get | Options used when registering a ServiceWorker via ServiceWorkerContainer.Register() https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register#options |
 | `Type` | `string?` | get |  |
 | `UpdateViaCache` | `string?` | get |  |
+| `Scope` | `string?` | get/set | A string representing a URL that defines a service worker's registration scope; that is, what range of URLs a service worker can control. This is usually a relative URL. It is relative to the base URL of the application. By default, the scope value for a service worker registration is set to the directory where the service worker script is located (by resolving ./ against scriptURL). See the Examples section for more information on how it works. |
 
 ## Examples
 

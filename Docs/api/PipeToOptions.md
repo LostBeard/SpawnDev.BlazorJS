@@ -14,6 +14,7 @@
 | `PreventAbort` | `bool?` | get/set |  |
 | `PreventCancel` | `bool?` | get/set |  |
 | `Signal` | `AbortSignal?` | get |  |
+| `PreventClose` | `bool?` | get/set | If this is set to true, the source ReadableStream closing will no longer cause the destination WritableStream to be closed. The method will return a fulfilled promise once this process completes, unless an error is encountered while closing the destination in which case it will be rejected with that error. |
 
 ## Examples
 

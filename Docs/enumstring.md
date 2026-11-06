@@ -123,6 +123,31 @@ When deserialized:
 - JSON `null` becomes a null `EnumString<T>`
 - A JSON string is mapped to the matching enum member (or stored as an undefined string if no match)
 
+### Using the enum directly (without EnumString)
+
+When a property or argument is the plain enum type rather than `EnumString<T>`, put the same converter on the enum
+declaration so the enum itself is written as its `[JsonPropertyName]` string:
+
+```csharp
+using SpawnDev.BlazorJS.JsonConverters;
+using System.Text.Json.Serialization;
+
+[JsonConverter(typeof(EnumStringConverterFactory))]
+public enum EncodedAudioChunkType
+{
+    [JsonPropertyName("key")]
+    Key,
+    [JsonPropertyName("delta")]
+    Delta,
+}
+```
+
+**Do not use `JsonStringEnumConverter` for this.** System.Text.Json's `JsonStringEnumConverter` ignores
+`[JsonPropertyName]` on enum members and writes the C# member NAME: `EncodedAudioChunkType.Key` goes out as `"Key"`
+(the browser rejects `new EncodedAudioChunk({ type: "Key" })`) and `GPUStencilOperation.IncrementClamp` as
+`"IncrementClamp"` instead of `"increment-clamp"`. SpawnDev.BlazorJS 3.5.31 moved its last three such enums to
+`EnumStringConverterFactory`.
+
 ---
 
 ## Real-World Examples

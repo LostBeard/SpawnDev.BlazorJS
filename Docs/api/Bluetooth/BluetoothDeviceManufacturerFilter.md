@@ -13,6 +13,7 @@
 | `BluetoothDeviceManufacturerFilter` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/Bluetooth/requestDevice#manufacturerdata |
 | `DataPrefix` | `byte[]?` | get |  |
 | `Mask` | `byte[]?` | get |  |
+| `CompanyIdentifier` | `int` | get/set | A mandatory number identifying the manufacturer of the device. Company identifiers are listed in the Bluetooth specification Assigned numbers, Section 7. For example, to match against devices manufactured by "Digianswer A/S", with assigned hex number 0x000C, you would specify 12. |
 
 ## Examples
 

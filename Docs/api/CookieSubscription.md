@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `CookieSubscription` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/CookieStoreManager/unsubscribe#subscriptions |
 | `Url` | `string?` | get |  |
+| `Name` | `string` | get/set | A string with the name of a cookie. |
 
 ## Examples
 

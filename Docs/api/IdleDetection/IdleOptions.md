@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `IdleOptions` | `class` | get | Options for the IdleDetector.start() method. |
 | `Signal` | `AbortSignal?` | get |  |
+| `Threshold` | `long?` | get/set | The minimum amount of time, in milliseconds, that the user must be idle before the observer is notified. |
 

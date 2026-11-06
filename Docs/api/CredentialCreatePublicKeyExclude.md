@@ -13,6 +13,7 @@
 | `CredentialCreatePublicKeyExclude` | `class` | get | Options for CredentialCreatePublicKey.ExcludeCredentials https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#excludecredentials |
 | `Transports` | `List<string>?` | get |  |
 | `Type` | `string` | get | A string defining the type of public key credential to create. This can currently take a single value, "public-key", but more values may be added in the future. |
+| `Id` | `BufferSource` | get/set | An ArrayBuffer, TypedArray, or DataView representing the existing credential ID. |
 
 ## Examples
 

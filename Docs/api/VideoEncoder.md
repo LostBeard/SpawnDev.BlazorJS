@@ -11,6 +11,7 @@
 | Signature | Description |
 |---|---|
 | `VideoEncoder(IJSInProcessObjectReference _ref)` | Deserialization constructor. |
+| `VideoEncoder(VideoEncoderInit init)` | Creates a new VideoEncoder. |
 
 ## Properties
 
@@ -24,6 +25,7 @@
 | Method | Return Type | Description |
 |---|---|---|
 | `IsConfigSupported(object config)` | `Task<object>` | Checks whether the given configuration is supported. |
+| `IsConfigSupported(VideoEncoderConfig config)` | `Task<VideoEncoderSupport>` | Checks if the given config is supported. |
 
 ## Methods
 
@@ -35,6 +37,8 @@
 | `Flush()` | `Task` | Flushes all pending encodes. |
 | `Reset()` | `void` | Resets the encoder, discarding pending work. |
 | `Close()` | `void` | Closes the encoder permanently. |
+| `Configure(VideoEncoderConfig config)` | `void` | Configures the encoder. |
+| `Encode(VideoFrame frame, VideoEncoderEncodeOptions? options = null)` | `void` | Enqueues a frame to be encoded. |
 
 ## Events
 

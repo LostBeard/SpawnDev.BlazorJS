@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `ElementCreationOptions` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement#options |
+| `Is` | `string?` | get/set | The tag name of a custom element previously defined via customElements.define(). |
 
 ## Examples
 

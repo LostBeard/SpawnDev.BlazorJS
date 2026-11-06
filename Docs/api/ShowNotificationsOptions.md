@@ -23,4 +23,5 @@
 | `Tag` | `string?` | get |  |
 | `Timestamp` | `double?` | get |  |
 | `Vibrate` | `double[]?` | get |  |
+| `Actions` | `ShowNotificationsOptionAction[]?` | get/set | An array of actions to display in the notification. |
 

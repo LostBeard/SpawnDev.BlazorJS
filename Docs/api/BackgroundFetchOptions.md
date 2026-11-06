@@ -13,6 +13,7 @@
 | `BackgroundFetchOptions` | `class` | get/set | Used to customize the BackgroundFetchManager fetch progress dialog that the browser shows to the user. https://developer.mozilla.org/en-US/docs/Web/API/BackgroundFetchManager/fetch#options |
 | `Icons` | `IEnumerable<IconInfo>?` | get |  |
 | `DownloadTotal` | `long?` | get |  |
+| `Title` | `string?` | get/set | A string that will be used as the title for the progress dialog. |
 
 ## Examples
 

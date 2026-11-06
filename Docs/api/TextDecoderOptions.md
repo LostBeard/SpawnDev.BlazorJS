@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `TextDecoderOptions` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder/TextDecoder#options |
 | `Fatal` | `bool?` | get |  |
+| `IgnoreBOM` | `bool?` | get/set | A boolean value indicating whether the byte order mark will be included in the output or skipped over. It defaults to false, which means that the byte order mark will be skipped over when decoding and will not be included in the decoded text. |
 
 ## Examples
 

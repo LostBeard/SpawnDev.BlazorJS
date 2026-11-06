@@ -12,4 +12,5 @@
 | `GPUMultisampleState` | `class` | get | An object describing how the pipeline interacts with a render pass's multisampled attachments. https://www.w3.org/TR/webgpu/#dictdef-gpumultisamplestate |
 | `Mask` | `GPUSampleMask?` | get |  |
 | `AlphaToCoverageEnabled` | `bool?` | get |  |
+| `Count` | `GPUSize32?` | get/set | Number of samples per pixel. This GPURenderPipeline will be compatible only with attachment textures (colorAttachments and depthStencilAttachment) with matching sampleCounts. |
 

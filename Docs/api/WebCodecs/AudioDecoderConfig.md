@@ -13,4 +13,5 @@
 | `SampleRate` | `int?` | get |  |
 | `NumberOfChannels` | `int?` | get |  |
 | `Description` | `Union<ArrayBuffer, DataView, byte[]>?` | get |  |
+| `Codec` | `string` | get/set | A string containing the codec string. |
 

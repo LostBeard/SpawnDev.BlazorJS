@@ -30,6 +30,46 @@ public EventTarget()
 | `RemoveEventListener(string type, Callback listener, bool useCapture)` | `void` | Remove with capture phase control. |
 | `RemoveEventListener(string type, Callback listener, AddEventListenerOptions options)` | `void` | Remove with options. |
 | `DispatchEvent(Event event)` | `bool` | Dispatch an event to this target. Returns false if event was cancelled. |
+| `AddEventListener<TResult>(string type, Func<TResult> listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<TResult>(string type, Func<TResult> listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, TResult>(string type, Func<T1, TResult> listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, TResult>(string type, Func<T1, TResult> listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, TResult>(string type, Func<T1, T2, TResult> listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, TResult>(string type, Func<T1, T2, TResult> listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, T3, TResult>(string type, Func<T1, T2, T3, TResult> listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, T3, TResult>(string type, Func<T1, T2, T3, TResult> listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, T3, T4, TResult>(string type, Func<T1, T2, T3, T4, TResult> listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, T3, T4, TResult>(string type, Func<T1, T2, T3, T4, TResult> listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<TResult>(string type, Func<TResult> listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<TResult>(string type, Func<TResult> listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, TResult>(string type, Func<T1, TResult> listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, TResult>(string type, Func<T1, TResult> listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, TResult>(string type, Func<T1, T2, TResult> listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, TResult>(string type, Func<T1, T2, TResult> listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, T3, TResult>(string type, Func<T1, T2, T3, TResult> listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, T3, TResult>(string type, Func<T1, T2, T3, TResult> listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, T3, T4, TResult>(string type, Func<T1, T2, T3, T4, TResult> listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, T3, T4, TResult>(string type, Func<T1, T2, T3, T4, TResult> listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener(string type, Action listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener(string type, Action listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1>(string type, Action<T1> listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1>(string type, Action<T1> listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2>(string type, Action<T1, T2> listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2>(string type, Action<T1, T2> listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, T3>(string type, Action<T1, T2, T3> listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, T3>(string type, Action<T1, T2, T3> listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, T3, T4>(string type, Action<T1, T2, T3, T4> listener, bool useCapture = false)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, T3, T4>(string type, Action<T1, T2, T3, T4> listener, bool useCapture = false)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener(string type, Action listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener(string type, Action listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1>(string type, Action<T1> listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1>(string type, Action<T1> listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2>(string type, Action<T1, T2> listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2>(string type, Action<T1, T2> listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, T3>(string type, Action<T1, T2, T3> listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, T3>(string type, Action<T1, T2, T3> listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
+| `AddEventListener<T1, T2, T3, T4>(string type, Action<T1, T2, T3, T4> listener, AddEventListenerOptions options)` | `void` | Registers an event handler of a specific event type on the EventTarget. |
+| `RemoveEventListener<T1, T2, T3, T4>(string type, Action<T1, T2, T3, T4> listener, AddEventListenerOptions options)` | `void` | Removes an event listener from the EventTarget. |
 
 EventTarget also supports typed Action/Func overloads of AddEventListener and RemoveEventListener (up to 7 type parameters) with automatic Callback tracking. However, these are primarily used internally by the ActionEvent system.
 
@@ -77,3 +117,10 @@ eventTarget.AddEventListener("customEvent", cb);
 eventTarget.RemoveEventListener("customEvent", cb);
 cb.Dispose();
 ```
+
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `EventTarget()` | The EventTarget() constructor creates a new EventTarget object instance. |
+

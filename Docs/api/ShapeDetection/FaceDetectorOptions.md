@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `FaceDetectorOptions` | `class` | get | Options for the FaceDetector constructor. |
 | `MaxDetectedFaces` | `int?` | get |  |
+| `FastMode` | `bool?` | get/set | A boolean value indicating whether the face detector should prioritize performance over accuracy. |
 

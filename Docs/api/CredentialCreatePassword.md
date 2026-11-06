@@ -15,6 +15,7 @@
 | `Name` | `string?` | get |  |
 | `Origin` | `string` | get/set | A string representing the credential's origin. PasswordCredential objects are origin-bound, which means that they will only be usable on the specified origin they were intended to be used on. |
 | `Password` | `string` | get | A string representing the credential password. |
+| `IconURL` | `string?` | get/set | A string representing the URL of an icon or avatar to be associated with the credential. |
 
 ## Examples
 

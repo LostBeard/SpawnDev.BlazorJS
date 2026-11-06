@@ -14,6 +14,7 @@
 | `Artist` | `string?` | get |  |
 | `Album` | `string?` | get |  |
 | `Artwork` | `MediaImage[]?` | get |  |
+| `Title` | `string?` | get/set | The title of the media to be played. |
 
 ## Examples
 

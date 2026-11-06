@@ -32,6 +32,12 @@ All properties are read/write on DOMRect (read-only on DOMRectReadOnly):
 | `Bottom` | `float` | The bottom edge (y + height, or y if height is negative). |
 | `Left` | `float` | The left edge (x, or x + width if width is negative). |
 
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `DOMRect(float x, float y, float width, float height)` | The DOMRect() constructor creates a new DOMRect object. |
+
 ## Example
 
 ```csharp

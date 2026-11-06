@@ -14,4 +14,5 @@
 | `DataCarrierDetect` | `bool` | get |  |
 | `DataSetReady` | `bool` | get |  |
 | `RingIndicator` | `bool` | get |  |
+| `ClearToSend` | `bool` | get/set | A boolean indicating to the other end of a serial connection that is clear to send data. |
 

@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `VideoFrameCopyOptions` | `class` | get | VideoFrame.CopyTo() options https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame/copyTo#options |
 | `Layout` | `List<VideoFrameLayout>?` | get |  |
+| `Rect` | `VideoFrameRect?` | get/set | The rectangle of pixels to copy from the VideoFrame. |
 
 ## Examples
 

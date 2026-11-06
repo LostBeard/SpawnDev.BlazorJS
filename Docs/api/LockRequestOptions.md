@@ -14,6 +14,7 @@
 | `IfAvailable` | `bool?` | get |  |
 | `Steal` | `bool?` | get |  |
 | `Signal` | `AbortSignal?` | get |  |
+| `Mode` | `string?` | get/set | Either "exclusive" or "shared". The default value is "exclusive". |
 
 ## Examples
 

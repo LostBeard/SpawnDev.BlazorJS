@@ -14,4 +14,5 @@
 | `Height` | `int?` | get |  |
 | `Bitrate` | `float?` | get |  |
 | `Framerate` | `float?` | get |  |
+| `ContentType` | `string?` | get/set | String containing a valid video MIME type, and (optionally) a codecs parameter. |
 

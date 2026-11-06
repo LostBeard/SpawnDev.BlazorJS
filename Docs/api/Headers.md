@@ -16,6 +16,7 @@
 | `Headers(Dictionary<string, string> init)` | Creates a new Headers object. |
 | `Headers(Headers init)` | Creates a new Headers object. |
 | `Headers(List<(string, string)` | Creates a new Headers object. |
+| `Headers(List<(string, string)> init)` | Creates a new Headers object. |
 
 ## Methods
 
@@ -29,6 +30,7 @@
 | `Keys()` | `List<string>` | Returns an iterator allowing you to go through all keys of the key/value pairs contained in this object. |
 | `Set(string name, string value)` | `void` | Sets a new value for an existing header inside a Headers object, or adds the header if it does not already exist. |
 | `Values()` | `List<string>` | Returns an iterator allowing you to go through all values of the key/value pairs contained in this object. |
+| `Entries()` | `List<(string, string)>` | Returns an iterator allowing to go through all key/value pairs contained in this object. |
 
 ## Example
 

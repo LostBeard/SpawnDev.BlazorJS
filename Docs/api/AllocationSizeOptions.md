@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `AllocationSizeOptions` | `class` | get | VideoFrame.AllocationSize() options https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame/allocationSize#options |
 | `Layout` | `List<VideoFrameLayout>?` | get |  |
+| `Rect` | `VideoFrameRect?` | get/set | The rectangle of pixels to copy from the VideoFrame. If unspecified the visibleRect will be used. |
 
 ## Examples
 

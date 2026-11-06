@@ -30,4 +30,5 @@
 | `NumberingSystem` | `string?` | get |  |
 | `HourCycle` | `string?` | get |  |
 | `DayPeriod` | `string?` | get |  |
+| `LocaleMatcher` | `string?` | get/set | The locale matching algorithm to use. Possible values are "lookup" and "best fit"; the default is "best fit". |
 

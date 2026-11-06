@@ -32,6 +32,7 @@
 | `Actions` | `List<NotificationAction>?` | get |  |
 | `Silent` | `bool?` | get |  |
 | `Timestamp` | `EpochDateTime?` | get |  |
+| `Dir` | `EnumString<NotificationDirection>?` | get/set | The direction in which to display the notification. It defaults to auto, which just adopts the browser's language setting behavior, but you can override that behavior by setting values of ltr and rtl (although most browsers seem to ignore these settings.) |
 
 ## Examples
 

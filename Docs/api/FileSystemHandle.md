@@ -20,6 +20,11 @@
 | `Name` | `string` | get | Returns the name of the associated entry. |
 | `Kind` | `string` | get | Returns the type of entry. This is 'file' if the associated entry is a file or 'directory'. |
 | `FilePermissionsOptions` | `class` | get | Options for requesting file permissions |
+| `PERMISSION_GRANTED` | `string` | get/set | "granted" |
+| `PERMISSION_DENIED` | `string` | get/set | "denied" |
+| `PERMISSION_PROMPT` | `string` | get/set | "prompt" |
+| `MODE_READ` | `string` | get/set | "read" |
+| `MODE_READ_WRITE` | `string` | get/set | "readwrite" |
 
 ## Methods
 

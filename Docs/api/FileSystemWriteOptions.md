@@ -14,6 +14,7 @@
 | `Data` | `Union<ArrayBuffer, TypedArray, DataView, Blob, string, byte[]>?` | get/set |  |
 | `Position` | `ulong?` | get/set |  |
 | `Size` | `ulong?` | get |  |
+| `Type` | `string?` | get/set | A string that is one of the following: "write", "seek", or "truncate" |
 
 ## Examples
 

@@ -14,4 +14,5 @@
 | `SeekOffset` | `double?` | get/set |  |
 | `SeekTime` | `double?` | get |  |
 | `FastSeek` | `bool?` | get |  |
+| `Action` | `string` | get/set | The action that was triggered. |
 

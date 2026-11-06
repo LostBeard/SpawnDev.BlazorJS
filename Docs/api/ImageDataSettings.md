@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `ImageDataSettings` | `class` | get | Settings used when creating an ImageData instance https://developer.mozilla.org/en-US/docs/Web/API/ImageData/ImageData#settings |
 | `PixelFormat` | `string?` | get |  |
+| `ColorSpace` | `string?` | get/set | colorSpace: Specifies the color space of the image data. Can be set to "srgb" for the sRGB color space or "display-p3" for the display-p3 color space. |
 
 ## Examples
 

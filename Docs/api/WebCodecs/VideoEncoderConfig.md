@@ -19,4 +19,5 @@
 | `HardwareAcceleration` | `string?` | get |  |
 | `Alpha` | `string?` | get |  |
 | `ScalabilityMode` | `string?` | get |  |
+| `Codec` | `string` | get/set | A string containing the codec string. |
 

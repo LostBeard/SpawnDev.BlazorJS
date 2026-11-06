@@ -13,4 +13,5 @@
 | `IconURL` | `string?` | get/set |  |
 | `Name` | `string?` | get/set |  |
 | `Password` | `string` | get | Password |
+| `Id` | `string` | get/set | Id |
 

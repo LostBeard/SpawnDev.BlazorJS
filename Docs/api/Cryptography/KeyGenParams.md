@@ -10,4 +10,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `KeyGenParams` | `class` | get | Base class for parameter types used when calling SubtleCrypto.generateKey |
+| `Name` | `string` | get/set | A string. |
 

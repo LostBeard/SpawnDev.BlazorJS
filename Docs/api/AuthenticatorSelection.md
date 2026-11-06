@@ -14,6 +14,7 @@
 | `RequireResidentKey` | `bool?` | get |  |
 | `ResidentKey` | `string?` | get |  |
 | `UserVerification` | `string?` | get |  |
+| `AuthenticatorAttachment` | `string?` | get/set | A string indicating which authenticator attachment type should be permitted for the chosen authenticator. Possible values are: "platform" - The authenticator is part of the device WebAuthn is running on (termed a platform authenticator), therefore WebAuthn will communicate with it using a transport available to that platform, such as a platform-specific API. A public key credential bound to a platform authenticator is called a platform credential. "cross-platform" - The authenticator is not a part of the device WebAuthn is running on (termed a roaming authenticator as it can roam between different devices), therefore WebAuthn will communicate with it using a cross-platform transport protocol such as Bluetooth or NFC. A public key credential bound to a roaming authenticator is called a roaming credential. If omitted, any type of authenticator, either platform or cross-platform, can be selected for the credential creation operation. |
 
 ## Examples
 

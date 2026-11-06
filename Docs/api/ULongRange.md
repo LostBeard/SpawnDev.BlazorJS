@@ -12,4 +12,5 @@
 | `ULongRange` | `class` | get | https://www.w3.org/TR/mediacapture-streams/#dom-ulongrange |
 | `Min` | `uint?` | get |  |
 | `Step` | `uint?` | get |  |
+| `Max` | `uint?` | get/set | The maximum valid value of this property. |
 

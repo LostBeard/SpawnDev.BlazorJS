@@ -13,4 +13,5 @@
 | `MediaPositionState` | `class` | get | The MediaPositionState dictionary of the Media Session API provides the state of the media playback position. https://developer.mozilla.org/en-US/docs/Web/API/MediaPositionState |
 | `PlaybackRate` | `double?` | get |  |
 | `Position` | `double?` | get |  |
+| `Duration` | `double?` | get/set | The duration of the media in seconds. |
 

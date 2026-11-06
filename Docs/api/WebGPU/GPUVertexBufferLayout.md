@@ -12,4 +12,5 @@
 | `GPUVertexBufferLayout` | `class` | get/set | Represents the expected layout of a vertex buffer used in the pipeline. https://www.w3.org/TR/webgpu/#dictdef-gpuvertexbufferlayout |
 | `ArrayStride` | `GPUSize64` | get | The byte offset between the start of consecutive vertex attributes. |
 | `StepMode` | `EnumString<GPUVertexStepMode>?` | get |  |
+| `Attributes` | `IEnumerable<GPUVertexAttribute>` | get/set | An array defining the layout of the vertex attributes within each element. |
 

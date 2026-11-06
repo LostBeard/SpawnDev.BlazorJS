@@ -13,4 +13,5 @@
 | `FailOp` | `EnumString<GPUStencilOperation>` | get |  |
 | `DepthFailOp` | `EnumString<GPUStencilOperation>` | get |  |
 | `PassOp` | `EnumString<GPUStencilOperation>` | get |  |
+| `Compare` | `EnumString<GPUCompareFunction>` | get/set | The exclusion operation to perform when the stencil test fails. |
 

@@ -16,6 +16,7 @@
 | `Priority` | `string?` | get/set |  |
 | `Rid` | `string?` | get |  |
 | `ScaleResolutionDownBy` | `float?` | get |  |
+| `Active` | `bool?` | get/set | Setting this value true (the default) causes this encoding to be sent, while false stops it from being sent and used (but does not cause the SSRC to be removed). |
 
 ## Examples
 

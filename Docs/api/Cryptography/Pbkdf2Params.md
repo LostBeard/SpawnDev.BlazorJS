@@ -16,3 +16,9 @@
 | `Salt` | `BufferSource` | get | An ArrayBuffer, a TypedArray, or a DataView. This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret. |
 | `Iterations` | `int` | get | A Number representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application. |
 
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `Pbkdf2Params(BufferSource salt)` | Creates a new instance. Salt is a constructor parameter rather than a required initializer because this type also fixes Name, and a [SetsRequiredMembers] constructor switches off the compiler's required checking for EVERY required member of the type - so a parameterless one would silently stop enforcing salt while claiming to set it. |
+

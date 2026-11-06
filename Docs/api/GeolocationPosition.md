@@ -12,4 +12,5 @@
 |---|---|---|---|
 | `GeolocationPosition` | `class` | get | The GeolocationPosition interface represents the position of the concerned device at a given time. The position, represented by a GeolocationCoordinates object, comprehends the 2D position of the device, on a spheroid representing the Earth, but also its altitude and its speed. https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition |
 | `Timestamp` | `EpochDateTime` | get | Returns a timestamp, given as Unix time in milliseconds, representing the time at which the location was retrieved. |
+| `Coords` | `GeolocationCoordinates` | get/set | Returns a GeolocationCoordinates object defining the current location. |
 

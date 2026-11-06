@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `ObserveOptions` | `class` | get | An options object allowing you to set options for the observation. https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver/observe#options |
+| `Box` | `string?` | get/set | Sets which box model the observer will observe changes to. Possible values are: "content-box" - Size of the content area as defined in CSS. (default) "border-box" - Size of the box border area as defined in CSS. "device-pixel-content-box" - The size of the content area as defined in CSS, in device pixels, before applying any CSS transforms on the element or its ancestors. |
 
 ## Examples
 

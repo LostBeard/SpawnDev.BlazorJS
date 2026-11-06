@@ -11,4 +11,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `EyeDropperOptions` | `class` | get | The EyeDropperOptions dictionary of the EyeDropper API provides options for the EyeDropper.open() method. https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper/open |
+| `Signal` | `AbortSignal?` | get/set | An AbortSignal. The open() method will be aborted when the signal's AbortController.abort() method is called. |
 

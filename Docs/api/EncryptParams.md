@@ -10,4 +10,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `EncryptParams` | `class` | get | Base class for parameter types used when calling SubtleCrypto.encrypt |
+| `Name` | `string` | get/set | A string. |
 

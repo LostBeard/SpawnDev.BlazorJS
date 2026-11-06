@@ -38,6 +38,9 @@
 | `Send(TypedArray data)` | `void` | Sends binary data from a `TypedArray`. |
 | `Send(byte[] data)` | `void` | Sends binary data from a .NET `byte[]`. |
 | `Close()` | `void` | Closes the data channel. |
+| `SendAsBinaryType(Blob blob)` | `Task` | Uses BinaryType to determine the type of data to send. Chrome only does ArrayBuffer, Firefox prefers Blob (not sure if supports ArrayBuffer att) |
+| `SendAsBinaryType(ArrayBuffer arrayBuffer)` | `void` | Uses BinaryType to determine the type of data to send. Chrome only does ArrayBuffer, Firefox prefers Blob (not sure if supports ArrayBuffer att) |
+| `Send(DataView data)` | `void` | Sends data across the data channel to the remote peer. |
 
 ## Events
 
@@ -48,6 +51,7 @@
 | `OnMessage` | `ActionEvent<MessageEvent>` | Fired when a message is received. |
 | `OnError` | `ActionEvent<RTCErrorEvent>` | Fired when an error occurs. |
 | `OnBufferedAmountLow` | `ActionEvent<Event>` | Fired when the buffered amount drops below the threshold. |
+| `OnClosing` | `ActionEvent<Event>` | Sent when the underlying data transport is about to start closing. Note supported on Firefox as of 2023-07-01 |
 
 ## Example
 

@@ -25,3 +25,9 @@
 | `DeleteProperty` | `Func<JSObject, JSObject, bool>?` | get |  |
 | `DeletePropertyCallback` | `FuncCallback<JSObject, JSObject, bool>?` | get |  |
 
+## Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `Dispose()` | `void` | Disposes all callbacks |
+

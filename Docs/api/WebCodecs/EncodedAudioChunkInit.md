@@ -13,4 +13,5 @@
 | `Timestamp` | `long` | get/set |  |
 | `Duration` | `long?` | get/set |  |
 | `Data` | `ArrayBuffer?` | get |  |
+| `Type` | `EncodedAudioChunkType` | get/set | The type of the chunk. |
 

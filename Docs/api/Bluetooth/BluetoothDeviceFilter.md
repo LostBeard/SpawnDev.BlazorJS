@@ -14,6 +14,7 @@
 | `Name` | `string?` | get |  |
 | `NamePrefix` | `string?` | get |  |
 | `ManufacturerData` | `IEnumerable<BluetoothDeviceManufacturerFilter>?` | get |  |
+| `Services` | `IEnumerable<string>?` | get/set | An array of values indicating the Bluetooth GATT (Generic Attribute Profile) services that a Bluetooth device must support. Each value can be a valid name from the GATT assigned services list, such as 'battery_service' or 'blood_pressure'. You can also pass a full service UUID such as '0000180F-0000-1000-8000-00805f9b34fb' or the short 16-bit (0x180F) or 32-bit alias. Note that these are the same values that can be passed to BluetoothUUID.getService(). |
 
 ## Examples
 

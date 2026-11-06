@@ -13,4 +13,5 @@
 | `StartDelay` | `double` | get | The delay in milliseconds before the effect is started. |
 | `StrongMagnitude` | `double` | get | Rumble intensity of the low-frequency (strong) rumble motors, normalized to the range between 0.0 and 1.0. |
 | `WeakMagnitude` | `double` | get | Rumble intensity of the high-frequency (weak) rumble motors, normalized to the range between 0.0 and 1.0. |
+| `Duration` | `double` | get/set | The duration of the effect in milliseconds. |
 

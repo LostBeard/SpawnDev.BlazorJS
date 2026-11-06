@@ -13,6 +13,7 @@
 | `ScrollOptions` | `class` | get | Window.Scroll() options https://developer.mozilla.org/en-US/docs/Web/API/Window/scroll#options |
 | `Left` | `int?` | get |  |
 | `Behavior` | `string?` | get |  |
+| `Top` | `int?` | get/set | Specifies the number of pixels along the Y axis to scroll the window or element. |
 
 ## Examples
 

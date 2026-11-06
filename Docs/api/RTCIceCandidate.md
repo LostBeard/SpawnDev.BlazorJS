@@ -11,6 +11,7 @@
 | Signature | Description |
 |-----------|-------------|
 | `RTCIceCandidate(IJSInProcessObjectReference _ref)` | Deserialization constructor. |
+| `RTCIceCandidate(RTCIceCandidateInfo candidate)` | The RTCIceCandidate() constructor creates and returns a new RTCIceCandidate object, which can be configured to represent a single ICE candidate. |
 
 ## Properties
 
@@ -30,6 +31,12 @@
 | `RelatedAddress` | `string?` | The related address (for server-reflexive or relayed candidates). |
 | `RelatedPort` | `int?` | The related port. |
 | `TcpType` | `string?` | TCP candidate type: `"active"`, `"passive"`, `"so"`. |
+
+## Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `ToJSON()` | `RTCIceCandidateInfo` | Returns a JSON representation of the RTCIceCandidate's current configuration. The format of the representation is the same as the candidateInfo object that can optionally be passed to the RTCIceCandidate() constructor to configure a candidate. |
 
 ## Example
 

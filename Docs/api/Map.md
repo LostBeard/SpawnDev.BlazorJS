@@ -16,6 +16,7 @@
 | `Map(Dictionary<TKey, TValue> iterable)` | Creates a new instance |
 | `Map()` | Creates a new instance |
 | `Map(Array iterable)` | Creates a new instance |
+| `Map(IEnumerable<(TKey, TValue)> iterable)` | Creates a new instance |
 
 ## Properties
 
@@ -36,4 +37,5 @@
 | `Keys()` | `Iterator<TKey>` | Returns a new Iterator object that contains the keys for each element in the Map object in insertion order. |
 | `Values()` | `Iterator<TValue>` | Returns a new Iterator object that contains the values for each element in the Map object in insertion order. |
 | `Clear()` | `void` | Removes all key-value pairs from the Map object. |
+| `Entries()` | `Iterator<(TKey, TValue)>` | Returns a new Iterator object that contains a two-member array of [key, value] for each element in the Map object in insertion order. |
 

@@ -27,6 +27,7 @@
 | `ChannelCount` | `int?` | get |  |
 | `ChannelCountMode` | `string?` | get |  |
 | `ChannelInterpretation` | `string?` | get |  |
+| `PanningModel` | `string?` | get/set | The PannerNode.panningModel you want the PannerNode to have (the default is equalpower.) |
 
 ## Examples
 

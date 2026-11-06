@@ -13,6 +13,8 @@
 |---|---|---|
 | `Start(float? when)` | `void` | Schedules the node to begin playing the constant sound at the specified time. If no time is specified, the node begins playing immediately. The time, in seconds, at which the sound should begin to play. This value is specified in the same time coordinate system as the AudioContext is using for its currentTime attribute. A value of 0 (or omitting the when parameter entirely) causes the sound to start playback immediately. |
 | `Stop(float? when)` | `void` | Schedules the node to stop playing at the specified time. If no time is specified, the node stops playing at once. The time, in seconds, at which the sound should stop playing. This value is specified in the same time coordinate system as the AudioContext is using for its currentTime attribute. Omitting this parameter, specifying a value of 0, or passing a negative value causes the sound to stop playback immediately. |
+| `Start(double when)` | `void` | Double-time overload - AudioContext.currentTime is a double; casting to float before stop/start can round the when into the past and throw InvalidStateError, leaving a started oscillator running forever. |
+| `Stop(double when)` | `void` | Double-time overload - see Start(double). |
 
 ## Events
 

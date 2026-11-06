@@ -12,4 +12,5 @@
 | `DeviceMotionAlphaBetaGamma` | `class` | get/set | Event data for the rotation rate of a device |
 | `Beta` | `double` | get/set | Beta |
 | `Gamma` | `double` | get | Gamma |
+| `Alpha` | `double` | get/set | Alpha |
 

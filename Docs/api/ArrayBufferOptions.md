@@ -11,4 +11,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `ArrayBufferOptions` | `class` | get | Options used when creating an ArrayBuffer https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/ArrayBuffer#options |
+| `MaxByteLength` | `long?` | get/set | The maximum size, in bytes, that the array buffer can be resized to. |
 

@@ -33,4 +33,5 @@
 | `DeviceId` | `ConstrainDOMString?` | get/set |  |
 | `GroupId` | `ConstrainDOMString?` | get |  |
 | `BackgroundBlur` | `ConstrainBoolean?` | get |  |
+| `WhiteBalanceMode` | `EnumString<WhiteBalanceModeEnum>[]?` | get/set | WhiteBalanceMode |
 

@@ -45,6 +45,7 @@
 | `TransferControlToOffscreen()` | `OffscreenCanvas` | The HTMLCanvasElement.transferControlToOffscreen() method transfers control to an OffscreenCanvas object, either on the main thread or on a worker. |
 | `DownloadAsImage(string fileName, bool appendToBody)` | `void` | Initiates a download of the canvas content as an image file. The name of the file to download. If true, appends the link element to the body before clicking it. Useful for some browsers compatibility. |
 | `Color4ToHexString(byte r, byte g, byte b, byte a)` | `string` | Converts RGBA values to a hex string. Red component (0-255) Green component (0-255) Blue component (0-255) Alpha component (0-255) Hex string representation (e.g. #RRGGBBAA) |
+| `CaptureStream(double? frameRate = null)` | `MediaStream` | The captureStream() method returns a MediaStream which includes a CanvasCaptureMediaStreamTrack containing a real-time video capture of the canvas's contents. |
 
 ## Events
 

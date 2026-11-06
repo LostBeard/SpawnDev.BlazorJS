@@ -13,6 +13,7 @@
 | `XRTransientInputHitTestOptionsInit` | `class` | get | https://www.w3.org/TR/webxr-hit-test-1/#dictdef-xrtransientinputhittestoptionsinit https://developer.mozilla.org/en-US/docs/Web/API/XRSession/requestHitTestSourceForTransientInput#options |
 | `EntityTypes` | `IEnumerable<string>?` | get |  |
 | `OffsetRay` | `XRRay?` | get |  |
+| `Profile` | `string` | get/set | A string specifying the input profile name of the transient input source that will be used to compute hit test results. |
 
 ## Examples
 

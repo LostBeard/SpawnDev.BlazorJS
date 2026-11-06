@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `CredentialGetFederated` | `class` | get | Used with CredentialGetPublicKeyOptions https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#federated_object_structure |
 | `Providers` | `IEnumerable<string>` | get | An array of strings representing the credentials' federated identity providers (for example "https://www.facebook.com" or "https://accounts.google.com"). |
+| `Protocols` | `IEnumerable<string>` | get/set | An array of strings representing the protocols of the requested credentials' federated identity providers (for example, "openidconnect"). |
 
 ## Examples
 

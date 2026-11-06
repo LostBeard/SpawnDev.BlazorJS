@@ -13,4 +13,5 @@
 | `Label` | `string?` | get |  |
 | `RequiredFeatures` | `List<string>?` | get |  |
 | `RequiredLimits` | `object?` | get |  |
+| `DefaultQueue` | `GPUQueue?` | get/set | An object that provides information for the device's default GPUQueue (as returned by GPUDevice.queue). This object has a single property — label — which provides the default queue with a label value. If no value is provided, this defaults to an empty object, and the default queue's label will be an empty string. |
 

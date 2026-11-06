@@ -18,6 +18,8 @@
 |---|---|---|
 | `RequestDevice(BluetoothDeviceOptions options)` | `Task<BluetoothDevice>` | Requests a device from the user. Shows a browser picker dialog. Requires user gesture. |
 | `GetDevices()` | `Task<BluetoothDevice[]>` | Returns previously paired devices (if the browser supports it). |
+| `GetAvailability()` | `Task<bool>` | The getAvailability() method of the Bluetooth interface returns true if the device has a Bluetooth adapter, and false otherwise (unless the user has configured the browser to not expose a real value). |
+| `RequestDevice()` | `Task<BluetoothDevice>` | Returns a Promise to a BluetoothDevice object with the specified options. |
 
 ## Events
 

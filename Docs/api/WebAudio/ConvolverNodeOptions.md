@@ -15,4 +15,5 @@
 | `ChannelCount` | `int?` | get |  |
 | `ChannelCountMode` | `string?` | get |  |
 | `ChannelInterpretation` | `string?` | get |  |
+| `Buffer` | `AudioBuffer?` | get/set | A mono, stereo, or 4-channel AudioBuffer containing the (possibly multichannel) impulse response used by the ConvolverNode to create the reverb effect. |
 

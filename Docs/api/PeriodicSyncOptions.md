@@ -10,4 +10,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `PeriodicSyncOptions` | `class` | get | PeriodicSync options |
+| `MinInterval` | `int?` | get/set | The minimum interval time, in milliseconds, at which the periodic sync should occur. |
 

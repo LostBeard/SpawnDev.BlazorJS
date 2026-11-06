@@ -11,4 +11,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `ColorSelectionResult` | `class` | get | The ColorSelectionResult dictionary of the EyeDropper API provides the result of an eye dropper selection. https://developer.mozilla.org/en-US/docs/Web/API/ColorSelectionResult |
+| `SRGBHex` | `string` | get/set | A string representing the selected color, in hexadecimal sRGB format (#RRGGBB). |
 

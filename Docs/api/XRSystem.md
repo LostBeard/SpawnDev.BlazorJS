@@ -19,6 +19,8 @@
 | `IsSessionSupported(string mode)` | `Task<bool>` | Checks if the given session mode is supported. Modes: `"inline"`, `"immersive-vr"`, `"immersive-ar"`. |
 | `RequestSession(string mode)` | `Task<XRSession>` | Requests an XR session of the given mode. |
 | `RequestSession(string mode, XRSessionInit options)` | `Task<XRSession>` | Requests a session with options (required/optional features). |
+| `IsSessionSupported(EnumString<XRSessionMode> mode)` | `Task<bool>` | The isSessionSupported(mode) method queries if a given mode may be supported by the user agent and device capabilities. |
+| `RequestSession(EnumString<XRSessionMode> mode, XRSessionInit? options = null)` | `Task<XRSession>` | The requestSession(mode, options) method attempts to initialize an XRSession for the given mode if possible, entering immersive mode if necessary. |
 
 ## Events
 

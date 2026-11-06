@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `VideoFrameLayout` | `class` | get | Describes a video plane layout for a VideoFrame https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame/VideoFrame#layout |
 | `Stride` | `int` | get | An integer representing the number of bytes, including padding, used by each row of the plane. Planes may not overlap. If no layout is specified, the planes will be tightly packed. |
+| `Offset` | `int` | get/set | An integer representing the offset in bytes where the given plane begins. |
 
 ## Examples
 

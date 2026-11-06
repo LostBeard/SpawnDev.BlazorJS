@@ -12,6 +12,9 @@
 | Signature | Description |
 |---|---|
 | `VideoFrame(IJSInProcessObjectReference _ref)` | Deserialization constructor. |
+| `VideoFrame(Union<SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame, HTMLImageElement> image)` | The VideoFrame() constructor creates a new VideoFrame object representing a frame of a video. |
+| `VideoFrame(Union<SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame, HTMLImageElement> image, VideoFrameOptions options)` | The VideoFrame() constructor creates a new VideoFrame object representing a frame of a video. |
+| `VideoFrame(Union<ArrayBuffer, TypedArray, byte[], DataView> data, VideoFrameDataOptions options)` | The VideoFrame() constructor creates a new VideoFrame object representing a frame of a video. |
 
 ## Properties
 
@@ -25,6 +28,8 @@
 | `Duration` | `long?` | Duration of the frame in microseconds. |
 | `Timestamp` | `long` | Timestamp in microseconds. |
 | `ColorSpace` | `JSObject` | The color space of the frame. |
+| `CodedRect` | `DOMRectReadOnly` | Returns a DOMRectReadOnly with the width and height matching codedWidth and codedHeight. |
+| `VisibleRect` | `DOMRectReadOnly` | Returns a DOMRectReadOnly describing the visible rectangle of pixels for this VideoFrame. |
 
 ## Methods
 
@@ -33,6 +38,10 @@
 | `CopyTo(ArrayBuffer destination)` | `Task` | Copies frame data to a buffer. |
 | `Clone()` | `VideoFrame` | Creates a copy of the frame. |
 | `Close()` | `void` | Releases the frame's resources. Must be called when done. |
+| `AllocationSize()` | `int` | Returns the number of bytes required to hold the VideoFrame as filtered by options passed into the method. |
+| `AllocationSize(AllocationSizeOptions options)` | `int` | Returns the number of bytes required to hold the VideoFrame as filtered by options passed into the method. |
+| `CopyTo(Union<ArrayBuffer, TypedArray, byte[], DataView> destination)` | `Task` | Copies the contents of the VideoFrame to an ArrayBuffer. |
+| `CopyTo(Union<ArrayBuffer, TypedArray, byte[], DataView> destination, VideoFrameCopyOptions options)` | `Task` | Copies the contents of the VideoFrame to an ArrayBuffer. |
 
 ## Example
 

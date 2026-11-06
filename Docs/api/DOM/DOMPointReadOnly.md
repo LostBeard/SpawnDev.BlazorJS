@@ -27,3 +27,12 @@
 | `MatrixTransform(DOMMatrix matrix)` | `DOMPointReadOnly` | The DOMPointReadOnly.matrixTransform() method returns a new DOMPointReadOnly object which is the result of the transformation of the point by the specified matrix. A DOMMatrixInit dictionary or another DOMMatrixReadOnly object to transform the point with. A new DOMPointReadOnly object. |
 | `MatrixTransform(DOMMatrixReadOnly matrix)` | `DOMPointReadOnly` | The DOMPointReadOnly.matrixTransform() method returns a new DOMPointReadOnly object which is the result of the transformation of the point by the specified matrix. A DOMMatrixInit dictionary or another DOMMatrixReadOnly object to transform the point with. A new DOMPointReadOnly object. |
 
+## Properties
+
+| Property | Type | Access | Description |
+|---|---|---|---|
+| `X` | `double` | get | The x coordinate of the point in space. |
+| `Y` | `double` | get | The y coordinate of the point in space. |
+| `Z` | `double` | get | The z coordinate of the point in space. |
+| `W` | `double` | get | The w coordinate of the point in space. |
+

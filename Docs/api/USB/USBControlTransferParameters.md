@@ -15,4 +15,5 @@
 | `Request` | `int?` | get |  |
 | `Value` | `int?` | get |  |
 | `Index` | `int?` | get |  |
+| `RequestType` | `string?` | get/set | Must be one of three values specifying whether the transfer is "standard" (common to all USB devices) "class" (common to an industry-standard class of devices) or "vendor". |
 

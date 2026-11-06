@@ -59,6 +59,21 @@
 | `PopDebugGroup()` | `void` | Ends the current debug group. |
 | `InsertDebugMarker(string markerLabel)` | `void` | Inserts a debug marker. |
 
+## Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `CopyBufferToBuffer(GPUBuffer source, GPUBuffer destination, GPUSize64 size)` | `void` | The copyBufferToBuffer() method of the GPUCommandEncoder interface encodes a command that copies data from one GPUBuffer to another. |
+| `CopyBufferToBuffer(GPUBuffer source, GPUBuffer destination)` | `void` | The copyBufferToBuffer() method of the GPUCommandEncoder interface encodes a command that copies data from one GPUBuffer to another. |
+| `CopyBufferToBuffer(GPUBuffer source, GPUSize64 sourceOffset, GPUBuffer destination, GPUSize64 destinationOffset, GPUSize64 size)` | `void` | The copyBufferToBuffer() method of the GPUCommandEncoder interface encodes a command that copies data from one GPUBuffer to another. |
+| `CopyBufferToBuffer(GPUBuffer source, GPUSize64 sourceOffset, GPUBuffer destination, GPUSize64 destinationOffset)` | `void` | The copyBufferToBuffer() method of the GPUCommandEncoder interface encodes a command that copies data from one GPUBuffer to another. |
+| `CopyBufferToTexture(GPUTexelCopyBufferInfo source, GPUTexelCopyTextureInfo destination, Union<GPUExtent3DDict, IEnumerable<GPUIntegerCoordinate>> copySize)` | `void` | Encode a command into the GPUCommandEncoder that copies data from a sub-region of a GPUBuffer to a sub-region of one or multiple continuous texture subresources. |
+| `CopyTextureToBuffer(GPUTexelCopyTextureInfo source, GPUTexelCopyBufferInfo destination, Union<GPUExtent3DDict, IEnumerable<GPUIntegerCoordinate>> copySize)` | `void` | Encode a command into the GPUCommandEncoder that copies data from a sub-region of one or multiple continuous texture subresources to a sub-region of a GPUBuffer. |
+| `CopyTextureToTexture(GPUTexelCopyTextureInfo source, GPUTexelCopyTextureInfo destination, Union<GPUExtent3DDict, IEnumerable<GPUIntegerCoordinate>> copySize)` | `void` | Encode a command into the GPUCommandEncoder that copies data from a sub-region of one or multiple contiguous texture subresources to another sub-region of one or multiple continuous texture subresources. |
+| `ClearBuffer(GPUBuffer buffer, GPUSize64 offset, GPUSize64 size)` | `void` | Encode a command into the GPUCommandEncoder that fills a sub-region of a GPUBuffer with zeros. |
+| `ClearBuffer(GPUBuffer buffer, GPUSize64 offset = 0)` | `void` | Encode a command into the GPUCommandEncoder that fills a sub-region of a GPUBuffer with zeros. |
+| `ResolveQuerySet(GPUQuerySet querySet, GPUSize32 firstQuery, GPUSize32 queryCount, GPUBuffer destination, GPUSize64 destinationOffset)` | `void` | Resolves query results from a GPUQuerySet out into a range of a GPUBuffer. |
+
 ## Example
 
 ```csharp

@@ -13,6 +13,7 @@
 | `WorkerOptions` | `class` | get | An object containing option properties that can be set when creating the Worker instance. https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker#options |
 | `Credentials` | `string?` | get |  |
 | `Name` | `string?` | get |  |
+| `Type` | `string?` | get/set | A string specifying the type of worker to create. The value can be classic or module. If not specified, the default used is classic. |
 
 ## Examples
 

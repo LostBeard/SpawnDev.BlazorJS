@@ -13,6 +13,7 @@
 | `PermissionDescriptor` | `class` | get | An object that sets options for the Permissions.query operation consisting of a comma-separated list of name-value pairs. https://developer.mozilla.org/en-US/docs/Web/API/Permissions/query |
 | `UserVisibleOnly` | `bool?` | get |  |
 | `Sysex` | `bool?` | get |  |
+| `Name` | `string` | get/set | The name of the API whose permissions you want to query. Each browser supports a different set of values. You'll find Firefox values here. Chromium values here. WebKit values here. |
 
 ## Examples
 

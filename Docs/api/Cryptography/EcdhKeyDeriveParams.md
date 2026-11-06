@@ -14,3 +14,9 @@
 | `Name` | `override string` | get/set | A string. This should be set to ECDH. |
 | `Public` | `CryptoKey` | get | A CryptoKey object representing the public key of the other entity. |
 
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `EcdhKeyDeriveParams()` | Creates a new instance. The algorithm name is fixed by this type, so a caller does not supply it even though the base declares it required. |
+

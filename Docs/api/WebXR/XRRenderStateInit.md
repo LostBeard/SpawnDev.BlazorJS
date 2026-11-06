@@ -15,4 +15,5 @@
 | `InlineVerticalFieldOfView` | `double?` | get |  |
 | `BaseLayer` | `XRWebGLLayer?` | get/set |  |
 | `Layers` | `IEnumerable<XRLayer>?` | get |  |
+| `DepthNear` | `double?` | get/set | The depthNear attribute defines the distance, in meters, of the near clip plane from the viewer. Leave unset to keep the session's current value (spec default: 0.1). Setting a non-null value updates the session; setting 0.0 explicitly will make the projection matrix NaN and silently blank the scene, so prefer a typical near-clip distance like 0.01 - 0.1 meters. |
 

@@ -10,4 +10,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `WatchAdvertisementsOptions` | `class` | get | https://webbluetoothcg.github.io/web-bluetooth/#dictdef-watchadvertisementsoptions |
+| `Signal` | `AbortSignal?` | get/set | Optional. The signal to abort the request. |
 

@@ -20,6 +20,15 @@
 | `FromPoint(DOMPointInit point)` | `DOMPoint` | The DOMPoint.fromPoint() method creates a new DOMPoint object given a source point. A DOMPointInit dictionary or another DOMPoint object to initialize the new point with. A new DOMPoint object. |
 | `MatrixTransform(DOMMatrixInit matrix)` | `DOMPoint` | The DOMPoint.matrixTransform() method returns a new DOMPoint object which is the result of the transformation of the point by the specified matrix. A DOMMatrixInit dictionary or another DOMMatrixReadOnly object to transform the point with. A new DOMPoint object. |
 
+## Properties
+
+| Property | Type | Access | Description |
+|---|---|---|---|
+| `X` | `double` | get | The x coordinate of the point in space. |
+| `Y` | `double` | get | The y coordinate of the point in space. |
+| `Z` | `double` | get | The z coordinate of the point in space. |
+| `W` | `double` | get | The w coordinate of the point in space. |
+
 ## Examples
 
 > **SpawnDev.BlazorJS Mapping Note:** The JavaScript examples below show the standard Web API usage.

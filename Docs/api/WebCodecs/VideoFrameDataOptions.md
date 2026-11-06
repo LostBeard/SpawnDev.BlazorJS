@@ -21,6 +21,7 @@
 | `DisplayHeight` | `int?` | get |  |
 | `ColorSpace` | `VideoColorSpaceOptions?` | get |  |
 | `Transfer` | `ArrayBuffer[]?` | get | An array of ArrayBuffers that VideoFrame will detach and take ownership of. If the array contains the ArrayBuffer backing data, VideoFrame will use that buffer directly instead of copying from it. |
+| `Format` | `string` | get/set | A string representing the video pixel format. One of the following strings, which are fully described on the page for the format property: I420, I420A, I422, I444, NV12, RGBA, RGBX, BGRA, BGRX |
 
 ## Examples
 

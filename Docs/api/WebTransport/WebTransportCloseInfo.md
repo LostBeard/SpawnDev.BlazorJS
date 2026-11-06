@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `WebTransportCloseInfo` | `class` | get | The WebTransportCloseInfo dictionary includes information about the error code and the reason for closing a WebTransport. |
 | `Reason` | `string?` | get |  |
+| `CloseCode` | `int?` | get/set | The error code for closing the WebTransport. |
 

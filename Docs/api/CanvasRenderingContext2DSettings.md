@@ -13,4 +13,5 @@
 | `Desynchronized` | `bool?` | get |  |
 | `WillReadFrequently` | `bool?` | get |  |
 | `ColorSpace` | `string?` | get |  |
+| `Alpha` | `bool?` | get/set | A boolean value that indicates if the canvas contains an alpha channel. If set to false, the browser now knows that the backdrop is always opaque, which can speed up drawing of transparent content and images. |
 

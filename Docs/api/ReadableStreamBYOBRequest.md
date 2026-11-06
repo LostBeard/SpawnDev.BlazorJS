@@ -13,6 +13,19 @@
 |---|---|
 | `ReadableStreamBYOBRequest(IJSInProcessObjectReference _ref)` | Deserialization constructor |
 
+## Properties
+
+| Property | Type | Access | Description |
+|---|---|---|---|
+| `View` | `ArrayBufferView` | get | The view that the underlying source should write to. |
+
+## Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `Respond(double bytesWritten)` | `void` | Signals that the underlying source has finished writing data to the view. |
+| `RespondWithNewView(ArrayBufferView view)` | `void` | Signals that the underlying source has finished writing data to the view, and provides a new view to be used for the next read operation. |
+
 ## Examples
 
 > **SpawnDev.BlazorJS Mapping Note:** The JavaScript examples below show the standard Web API usage.

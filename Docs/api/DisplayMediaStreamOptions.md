@@ -17,6 +17,7 @@
 | `SurfaceSwitching` | `EnumString<SurfaceSwitchingPreferenceEnum>?` | get |  |
 | `SystemAudio` | `EnumString<SystemAudioPreferenceEnum>?` | get |  |
 | `PreferCurrentTab` | `bool?` | get |  |
+| `WindowAudio` | `EnumString<WindowAudioPreferenceEnum>?` | get/set | An enumerated value specifying which audio the browser should offer with a WINDOW capture: exclude (none), system (all system audio) or window (only the captured window's application). Chromium shipped it around Chrome 141; browsers without it ignore the member. ⚠ Non-standard 🧪 Experimental |
 
 ## Examples
 

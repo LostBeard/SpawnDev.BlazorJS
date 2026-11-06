@@ -10,4 +10,5 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `KeyDeriveParams` | `class` | get | Base class for options used in SubtleCrypto.DeriveKey() |
+| `Name` | `string` | get/set | A string indicating the derive key parameters the inheriting class holds |
 

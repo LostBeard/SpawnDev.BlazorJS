@@ -36,4 +36,6 @@
 | `ExportDefaultAs(string asName)` | `ModuleNamespaceObject` | Exports the default export JavaScript object under the specified name. The name to assign to the exported default object. Cannot be null or empty. |
 | `ExportDefaultToAs(string nameSpace, string asName)` | `ModuleNamespaceObject` | Exports the default export of the current module to the specified namespace under a new name. The target namespace to which the default export will be added. Cannot be null or empty. The name under which the default export will be accessible in the target namespace. Cannot be null or empty. A ModuleNamespaceObject representing the updated namespace with the default export added under the specified name. |
 | `ExportNamespace(string name)` | `ModuleNamespaceObject` | Exports this module namespace object to the JavaScript environment under the specified name. The name to associate with the exported object in the JavaScript environment. Cannot be null or empty. |
+| `ExportAs(params (string exportName, string asName)[] exportAs)` | `ModuleNamespaceObject` | Exports the specified exports to the JavaScript environment under the given names. |
+| `ExportToAs(string nameSpace, params (string exportName, string asName)[] exportAs)` | `ModuleNamespaceObject` | Exports one or more module members to the specified JavaScript namespace under custom names. |
 

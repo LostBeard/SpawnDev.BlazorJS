@@ -48,6 +48,10 @@ public Element(ElementReference elementReference)
 | `ShadowRoot` | `ShadowRoot?` | The element's shadow root, if any. |
 | `Slot` | `string` | The slot the element is inserted in. |
 | `TagName` | `string` | The tag name (uppercase, e.g., "DIV"). |
+| `AssignedSlot` | `HTMLSlotElement?` | Returns a HTMLSlotElement representing the <slot> the node is inserted in. |
+| `ClassNames` | `string[]` | Returns ClassNames from ClassName split on spaces |
+| `CurrentCSSZoom` | `float` | A number indicating the effective zoom size of the element, or 1.0 if the element is not rendered. |
+| `ElementTiming` | `string?` | A string reflecting the elementtiming attribute which marks an element for observation in the PerformanceElementTiming API. |
 
 ## Methods
 
@@ -81,6 +85,13 @@ public Element(ElementReference elementReference)
 | `InsertAdjacentHTML(string position, string text)` | `void` | Parse HTML and insert at the specified position. |
 | `InsertAdjacentElement(string position, Element el)` | `Element` | Insert an element at the specified position. |
 | `Animate(object keyframes, object options)` | `Animation` | Create a CSS animation. |
+| `ScrollIntoView(bool alignToTop)` | `void` | Scrolls the element into the visible area of the browser window. If alignToTop is true, the top of the element will be aligned with the top of the visible area; if false, the bottom will be aligned with the bottom. |
+| `SetPointerCapture(int pointerId)` | `void` | Designates a specific element as the capture target of future pointer events. |
+| `ReleasePointerCapture(int pointerId)` | `void` | Releases pointer capture that was previously set for a specific pointer event. |
+| `HasPointerCapture(int pointerId)` | `bool` | Returns true if the element has pointer capture for the pointer identified by the given pointer ID. |
+| `GetClientRects()` | `DOMRect[]` | Returns a collection of DOMRect objects that indicate the bounding rectangles for each CSS border box in a client. |
+| `ReplaceWith(params Union<Node, string>[] nodes)` | `void` | Replaces the element in the children list of its parent with a set of Node or string objects. |
+| `ReplaceChildren(params Union<Node, string>[] nodes)` | `void` | Replaces the existing children of a node with a specified new set of children. |
 
 ## Events
 
@@ -111,6 +122,34 @@ public Element(ElementReference elementReference)
 | `OnPointerMove` | `ActionEvent<PointerEvent>` | Fired when a pointer moves. |
 | `OnFullscreenChange` | `ActionEvent<Event>` | Fired when fullscreen state changes. |
 | `OnFullscreenError` | `ActionEvent<Event>` | Fired on fullscreen error. |
+| `OnSecurityPolicyViolation` | `ActionEvent<SecurityPolicyViolationEvent>` | Fired when a Content Security Policy is violated. |
+| `OnContentVisibilityAutoStateChange` | `ActionEvent<ContentVisibilityAutoStateChangeEvent>` | Fires on any element with content-visibility: auto set on it when it starts or stops being relevant to the user and skipping its contents. |
+| `OnScrollEnd` | `ActionEvent<Event>` | Fires when the document view has completed scrolling. |
+| `OnInput` | `ActionEvent<InputEvent>` | Fires when the value of an input, select, or textarea element has been changed as a direct result of a user action (such as typing in a textbox or checking a checkbox). |
+| `OnBeforeInput` | `ActionEvent<InputEvent>` | Fires when the value of an input or textarea element is about to be modified. |
+| `OnCopy` | `ActionEvent<ClipboardEvent>` | Fires when the user initiates a copy action through the browser's user interface. |
+| `OnCut` | `ActionEvent<ClipboardEvent>` | Fired when the user has initiated a "cut" action through the browser's user interface. |
+| `OnPaste` | `ActionEvent<ClipboardEvent>` | Fires when the user initiates a paste action through the browser's user interface. |
+| `OnAuxClick` | `ActionEvent<PointerEvent>` | Fired when a non-primary pointing device button (e.g., any mouse button other than the left button) has been pressed and released on an element. |
+| `OnFocusIn` | `ActionEvent<FocusEvent>` | Fired when an element has gained focus, after focus. |
+| `OnFocusOut` | `ActionEvent<FocusEvent>` | Fired when an element has lost focus, after blur. |
+| `OnGotPointerCapture` | `ActionEvent<PointerEvent>` | Fired when an element captures a pointer using setPointerCapture(). |
+| `OnLostPointerCapture` | `ActionEvent<PointerEvent>` | Fired when a captured pointer is released. |
+| `OnPointerCancel` | `ActionEvent<PointerEvent>` | Fired when a pointer event is canceled. |
+| `OnPointerEnter` | `ActionEvent<PointerEvent>` | Fired when a pointer is moved into the hit test boundaries of an element or one of its descendants. |
+| `OnPointerLeave` | `ActionEvent<PointerEvent>` | Fired when a pointer is moved out of the hit test boundaries of an element. |
+| `OnPointerOut` | `ActionEvent<PointerEvent>` | Fired when a pointer is moved out of the hit test boundaries of an element (among other reasons). |
+| `OnPointerOver` | `ActionEvent<PointerEvent>` | Fired when a pointer is moved into an element's hit test boundaries. |
+| `OnPointerRawUpdate` | `ActionEvent<PointerEvent>` | Fired when a pointer changes any properties that don't fire pointerdown or pointerup events. |
+| `OnGestureChange` | `ActionEvent<GestureEvent>` | Fired when digits move during a touch gesture. |
+| `OnGestureEnd` | `ActionEvent<GestureEvent>` | Fired when there are no longer multiple fingers contacting the touch surface, thus ending the gesture. |
+| `OnGestureStart` | `ActionEvent<GestureEvent>` | Fired when multiple fingers contact the touch surface, thus starting a new gesture. |
+
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `Element(ElementReference elementReference)` | Creates a new Element from an ElementReference |
 
 ## Example
 

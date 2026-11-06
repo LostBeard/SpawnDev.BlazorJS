@@ -13,3 +13,9 @@
 | `Name` | `override string` | get | A string. This should be set to RSA-PSS. |
 | `SaltLength` | `int` | get | A long integer representing the length of the random salt to use, in bytes. RFC 3447 says that "Typical salt lengths" are either 0 or the length of the output of the digest algorithm that was selected when this key was generated.For example, if you use SHA-256 as the digest algorithm, this could be 32. |
 
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `RsaPssParams()` | Creates a new instance. The algorithm name is fixed by this type, so a caller does not supply it even though the base declares it required. |
+

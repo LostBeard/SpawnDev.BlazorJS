@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `LockManagerState` | `class` | get | An object containing a snapshot of the LockManager state. https://developer.mozilla.org/en-US/docs/Web/API/LockManager/query#return_value |
 | `Pending` | `LockInfo[]` | get |  |
+| `Held` | `LockInfo[]` | get/set | An array of LockInfo objects for held locks. |
 
 ## Examples
 

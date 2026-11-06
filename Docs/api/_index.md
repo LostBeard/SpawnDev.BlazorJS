@@ -1,6 +1,6 @@
 # API Reference - Complete Class Index
 
-**Total types documented:** 1021
+**Total types documented:** 1056
 
 This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by category (matching the source folder structure).
 
@@ -19,6 +19,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [BluetoothRemoteGATTDescriptor](Bluetooth/BluetoothRemoteGATTDescriptor.md) | The BluetoothRemoteGATTDescriptor interface of the Web Bluetooth API provides a GATT Descriptor, which provides further ... |
 | [BluetoothRemoteGATTServer](Bluetooth/BluetoothRemoteGATTServer.md) | The BluetoothRemoteGATTServer interface of the Web Bluetooth API represents a GATT Server on a remote device. https://de... |
 | [BluetoothRemoteGATTService](Bluetooth/BluetoothRemoteGATTService.md) | The BluetoothRemoteGATTService interface of the Web Bluetooth API represents a service provided by a GATT server, includ... |
+| [BluetoothUUID](Bluetooth/BluetoothUUID.md) | The BluetoothUUID interface of the Web Bluetooth API provides a way to look up Universally Unique Identifier (UUID) valu... |
 | [WatchAdvertisementsOptions](Bluetooth/WatchAdvertisementsOptions.md) | https://webbluetoothcg.github.io/web-bluetooth/#dictdef-watchadvertisementsoptions |
 
 ## Compression
@@ -65,6 +66,8 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [Attr](DOM/Attr.md) | The Attr interface represents one of an element's attributes as an object. In most situations, you will directly retriev... |
 | [CharacterData](DOM/CharacterData.md) | The CharacterData abstract interface represents a Node object that contains characters. This is an abstract interface, m... |
 | [Comment](DOM/Comment.md) | The Comment interface represents textual notations within markup; although it is generally not visually shown, such comm... |
+| [CustomElementOptions](DOM/CustomElementOptions.md) | Object that controls how the element is defined. https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/... |
+| [CustomElementRegistry](DOM/CustomElementRegistry.md) | The CustomElementRegistry interface provides methods for registering custom elements and querying registered elements. T... |
 | [CustomEvent](DOM/CustomEvent.md) | The CustomEvent interface represents events initialized by an application for any purpose. |
 | [Document](DOM/Document.md) | The Document interface represents any web page loaded in the browser and serves as an entry point into the web page's co... |
 | [DocumentFragment](DOM/DocumentFragment.md) | The DocumentFragment interface represents a minimal document object that has no parent. https://developer.mozilla.org/en... |
@@ -77,6 +80,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [DOMMatrix2DInit](DOM/DOMMatrix2DInit.md) | The DOMMatrix2DInit dictionary of the Geometry Interfaces Module Level 1 specification is used to provide optional param... |
 | [DOMMatrixInit](DOM/DOMMatrixInit.md) | The DOMMatrixInit dictionary of the Geometry Interfaces Module Level 1 specification is used to provide optional paramet... |
 | [DOMMatrixReadOnly](DOM/DOMMatrixReadOnly.md) | https://developer.mozilla.org/en-US/docs/Web/API/DOMPointReadOnly https://www.w3.org/TR/geometry-1/#dommatrixreadonly |
+| [DOMParser](DOM/DOMParser.md) | The DOMParser interface provides the ability to parse XML or HTML source code from a string into a DOM Document. You can... |
 | [DOMPoint](DOM/DOMPoint.md) | https://developer.mozilla.org/en-US/docs/Web/API/DOMPoint |
 | [DOMPointInit](DOM/DOMPointInit.md) | The DOMPointInit dictionary of the Geometry Interfaces Module Level 1 specification is used to provide optional paramete... |
 | [DOMPointReadOnly](DOM/DOMPointReadOnly.md) | The DOMPointReadOnly interface specifies the coordinate and perspective fields used by DOMPoint to define a 2D or 3D poi... |
@@ -109,7 +113,9 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [HTMLSourceElement](DOM/HTMLSourceElement.md) | The HTMLSourceElement interface provides special properties (beyond the regular HTMLElement object interface it also has... |
 | [HTMLTrackElement](DOM/HTMLTrackElement.md) | The HTMLTrackElement interface represents an HTML track element within the DOM. https://developer.mozilla.org/en-US/docs... |
 | [HTMLVideoElement](DOM/HTMLVideoElement.md) | Implemented by the video element, the HTMLVideoElement interface provides special properties and methods for manipulatin... |
+| [NamedNodeMap](DOM/NamedNodeMap.md) | The NamedNodeMap interface represents a collection of Attr objects. Objects inside a NamedNodeMap are not in any particu... |
 | [Node](DOM/Node.md) | The DOM Node interface is an abstract base class upon which many other DOM API objects are based, thus letting those obj... |
+| [NodeList](DOM/NodeList.md) | NodeList objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as do... |
 | [NodeList<T>](DOM/NodeList.md) | NodeList objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as do... |
 | [Selection](DOM/Selection.md) | A Selection object represents the range of text selected by the user or the current position of the caret. To obtain a S... |
 | [ShadowRoot](DOM/ShadowRoot.md) | The ShadowRoot interface of the Shadow DOM API is the root node of a DOM subtree that is rendered separately from a docu... |
@@ -148,12 +154,15 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [MediaMetadataInit](MediaSession/MediaMetadataInit.md) | The MediaMetadataInit dictionary of the Media Session API provides initialization data for the MediaMetadata interface. ... |
 | [MediaPositionState](MediaSession/MediaPositionState.md) | The MediaPositionState dictionary of the Media Session API provides the state of the media playback position. https://de... |
 | [MediaSession](MediaSession/MediaSession.md) | The MediaSession interface of the Media Session API allows a web page to provide custom behaviors for standard media pla... |
+| [MediaSessionAction](MediaSession/MediaSessionAction.md) | A string representing the action type. |
 | [MediaSessionActionDetails](MediaSession/MediaSessionActionDetails.md) | The MediaSessionActionDetails dictionary of the Media Session API is passed to the MediaSession.setActionHandler() callb... |
 
 ## PaymentRequest
 
 | Type | Description |
 |---|---|
+| [AddressErrors](PaymentRequest/AddressErrors.md) | Validation errors for the shipping address. |
+| [PayerErrors](PaymentRequest/PayerErrors.md) | Validation errors for payer details. |
 | [PaymentAddress](PaymentRequest/PaymentAddress.md) | The PaymentAddress interface of the Payment Request API is used to store validity information about an address used for ... |
 | [PaymentDetailsInit](PaymentRequest/PaymentDetailsInit.md) | The PaymentDetailsInit dictionary contains the details of the payment request. |
 | [PaymentOptions](PaymentRequest/PaymentOptions.md) | The PaymentOptions dictionary contains the options for the payment request. |
@@ -244,6 +253,17 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [SpeechSynthesisUtterance](Speech/SpeechSynthesisUtterance.md) | The SpeechSynthesisUtterance interface of the Web Speech API represents a speech request. It contains the content the sp... |
 | [SpeechSynthesisVoice](Speech/SpeechSynthesisVoice.md) | The SpeechSynthesisVoice interface of the Web Speech API represents a voice that the system supports. Every SpeechSynthe... |
 
+## TrustedTypes
+
+| Type | Description |
+|---|---|
+| [TrustedHTML](TrustedTypes/TrustedHTML.md) | An immutable, policy-approved HTML string. Produced by CreateHTML and accepted by HTML injection sinks (Element.innerHTM... |
+| [TrustedScript](TrustedTypes/TrustedScript.md) | An immutable, policy-approved script string. Produced by CreateScript and accepted by script injection sinks (e.g. an in... |
+| [TrustedScriptURL](TrustedTypes/TrustedScriptURL.md) | An immutable, policy-approved URL string for loading a script. Produced by CreateScriptURL and accepted by script-URL in... |
+| [TrustedTypePolicy](TrustedTypes/TrustedTypePolicy.md) | A Trusted Type policy created via CreatePolicy. Its `Create*` methods turn an input string into the matching Trusted Typ... |
+| [TrustedTypePolicyFactory](TrustedTypes/TrustedTypePolicyFactory.md) | `window.trustedTypes` - creates Trusted Type policies and inspects Trusted Type values. The global exists only when the ... |
+| [TrustedTypePolicyOptions](TrustedTypes/TrustedTypePolicyOptions.md) | Callbacks passed to CreatePolicy. Each receives the untrusted input string (and any extra arguments) and returns the app... |
+
 ## TypedArrays
 
 | Type | Description |
@@ -256,6 +276,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [Int16Array](TypedArrays/Int16Array.md) | The Int16Array typed array represents an array of 32-bit signed integers in the platform byte order. If control over byt... |
 | [Int32Array](TypedArrays/Int32Array.md) | The Int32Array typed array represents an array of 32-bit signed integers in the platform byte order. If control over byt... |
 | [Int8Array](TypedArrays/Int8Array.md) | The Int8Array typed array represents an array of 32-bit signed integers in the platform byte order. If control over byte... |
+| [TypedArray](TypedArrays/TypedArray.md) | A TypedArray object describes an array-like view of an underlying binary data buffer. There is no global property named ... |
 | [TypedArray<TElement>](TypedArrays/TypedArray.md) | A TypedArray object describes an array-like view of an underlying binary data buffer. There is no global property named ... |
 | [Uint16Array](TypedArrays/Uint16Array.md) | The Uint16Array typed array represents an array of 32-bit unsigned integers in the platform byte order. If control over ... |
 | [Uint32Array](TypedArrays/Uint32Array.md) | The Uint32Array typed array represents an array of 32-bit unsigned integers in the platform byte order. If control over ... |
@@ -304,6 +325,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [AudioTimestamp](WebAudio/AudioTimestamp.md) | Returned from AudioContext.GetOutputTimestamp() https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/getOutputT... |
 | [AudioWorklet](WebAudio/AudioWorklet.md) | The AudioWorklet interface of the Web Audio API is used to supply custom audio processing scripts that execute in a sepa... |
 | [AudioWorkletNode](WebAudio/AudioWorkletNode.md) | The AudioWorkletNode interface of the Web Audio API represents a base class for a user-defined AudioNode, which can be c... |
+| [AudioWorkletNodeOptions](WebAudio/AudioWorkletNodeOptions.md) | Options for creating an AudioWorkletNode. |
 | [BaseAudioContext](WebAudio/BaseAudioContext.md) | The BaseAudioContext interface of the Web Audio API acts as a base definition for online and offline audio-processing gr... |
 | [BiquadFilterNode](WebAudio/BiquadFilterNode.md) | https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode |
 | [BiquadFilterNodeOptions](WebAudio/BiquadFilterNodeOptions.md) | https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode/BiquadFilterNode#options |
@@ -337,6 +359,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 
 | Type | Description |
 |---|---|
+| [AudioData](WebCodecs/AudioData.md) | The AudioData interface of the WebCodecs API represents an audio sample. AudioData is a transferable object. An audio tr... |
 | [AudioDataAllocationSizeOptions](WebCodecs/AudioDataAllocationSizeOptions.md) | Options used for AudioData.AllocationSize() https://developer.mozilla.org/en-US/docs/Web/API/AudioData/allocationSize#op... |
 | [AudioDataCopyToOptions](WebCodecs/AudioDataCopyToOptions.md) | Options used fpr AudioData.CopyTo() https://developer.mozilla.org/en-US/docs/Web/API/AudioData/copyTo#options |
 | [AudioDataOptions](WebCodecs/AudioDataOptions.md) | Options used when creating a new AudioData https://developer.mozilla.org/en-US/docs/Web/API/AudioData/AudioData#init |
@@ -351,9 +374,11 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [EncodedAudioChunk](WebCodecs/EncodedAudioChunk.md) | The EncodedAudioChunk interface of the Web Codecs API represents a chunk of encoded audio. |
 | [EncodedAudioChunkInit](WebCodecs/EncodedAudioChunkInit.md) | A dictionary object containing the init params for the EncodedAudioChunk |
 | [EncodedAudioChunkMetadata](WebCodecs/EncodedAudioChunkMetadata.md) | A dictionary object containing metadata for the EncodedAudioChunk |
+| [EncodedAudioChunkType](WebCodecs/EncodedAudioChunkType.md) | The type of the chunk. |
 | [EncodedVideoChunk](WebCodecs/EncodedVideoChunk.md) | The EncodedVideoChunk interface of the Web Codecs API represents a chunk of encoded video. |
 | [EncodedVideoChunkInit](WebCodecs/EncodedVideoChunkInit.md) | A dictionary object containing the init params for the EncodedVideoChunk |
 | [EncodedVideoChunkMetadata](WebCodecs/EncodedVideoChunkMetadata.md) | A dictionary object containing metadata for the EncodedVideoChunk |
+| [EncodedVideoChunkType](WebCodecs/EncodedVideoChunkType.md) | The type of the chunk. |
 | [VideoColorSpace](WebCodecs/VideoColorSpace.md) | The VideoColorSpace() constructor creates a new VideoColorSpace object which represents a video color space. https://dev... |
 | [VideoColorSpaceOptions](WebCodecs/VideoColorSpaceOptions.md) | An object representing the color space of the VideoFrame https://developer.mozilla.org/en-US/docs/Web/API/VideoColorSpac... |
 | [VideoDecoder](WebCodecs/VideoDecoder.md) | The VideoDecoder interface of the Web Codecs API decodes EncodedVideoChunks into VideoFrames. |
@@ -365,6 +390,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [VideoEncoderEncodeOptions](WebCodecs/VideoEncoderEncodeOptions.md) | A dictionary object containing options for the encode method |
 | [VideoEncoderInit](WebCodecs/VideoEncoderInit.md) | A dictionary object containing the init params for the VideoEncoder |
 | [VideoEncoderSupport](WebCodecs/VideoEncoderSupport.md) | Result of VideoEncoder.isConfigSupported |
+| [VideoFrame](VideoFrame.md) | The `VideoFrame` interface of the WebCodecs API represents a single frame of video. It can be created from various image... |
 | [VideoFrameCopyOptions](WebCodecs/VideoFrameCopyOptions.md) | VideoFrame.CopyTo() options https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame/copyTo#options |
 | [VideoFrameDataOptions](WebCodecs/VideoFrameDataOptions.md) | Options used when creating a new VideoFrame using ArrayBuffer, TypedArray, or DataView data https://developer.mozilla.or... |
 | [VideoFrameLayout](WebCodecs/VideoFrameLayout.md) | Describes a video plane layout for a VideoFrame https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame/VideoFrame#l... |
@@ -377,6 +403,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 
 | Type | Description |
 |---|---|
+| [GL](WebGL/GL.md) | WebGL and WebGL2 specification constants (GLenum values). All values are typed as uint to match the GLenum specification... |
 | [WebGL2RenderingContext](WebGL/WebGL2RenderingContext.md) | The WebGL2RenderingContext interface provides the OpenGL ES 3.0 rendering context for the drawing surface of an HTML can... |
 | [WebGLActiveInfo](WebGL/WebGLActiveInfo.md) | The WebGLActiveInfo interface is part of the WebGL API and represents the information returned by calling the WebGLRende... |
 | [WebGLBuffer](WebGL/WebGLBuffer.md) | The WebGLBuffer interface is part of the WebGL API and represents an opaque buffer object storing data such as vertices ... |
@@ -410,6 +437,8 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [GPU](WebGPU/GPU.md) | The GPU interface of the WebGPU API is the starting point for using WebGPU. It can be used to return a GPUAdapter from w... |
 | [GPUAdapter](WebGPU/GPUAdapter.md) | The GPUAdapter interface of the WebGPU API represents a GPU adapter. From this you can request a GPUDevice, adapter info... |
 | [GPUAdapterInfo](WebGPU/GPUAdapterInfo.md) | The GPUAdapterInfo interface of the WebGPU API contains identifying information about a GPUAdapter. https://developer.mo... |
+| [GPUAddressMode](WebGPU/GPUAddressMode.md) | https://www.w3.org/TR/webgpu/#enumdef-gpuaddressmode |
+| [GPUAutoLayoutMode](WebGPU/GPUAutoLayoutMode.md) | https://www.w3.org/TR/webgpu/#enumdef-gpuautolayoutmode |
 | [GPUBindGroup](WebGPU/GPUBindGroup.md) | A GPUBindGroup defines a set of resources to be bound together in a group and how the resources are used in shader stage... |
 | [GPUBindGroupDescriptor](WebGPU/GPUBindGroupDescriptor.md) | https://www.w3.org/TR/webgpu/#dictdef-gpubindgroupdescriptor |
 | [GPUBindGroupEntry](WebGPU/GPUBindGroupEntry.md) | A GPUBindGroupEntry describes a single resource to be bound in a GPUBindGroup https://www.w3.org/TR/webgpu/#dictdef-gpub... |
@@ -418,20 +447,26 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [GPUBindGroupLayoutEntry](WebGPU/GPUBindGroupLayoutEntry.md) | Describes a single shader resource binding to be included in the GPUBindGroupLayout https://www.w3.org/TR/webgpu/#dictde... |
 | [GPUBindingCommandsMixin](WebGPU/GPUBindingCommandsMixin.md) | https://www.w3.org/TR/webgpu/#gpubindingcommandsmixin |
 | [GPUBlendComponent](WebGPU/GPUBlendComponent.md) | https://www.w3.org/TR/webgpu/#dictdef-gpublendcomponent |
+| [GPUBlendFactor](WebGPU/GPUBlendFactor.md) | GPUBlendFactor defines how either a source or destination blend factors is calculated: https://www.w3.org/TR/webgpu/#enu... |
+| [GPUBlendOperation](WebGPU/GPUBlendOperation.md) | GPUBlendOperation defines the algorithm used to combine source and destination blend factors: https://www.w3.org/TR/webg... |
 | [GPUBlendState](WebGPU/GPUBlendState.md) | https://www.w3.org/TR/webgpu/#dictdef-gpublendstate |
 | [GPUBuffer](WebGPU/GPUBuffer.md) | The GPUBuffer interface of the WebGPU API represents a block of memory that can be used to store raw data to use in GPU ... |
 | [GPUBufferBinding](WebGPU/GPUBufferBinding.md) | A GPUBufferBinding describes a buffer and optional range to bind as a resource. https://www.w3.org/TR/webgpu/#dictdef-gp... |
 | [GPUBufferBindingLayout](WebGPU/GPUBufferBindingLayout.md) | https://www.w3.org/TR/webgpu/#dictdef-gpubufferbindinglayout |
 | [GPUBufferDescriptor](WebGPU/GPUBufferDescriptor.md) | Creates buffer descriptor https://www.w3.org/TR/webgpu/#gpubufferdescriptor |
+| [GPUBufferMapState](WebGPU/GPUBufferMapState.md) | A GPUBuffer represents a block of memory that can be used in GPU operations. Data is stored in linear layout, meaning th... |
+| [GPUBufferUsage](WebGPU/GPUBufferUsage.md) | WebGPU usage flags https://www.w3.org/TR/webgpu/#buffer-usage |
 | [GPUCanvasConfiguration](WebGPU/GPUCanvasConfiguration.md) | Configuration options for creating a GPUCanvasContext. https://www.w3.org/TR/webgpu/#dictdef-gpucanvasconfiguration |
 | [GPUCanvasContext](WebGPU/GPUCanvasContext.md) | The GPUCanvasContext interface of the WebGPU API represents the WebGPU rendering context of a canvas element, returned v... |
 | [GPUColorDict](WebGPU/GPUColorDict.md) | https://www.w3.org/TR/webgpu/#dictdef-gpucolordict |
 | [GPUColorTargetState](WebGPU/GPUColorTargetState.md) | Represents the state of a color target in a GPU rendering pipeline, including its format. https://www.w3.org/TR/webgpu/#... |
+| [GPUColorWriteFlags](WebGPU/GPUColorWriteFlags.md) | https://www.w3.org/TR/webgpu/#typedefdef-gpucolorwriteflags |
 | [GPUCommandBuffer](WebGPU/GPUCommandBuffer.md) | Command buffers are pre-recorded lists of GPU commands (blocks of queue timeline steps) that can be submitted to a GPUQu... |
 | [GPUCommandBufferDescriptor](WebGPU/GPUCommandBufferDescriptor.md) | https://www.w3.org/TR/webgpu/#command-buffer-creation |
 | [GPUCommandEncoder](WebGPU/GPUCommandEncoder.md) | The GPUCommandEncoder interface of the WebGPU API represents an encoder that collects a sequence of GPU commands to be i... |
 | [GPUCommandEncoderDescriptor](WebGPU/GPUCommandEncoderDescriptor.md) | Represents a descriptor used to configure a GPU command encoder. https://www.w3.org/TR/webgpu/#dictdef-gpucommandencoder... |
 | [GPUCommandsMixin](WebGPU/GPUCommandsMixin.md) | https://www.w3.org/TR/webgpu/#gpucommandsmixin |
+| [GPUCompareFunction](WebGPU/GPUCompareFunction.md) | GPUCompareFunction specifies the behavior of a comparison sampler. If a comparison sampler is used in a shader, the dept... |
 | [GPUCompilationInfo](WebGPU/GPUCompilationInfo.md) | The GPUCompilationInfo interface of the WebGPU API represents an array of GPUCompilationMessage objects generated by the... |
 | [GPUCompilationMessage](WebGPU/GPUCompilationMessage.md) | The GPUCompilationMessage interface of the WebGPU API represents a single informational, warning, or error message gener... |
 | [GPUComputePassDescriptor](WebGPU/GPUComputePassDescriptor.md) | https://www.w3.org/TR/webgpu/#dictdef-gpucomputepassdescriptor |
@@ -441,17 +476,25 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [GPUComputePipelineDescriptor](WebGPU/GPUComputePipelineDescriptor.md) | https://www.w3.org/TR/webgpu/#dictdef-gpucomputepipelinedescriptor |
 | [GPUCopyExternalImageDestInfo](WebGPU/GPUCopyExternalImageDestInfo.md) | WebGPU textures hold raw numeric data, and are not tagged with semantic metadata describing colors. However, copyExterna... |
 | [GPUCopyExternalImageSourceInfo](WebGPU/GPUCopyExternalImageSourceInfo.md) | "GPUCopyExternalImageSourceInfo" describes the "info" about the "source" of a "copyExternalImageToTexture()" operation. ... |
+| [GPUCullMode](WebGPU/GPUCullMode.md) | https://www.w3.org/TR/webgpu/#enumdef-gpucullmode |
 | [GPUDebugCommandsMixin](WebGPU/GPUDebugCommandsMixin.md) | https://www.w3.org/TR/webgpu/#gpudebugcommandsmixin |
 | [GPUDepthStencilState](WebGPU/GPUDepthStencilState.md) | Represents a depth-stencil state in WebGPU, which is used to configure depth and stencil testing for rendering operation... |
 | [GPUDevice](WebGPU/GPUDevice.md) | The GPUDevice interface of the WebGPU API represents a logical GPU device. This is the main interface through which the ... |
 | [GPUDeviceDescriptor](WebGPU/GPUDeviceDescriptor.md) | RequestDevice options https://www.w3.org/TR/webgpu/#gpudevicedescriptor |
 | [GPUDeviceLostInfo](WebGPU/GPUDeviceLostInfo.md) | The GPUDeviceLostInfo interface of the WebGPU API represents the object returned when the GPUDevice.lost Promise resolve... |
 | [GPUError](WebGPU/GPUError.md) | The GPUError interface of the WebGPU API is the base interface for errors surfaced by GPUDevice.popErrorScope and the un... |
+| [GPUErrorFilter](WebGPU/GPUErrorFilter.md) | GPUErrorFilter defines the type of errors that should be caught when calling pushErrorScope(): https://www.w3.org/TR/web... |
 | [GPUExtent3DDict](WebGPU/GPUExtent3DDict.md) | https://www.w3.org/TR/webgpu/#dictdef-gpuextent3ddict |
 | [GPUExternalTexture](WebGPU/GPUExternalTexture.md) | A GPUExternalTexture is a sampleable 2D texture wrapping an external video frame. It is an immutable snapshot; its conte... |
 | [GPUExternalTextureBindingLayout](WebGPU/GPUExternalTextureBindingLayout.md) | https://www.w3.org/TR/webgpu/#dictdef-gpuexternaltexturebindinglayout |
 | [GPUExternalTextureDescriptor](WebGPU/GPUExternalTextureDescriptor.md) | https://www.w3.org/TR/webgpu/#dictdef-gpuexternaltexturedescriptor |
+| [GPUFilterMode](WebGPU/GPUFilterMode.md) | https://www.w3.org/TR/webgpu/#enumdef-gpufiltermode |
 | [GPUFragmentState](WebGPU/GPUFragmentState.md) | Represents a fragment of data or a computational unit intended for processing on a GPU. https://www.w3.org/TR/webgpu/#di... |
+| [GPUFrontFace](WebGPU/GPUFrontFace.md) | GPUFrontFace defines which polygons are considered front-facing by a GPURenderPipeline. See § 23.2.5.4 Polygon Rasteriza... |
+| [GPUIndexFormat](WebGPU/GPUIndexFormat.md) | https://www.w3.org/TR/webgpu/#enumdef-gpuindexformat |
+| [GPULoadOp](WebGPU/GPULoadOp.md) | https://www.w3.org/TR/webgpu/#enumdef-gpuloadop |
+| [GPUMapMode](WebGPU/GPUMapMode.md) | The GPUMapMode flags determine how a GPUBuffer is mapped when calling mapAsync(): https://www.w3.org/TR/webgpu/#typedefd... |
+| [GPUMipmapFilterMode](WebGPU/GPUMipmapFilterMode.md) | https://www.w3.org/TR/webgpu/#enumdef-gpumipmapfiltermode |
 | [GPUMultisampleState](WebGPU/GPUMultisampleState.md) | An object describing how the pipeline interacts with a render pass's multisampled attachments. https://www.w3.org/TR/web... |
 | [GPUObjectBase](WebGPU/GPUObjectBase.md) | A WebGPU object consists of a WebGPU Interface and an internal object. The WebGPU interface defines the public interface... |
 | [GPUObjectDescriptorBase](WebGPU/GPUObjectDescriptorBase.md) | An object descriptor holds the information needed to create an object, which is typically done via one of the create* me... |
@@ -460,7 +503,9 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [GPUPipelineDescriptorBase](WebGPU/GPUPipelineDescriptorBase.md) | https://www.w3.org/TR/webgpu/#dictdef-gpupipelinedescriptorbase |
 | [GPUPipelineLayout](WebGPU/GPUPipelineLayout.md) | The GPUPipelineLayout interface of the WebGPU API defines the GPUBindGroupLayouts used by a pipeline. GPUBindGroups used... |
 | [GPUPipelineLayoutDescriptor](WebGPU/GPUPipelineLayoutDescriptor.md) | Describes the layout of a pipeline, which is used to create a GPUPipelineLayout object. https://www.w3.org/TR/webgpu/#di... |
+| [GPUPowerPreference](WebGPU/GPUPowerPreference.md) | Power preference options for GPUAdapter request. |
 | [GPUPrimitiveState](WebGPU/GPUPrimitiveState.md) | An object describing how a pipeline constructs and rasterizes primitives from its vertex inputs. https://www.w3.org/TR/w... |
+| [GPUPrimitiveTopology](WebGPU/GPUPrimitiveTopology.md) | GPUPrimitiveTopology defines the primitive type draw calls made with a GPURenderPipeline will use. See § 23.2.5 Rasteriz... |
 | [GPUProgrammableStage](WebGPU/GPUProgrammableStage.md) | A GPUProgrammableStage describes the entry point in the user-provided GPUShaderModule that controls one of the programma... |
 | [GPUQuerySet](WebGPU/GPUQuerySet.md) | https://www.w3.org/TR/webgpu/#gpuqueryset |
 | [GPUQuerySetDescriptor](WebGPU/GPUQuerySetDescriptor.md) | A GPUQuerySetDescriptor specifies the options to use in creating a GPUQuerySet. https://www.w3.org/TR/webgpu/#dictdef-gp... |
@@ -475,6 +520,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [GPURenderPassDepthStencilAttachment](WebGPU/GPURenderPassDepthStencilAttachment.md) | https://www.w3.org/TR/webgpu/#dictdef-gpurenderpassdepthstencilattachment |
 | [GPURenderPassDescriptor](WebGPU/GPURenderPassDescriptor.md) | Represents a descriptor for configuring a GPU render pass. https://www.w3.org/TR/webgpu/#dictdef-gpurenderpassdescriptor |
 | [GPURenderPassEncoder](WebGPU/GPURenderPassEncoder.md) | Represents an encoder for recording commands within a GPU render pass. https://www.w3.org/TR/webgpu/#gpurenderpassencode... |
+| [GPURenderPassTimestampWrites](WebGPU/GPURenderPassTimestampWrites.md) | Defines timestamp write operations for a render pass. https://www.w3.org/TR/webgpu/#dictdef-gpurenderpasstimestampwrites |
 | [GPURenderPipeline](WebGPU/GPURenderPipeline.md) | The GPURenderPipeline interface of the WebGPU API represents a pipeline that controls the vertex and fragment shader sta... |
 | [GPURenderPipelineDescriptor](WebGPU/GPURenderPipelineDescriptor.md) | Create render pipeline descriptor https://www.w3.org/TR/webgpu/#dictdef-gpurenderpipelinedescriptor |
 | [GPURequestAdapterOptions](WebGPU/GPURequestAdapterOptions.md) | Options for GPU.RequestAdapter https://www.w3.org/TR/webgpu/#dictdef-gpurequestadapteroptions |
@@ -483,22 +529,30 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [GPUSamplerDescriptor](WebGPU/GPUSamplerDescriptor.md) | https://www.w3.org/TR/webgpu/#dictdef-gpusamplerdescriptor |
 | [GPUShaderModule](WebGPU/GPUShaderModule.md) | The GPUShaderModule interface of the WebGPU API represents an internal shader module object, a container for WGSL shader... |
 | [GPUShaderModuleDescriptor](WebGPU/GPUShaderModuleDescriptor.md) | Describes the parameters for creating a GPUShaderModule, which is used to compile and manage shader code in WebGPU. http... |
+| [GPUShaderStageFlags](WebGPU/GPUShaderStageFlags.md) | GPUShaderStage contains the following flags, which describe which shader stages a corresponding GPUBindGroupEntry for th... |
 | [GPUStencilFaceState](WebGPU/GPUStencilFaceState.md) | A GPUStencilFaceState dictionary specifies the stencil state for a given face direction (front or back). https://www.w3.... |
+| [GPUStencilOperation](WebGPU/GPUStencilOperation.md) | https://www.w3.org/TR/webgpu/#enumdef-gpustenciloperation |
 | [GPUStorageTextureBindingLayout](WebGPU/GPUStorageTextureBindingLayout.md) | https://www.w3.org/TR/webgpu/#dictdef-gpustoragetexturebindinglayout |
+| [GPUStoreOp](WebGPU/GPUStoreOp.md) | https://www.w3.org/TR/webgpu/#enumdef-gpustoreop |
 | [GPUSupportedFeatures](WebGPU/GPUSupportedFeatures.md) | The GPUSupportedFeatures interface of the WebGPU API is a Set-like object that describes additional functionality suppor... |
 | [GPUSupportedLimits](WebGPU/GPUSupportedLimits.md) | The GPUSupportedLimits interface of the WebGPU API describes the limits supported by a GPUAdapter. https://www.w3.org/TR... |
 | [GPUTexelCopyBufferInfo](WebGPU/GPUTexelCopyBufferInfo.md) | "GPUTexelCopyBufferInfo" describes the "info" (GPUBuffer and GPUTexelCopyBufferLayout) about a "buffer" source or destin... |
 | [GPUTexelCopyBufferLayout](WebGPU/GPUTexelCopyBufferLayout.md) | "GPUTexelCopyBufferLayout" describes the "layout" of texels in a "buffer" of bytes (GPUBuffer or AllowSharedBufferSource... |
 | [GPUTexelCopyTextureInfo](WebGPU/GPUTexelCopyTextureInfo.md) | "GPUTexelCopyTextureInfo" describes the "info" (GPUTexture, etc.) about a "texture" source or destination of a "texel co... |
 | [GPUTexture](WebGPU/GPUTexture.md) | The GPUTexture interface of the WebGPU API represents a container used to store 1D, 2D, or 3D arrays of data, such as im... |
+| [GPUTextureAspect](WebGPU/GPUTextureAspect.md) | Each GPUTextureAspect value corresponds to a set of aspects. The set of aspects are defined for each value below. https:... |
 | [GPUTextureBindingLayout](WebGPU/GPUTextureBindingLayout.md) | https://www.w3.org/TR/webgpu/#dictdef-gputexturebindinglayout |
 | [GPUTextureDescriptor](WebGPU/GPUTextureDescriptor.md) | https://www.w3.org/TR/webgpu/#gputexturedescriptor |
+| [GPUTextureFormat](WebGPU/GPUTextureFormat.md) |  |
+| [GPUTextureUsage](WebGPU/GPUTextureUsage.md) | The bitwise flags representing the original usages set when the GPUTexture was first created. The returned number is the... |
 | [GPUTextureView](WebGPU/GPUTextureView.md) | The GPUTextureView interface of the WebGPU API represents a view into a subset of the texture resources defined by a par... |
 | [GPUTextureViewDescriptor](WebGPU/GPUTextureViewDescriptor.md) | Descriptor for creating a GPUTextureView. https://www.w3.org/TR/webgpu/#dictdef-gputextureviewdescriptor |
 | [GPUUncapturedErrorEvent](WebGPU/GPUUncapturedErrorEvent.md) | The GPUUncapturedErrorEvent interface of the WebGPU API is the event object type for the GPUDevice uncapturederror event... |
 | [GPUVertexAttribute](WebGPU/GPUVertexAttribute.md) | Defines the layout of the vertex attributes within each structure. https://www.w3.org/TR/webgpu/#dictdef-gpuvertexattrib... |
 | [GPUVertexBufferLayout](WebGPU/GPUVertexBufferLayout.md) | Represents the expected layout of a vertex buffer used in the pipeline. https://www.w3.org/TR/webgpu/#dictdef-gpuvertexb... |
+| [GPUVertexFormat](WebGPU/GPUVertexFormat.md) | https://www.w3.org/TR/webgpu/#enumdef-gpuvertexformat |
 | [GPUVertexState](WebGPU/GPUVertexState.md) | An object describing the vertex shader entry point of the pipeline and its input buffer layouts. https://www.w3.org/TR/w... |
+| [GPUVertexStepMode](WebGPU/GPUVertexStepMode.md) | The step mode configures how an address for vertex buffer data is computed, based on the current vertex or instance inde... |
 | [WGSLLanguageFeatures](WebGPU/WGSLLanguageFeatures.md) | The WGSLLanguageFeatures interface of the WebGPU API is a setlike object that reports the WGSL language extensions suppo... |
 
 ## WebRTC
@@ -508,6 +562,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [RTCAnswerOptions](WebRTC/RTCAnswerOptions.md) | Options used for RTCPeerConnection.CreateSnwer() https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/crea... |
 | [RTCCertificate](WebRTC/RTCCertificate.md) | The RTCCertificate interface provides an object representing a certificate used by an RTCPeerConnection for authenticati... |
 | [RTCConfiguration](WebRTC/RTCConfiguration.md) | Configuration passed to new RTCPeerConnection https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/RTCPeer... |
+| [RTCDataChannel](RTCDataChannel.md) | The `RTCDataChannel` class represents a bi-directional data channel between two peers in a WebRTC connection. Data chann... |
 | [RTCDataChannelEvent](WebRTC/RTCDataChannelEvent.md) | The RTCDataChannelEvent interface represents an event that is fired when an RTCDataChannel is added to an RTCPeerConnect... |
 | [RTCDataChannelOptions](WebRTC/RTCDataChannelOptions.md) | The RTCDataChannelOptions dictionary is used to provide options when creating an RTCDataChannel. |
 | [RTCDtlsTransport](WebRTC/RTCDtlsTransport.md) | The RTCDtlsTransport interface provides access to information about the Datagram Transport Layer Security (DTLS) transpo... |
@@ -519,18 +574,29 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [RTCIceCandidatePairStats](WebRTC/RTCIceCandidatePairStats.md) | The RTCIceCandidatePairStats dictionary of the WebRTC API is used to report statistics that provide insight into the qua... |
 | [RTCIceCandidateStats](WebRTC/RTCIceCandidateStats.md) | The RTCIceCandidateStats dictionary of the WebRTC API is used to report statistics related to an RTCIceCandidate. https:... |
 | [RTCIceServer](WebRTC/RTCIceServer.md) | Describes one server which may be used by the ICE agent; these are typically STUN and/or TURN servers. If this isn't spe... |
+| [RTCIceTransport](WebRTC/RTCIceTransport.md) | The RTCIceTransport interface provides access to information about the ICE transport layer over which the data is being ... |
+| [RTCIdentityAssertion](WebRTC/RTCIdentityAssertion.md) | The RTCIdentityAssertion interface represents an identity assertion which can be used to authenticate an RTCPeerConnecti... |
 | [RTCMediaEncoding](WebRTC/RTCMediaEncoding.md) | Parameters for a single codec that could be used to encode the track's media. https://developer.mozilla.org/en-US/docs/W... |
 | [RTCOfferOptions](WebRTC/RTCOfferOptions.md) | Options used for RTCPeerConnection.CreateOffer() https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/crea... |
 | [RTCPeerConnection](WebRTC/RTCPeerConnection.md) | The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It provides... |
 | [RTCPeerConnectionEvent](WebRTC/RTCPeerConnectionEvent.md) | The RTCPeerConnectionEvent interface represents an event that is fired when an RTCPeerConnection receives an ICE candida... |
 | [RTCPeerConnectionIceErrorEvent](WebRTC/RTCPeerConnectionIceErrorEvent.md) | The RTCPeerConnectionIceErrorEvent interface represents an error that occurred during the ICE candidate gathering or con... |
+| [RTCRtcpParameters](WebRTC/RTCRtcpParameters.md) | RTCP (RTP Control Protocol) parameters carried on RTCRtpParameters. Read-only in practice - browsers populate these from... |
+| [RTCRtpCodecParameters](WebRTC/RTCRtpCodecParameters.md) | One codec's negotiated parameters inside RTCRtpParameters. Populated from the negotiated SDP m= section; consumers round... |
+| [RTCRtpCodingParameters](WebRTC/RTCRtpCodingParameters.md) | Base dictionary for encoding/decoding parameters. Provides the per-encoding restriction identifier (RID) used by simulca... |
+| [RTCRtpEncodingParameters](WebRTC/RTCRtpEncodingParameters.md) | Per-encoding parameters for an RTCRtpSender. The array-of-these field `encodings` on RTCRtpSendParameters is what simulc... |
+| [RTCRtpHeaderExtensionParameters](WebRTC/RTCRtpHeaderExtensionParameters.md) | One RTP header extension (RFC 8285) parameter entry carried on RTCRtpParameters. Negotiated via SDP `a=extmap`; consumer... |
+| [RTCRtpParameters](WebRTC/RTCRtpParameters.md) | Base dictionary for RTCRtpSender.GetParameters / SetParameters and RTCRtpReceiver.GetParameters. Carries the round-trip-... |
 | [RTCRtpReceiver](WebRTC/RTCRtpReceiver.md) | The RTCRtpReceiver interface manages the reception and decoding of data for a MediaStreamTrack on an RTCPeerConnection. |
 | [RTCRtpSender](WebRTC/RTCRtpSender.md) | The RTCRtpSender interface provides the ability to control and obtain details about how a particular MediaStreamTrack is... |
 | [RTCRtpSenderCapabilities](WebRTC/RTCRtpSenderCapabilities.md) | The RTCRtpSenderCapabilities dictionary provides information about the capabilities of an RTCRtpSender. |
 | [RTCRtpSenderCapabilityHeaderExtension](WebRTC/RTCRtpSenderCapabilityHeaderExtension.md) | The RTCRtpSenderCapabilityHeaderExtension dictionary provides information about a supported RTP header extension. |
+| [RTCRtpSendParameters](WebRTC/RTCRtpSendParameters.md) | Parameters for the send side of an RTP stream, returned by GetParameters and passed back (possibly modified) to SetParam... |
 | [RTCRtpTransceiver](WebRTC/RTCRtpTransceiver.md) | The WebRTC interface RTCRtpTransceiver describes a permanent pairing of an RTCRtpSender and an RTCRtpReceiver, along wit... |
 | [RTCRtpTransceiverCodec](WebRTC/RTCRtpTransceiverCodec.md) | RTCRtpTransceiverCodec https://developer.mozilla.org/en-US/docs/Web/API/RTCRtpTransceiver/setCodecPreferences#channels |
 | [RTCRtpTransceiverOptions](WebRTC/RTCRtpTransceiverOptions.md) | Used in RTCPeerConnection.AddTransceiver https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/addTransceiv... |
+| [RTCSctpTransport](WebRTC/RTCSctpTransport.md) | The RTCSctpTransport interface provides information which describes a Stream Control Transmission Protocol (SCTP) transp... |
+| [RTCSdpType](WebRTC/RTCSdpType.md) | The RTCSdpType enum is used to describe the type of an RTCSessionDescription. |
 | [RTCSessionDescription](WebRTC/RTCSessionDescription.md) | The RTCSessionDescription interface describes one end of a connection-or potential connection-and how it's configured. E... |
 | [RTCStats](WebRTC/RTCStats.md) | Base class for RTC stats objects https://developer.mozilla.org/en-US/docs/Web/API/RTCStatsReport#the_statistic_types |
 | [RTCStatsReport](WebRTC/RTCStatsReport.md) | The RTCStatsReport interface of the WebRTC API provides a statistics report for a RTCPeerConnection, RTCRtpSender, or RT... |
@@ -545,6 +611,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [WebTransportBidirectionalStream](WebTransport/WebTransportBidirectionalStream.md) | The WebTransportBidirectionalStream interface of the WebTransport API represents a bidirectional stream created by a Web... |
 | [WebTransportCloseInfo](WebTransport/WebTransportCloseInfo.md) | The WebTransportCloseInfo dictionary includes information about the error code and the reason for closing a WebTransport... |
 | [WebTransportDatagramDuplexStream](WebTransport/WebTransportDatagramDuplexStream.md) | The WebTransportDatagramDuplexStream interface of the WebTransport API represents a duplex stream for sending and receiv... |
+| [WebTransportHash](WebTransport/WebTransportHash.md) | A WebTransport certificate |
 | [WebTransportOptions](WebTransport/WebTransportOptions.md) | The WebTransportOptions dictionary includes options that can be passed to the WebTransport constructor. |
 
 ## WebXR
@@ -568,6 +635,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [XREquirectLayerInit](WebXR/XREquirectLayerInit.md) | https://developer.mozilla.org/en-US/docs/Web/API/XRWebGLBinding/createEquirectLayer#options |
 | [XRFrame](WebXR/XRFrame.md) | https://www.w3.org/TR/webxr/#xrframe-interface https://developer.mozilla.org/en-US/docs/Web/API/XRFrame |
 | [XRGPUBinding](WebXR/XRGPUBinding.md) | The XRGPUBinding interface is used to create GPU layers for WebXR rendering with WebGPU. This is the WebGPU counterpart ... |
+| [XRGPUProjectionLayerInit](WebXR/XRGPUProjectionLayerInit.md) | Configuration options for XRGPUBinding.createProjectionLayer(). |
 | [XRGPUSubImage](WebXR/XRGPUSubImage.md) | The XRGPUSubImage interface provides the GPU textures for rendering a view in an XR session. This is the WebGPU counterp... |
 | [XRHand](WebXR/XRHand.md) | The XRHand interface is pair iterator (an ordered map) with the key being the hand joints and the value being an XRJoint... |
 | [XRHitTestOptionsInit](WebXR/XRHitTestOptionsInit.md) | An XRHitTestOptionsInit dictionary represents a set of configurable values that affect the behavior of the hit test bein... |
@@ -584,6 +652,9 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [XRLightProbe](WebXR/XRLightProbe.md) | The XRLightProbe interface of the WebXR Device API contains lighting information at a given point in the user's environm... |
 | [XRLightProbeInit](WebXR/XRLightProbeInit.md) | https://developer.mozilla.org/en-US/docs/Web/API/XRSession/requestLightProbe#options |
 | [XRMediaBinding](WebXR/XRMediaBinding.md) | The XRMediaBinding interface is used to create XR layers that display the content of an HTMLVideoElement. https://immers... |
+| [XRMediaCylinderLayerInit](WebXR/XRMediaCylinderLayerInit.md) | Configuration options for XRMediaBinding.createCylinderLayer(). |
+| [XRMediaEquirectLayerInit](WebXR/XRMediaEquirectLayerInit.md) | Configuration options for XRMediaBinding.createEquirectLayer(). |
+| [XRMediaQuadLayerInit](WebXR/XRMediaQuadLayerInit.md) | Configuration options for XRMediaBinding.createQuadLayer(). |
 | [XRMesh](WebXR/XRMesh.md) | The XRMesh interface of the WebXR Device API provides real-world geometry data such as meshes detected by the XR system.... |
 | [XRPlane](WebXR/XRPlane.md) | The XRPlane interface of the WebXR Device API describes a detected flat surface in the real world. An XRPlane is detecte... |
 | [XRPose](WebXR/XRPose.md) | XRPose is a WebXR API interface representing a position and orientation in the 3D space, relative to the XRSpace within ... |
@@ -595,12 +666,14 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [XRRayDirectionInit](WebXR/XRRayDirectionInit.md) | An XRRayDirectionInit dictionary represents a direction vector to be passed to the XRRay(origin, direction) constructor.... |
 | [XRReferenceSpace](WebXR/XRReferenceSpace.md) | https://www.w3.org/TR/webxr/#xrreferencespace https://developer.mozilla.org/en-US/docs/Web/API/XRReferenceSpace |
 | [XRReferenceSpaceEvent](WebXR/XRReferenceSpaceEvent.md) | The WebXR Device API interface XRReferenceSpaceEvent represents an event sent to an XRReferenceSpace. Currently, the onl... |
+| [XRReferenceSpaceType](WebXR/XRReferenceSpaceType.md) | https://www.w3.org/TR/webxr/#enumdef-xrreferencespacetype |
 | [XRRenderState](WebXR/XRRenderState.md) | https://developer.mozilla.org/en-US/docs/Web/API/XRRenderState |
 | [XRRenderStateInit](WebXR/XRRenderStateInit.md) | https://www.w3.org/TR/webxr/#dictdef-xrrenderstateinit |
 | [XRRigidTransform](WebXR/XRRigidTransform.md) | The XRRigidTransform is a WebXR API interface that represents the 3D geometric transform described by a position and ori... |
 | [XRSession](WebXR/XRSession.md) | The XRSession interface of the WebXR Device API represents an ongoing XR session, providing methods and properties used ... |
 | [XRSessionEvent](WebXR/XRSessionEvent.md) | https://developer.mozilla.org/en-US/docs/Web/API/XRSessionEvent |
 | [XRSessionInit](WebXR/XRSessionInit.md) | https://www.w3.org/TR/webxr/#dictdef-xrsessioninit |
+| [XRSessionMode](WebXR/XRSessionMode.md) | https://www.w3.org/TR/webxr/#enumdef-xrsessionmode |
 | [XRSpace](WebXR/XRSpace.md) | The XRSpace interface of the WebXR Device API is an abstract interface providing a common basis for every class which re... |
 | [XRSubImage](WebXR/XRSubImage.md) | The XRSubImage interface of the WebXR Device API represents what viewport of the GPU texture to use for rendering. https... |
 | [XRSystem](WebXR/XRSystem.md) | The WebXR Device API interface XRSystem provides methods which let you get access to an XRSession object representing a ... |
@@ -626,17 +699,21 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [AllocationSizeOptions](AllocationSizeOptions.md) | VideoFrame.AllocationSize() options https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame/allocationSize#options |
 | [AnimationTimeline](AnimationTimeline.md) | The AnimationTimeline interface of the Web Animations API represents the timeline of an animation. https://developer.moz... |
 | [Array](Array.md) | The Array object, as with arrays in other programming languages, enables storing a collection of multiple items under a ... |
+| [ArrayBuffer](ArrayBuffer.md) | The `ArrayBuffer` object represents a generic raw binary data buffer. It is an array of bytes, often referred to in othe... |
 | [ArrayBufferOptions](ArrayBufferOptions.md) | Options used when creating an ArrayBuffer https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objec... |
 | [AsyncIterator](AsyncIterator.md) | An AsyncIterator object is an object that conforms to the async iterator protocol by providing a next() method that retu... |
+| [Atomics](Atomics.md) | Wraps the JavaScript `Atomics` namespace object. Provides static methods for performing atomic operations on SharedArray... |
 | [AtomicsWaitAsyncResult](AtomicsWaitAsyncResult.md) | Result type returned from Atomics.WaitAsync() https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_O... |
 | [AttachShadowRootOptions](AttachShadowRootOptions.md) | Options for Element.AttachShadowRoot calls |
 | [Audio](Audio.md) | The audio HTML element is used to embed sound content in documents. It may contain one or more audio sources, represente... |
 | [AudioTrack](AudioTrack.md) | The AudioTrack interface represents a single audio track from one of the HTML media elements, &lt;audio> or &lt;video>. ... |
 | [AudioTrackList](AudioTrackList.md) | The AudioTrackList interface is used to represent a list of the audio tracks contained within a given HTML media element... |
+| [AuthenticationExtensionsClientInputs](AuthenticationExtensionsClientInputs.md) | Contains the client extension input values for authentication extensions. |
 | [AuthenticatorAssertionResponse](AuthenticatorAssertionResponse.md) | The AuthenticatorAssertionResponse interface of the Web Authentication API contains a digital signature from the private... |
 | [AuthenticatorAttestationResponse](AuthenticatorAttestationResponse.md) | The AuthenticatorAttestationResponse interface of the Web Authentication API is the result of a WebAuthn credential regi... |
 | [AuthenticatorResponse](AuthenticatorResponse.md) | The AuthenticatorResponse interface of the Web Authentication API is the base interface for interfaces that provide a cr... |
 | [AuthenticatorSelection](AuthenticatorSelection.md) | Used in CredentialCreatePublicKey https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#authentic... |
+| [AuthenticatorTransport](AuthenticatorTransport.md) | Constants for authenticator transport values |
 | [BackgroundFetchEvent](BackgroundFetchEvent.md) | The BackgroundFetchEvent interface of the Background Fetch API is the event type for background fetch events dispatched ... |
 | [BackgroundFetchManager](BackgroundFetchManager.md) | The BackgroundFetchManager interface of the Background Fetch API is a map where the keys are background fetch IDs and th... |
 | [BackgroundFetchMatchOptions](BackgroundFetchMatchOptions.md) | Options used with BackgroundFetchRegistration.Match() https://developer.mozilla.org/en-US/docs/Web/API/BackgroundFetchRe... |
@@ -650,6 +727,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [BatteryManager](BatteryManager.md) | The BatteryManager interface of the Battery Status API provides information about the system's battery charge level. The... |
 | [BeforeInstallPromptEvent](BeforeInstallPromptEvent.md) | The BeforeInstallPromptEvent is the interface of the beforeinstallprompt event fired at the Window object before a user ... |
 | [BeforeUnloadEvent](BeforeUnloadEvent.md) | The BeforeUnloadEvent interface represents the event object for the beforeunload event, which is fired when the current ... |
+| [BigInt](BigInt.md) | BigInt values represent numeric values which are too large to be represented by the number primitive. https://developer.... |
 | [BigInt<T>](BigInt.md) | BigInt values represent numeric values which are too large to be represented by the number primitive. https://developer.... |
 | [Blob](Blob.md) | The Blob object represents a blob, which is a file-like object of immutable, raw data; they can be read as text or binar... |
 | [BlobEvent](BlobEvent.md) | The BlobEvent interface represents events associated with a Blob. These blobs are typically, but not necessarily, associ... |
@@ -668,6 +746,8 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [CanvasRenderingContext2DSettings](CanvasRenderingContext2DSettings.md) | Options used when calling Canvas.Get2DContext or OffscreenCanvas.Get2DContext |
 | [CaptureController](CaptureController.md) | The CaptureController interface provides methods that can be used to further manipulate a capture session separate from ... |
 | [CaptureStartFocusBehavior](CaptureStartFocusBehavior.md) | Describes whether an application invoking setFocusBehavior() would like the user agent to focus the display surface asso... |
+| [ChannelCountMode](ChannelCountMode.md) | The ChannelCountMode, in conjuction with the node’s channelCount and channelInterpretation values, is used to determine ... |
+| [ChannelInterpretation](ChannelInterpretation.md) | ChannelInterpretation https://www.w3.org/TR/webaudio/#enumdef-channelinterpretation |
 | [CheckVisibilityOptions](CheckVisibilityOptions.md) | Element.checkVisibility options |
 | [Client](Client.md) | The Client interface represents an executable context such as a Worker, or a SharedWorker. Window clients are represente... |
 | [Clients](Clients.md) | The Clients interface provides access to Client objects. Access it via self.clients within a service worker. https://dev... |
@@ -711,11 +791,14 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [CredentialGetPublicKey](CredentialGetPublicKey.md) | Options for CredentialsContainer.Get() CredentialsContainer.Get() will return a Promise that resolves with an PublicKeyC... |
 | [CredentialGetPublicKeyAllowedCredential](CredentialGetPublicKeyAllowedCredential.md) | Used in CredentialGetPublicKey https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#allowcredential... |
 | [CredentialGetPublicKeyOptions](CredentialGetPublicKeyOptions.md) | If used for CredentialsContainer.Get() a PublicKeyCredential will be returned https://developer.mozilla.org/en-US/docs/W... |
+| [CredentialMediationRequirement](CredentialMediationRequirement.md) | Constants for valid mediation requirement values in CredentialRequestOptions |
 | [CredentialRequestOptions](CredentialRequestOptions.md) | Options for requesting a credential via navigator.credentials.get() https://w3c.github.io/webappsec-credential-managemen... |
+| [CredentialRequestOptionsExtensions](CredentialRequestOptionsExtensions.md) | Extension methods for CredentialRequestOptions |
 | [CredentialsContainer](CredentialsContainer.md) | The CredentialsContainer interface of the Credential Management API exposes methods to request credentials and notify th... |
 | [CredentialUser](CredentialUser.md) | An object describing the user account for which the credential is generated. Used for property CredentialCreatePublicKey... |
 | [CryptoImportParams](CryptoImportParams.md) | Represents the object that should be passed as the algorithm parameter into SubtleCrypto.importKey() or SubtleCrypto.unw... |
 | [CryptoSignParams](CryptoSignParams.md) | Represents the object that should be passed as the algorithm parameter into SubtleCrypto.sign() or SubtleCrypto.verify() |
+| [CSSImportRule](CSSImportRule.md) | The CSSImportRule interface represents an @import at-rule. |
 | [CSSRule](CSSRule.md) | The CSSRule interface represents a single CSS rule. There are several types of rules which inherit properties from CSSRu... |
 | [CSSRuleList](CSSRuleList.md) | A CSSRuleList represents an ordered collection of read-only CSSRule objects. While the CSSRuleList object is read-only, ... |
 | [CSSStyleDeclaration](CSSStyleDeclaration.md) | The CSSStyleDeclaration interface represents an object that is a CSS declaration block, and exposes style information an... |
@@ -738,6 +821,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [DisplayMediaStreamOptions](DisplayMediaStreamOptions.md) | The DisplayMediaStreamOptions dictionary is used to instruct the user agent what sort of MediaStreamTracks may be includ... |
 | [DoubleRange](DoubleRange.md) | https://www.w3.org/TR/mediacapture-streams/#dom-doublerange |
 | [DragEvent](DragEvent.md) | The DragEvent interface is a DOM event that represents a drag and drop interaction. The user initiates a drag by placing... |
+| [ECJWKFull](ECJWKFull.md) | Contains both private key and public key |
 | [ECJWKPublic](JWK.md) | Contains public key |
 | [ElementCreationOptions](ElementCreationOptions.md) | https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement#options |
 | [EncodeIntoProgress](EncodeIntoProgress.md) | Returned fro ma call to TextEncoder.EncodeInto |
@@ -745,15 +829,18 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [EncodingConfigurationAudio](EncodingConfigurationAudio.md) | Configuration object for an audio media source. |
 | [EncodingConfigurationVideo](EncodingConfigurationVideo.md) | Configuration object for a video media source. |
 | [EncryptParams](EncryptParams.md) | Base class for parameter types used when calling SubtleCrypto.encrypt |
+| [Error](Error.md) | A .Net exception that represents a Javascript Error and makes the Error information available if needed |
 | [ErrorEvent](ErrorEvent.md) | The ErrorEvent interface represents events providing information related to errors in scripts or in files. |
 | [ErrorOptions](ErrorOptions.md) | Options used when creating a new Error |
 | [ExtendableCookieChangeEvent](ExtendableCookieChangeEvent.md) | The cookiechange event of the ServiceWorkerGlobalScope interface is fired when a cookie change occurs that matches the s... |
 | [ExtendableEvent](ExtendableEvent.md) | The ExtendableEvent interface extends the lifetime of the install and activate events dispatched on the global scope as ... |
 | [ExtendableMessageEvent](ExtendableMessageEvent.md) | The ExtendableMessageEvent interface of the Service Worker API represents the event object of a message event fired on a... |
+| [FederatedCredentialRequestOptions](FederatedCredentialRequestOptions.md) | Options for requesting federated credentials |
 | [FetchEvent](FetchEvent.md) | This is the event type for fetch events dispatched on the service worker global scope. It contains information about the... |
 | [File](File.md) | The File interface provides information about files and allows JavaScript in a web page to access their content. https:/... |
 | [FileList](FileList.md) | The FileList interface represents an object of this type returned by the files property of the HTML input element; this ... |
 | [FileOptions](FileOptions.md) | An options object containing optional attributes used when creating a new File https://developer.mozilla.org/en-US/docs/... |
+| [FilePermissionsOptions](FilePermissionsOptions.md) | Options for requesting file permissions |
 | [FilePickerType](FilePickerType.md) | https://developer.mozilla.org/en-US/docs/Web/API/Window/showOpenFilePicker#description |
 | [FileReader](FileReader.md) | The FileReader object lets web applications asynchronously read the contents of files (or raw data buffers) stored on th... |
 | [FileSystem](FileSystem.md) | The File and Directory Entries API interface FileSystem is used to represent a file system. These objects can be obtaine... |
@@ -806,28 +893,36 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [HIDReportItem](HIDReportItem.md) | A HIDReportItem represents one field within a HID report. https://wicg.github.io/webhid/#hidreportitem-dictionary |
 | [History](History.md) | The History interface allows manipulation of the browser session history, that is the pages visited in the tab or frame ... |
 | [IconInfo](IconInfo.md) | https://developer.mozilla.org/en-US/docs/Web/API/BackgroundFetchUpdateUIEvent/updateUI#icons https://developer.mozilla.o... |
+| [IDBCursor](IDBCursor.md) | The IDBCursor interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a ... |
 | [IDBCursor<TKey, TPrimaryKey, TValue>](IDBCursor.md) | The IDBCursor interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a ... |
+| [IDBCursorWithValue](IDBCursorWithValue.md) | The IDBCursorWithValue interface of the IndexedDB API represents a cursor for traversing or iterating over multiple reco... |
 | [IDBCursorWithValue<TKey, TPrimaryKey, TValue>](IDBCursorWithValue.md) | The IDBCursorWithValue interface of the IndexedDB API represents a cursor for traversing or iterating over multiple reco... |
 | [IDBDatabase](IDBDatabase.md) | The IDBDatabase interface of the IndexedDB API provides a connection to a database; you can use an IDBDatabase object to... |
 | [IDBDatabaseInfo](IDBDatabaseInfo.md) | Returned as elements in an array from the Promise returned by IDBFactory.databases() |
 | [IDBDatabaseTransactionOptions](IDBDatabaseTransactionOptions.md) | Options for IDBDatabase.Transaction |
 | [IDBFactory](IDBFactory.md) | The IDBFactory interface of the IndexedDB API lets applications asynchronously access the indexed databases. The object ... |
+| [IDBIndex](IDBIndex.md) | IDBIndex interface of the IndexedDB API provides asynchronous access to an index in a database. An index is a kind of ob... |
 | [IDBIndex<TIndexKey, TPrimaryKey, TValue>](IDBIndex.md) | IDBIndex interface of the IndexedDB API provides asynchronous access to an index in a database. An index is a kind of ob... |
+| [IDBKeyRange](IDBKeyRange.md) | The IDBKeyRange interface of the IndexedDB API represents a continuous interval over some data type that is used for key... |
 | [IDBKeyRange<TKey>](IDBKeyRange.md) | The IDBKeyRange interface of the IndexedDB API represents a continuous interval over some data type that is used for key... |
+| [IDBObjectStore](IDBObjectStore.md) | The IDBObjectStore interface of the IndexedDB API represents an object store in a database. Records within an object sto... |
 | [IDBObjectStore<TPrimaryKey, TValue>](IDBObjectStore.md) | The IDBObjectStore interface of the IndexedDB API represents an object store in a database. Records within an object sto... |
 | [IDBObjectStoreCreateIndexOptions](IDBObjectStoreCreateIndexOptions.md) | Options for IDBObjectStore.CreateIndex https://developer.mozilla.org/en-US/docs/Web/API/IDBObjectStore/createIndex#optio... |
 | [IDBObjectStoreCreateOptions](IDBObjectStoreCreateOptions.md) | Options for IDBDatabase.CreateObjectStore |
 | [IDBOpenDBRequest](IDBOpenDBRequest.md) | The IDBOpenDBRequest interface of the IndexedDB API provides access to the results of requests to open or delete databas... |
+| [IDBRequest](IDBRequest.md) | The IDBRequest interface of the IndexedDB API provides access to results of asynchronous requests to databases and datab... |
 | [IDBRequest<TResult>](IDBRequest.md) | The IDBRequest interface of the IndexedDB API provides access to results of asynchronous requests to databases and datab... |
 | [IDBTransaction](IDBTransaction.md) | The IDBTransaction interface of the IndexedDB API provides a static, asynchronous transaction on a database using event ... |
 | [IDBVersionChangeEvent](IDBVersionChangeEvent.md) | The IDBVersionChangeEvent interface of the IndexedDB API indicates that the version of the database has changed, as the ... |
 | [IdleDeadline](IdleDeadline.md) | The IdleDeadline interface is used as the data type of the input parameter to idle callbacks established by calling Wind... |
+| [ImageBitmap](ImageBitmap.md) | The `ImageBitmap` class represents a bitmap image that can be drawn to a canvas without undue latency. It provides an as... |
 | [ImageBitmapOptions](ImageBitmapOptions.md) | An object that sets options for the image's extraction when using Window.CreateImageBitmap https://developer.mozilla.org... |
 | [ImageBitmapRenderingContext](ImageBitmapRenderingContext.md) | The ImageBitmapRenderingContext interface is a canvas rendering context that provides variables and methods for replacin... |
 | [ImageBitmapRenderingContextSettings](ImageBitmapRenderingContextSettings.md) | The ImageBitmapRenderingContextSettings interface of the Canvas API provides settings for an ImageBitmapRenderingContext... |
 | [ImageData](ImageData.md) | The ImageData interface represents the underlying pixel data of an area of a canvas element. It is created using the Ima... |
 | [ImageDataSettings](ImageDataSettings.md) | Settings used when creating an ImageData instance https://developer.mozilla.org/en-US/docs/Web/API/ImageData/ImageData#s... |
 | [IMessagePort](MessagePort.md) | The MessagePort interface of the Channel Messaging API represents one of the two ports of a MessageChannel, allowing mes... |
+| [IMessagePortSimple](IMessagePortSimple.md) | MessagePort simple interface |
 | [Ink](Ink.md) | The Ink interface of the Ink API provides access to InkPresenter objects for the application to use to render ink stroke... |
 | [InkPresenter](InkPresenter.md) | The InkPresenter interface of the Ink API provides the ability to instruct the OS-level compositor to render ink strokes... |
 | [InkPresenterParam](InkPresenterParam.md) | Used for Ink RequestPresenter call |
@@ -846,6 +941,8 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [Iterator](Iterator.md) | Iteration protocols aren't new built-ins or syntax, but protocols. These protocols can be implemented by any object by f... |
 | [IteratorResult](IteratorResult.md) | Returned from an Iterator or AsyncIterator Next call |
 | [JSException](Error.md) | A .Net exception that represents a Javascript Error and makes the Error information available if needed |
+| [JSON](JSON.md) | Wraps the JavaScript `JSON` object. Provides static methods for parsing and stringifying JSON using the browser's native... |
+| [JWK](JWK.md) | Contains public key |
 | [KeyboardEvent](KeyboardEvent.md) | KeyboardEvent objects describe a user interaction with the keyboard https://developer.mozilla.org/en-US/docs/Web/API/Key... |
 | [KeyLocation](KeyLocation.md) | The following constants identify which part of the keyboard the key event originates from. |
 | [LaunchParams](LaunchParams.md) | The LaunchParams interface of the Launch Handler API is used when implementing custom launch navigation handling in a PW... |
@@ -854,8 +951,10 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [Lock](Lock.md) | The Lock interface of the Web Locks API provides the name and mode of a lock. This may be a newly requested lock that is... |
 | [LockInfo](LockInfo.md) | LockManager lock info https://developer.mozilla.org/en-US/docs/Web/API/LockManager/query#name |
 | [LockManager](LockManager.md) | The LockManager interface of the Web Locks API provides methods for requesting a new Lock object and querying for an exi... |
+| [LockManagerExtensions](LockManagerExtensions.md) | Adds extension methods to LockManager |
 | [LockManagerState](LockManagerState.md) | An object containing a snapshot of the LockManager state. https://developer.mozilla.org/en-US/docs/Web/API/LockManager/q... |
 | [LockRequestOptions](LockRequestOptions.md) | An object describing characteristics of the lock you want to create. https://developer.mozilla.org/en-US/docs/Web/API/Lo... |
+| [Map](Map.md) | The Map object holds key-value pairs and remembers the original insertion order of the keys. Any value (both objects and... |
 | [Map<TKey, TValue>](Map.md) | The Map object holds key-value pairs and remembers the original insertion order of the keys. Any value (both objects and... |
 | [MediaCapabilities](MediaCapabilities.md) | The MediaCapabilities interface of the Media Capabilities API provides information about the decoding abilities of the d... |
 | [MediaCapabilitiesInfo](MediaCapabilitiesInfo.md) | The MediaCapabilitiesInfo interface of the Media Capabilities API is returned when MediaCapabilities.decodingInfo() or M... |
@@ -875,8 +974,10 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [MediaRecorderErrorEvent](MediaRecorderErrorEvent.md) | The MediaRecorderErrorEvent interface represents errors which occur during recording. |
 | [MediaRecorderOptions](MediaRecorderOptions.md) | Options used when creating a new MediaRecorder |
 | [MediaSource](MediaSource.md) | The MediaSource interface of the Media Source Extensions API represents a source of media data for an HTMLMediaElement o... |
+| [MediaSourceHandle](MediaSourceHandle.md) | The MediaSourceHandle interface of the Media Source Extensions API is a proxy for a MediaSource that can be transferred ... |
 | [MediaStream](MediaStream.md) | The MediaStream interface of the Media Capture and Streams API represents a stream of media content. A stream consists o... |
 | [MediaStreamConstraints](MediaStreamConstraints.md) | The MediaStreamConstraints dictionary is used to instruct the User Agent what sort of MediaStreamTracks to include in th... |
+| [MediaStreamTrack](MediaStreamTrack.md) | The `MediaStreamTrack` class represents a single media track within a stream - typically an audio or video track, but ot... |
 | [MediaStreamTrackEvent](MediaStreamTrackEvent.md) | The MediaStreamTrackEvent interface of the Media Capture and Streams API represents events which indicate that a MediaSt... |
 | [MediaStreamTrackGenerator](MediaStreamTrackGenerator.md) | The MediaStreamTrackGenerator interface of the Insertable Streams for MediaStreamTrack API creates a WritableStream that... |
 | [MediaStreamTrackGeneratorOptions](MediaStreamTrackGeneratorOptions.md) | Options for the MediaStreamTrackProcessor constructor. https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack... |
@@ -887,7 +988,10 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [MediaTrackConstraints](MediaTrackConstraints.md) | The MediaTrackConstraints dictionary is used to instruct the User Agent what sort of MediaStreamTracks to include in the... |
 | [MediaTrackSettings](MediaTrackSettings.md) | MediaTrackSettings represents the Settings of a MediaStreamTrack object. Future specifications can extend the MediaTrack... |
 | [MessageChannel](MessageChannel.md) | The MessageChannel interface of the Channel Messaging API allows us to create a new message channel and send data throug... |
+| [MessageEvent](MessageEvent.md) | The MessageEvent interface represents a message received by a target object. https://developer.mozilla.org/en-US/docs/We... |
 | [MessageEvent<TData>](MessageEvent.md) | The MessageEvent interface represents a message received by a target object. https://developer.mozilla.org/en-US/docs/We... |
+| [MessagePort](MessagePort.md) | The MessagePort interface of the Channel Messaging API represents one of the two ports of a MessageChannel, allowing mes... |
+| [MIDIAccess](MIDIAccess.md) | The MIDIAccess interface of the Web MIDI API provides methods for listing MIDI input and output devices, and obtaining a... |
 | [MIDIAccessOptions](MIDIAccessOptions.md) | Otpions for RequestMIDIAccess |
 | [MIDIConnectionEvent](MIDIConnectionEvent.md) | The MIDIConnectionEvent interface of the Web MIDI API is the event passed to the statechange event of the MIDIAccess int... |
 | [MIDIInput](MIDIInput.md) | The MIDIInput interface of the Web MIDI API receives messages from a MIDI input port. https://developer.mozilla.org/en-U... |
@@ -899,6 +1003,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [ModuleNamespaceObject](ModuleNamespaceObject.md) | A module namespace object is an object that describes all exports from a module. It is a static object that is created w... |
 | [MonitorTypeSurfacesEnum](MonitorTypeSurfacesEnum.md) | Describes whether the application would like the user agent to offer the user the option to choose display surfaces whos... |
 | [MouseButton](MouseButton.md) | A number representing a given button https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button#value |
+| [MouseButtons](MouseButtons.md) | A number representing one or more buttons. For more than one button pressed simultaneously, the values are combined (e.g... |
 | [MouseEvent](MouseEvent.md) | The MouseEvent interface represents events that occur due to the user interacting with a pointing device (such as a mous... |
 | [MutationObserveOptions](MutationObserveOptions.md) | MutationObserver.observe options |
 | [MutationObserver](MutationObserver.md) | The MutationObserver interface provides the ability to watch for changes being made to the DOM tree. It is designed as a... |
@@ -911,10 +1016,13 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [NotificationAction](NotificationAction.md) | Represents a Notification action |
 | [NotificationDirection](NotificationOptions.md) | Notification direction |
 | [NotificationEvent](NotificationEvent.md) | The NotificationEvent interface of the Notifications API represents a notification event dispatched on the ServiceWorker... |
+| [NotificationOptions](NotificationOptions.md) | Notification direction |
 | [Number](Number.md) | Number values represent floating-point numbers like 37 or -9.25. https://developer.mozilla.org/en-US/docs/Web/JavaScript... |
 | [ObserveOptions](ObserveOptions.md) | An options object allowing you to set options for the observation. https://developer.mozilla.org/en-US/docs/Web/API/Resi... |
 | [OfflineAudioCompletionEvent](OfflineAudioCompletionEvent.md) | The Web Audio API OfflineAudioCompletionEvent interface represents events that occur when the processing of an OfflineAu... |
+| [OffscreenCanvas](OffscreenCanvas.md) | The `OffscreenCanvas` class provides a canvas that can be rendered off-screen, decoupling the DOM and the Canvas API so ... |
 | [OffscreenCanvasRenderingContext2D](OffscreenCanvasRenderingContext2D.md) | The OffscreenCanvasRenderingContext2D interface is a CanvasRenderingContext2D rendering context for drawing to the bitma... |
+| [OscillatorType](OscillatorType.md) | The shape of the wave produced by the node. |
 | [PageTransitionEvent](PageTransitionEvent.md) | The PageTransitionEvent event object is available inside handler functions for the pageshow and pagehide events, fired w... |
 | [PasswordCredential](PasswordCredential.md) | The PasswordCredential interface of the Credential Management API provides information about a username/password pair. |
 | [PasswordCredentialData](PasswordCredentialData.md) | The PasswordCredentialData interface of the Credential Management API is the dictionary containing the data used to crea... |
@@ -939,15 +1047,21 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [Point2DF](Point2DF.md) | Represents a point in 2D space with float coordinates |
 | [PointerEvent](PointerEvent.md) | The PointerEvent interface represents the state of a DOM event produced by a pointer such as the geometry of the contact... |
 | [PopStateEvent](PopStateEvent.md) | The PopStateEvent interface of the HTML 5 History API represents an event that is fired when the active history entry ch... |
+| [PredefinedColorSpace](PredefinedColorSpace.md) | https://html.spec.whatwg.org/multipage/canvas.html#predefinedcolorspace |
 | [ProgressEvent](ProgressEvent.md) | The progress event is fired periodically as the FileReader reads data. https://developer.mozilla.org/en-US/docs/Web/API/... |
+| [Promise](Promise.md) | The Promise object represents the eventual completion (or failure) of an asynchronous operation and its resulting value.... |
 | [Promise<TResult>](Promise.md) | The Promise object represents the eventual completion (or failure) of an asynchronous operation and its resulting value.... |
+| [PromiseCatchException](PromiseCatchException.md) | Exception thrown when a Promise is rejected and caught |
 | [PromiseCatchException<TCatch>](PromiseCatchException.md) | Exception thrown when a Promise is rejected and caught |
 | [PromiseRejectionEvent](PromiseRejectionEvent.md) | The PromiseRejectionEvent interface represents events which are sent to the global script context when JavaScript Promis... |
 | [PropertyDescriptor](PropertyDescriptor.md) | https://javascript.info/property-descriptors |
 | [Proxy](Proxy.md) | The Proxy object enables you to create a proxy for another object, which can intercept and redefine fundamental operatio... |
 | [ProxyHandler](ProxyHandler.md) | An object whose properties are functions that define the behavior of the proxy when an operation is performed on it. |
+| [PublicKeyCredential](PublicKeyCredential.md) | The PublicKeyCredential interface provides information about a public key / private key pair, which is a credential for ... |
 | [PublicKeyCredential<TResponse>](PublicKeyCredential.md) | The PublicKeyCredential interface provides information about a public key / private key pair, which is a credential for ... |
+| [PublicKeyCredentialDescriptor](PublicKeyCredentialDescriptor.md) | Contains the attributes that are specified by a caller when referring to a public key credential. |
 | [PublicKeyCredentialParameter](PublicKeyCredentialParameter.md) | Used for property CredentialCreatePublicKey.PubKeyCredParams https://developer.mozilla.org/en-US/docs/Web/API/Credential... |
+| [PublicKeyCredentialRequestOptions](PublicKeyCredentialRequestOptions.md) | The PublicKeyCredentialRequestOptions dictionary supplies get() with the data it needs to generate an assertion. https:/... |
 | [PushEvent](PushEvent.md) | The PushEvent interface of the Push API represents a push message that has been received. This event is sent to the glob... |
 | [PushManager](PushManager.md) | The PushManager interface of the Push API provides a way to receive notifications from third-party servers as well as re... |
 | [PushManagerSubscribeOptions](PushManagerSubscribeOptions.md) | Options for PushManager.Subscribe |
@@ -957,12 +1071,17 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [QueueingStrategy](QueueingStrategy.md) | A generic queueing strategy |
 | [ReadableByteStreamController](ReadableByteStreamController.md) | The ReadableByteStreamController interface of the Streams API represents a controller for a readable byte stream. It all... |
 | [ReadableByteStreamSource](ReadableByteStreamSource.md) | The ReadableByteStreamSource interface represents an underlying source for a ReadableStream of bytes. |
+| [ReadableStream](ReadableStream.md) | The `ReadableStream` interface represents a readable stream of byte data. The Fetch API offers a concrete instance via t... |
+| [ReadableStreamBYOBReader](ReadableStreamBYOBReader.md) | The ReadableStreamBYOBReader interface of the Streams API defines a reader for a ReadableStream that supports zero-copy ... |
 | [ReadableStreamBYOBRequest](ReadableStreamBYOBRequest.md) | The ReadableStreamBYOBRequest interface of the Streams API represents a "pull request" for data from an underlying sourc... |
 | [ReadableStreamDefaultController](ReadableStreamDefaultController.md) | The ReadableStreamDefaultController interface of the Streams API represents a controller allowing control of a ReadableS... |
 | [ReadableStreamDefaultReader](ReadableStreamDefaultReader.md) | The ReadableStreamDefaultReader interface of the Streams API represents a default reader that can be used to read stream... |
 | [ReadableStreamDefaultSource](ReadableStreamDefaultSource.md) | The ReadableStreamDefaultSource interface represents an underlying source for a ReadableStream. |
+| [ReadableStreamGetReaderOptions](ReadableStreamGetReaderOptions.md) | https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream/getReader#options |
 | [ReadableStreamReaderReadResponse](ReadableStreamReaderReadResponse.md) | Returned by ReadableStreamDefaultReader.Read |
+| [ReadableStreamReadResult](ReadableStreamReadResult.md) | Represents the result of a read operation on a ReadableStream. |
 | [ReadableStreamUnderlyingSource](ReadableStreamUnderlyingSource.md) | The ReadableStreamUnderlyingSource interface represents an underlying source for a ReadableStream. |
+| [Reflect](Reflect.md) | Wraps the JavaScript `Reflect` built-in object. Provides static methods for interceptable JavaScript operations - the sa... |
 | [RegExp](RegExp.md) | https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp |
 | [RelyingParty](RelyingParty.md) | An object describing the relying party that requested the credential creation. Used for property CredentialCreatePublicK... |
 | [RemoveEntryOptions](RemoveEntryOptions.md) | FileSystemDirectory.RemoveEntry options |
@@ -974,6 +1093,8 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [ResizeObserverSize](ResizeObserverSize.md) | The content box size of the observed element https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry/conten... |
 | [Response](Response.md) | The Response interface of the Fetch API represents the response to a request. https://developer.mozilla.org/en-US/docs/W... |
 | [ResponseOptions](ResponseOptions.md) | An options object containing settings for the response, including the status code, status text, and headers. https://dev... |
+| [RSAPS256JWKFull](RSAPS256JWKFull.md) | Contains both private key and public key |
+| [RSAPS256JWKPublic](RSAPS256JWKPublic.md) | Contains public key |
 | [Screen](Screen.md) | The Screen interface represents a screen, usually the one on which the current window is being rendered, and is obtained... |
 | [ScreenDetailed](ScreenDetailed.md) | The ScreenDetailed interface of the Window Management API represents detailed information about one specific screen avai... |
 | [ScreenDetails](ScreenDetails.md) | The ScreenDetails interface of the Window Management API represents the details of all the screens available to the user... |
@@ -1023,6 +1144,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [TextDecoderStream](TextDecoderStream.md) | The TextDecoderStream interface of the Encoding API converts a stream of text in a binary encoding, such as UTF-8 etc., ... |
 | [TextDecoderStreamOptions](TextDecoderStreamOptions.md) | TextDecoderStream options https://developer.mozilla.org/en-US/docs/Web/API/TextDecoderStream/TextDecoderStream#options |
 | [TextEncoder](TextEncoder.md) | The TextEncoder interface takes a stream of code points as input and emits a stream of UTF-8 bytes. https://developer.mo... |
+| [TextEncoderStream](TextEncoderStream.md) | The TextEncoderStream interface of the Encoding API converts a stream of strings into bytes in the UTF-8 encoding. It is... |
 | [TextMetrics](TextMetrics.md) | The TextMetrics interface represents the dimensions of a piece of text in the canvas; a TextMetrics instance can be retr... |
 | [TextTrack](TextTrack.md) | The TextTrack interface of the WebVTT API represents a text track associated with a media element. https://developer.moz... |
 | [TextTrackCue](TextTrackCue.md) | The TextTrackCue interface of the WebVTT API is the abstract base class for the various derived cue types, such as VTTCu... |
@@ -1034,6 +1156,8 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [TouchEvent](TouchEvent.md) | The TouchEvent interface represents an UIEvent which is sent when the state of contacts with a touch-sensitive surface c... |
 | [TouchList](TouchList.md) | The TouchList interface represents a list of contact points on a touch surface. For example, if the user has three finge... |
 | [TrackEvent](TrackEvent.md) | The TrackEvent interface of the HTML DOM API is used for events which represent changes to a set of available tracks on ... |
+| [TransferableAttribute](TransferableAttribute.md) | Indicates the class type is a transferable object. Transferable objects are objects that own resources that can be trans... |
+| [TransformStream](TransformStream.md) | The `TransformStream` interface represents a pair of streams: a writable side that accepts input, and a readable side th... |
 | [TransformStreamCallbacks](TransformStreamCallbacks.md) | Options for the TransformStream constructor. |
 | [TransformStreamDefaultController](TransformStreamDefaultController.md) | The TransformStreamDefaultController interface of the Streams API provides methods to manipulate the associated Readable... |
 | [UIEvent](UIEvent.md) | The UIEvent interface represents simple user interface events. https://developer.mozilla.org/en-US/docs/Web/API/UIEvent |
@@ -1043,6 +1167,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [URL](URL.md) | The URL interface is used to parse, construct, normalize, and encode URLs. It works by providing properties which allow ... |
 | [URLSearchParams](URLSearchParams.md) | The URLSearchParams interface defines utility methods to work with the query string of a URL. |
 | [UserActivation](UserActivation.md) | The UserActivation interface allows querying information about a window's user activation state. https://developer.mozil... |
+| [UserVerificationRequirement](UserVerificationRequirement.md) | Constants for user verification requirement values |
 | [VideoFacingModeEnum](VideoFacingModeEnum.md) | The VideoFacingModeEnum enum of the Media Statistics API is used to describe the facing mode of a video source. |
 | [VideoTrack](VideoTrack.md) | https://developer.mozilla.org/en-US/docs/Web/API/VideoTrack |
 | [VideoTrackGenerator](VideoTrackGenerator.md) | The VideoTrackGenerator interface of the Insertable Streams for MediaStreamTrack API has a WritableStream property that ... |
@@ -1054,8 +1179,11 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [WakeLock](WakeLock.md) | The WakeLock interface of the Screen Wake Lock API can be used to request a lock that prevents device screens from dimmi... |
 | [WakeLockSentinel](WakeLockSentinel.md) | The WakeLockSentinel interface of the Screen Wake Lock API can be used to monitor the status of the platform screen wake... |
 | [WebSocket](WebSocket.md) | The WebSocket object provides the API for creating and managing a WebSocket connection to a server, as well as for sendi... |
+| [WebTransportReceiveStream](WebTransportReceiveStream.md) | The WebTransportReceiveStream interface of the WebTransport API is a ReadableStream that can be used to read from an inc... |
+| [WebTransportSendStream](WebTransportSendStream.md) | The WebTransportSendStream interface of the WebTransport API is a specialized WritableStream that is used to send outbou... |
 | [WheelEvent](WheelEvent.md) | The WheelEvent interface represents events that occur due to the user moving a mouse wheel or similar input device. http... |
 | [WhiteBalanceModeEnum](WhiteBalanceModeEnum.md) | White balance options for media stream track capabilities |
+| [WindowAudioPreferenceEnum](WindowAudioPreferenceEnum.md) | Which audio, if any, the user agent should offer to share with a WINDOW capture from getDisplayMedia() (WindowAudio). Ch... |
 | [WindowClient](WindowClient.md) | The WindowClient interface of the ServiceWorker API represents the scope of a service worker client that is a document i... |
 | [WindowControlsOverlay](WindowControlsOverlay.md) | The WindowControlsOverlay interface of the Window Controls Overlay API exposes information about the geometry of the tit... |
 | [WindowControlsOverlayGeometryChangeEvent](WindowControlsOverlayGeometryChangeEvent.md) | The WindowControlsOverlayGeometryChangeEvent interface of the Window Controls Overlay API is passed to geometrychange wh... |
@@ -1064,11 +1192,10 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [WorkerLocation](WorkerLocation.md) | The WorkerLocation interface defines the absolute location of the script executed by the Worker. Such an object is initi... |
 | [WorkerNavigator](WorkerNavigator.md) | The WorkerNavigator interface represents a subset of the Navigator interface allowed to be accessed from a Worker https:... |
 | [WorkerOptions](WorkerOptions.md) | An object containing option properties that can be set when creating the Worker instance. https://developer.mozilla.org/... |
+| [WritableStream](WritableStream.md) | The `WritableStream` interface provides a standard abstraction for writing streaming data to a destination, known as a s... |
 | [WritableStreamDefaultController](WritableStreamDefaultController.md) | The WritableStreamDefaultController interface of the Streams API represents a controller allowing control of a WritableS... |
 | [WritableStreamDefaultWriter](WritableStreamDefaultWriter.md) | The WritableStreamDefaultWriter interface of the Streams API is the object returned by WritableStream.getWriter() and on... |
 | [XMLDocument](XMLDocument.md) | The XMLDocument interface represents an XML document. It inherits from the generic Document and does not add any specifi... |
 | [XMLHttpRequest](XMLHttpRequest.md) | XMLHttpRequest (XHR) objects are used to interact with servers. You can retrieve data from a URL without having to do a ... |
 | [XMLHttpRequestEventTarget](XMLHttpRequestEventTarget.md) | XMLHttpRequestEventTarget is the interface that describes the event handlers shared on XMLHttpRequest and XMLHttpRequest... |
 | [XMLHttpRequestUpload](XMLHttpRequestUpload.md) | The XMLHttpRequestUpload interface represents the upload process for a specific XMLHttpRequest. It is an opaque object t... |
-
-

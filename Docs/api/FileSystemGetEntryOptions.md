@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `FileSystemGetEntryOptions` | `class` | get | Options used for FileSystemDirectoryEntry.GetDirectory method. https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry/getDirectory#options_parameter |
 | `Exclusive` | `bool?` | get |  |
+| `Create` | `bool?` | get/set | If this property is true, and the requested directory doesn't exist, the user agent should create it. The default is false. The parent directory must already exist. |
 
 ## Examples
 

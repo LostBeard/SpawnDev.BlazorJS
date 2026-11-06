@@ -17,4 +17,5 @@
 | `AltitudeAccuracy` | `double?` | get | Returns a double representing the accuracy of the altitude expressed in meters. This value can be null. |
 | `Heading` | `double?` | get | Returns a double representing the direction towards which the device is facing. This value, specified in degrees, indicates how far off from heading true north the device is. 0 degrees represents true north, and the direction is determined clockwise (which means that east is 90 degrees and west is 270 degrees). If speed is 0, heading is NaN. If the device is unable to provide heading information, this value is null. |
 | `Speed` | `double?` | get | Returns a double representing the velocity of the device in meters per second. This value can be null. |
+| `Latitude` | `double` | get/set | Returns a double representing the position's latitude in decimal degrees |
 

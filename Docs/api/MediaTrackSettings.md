@@ -37,4 +37,5 @@
 | `Saturation` | `double?` | get/set |  |
 | `Sharpness` | `double?` | get |  |
 | `WhiteBalanceMode` | `EnumString<WhiteBalanceModeEnum>?` | get |  |
+| `DeviceId` | `string` | get/set | A string indicating the current value of the deviceId property. The device ID is an origin-unique string identifying the source of the track; this is usually a GUID. This value is specific to the source of the track's data and is not usable for setting constraints; it can, however, be used for initially selecting media when calling MediaDevices.getUserMedia(). |
 

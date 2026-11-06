@@ -20,6 +20,7 @@
 |---|---|---|---|
 | `PublicKeyCredentialParameter` | `class` | get | Used for property CredentialCreatePublicKey.PubKeyCredParams https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#pubkeycredparams |
 | `Alg` | `int` | get | A number that is equal to a COSE Algorithm Identifier, representing the cryptographic algorithm to use for this credential type. It is recommended that relying parties that wish to support a wide range of authenticators should include at least the following values in the provided choices: -8: Ed25519 -7: ES256 -257: RS256 |
+| `Type` | `string` | get/set | A string defining the type of public key credential to create. This can currently take a single value, "public-key", but more values may be added in the future. |
 
 ## Methods
 

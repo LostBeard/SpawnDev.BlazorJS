@@ -13,6 +13,7 @@
 | `ResponseOptions` | `class` | get | An options object containing settings for the response, including the status code, status text, and headers. https://developer.mozilla.org/en-US/docs/Web/API/Response/Response#options https://developer.mozilla.org/en-US/docs/Web/API/Response/json_static#options |
 | `StatusText` | `string?` | get |  |
 | `Headers` | `Union<Dictionary<string, string>, Headers>?` | get |  |
+| `Status` | `int?` | get/set | The status code for the response, such as 200. |
 
 ## Examples
 

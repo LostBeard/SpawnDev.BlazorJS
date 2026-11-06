@@ -13,6 +13,7 @@
 | `FileOptions` | `class` | get | An options object containing optional attributes used when creating a new File https://developer.mozilla.org/en-US/docs/Web/API/File/File |
 | `LastModified` | `long?` | get |  |
 | `Endings` | `string?` | get |  |
+| `Type` | `string?` | get/set | A string representing the MIME type of the content that will be put into the file. Defaults to a value of "" |
 
 ## Examples
 

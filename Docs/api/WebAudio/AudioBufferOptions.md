@@ -13,4 +13,5 @@
 | `AudioBufferOptions` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer/AudioBuffer#options |
 | `NumberOfChannels` | `int?` | get |  |
 | `SampleRate` | `float?` | get |  |
+| `Length` | `long` | get/set | The size of the audio buffer in sample-frames. To determine the length to use for a specific number of seconds of audio, use numSeconds * sampleRate. |
 

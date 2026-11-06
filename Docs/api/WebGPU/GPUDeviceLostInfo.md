@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `GPUDeviceLostInfo` | `class` | get/set | The GPUDeviceLostInfo interface of the WebGPU API represents the object returned when the GPUDevice.lost Promise resolves. This provides information as to why a device has been lost. https://developer.mozilla.org/en-US/docs/Web/API/GPUDeviceLostInfo |
 | `Reason` | `string` | get | An enumerated value that defines the reason the device was lost in a machine-readable way. |
+| `Message` | `string` | get/set | A string providing a human-readable message that explains why the device was lost. |
 
 ## Examples
 

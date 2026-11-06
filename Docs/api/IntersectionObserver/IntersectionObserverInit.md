@@ -13,6 +13,7 @@
 | `IntersectionObserverInit` | `class` | get/set | Options utilized when creating a new IntersectionObserver. https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver#options |
 | `RootMargin` | `string?` | get |  |
 | `Threshold` | `Union<double, double[]>?` | get |  |
+| `Root` | `Element?` | get/set | An Element or Document object which is an ancestor of the intended target, whose bounding rectangle will be considered the viewport. Any part of the target not visible in the visible area of the root is not considered visible. |
 
 ## Examples
 

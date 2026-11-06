@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `StructuredCloneOptions` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone#options |
+| `Transfer` | `IEnumerable<object>?` | get/set | An array of transferable objects that will be moved rather than cloned to the returned object. |
 
 ## Examples
 

@@ -13,6 +13,7 @@
 | `BackgroundFetchMatchOptions` | `class` | get | Options used with BackgroundFetchRegistration.Match() https://developer.mozilla.org/en-US/docs/Web/API/BackgroundFetchRegistration/match#options |
 | `IgnoreMethod` | `bool?` | get |  |
 | `IgnoreVary` | `bool?` | get |  |
+| `IgnoreSearch` | `bool?` | get/set | A boolean value that specifies whether to ignore the query string in the URL. For example, if set to true the ?value=bar part of http://foo.com/?value=bar would be ignored when performing a match. It defaults to false. |
 
 ## Examples
 

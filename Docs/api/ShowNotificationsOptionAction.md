@@ -12,4 +12,5 @@
 | `ShowNotificationsOptionAction` | `class` | get | The ShowNotificationsOptionAction dictionary represents an action that can be performed when a notification is displayed. |
 | `Title` | `string?` | get/set |  |
 | `Icon` | `string?` | get |  |
+| `Action` | `string?` | get/set | The name of the action. |
 

@@ -54,6 +54,7 @@
 | `Title` | `string` | get | The document.title property gets or sets the current title of the document. When present, it defaults to the value of the title. |
 | `VisibilityState` | `string` | get | The Document.visibilityState read-only property returns the visibility of the document. It can be used to check whether the document is in the background or in a minimized window, or is otherwise not visible to the user. |
 | `URL` | `string` | get | Returns the document location as a string. |
+| `AdoptedStyleSheets` | `Array<CSSStyleSheet>` | get | Add an array of constructed stylesheets to be used by the document. These stylesheets may also be shared with shadow DOM subtrees of the same document. |
 
 ## Methods
 

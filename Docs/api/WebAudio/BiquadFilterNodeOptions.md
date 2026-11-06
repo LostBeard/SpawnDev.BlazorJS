@@ -17,4 +17,6 @@
 | `ChannelCount` | `int?` | get |  |
 | `ChannelCountMode` | `string?` | get |  |
 | `ChannelInterpretation` | `string?` | get |  |
+| `Type` | `string?` | get/set | The meaning of the other options depends on the value of type. |
+| `Q` | `float?` | get/set | Defaults to 1. The meaning of this option depends on the value of type. |
 

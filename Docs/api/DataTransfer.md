@@ -12,6 +12,7 @@
 | Signature | Description |
 |---|---|
 | `DataTransfer(IJSInProcessObjectReference _ref)` | Deserialization constructor |
+| `DataTransfer()` | Creates a new, empty DataTransfer (as SpawnDev.SpawnJS's DataTransfer can). |
 
 ## Properties
 
@@ -21,6 +22,7 @@
 | `Files` | `FileList?` | get | Contains a list of all the local files available on the data transfer. If the drag operation doesn't involve dragging files, this property is an empty list. |
 | `DropEffect` | `string` | get | Gets the type of drag-and-drop operation currently selected or sets the operation to a new type. The value must be none, copy, link or move |
 | `EffectAllowed` | `string` | get | Provides all of the types of operations that are possible. Must be one of none, copy, copyLink, copyMove, link, linkMove, move, all or uninitialized. |
+| `Types` | `string[]` | get | The formats that were set in dragstart, in the order they were added ("Files" when files are being dragged). |
 
 ## Methods
 

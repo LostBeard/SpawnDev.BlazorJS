@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `XRLightProbeInit` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/XRSession/requestLightProbe#options |
+| `ReflectionFormat` | `string?` | get/set | The internal reflection format indicating how the texture data is represented, either srgba8 (default value) or rgba16f. See also XRSession.preferredReflectionFormat. |
 
 ## Examples
 

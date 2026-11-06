@@ -15,4 +15,5 @@
 | `Protocol` | `string?` | get/set |  |
 | `Negotiated` | `bool?` | get/set |  |
 | `Id` | `ushort?` | get |  |
+| `Ordered` | `bool?` | get/set | Ordered |
 

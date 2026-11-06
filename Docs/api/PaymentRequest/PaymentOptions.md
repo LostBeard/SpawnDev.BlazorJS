@@ -14,4 +14,5 @@
 | `RequestPayerPhone` | `bool?` | get |  |
 | `RequestShipping` | `bool?` | get |  |
 | `ShippingType` | `string?` | get |  |
+| `RequestPayerName` | `bool?` | get/set | A boolean indicating whether the user agent should collect the payer's name. |
 

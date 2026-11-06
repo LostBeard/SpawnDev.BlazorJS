@@ -14,6 +14,7 @@
 | `Write` | `FuncCallback<JSObject, WritableStreamDefaultController, Task>?` | get |  |
 | `Close` | `FuncCallback<Task>?` | get |  |
 | `Abort` | `FuncCallback<JSObject?, Task>?` | get |  |
+| `Start` | `FuncCallback<WritableStreamDefaultController, Task>?` | get/set | A function that is called immediately during creation of the WritableStream. Typically this is used to acquire access to the underlying sink resource being represented. If this setup process is asynchronous, it can return a promise to signal success or failure; a rejected promise will error the stream. Any thrown exceptions will be re-thrown by the WritableStream() constructor. |
 
 ## Examples
 

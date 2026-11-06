@@ -21,6 +21,7 @@
 | `Detune` | `float` | get | An a-rate AudioParam representing detuning of the frequency in cents. |
 | `Gain` | `float` | get | An a-rate AudioParam, a double representing the gain used in the current filtering algorithm. |
 | `Type` | `string` | get | A string value defining the kind of filtering algorithm the node is implementing. |
+| `Q` | `float` | get | An a-rate AudioParam, a double representing a Q factor, or quality factor. |
 
 ## Methods
 

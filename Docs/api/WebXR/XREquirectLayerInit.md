@@ -24,6 +24,7 @@
 | `IsStatic` | `bool?` | get |  |
 | `Layout` | `string?` | get |  |
 | `MipLevels` | `int?` | get |  |
+| `CentralHorizontalAngle` | `float?` | get/set | A number indicating the central horizontal angle in radians of the sphere. Default value: 6.28318 (2π). |
 
 ## Examples
 

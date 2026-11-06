@@ -16,3 +16,9 @@
 | `Salt` | `BufferSource` | get | An ArrayBuffer, a TypedArray, or a DataView. The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret. |
 | `Info` | `BufferSource` | get | An ArrayBuffer, a TypedArray, or a DataView representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer. |
 
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `HkdfParams(BufferSource salt, BufferSource info)` | Creates a new instance. Salt and info are constructor parameters rather than required initializers because this type also fixes Name, and a [SetsRequiredMembers] constructor switches off the compiler's required checking for EVERY required member of the type - so a parameterless one would silently stop enforcing salt and info while claiming to set them. |
+

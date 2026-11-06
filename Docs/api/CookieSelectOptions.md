@@ -14,6 +14,7 @@
 | `Domain` | `string?` | get/set | A string with the domain of a cookie. Defaults to null. |
 | `Path` | `string?` | get | A string containing a path. Defaults to /. |
 | `Partitioned` | `bool?` | get | A boolean value that defaults to false. Setting it to true specifies that the cookie to delete will be a partitioned cookie. See Cookies Having Independent Partitioned State (CHIPS) for more information. |
+| `Name` | `string` | get/set | A string with the name of a cookie. |
 
 ## Examples
 

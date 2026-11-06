@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `FileSystemSyncReadWriteOptions` | `class` | get | https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle/read#options |
+| `At` | `long?` | get/set | A number representing the offset in bytes that the file should be read from, or written to. |
 
 ## Examples
 

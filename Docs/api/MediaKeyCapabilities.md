@@ -12,4 +12,5 @@
 | `MediaKeyCapabilities` | `class` | get | The MediaKeyCapabilities interface of the Encrypted Media Extensions API provides a set of capabilities for a given media key system. |
 | `EncryptionScheme` | `string?` | get/set |  |
 | `Robustness` | `string?` | get |  |
+| `ContentType` | `string?` | get/set | ContentType |
 

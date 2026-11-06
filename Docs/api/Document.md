@@ -54,6 +54,16 @@ var doc = JS.WindowThis?.Document;
 | `Title` | `string` | Get/set the document title. |
 | `URL` | `string` | The document URL. |
 | `VisibilityState` | `string` | The visibility state ("visible"/"hidden"). |
+| `AdoptedStyleSheets` | `Array<CSSStyleSheet>` | Add an array of constructed stylesheets to be used by the document. These stylesheets may also be shared with shadow DOM subtrees of the same document. |
+| `Embeds` | `HTMLCollection?` | Returns an HTMLCollection of the embedded embed elements in the document. |
+| `Forms` | `HTMLCollection?` | Returns an HTMLCollection of the form elements in the document. |
+| `Images` | `HTMLCollection?` | Returns an HTMLCollection of the images in the document. |
+| `Links` | `HTMLCollection?` | Returns an HTMLCollection of the hyperlinks in the document. |
+| `Plugins` | `HTMLCollection?` | Returns an HTMLCollection of the available plugins. |
+| `Scripts` | `HTMLCollection?` | Returns an HTMLCollection of the script elements in the document. |
+| `ScrollingElement` | `Element?` | Returns a reference to the Element that scrolls the document. |
+| `Location` | `Location?` | The Document.location read-only property returns a Location object, which contains information about the URL of the document and provides methods for changing that URL and loading another URL. |
+| `Prerendering` | `bool` | The prerendering read-only property of the Document interface returns true if the document is currently in the process of prerendering, as initiated via the Speculation Rules API. |
 
 ## Methods
 
@@ -86,6 +96,8 @@ var doc = JS.WindowThis?.Document;
 | `ExitFullscreen()` | `Task` | Exit fullscreen mode. |
 | `ExitPointerLock()` | `void` | Release the pointer lock. |
 | `ExitPictureInPicture()` | `Task` | Exit Picture-in-Picture mode. |
+| `CreateElementNS<TElement>(string namespaceURI, string qualifiedName, ElementCreationOptions options)` | `TElement` | Creates a new element with the given tag name and namespace URI. |
+| `CreateElementNS(string namespaceURI, string qualifiedName, ElementCreationOptions options)` | `Element` | Creates a new element with the given tag name and namespace URI. |
 
 ## Events
 
@@ -98,6 +110,51 @@ var doc = JS.WindowThis?.Document;
 | `OnPointerlockChange` | `ActionEvent<Event>` | Fired when pointer lock changes. |
 | `OnPointerlockError` | `ActionEvent<Event>` | Fired on pointer lock error. |
 | `OnScroll` | `ActionEvent<Event>` | Fired when the document is scrolled. |
+| `OnAuxClick` | `ActionEvent<PointerEvent>` | Fired when a non-primary pointing device button (e.g., any mouse button other than the left button) has been pressed and released. |
+| `OnClick` | `ActionEvent<PointerEvent>` | Fired when a pointing device button (e.g., a mouse's primary button) is pressed and released. |
+| `OnContextMenu` | `ActionEvent<PointerEvent>` | Fired when the user attempts to open a context menu. |
+| `OnDblClick` | `ActionEvent<MouseEvent>` | Fired when a pointing device button (e.g., a mouse's primary button) is clicked twice. |
+| `OnMouseDown` | `ActionEvent<MouseEvent>` | Fired when a pointing device button is pressed. |
+| `OnMouseEnter` | `ActionEvent<MouseEvent>` | Fired when a pointing device (usually a mouse) is moved over the element that has the listener attached. |
+| `OnMouseLeave` | `ActionEvent<MouseEvent>` | Fired when the pointer of a pointing device (usually a mouse) is moved out of an element that has the listener attached to it. |
+| `OnMouseMove` | `ActionEvent<MouseEvent>` | Fired when a pointing device (usually a mouse) is moved while over the document. |
+| `OnMouseOut` | `ActionEvent<MouseEvent>` | Fired when a pointing device (usually a mouse) is moved off the element to which the listener is attached or off one of its children. |
+| `OnMouseOver` | `ActionEvent<MouseEvent>` | Fired when a pointing device is moved onto the element to which the listener is attached or onto one of its children. |
+| `OnMouseUp` | `ActionEvent<MouseEvent>` | Fired when a pointing device button is released. |
+| `OnKeyDown` | `ActionEvent<KeyboardEvent>` | Fired when a key is pressed. |
+| `OnKeyUp` | `ActionEvent<KeyboardEvent>` | Fired when a key is released. |
+| `OnPointerCancel` | `ActionEvent<PointerEvent>` | Fired when a pointer event is canceled. |
+| `OnPointerDown` | `ActionEvent<PointerEvent>` | Fired when a pointer becomes active. |
+| `OnPointerEnter` | `ActionEvent<PointerEvent>` | Fired when a pointer is moved into the hit test boundaries of an element or one of its descendants. |
+| `OnPointerLeave` | `ActionEvent<PointerEvent>` | Fired when a pointer is moved out of the hit test boundaries of an element. |
+| `OnPointerMove` | `ActionEvent<PointerEvent>` | Fired when a pointer changes coordinates. |
+| `OnPointerOut` | `ActionEvent<PointerEvent>` | Fired when a pointer is moved out of the hit test boundaries of an element (among other reasons). |
+| `OnPointerOver` | `ActionEvent<PointerEvent>` | Fired when a pointer is moved into an element's hit test boundaries. |
+| `OnPointerUp` | `ActionEvent<PointerEvent>` | Fired when a pointer is no longer active. |
+| `OnTouchCancel` | `ActionEvent<TouchEvent>` | Fired when one or more touch points have been disrupted in an implementation-specific manner. |
+| `OnTouchEnd` | `ActionEvent<TouchEvent>` | Fired when one or more touch points are removed from the touch surface. |
+| `OnTouchMove` | `ActionEvent<TouchEvent>` | Fired when one or more touch points are moved along the touch surface. |
+| `OnTouchStart` | `ActionEvent<TouchEvent>` | Fired when one or more touch points are placed on the touch surface. |
+| `OnBlur` | `ActionEvent<FocusEvent>` | Fired when an element has lost focus. |
+| `OnFocus` | `ActionEvent<FocusEvent>` | Fired when an element has gained focus. |
+| `OnFocusIn` | `ActionEvent<FocusEvent>` | Fired when an element has gained focus, after focus. |
+| `OnFocusOut` | `ActionEvent<FocusEvent>` | Fired when an element has lost focus, after blur. |
+| `OnPrerenderingChange` | `ActionEvent<Event>` | The prerenderingchange event is fired on a prerendered document when it is activated (i.e. the user views the page). |
+| `OnSecurityPolicyViolation` | `ActionEvent<SecurityPolicyViolationEvent>` | The securitypolicyviolation event is fired when a Content Security Policy is violated. |
+| `OnCopy` | `ActionEvent<ClipboardEvent>` | The copy event fires when the user initiates a copy action through the browser's user interface. |
+| `OnCut` | `ActionEvent<ClipboardEvent>` | The cut event fires when the user initiates a cut action through the browser's user interface. |
+| `OnPaste` | `ActionEvent<ClipboardEvent>` | The paste event fires when the user initiates a paste action through the browser's user interface. |
+| `OnDOMContentLoaded` | `ActionEvent<Event>` | The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (script defer src="…" and type="module") have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading. |
+| `OnPointerLockChange` | `ActionEvent<Event>` | The pointerlockchange event is fired when the pointer is locked/unlocked. |
+| `OnPointerLockError` | `ActionEvent<Event>` | The pointerlockerror event is fired when locking the pointer failed (for technical reasons or because the permission was denied). |
+| `OnScrollEnd` | `ActionEvent<Event>` | The scrollend event fires when the document view has completed scrolling. Scrolling is considered completed when the scroll position has no more pending updates and the user has completed their gesture. |
+| `OnSelectionChange` | `ActionEvent<Event>` | The selectionchange event of the Selection API is fired when the current Selection of a Document is changed. |
+
+## Constructors
+
+| Signature | Description |
+|---|---|
+| `Document()` | The Document constructor creates a new Document object that is a web page loaded in the browser and serving as an entry point into the page's content. |
 
 ## Example
 

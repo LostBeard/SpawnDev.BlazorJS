@@ -25,3 +25,9 @@
 | `Transform` | `Callback?` | get |  |
 | `Flush` | `Callback?` | get |  |
 
+## Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `Dispose()` | `void` |  |
+

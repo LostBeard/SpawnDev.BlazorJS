@@ -3,9 +3,9 @@
 
 > 💜 **Built and maintained by one independent developer** — no company, no overhead, just code. If SpawnDev.BlazorJS saves you time, please consider [**sponsoring its development »**](https://github.com/sponsors/LostBeard). Sponsorship is what keeps it alive and maintained.
 
-Full Blazor WebAssembly and JavaScript interop. 1,021 strongly typed C# wrappers for browser APIs - create JavaScript objects, access properties, call methods, and handle events the .NET way without writing JavaScript.
+Full Blazor WebAssembly and JavaScript interop. 1,056 strongly typed C# wrappers for browser APIs - create JavaScript objects, access properties, call methods, and handle events the .NET way without writing JavaScript.
 
-**[Full API Documentation](Docs/README.md)** - Complete MDN-style API reference with guides, 1,021 typed wrapper references, and real C# examples.
+**[Full API Documentation](Docs/README.md)** - Complete MDN-style API reference with guides, 1,056 typed wrapper references, and real C# examples.
 
 [Live Demo](https://blazorjs.spawndev.com/)
 
@@ -89,7 +89,7 @@ For full setup details including worker scope detection and WebWorkerService, se
 
 | Feature | Description | Docs |
 |---|---|---|
-| **1,021 Typed Wrappers** | Every major browser API - DOM, WebGPU, WebRTC, WebAudio, Crypto, WebXR, and more | [API Reference](Docs/api/_index.md) |
+| **1,056 Typed Wrappers** | Every major browser API - DOM, WebGPU, WebRTC, WebAudio, Crypto, WebXR, and more | [API Reference](Docs/api/_index.md) |
 | **BlazorJSRuntime** | Get, Set, Call, CallAsync, New - with null-conditional (`?.`) support | [Guide](Docs/blazorjsruntime.md) |
 | **JSObject** | Base class for typed JS wrappers with automatic disposal | [Guide](Docs/jsobject.md) |
 | **ActionEvent** | Type-safe event subscription with `+=` / `-=` and automatic ref counting | [Guide](Docs/events.md) |
@@ -225,7 +225,7 @@ public class Audio : JSObject
 
 See the [Custom JSObject Guide](Docs/custom-jsobjects.md) for the full walkthrough.
 
-For the complete list of all 1,021 typed wrappers, see the [Complete API Reference](Docs/api/_index.md).
+For the complete list of all 1,056 typed wrappers, see the [Complete API Reference](Docs/api/_index.md).
 
 ---
 

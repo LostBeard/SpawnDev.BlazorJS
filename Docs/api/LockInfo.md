@@ -13,6 +13,7 @@
 | `LockInfo` | `class` | get | LockManager lock info https://developer.mozilla.org/en-US/docs/Web/API/LockManager/query#name |
 | `Mode` | `string` | get/set |  |
 | `ClientId` | `string` | get |  |
+| `Name` | `string` | get/set | The name of the lock. |
 
 ## Examples
 

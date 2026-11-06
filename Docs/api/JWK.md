@@ -22,4 +22,5 @@
 | `X5u` | `string?` | get |  |
 | `X5c` | `string[]?` | get |  |
 | `X5t` | `string[]?` | get |  |
+| `KeyType` | `string` | get/set | "kty" (Key Type) Parameter The "kty" (key type) parameter identifies the cryptographic algorithm family used with the key, such as "RSA" or "EC". "kty" values should either be registered in the IANA "JSON Web Key Types" registry established by [JWA] or be a value that contains a Collision- Resistant Name. The "kty" value is a case-sensitive string. This member MUST be present in a JWK. |
 

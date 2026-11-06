@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `GPUBlendState` | `class` | get | https://www.w3.org/TR/webgpu/#dictdef-gpublendstate |
 | `Alpha` | `GPUBlendComponent` | get | Defines the blending behavior of the corresponding render target for the alpha channel. |
+| `Color` | `GPUBlendComponent` | get/set | Defines the blending behavior of the corresponding render target for color channels. |
 

@@ -14,6 +14,7 @@
 | `Sizes` | `string?` | get |  |
 | `Type` | `string?` | get |  |
 | `Label` | `string?` | get |  |
+| `Src` | `string?` | get/set | A string representing a URL to the icon file. |
 
 ## Examples
 

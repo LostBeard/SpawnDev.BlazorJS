@@ -11,6 +11,7 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `CredentialCreateOptions` | `abstract class` | get | Options used for CredentialsContainer.Create() https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#options |
+| `Signal` | `AbortSignal?` | get/set | An AbortSignal object instance that allows an ongoing create() operation to be aborted. An aborted operation may complete normally (generally if the abort was received after the operation finished) or reject with an "AbortError" DOMException. |
 
 ## Examples
 

@@ -13,4 +13,5 @@
 | `Timestamp` | `long` | get/set |  |
 | `Duration` | `long?` | get/set |  |
 | `Data` | `ArrayBuffer?` | get |  |
+| `Type` | `EncodedVideoChunkType` | get/set | The type of the chunk. |
 

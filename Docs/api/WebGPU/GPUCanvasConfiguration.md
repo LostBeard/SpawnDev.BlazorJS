@@ -15,4 +15,5 @@
 | `ViewFormats` | `string[]?` | get |  |
 | `ColorSpace` | `string?` | get |  |
 | `AlphaMode` | `string?` | get |  |
+| `Device` | `GPUDevice` | get/set | The GPUDevice that the rendering information for the context will come from. |
 

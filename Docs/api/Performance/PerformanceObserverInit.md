@@ -13,6 +13,7 @@
 | `PerformanceObserverInit` | `class` | get | Options utilized when calling PerformanceObserver.observe(). https://developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver/observe |
 | `EntryTypes` | `string[]?` | get |  |
 | `Buffered` | `bool?` | get |  |
+| `Type` | `string?` | get/set | A single string specifying the entry type to observe. usage of this property is not compatible with entryTypes. |
 
 ## Examples
 

@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `ResizeObserverSize` | `class` | get | The content box size of the observed element https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry/contentBoxSize#value |
 | `InlineSize` | `double` | get | The length of the observed element's content box in the inline dimension. For boxes with a horizontal writing-mode, this is the horizontal dimension, or width; if the writing-mode is vertical, this is the vertical dimension, or height. |
+| `BlockSize` | `double` | get/set | The length of the observed element's content box in the block dimension. For boxes with a horizontal writing-mode, this is the vertical dimension, or height; if the writing-mode is vertical, this is the horizontal dimension, or width. |
 
 ## Examples
 

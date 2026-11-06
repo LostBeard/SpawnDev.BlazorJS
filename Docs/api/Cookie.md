@@ -17,4 +17,5 @@
 | `SameSite` | `string?` | get |  |
 | `Secure` | `bool?` | get |  |
 | `Value` | `string?` | get |  |
+| `Domain` | `string?` | get/set | A string containing the domain of the cookie. |
 

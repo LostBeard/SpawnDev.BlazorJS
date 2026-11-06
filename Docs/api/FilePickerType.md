@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `FilePickerType` | `class` | get/set | https://developer.mozilla.org/en-US/docs/Web/API/Window/showOpenFilePicker#description |
 | `Accept` | `Dictionary<string, IEnumerable<string>>?` | get |  |
+| `Description` | `string?` | get/set | An optional description of the category of files types allowed. Defaults to an empty string. |
 
 ## Examples
 

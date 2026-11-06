@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `AudioEncoderSupport` | `class` | get/set | Result of AudioEncoder.isConfigSupported |
 | `Config` | `AudioEncoderConfig` | get |  |
+| `Supported` | `bool` | get/set | If the configuration is supported. |
 

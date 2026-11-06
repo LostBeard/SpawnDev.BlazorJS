@@ -12,4 +12,5 @@
 | `GPUExtent3DDict` | `class` | get | https://www.w3.org/TR/webgpu/#dictdef-gpuextent3ddict |
 | `Height` | `GPUIntegerCoordinate?` | get |  |
 | `DepthOrArrayLayers` | `GPUIntegerCoordinate?` | get |  |
+| `Width` | `GPUIntegerCoordinate` | get/set | Width of the extent. |
 

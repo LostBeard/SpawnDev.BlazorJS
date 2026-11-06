@@ -20,6 +20,7 @@
 | `PreserveDrawingBuffer` | `bool?` | get |  |
 | `Stencil` | `bool?` | get |  |
 | `XrCompatible` | `bool?` | get |  |
+| `Alpha` | `bool?` | get/set | Boolean that indicates if the canvas contains an alpha buffer. |
 
 ## Examples
 

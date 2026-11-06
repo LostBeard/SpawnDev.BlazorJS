@@ -16,6 +16,7 @@
 | `ResizeWidth` | `int?` | get |  |
 | `ResizeHeight` | `int?` | get |  |
 | `ResizeQuality` | `string?` | get |  |
+| `ImageOrientation` | `string?` | get/set | Specifies how the bitmap image should be oriented. "from-image" - Image oriented according to EXIF orientation metadata, if present (default). "flipY" - Image oriented according to EXIF orientation metadata, if present, and then flipped vertically. "none" - Image oriented according to image encoding, ignoring any metadata about the orientation (such as EXIF metadata, that might be added to an image to indicate that the camera was turned sideways to capture the image in portrait mode). |
 
 ## Examples
 

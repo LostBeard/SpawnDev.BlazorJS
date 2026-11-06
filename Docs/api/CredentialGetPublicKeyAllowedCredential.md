@@ -13,6 +13,7 @@
 | `CredentialGetPublicKeyAllowedCredential` | `class` | get | Used in CredentialGetPublicKey https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#allowcredentials |
 | `Transports` | `List<string>?` | get |  |
 | `Type` | `string` | get | A string defining the type of the public key credential to retrieve. This can currently take a single value, "public-key", but more values may be added in the future. This value is mirrored by the type property of the PublicKeyCredential object returned by a successful get() call. |
+| `Id` | `BufferSource` | get/set | An ArrayBuffer, TypedArray, or DataView representing the ID of the public key credential to retrieve. This value is mirrored by the rawId property of the PublicKeyCredential object returned by a successful get() call. |
 
 ## Examples
 

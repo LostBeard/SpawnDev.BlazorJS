@@ -12,6 +12,7 @@
 |---|---|---|---|
 | `TextDecoderStreamOptions` | `class` | get | TextDecoderStream options https://developer.mozilla.org/en-US/docs/Web/API/TextDecoderStream/TextDecoderStream#options |
 | `IgnoreBOM` | `bool?` | get |  |
+| `Fatal` | `bool?` | get/set | A boolean value indicating if the TextDecoder.decode() method must throw a TypeError when decoding invalid data. It defaults to false, which means that the decoder will substitute malformed data with a replacement character. |
 
 ## Examples
 

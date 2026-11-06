@@ -33,6 +33,7 @@
 | `DeviceId` | `string?` | get |  |
 | `GroupId` | `string?` | get |  |
 | `BackgroundBlur` | `bool[]?` | get |  |
+| `WhiteBalanceMode` | `EnumString<WhiteBalanceModeEnum>[]?` | get/set | WhiteBalanceMode |
 
 ## Examples
 

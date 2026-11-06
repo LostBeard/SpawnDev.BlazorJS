@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `SerialPortFilter` | `class` | get | The USB Implementors Forum assigns IDs to specific companies. Each company assigns IDs to its products. |
 | `UsbProductId` | `ushort?` | get |  |
+| `UsbVendorId` | `ushort?` | get/set | An unsigned short integer that identifies a USB device vendor. |
 

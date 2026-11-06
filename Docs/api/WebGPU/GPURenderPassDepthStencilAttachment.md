@@ -18,4 +18,5 @@
 | `StencilStoreOp` | `string?` | get |  |
 | `DepthReadOnly` | `bool?` | get |  |
 | `StencilReadOnly` | `bool?` | get |  |
+| `View` | `Union<GPUTextureView, GPUTexture>?` | get/set |  |
 

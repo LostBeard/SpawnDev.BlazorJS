@@ -19,6 +19,7 @@
 | `Timeout` | `uint?` | get |  |
 | `UserVerification` | `string?` | get |  |
 | `Hints` | `List<string>?` | get |  |
+| `AllowCredentials` | `List<CredentialGetPublicKeyAllowedCredential>?` | get/set | An array of objects defining a restricted list of the acceptable credentials for retrieval. |
 
 ## Examples
 

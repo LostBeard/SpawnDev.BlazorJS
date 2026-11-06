@@ -22,4 +22,6 @@
 | `Right` | `virtual float` | get | The right coordinate value of the DOMRect (has the same value as x + width, or x if width is negative). |
 | `Bottom` | `virtual float` | get | The bottom coordinate value of the DOMRect (has the same value as y + height, or y if height is negative). |
 | `Left` | `virtual float` | get | The left coordinate value of the DOMRect (has the same value as x, or x + width if width is negative). |
+| `X` | `float` | get | The x coordinate of the DOMRect's origin (typically the top-left corner of the rectangle). |
+| `Y` | `float` | get | The y coordinate of the DOMRect's origin (typically the top-left corner of the rectangle). |
 

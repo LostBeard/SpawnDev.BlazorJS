@@ -19,4 +19,5 @@
 | `StencilBack` | `GPUStencilFaceState?` | get/set |  |
 | `StencilReadMask` | `uint` | get/set |  |
 | `StencilWriteMask` | `uint` | get |  |
+| `Format` | `string` | get/set | An enumerated value specifying the depthStencilAttachment format that the GPURenderPipeline will be compatible with. See the specification's Texture Formats section for all the available format values. |
 

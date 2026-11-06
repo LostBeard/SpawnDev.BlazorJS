@@ -22,3 +22,9 @@
 | `Start` | `FuncCallback<ReadableStreamDefaultController, Task>?` | get |  |
 | `Cancel` | `ActionCallback<string?>?` | get |  |
 
+## Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `Dispose()` | `void` | Disposes of the instance |
+

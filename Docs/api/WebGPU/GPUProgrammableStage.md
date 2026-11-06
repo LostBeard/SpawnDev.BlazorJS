@@ -12,4 +12,5 @@
 | `GPUProgrammableStage` | `class` | get | A GPUProgrammableStage describes the entry point in the user-provided GPUShaderModule that controls one of the programmable stages of a pipeline. Entry point names follow the rules defined in WGSL identifier comparison. https://www.w3.org/TR/webgpu/#gpuprogrammablestage |
 | `EntryPoint` | `string?` | get |  |
 | `Constants` | `Dictionary<string, object>?` | get |  |
+| `Module` | `GPUShaderModule` | get/set | A GPUShaderModule object containing the WGSL code that this programmable stage will execute. |
 

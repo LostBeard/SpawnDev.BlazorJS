@@ -10,4 +10,6 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `StorageManagerEstimateUsageDetails` | `class` | get/set | The StorageManagerEstimateUsageDetails dictionary is used by the StorageManager.estimate() method to return a detailed estimate of the amount of storage in use by various features. |
+| `Caches` | `long` | get/set | Caches |
+| `serviceWorkerRegistrations` | `long` | get/set | serviceWorkerRegistrations |
 

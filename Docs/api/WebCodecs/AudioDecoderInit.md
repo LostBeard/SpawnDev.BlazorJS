@@ -11,4 +11,5 @@
 |---|---|---|---|
 | `AudioDecoderInit` | `class` | get | A dictionary object containing the init params for the AudioDecoder |
 | `Error` | `ActionCallback<DOMException>` | get |  |
+| `Output` | `ActionCallback<AudioData>` | get/set | A callback which takes a AudioData object as the first argument. |
 

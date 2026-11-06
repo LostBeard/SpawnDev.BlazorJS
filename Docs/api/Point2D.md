@@ -10,4 +10,6 @@
 | Property | Type | Access | Description |
 |---|---|---|---|
 | `Point2D` | `class` | get/set | Represents a point in 2D space with integer coordinates |
+| `X` | `int` | get/set | X |
+| `Y` | `int` | get/set | Y |
 
