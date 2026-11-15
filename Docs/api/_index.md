@@ -1,6 +1,6 @@
 # API Reference - Complete Class Index
 
-**Total types documented:** 1056
+**Total types documented:** 1060
 
 This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by category (matching the source folder structure).
 
@@ -776,6 +776,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [CredentialCreateFederated](CredentialCreateFederated.md) | Options for CredentialsContainer.Create() https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#f... |
 | [CredentialCreateFederatedOptions](CredentialCreateFederatedOptions.md) | If used for CredentialsContainer.Create() a FederatedCredential will be returned |
 | [CredentialCreateOptions](CredentialCreateOptions.md) | Options used for CredentialsContainer.Create() https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/cre... |
+| [CredentialCreateParsedPublicKeyOptions](CredentialCreateParsedPublicKeyOptions.md) | Options for CredentialsContainer.Create() with a publicKey made by PublicKeyCredential.ParseCreationOptionsFromJSON |
 | [CredentialCreatePassword](CredentialCreatePassword.md) | Options for CredentialsContainer.Create() https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#p... |
 | [CredentialCreatePasswordOptions](CredentialCreatePasswordOptions.md) | If used for CredentialsContainer.Create() a PasswordCredential will be returned |
 | [CredentialCreatePublicKey](CredentialCreatePublicKey.md) | Options for CredentialsContainer.Create() https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create#p... |
@@ -787,6 +788,7 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [CredentialGetOptions](CredentialGetOptions.md) | Options used for CredentialsContainer.Get() https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#op... |
 | [CredentialGetOtp](CredentialGetOtp.md) | Options for CredentialsContainer.Get() CredentialsContainer.Get() will return a Promise that resolves with an OTPCredent... |
 | [CredentialGetOtpOptions](CredentialGetOtpOptions.md) | If used for CredentialsContainer.Get() an OtpCredential will be returned https://developer.mozilla.org/en-US/docs/Web/AP... |
+| [CredentialGetParsedPublicKeyOptions](CredentialGetParsedPublicKeyOptions.md) | Options for CredentialsContainer.Get() with a publicKey made by PublicKeyCredential.ParseRequestOptionsFromJSON |
 | [CredentialGetPasswordOptions](CredentialGetPasswordOptions.md) | If used for CredentialsContainer.Get() a PasswordCredential will be returned https://developer.mozilla.org/en-US/docs/We... |
 | [CredentialGetPublicKey](CredentialGetPublicKey.md) | Options for CredentialsContainer.Get() CredentialsContainer.Get() will return a Promise that resolves with an PublicKeyC... |
 | [CredentialGetPublicKeyAllowedCredential](CredentialGetPublicKeyAllowedCredential.md) | Used in CredentialGetPublicKey https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get#allowcredential... |
@@ -1024,6 +1026,8 @@ This index lists every type in `SpawnDev.BlazorJS.JSObjects` organized by catego
 | [OffscreenCanvasRenderingContext2D](OffscreenCanvasRenderingContext2D.md) | The OffscreenCanvasRenderingContext2D interface is a CanvasRenderingContext2D rendering context for drawing to the bitma... |
 | [OscillatorType](OscillatorType.md) | The shape of the wave produced by the node. |
 | [PageTransitionEvent](PageTransitionEvent.md) | The PageTransitionEvent event object is available inside handler functions for the pageshow and pagehide events, fired w... |
+| [ParsedPublicKeyCredentialCreationOptions](ParsedPublicKeyCredentialCreationOptions.md) | PublicKeyCredentialCreationOptions made by the browser from the server's JSON (PublicKeyCredential.ParseCreationOptionsFromJSON) |
+| [ParsedPublicKeyCredentialRequestOptions](ParsedPublicKeyCredentialRequestOptions.md) | PublicKeyCredentialRequestOptions made by the browser from the server's JSON (PublicKeyCredential.ParseRequestOptionsFromJSON) |
 | [PasswordCredential](PasswordCredential.md) | The PasswordCredential interface of the Credential Management API provides information about a username/password pair. |
 | [PasswordCredentialData](PasswordCredentialData.md) | The PasswordCredentialData interface of the Credential Management API is the dictionary containing the data used to crea... |
 | [Path2D](Path2D.md) | The Path2D interface of the Canvas 2D API is used to declare a path that can then be used on a CanvasRenderingContext2D ... |

@@ -105,6 +105,27 @@ namespace PlaywrightTestRunner
         public async Task RunAllTestsInTable_ShouldSucceed()
         {
             var testPage = new Uri(new Uri(BaseUrl), UnitTestPage).ToString();
+            // A CDP virtual authenticator (Chromium only: CDP), so the WebAuthn tests run real create() / get()
+            // ceremonies without a person: a platform (internal) CTAP2 device with resident keys and user verification
+            // that always passes. The page learns of it through globalThis.virtualAuthenticator (WebAuthnTests).
+            if (BrowserName == "chromium")
+            {
+                var webAuthn = await Page.Context.NewCDPSessionAsync(Page);
+                await webAuthn.SendAsync("WebAuthn.enable");
+                await webAuthn.SendAsync("WebAuthn.addVirtualAuthenticator", new Dictionary<string, object>
+                {
+                    ["options"] = new Dictionary<string, object>
+                    {
+                        ["protocol"] = "ctap2",
+                        ["transport"] = "internal",
+                        ["hasResidentKey"] = true,
+                        ["hasUserVerification"] = true,
+                        ["isUserVerified"] = true,
+                        ["automaticPresenceSimulation"] = true,
+                    },
+                });
+                await Page.AddInitScriptAsync("globalThis.virtualAuthenticator = true;");
+            }
             await Page.GotoAsync(testPage);
 
             // get the table
@@ -151,6 +172,9 @@ namespace PlaywrightTestRunner
 
                 // current state text
                 var stateMessage = await currentRow.Locator(".test-state").TextContentAsync();
+
+                // one line per row, so a passing run shows what ran
+                TestContext.Progress.WriteLine($"{typeName}.{methodName}: {stateMessage}");
 
                 //  check for error  class
                 var wasError = await currentRow.EvaluateAsync<bool>("el => el.classList.contains('test-error')");

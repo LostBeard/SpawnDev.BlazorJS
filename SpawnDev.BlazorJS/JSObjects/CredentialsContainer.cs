@@ -56,6 +56,29 @@ namespace SpawnDev.BlazorJS.JSObjects
         /// Sets a flag that specifies whether automatic log in is allowed for future visits to the current origin, then returns an empty Promise. For example, you might call this, after a user signs out of a website to ensure that they aren't automatically signed in on the next site visit. Earlier versions of the spec called this method requireUserMediation(). See Browser compatibility for support details.
         /// </summary>
         /// <returns></returns>
+        /// <summary>
+        /// Creates a public key credential from options made by <see cref="PublicKeyCredential.ParseCreationOptionsFromJSON(string)"/>
+        /// (the relying party server's JSON). Send <see cref="PublicKeyCredential.ToJSONString"/> of the result back to the server.
+        /// </summary>
+        /// <param name="publicKey">The parsed creation options</param>
+        /// <param name="signal">An optional AbortSignal</param>
+        public Task<PublicKeyCredential<AuthenticatorAttestationResponse>> Create(ParsedPublicKeyCredentialCreationOptions publicKey, AbortSignal? signal = null) => Create(new CredentialCreateParsedPublicKeyOptions { PublicKey = publicKey, Signal = signal });
+        /// <summary>
+        /// Creates a public key credential from options whose publicKey was made by <see cref="PublicKeyCredential.ParseCreationOptionsFromJSON(string)"/>.
+        /// </summary>
+        public Task<PublicKeyCredential<AuthenticatorAttestationResponse>> Create(CredentialCreateParsedPublicKeyOptions options) => JSRef!.CallAsync<PublicKeyCredential<AuthenticatorAttestationResponse>>("create", options);
+        /// <summary>
+        /// Gets a public key credential (an assertion) with options made by <see cref="PublicKeyCredential.ParseRequestOptionsFromJSON(string)"/>
+        /// (the relying party server's JSON). Send <see cref="PublicKeyCredential.ToJSONString"/> of the result back to the server.
+        /// </summary>
+        /// <param name="publicKey">The parsed request options</param>
+        /// <param name="mediation">Optional mediation: "conditional", "optional", "required" or "silent"</param>
+        /// <param name="signal">An optional AbortSignal</param>
+        public Task<PublicKeyCredential<AuthenticatorAssertionResponse>?> Get(ParsedPublicKeyCredentialRequestOptions publicKey, string? mediation = null, AbortSignal? signal = null) => Get(new CredentialGetParsedPublicKeyOptions { PublicKey = publicKey, Mediation = mediation, Signal = signal });
+        /// <summary>
+        /// Gets a public key credential with options whose publicKey was made by <see cref="PublicKeyCredential.ParseRequestOptionsFromJSON(string)"/>.
+        /// </summary>
+        public Task<PublicKeyCredential<AuthenticatorAssertionResponse>?> Get(CredentialGetParsedPublicKeyOptions options) => JSRef!.CallAsync<PublicKeyCredential<AuthenticatorAssertionResponse>?>("get", options);
         public Task PreventSilentAccess() => JSRef!.CallVoidAsync("preventSilentAccess");
         /// <summary>
         /// Stores a set of credentials for a user, inside a provided Credential instance and returns that instance in a Promise.

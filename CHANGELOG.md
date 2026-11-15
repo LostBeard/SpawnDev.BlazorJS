@@ -1,5 +1,21 @@
 ﻿# Changelog
 
+## 3.5.32 - unreleased
+
+### 3.5.32-local.1: WebAuthn JSON converters (parallel of SpawnDev.SpawnJS 3.0.9)
+
+`PublicKeyCredential.ParseCreationOptionsFromJSON(string json)` / `ParseRequestOptionsFromJSON(string json)` (and overloads
+taking a parsed `JSObject`) return `ParsedPublicKeyCredentialCreationOptions` / `...RequestOptions`, JS-held objects whose
+ArrayBuffers never cross into .NET; `CredentialsContainer.Create(parsed, signal)` and `Get(parsed, mediation, signal)` take
+them; `PublicKeyCredential.ToJSON()` / `ToJSONString()` give the RegistrationResponseJSON / AuthenticationResponseJSON to
+POST; `PublicKeyCredential.IsJSONSupported`. `PublicKeyCredential<TResponse>` now derives from a new non-generic
+`PublicKeyCredential` (RawId, AuthenticatorAttachment, the statics); existing callers are unchanged. Docs: 4 new API pages,
+wrapper count 1,056 -> 1,060.
+
+Tests: `WebAuthnTests` (4), including a real registration + authentication through these calls on a CDP virtual
+authenticator the PlaywrightTestRunner now adds on Chromium (Firefox: the ceremony test reports unsupported). Red-checked
+(Create dropping publicKey fails the ceremony). Full table passes in Chromium and Firefox. The runner now logs one line per row.
+
 ## 3.5.31 - 2026-11-05
 
 Full test table passes in Chromium and Firefox.

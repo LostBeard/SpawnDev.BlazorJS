@@ -21,6 +21,7 @@ builder.Services.AddSingleton<CacheTests>();
 builder.Services.AddSingleton<BlobStreamTests>();
 builder.Services.AddSingleton<StreamPipeThroughTests>();
 builder.Services.AddSingleton<EnumStringTests>();
+builder.Services.AddSingleton<WebAuthnTests>();
 builder.Services.AddSingleton<HeapViewTests>();
 builder.Services.AddSingleton<JSReadStreamTests>();
 builder.Services.AddSingleton<JSWriteStreamTests>();
