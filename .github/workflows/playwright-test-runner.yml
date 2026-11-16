@@ -11,7 +11,9 @@ jobs:
       max-parallel: 1
       matrix:
         # options (can be multiple) [ubuntu-latest, windows-latest, macos-latest]
-        os: [ubuntu-latest]
+        # ubuntu-24.04, not ubuntu-latest: latest is Ubuntu 26.04 since 2026-11, where this Playwright has no
+        # Chromium ("Playwright does not support chromium on ubuntu26.04-x64")
+        os: [ubuntu-24.04]
 
     steps:
     - uses: actions/checkout@v4
