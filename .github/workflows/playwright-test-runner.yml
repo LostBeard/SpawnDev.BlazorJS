@@ -21,6 +21,13 @@ jobs:
       with:
         dotnet-version: 10.0.x # Match your project version
         
+    # Pin the .NET 10 SDK: ubuntu-latest also ships SDK 11, which `dotnet` picks when there is no global.json, and
+    # its wasm-tools workload has no wasm-tools-net10, so a net10 publish fails with NETSDK1147 (2026-11-16)
+    - name: Pin .NET SDK 10
+      run: |
+        echo '{"sdk":{"version":"10.0.100","rollForward":"latestFeature"}}' > global.json
+        dotnet --version
+
     - name: Install dotnet wasm tools
       run: dotnet workload install wasm-tools
 
