@@ -1,6 +1,9 @@
 ﻿# Changelog
 
-## 3.5.32 - unreleased
+## 3.5.32 - 2026-11-16
+
+Released to nuget.org: 3.5.32-local.1 below. Final run on the released code: the demo's unit test table (88 rows) green in
+Chromium (with the CDP virtual authenticator, so the WebAuthn create / get ceremonies run) and Firefox.
 
 ### 3.5.32-local.1: WebAuthn JSON converters (parallel of SpawnDev.SpawnJS 3.0.9)
 
